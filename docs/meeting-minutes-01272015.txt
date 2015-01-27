@@ -1,0 +1,122 @@
+01/27/2015 IT meeting minutes
+
+These meeting minutes will serve as the base for a document on the high-level
+specifications. The document should also include the defintion of terms like
+"recommendations", "data submission process", etc.
+
+- Who are the developers? Involvement?
+
+  Vivien and Ariel will do code reviews
+  Vivien and Ariel may work on specific things (GeoNode-related stuff for example)
+  Talk about architecture
+
+- Technology decisions
+
+  Vivien and Ariel will participate to decisions
+
+- Project managment tool
+
+  We need to have a tool
+  We need a central place to store documents
+  To be discussed
+
+- Data
+
+  The size is not known right now
+  There are global and local layers
+  One global layer per risk type
+  There is a GIS person at GFDRR responsible for the data
+
+- Architecture / Infrastructure
+
+  GeoNode exposes the layer metadata through CSW (PyCSW)
+  GeoServer is used to serve the data
+  The vector data is stored in PostGIS tables
+  The raster data is stored as TIFF files
+
+- Data Formats
+
+  The format of the input data needs to be defined
+
+  The input data for a layer:
+  - SQL or TIFF file for the data
+  - SQL file for the metadata
+
+  The format (column names, column types, units) needs to be defined. The tool
+  (Data Submission Process) will check the conformity of the data.
+
+  The styles (SLD) are defined on the HST software side.
+
+  The recommandation documents are added by the HST administrator.
+
+- HST Administration Interface
+
+  An admin interface is needed for the admin the add recommandations and
+  set/change the thresholds.
+
+- POC work
+
+  Work with two hazard types. Define the input format for these two hazard
+  types.
+
+  Work with both local and global data (two different scales).
+
+  The POC work should be based on one or two use-cases. The POC should cover
+  the whole system:
+
+  - [BO] Submit data
+  - [BO] Categorize the data (depends the thresholds)
+  - [FO] Selection of a location (possibly pre-defined)
+  - [FO] Show the answer to the location (with a static map)
+
+  Question: What selection modes do we want? Use a map? Multi-selection?
+
+  What needs to be defined for the POC:
+
+  - Input data (format, resolution, …)
+  - Simple catagorization precesses
+  - Macroscopic use-case definition (data selection)
+  - Vocabulary definition (categorization, …)
+
+- Location selection
+
+  Use-cases: "Horn of Africa", "South of France", "East Paris" => No. This
+  is too complex.
+
+  But it should be possible to select multiple areas at the same admin level.
+  The UI should make this possible.
+
+  The Location data is provided by GFDRR.
+
+- Do we want a map for the location selection?
+
+  Yes, probably.
+
+  See <http://bnpe.eaufrance.fr/acces-donnees> for example.
+
+- Do we need to have a map in the response page?
+
+  In GeoRisques per-hazard type static maps are displayed. This is probably
+  sufficient. The map needs a legend and a scale.
+
+- Background layer
+
+  OpenStreetMap-based background layer. Humanitarian layer for example.
+
+- Operating System
+
+  Using Debian is ok.
+
+- Browser compatibility
+  
+  Internet Explorer 9
+
+- Map projection
+
+  What projection do we use?
+  The easy one is to use Web Mercator.
+
+- Tools/librairies
+
+  Use whatever Camptocamp feel confortable with.
+  MapServer, Pyramid, OpenLayers, AngularJS
