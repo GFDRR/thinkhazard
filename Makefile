@@ -17,7 +17,7 @@ help:
 	@echo
 
 .PHONY: install
-install: setup-develop
+install: setup-develop .build/node_modules.timestamp
 	
 .PHONY: setup-develop
 setup-develop: .build/venv
@@ -59,6 +59,11 @@ dist: .build/venv
 .build/venv/thinkhazard.wsgi: thinkhazard.wsgi
 	sed 's#{{DIR}}#$(CURDIR)#' $< > $@
 	chmod 755 $@
+
+.build/node_modules.timestamp: package.json
+	mkdir -p $(dir $@)
+	npm install
+	touch $@
 
 .build/apache.conf: apache.conf .build/venv
 	sed -e 's#{{PYTHONPATH}}#$(shell .build/venv/bin/python -c "import distutils; print(distutils.sysconfig.get_python_lib())")#' \
