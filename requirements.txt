@@ -1,0 +1,5 @@
+#
+# This file defines the requirements.txt for development.
+#
+flake8==2.2.2
+pep8-naming==0.2.2
