@@ -1,14 +1,19 @@
-thinkhazard README
-==================
+ThinkHazard
+###########
 
 Getting Started
----------------
+===============
 
-- cd <directory containing this file>
+Create a Python virtual environment and install the project into it::
 
-- $VENV/bin/python setup.py develop
+    $ make install
 
-- $VENV/bin/initialize_thinkhazard_db development.ini
+Set up the project's database::
 
-- $VENV/bin/pserve development.ini
+    $ make initdb
 
+Run the development server::
+
+    $ make serve
+
+Now point your browser to http://localhost:6543
