@@ -1,0 +1,6 @@
+*.pyc
+*.egg-info
+*.sqlite
+npm-debug.log
+.build
+node_modules
