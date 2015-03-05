@@ -12,6 +12,7 @@ requires = [
     'pyramid',
     'pyramid_chameleon',
     'pyramid_debugtoolbar',
+    'pyramid_mako',
     'pyramid_tm',
     'SQLAlchemy',
     'transaction',
