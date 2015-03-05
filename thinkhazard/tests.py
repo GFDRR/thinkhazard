@@ -7,7 +7,7 @@ from .models import DBSession
 
 
 class TestMyViewSuccessCondition(unittest.TestCase):
-    def setUp(self):
+    def setUp(self):  # NOQA
         self.config = testing.setUp()
         from sqlalchemy import create_engine
         engine = create_engine('sqlite://')
@@ -21,7 +21,7 @@ class TestMyViewSuccessCondition(unittest.TestCase):
             model = MyModel(name='one', value=55)
             DBSession.add(model)
 
-    def tearDown(self):
+    def tearDown(self):  # NOQA
         DBSession.remove()
         testing.tearDown()
 
@@ -34,17 +34,13 @@ class TestMyViewSuccessCondition(unittest.TestCase):
 
 
 class TestMyViewFailureCondition(unittest.TestCase):
-    def setUp(self):
+    def setUp(self):  # NOQA
         self.config = testing.setUp()
         from sqlalchemy import create_engine
         engine = create_engine('sqlite://')
-        from .models import (
-            Base,
-            MyModel,
-            )
         DBSession.configure(bind=engine)
 
-    def tearDown(self):
+    def tearDown(self):  # NOQA
         DBSession.remove()
         testing.tearDown()
 
