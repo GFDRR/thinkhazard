@@ -1,6 +1,11 @@
 ThinkHazard
 ###########
 
+
+.. image:: https://api.travis-ci.org/GFDRR/thinkhazard.svg?branch=master
+    :target: https://travis-ci.org/GFDRR/thinkhazard
+    :alt: Travis CI Status
+
 Getting Started
 ===============
 
