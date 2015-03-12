@@ -11,7 +11,6 @@ with open(os.path.join(here, 'CHANGES.rst')) as f:
 requires = [
     'pyramid',
     'pyramid_jinja2',
-    'pyramid_chameleon',
     'pyramid_debugtoolbar',
     'pyramid_tm',
     'SQLAlchemy',
