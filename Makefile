@@ -1,3 +1,5 @@
+LESS_FILES = $(shell find thinkhazard/static/less -type f -name '*.less' 2> /dev/null)
+
 .PHONY: all
 all: help
 
@@ -8,6 +10,7 @@ help:
 	@echo "Possible targets:"
 	@echo
 	@echo "- install                 Install thinkhazard"
+	@echo "- build                   Build CSS and JS"
 	@echo "- initdb                  (Re-)initialize the database"
 	@echo "- serve                   Run the dev server"
 	@echo "- check                   Check the code with flake8"
@@ -24,12 +27,18 @@ install: setup-develop .build/node_modules.timestamp
 setup-develop: .build/venv
 	.build/venv/bin/python setup.py develop
 
+.PHONY: build
+build: buildcss
+
+.PHONY: buildcss
+buildcss: thinkhazard/static/build/build.css thinkhazard/static/build/build.min.css
+
 .PHONY: initdb
 initdb:
 	.build/venv/bin/initialize_thinkhazard_db development.ini
 
 .PHONY: serve
-serve:
+serve: build
 	.build/venv/bin/pserve --reload development.ini
 
 .PHONY: routes
@@ -53,6 +62,14 @@ test:
 .PHONY: dist
 dist: .build/venv
 	.build/venv/bin/python setup.py sdist
+
+thinkhazard/static/build/build.css: $(LESS_FILES) .build/node_modules.timestamp
+	mkdir -p $(dir $@)
+	./node_modules/.bin/lessc thinkhazard/static/less/thinkhazard.less $@
+
+thinkhazard/static/build/build.min.css: $(LESS_FILES) .build/node_modules.timestamp
+	mkdir -p $(dir $@)
+	./node_modules/.bin/lessc --clean-css thinkhazard/static/less/thinkhazard.less $@
 
 .build/venv:
 	mkdir -p $(dir $@)
