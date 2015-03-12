@@ -1,4 +1,5 @@
 LESS_FILES = $(shell find thinkhazard/static/less -type f -name '*.less' 2> /dev/null)
+JS_FILES = $(shell find thinkhazard/static/js -type f -name '*.js' 2> /dev/null)
 
 .PHONY: all
 all: help
@@ -13,7 +14,7 @@ help:
 	@echo "- build                   Build CSS and JS"
 	@echo "- initdb                  (Re-)initialize the database"
 	@echo "- serve                   Run the dev server"
-	@echo "- check                   Check the code with flake8"
+	@echo "- check                   Check the code with flake8 and jshint"
 	@echo "- modwsgi                 Create files for Apache mod_wsgi"
 	@echo "- test                    Run the unit tests"
 	@echo "- dist                    Build a source distribution"
@@ -46,11 +47,14 @@ routes:
 	.build/venv/bin/proutes development.ini
 
 .PHONY: check
-check: flake8
+check: flake8 jshint
 
 .PHONY: flake8
 flake8: .build/venv/bin/flake8
 	.build/venv/bin/flake8 thinkhazard
+
+.PHONY: jshint
+jshint: .build/node_modules.timestamp .build/jshint.timestamp
 
 .PHONY: modwsgi
 modwsgi: install .build/venv/thinkhazard.wsgi .build/apache.conf
@@ -85,6 +89,11 @@ thinkhazard/static/build/build.min.css: $(LESS_FILES) .build/node_modules.timest
 .build/node_modules.timestamp: package.json
 	mkdir -p $(dir $@)
 	npm install
+	touch $@
+
+.build/jshint.timestamp: $(JS_FILES)
+	mkdir -p $(dir $@)
+	./node_modules/.bin/jshint --verbose $?
 	touch $@
 
 .build/apache.conf: apache.conf .build/venv
