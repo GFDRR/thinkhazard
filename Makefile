@@ -1,5 +1,6 @@
 LESS_FILES = $(shell find thinkhazard/static/less -type f -name '*.less' 2> /dev/null)
 JS_FILES = $(shell find thinkhazard/static/js -type f -name '*.js' 2> /dev/null)
+PY_FILES = $(shell find thinkhazard -type f -name '*.py' 2> /dev/null)
 
 .PHONY: all
 all: help
@@ -50,8 +51,7 @@ routes:
 check: flake8 jshint bootlint
 
 .PHONY: flake8
-flake8: .build/venv/bin/flake8
-	.build/venv/bin/flake8 thinkhazard
+flake8: .build/venv/bin/flake8 .build/flake8.timestamp
 
 .PHONY: jshint
 jshint: .build/node_modules.timestamp .build/jshint.timestamp
@@ -92,6 +92,11 @@ thinkhazard/static/build/build.min.css: $(LESS_FILES) .build/node_modules.timest
 .build/node_modules.timestamp: package.json
 	mkdir -p $(dir $@)
 	npm install
+	touch $@
+
+.build/flake8.timestamp: $(PY_FILES)
+	mkdir -p $(dir $@)
+	.build/venv/bin/flake8 $?
 	touch $@
 
 .build/jshint.timestamp: $(JS_FILES)
