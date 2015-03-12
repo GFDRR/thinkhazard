@@ -14,6 +14,7 @@ help:
 	@echo "- modwsgi                 Create files for Apache mod_wsgi"
 	@echo "- test                    Run the unit tests"
 	@echo "- dist                    Build a source distribution"
+	@echo "- routes                  Show the application routes"
 	@echo
 
 .PHONY: install
@@ -30,6 +31,10 @@ initdb:
 .PHONY: serve
 serve:
 	.build/venv/bin/pserve --reload development.ini
+
+.PHONY: routes
+routes:
+	.build/venv/bin/proutes development.ini
 
 .PHONY: check
 check: flake8
