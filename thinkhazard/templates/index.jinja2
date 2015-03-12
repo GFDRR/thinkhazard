@@ -5,7 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Thinkhazard</title>
+{% if debug %}
+    <link href="{{'thinkhazard:static/build/build.css'|static_url}}" rel="stylesheet">
+{% else %}
     <link href="{{'thinkhazard:static/build/build.min.css'|static_url}}" rel="stylesheet">
+{% endif %}
   </head>
   <body>
     <div class="container">
@@ -13,7 +17,12 @@
     </div>
     <footer>
     </footer>
+{% if debug %}
+    <script src="{{('%s/jquery/dist/jquery.js' % node_modules)|static_url}}"></script>
+    <script src="{{('%s/bootstrap/dist/js/bootstrap.js' % node_modules)|static_url}}"></script>
+{% else %}
     <script src="{{('%s/jquery/dist/jquery.min.js' % node_modules)|static_url}}"></script>
     <script src="{{('%s/bootstrap/dist/js/bootstrap.min.js' % node_modules)|static_url}}"></script>
+{% endif %}
   </body>
 </html>
