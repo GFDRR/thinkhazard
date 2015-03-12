@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/GFDRR/thinkhazard",
   "dependencies": {
+    "bootlint": "^0.11.0",
     "bootstrap": "^3.3.2",
     "jquery": "^2.1.3",
     "jshint": "~2.5.1",

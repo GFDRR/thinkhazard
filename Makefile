@@ -14,7 +14,7 @@ help:
 	@echo "- build                   Build CSS and JS"
 	@echo "- initdb                  (Re-)initialize the database"
 	@echo "- serve                   Run the dev server"
-	@echo "- check                   Check the code with flake8 and jshint"
+	@echo "- check                   Check the code with flake8, jshint and bootlint"
 	@echo "- modwsgi                 Create files for Apache mod_wsgi"
 	@echo "- test                    Run the unit tests"
 	@echo "- dist                    Build a source distribution"
@@ -47,7 +47,7 @@ routes:
 	.build/venv/bin/proutes development.ini
 
 .PHONY: check
-check: flake8 jshint
+check: flake8 jshint bootlint
 
 .PHONY: flake8
 flake8: .build/venv/bin/flake8
@@ -55,6 +55,9 @@ flake8: .build/venv/bin/flake8
 
 .PHONY: jshint
 jshint: .build/node_modules.timestamp .build/jshint.timestamp
+
+.PHONY: bootlint
+bootlint: .build/node_modules.timestamp .build/bootlint.timestamp
 
 .PHONY: modwsgi
 modwsgi: install .build/venv/thinkhazard.wsgi .build/apache.conf
@@ -94,6 +97,11 @@ thinkhazard/static/build/build.min.css: $(LESS_FILES) .build/node_modules.timest
 .build/jshint.timestamp: $(JS_FILES)
 	mkdir -p $(dir $@)
 	./node_modules/.bin/jshint --verbose $?
+	touch $@
+
+.build/bootlint.timestamp: $(JINJA2_FILES)
+	mkdir -p $(dir $@)
+	./node_modules/.bin/bootlint $?
 	touch $@
 
 .build/apache.conf: apache.conf .build/venv
