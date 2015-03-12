@@ -14,6 +14,9 @@
   <body>
     <div class="container">
       <h1>Welcome to the Thinkhazard tool!</h1>
+      <div class="form-group">
+        <input id="search-field" class="form-control" type="text" placeholder="Enter location… (e.g. Morocco)">
+      </div>
     </div>
     <footer>
     </footer>
@@ -26,5 +29,6 @@
     <script src="{{('%s/bootstrap/dist/js/bootstrap.min.js' % node_modules)|static_url}}"></script>
     <script src="{{('%s/typeahead.js/dist/typeahead.bundle.min.js' % node_modules)|static_url}}"></script>
 {% endif %}
+    <script src="{{'thinkhazard:static/js/index.js'|static_url}}"></script>
   </body>
 </html>
