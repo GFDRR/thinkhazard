@@ -9,6 +9,7 @@ with open(os.path.join(here, 'CHANGES.rst')) as f:
     CHANGES = f.read()
 
 requires = [
+    'psycopg2',
     'pyramid',
     'pyramid_jinja2',
     'pyramid_debugtoolbar',
