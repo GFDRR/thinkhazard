@@ -39,4 +39,11 @@
     source: engine.ttAdapter()
   });
 
+  $('#search-field').on('typeahead:selected',
+      function(e, d) {
+        var admin = d.admin2 || d.admin1 || d.admin0;
+        window.alert('You selected ' + admin);
+      }
+  );
+
 })();
