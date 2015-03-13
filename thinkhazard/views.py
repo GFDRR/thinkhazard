@@ -30,10 +30,7 @@ def roundrobin(*iterables, **kwargs):
 
 @view_config(route_name='index', renderer='templates/index.jinja2')
 def index(request):
-    debug = 'debug' in request.params
-    settings = request.registry.settings
-    return {'debug': debug,
-            'node_modules': settings.get('node_modules')}
+    return {}
 
 
 @view_config(route_name='adminunit', renderer='json')
