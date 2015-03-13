@@ -33,6 +33,10 @@
     <script src="{{('%s/bootstrap/dist/js/bootstrap.min.js' % node_modules)|static_url}}"></script>
     <script src="{{('%s/typeahead.js/dist/typeahead.bundle.min.js' % node_modules)|static_url}}"></script>
 {% endif %}
+    <script>
+      var app = {};
+      app.adminunitUrl = '{{'adminunit'|route_url}}';
+    </script>
     <script src="{{'thinkhazard:static/js/index.js'|static_url}}"></script>
   </body>
 </html>
