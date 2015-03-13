@@ -70,6 +70,11 @@ test:
 dist: .build/venv
 	.build/venv/bin/python setup.py sdist
 
+.PHONY: dbtunnel
+dbtunnel:
+	@echo "Opening tunnel…"
+	ssh -N -L 9999:localhost:5432 wb-thinkhazard-dev-1.sig.cloud.camptocamp.net
+
 thinkhazard/static/build/build.css: $(LESS_FILES) .build/node_modules.timestamp
 	mkdir -p $(dir $@)
 	./node_modules/.bin/lessc thinkhazard/static/less/thinkhazard.less $@
