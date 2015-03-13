@@ -13,7 +13,8 @@ help:
 	@echo
 	@echo "- install                 Install thinkhazard"
 	@echo "- build                   Build CSS and JS"
-	@echo "- initdb                  (Re-)initialize the database"
+	@echo "- initdb-dev              Initialize db using development.ini"
+	@echo "- initdb-prod             Initialize db using production.ini"
 	@echo "- serve                   Run the dev server"
 	@echo "- check                   Check the code with flake8, jshint and bootlint"
 	@echo "- modwsgi                 Create files for Apache mod_wsgi"
@@ -35,9 +36,13 @@ build: buildcss
 .PHONY: buildcss
 buildcss: thinkhazard/static/build/build.css thinkhazard/static/build/build.min.css
 
-.PHONY: initdb
-initdb:
+.PHONY: initdb-dev
+initdb-dev:
 	.build/venv/bin/initialize_thinkhazard_db development.ini
+
+.PHONY: initdb-prod
+initdb-prod:
+	.build/venv/bin/initialize_thinkhazard_db production.ini
 
 .PHONY: serve
 serve: build
@@ -69,6 +74,11 @@ test:
 .PHONY: dist
 dist: .build/venv
 	.build/venv/bin/python setup.py sdist
+
+.PHONY: dbtunnel
+dbtunnel:
+	@echo "Opening tunnel…"
+	ssh -N -L 9999:localhost:5432 wb-thinkhazard-dev-1.sig.cloud.camptocamp.net
 
 thinkhazard/static/build/build.css: $(LESS_FILES) .build/node_modules.timestamp
 	mkdir -p $(dir $@)

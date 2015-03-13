@@ -12,28 +12,13 @@
       return tokens;
     },
     queryTokenizer: Bloodhound.tokenizers.whitespace,
-    local: [{
-      admin0: 'Morocco'
-    }, {
-      admin0: 'Morocco',
-      admin1: 'Chaouia-Ouardigha'
-    }, {
-      admin0: 'Morocco',
-      admin1: 'Chaouia-Ouardigha',
-      admin2: 'Ben Slimane'
-    }, {
-      admin0: 'Morocco',
-      admin1: 'Chaouia-Ouardigha',
-      admin2: 'Khouribga'
-    }, {
-      admin0: 'Morocco',
-      admin1: 'Chaouia-Ouardigha',
-      admin2: 'Settat'
-    }, {
-      admin0: 'Morocco',
-      admin1: 'Chaouia-Ouardigha',
-      admin2: 'Berrechid'
-    }]
+    limit: 10,
+    remote: {
+      url: app.adminunitUrl + '?q=%QUERY',
+      filter: function(parsedResponse) {
+        return parsedResponse.data;
+      }
+    }
   });
 
   engine.initialize();
@@ -53,5 +38,12 @@
     },
     source: engine.ttAdapter()
   });
+
+  $('#search-field').on('typeahead:selected',
+      function(e, d) {
+        var admin = d.admin2 || d.admin1 || d.admin0;
+        window.alert('You selected ' + admin);
+      }
+  );
 
 })();
