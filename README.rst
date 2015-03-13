@@ -22,3 +22,9 @@ Run the development server::
     $ make serve
 
 Now point your browser to http://localhost:6543
+
+
+Import the admin units data
+===========================
+
+See `import <doc/import.rst>`_.
