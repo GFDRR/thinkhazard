@@ -27,7 +27,7 @@ Create a Python virtual environment and install the project into it::
 
 Set up the project's database::
 
-    $ make initdb
+    $ make initdb-dev
 
 Run the development server::
 
