@@ -1,7 +1,17 @@
 {% extends "base.jinja2" %}
-{% block container %}
-    <header>
-      <h1>Think hazard</h1>
-    </header>
+
+{% block name %}report{% endblock %}
+
+{% block content %}
+    <nav class="navbar navbar-default navbar-fixed-top">
+    </nav>
+    <div id="map"></div>
 {% endblock %}
 
+{% block scripts %}
+{% if debug %}
+    <script src="{{('%s/openlayers/dist/ol-debug.js' % node_modules)|static_url}}"></script>
+{% else %}
+    <script src="{{('%s/openlayers/dist/ol.js' % node_modules)|static_url}}"></script>
+{% endif %}
+{% endblock %}

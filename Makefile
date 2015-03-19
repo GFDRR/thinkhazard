@@ -34,7 +34,10 @@ setup-develop: .build/venv
 build: buildcss
 
 .PHONY: buildcss
-buildcss: thinkhazard/static/build/build.css thinkhazard/static/build/build.min.css
+buildcss: thinkhazard/static/build/index.css \
+	      thinkhazard/static/build/index.min.css \
+	      thinkhazard/static/build/report.css \
+	      thinkhazard/static/build/report.min.css
 
 .PHONY: initdb-dev
 initdb-dev:
@@ -80,13 +83,13 @@ dbtunnel:
 	@echo "Opening tunnel…"
 	ssh -N -L 9999:localhost:5432 wb-thinkhazard-dev-1.sig.cloud.camptocamp.net
 
-thinkhazard/static/build/build.css: $(LESS_FILES) .build/node_modules.timestamp
+thinkhazard/static/build/%.min.css: $(LESS_FILES) .build/node_modules.timestamp
 	mkdir -p $(dir $@)
-	./node_modules/.bin/lessc thinkhazard/static/less/thinkhazard.less $@
+	./node_modules/.bin/lessc --clean-css thinkhazard/static/less/$*.less $@
 
-thinkhazard/static/build/build.min.css: $(LESS_FILES) .build/node_modules.timestamp
+thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 	mkdir -p $(dir $@)
-	./node_modules/.bin/lessc --clean-css thinkhazard/static/less/thinkhazard.less $@
+	./node_modules/.bin/lessc thinkhazard/static/less/$*.less $@
 
 .build/venv:
 	mkdir -p $(dir $@)
@@ -127,6 +130,7 @@ thinkhazard/static/build/build.min.css: $(LESS_FILES) .build/node_modules.timest
 clean:
 	rm -f .build/venv/thinkhazard.wsgi
 	rm -f .build/apache.conf
+	rm -rf thinkhazard/static/build
 
 .PHONY: cleanall
 cleanall:
