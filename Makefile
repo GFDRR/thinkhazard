@@ -21,6 +21,7 @@ help:
 	@echo "- test                    Run the unit tests"
 	@echo "- dist                    Build a source distribution"
 	@echo "- routes                  Show the application routes"
+	@echo "- watchless               Watch less files"
 	@echo
 
 .PHONY: install
@@ -59,7 +60,7 @@ routes:
 check: flake8 jshint bootlint
 
 .PHONY: flake8
-flake8: .build/venv/bin/flake8 .build/flake8.timestamp
+flake8: .build/requirements.timestamp .build/flake8.timestamp
 
 .PHONY: jshint
 jshint: .build/node_modules.timestamp .build/jshint.timestamp
@@ -83,6 +84,11 @@ dbtunnel:
 	@echo "Opening tunnel…"
 	ssh -N -L 9999:localhost:5432 wb-thinkhazard-dev-1.sig.cloud.camptocamp.net
 
+.PHONY: watchless
+watchless: .build/requirements.timestamp
+	@echo "Watching less files…"
+	.build/venv/bin/nosier -p thinkhazard/static/less "make thinkhazard/static/build/index.css thinkhazard/static/build/report.css"
+
 thinkhazard/static/build/%.min.css: $(LESS_FILES) .build/node_modules.timestamp
 	mkdir -p $(dir $@)
 	./node_modules/.bin/lessc --clean-css thinkhazard/static/less/$*.less $@
@@ -95,9 +101,6 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 	mkdir -p $(dir $@)
 	virtualenv --no-site-packages .build/venv
 
-.build/venv/bin/flake8: .build/venv
-	.build/venv/bin/pip install -r requirements.txt > /dev/null 2>&1
-
 .build/venv/thinkhazard.wsgi: thinkhazard.wsgi
 	sed 's#{{DIR}}#$(CURDIR)#' $< > $@
 	chmod 755 $@
@@ -105,6 +108,11 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 .build/node_modules.timestamp: package.json
 	mkdir -p $(dir $@)
 	npm install
+	touch $@
+
+.build/requirements.timestamp: .build/venv requirements.txt
+	mkdir -p $(dir $@)
+	.build/venv/bin/pip install -r requirements.txt > /dev/null 2>&1
 	touch $@
 
 .build/flake8.timestamp: $(PY_FILES)
