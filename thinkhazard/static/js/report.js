@@ -1,6 +1,9 @@
 (function() {
   var map = new ol.Map({
     target: 'map',
+    interactions: ol.interaction.defaults({
+      mouseWheelZoom: false
+    }),
     layers: [
       new ol.layer.Tile({
         source: new ol.source.OSM()
