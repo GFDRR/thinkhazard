@@ -21,6 +21,7 @@ help:
 	@echo "- test                    Run the unit tests"
 	@echo "- dist                    Build a source distribution"
 	@echo "- routes                  Show the application routes"
+	@echo "- watchless               Watch less files"
 	@echo
 
 .PHONY: install
@@ -34,7 +35,10 @@ setup-develop: .build/venv
 build: buildcss
 
 .PHONY: buildcss
-buildcss: thinkhazard/static/build/build.css thinkhazard/static/build/build.min.css
+buildcss: thinkhazard/static/build/index.css \
+	      thinkhazard/static/build/index.min.css \
+	      thinkhazard/static/build/report.css \
+	      thinkhazard/static/build/report.min.css
 
 .PHONY: initdb-dev
 initdb-dev:
@@ -56,7 +60,7 @@ routes:
 check: flake8 jshint bootlint
 
 .PHONY: flake8
-flake8: .build/venv/bin/flake8 .build/flake8.timestamp
+flake8: .build/requirements.timestamp .build/flake8.timestamp
 
 .PHONY: jshint
 jshint: .build/node_modules.timestamp .build/jshint.timestamp
@@ -80,20 +84,22 @@ dbtunnel:
 	@echo "Opening tunnel…"
 	ssh -N -L 9999:localhost:5432 wb-thinkhazard-dev-1.sig.cloud.camptocamp.net
 
-thinkhazard/static/build/build.css: $(LESS_FILES) .build/node_modules.timestamp
-	mkdir -p $(dir $@)
-	./node_modules/.bin/lessc thinkhazard/static/less/thinkhazard.less $@
+.PHONY: watchless
+watchless: .build/requirements.timestamp
+	@echo "Watching less files…"
+	.build/venv/bin/nosier -p thinkhazard/static/less "make thinkhazard/static/build/index.css thinkhazard/static/build/report.css"
 
-thinkhazard/static/build/build.min.css: $(LESS_FILES) .build/node_modules.timestamp
+thinkhazard/static/build/%.min.css: $(LESS_FILES) .build/node_modules.timestamp
 	mkdir -p $(dir $@)
-	./node_modules/.bin/lessc --clean-css thinkhazard/static/less/thinkhazard.less $@
+	./node_modules/.bin/lessc --clean-css thinkhazard/static/less/$*.less $@
+
+thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
+	mkdir -p $(dir $@)
+	./node_modules/.bin/lessc thinkhazard/static/less/$*.less $@
 
 .build/venv:
 	mkdir -p $(dir $@)
 	virtualenv --no-site-packages .build/venv
-
-.build/venv/bin/flake8: .build/venv
-	.build/venv/bin/pip install -r requirements.txt > /dev/null 2>&1
 
 .build/venv/thinkhazard.wsgi: thinkhazard.wsgi
 	sed 's#{{DIR}}#$(CURDIR)#' $< > $@
@@ -102,6 +108,11 @@ thinkhazard/static/build/build.min.css: $(LESS_FILES) .build/node_modules.timest
 .build/node_modules.timestamp: package.json
 	mkdir -p $(dir $@)
 	npm install
+	touch $@
+
+.build/requirements.timestamp: .build/venv requirements.txt
+	mkdir -p $(dir $@)
+	.build/venv/bin/pip install -r requirements.txt > /dev/null 2>&1
 	touch $@
 
 .build/flake8.timestamp: $(PY_FILES)
@@ -127,6 +138,7 @@ thinkhazard/static/build/build.min.css: $(LESS_FILES) .build/node_modules.timest
 clean:
 	rm -f .build/venv/thinkhazard.wsgi
 	rm -f .build/apache.conf
+	rm -rf thinkhazard/static/build
 
 .PHONY: cleanall
 cleanall:

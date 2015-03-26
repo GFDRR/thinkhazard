@@ -24,6 +24,7 @@ def main(global_config, **settings):
                            cache_max_age=86000)
 
     config.add_route('index', '/')
+    config.add_route('report', '/report')
     config.add_route('adminunit', '/adminunit')
 
     config.scan()

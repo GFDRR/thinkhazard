@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Think hazard</title>
+{% if debug %}
+    <link href="{{('thinkhazard:static/build/%s.css' % self.name())|static_url}}" rel="stylesheet">
+{% else %}
+    <link href="{{('thinkhazard:static/build/%s.min.css' % self.name())|static_url}}" rel="stylesheet">
+{% endif %}
+  </head>
+  <body>
+    {% block content %}
+    {% endblock %}
+{% if debug %}
+    <script src="{{('%s/jquery/dist/jquery.js' % node_modules)|static_url}}"></script>
+    <script src="{{('%s/bootstrap/dist/js/bootstrap.js' % node_modules)|static_url}}"></script>
+    <script src="{{('%s/typeahead.js/dist/typeahead.bundle.js' % node_modules)|static_url}}"></script>
+{% else %}
+    <script src="{{('%s/jquery/dist/jquery.min.js' % node_modules)|static_url}}"></script>
+    <script src="{{('%s/bootstrap/dist/js/bootstrap.min.js' % node_modules)|static_url}}"></script>
+    <script src="{{('%s/typeahead.js/dist/typeahead.bundle.min.js' % node_modules)|static_url}}"></script>
+{% endif %}
+    {% block scripts %}
+    {% endblock scripts %}
+    <script>
+      var app = {};
+      app.adminunitUrl = '{{'adminunit'|route_url}}';
+    </script>
+    <script src="{{('thinkhazard:static/js/%s.js' % self.name())|static_url}}"></script>
+  </body>
+</html>

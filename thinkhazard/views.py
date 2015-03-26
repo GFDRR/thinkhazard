@@ -33,6 +33,11 @@ def index(request):
     return {}
 
 
+@view_config(route_name='report', renderer='templates/report.jinja2')
+def report(request):
+    return {}
+
+
 @view_config(route_name='adminunit', renderer='json')
 def adminunit(request):
 

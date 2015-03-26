@@ -1,17 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Think hazard</title>
-{% if debug %}
-    <link href="{{'thinkhazard:static/build/build.css'|static_url}}" rel="stylesheet">
-{% else %}
-    <link href="{{'thinkhazard:static/build/build.min.css'|static_url}}" rel="stylesheet">
-{% endif %}
-  </head>
-  <body>
+{% extends "base.jinja2" %}
+
+{% block name %}index{% endblock %}
+
+{% block content %}
     <div class="container">
       <header>
         <h1>Think hazard</h1>
@@ -19,24 +10,10 @@
         <p>Identify the hazards in your project area and receive guidance on how to handle them</p>
       </header>
       <div class="form-group">
-        <input id="search-field" class="form-control" type="text" placeholder="Enter location… (e.g. Ben Slimane)">
+        <input id="search-field" class="form-control" type="text"
+               placeholder="Enter location… (e.g. Ben Slimane)">
       </div>
+      <footer>
+      </footer>
     </div>
-    <footer>
-    </footer>
-{% if debug %}
-    <script src="{{('%s/jquery/dist/jquery.js' % node_modules)|static_url}}"></script>
-    <script src="{{('%s/bootstrap/dist/js/bootstrap.js' % node_modules)|static_url}}"></script>
-    <script src="{{('%s/typeahead.js/dist/typeahead.bundle.js' % node_modules)|static_url}}"></script>
-{% else %}
-    <script src="{{('%s/jquery/dist/jquery.min.js' % node_modules)|static_url}}"></script>
-    <script src="{{('%s/bootstrap/dist/js/bootstrap.min.js' % node_modules)|static_url}}"></script>
-    <script src="{{('%s/typeahead.js/dist/typeahead.bundle.min.js' % node_modules)|static_url}}"></script>
-{% endif %}
-    <script>
-      var app = {};
-      app.adminunitUrl = '{{'adminunit'|route_url}}';
-    </script>
-    <script src="{{'thinkhazard:static/js/index.js'|static_url}}"></script>
-  </body>
-</html>
+{% endblock %}

@@ -1,0 +1,26 @@
+html, body {
+  height: 100%;
+}
+
+#map {
+  position: fixed;
+  top: @navbar-height;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  .ol-zoom {
+   left: auto;
+   right: .5em;
+  }
+}
+
+@report-panel-margin: 10px;
+
+#report-panel {
+  position: absolute;
+  top: @navbar-height + @report-panel-margin;
+  width: 50%;
+  left: @report-panel-margin;
+  padding: 10px;
+}
