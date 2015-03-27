@@ -10,7 +10,7 @@ with open(os.path.join(here, 'CHANGES.rst')) as f:
 
 requires = [
     'psycopg2',
-    'pyramid',
+    'pyramid == 1.6.dev0',
     'pyramid_jinja2',
     'pyramid_debugtoolbar',
     'pyramid_tm',
