@@ -19,9 +19,10 @@ def main(global_config, **settings):
 
     config.include('pyramid_jinja2')
 
-    config.add_static_view('static', 'static', cache_max_age=3600)
+    config.add_static_view('static', 'static', cache_max_age=3600,
+                           cachebust=True)
     config.add_static_view('lib', settings.get('node_modules'),
-                           cache_max_age=86000)
+                           cache_max_age=86000, cachebust=True)
 
     config.add_route('index', '/')
     config.add_route('report', '/report')
