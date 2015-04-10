@@ -2,25 +2,53 @@ html, body {
   height: 100%;
 }
 
-#map {
-  position: fixed;
-  top: @navbar-height;
-  bottom: 0;
-  left: 0;
-  right: 0;
+@report-header-height: 150px;
 
-  .ol-zoom {
-   left: auto;
-   right: .5em;
-  }
+.navbar {
+  .box-shadow(0px 2px 6px -1px rgba(0, 0, 0, 0.5));
 }
 
-@report-panel-margin: 10px;
+#wrapper {
+  min-height: 100%;
+  height: 100%;
+  width: 100%;
+  padding-top: @navbar-height;
+}
 
-#report-panel {
+#report-wrapper,
+#map-wrapper {
+  height: 100%;
+  padding: 0;
+}
+
+#report {
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+#report-header {
   position: absolute;
-  top: @navbar-height + @report-panel-margin;
-  width: 50%;
-  left: @report-panel-margin;
-  padding: 10px;
+  width: 100%;
+  background-color: white;
+  height: @report-header-height;
+  .box-shadow(0px 2px 6px -1px rgba(0, 0, 0, 0.5));
+}
+
+#report-body {
+  /*margin-top: 200px;*/
+  max-height: 100%;
+  position: absolute;
+  top: @report-header-height;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  bottom: 0;
+}
+
+#map {
+  height: 100%;
+}
+
+#map img {
+  width: 100%;
+  height: 100%;
 }
