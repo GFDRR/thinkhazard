@@ -38,9 +38,49 @@ html, body {
   padding: 0;
 }
 
+#report-header {
+  padding-top: 10px;
+  h2 {
+    margin-top: 0;
+    font-family: 'variablebold';
+  }
+  h3 {
+    text-transform: uppercase;
+    font-size: 12px;
+    margin-bottom: 0;
+  }
+}
+
+.logo-gfdrr {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 135px;
+  height: 45px;
+  background: url(../images/logo-gfdrr-small.png) no-repeat;
+  background-position-x: center;
+  z-index: 2;
+}
+
 #report {
   max-height: 100%;
   overflow-y: auto;
+}
+
+#pdf-link {
+  position: absolute;
+  padding: 5px 10px;
+  right: 10px;
+  background-color: #035E8B;
+  z-index: 2;
+  color: white;
+  font-size: 0.9em;
+  font-family: 'variableblack', arial, sans-serif;
+  border-radius: 0 0 5px 5px;
+
+  img {
+    padding-right: 10px;
+  }
 }
 
 #report-header {
