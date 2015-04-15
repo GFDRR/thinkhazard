@@ -6,7 +6,7 @@ header {
 
 // height of the search pane (ie. height of the background image)
 @search-pane-height: 266px;
-@search-field-height: 34px;
+@search-field-height: 54px;
 #search-pane {
   height: @search-pane-height;
   background: url(../images/front-bg.png) no-repeat;
@@ -14,6 +14,18 @@ header {
 
   > div {
     padding-top: @search-pane-height / 2 - @search-field-height / 2;
+  }
+
+  .form-control,
+  #search-field {
+    height: @search-field-height;
+    border: 0;
+    background-color: white;
+    padding-left: 90px;
+  }
+  #search-field, #search-field:focus {
+    .box-shadow(0 6px 12px rgba(0,0,0,.175));
+    background: url(../images/search-addon.png) no-repeat;
   }
 
 }
