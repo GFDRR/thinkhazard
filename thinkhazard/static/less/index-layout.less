@@ -1,6 +1,19 @@
 body {
-  padding: 50px;
+  padding-top: @navbar-height;
 }
 
 header {
+}
+
+// height of the search pane (ie. height of the background image)
+@search-pane-height: 266px;
+@search-field-height: 34px;
+#search-pane {
+  height: @search-pane-height;
+  background: url(../images/front-bg.png) no-repeat;
+  background-position-x: center;
+
+  > div {
+    padding-top: @search-pane-height / 2 - @search-field-height / 2;
+  }
 }
