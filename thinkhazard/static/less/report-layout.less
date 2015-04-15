@@ -4,8 +4,25 @@ html, body {
 
 @report-header-height: 150px;
 
-.navbar {
-  .box-shadow(0px 2px 6px -1px rgba(0, 0, 0, 0.5));
+.navbar-brand {
+  padding: 0;
+  margin-top: -5px;
+}
+
+.navbar-form {
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+.navbar-form input {
+  border: 0;
+  &, &:focus {
+    .box-shadow(none);
+  }
+  background: url(../images/search-magnifier.png) no-repeat white;
+  background-position-y: center;
+  background-position-x: 10px;
+  padding-left: 50px;
 }
 
 #wrapper {

@@ -4,11 +4,28 @@
 
 {% block content %}
   <nav class="navbar navbar-default navbar-fixed-top">
-    <form class="navbar-form navbar-left" role="search">
-      <div class="form-group">
-        <input type="text" class="form-control col-md-9" placeholder="Search">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">
+          <img src="{{('thinkhazard:static/images/logo-small.png'|static_url)}}">
+        </a>
       </div>
-    </form>
+      <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control input-lg" placeholder="Search">
+        </div>
+      </form>
+      <div id="navbar" class="">
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a href="">About</a>
+          </li>
+          <li>
+            <a href="">Contact us</a>
+          </li>
+        </ul>
+      </div>
+    </div>
   </nav>
   <div id="wrapper">
     <div id="report-wrapper" class="col-sm-6 col-md-5 col-lg-4">
