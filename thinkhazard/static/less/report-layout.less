@@ -2,25 +2,200 @@ html, body {
   height: 100%;
 }
 
-#map {
-  position: fixed;
-  top: @navbar-height;
-  bottom: 0;
-  left: 0;
-  right: 0;
+@report-header-height: 166px;
 
-  .ol-zoom {
-   left: auto;
-   right: .5em;
+.navbar {
+  .box-shadow(0px 2px 6px -1px rgba(0, 0, 0, 0.5));
+}
+
+.navbar-brand {
+  padding: 0;
+  margin-top: -5px;
+}
+
+.navbar-form {
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+.navbar-form input.form-control {
+  border: 0;
+  &, &:focus {
+    .box-shadow(none);
+  }
+  background: url(../images/search-magnifier.png) no-repeat white;
+  background-position-y: center;
+  background-position-x: 10px;
+  padding-left: 50px;
+}
+
+/* Media queries to adjust form width */
+@media(min-width:768px) {
+  .navbar-form .form-control {
+    width: 350px;
   }
 }
 
-@report-panel-margin: 10px;
-
-#report-panel {
+#wrapper {
+  width: 100%;
   position: absolute;
-  top: @navbar-height + @report-panel-margin;
-  width: 50%;
-  left: @report-panel-margin;
-  padding: 10px;
+  top: @navbar-height;
+  bottom: 0;
+}
+
+#report-wrapper,
+#map-wrapper {
+  height: 100%;
+  padding: 0;
+}
+
+@report-wrapper-width: 655px;
+#report-wrapper {
+  position: absolute;
+  width: @report-wrapper-width;
+  .box-shadow(0px 2px 6px -1px rgba(0, 0, 0, 0.5));
+}
+
+#map-wrapper {
+  margin-left: @report-wrapper-width;
+}
+
+.logo-gfdrr {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 135px;
+  height: 45px;
+  background: url(../images/logo-gfdrr-small.png) no-repeat;
+  background-position-x: center;
+  z-index: 2;
+}
+
+#report {
+  max-height: 100%;
+}
+
+#pdf-link {
+  position: absolute;
+  padding: 5px 10px;
+  right: 10px;
+  background-color: #035E8B;
+  z-index: 2;
+  color: white;
+  font-size: 0.9em;
+  font-family: 'variableblack', arial, sans-serif;
+  border-radius: 0 0 5px 5px;
+
+  img {
+    padding-right: 10px;
+  }
+}
+
+#report-header {
+  position: absolute;
+  width: 100%;
+  background-color: white;
+  height: @report-header-height;
+  z-index: 2;
+  .box-shadow(0px 2px 6px -1px rgba(0, 0, 0, 0.5));
+
+  h2 {
+    margin-top: 0;
+    font-family: 'variablebold';
+  }
+  h3 {
+    text-transform: uppercase;
+    font-size: 12px;
+    margin-bottom: 0;
+  }
+
+  ul.hazards {
+    background-color: #f2f2f2;
+    height: 90px;
+    li {
+      vertical-align: top;
+      background-color: #f2f2f2;
+      height: 90px;
+      border-bottom: 4px solid @level-default-color;
+      overflow: hidden;
+      .transition(height .15s linear);
+      a, a:hover {
+        color: @text-color;
+        text-decoration: none;
+      }
+      img {
+        display: block;
+        padding: 10px;
+      }
+      &.high {
+        border-color: @level-high-color;
+      }
+      &.medium {
+        border-color: @level-medium-color;
+      }
+      &.low {
+        border-color: @level-low-color;
+      }
+      &:hover {
+        height: 110px;
+      }
+    }
+  }
+  }
+
+#report-body {
+  max-height: 100%;
+  position: absolute;
+  top: @report-header-height;
+  bottom: 0;
+
+  @footer-gradient-height: 30px;
+  .scrollable {
+    max-height: 100%;
+    overflow-x: hidden;
+    padding-bottom: @footer-gradient-height;
+  }
+
+  .title-gradient(@color) {
+    #gradient > .horizontal(@start-color: white; @end-color: @color; @start-percent: 50%);
+    border-color: @color;
+  }
+
+  .page-header {
+    &.level-high {
+      .title-gradient(@level-high-color);
+    }
+    &.level-medium {
+      .title-gradient(@level-medium-color);
+    }
+    &.level-low {
+      .title-gradient(@level-low-color);
+    }
+    &.level-default {
+      .title-gradient(@level-default-color);
+    }
+    small {
+      color: white;
+      margin-top: 0.6em;
+      padding-right: 10px;
+    }
+  }
+  .footer-gradient {
+    height: @footer-gradient-height;
+    position: absolute;
+    left: 0;
+    right: 15px;
+    bottom: 0;
+    z-index: 2;
+    #gradient > .vertical(@start-color: rgba(255, 255, 255, 0), @end-color: rgba(255, 255, 255, 1));
+  }
+}
+
+#map {
+  height: 100%;
+}
+
+#map img {
+  width: 100%;
+  height: 100%;
 }
