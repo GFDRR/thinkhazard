@@ -4,6 +4,10 @@ html, body {
 
 @report-header-height: 166px;
 
+.navbar {
+  .box-shadow(0px 2px 6px -1px rgba(0, 0, 0, 0.5));
+}
+
 .navbar-brand {
   padding: 0;
   margin-top: -5px;
@@ -49,6 +53,7 @@ html, body {
 #report-wrapper {
   position: absolute;
   width: @report-wrapper-width;
+  .box-shadow(0px 2px 6px -1px rgba(0, 0, 0, 0.5));
 }
 
 #map-wrapper {
@@ -91,8 +96,8 @@ html, body {
   width: 100%;
   background-color: white;
   height: @report-header-height;
-  .box-shadow(0px 2px 6px -1px rgba(0, 0, 0, 0.5));
   z-index: 2;
+  .box-shadow(0px 2px 6px -1px rgba(0, 0, 0, 0.5));
 
   h2 {
     margin-top: 0;
