@@ -2,7 +2,7 @@ html, body {
   height: 100%;
 }
 
-@report-header-height: 150px;
+@report-header-height: 178px;
 
 .navbar-brand {
   padding: 0;
@@ -89,6 +89,39 @@ html, body {
   background-color: white;
   height: @report-header-height;
   .box-shadow(0px 2px 6px -1px rgba(0, 0, 0, 0.5));
+
+  ul.hazards {
+    background-color: #f2f2f2;
+    height: 90px;
+    li {
+      vertical-align: top;
+      background-color: #f2f2f2;
+      height: 90px;
+      border-bottom: 4px solid @level-default-color;
+      overflow: hidden;
+      .transition(height .15s linear);
+      a, a:hover {
+        color: @text-color;
+        text-decoration: none;
+      }
+      img {
+        display: block;
+        padding: 10px;
+      }
+      &.high {
+        border-color: @level-high-color;
+      }
+      &.medium {
+        border-color: @level-medium-color;
+      }
+      &.low {
+        border-color: @level-low-color;
+      }
+      &:hover {
+        height: 110px;
+      }
+    }
+  }
 }
 
 #report-body {
