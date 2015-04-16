@@ -2,3 +2,19 @@
 @import "../../../node_modules/typeahead.js-bootstrap3.less/typeahead.less";
 
 @import "common-variables.less";
+
+@import "web-fonts.less";
+
+body {
+  font-family: 'variableregular', Arial, sans-serif;
+}
+
+ul.horizontal li {
+  display: inline-block;
+}
+
+
+// overrides for typeahead-bootstrap-less
+.form-group-lg .twitter-typeahead .tt-dropdown-menu {
+  font-size: @font-size-large;
+}
