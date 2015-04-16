@@ -25,12 +25,8 @@ help:
 	@echo
 
 .PHONY: install
-install: setup-develop .build/node_modules.timestamp
+install: .build/requirements.timestamp .build/node_modules.timestamp
 	
-.PHONY: setup-develop
-setup-develop: .build/venv
-	.build/venv/bin/python setup.py develop
-
 .PHONY: build
 build: buildcss
 
@@ -60,7 +56,7 @@ routes:
 check: flake8 jshint bootlint
 
 .PHONY: flake8
-flake8: .build/requirements.timestamp .build/flake8.timestamp
+flake8: .build/dev-requirements.timestamp .build/flake8.timestamp
 
 .PHONY: jshint
 jshint: .build/node_modules.timestamp .build/jshint.timestamp
@@ -85,7 +81,7 @@ dbtunnel:
 	ssh -N -L 9999:localhost:5432 wb-thinkhazard-dev-1.sig.cloud.camptocamp.net
 
 .PHONY: watchless
-watchless: .build/requirements.timestamp
+watchless: .build/dev-requirements.timestamp
 	@echo "Watching less files…"
 	.build/venv/bin/nosier -p thinkhazard/static/less "make thinkhazard/static/build/index.css thinkhazard/static/build/report.css"
 
@@ -110,9 +106,14 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 	npm install
 	touch $@
 
+.build/dev-requirements.timestamp: .build/venv dev-requirements.txt
+	mkdir -p $(dir $@)
+	.build/venv/bin/pip install -r dev-requirements.txt > /dev/null 2>&1
+	touch $@
+
 .build/requirements.timestamp: .build/venv requirements.txt
 	mkdir -p $(dir $@)
-	.build/venv/bin/pip install -r requirements.txt > /dev/null 2>&1
+	.build/venv/bin/pip install -r requirements.txt
 	touch $@
 
 .build/flake8.timestamp: $(PY_FILES)
