@@ -132,6 +132,31 @@ html, body {
   overflow-y: scroll;
   overflow-x: hidden;
   bottom: 0;
+
+  .title-gradient(@color) {
+    #gradient > .horizontal(@start-color: white; @end-color: @color; @start-percent: 50%);
+    border-color: @color;
+  }
+
+  .page-header {
+    &.level-high {
+      .title-gradient(@level-high-color);
+    }
+    &.level-medium {
+      .title-gradient(@level-medium-color);
+    }
+    &.level-low {
+      .title-gradient(@level-low-color);
+    }
+    &.level-default {
+      .title-gradient(@level-default-color);
+    }
+    small {
+      color: white;
+      margin-top: 0.6em;
+      padding-right: 10px;
+    }
+  }
 }
 
 #map {
