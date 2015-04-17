@@ -17,6 +17,7 @@ The following packages must be installed on the system:
 * `python-devel`
 * `python-virtualenv`
 * `apache2`
+* `mapnik-utils`, `libmapnik2.2`, `libmapnik-dev`, `python-mapnik`
 
 Getting Started
 ===============
@@ -30,9 +31,3 @@ Run the development server::
     $ make serve
 
 Now point your browser to http://localhost:6543
-
-
-Import the admin units data
-===========================
-
-See `import <doc/import.rst>`_.

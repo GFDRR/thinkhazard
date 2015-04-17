@@ -53,7 +53,7 @@
 
   $('#search-field').on('typeahead:selected',
       function(e, d) {
-        window.location.href = app.reportpageUrl + '?administrativedivision_id=' + d.id;
+        window.location.href = app.reportpageUrl + '?divisioncode=' + d.code;
       }
   );
 

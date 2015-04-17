@@ -95,7 +95,7 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 
 .build/venv:
 	mkdir -p $(dir $@)
-	virtualenv --no-site-packages .build/venv
+	virtualenv --system-site-packages .build/venv
 
 .build/venv/thinkhazard.wsgi: thinkhazard.wsgi
 	sed 's#{{DIR}}#$(CURDIR)#' $< > $@
