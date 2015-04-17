@@ -35,7 +35,31 @@ def index(request):
 
 @view_config(route_name='report', renderer='templates/report.jinja2')
 def report(request):
-    return {}
+    hazards = [{
+        'name': 'drought',
+        'level': 'high'
+    }, {
+        'name': 'earthquake',
+        'level': 'high'
+    }, {
+        'name': 'tsunami',
+        'level': 'high'
+    }, {
+        'name': 'flood',
+        'level': 'medium'
+    }, {
+        'name': 'storm-surge',
+        'level': 'medium'
+    }, {
+        'name': 'strong-wind',
+        'level': 'low'
+    }, {
+        'name': 'volcanic-ash',
+        'level': 'no-evidence'
+    }]
+    return {
+        'hazards': hazards
+    }
 
 
 @view_config(route_name='adminunit', renderer='json')

@@ -3,6 +3,7 @@
 {% block name %}report{% endblock %}
 
 {% block content %}
+
   <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
       <div class="navbar-header">
@@ -29,66 +30,43 @@
   </nav>
   <div id="wrapper">
     <div id="report-wrapper" class="">
-      <div id="report">
+      <div id="report" role="tabpanel">
         <div id="report-header" class="text-center">
           <div class="logo-gfdrr"></div>
           <a id="pdf-link" href><img src="{{('thinkhazard:static/images/download.png'|static_url)}}">Download PDF</a>
           <h3>Report on Hazards</h3>
           <h2>Morocco</h2>
-          <nav>
-            <ul class="horizontal list-unstyled hazards">
-              <li class="high">
-                <a href="">
-                  <img src="{{('thinkhazard:static/images/hazard-icon-drought.png'|static_url)}}" />
-                  Drought
-                </a>
-              </li>
-              <li class="high">
-                <a href="">
-                <img src="{{('thinkhazard:static/images/hazard-icon-earthquake.png'|static_url)}}" />
-                Earthquake
-                </a>
-              </li>
-              <li class="medium">
-                <a href="">
-                <img src="{{('thinkhazard:static/images/hazard-icon-flood.png'|static_url)}}" />
-                Flood
-                </a>
-              </li>
-              <li class="medium">
-                <a href="">
-                <img src="{{('thinkhazard:static/images/hazard-icon-storm-surge.png'|static_url)}}" />
-                Storm surge
-                </a>
-              </li>
-              <li class="low">
-                <a href="">
-                <img src="{{('thinkhazard:static/images/hazard-icon-strong-wind.png'|static_url)}}" />
-                Strong wind
-                </a>
-              </li>
-              <li class="low">
-                <a href="">
-                <img src="{{('thinkhazard:static/images/hazard-icon-tsunami.png'|static_url)}}" />
-                Tsunami
-                </a>
-              </li>
-              <li>
-                <a href="">
-                <img src="{{('thinkhazard:static/images/hazard-icon-volcanic-ash.png'|static_url)}}" />
-                Volcanic ash
-                </a>
-              </li>
-            </ul>
-          </nav>
+          <ul class="horizontal list-unstyled hazards" role="tablist">
+            {% for hazard in hazards %}
+            <li class="{{ hazard.level }}">
+              <a href="#{{ hazard.name }}" aria-controls="{{ hazard.name }}" role="tab" data-toggle="tab">
+                <img src="{{(('thinkhazard:static/images/hazard-icon-%s.png' % hazard.name) |static_url)}}" />
+                {{ hazard.name }}
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
         </div>
         <div id="report-body">
-          <div class="container-fluid scrollable">
-            <div class="row">
+          <div class="container-fluid scrollable tab-content">
+            <div id="default" class="row tab-pane active" role="tabpanel">
+              <div class="col-md-12 overview">
+              {% for hazard in hazards %}
+                <a href="#{{ hazard.name }}" aria-controls="{{ hazard.name }}" role="tab" data-toggle="tab">
+                  <h1 class="page-header level-{{ hazard.level }}">
+                    {{ hazard.name }}
+                    <small class="pull-right">{{ hazard.level }}</small>
+                  </h1>
+                </a>
+              {% endfor %}
+              </div>
+            </div>
+            {% for hazard in hazards %}
+            <div id="{{ hazard.name }}" class="row tab-pane" role="tabpanel">
               <div class="col-md-12">
-                <h1 class="page-header level-high">
-                  Earthquake
-                  <small class="pull-right">High</small>
+                <h1 class="page-header detail level-{{ hazard.level }}">
+                  {{ hazard.name }}
+                  <small class="pull-right">{{ hazard.level }}</small>
                 </h1>
                 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has
                 survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
@@ -106,6 +84,7 @@
                 </p>
               </div>
             </div>
+            {% endfor %}
           </div>
           <div class="footer-gradient"></div>
         </div>
