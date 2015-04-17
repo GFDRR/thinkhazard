@@ -116,7 +116,6 @@ html, body {
       vertical-align: top;
       background-color: #f2f2f2;
       height: 90px;
-      border-bottom: 4px solid @level-default-color;
       overflow: hidden;
       .transition(height .15s linear);
       a, a:hover {
@@ -127,15 +126,21 @@ html, body {
         display: block;
         padding: 10px;
       }
-      &.high {
-        border-color: @level-high-color;
+      border-bottom: 4px solid;
+
+      .by-level(@level) {
+        &.@{level} {
+          @color: "level-@{level}-color";
+          border-color: @@color;
+          &.active {
+            background-color: lighten(@@color, 30%);
+          }
+        }
       }
-      &.medium {
-        border-color: @level-medium-color;
-      }
-      &.low {
-        border-color: @level-low-color;
-      }
+      .by-level(high);
+      .by-level(medium);
+      .by-level(low);
+      .by-level(no-evidence);
       &:hover {
         height: 110px;
       }
@@ -144,6 +149,7 @@ html, body {
   }
 
 #report-body {
+  width: 100%;
   max-height: 100%;
   position: absolute;
   top: @report-header-height;
@@ -154,6 +160,7 @@ html, body {
     max-height: 100%;
     overflow-x: hidden;
     padding-bottom: @footer-gradient-height;
+    padding-top: 30px;
   }
 
   .title-gradient(@color) {
@@ -161,25 +168,42 @@ html, body {
     border-color: @color;
   }
 
+  a:hover {
+    text-decoration: none;
+  }
   .page-header {
-    &.level-high {
-      .title-gradient(@level-high-color);
-    }
-    &.level-medium {
-      .title-gradient(@level-medium-color);
-    }
-    &.level-low {
-      .title-gradient(@level-low-color);
-    }
-    &.level-default {
-      .title-gradient(@level-default-color);
-    }
+    margin-top: 0;
+    color: @text-color;
     small {
-      color: white;
       margin-top: 0.6em;
       padding-right: 10px;
     }
+
+    .page-header-level(@level_name) {
+      @color: "level-@{level_name}-color";
+      &.level-@{level_name} {
+        &:hover {
+          border-bottom-color: @@color;
+        }
+        small {
+          color: @@color;
+        }
+      }
+      &.detail {
+        &.level-@{level_name} {
+          .title-gradient(@@color);
+        }
+        small {
+          color: white;
+        }
+      }
+    }
+    .page-header-level(high);
+    .page-header-level(medium);
+    .page-header-level(low);
+    .page-header-level(no-evidence);
   }
+
   .footer-gradient {
     height: @footer-gradient-height;
     position: absolute;
