@@ -14,7 +14,7 @@
     queryTokenizer: Bloodhound.tokenizers.whitespace,
     limit: 10,
     remote: {
-      url: app.adminunitUrl + '?q=%QUERY',
+      url: app.admindivUrl + '?q=%QUERY',
       filter: function(parsedResponse) {
         return parsedResponse.data;
       }

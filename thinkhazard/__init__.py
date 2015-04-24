@@ -26,7 +26,7 @@ def main(global_config, **settings):
 
     config.add_route('index', '/')
     config.add_route('report', '/report')
-    config.add_route('adminunit', '/adminunit')
+    config.add_route('admindiv', '/admindiv')
 
     config.scan()
     return config.make_wsgi_app()

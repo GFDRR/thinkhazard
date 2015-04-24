@@ -111,7 +111,7 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 	.build/venv/bin/pip install -r dev-requirements.txt > /dev/null 2>&1
 	touch $@
 
-.build/requirements.timestamp: .build/venv requirements.txt
+.build/requirements.timestamp: .build/venv setup.py requirements.txt
 	mkdir -p $(dir $@)
 	.build/venv/bin/pip install -r requirements.txt
 	touch $@

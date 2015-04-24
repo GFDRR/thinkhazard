@@ -3,7 +3,9 @@ import itertools
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest
 
-from .models import DBSession, Admin0, Admin1, Admin2
+from sqlalchemy import and_
+
+from .models import DBSession, AdministrativeDivision
 
 
 def roundrobin(*iterables, **kwargs):
@@ -62,22 +64,27 @@ def report(request):
     }
 
 
-@view_config(route_name='adminunit', renderer='json')
-def adminunit(request):
+@view_config(route_name='admindiv', renderer='json')
+def admindiv(request):
 
     if 'q' not in request.params:
         raise HTTPBadRequest(detail='parameter "q" is missing')
 
     ilike = '%s%%' % request.params['q']
 
-    admin0s = DBSession.query(Admin0).filter(
-        Admin0.name.ilike(ilike)).limit(10)
-    admin1s = DBSession.query(Admin1).filter(
-        Admin1.name.ilike(ilike)).limit(10)
-    admin2s = DBSession.query(Admin2).filter(
-        Admin2.name.ilike(ilike)).limit(10)
+    admin0s = DBSession.query(AdministrativeDivision).filter(
+        and_(AdministrativeDivision.leveltype_id == 1,
+             AdministrativeDivision.name.ilike(ilike))).limit(10)
+
+    admin1s = DBSession.query(AdministrativeDivision).filter(
+        and_(AdministrativeDivision.leveltype_id == 2,
+             AdministrativeDivision.name.ilike(ilike))).limit(10)
+
+    admin2s = DBSession.query(AdministrativeDivision).filter(
+        and_(AdministrativeDivision.leveltype_id == 3,
+             AdministrativeDivision.name.ilike(ilike))).limit(10)
 
     data = sorted(roundrobin(admin0s, admin1s, admin2s, limit=10),
-                  key=lambda o: o.order)
+                  key=lambda o: o.leveltype_id)
 
     return {'data': data}
