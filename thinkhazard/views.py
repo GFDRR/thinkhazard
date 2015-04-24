@@ -64,8 +64,8 @@ def report(request):
     }
 
 
-@view_config(route_name='admindiv', renderer='json')
-def admindiv(request):
+@view_config(route_name='administrativedivision', renderer='json')
+def administrativedivision(request):
 
     if 'q' not in request.params:
         raise HTTPBadRequest(detail='parameter "q" is missing')
