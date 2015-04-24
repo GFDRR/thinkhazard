@@ -23,20 +23,32 @@
 
   engine.initialize();
 
+  function getSortedTokens(s) {
+    var tokens = [s.admin0];
+    if (s.admin1) {
+      tokens.unshift(s.admin1);
+    }
+    if (s.admin2) {
+      tokens.unshift(s.admin2);
+    }
+    return tokens;
+  }
+
   $('#search-field').typeahead({
     highlight: true
   }, {
     displayKey: function(s) {
-      var tokens = [s.admin0];
-      if (s.admin1) {
-        tokens.push(s.admin1);
-      }
-      if (s.admin2) {
-        tokens.push(s.admin2);
-      }
-      return tokens.join(', ');
+      return getSortedTokens(s).join(', ');
     },
-    source: engine.ttAdapter()
+    source: engine.ttAdapter(),
+    templates: {
+      suggestion: function(data) {
+        var tokens = getSortedTokens(data);
+        tokens[0] += '<small><em>';
+        tokens[tokens.length - 1] += '</em></small>';
+        return tokens.join(', ');
+      }
+    }
   });
 
   $('#search-field').on('typeahead:selected',
