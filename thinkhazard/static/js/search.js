@@ -41,8 +41,7 @@
 
   $('#search-field').on('typeahead:selected',
       function(e, d) {
-        var admin = d.admin2 || d.admin1 || d.admin0;
-        window.location.href = app.reportpageUrl + '?administrativedivision_id=' + admin;
+        window.location.href = app.reportpageUrl + '?administrativedivision_id=' + d.id;
       }
   );
 

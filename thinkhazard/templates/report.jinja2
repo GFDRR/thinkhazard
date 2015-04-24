@@ -35,7 +35,7 @@
           <div class="logo-gfdrr"></div>
           <a id="pdf-link" href><img src="{{('thinkhazard:static/images/download.png'|static_url)}}">Download PDF</a>
           <h3>Report on Hazards</h3>
-          <h2>Morocco</h2>
+          <h2>{{ place }}</h2>
           <ul class="horizontal list-unstyled hazards" role="tablist">
             {% for hazard in hazards %}
             <li class="{{ hazard.level }}">

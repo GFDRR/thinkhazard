@@ -37,6 +37,14 @@ def index(request):
 
 @view_config(route_name='report', renderer='templates/report.jinja2')
 def report(request):
+    if 'administrativedivision_id' not in request.params:
+        raise HTTPBadRequest(
+            detail='parameter "administrativedivision_id" is missing')
+
+    id = request.params['administrativedivision_id']
+
+    place = DBSession.query(AdministrativeDivision).get(id)
+
     hazards = [{
         'name': 'drought',
         'level': 'high'
@@ -60,7 +68,8 @@ def report(request):
         'level': 'no-evidence'
     }]
     return {
-        'hazards': hazards
+        'hazards': hazards,
+        'place': place.name
     }
 
 
