@@ -14,7 +14,7 @@
     queryTokenizer: Bloodhound.tokenizers.whitespace,
     limit: 10,
     remote: {
-      url: app.admindivUrl + '?q=%QUERY',
+      url: app.administrativedivisionUrl + '?q=%QUERY',
       filter: function(parsedResponse) {
         return parsedResponse.data;
       }
@@ -42,7 +42,7 @@
   $('#search-field').on('typeahead:selected',
       function(e, d) {
         var admin = d.admin2 || d.admin1 || d.admin0;
-        window.location.href = app.reportpageUrl + '?admin=' + admin;
+        window.location.href = app.reportpageUrl + '?administrativedivision_id=' + admin;
       }
   );
 
