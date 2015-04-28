@@ -41,8 +41,17 @@ thinkhazard=# COPY datamart.administrativedivision FROM '/var/sig/adm-div_201504
 
 Step3: populate the admin division/hazard category relation table
 
+For the earthquake data:
+
 ```shell
 $ psql -d thinkhazard
 thinkhazard=# COPY datamart.rel_hazardcategory_administrativedivision FROM '/var/sig/poc-morocco-EQ_rel-hazardcategory-administrativedivision.csv' WITH DELIMITER ',' ENCODING 'utf-8';
+thinkhazard=# setval('datamart.rel_hazardcategory_administrativedivision_id_seq', 64);
+```
+
+For the flood data:
+
+```shell
+$ psql -d thinkhazard -f /var/sig/thor_data_updates_24-04-2015_FL.sql
 ```
 
