@@ -78,6 +78,11 @@ def mapnikmap(request):
         raise HTTPBadRequest(detail='incorrect value for parameter '
                                     '"height"')
 
+    format_ = request.matchdict['format']
+    if format_ not in (u'json', u'jpeg', u'png'):
+        raise HTTPBadRequest(detail='format %s is not supported' % format_)
+    format_ = str(format_)
+
     mapfile = request.registry.settings.get('mapfile')
     rasterfile = request.registry.settings.get('rasterfile')
 
@@ -95,7 +100,7 @@ def mapnikmap(request):
     else:
         image = mapnik.Image(width, height)
         mapnik.render(map_, image, 1, 1)
-        request.response.content_type = 'image/png'
-        request.response.body = image.tostring('png')
+        request.response.content_type = 'image/%s' % format_
+        request.response.body = image.tostring(format_)
 
     return request.response
