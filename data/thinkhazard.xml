@@ -31,14 +31,32 @@
   </Rule>
 </Style>
 
-<Style name="admindiv">
+<Style name="admindivcommon">
   <Rule>
-    <LineSymbolizer stroke="#559944" stroke-width="0.5" />
-    <PolygonSymbolizer fill="#ff0000" fill-opacity="0.3" />
     <TextSymbolizer fontset-name="fontset-0" fill="#000000" size="9"
         halo-fill="rgba(255, 255, 255, 0.5)" halo-radius="1"
         line-spacing="1" ><![CDATA[[name]]]>
     </TextSymbolizer>
+    <LineSymbolizer stroke="#559944" stroke-width="0.5" />
+  </Rule>
+</Style>
+
+<Style name="admindiv">
+  <Rule>
+    <Filter>[category] = 'HIG'</Filter>
+    <PolygonSymbolizer fill="#d91f2c" fill-opacity="0.3" />
+  </Rule>
+  <Rule>
+    <Filter>[category] = 'MED'</Filter>
+    <PolygonSymbolizer fill="#d57c27" fill-opacity="0.3" />
+  </Rule>
+  <Rule>
+    <Filter>[category] = 'LOW'</Filter>
+    <PolygonSymbolizer fill="#e0b025" fill-opacity="0.3" />
+  </Rule>
+  <Rule>
+    <ElseFilter />
+    <PolygonSymbolizer fill="#87988c" fill-opacity="0.3" />
   </Rule>
 </Style>
 
