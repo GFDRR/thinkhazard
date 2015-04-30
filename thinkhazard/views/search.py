@@ -5,10 +5,10 @@ from pyramid.httpexceptions import HTTPBadRequest
 
 from sqlalchemy import and_
 
-from .models import DBSession, AdministrativeDivision
+from ..models import DBSession, AdministrativeDivision
 
 
-def roundrobin(*iterables, **kwargs):
+def _roundrobin(*iterables, **kwargs):
     """
     This function is a derivate of the roundrobin function provided in the
     itertools documentation page.
@@ -28,49 +28,6 @@ def roundrobin(*iterables, **kwargs):
         except StopIteration:
             pending -= 1
             nexts = itertools.cycle(itertools.islice(nexts, pending))
-
-
-@view_config(route_name='index', renderer='templates/index.jinja2')
-def index(request):
-    return {}
-
-
-@view_config(route_name='report', renderer='templates/report.jinja2')
-def report(request):
-    if 'administrativedivision_id' not in request.params:
-        raise HTTPBadRequest(
-            detail='parameter "administrativedivision_id" is missing')
-
-    id = request.params['administrativedivision_id']
-
-    place = DBSession.query(AdministrativeDivision).get(id)
-
-    hazards = [{
-        'name': 'drought',
-        'level': 'high'
-    }, {
-        'name': 'earthquake',
-        'level': 'high'
-    }, {
-        'name': 'tsunami',
-        'level': 'high'
-    }, {
-        'name': 'flood',
-        'level': 'medium'
-    }, {
-        'name': 'storm-surge',
-        'level': 'medium'
-    }, {
-        'name': 'strong-wind',
-        'level': 'low'
-    }, {
-        'name': 'volcanic-ash',
-        'level': 'no-evidence'
-    }]
-    return {
-        'hazards': hazards,
-        'place': place.name
-    }
 
 
 @view_config(route_name='administrativedivision', renderer='json')
@@ -93,7 +50,7 @@ def administrativedivision(request):
         and_(AdministrativeDivision.leveltype_id == 3,
              AdministrativeDivision.name.ilike(ilike))).limit(10)
 
-    data = sorted(roundrobin(admin0s, admin1s, admin2s, limit=10),
+    data = sorted(_roundrobin(admin0s, admin1s, admin2s, limit=10),
                   key=lambda o: o.leveltype_id)
 
     return {'data': data}

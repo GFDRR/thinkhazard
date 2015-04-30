@@ -204,14 +204,14 @@ class AdministrativeDivision(Base):
 
     def __json__(self, request):
         if self.leveltype_id == 1:
-            return {'id': self.id,
+            return {'code': self.code,
                     'admin0': self.name}
         if self.leveltype_id == 2:
-            return {'id': self.id,
+            return {'code': self.code,
                     'admin0': self.parent.name,
                     'admin1': self.name}
         if self.leveltype_id == 3:
-            return {'id': self.id,
+            return {'code': self.code,
                     'admin0': self.parent.parent.name,
                     'admin1': self.parent.name,
                     'admin2': self.name}

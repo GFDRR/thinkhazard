@@ -29,6 +29,13 @@
       var app = {};
       app.administrativedivisionUrl = '{{'administrativedivision'|route_url}}';
       app.reportpageUrl = '{{'report'|route_url}}';
+      app.mapImgUrl = '{{'map'|route_url(format='jpeg')}}';
+      app.mapUtfUrl = '{{'map'|route_url(format='json')}}';
+      {%- if division %}
+      app.divisionCode = {{division.code}};
+      {%- else %}
+      app.divisionCode = undefined;
+      {%- endif %}
     </script>
     <script src="{{('thinkhazard:static/js/%s.js' % self.name())|static_url}}"></script>
     <script src="{{'thinkhazard:static/js/search.js'|static_url}}"></script>
