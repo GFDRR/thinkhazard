@@ -36,10 +36,10 @@
           <a id="pdf-link" href><img src="{{('thinkhazard:static/images/download.png'|static_url)}}">Download PDF</a>
           <h3>Report on Hazards</h3>
           <h2>{{ division.name }}</h2>
-          <ul class="horizontal list-unstyled hazards" role="tablist">
+          <ul id="hazard-types-list" class="horizontal list-unstyled hazards" role="tablist">
             {% for hazard in hazards %}
             <li class="{{ hazard.level }}">
-              <a href="#{{ hazard.name }}" aria-controls="{{ hazard.name }}" role="tab" data-toggle="tab">
+              <a href="#{{ hazard.mnemonic }}" aria-controls="{{ hazard.name }}" role="tab" data-toggle="tab">
                 <img src="{{(('thinkhazard:static/images/hazard-icon-%s.png' % hazard.name) |static_url)}}" />
                 {{ hazard.name }}
               </a>
@@ -52,7 +52,7 @@
             <div id="default" class="row tab-pane active" role="tabpanel">
               <div class="col-md-12 overview">
               {% for hazard in hazards %}
-                <a href="#{{ hazard.name }}" aria-controls="{{ hazard.name }}" role="tab" data-toggle="tab">
+                <a href="#{{ hazard.mnemonic }}" aria-controls="{{ hazard.name }}" role="tab" data-toggle="tab">
                   <h1 class="page-header level-{{ hazard.level }}">
                     {{ hazard.name }}
                     <small class="pull-right">{{ hazard.level }}</small>
@@ -62,7 +62,7 @@
               </div>
             </div>
             {% for hazard in hazards %}
-            <div id="{{ hazard.name }}" class="row tab-pane" role="tabpanel">
+            <div id="{{ hazard.mnemonic }}" class="row tab-pane" role="tabpanel">
               <div class="col-md-12">
                 <h1 class="page-header detail level-{{ hazard.level }}">
                   {{ hazard.name }}

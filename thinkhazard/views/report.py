@@ -16,24 +16,31 @@ def report(request):
         AdministrativeDivision.code == divisioncode).one()
 
     hazards = [{
+        'mnemonic': 'DG',
         'name': 'drought',
         'level': 'high'
     }, {
+        'mnemonic': 'EQ',
         'name': 'earthquake',
         'level': 'high'
     }, {
+        'mnemonic': 'TS',
         'name': 'tsunami',
         'level': 'high'
     }, {
+        'mnemonic': 'FL',
         'name': 'flood',
         'level': 'medium'
     }, {
+        'mnemonic': 'SS',
         'name': 'storm-surge',
         'level': 'medium'
     }, {
+        'mnemonic': 'SW',
         'name': 'strong-wind',
         'level': 'low'
     }, {
+        'mnemonic': 'VA',
         'name': 'volcanic-ash',
         'level': 'no-evidence'
     }]

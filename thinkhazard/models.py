@@ -201,6 +201,9 @@ class AdministrativeDivision(Base):
     leveltype = relationship(AdminLevelType)
     parent = relationship('AdministrativeDivision', uselist=False,
                           remote_side=code)
+    hazardcategories = relationship(
+        'HazardCategory',
+        secondary=hazardcategory_administrativedivision_table)
 
     def __json__(self, request):
         if self.leveltype_id == 1:

@@ -4,12 +4,20 @@ import mapnik
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest
 
+from sqlalchemy import and_
+
 import geoalchemy2.shape
 
-from ..models import DBSession, AdministrativeDivision
+from ..models import (
+    DBSession,
+    AdministrativeDivision,
+    CategoryType,
+    HazardType
+    )
 
 
-def _create_map_object(division_code, mapfile, rasterfile, width, height):
+def _create_map_object(division_code, hazard_type, mapfile, rasterfile,
+                       width, height):
     """
     Create a Mapnik map for an administrative division.
     """
@@ -30,15 +38,21 @@ def _create_map_object(division_code, mapfile, rasterfile, width, height):
     division_shape = geoalchemy2.shape.to_shape(division_geometry)
     division_box = mapnik.Box2d(*division_shape.bounds)
 
-    subdivisions = DBSession.query(AdministrativeDivision).filter(
-        AdministrativeDivision.parent_code == division_code)
+    subdivisions = DBSession.query(AdministrativeDivision,
+                                   CategoryType.mnemonic) \
+        .outerjoin(AdministrativeDivision.hazardcategories) \
+        .outerjoin(HazardType) \
+        .outerjoin(CategoryType) \
+        .filter(and_(AdministrativeDivision.parent_code == division_code,
+                     HazardType.mnemonic == hazard_type))
 
     division_datasource = mapnik.MemoryDatasource()
 
-    for subdivision in subdivisions:
+    for subdivision, category in subdivisions:
         feature = mapnik.Feature(mapnik.Context(), subdivision.id)
         feature['name'] = subdivision.name
         feature['code'] = subdivision.code
+        feature['category'] = category
         shape = geoalchemy2.shape.to_shape(subdivision.geometry_wgs84)
         feature.add_geometries_from_wkb(shape.wkb)
         division_datasource.add_feature(feature)
@@ -48,6 +62,7 @@ def _create_map_object(division_code, mapfile, rasterfile, width, height):
                 '+x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null ' \
                 '+wktext +no_defs +over" background-color="#b8dee6"'
     layer.styles.append('admindiv')
+    layer.styles.append('admindivcommon')
     layer.datasource = division_datasource
 
     map_.layers.append(layer)
@@ -65,6 +80,8 @@ def mapnikmap(request):
     except:
         raise HTTPBadRequest(detail='incorrect value for parameter '
                                     '"divisioncode"')
+
+    hazard_type = params.get('hazardtype')
 
     try:
         width = int(params.get('width'))
@@ -86,10 +103,8 @@ def mapnikmap(request):
     mapfile = request.registry.settings.get('mapfile')
     rasterfile = request.registry.settings.get('rasterfile')
 
-    map_ = _create_map_object(division_code, mapfile, rasterfile,
-                              width, height)
-
-    format_ = request.matchdict['format']
+    map_ = _create_map_object(division_code, hazard_type,
+                              mapfile, rasterfile, width, height)
 
     if format_ == 'json':
         grid = mapnik.Grid(width, height)
