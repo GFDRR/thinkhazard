@@ -40,7 +40,7 @@
             {% for hazard in hazards %}
             <li class="{{ hazard.level }}">
               <a href="#{{ hazard.mnemonic }}" aria-controls="{{ hazard.name }}" role="tab" data-toggle="tab">
-                <img src="{{(('thinkhazard:static/images/hazard-icon-%s.png' % hazard.name.lower()) |static_url)}}" />
+                <img src="{{(('thinkhazard:static/images/hazard-icon-%s.png' % hazard.name.lower().replace(' ', '-')) |static_url)}}" />
                 {{ hazard.name }}
               </a>
             </li>

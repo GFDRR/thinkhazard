@@ -16,7 +16,18 @@ def report(request):
     division = DBSession.query(AdministrativeDivision).filter(
         AdministrativeDivision.code == divisioncode).one()
 
-    hs = DBSession.query(HazardType.mnemonic,
+    hs = DBSession.query(HazardType.mnemonic, HazardType.title) \
+        .all()
+
+    hazards = {}
+    for mnemonic, name in hs:
+        hazards[mnemonic] = {
+            'mnemonic': mnemonic,
+            'name': name,
+            'level': 'no-data'
+        }
+
+    ls = DBSession.query(HazardType.mnemonic,
                          HazardType.title,
                          CategoryType.mnemonic) \
         .outerjoin(AdministrativeDivision.hazardcategories) \
@@ -24,15 +35,15 @@ def report(request):
         .outerjoin(CategoryType) \
         .filter(AdministrativeDivision.code == divisioncode).all()
 
-    hazards = []
-    for mnemonic, name, level in hs:
-        hazards.append({
-            'mnemonic': mnemonic,
-            'name': name,
-            'level': level
-        })
+    for mnemonic, name, level in ls:
+        if mnemonic is not None:
+            hazards[mnemonic]['level'] = level
+
+    hs = []
+    for mnemonic in hazards:
+        hs.append(hazards[mnemonic])
 
     return {
-        'hazards': hazards,
+        'hazards': hs,
         'division': division
     }
