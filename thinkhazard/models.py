@@ -203,7 +203,8 @@ class AdministrativeDivision(Base):
                           remote_side=code)
     hazardcategories = relationship(
         'HazardCategory',
-        secondary=hazardcategory_administrativedivision_table)
+        secondary=hazardcategory_administrativedivision_table,
+        backref='administrativedivisions')
 
     def __json__(self, request):
         if self.leveltype_id == 1:
@@ -282,6 +283,9 @@ class HazardCategory(Base):
     intensitythreshold = relationship(IntensityThreshold)
     categorytype = relationship(CategoryType)
     status = relationship(TermStatus)
+    recommendations = relationship(
+        'Recommendation',
+        secondary=hazardcategory_recommendation_table)
 
 
 class Recommendation(Base):
