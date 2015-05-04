@@ -33,7 +33,7 @@
 
 <Style name="admindivcommon">
   <Rule>
-    <TextSymbolizer fontset-name="fontset-0" fill="#000000" size="9"
+    <TextSymbolizer fontset-name="fontset-0" fill="#000000" size="12"
         halo-fill="rgba(255, 255, 255, 0.5)" halo-radius="1"
         line-spacing="1" ><![CDATA[[name]]]>
     </TextSymbolizer>
@@ -55,8 +55,8 @@
     <PolygonSymbolizer fill="#e0b025" fill-opacity="0.3" />
   </Rule>
   <Rule>
-    <ElseFilter />
-    <PolygonSymbolizer fill="#87988c" fill-opacity="0.3" />
+    <Filter>[category] = 'NPR'</Filter>
+    <PolygonSymbolizer fill="#e0b025" fill-opacity="0.3" />
   </Rule>
 </Style>
 

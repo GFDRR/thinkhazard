@@ -1,4 +1,5 @@
 import json
+import itertools
 import mapnik
 
 from pyramid.view import view_config
@@ -41,18 +42,22 @@ def _create_map_object(division_code, hazard_type, mapfile, rasterfile,
     division_shape = geoalchemy2.shape.to_shape(division_geometry)
     division_box = mapnik.Box2d(*division_shape.bounds)
 
-    # Display sub-divisions if admin level 0 or 1 (country or province), and
-    # display the division itself if admin level 2 (region).
-    division_filter = (AdministrativeDivision.code == division_code
-                       if division_leveltype == u'REG' else
-                       AdministrativeDivision.parent_code == division_code)
+    _filter = None
+    if division_leveltype == u'REG':
+        _filter = AdministrativeDivision.code == division_code
+    else:
+        _filter = AdministrativeDivision.parent_code == division_code
 
-    subdivisions = DBSession.query(AdministrativeDivision,
-                                   CategoryType.mnemonic) \
-        .outerjoin(AdministrativeDivision.hazardcategories) \
-        .outerjoin(HazardType) \
-        .outerjoin(CategoryType) \
-        .filter(and_(division_filter, HazardType.mnemonic == hazard_type))
+    if hazard_type is not None:
+        subdivisions = DBSession.query(AdministrativeDivision,
+                                       CategoryType.mnemonic) \
+            .outerjoin(AdministrativeDivision.hazardcategories) \
+            .outerjoin(HazardType).outerjoin(CategoryType) \
+            .filter(and_(_filter, HazardType.mnemonic == hazard_type))
+    else:
+        subdivisions = itertools.izip(
+            DBSession.query(AdministrativeDivision).filter(_filter),
+            itertools.chain('NONE'))
 
     division_datasource = mapnik.MemoryDatasource()
 
