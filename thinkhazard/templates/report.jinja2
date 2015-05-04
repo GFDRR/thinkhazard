@@ -68,7 +68,11 @@
                   {{ hazard.hazardtype.title }}
                   <small class="pull-right">{{ hazard.categorytype.title }}</small>
                 </h1>
+                {% if hazard.description %}
+                {{ hazard.description }}
+                {% else %}
                 {{ hazard.categorytype.description }}
+                {% endif %}
                 {% if hazard.recommendations %}
                 <h2>Recommendations</h2>
                 {% for recommendation in hazard.recommendations %}
