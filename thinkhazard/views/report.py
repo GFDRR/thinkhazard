@@ -32,6 +32,7 @@ def report(request):
     # are the hazard type mnemonics.
     hazard_data = {hazardtype.mnemonic: {'hazardtype': hazardtype,
                                          'categorytype': _categorytype_nodata,
+                                         'description': None,
                                          'recommendations': None}
                    for hazardtype in hazardtype_query}
 
@@ -48,6 +49,7 @@ def report(request):
     for hazardcategory in hazardcategories:
         key = hazardcategory.hazardtype.mnemonic
         hazard_data[key]['categorytype'] = hazardcategory.categorytype
+        hazard_data[key]['description'] = hazardcategory.description
         hazard_data[key]['recommendations'] = hazardcategory.recommendations
 
     # Order the hazard data by category type (hazard types with the highest
