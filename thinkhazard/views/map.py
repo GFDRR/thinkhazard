@@ -10,6 +10,7 @@ import geoalchemy2.shape
 
 from ..models import (
     DBSession,
+    AdminLevelType,
     AdministrativeDivision,
     CategoryType,
     HazardType
@@ -32,19 +33,26 @@ def _create_map_object(division_code, hazard_type, mapfile, rasterfile,
     layer.datasource = raster_datasource
     map_.layers.append(layer)
 
-    division_geometry = DBSession.query(
-        AdministrativeDivision.geometry_wgs84).filter(
-        AdministrativeDivision.code == division_code).scalar()
+    division_geometry, division_leveltype = DBSession.query(
+        AdministrativeDivision.geometry_wgs84, AdminLevelType.mnemonic) \
+        .join(AdministrativeDivision.leveltype) \
+        .filter(AdministrativeDivision.code == division_code).one()
+
     division_shape = geoalchemy2.shape.to_shape(division_geometry)
     division_box = mapnik.Box2d(*division_shape.bounds)
+
+    # Display sub-divisions if admin level 0 or 1 (country or province), and
+    # display the division itself if admin level 2 (region).
+    division_filter = (AdministrativeDivision.code == division_code
+                       if division_leveltype == u'REG' else
+                       AdministrativeDivision.parent_code == division_code)
 
     subdivisions = DBSession.query(AdministrativeDivision,
                                    CategoryType.mnemonic) \
         .outerjoin(AdministrativeDivision.hazardcategories) \
         .outerjoin(HazardType) \
         .outerjoin(CategoryType) \
-        .filter(and_(AdministrativeDivision.parent_code == division_code,
-                     HazardType.mnemonic == hazard_type))
+        .filter(and_(division_filter, HazardType.mnemonic == hazard_type))
 
     division_datasource = mapnik.MemoryDatasource()
 
