@@ -55,8 +55,8 @@
     <PolygonSymbolizer fill="#e0b025" fill-opacity="0.3" />
   </Rule>
   <Rule>
-    <ElseFilter />
-    <PolygonSymbolizer fill="#87988c" fill-opacity="0.3" />
+    <Filter>[category] = 'NPR'</Filter>
+    <PolygonSymbolizer fill="#e0b025" fill-opacity="0.3" />
   </Rule>
 </Style>
 
