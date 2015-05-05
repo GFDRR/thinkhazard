@@ -35,7 +35,7 @@ def _create_map_object(division_code, hazard_type, mapfile, rasterfile,
     map_.layers.append(layer)
 
     division_geometry, division_leveltype = DBSession.query(
-        AdministrativeDivision.geometry_wgs84, AdminLevelType.mnemonic) \
+        AdministrativeDivision.geom, AdminLevelType.mnemonic) \
         .join(AdministrativeDivision.leveltype) \
         .filter(AdministrativeDivision.code == division_code).one()
 
@@ -66,7 +66,7 @@ def _create_map_object(division_code, hazard_type, mapfile, rasterfile,
         feature['name'] = subdivision.name
         feature['code'] = subdivision.code
         feature['category'] = category
-        shape = geoalchemy2.shape.to_shape(subdivision.geometry_wgs84)
+        shape = geoalchemy2.shape.to_shape(subdivision.geom)
         feature.add_geometries_from_wkb(shape.wkb)
         division_datasource.add_feature(feature)
 
