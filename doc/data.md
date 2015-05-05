@@ -43,7 +43,7 @@ Step 2: load the administrative data
 
 ```shell
 $ psql -d thinkhazard
-thinkhazard=# COPY datamart.administrativedivision FROM '/var/sig/adm-div_20150420.csv' WITH DELIMITER ',' ENCODING 'utf-8';
+thinkhazard=# COPY datamart.administrativedivision FROM '/var/sig/adm-div_20150505.csv' WITH DELIMITER ',' ENCODING 'utf-8';
 ```
 
 Step3: populate the admin division/hazard category relation table
@@ -53,7 +53,7 @@ For the earthquake data:
 ```shell
 $ psql -d thinkhazard
 thinkhazard=# COPY datamart.rel_hazardcategory_administrativedivision FROM '/var/sig/poc-morocco-EQ_rel-hazardcategory-administrativedivision.csv' WITH DELIMITER ',' ENCODING 'utf-8';
-thinkhazard=# setval('datamart.rel_hazardcategory_administrativedivision_id_seq', 64);
+thinkhazard=# SELECT setval('datamart.rel_hazardcategory_administrativedivision_id_seq', 64);
 ```
 
 For the flood data:
