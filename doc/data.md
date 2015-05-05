@@ -53,7 +53,7 @@ For the earthquake data:
 ```shell
 $ psql -d thinkhazard
 thinkhazard=# COPY datamart.rel_hazardcategory_administrativedivision FROM '/var/sig/poc-morocco-EQ_rel-hazardcategory-administrativedivision.csv' WITH DELIMITER ',' ENCODING 'utf-8';
-thinkhazard=# setval('datamart.rel_hazardcategory_administrativedivision_id_seq', 64);
+thinkhazard=# SELECT setval('datamart.rel_hazardcategory_administrativedivision_id_seq', 64);
 ```
 
 For the flood data:
