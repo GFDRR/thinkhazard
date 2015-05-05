@@ -109,6 +109,7 @@ class CategoryType(Base):
     title = Column(Unicode, nullable=False)
     color = Column(Unicode, nullable=False)
     description = Column(Unicode)
+    order = Column(Integer)
     status_id = Column(Integer, ForeignKey(TermStatus.id), nullable=False)
     status = relationship(TermStatus)
 

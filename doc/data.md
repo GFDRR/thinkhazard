@@ -37,6 +37,7 @@ Step 1: load the hazard data
 
 ```shell
 $ psql -d thinkhazard -f /var/sig/thor_data_updates_23-04-2015_EQ.sql
+$ psql -d thinkhazard -f /var/sig/thor_enum_updates_05-05-2015.sql
 ```
 
 Step 2: load the administrative data
