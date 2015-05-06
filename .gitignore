@@ -1,6 +1,8 @@
 *.pyc
 *.egg-info
 *.sqlite
+*.rpm
+*.deb
 npm-debug.log
 .build
 node_modules
