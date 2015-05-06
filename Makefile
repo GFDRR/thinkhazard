@@ -25,6 +25,7 @@ help:
 	@echo "- routes                  Show the application routes"
 	@echo "- watchless               Watch less files"
 	@echo "- rpm                     Create RPM package"
+	@echo "- deb                     Create DEB package"
 	@echo
 
 .PHONY: install
@@ -89,11 +90,21 @@ watchless: .build/dev-requirements.timestamp
 	.build/venv/bin/nosier -p thinkhazard/static/less "make thinkhazard/static/build/index.css thinkhazard/static/build/report.css"
 
 .PHONY: rpm
-rpm: .build/venv-pkg-requirements.timestamp thinkhazard-0.0.1-1.x86_64.rpm
+rpm: .build/pkg/requirements.timestamp thinkhazard-0.0.1-1.x86_64.rpm
+
+.PHONY: deb
+deb: .build/pkg/requirements.timestamp thinkhazard_0.0.1_amd64.deb
 
 thinkhazard-%-1.x86_64.rpm: .build/pkg/requirements.timestamp .build/node_modules.timestamp .build/pkg/thinkhazard.wsgi
-	fpm -s dir -t rpm -n thinkhazard -v $* --prefix $(PKG_PREFIX) \
-            production.ini data node_modules .build/pkg/thinkhazard.wsgi=. .build/pkg/venv=.
+	fpm -s dir -t rpm -n thinkhazard -v $* \
+	  --prefix $(PKG_PREFIX) \
+	  production.ini data node_modules .build/pkg/thinkhazard.wsgi=. .build/pkg/venv=.
+
+thinkhazard_%_amd64.deb: .build/pkg/requirements.timestamp .build/node_modules.timestamp .build/pkg/thinkhazard.wsgi
+	fpm -s dir -t deb -n thinkhazard -v $* \
+	  -d "mapnik-utils,libmapnik2.2,libmapnik-dev,python-mapnik" \
+	  --prefix $(PKG_PREFIX) \
+	  production.ini data node_modules .build/pkg/thinkhazard.wsgi=. .build/pkg/venv=.
 
 thinkhazard/static/build/%.min.css: $(LESS_FILES) .build/node_modules.timestamp
 	mkdir -p $(dir $@)
