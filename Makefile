@@ -2,7 +2,7 @@ LESS_FILES = $(shell find thinkhazard/static/less -type f -name '*.less' 2> /dev
 JS_FILES = $(shell find thinkhazard/static/js -type f -name '*.js' 2> /dev/null)
 PY_FILES = $(shell find thinkhazard -type f -name '*.py' 2> /dev/null)
 
-PKG_PREFIX := /tmp/thinkhazard
+PKG_PREFIX := /var/www/vhosts/wb-thinkhazard/private/thinkhazard
 
 .PHONY: all
 all: help
@@ -90,21 +90,28 @@ watchless: .build/dev-requirements.timestamp
 	.build/venv/bin/nosier -p thinkhazard/static/less "make thinkhazard/static/build/index.css thinkhazard/static/build/report.css"
 
 .PHONY: rpm
-rpm: .build/pkg/requirements.timestamp thinkhazard-0.0.1-1.x86_64.rpm
+rpm: build thinkhazard-0.0.1-1.x86_64.rpm
 
 .PHONY: deb
-deb: .build/pkg/requirements.timestamp thinkhazard_0.0.1_amd64.deb
+deb: build thinkhazard_0.0.1_amd64.deb
 
-thinkhazard-%-1.x86_64.rpm: .build/pkg/requirements.timestamp .build/node_modules.timestamp .build/pkg/thinkhazard.wsgi
-	fpm -s dir -t rpm -n thinkhazard -v $* \
-	  --prefix $(PKG_PREFIX) \
-	  production.ini data node_modules .build/pkg/thinkhazard.wsgi=. .build/pkg/venv=.
+thinkhazard-%-1.x86_64.rpm: .build/pkg/requirements.timestamp \
+	                        .build/node_modules.timestamp \
+	                        .build/pkg/thinkhazard.wsgi \
+	                        .build/pkg/apache.conf
+	fpm -f -s dir -t rpm -n thinkhazard -v $* --prefix $(PKG_PREFIX) \
+	production.ini data node_modules .build/pkg/thinkhazard.wsgi=. \
+	.build/pkg/venv=. .build/pkg/apache.conf=.
 
-thinkhazard_%_amd64.deb: .build/pkg/requirements.timestamp .build/node_modules.timestamp .build/pkg/thinkhazard.wsgi
-	fpm -s dir -t deb -n thinkhazard -v $* \
-	  -d "mapnik-utils,libmapnik2.2,libmapnik-dev,python-mapnik" \
-	  --prefix $(PKG_PREFIX) \
-	  production.ini data node_modules .build/pkg/thinkhazard.wsgi=. .build/pkg/venv=.
+thinkhazard_%_amd64.deb: .build/pkg/requirements.timestamp \
+	                     .build/node_modules.timestamp \
+	                     .build/pkg/thinkhazard.wsgi \
+	                     .build/pkg/apache.conf
+	fpm -f -s dir -t deb -n thinkhazard -v $* \
+	-d "mapnik-utils,libmapnik2.2,libmapnik-dev,python-mapnik" \
+	--prefix $(PKG_PREFIX) \
+	production.ini data node_modules .build/pkg/thinkhazard.wsgi=. \
+	.build/pkg/venv=. .build/pkg/apache.conf=.
 
 thinkhazard/static/build/%.min.css: $(LESS_FILES) .build/node_modules.timestamp
 	mkdir -p $(dir $@)
@@ -164,11 +171,18 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 	sed -e 's#{{PYTHONPATH}}#$(shell .build/venv/bin/python -c "import distutils; print(distutils.sysconfig.get_python_lib())")#' \
 		-e 's#{{WSGISCRIPT}}#$(abspath .build/venv/thinkhazard.wsgi)#' $< > $@
 
+.build/pkg/apache.conf: apache.conf .build/pkg/venv
+	sed -e 's#{{PYTHONPATH}}#$(subst $(CURDIR)/.build/pkg,$(PKG_PREFIX),$(shell .build/pkg/venv/bin/python -c "import distutils; print(distutils.sysconfig.get_python_lib())"))#' \
+		-e 's#{{WSGISCRIPT}}#$(PKG_PREFIX)/thinkhazard.wsgi)#' $< > $@
+
 .PHONY: clean
 clean:
 	rm -f .build/venv/thinkhazard.wsgi
 	rm -f .build/apache.conf
-	rm -r *.rpm
+	rm -f .build/pkg/apache.conf
+	rm -f .build/pkg/thinkhazard.wsgi
+	rm -f *.rpm
+	rm -f *.deb
 	rm -rf thinkhazard/static/build
 
 .PHONY: cleanall
