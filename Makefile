@@ -2,6 +2,8 @@ LESS_FILES = $(shell find thinkhazard/static/less -type f -name '*.less' 2> /dev
 JS_FILES = $(shell find thinkhazard/static/js -type f -name '*.js' 2> /dev/null)
 PY_FILES = $(shell find thinkhazard -type f -name '*.py' 2> /dev/null)
 
+PKG_PREFIX := /tmp/thinkhazard
+
 .PHONY: all
 all: help
 
@@ -22,6 +24,7 @@ help:
 	@echo "- dist                    Build a source distribution"
 	@echo "- routes                  Show the application routes"
 	@echo "- watchless               Watch less files"
+	@echo "- rpm                     Create RPM package"
 	@echo
 
 .PHONY: install
@@ -85,6 +88,13 @@ watchless: .build/dev-requirements.timestamp
 	@echo "Watching less files…"
 	.build/venv/bin/nosier -p thinkhazard/static/less "make thinkhazard/static/build/index.css thinkhazard/static/build/report.css"
 
+.PHONY: rpm
+rpm: .build/venv-pkg-requirements.timestamp thinkhazard-0.0.1-1.x86_64.rpm
+
+thinkhazard-%-1.x86_64.rpm: .build/pkg/requirements.timestamp .build/node_modules.timestamp .build/pkg/thinkhazard.wsgi
+	fpm -s dir -t rpm -n thinkhazard -v $* --prefix $(PKG_PREFIX) \
+            production.ini data node_modules .build/pkg/thinkhazard.wsgi=. .build/pkg/venv=.
+
 thinkhazard/static/build/%.min.css: $(LESS_FILES) .build/node_modules.timestamp
 	mkdir -p $(dir $@)
 	./node_modules/.bin/lessc --clean-css thinkhazard/static/less/$*.less $@
@@ -93,17 +103,25 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 	mkdir -p $(dir $@)
 	./node_modules/.bin/lessc thinkhazard/static/less/$*.less $@
 
-.build/venv:
+.build/venv .build/pkg/venv:
 	mkdir -p $(dir $@)
-	virtualenv --system-site-packages .build/venv
+	virtualenv --system-site-packages $@
 
 .build/venv/thinkhazard.wsgi: thinkhazard.wsgi
 	sed 's#{{DIR}}#$(CURDIR)#' $< > $@
 	chmod 755 $@
 
+.build/pkg/thinkhazard.wsgi: thinkhazard.wsgi
+	sed 's#{{DIR}}#$(PKG_PREFIX)#' $< > $@
+
 .build/node_modules.timestamp: package.json
 	mkdir -p $(dir $@)
 	npm install
+	touch $@
+
+.build/requirements.timestamp: .build/venv setup.py requirements.txt
+	mkdir -p $(dir $@)
+	.build/venv/bin/pip install -r requirements.txt -e .
 	touch $@
 
 .build/dev-requirements.timestamp: .build/venv dev-requirements.txt
@@ -111,9 +129,9 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 	.build/venv/bin/pip install -r dev-requirements.txt > /dev/null 2>&1
 	touch $@
 
-.build/requirements.timestamp: .build/venv setup.py requirements.txt
+.build/pkg/requirements.timestamp: .build/pkg/venv setup.py requirements.txt
 	mkdir -p $(dir $@)
-	.build/venv/bin/pip install -r requirements.txt
+	.build/pkg/venv/bin/pip install -r requirements.txt .
 	touch $@
 
 .build/flake8.timestamp: $(PY_FILES)
@@ -139,6 +157,7 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 clean:
 	rm -f .build/venv/thinkhazard.wsgi
 	rm -f .build/apache.conf
+	rm -r *.rpm
 	rm -rf thinkhazard/static/build
 
 .PHONY: cleanall
