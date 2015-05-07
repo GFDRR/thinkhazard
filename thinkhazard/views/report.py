@@ -10,7 +10,7 @@ _categorytype_nodata = CategoryType()
 _categorytype_nodata.mnemonic = 'no-data'
 _categorytype_nodata.title = 'No data'
 _categorytype_nodata.description = 'No data for this hazard type.'
-_categorytype_nodata.id = float('inf')
+_categorytype_nodata.order = float('inf')
 
 
 @view_config(route_name='report', renderer='templates/report.jinja2')
@@ -55,6 +55,6 @@ def report(request):
     # Order the hazard data by category type (hazard types with the highest
     # risk are first in the UI).
     hazard_data = hazard_data.values()
-    hazard_data = sorted(hazard_data, key=lambda d: d['categorytype'].id)
+    hazard_data = sorted(hazard_data, key=lambda d: d['categorytype'].order)
 
     return {'hazards': hazard_data, 'division': division}
