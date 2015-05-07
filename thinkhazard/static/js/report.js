@@ -40,8 +40,19 @@
       currentCursor = $(this).css('cursor');
     }
 
-    var xRelative = e.offsetX / w;
-    var yRelative = e.offsetY / h;
+    var offsetX = e.offsetX;
+    var offsetY = e.offsetY;
+
+    // event.offsetX and event.offsetY are not defined in Firefox < 39.
+    // See https://bugzilla.mozilla.org/show_bug.cgi?id=69787
+    if (offsetX === undefined || offsetY === undefined) {
+      var targetOffset = $(e.target).offset();
+      offsetX = e.pageX - targetOffset.left;
+      offsetY = e.pageY - targetOffset.top;
+    }
+
+    var xRelative = offsetX / w;
+    var yRelative = offsetY / h;
 
     var data = getDataForPosition(xRelative, yRelative);
 
