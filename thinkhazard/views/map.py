@@ -57,7 +57,7 @@ def _create_map_object(division_code, hazard_type, mapfile, rasterfile,
     else:
         subdivisions = itertools.izip(
             DBSession.query(AdministrativeDivision).filter(_filter),
-            itertools.chain('NONE'))
+            itertools.cycle(('NONE',)))
 
     division_datasource = mapnik.MemoryDatasource()
 
