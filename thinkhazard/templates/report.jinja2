@@ -73,10 +73,10 @@
                 {% else %}
                 {{ hazard.categorytype.description }}
                 {% endif %}
-                {% if hazard.recommendations %}
+                {% if hazard.recommendation_associations %}
                 <h2>Recommendations</h2>
-                {% for recommendation in hazard.recommendations %}
-                <p>{{ recommendation.description }}</p>
+                {% for recommendation_association in hazard.recommendation_associations %}
+                <p>{{ recommendation_association.recommendation.description }}</p>
                 {% endfor %}
                 {% endif %}
               </div>
