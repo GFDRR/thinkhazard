@@ -1,8 +1,13 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest
 
-from ..models import DBSession, \
-    AdministrativeDivision, CategoryType, HazardCategory, HazardType
+from ..models import (
+    DBSession,
+    AdministrativeDivision,
+    CategoryType,
+    HazardCategory,
+    HazardCategoryRecommendationAssociation,
+    HazardType)
 
 
 # An object for the "no data" category type.
@@ -33,14 +38,15 @@ def report(request):
     hazard_data = {hazardtype.mnemonic: {'hazardtype': hazardtype,
                                          'categorytype': _categorytype_nodata,
                                          'description': None,
-                                         'recommendations': None}
+                                         'recommendation_associations': None}
                    for hazardtype in hazardtype_query}
 
     # Query 3: get the hazard categories corresponding to the administrative
     # division whose code is division_code.
     hazardcategories = DBSession.query(HazardCategory) \
         .join(HazardCategory.administrativedivisions) \
-        .join(HazardCategory.recommendations) \
+        .join(HazardCategory.recommendation_associations) \
+        .join(HazardCategoryRecommendationAssociation.recommendation) \
         .join(HazardType) \
         .join(CategoryType) \
         .filter(AdministrativeDivision.code == division_code)
@@ -50,7 +56,8 @@ def report(request):
         key = hazardcategory.hazardtype.mnemonic
         hazard_data[key]['categorytype'] = hazardcategory.categorytype
         hazard_data[key]['description'] = hazardcategory.description
-        hazard_data[key]['recommendations'] = hazardcategory.recommendations
+        hazard_data[key]['recommendation_associations'] = \
+            hazardcategory.recommendation_associations
 
     # Order the hazard data by category type (hazard types with the highest
     # risk are first in the UI).

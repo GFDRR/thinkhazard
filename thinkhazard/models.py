@@ -165,16 +165,6 @@ hazardcategory_administrativedivision_table = Table(
            ForeignKey('hazardcategory.id'), nullable=False, index=True))
 
 
-hazardcategory_recommendation_table = Table(
-    'rel_hazardcategory_recommendation', Base.metadata,
-    Column('id', Integer, primary_key=True),
-    Column('hazardcategory_id', Integer,
-           ForeignKey('hazardcategory.id'), nullable=False, index=True),
-    Column('recommendation_id', Integer, ForeignKey('recommendation.id'),
-           nullable=False, index=True),
-    Column('recommendationorder', Integer, nullable=False))
-
-
 hazardcategory_additionalinformation_table = Table(
     'rel_hazardcategory_additionalinformation', Base.metadata,
     Column('id', Integer, primary_key=True),
@@ -184,6 +174,19 @@ hazardcategory_additionalinformation_table = Table(
            ForeignKey('hazardcategory.id'),
            nullable=False, index=True),
     Column('additionalinformationorder', Integer, nullable=False))
+
+
+class HazardCategoryRecommendationAssociation(Base):
+    __tablename__ = 'rel_hazardcategory_recommendation'
+
+    id = Column(Integer, primary_key=True)
+    hazardcategory_id = Column(Integer, ForeignKey('hazardcategory.id'),
+                               nullable=False, index=True)
+    recommendation_id = Column(Integer, ForeignKey('recommendation.id'),
+                               nullable=False, index=True)
+    recommendationorder = Column(Integer, nullable=False)
+
+    recommendation = relationship('Recommendation', lazy='joined')
 
 
 class AdministrativeDivision(Base):
@@ -284,9 +287,10 @@ class HazardCategory(Base):
     intensitythreshold = relationship(IntensityThreshold)
     categorytype = relationship(CategoryType)
     status = relationship(TermStatus)
-    recommendations = relationship(
-        'Recommendation',
-        secondary=hazardcategory_recommendation_table)
+    recommendation_associations = relationship(
+        'HazardCategoryRecommendationAssociation',
+        order_by='HazardCategoryRecommendationAssociation.recommendationorder',
+        lazy='joined')
 
 
 class Recommendation(Base):
