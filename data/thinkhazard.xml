@@ -58,6 +58,10 @@
     <Filter>[category] = 'NPR'</Filter>
     <PolygonSymbolizer fill="#e0b025" fill-opacity="0.3" />
   </Rule>
+  <Rule>
+    <ElseFilter />
+    <PolygonSymbolizer fill="#ffffff" fill-opacity="0.1" />
+  </Rule>
 </Style>
 
 </Map>
