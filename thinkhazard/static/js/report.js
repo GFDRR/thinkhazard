@@ -12,8 +12,8 @@
   var offsets = new Array(2);
 
   // Change the tab to active in the tablist when a item is selected
-  // in the "default" tabpanel
-  $('#default a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+  // in the "overview" tabpanel
+  $('#overview a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
     var target = this.href.split('#');
     $('ul.hazards a').filter('[href="#' + target[1] + '"]').tab('show');
   });
@@ -24,6 +24,15 @@
     var target = this.href.split('#');
     hazardType = target[1];
     addMap(hazardType);
+  });
+
+  // Show the "overview" list when the division-name link is clicked
+  $('#division-name').on('click', function() {
+    if (hazardType) {
+      $('ul.hazards a').filter('[href="#overview"]').tab('show');
+      hazardType = undefined;
+      addMap(hazardType);
+    }
   });
 
   // Add a new map to the page when the window changes size

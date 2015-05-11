@@ -35,9 +35,12 @@
           <div class="logo-gfdrr"></div>
           <a id="pdf-link" href><img src="{{('thinkhazard:static/images/download.png'|static_url)}}">Download PDF</a>
           <h3>Report on Hazards</h3>
-          <h2>{{ division.name }}</h2>
+          <h2><a id="division-name" href="#" title="Go back to overview page">{{ division.name }}</a>&nbsp;</h2>
           <h4><a href="{{ 'report'|route_url(_query={'divisioncode': parent_division.code}) }}" title="Report on hazards in {{ parent_division.name }}">{{ parent_division.name}}</a>&nbsp;</h4>
           <ul id="hazard-types-list" class="horizontal list-unstyled hazards" role="tablist">
+            <li>
+              <a href="#overview"></a>
+            </li>
             {% for hazard in hazards %}
             <li class="{{ hazard.categorytype.mnemonic }}">
               <a href="#{{ hazard.hazardtype.mnemonic }}" aria-controls="{{ hazard.hazardtype.title }}" role="tab" data-toggle="tab">
@@ -50,7 +53,7 @@
         </div>
         <div id="report-body">
           <div class="container-fluid scrollable tab-content">
-            <div id="default" class="row tab-pane active" role="tabpanel">
+            <div id="overview" class="row tab-pane active" role="tabpanel">
               <div class="col-md-12 overview">
               {% for hazard in hazards %}
                 <a href="#{{ hazard.hazardtype.mnemonic }}" aria-controls="{{ hazard.hazardtype.title }}" role="tab" data-toggle="tab">
