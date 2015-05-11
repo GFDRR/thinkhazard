@@ -234,3 +234,43 @@ html, body {
   top: 10px;
   right: 10px;
 }
+
+#legend {
+  padding: 5px;
+  position: absolute;
+  right: 0;
+  bottom: 30px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 5px 0 0 5px;
+  font-family: 'variablebold';
+
+  ul {
+    padding: 0;
+    margin-bottom: 0;
+    display: table;
+    border-spacing: 1px;
+    li {
+      font-size: 0.8em;
+      height: 20px;
+      display: table-cell;
+      width: 70px;
+      white-space: nowrap;
+      text-align: center;
+      vertical-align: middle;
+      &.level-HIG {
+        background-color: @level-HIG-color;
+        color: white;
+      }
+      &.level-MED {
+        background-color: @level-MED-color;
+        color: white;
+      }
+      &.level-LOW {
+        background-color: @level-LOW-color;
+      }
+      &.level-NPR {
+        background-color: @level-NPR-color;
+      }
+    }
+  }
+}
