@@ -7,6 +7,7 @@ from ..models import (
     CategoryType,
     HazardCategory,
     HazardCategoryRecommendationAssociation,
+    HazardCategoryAdditionalInformationAssociation,
     HazardType)
 
 
@@ -38,7 +39,8 @@ def report(request):
     hazard_data = {hazardtype.mnemonic: {'hazardtype': hazardtype,
                                          'categorytype': _categorytype_nodata,
                                          'description': None,
-                                         'recommendation_associations': None}
+                                         'recommendation_associations': None,
+                                         'additionalinfo_associations': None}
                    for hazardtype in hazardtype_query}
 
     # Query 3: get the hazard categories corresponding to the administrative
@@ -47,6 +49,9 @@ def report(request):
         .join(HazardCategory.administrativedivisions) \
         .join(HazardCategory.recommendation_associations) \
         .join(HazardCategoryRecommendationAssociation.recommendation) \
+        .join(HazardCategory.additionalinformation_associations) \
+        .join(HazardCategoryAdditionalInformationAssociation
+              .additionalinformation) \
         .join(HazardType) \
         .join(CategoryType) \
         .filter(AdministrativeDivision.code == division_code)
@@ -58,6 +63,8 @@ def report(request):
         hazard_data[key]['description'] = hazardcategory.description
         hazard_data[key]['recommendation_associations'] = \
             hazardcategory.recommendation_associations
+        hazard_data[key]['additionalinfo_associations'] = \
+            hazardcategory.additionalinformation_associations
 
     # Order the hazard data by category type (hazard types with the highest
     # risk are first in the UI).
