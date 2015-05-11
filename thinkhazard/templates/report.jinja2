@@ -89,10 +89,12 @@
     </div>
     <div id="map-wrapper" class="">
       <div id="map">
+        {% if parent_division %}
         <button id="map-drillup" class="btn btn-default">
           <img src="{{('thinkhazard:static/images/zoom-out.png'|static_url)}}">
-          Zoom out to upper-level area
+          Zoom out to {{ parent_division.name }}
         </button>
+        {% endif %}
         <img />
       </div>
     </div>

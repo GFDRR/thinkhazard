@@ -1,6 +1,8 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest
 
+from sqlalchemy.orm import aliased
+
 from ..models import (
     DBSession,
     AdministrativeDivision,
@@ -27,8 +29,10 @@ def report(request):
                                     '"divisioncode"')
 
     # Query 1: get the administrative division whose code is division_code.
-    division = DBSession.query(AdministrativeDivision).filter(
-        AdministrativeDivision.code == division_code).one()
+    _alias = aliased(AdministrativeDivision)
+    division = DBSession.query(AdministrativeDivision) \
+        .outerjoin(_alias, _alias.code == AdministrativeDivision.parent_code) \
+        .filter(AdministrativeDivision.code == division_code).one()
 
     # Query 2: get all the hazard types.
     hazardtype_query = DBSession.query(HazardType)
@@ -64,4 +68,5 @@ def report(request):
     hazard_data = hazard_data.values()
     hazard_data = sorted(hazard_data, key=lambda d: d['categorytype'].order)
 
-    return {'hazards': hazard_data, 'division': division}
+    return {'hazards': hazard_data, 'division': division,
+            'parent_division': division.parent}
