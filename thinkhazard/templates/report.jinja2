@@ -79,6 +79,12 @@
                 <p>{{ recommendation_association.recommendation.description }}</p>
                 {% endfor %}
                 {% endif %}
+                {% if hazard.additionalinfo_associations %}
+                <h2>Additional Information</h2>
+                {% for additionalinfo_association in hazard.additionalinfo_associations %}
+                <p><a href="{{ additionalinfo_association.additionalinformation.accessurl }}">{{ additionalinfo_association.additionalinformation.title }}</a></p>
+                {% endfor %}
+                {% endif %}
               </div>
             </div>
             {% endfor %}

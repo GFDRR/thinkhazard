@@ -165,17 +165,6 @@ hazardcategory_administrativedivision_table = Table(
            ForeignKey('hazardcategory.id'), nullable=False, index=True))
 
 
-hazardcategory_additionalinformation_table = Table(
-    'rel_hazardcategory_additionalinformation', Base.metadata,
-    Column('id', Integer, primary_key=True),
-    Column('additionalinformation_id', Integer,
-           ForeignKey('additionalinformation.id'), nullable=False, index=True),
-    Column('hazardcategory_id', Integer,
-           ForeignKey('hazardcategory.id'),
-           nullable=False, index=True),
-    Column('additionalinformationorder', Integer, nullable=False))
-
-
 class HazardCategoryRecommendationAssociation(Base):
     __tablename__ = 'rel_hazardcategory_recommendation'
 
@@ -187,6 +176,20 @@ class HazardCategoryRecommendationAssociation(Base):
     recommendationorder = Column(Integer, nullable=False)
 
     recommendation = relationship('Recommendation', lazy='joined')
+
+
+class HazardCategoryAdditionalInformationAssociation(Base):
+    __tablename__ = 'rel_hazardcategory_additionalinformation'
+    id = Column(Integer, primary_key=True)
+    hazardcategory_id = Column(Integer, ForeignKey('hazardcategory.id'),
+                               nullable=False, index=True)
+    additionalinformation_id = Column(Integer,
+                                      ForeignKey('additionalinformation.id'),
+                                      nullable=False, index=True)
+    additionalinformationorder = Column(Integer, nullable=False)
+
+    additionalinformation = relationship('AdditionalInformation',
+                                         lazy='joined')
 
 
 class AdministrativeDivision(Base):
@@ -290,6 +293,11 @@ class HazardCategory(Base):
     recommendation_associations = relationship(
         'HazardCategoryRecommendationAssociation',
         order_by='HazardCategoryRecommendationAssociation.recommendationorder',
+        lazy='joined')
+    additionalinformation_associations = relationship(
+        'HazardCategoryAdditionalInformationAssociation',
+        order_by='HazardCategoryAdditionalInformationAssociation.'
+                 'additionalinformationorder',
         lazy='joined')
 
 
