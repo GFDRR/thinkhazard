@@ -1,12 +1,15 @@
 (function() {
 
+  // UTFGrid data
   var grid;
   var keys;
   var data;
-  var currentCursor;
-  var timeoutId = -1;
+
+  // Map element selector
   var mapSelector = '#map';
-  var hazardType;
+
+  // Array used as a temporary storage for event offsetX and offsetY
+  var offsets = new Array(2);
 
   // Change the tab to active in the tablist when a item is selected
   // in the "default" tabpanel
@@ -16,21 +19,24 @@
   });
 
   // Reload the map when a hazard type is selected
+  var hazardType;
   $('#hazard-types-list a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
     var target = this.href.split('#');
     hazardType = target[1];
-    addMap();
+    addMap(hazardType);
   });
 
   // Add a new map to the page when the window changes size
+  var timeoutId;
   $(window).resize(function() {
-    if (timeoutId != -1) {
-      clearTimeout(timeoutId);
-    }
-    timeoutId = setTimeout(addMap, 500);
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(function() {
+      addMap(hazardType);
+    }, 500);
   });
 
   // Change the mouse cursor when an administrative division is detected
+  var currentCursor;
   $('#map').on('mousemove', function(e) {
 
     var w = $(this).width();
@@ -40,19 +46,10 @@
       currentCursor = $(this).css('cursor');
     }
 
-    var offsetX = e.offsetX;
-    var offsetY = e.offsetY;
+    getEventOffsets(e, offsets);
 
-    // event.offsetX and event.offsetY are not defined in Firefox < 39.
-    // See https://bugzilla.mozilla.org/show_bug.cgi?id=69787
-    if (offsetX === undefined || offsetY === undefined) {
-      var targetOffset = $(e.target).offset();
-      offsetX = e.pageX - targetOffset.left;
-      offsetY = e.pageY - targetOffset.top;
-    }
-
-    var xRelative = offsetX / w;
-    var yRelative = offsetY / h;
+    var xRelative = offsets[0] / w;
+    var yRelative = offsets[1] / h;
 
     var data = getDataForPosition(xRelative, yRelative);
 
@@ -71,19 +68,10 @@
     var w = $(this).width();
     var h = $(this).height();
 
-    var offsetX = e.offsetX;
-    var offsetY = e.offsetY;
+    getEventOffsets(e, offsets);
 
-    // event.offsetX and event.offsetY are not defined in Firefox < 39.
-    // See https://bugzilla.mozilla.org/show_bug.cgi?id=69787
-    if (offsetX === undefined || offsetY === undefined) {
-      var targetOffset = $(e.target).offset();
-      offsetX = e.pageX - targetOffset.left;
-      offsetY = e.pageY - targetOffset.top;
-    }
-
-    var xRelative = offsetX / w;
-    var yRelative = offsetY / h;
+    var xRelative = offsets[0] / w;
+    var yRelative = offsets[1] / h;
     var data = getDataForPosition(xRelative, yRelative);
     if (data) {
       window.location.href = app.reportpageUrl + '?divisioncode=' + data.code;
@@ -91,7 +79,7 @@
   });
 
   // Add the map to the page
-  addMap();
+  addMap(hazardType);
 
   /**
    * Return the UTFGrid data for a position (x, y). `null` is returned
@@ -119,9 +107,27 @@
   }
 
   /**
+   * Get offsetX and offsetY from the event object.
+   *
+   * event.offsetX and event.offsetY are not defined in Firefox < 39.
+   * See https://bugzilla.mozilla.org/show_bug.cgi?id=69787
+   */
+  function getEventOffsets(evt, offsets) {
+    var offsetX = evt.offsetX;
+    var offsetY = evt.offsetY;
+    if (offsetX === undefined || offsetY === undefined) {
+      var targetOffset = $(evt.target).offset();
+      offsetX = evt.pageX - targetOffset.left;
+      offsetY = evt.pageY - targetOffset.top;
+    }
+    offsets[0] = offsetX;
+    offsets[1] = offsetY;
+  }
+
+  /**
    * Add the map image to the DOM and load the corresponding UTFGrid.
    */
-  function addMap() {
+  function addMap(hazardType) {
 
     var divisionCode = app.divisionCode;
 
@@ -150,8 +156,6 @@
       keys = json.keys;
       data = json.data;
     });
-
-    timeoutId = -1;
   }
 
 })();
