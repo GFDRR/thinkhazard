@@ -23,17 +23,6 @@
 
   engine.initialize();
 
-  function getSortedTokens(s) {
-    var tokens = [s.admin0];
-    if (s.admin1) {
-      tokens.unshift(s.admin1);
-    }
-    if (s.admin2) {
-      tokens.unshift(s.admin2);
-    }
-    return tokens;
-  }
-
   $('#search-field').typeahead({
     highlight: true
   }, {
@@ -56,5 +45,18 @@
         window.location.href = app.reportpageUrl + '?divisioncode=' + d.code;
       }
   );
+
+  /**
+   */
+  function getSortedTokens(s) {
+    var tokens = [s.admin0];
+    if (s.admin1) {
+      tokens.unshift(s.admin1);
+    }
+    if (s.admin2) {
+      tokens.unshift(s.admin2);
+    }
+    return tokens;
+  }
 
 })();
