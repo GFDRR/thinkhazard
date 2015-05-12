@@ -6,8 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Think hazard</title>
 {% if debug %}
+    <link href="{{'thinkhazard:static/build/common.css'|static_url}}" rel="stylesheet">
     <link href="{{('thinkhazard:static/build/%s.css' % self.name())|static_url}}" rel="stylesheet">
 {% else %}
+    <link href="{{'thinkhazard:static/build/common.min.css'|static_url}}" rel="stylesheet">
     <link href="{{('thinkhazard:static/build/%s.min.css' % self.name())|static_url}}" rel="stylesheet">
 {% endif %}
   </head>
