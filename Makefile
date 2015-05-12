@@ -34,7 +34,9 @@ build: buildcss
 buildcss: thinkhazard/static/build/index.css \
 	      thinkhazard/static/build/index.min.css \
 	      thinkhazard/static/build/report.css \
-	      thinkhazard/static/build/report.min.css
+	      thinkhazard/static/build/report.min.css \
+	      thinkhazard/static/build/common.css \
+	      thinkhazard/static/build/common.min.css
 
 .PHONY: initdb-dev
 initdb-dev:
@@ -83,7 +85,7 @@ dbtunnel:
 .PHONY: watchless
 watchless: .build/dev-requirements.timestamp
 	@echo "Watching less files…"
-	.build/venv/bin/nosier -p thinkhazard/static/less "make thinkhazard/static/build/index.css thinkhazard/static/build/report.css"
+	.build/venv/bin/nosier -p thinkhazard/static/less "make thinkhazard/static/build/index.css thinkhazard/static/build/report.css thinkhazard/static/build/common.css"
 
 thinkhazard/static/build/%.min.css: $(LESS_FILES) .build/node_modules.timestamp
 	mkdir -p $(dir $@)
