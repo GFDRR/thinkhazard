@@ -21,10 +21,18 @@
   // Reload the map when a hazard type is selected
   var hazardType;
   $('#hazard-types-list a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-    var target = this.href.split('#');
-    hazardType = target[1];
+    var hash = this.hash;
+    hazardType = hash.substr(1);
     addMap(hazardType);
+    window.location.hash = hash;
   });
+
+  // detect any change on hash (history back for example)
+  $(window).bind('hashchange', showTab);
+  // Load the hazard if already defined URL hash
+  if (window.location.hash) {
+    showTab();
+  }
 
   // Show the "overview" list when the division-name link is clicked
   $('#division-name').on('click', function() {
@@ -83,12 +91,18 @@
     var yRelative = offsets[1] / h;
     var data = getDataForPosition(xRelative, yRelative);
     if (data) {
-      window.location.href = app.reportpageUrl + '?divisioncode=' + data.code;
+      showDivision(data.code);
     }
   });
 
   // Add the map to the page
   addMap(hazardType);
+
+  $('.drillup').on('click', function(e) {
+    var code = $(this).attr('data-code');
+    showDivision(code);
+    return false;
+  });
 
   /**
    * Return the UTFGrid data for a position (x, y). `null` is returned
@@ -167,4 +181,22 @@
     });
   }
 
+  /**
+   * Load page for given division code.
+   */
+  function showDivision(code) {
+    var url = app.reportpageUrl + '?divisioncode=' + code;
+    if (hazardType) {
+      url  += '#' + hazardType;
+    }
+    window.location.href = url;
+  }
+
+  /**
+   * Take the hash from URL to activate the tab corresponding to the hazard
+   * type.
+   */
+  function showTab() {
+    $('#hazard-types-list a[href=' + window.location.hash + ']').tab('show');
+  }
 })();

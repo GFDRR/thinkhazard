@@ -36,7 +36,7 @@
           <a id="pdf-link" href><img src="{{('thinkhazard:static/images/download.png'|static_url)}}">Download PDF</a>
           <h3>Report on Hazards</h3>
           <h2><a id="division-name" href="#" title="Go back to overview page">{{ division.name }}</a>&nbsp;</h2>
-          <h4><a href="{{ 'report'|route_url(_query={'divisioncode': parent_division.code}) }}" title="Report on hazards in {{ parent_division.name }}">{{ parent_division.name}}</a>&nbsp;</h4>
+          <h4><a class="drillup" href="#" data-code="{{ parent_division.code }}" title="Report on hazards in {{ parent_division.name }}">{{ parent_division.name}}</a>&nbsp;</h4>
           <ul id="hazard-types-list" class="horizontal list-unstyled hazards" role="tablist">
             <li>
               <a href="#overview"></a>
@@ -100,7 +100,7 @@
     <div id="map-wrapper" class="">
       <div id="map">
         {% if parent_division %}
-        <a id="map-drillup" class="btn btn-default" href="{{ 'report'|route_url(_query={'divisioncode': parent_division.code}) }}">
+        <a id="map-drillup" class="btn btn-default drillup" href="#" data-code="{{ parent_division.code }}">
           <img src="{{('thinkhazard:static/images/zoom-out.png'|static_url)}}">
           Zoom out to {{ parent_division.name }}
         </a>
