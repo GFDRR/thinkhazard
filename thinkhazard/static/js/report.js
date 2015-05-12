@@ -24,6 +24,7 @@
     var hash = this.hash;
     hazardType = hash.substr(1);
     addMap(hazardType);
+    $('#legend').show();
     window.location.hash = hash;
   });
 
@@ -40,6 +41,7 @@
       $('ul.hazards a').filter('[href="#overview"]').tab('show');
       hazardType = undefined;
       addMap(hazardType);
+      $('#legend').hide();
     }
   });
 
