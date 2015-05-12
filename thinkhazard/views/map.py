@@ -40,7 +40,12 @@ def _create_map_object(division_code, hazard_type, mapfile, rasterfile,
         .filter(AdministrativeDivision.code == division_code).one()
 
     division_shape = geoalchemy2.shape.to_shape(division_geometry)
-    division_box = mapnik.Box2d(*division_shape.bounds)
+    division_bounds = division_shape.bounds
+    dx = (division_bounds[2] - division_bounds[0]) / 8
+    dy = (division_bounds[3] - division_bounds[1]) / 8
+    division_box = mapnik.Box2d(
+        division_bounds[0] - dx, division_bounds[1] - dy,
+        division_bounds[2] + dx, division_bounds[3] + dy)
 
     _filter = None
     if division_leveltype == u'REG':
