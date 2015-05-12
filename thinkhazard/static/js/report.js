@@ -38,10 +38,7 @@
   // Show the "overview" list when the division-name link is clicked
   $('#division-name').on('click', function() {
     if (hazardType) {
-      $('ul.hazards a').filter('[href="#overview"]').tab('show');
-      hazardType = undefined;
-      addMap(hazardType);
-      $('#legend').hide();
+      showOverview();
     }
   });
 
@@ -199,6 +196,21 @@
    * type.
    */
   function showTab() {
-    $('#hazard-types-list a[href=' + window.location.hash + ']').tab('show');
+    var hash = window.location.hash;
+    if (hash !== '') {
+      $('#hazard-types-list a[href=' + hash + ']').tab('show');
+    } else {
+      showOverview();
+    }
+  }
+
+  /**
+   * Show overview (default) tab.
+   */
+  function showOverview() {
+    $('ul.hazards a').filter('[href="#overview"]').tab('show');
+    hazardType = undefined;
+    addMap(hazardType);
+    $('#legend').hide();
   }
 })();
