@@ -264,18 +264,16 @@ html, body {
       text-align: center;
       vertical-align: middle;
       &.level-HIG {
-        background-color: @level-HIG-color;
-        color: white;
+        background-color: fade(@level-HIG-color, 50%);
       }
       &.level-MED {
-        background-color: @level-MED-color;
-        color: white;
+        background-color: fade(@level-MED-color, 50%);
       }
       &.level-LOW {
-        background-color: @level-LOW-color;
+        background-color: fade(@level-LOW-color, 50%);
       }
       &.level-NPR {
-        background-color: @level-NPR-color;
+        background-color: fade(@level-NPR-color, 50%);
       }
     }
   }
