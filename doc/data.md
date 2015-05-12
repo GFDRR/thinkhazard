@@ -31,35 +31,16 @@ $ .build/venv/bin/initialize_thinkhazard_db production.ini
 Database data
 -------------
 
-Populating the database with the data created by the BRGM team for the « POC » requires three steps:
+The BRGM team is currently responsible for the database data (a.k.a. the
+``datamart``). They provide a SQL script that populates the database. This
+script is ``/var/sig/thor-data-backup_20150507.backup`` on the demo server.
 
-Step 1: load the hazard data
+First of all, edit this script and check that the path to the
+``adm-div_20150505.csv`` file is correct. It should be
+``/var/sig/adm-div_20150505.csv``.
 
-```shell
-$ psql -d thinkhazard -f /var/sig/thor_data_updates_23-04-2015_EQ.sql
-$ psql -d thinkhazard -f /var/sig/thor_enum_updates_05-05-2015.sql
-```
-
-Step 2: load the administrative data
-
-```shell
-$ psql -d thinkhazard
-thinkhazard=# COPY datamart.administrativedivision FROM '/var/sig/adm-div_20150505.csv' WITH DELIMITER ',' ENCODING 'utf-8';
-```
-
-Step3: populate the admin division/hazard category relation table
-
-For the earthquake data:
+Then run the following command as the ``postgres`` user:
 
 ```shell
-$ psql -d thinkhazard
-thinkhazard=# COPY datamart.rel_hazardcategory_administrativedivision FROM '/var/sig/poc-morocco-EQ_rel-hazardcategory-administrativedivision.csv' WITH DELIMITER ',' ENCODING 'utf-8';
-thinkhazard=# SELECT setval('datamart.rel_hazardcategory_administrativedivision_id_seq', 64);
+$ psql -d thinkhazard -f /var/sig/thor-data-backup_20150507.backup
 ```
-
-For the flood data:
-
-```shell
-$ psql -d thinkhazard -f /var/sig/thor_data_updates_24-04-2015_FL.sql
-```
-
