@@ -173,7 +173,7 @@ class HazardCategoryRecommendationAssociation(Base):
                                nullable=False, index=True)
     recommendation_id = Column(Integer, ForeignKey('recommendation.id'),
                                nullable=False, index=True)
-    recommendationorder = Column(Integer, nullable=False)
+    order = Column(Integer, nullable=False)
 
     recommendation = relationship('Recommendation', lazy='joined')
 
@@ -186,7 +186,7 @@ class HazardCategoryAdditionalInformationAssociation(Base):
     additionalinformation_id = Column(Integer,
                                       ForeignKey('additionalinformation.id'),
                                       nullable=False, index=True)
-    additionalinformationorder = Column(Integer, nullable=False)
+    order = Column(Integer, nullable=False)
 
     additionalinformation = relationship('AdditionalInformation',
                                          lazy='joined')
@@ -292,12 +292,11 @@ class HazardCategory(Base):
     status = relationship(TermStatus)
     recommendation_associations = relationship(
         'HazardCategoryRecommendationAssociation',
-        order_by='HazardCategoryRecommendationAssociation.recommendationorder',
+        order_by='HazardCategoryRecommendationAssociation.order',
         lazy='joined')
     additionalinformation_associations = relationship(
         'HazardCategoryAdditionalInformationAssociation',
-        order_by='HazardCategoryAdditionalInformationAssociation.'
-                 'additionalinformationorder',
+        order_by='HazardCategoryAdditionalInformationAssociation.order',
         lazy='joined')
 
 
