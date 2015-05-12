@@ -10,7 +10,8 @@ html, body {
 @level-HIG-color: #D91F2C;
 @level-MED-color: #D57C27;
 @level-LOW-color: #E0B025;
-@level-NPR-color: grey;
+@level-NPR-color: #8E9D92;
+@level-no-data-color: #F2F2F2;
 
 .btn-default {
   background-color: #efefef;
@@ -172,12 +173,21 @@ html, body {
       .by-level(MED);
       .by-level(LOW);
       .by-level(NPR);
+      .by-level(no-data);
       &:hover {
         height: 110px;
       }
+      &.no-data {
+        &:hover {
+          height: inherit;
+        }
+        img {
+          opacity: .5;
+        }
+      }
     }
   }
-  }
+}
 
 #report-body {
   width: 100%;
@@ -235,6 +245,9 @@ html, body {
     .page-header-level(MED);
     .page-header-level(LOW);
     .page-header-level(NPR);
+    &.level-no-data {
+      opacity: .5;
+    }
   }
 
   .footer-gradient {

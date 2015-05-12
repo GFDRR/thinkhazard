@@ -16,7 +16,7 @@ from ..models import (
 # An object for the "no data" category type.
 _categorytype_nodata = CategoryType()
 _categorytype_nodata.mnemonic = 'no-data'
-_categorytype_nodata.title = 'No data'
+_categorytype_nodata.title = 'No data available'
 _categorytype_nodata.description = 'No data for this hazard type.'
 _categorytype_nodata.order = float('inf')
 
