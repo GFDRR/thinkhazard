@@ -36,17 +36,21 @@
           <a id="pdf-link" href><img src="{{('thinkhazard:static/images/download.png'|static_url)}}">Download PDF</a>
           <h3>Report on Hazards</h3>
           <h2><a id="division-name" href="#" title="Go back to overview page">{{ division.name }}</a>&nbsp;</h2>
-          <h4><a class="drillup" href="#" data-code="{{ parent_division.code }}" title="Report on hazards in {{ parent_division.name }}">{{ parent_division.name}}</a>&nbsp;</h4>
+          <h4><a class="drillup" href="#" data-code="{{ parent_division.code }}" title="Report on hazards in {{ parent_division.name }}">{{ parent_division.name }}</a>&nbsp;</h4>
           <ul id="hazard-types-list" class="horizontal list-unstyled hazards" role="tablist">
             <li>
               <a href="#overview"></a>
             </li>
             {% for hazard in hazards %}
             <li class="{{ hazard.categorytype.mnemonic }}">
+            {% if hazard.categorytype.mnemonic == 'no-data' %}
+                <img src="{{(('thinkhazard:static/images/hazard-icon-%s.png' % hazard.hazardtype.title.lower().replace(' ', '-'))|static_url)}}" />
+            {% else %}
               <a href="#{{ hazard.hazardtype.mnemonic }}" aria-controls="{{ hazard.hazardtype.title }}" role="tab" data-toggle="tab">
                 <img src="{{(('thinkhazard:static/images/hazard-icon-%s.png' % hazard.hazardtype.title.lower().replace(' ', '-'))|static_url)}}" />
                 {{ hazard.hazardtype.title }}
               </a>
+            {% endif %}
             </li>
             {% endfor %}
           </ul>
