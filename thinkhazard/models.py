@@ -175,7 +175,8 @@ class HazardCategoryRecommendationAssociation(Base):
                                nullable=False, index=True)
     order = Column(Integer, nullable=False)
 
-    recommendation = relationship('Recommendation', lazy='joined')
+    recommendation = relationship('Recommendation', lazy='joined',
+                                  innerjoin=True)
 
 
 class HazardCategoryAdditionalInformationAssociation(Base):
@@ -189,7 +190,7 @@ class HazardCategoryAdditionalInformationAssociation(Base):
     order = Column(Integer, nullable=False)
 
     additionalinformation = relationship('AdditionalInformation',
-                                         lazy='joined')
+                                         lazy='joined', innerjoin=True)
 
 
 class AdministrativeDivision(Base):

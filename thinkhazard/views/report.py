@@ -8,8 +8,6 @@ from ..models import (
     AdministrativeDivision,
     CategoryType,
     HazardCategory,
-    HazardCategoryRecommendationAssociation,
-    HazardCategoryAdditionalInformationAssociation,
     HazardType)
 
 
@@ -51,11 +49,6 @@ def report(request):
     # division whose code is division_code.
     hazardcategories = DBSession.query(HazardCategory) \
         .join(HazardCategory.administrativedivisions) \
-        .join(HazardCategory.recommendation_associations) \
-        .join(HazardCategoryRecommendationAssociation.recommendation) \
-        .join(HazardCategory.additionalinformation_associations) \
-        .join(HazardCategoryAdditionalInformationAssociation
-              .additionalinformation) \
         .join(HazardType) \
         .join(CategoryType) \
         .filter(AdministrativeDivision.code == division_code)
