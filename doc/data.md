@@ -33,7 +33,7 @@ Database data
 
 The BRGM team is currently responsible for the database data (a.k.a. the
 ``datamart``). They provide a SQL script that populates the database. This
-script is ``/var/sig/thor-data-backup_20150512_v2.backup`` on the demo server.
+script is ``/var/sig/thor-data-backup_20150512_v3.backup`` on the demo server.
 
 First of all, edit this script and check that the path to the
 ``adm-div_20150505.csv`` file is correct. It should be
@@ -42,5 +42,5 @@ First of all, edit this script and check that the path to the
 Then run the following command as the ``postgres`` user:
 
 ```shell
-$ psql -d thinkhazard -f /var/sig/thor-data-backup_20150512_v2.backup
+$ psql -d thinkhazard -f /var/sig/thor-data-backup_20150512_v3.backup
 ```
