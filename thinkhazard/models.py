@@ -261,7 +261,7 @@ class Metadata(Base):
     hazardsetid = Column(Integer)
     glidenumber = Column(Integer)
     intensityunit = Column(Unicode)
-    returnperiod = Column(Integer)
+    returnperiod_id = Column(Integer, ForeignKey(ReturnPeriod.id))
     mdauthorindividualorganisationnames = Column(Unicode)
 
     datetype = relationship(MetadataDateType)
@@ -272,6 +272,7 @@ class Metadata(Base):
     language = relationship(MetadataLanguage)
     topiccategory = relationship(MetadataTopicCategory)
     countryregion = relationship(AdministrativeDivision)
+    returnperiod = relationship(ReturnPeriod)
     hazardtype = relationship(HazardType)
 
 
