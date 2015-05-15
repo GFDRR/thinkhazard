@@ -60,12 +60,19 @@
             <div id="overview" class="row tab-pane active" role="tabpanel">
               <div class="col-md-12 overview">
               {% for hazard in hazards %}
+                {% if hazard.categorytype.mnemonic == 'no-data' %}
+                <h1 class="page-header level-{{ hazard.categorytype.mnemonic }}">
+                  {{ hazard.hazardtype.title }}
+                  <small class="pull-right">{{ hazard.categorytype.title }}</small>
+                </h1>
+                {% else %}
                 <a href="#{{ hazard.hazardtype.mnemonic }}" aria-controls="{{ hazard.hazardtype.title }}" role="tab" data-toggle="tab">
                   <h1 class="page-header level-{{ hazard.categorytype.mnemonic }}">
                     {{ hazard.hazardtype.title }}
                     <small class="pull-right">{{ hazard.categorytype.title }}</small>
                   </h1>
                 </a>
+                {% endif %}
               {% endfor %}
               </div>
             </div>
