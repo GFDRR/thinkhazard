@@ -80,7 +80,7 @@
 
   // Listen to click events on the map and reload the page for the clicked
   // administrative division
-  $('#map').on('click', function(e) {
+  $(mapSelector).on('click', function(e) {
     var w = $(this).width();
     var h = $(this).height();
 
@@ -94,12 +94,28 @@
     }
   });
 
+
+  // Firefox
+  $(mapSelector).bind('DOMMouseScroll', function(e){
+    if (e.originalEvent.detail > 0) {
+      // scroll down: zooming out
+      zoomout();
+    } // else scroll up
+    return false; // prevents page fom scrolling
+  });
+  // IE, Opera, Safari
+  $(mapSelector).bind('mousewheel', function(e){
+    if (e.originalEvent.wheelDelta < 0) {
+      zoomout();
+    }
+    return false;
+  });
+
   // Add the map to the page
   addMap(hazardType);
 
   $('.drillup').on('click', function(e) {
-    var code = $(this).attr('data-code');
-    showDivision(code);
+    zoomout();
     return false;
   });
 
@@ -178,6 +194,16 @@
       keys = json.keys;
       data = json.data;
     });
+  }
+
+  /**
+   * Drillup
+   */
+  function zoomout() {
+    var code = $('.drillup').attr('data-code');
+    if (code) {
+      showDivision(code);
+    }
   }
 
   /**
