@@ -44,19 +44,19 @@
 <Style name="admindiv">
   <Rule>
     <Filter>[category] = 'HIG'</Filter>
-    <PolygonSymbolizer fill="#d91f2c" fill-opacity="0.3" />
+    <PolygonSymbolizer fill="#d91f2c" fill-opacity="0.5" />
   </Rule>
   <Rule>
     <Filter>[category] = 'MED'</Filter>
-    <PolygonSymbolizer fill="#d57c27" fill-opacity="0.3" />
+    <PolygonSymbolizer fill="#d57c27" fill-opacity="0.5" />
   </Rule>
   <Rule>
     <Filter>[category] = 'LOW'</Filter>
-    <PolygonSymbolizer fill="#e0b025" fill-opacity="0.3" />
+    <PolygonSymbolizer fill="#e0b025" fill-opacity="0.5" />
   </Rule>
   <Rule>
     <Filter>[category] = 'NPR'</Filter>
-    <PolygonSymbolizer fill="#8e9d92" fill-opacity="0.3" />
+    <PolygonSymbolizer fill="#8e9d92" fill-opacity="0.5" />
   </Rule>
   <Rule>
     <ElseFilter />
