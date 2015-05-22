@@ -56,51 +56,47 @@
           </ul>
         </div>
         <div id="report-body">
-          <div class="container-fluid scrollable tab-content">
-            <div id="overview" class="row tab-pane active" role="tabpanel">
-              <div class="col-md-12 overview">
-              {% for hazard in hazards %}
-                {% if hazard.categorytype.mnemonic == 'no-data' %}
+          <div class="scrollable tab-content">
+            <div id="overview" class="tab-pane active" role="tabpanel">
+            {% for hazard in hazards %}
+              {% if hazard.categorytype.mnemonic == 'no-data' %}
+              <h1 class="page-header level-{{ hazard.categorytype.mnemonic }}">
+                {{ hazard.hazardtype.title }}
+                <small class="pull-right">{{ hazard.categorytype.title }}</small>
+              </h1>
+              {% else %}
+              <a href="#{{ hazard.hazardtype.mnemonic }}" aria-controls="{{ hazard.hazardtype.title }}" role="tab" data-toggle="tab">
                 <h1 class="page-header level-{{ hazard.categorytype.mnemonic }}">
                   {{ hazard.hazardtype.title }}
                   <small class="pull-right">{{ hazard.categorytype.title }}</small>
                 </h1>
-                {% else %}
-                <a href="#{{ hazard.hazardtype.mnemonic }}" aria-controls="{{ hazard.hazardtype.title }}" role="tab" data-toggle="tab">
-                  <h1 class="page-header level-{{ hazard.categorytype.mnemonic }}">
-                    {{ hazard.hazardtype.title }}
-                    <small class="pull-right">{{ hazard.categorytype.title }}</small>
-                  </h1>
-                </a>
-                {% endif %}
-              {% endfor %}
-              </div>
+              </a>
+              {% endif %}
+            {% endfor %}
             </div>
             {% for hazard in hazards %}
-            <div id="{{ hazard.hazardtype.mnemonic }}" class="row tab-pane" role="tabpanel">
-              <div class="col-md-12">
-                <h1 class="page-header detail level-{{ hazard.categorytype.mnemonic }}">
-                  {{ hazard.hazardtype.title }}
-                  <small class="pull-right">{{ hazard.categorytype.title }}</small>
-                </h1>
-                {% if hazard.description %}
-                {{ hazard.description }}
-                {% else %}
-                {{ hazard.categorytype.description }}
-                {% endif %}
-                {% if hazard.recommendation_associations %}
-                <h2>Recommendations</h2>
-                {% for recommendation_association in hazard.recommendation_associations %}
-                <p>{{ recommendation_association.recommendation.description }}</p>
-                {% endfor %}
-                {% endif %}
-                {% if hazard.additionalinfo_associations %}
-                <h2>Additional Information</h2>
-                {% for additionalinfo_association in hazard.additionalinfo_associations %}
-                <p><a href="{{ additionalinfo_association.additionalinformation.accessurl }}">{{ additionalinfo_association.additionalinformation.title }}</a></p>
-                {% endfor %}
-                {% endif %}
-              </div>
+            <div id="{{ hazard.hazardtype.mnemonic }}" class="tab-pane" role="tabpanel">
+              <h1 class="page-header detail level-{{ hazard.categorytype.mnemonic }}">
+                {{ hazard.hazardtype.title }}
+                <small class="pull-right">{{ hazard.categorytype.title }}</small>
+              </h1>
+              {% if hazard.description %}
+              {{ hazard.description }}
+              {% else %}
+              {{ hazard.categorytype.description }}
+              {% endif %}
+              {% if hazard.recommendation_associations %}
+              <h2>Recommendations</h2>
+              {% for recommendation_association in hazard.recommendation_associations %}
+              <p>{{ recommendation_association.recommendation.description }}</p>
+              {% endfor %}
+              {% endif %}
+              {% if hazard.additionalinfo_associations %}
+              <h2>Additional Information</h2>
+              {% for additionalinfo_association in hazard.additionalinfo_associations %}
+              <p><a href="{{ additionalinfo_association.additionalinformation.accessurl }}">{{ additionalinfo_association.additionalinformation.title }}</a></p>
+              {% endfor %}
+              {% endif %}
             </div>
             {% endfor %}
           </div>
