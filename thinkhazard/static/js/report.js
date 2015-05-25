@@ -3,8 +3,30 @@
   // Map element selector
   var mapSelector = '#map';
 
+  // The hazard layer
+  var hazardLayer;
+
+  // Source for the hazard layer
+  var hazardLayerSource;
+
   // Array used as a temporary storage for event offsetX and offsetY
   var offsets = new Array(2);
+
+  var map = new ol.Map({
+    target: 'map',
+    interactions: [],
+    controls: [],
+    layers: [
+      new ol.layer.Tile({
+        source: new ol.source.Stamen({
+          layer: 'watercolor'
+        }),
+        opacity: 0.5
+      })
+    ],
+    view: new ol.View({ })
+  });
+  map.getView().fitExtent(division_bounds, map.getSize());
 
   // Change the tab to active in the tablist when a item is selected
   // in the "overview" tabpanel
@@ -18,7 +40,7 @@
   $('#hazard-types-list a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
     var hash = this.hash;
     hazardType = hash.substr(1);
-    // FIXME show the hazard map
+    showHazard(hazardType);
     $('#legend').show();
     window.location.hash = hash;
   });
@@ -37,18 +59,7 @@
     }
   });
 
-  var map = new ol.Map({
-    target: 'map',
-    interactions: [],
-    controls: [],
-    layers: [
-      new ol.layer.Tile({
-        source: new ol.source.OSM()
-      })
-    ],
-    view: new ol.View({ })
-  });
-  map.getView().fitExtent(division_bounds, map.getSize());
+  showHazard(hazardType);
 
   $('.drillup').on('click', function(e) {
     var code = $(this).attr('data-code');
@@ -86,7 +97,37 @@
   function showOverview() {
     $('ul.hazards a').filter('[href="#overview"]').tab('show');
     hazardType = undefined;
-    // FIXME show the overview map
+    showHazard();
     $('#legend').hide();
+  }
+
+  /**
+   * Adds or replaces the hazard image layer.
+   */
+  function showHazard(hazardType) {
+    if (hazardLayer) {
+      map.removeLayer(hazardLayer);
+    }
+
+    var size = map.getSize();
+    var extent = map.getView().calculateExtent(map.getSize());
+    var params = {
+      width: size[0],
+      height: size[1],
+      divisioncode: app.divisionCode,
+      bbox: extent.toString()
+    };
+    if (hazardType) {
+        params.hazardtype = hazardType;
+    }
+    var url = app.mapImgUrl + '?' + $.param(params);
+    hazardLayerSource = new ol.source.ImageStatic({
+      url: url,
+      imageExtent: extent
+    });
+    hazardLayer = new ol.layer.Image({
+      source: hazardLayerSource
+    });
+    map.addLayer(hazardLayer);
   }
 })();

@@ -1,6 +1,7 @@
 import json
 import itertools
 import mapnik
+import ast
 
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest
@@ -19,33 +20,19 @@ from ..models import (
 
 
 def _create_map_object(division_code, hazard_type, mapfile, rasterfile,
-                       width, height):
+                       width, height, bbox):
     """
     Create a Mapnik map for an administrative division.
     """
 
     map_ = mapnik.Map(width, height)
     mapnik.load_map(map_, mapfile)
+    xmin, ymin, xmax, ymax = bbox
+    division_box = mapnik.Box2d(xmin, ymin, xmax, ymax)
 
-    raster_datasource = mapnik.Gdal(file=rasterfile)
-    layer = mapnik.Layer('raster')
-    layer.srs = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
-    layer.styles.append('raster')
-    layer.datasource = raster_datasource
-    map_.layers.append(layer)
-
-    division_geometry, division_leveltype = DBSession.query(
-        AdministrativeDivision.geom, AdminLevelType.mnemonic) \
+    division_leveltype = DBSession.query(AdminLevelType.mnemonic) \
         .join(AdministrativeDivision.leveltype) \
         .filter(AdministrativeDivision.code == division_code).one()
-
-    division_shape = geoalchemy2.shape.to_shape(division_geometry)
-    division_bounds = division_shape.bounds
-    dx = (division_bounds[2] - division_bounds[0]) / 8
-    dy = (division_bounds[3] - division_bounds[1]) / 8
-    division_box = mapnik.Box2d(
-        division_bounds[0] - dx, division_bounds[1] - dy,
-        division_bounds[2] + dx, division_bounds[3] + dy)
 
     _filter = None
     if division_leveltype == u'REG':
@@ -113,6 +100,12 @@ def mapnikmap(request):
         raise HTTPBadRequest(detail='incorrect value for parameter '
                                     '"height"')
 
+    try:
+        bbox = ast.literal_eval(params.get('bbox'))
+    except:
+        raise HTTPBadRequest(detail='incorrect value for parameter '
+                                    '"bbox"')
+
     format_ = request.matchdict['format']
     if format_ not in (u'json', u'jpeg', u'png'):
         raise HTTPBadRequest(detail='format %s is not supported' % format_)
@@ -122,7 +115,7 @@ def mapnikmap(request):
     rasterfile = request.registry.settings.get('rasterfile')
 
     map_ = _create_map_object(division_code, hazard_type,
-                              mapfile, rasterfile, width, height)
+                              mapfile, rasterfile, width, height, bbox)
 
     if format_ == 'json':
         grid = mapnik.Grid(width, height)
