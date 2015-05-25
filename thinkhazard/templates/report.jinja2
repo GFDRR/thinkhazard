@@ -132,4 +132,7 @@
 {% else %}
     <script src="{{('%s/openlayers/dist/ol.js' % node_modules)|static_url}}"></script>
 {% endif %}
+    <script>
+      var division_bounds = {{bounds}};
+    </script>
 {% endblock %}

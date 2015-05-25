@@ -47,11 +47,9 @@
         source: new ol.source.OSM()
       })
     ],
-    view: new ol.View({
-      center: [0, 0],
-      zoom: 5
-    })
+    view: new ol.View({ })
   });
+  map.getView().fitExtent(division_bounds, map.getSize());
 
   $('.drillup').on('click', function(e) {
     var code = $(this).attr('data-code');
