@@ -109,13 +109,16 @@
       map.removeLayer(hazardLayer);
     }
 
-    var size = map.getSize();
+    var bounds = division_bounds;
+    // we don't need an image bigger than the division area
+    var width = (bounds[2] - bounds[0]) / map.getView().getResolution();
+    var height = (bounds[3] - bounds[1]) / map.getView().getResolution();
+
     var extent = map.getView().calculateExtent(map.getSize());
     var params = {
-      width: size[0],
-      height: size[1],
-      divisioncode: app.divisionCode,
-      bbox: extent.toString()
+      width: Math.round(width),
+      height: Math.round(height),
+      divisioncode: app.divisionCode
     };
     if (hazardType) {
         params.hazardtype = hazardType;
@@ -123,7 +126,7 @@
     var url = app.mapImgUrl + '?' + $.param(params);
     hazardLayerSource = new ol.source.ImageStatic({
       url: url,
-      imageExtent: extent
+      imageExtent: division_bounds
     });
     hazardLayer = new ol.layer.Image({
       source: hazardLayerSource
