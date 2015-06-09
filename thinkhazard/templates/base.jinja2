@@ -31,7 +31,7 @@
       var app = {};
       app.administrativedivisionUrl = '{{'administrativedivision'|route_url}}';
       app.reportpageUrl = '{{'report'|route_url}}';
-      app.mapImgUrl = '{{'map'|route_url(format='jpeg')}}';
+      app.mapImgUrl = '{{'map'|route_url(format='png')}}';
       app.mapUtfUrl = '{{'map'|route_url(format='json')}}';
       {%- if division %}
       app.divisionCode = {{division.code}};

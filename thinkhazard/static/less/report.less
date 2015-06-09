@@ -1,3 +1,4 @@
+@import (inline) "../../../node_modules/openlayers/css/ol.css";
 @import "../../../node_modules/bootstrap/less/mixins.less";
 
 html, body {
@@ -262,6 +263,10 @@ html, body {
 
 #map {
   height: 100%;
+
+  .control {
+    z-index: 2;
+  }
 }
 
 #map-drillup {

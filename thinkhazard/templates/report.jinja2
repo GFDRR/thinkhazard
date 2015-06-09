@@ -107,13 +107,12 @@
     <div id="map-wrapper" class="">
       <div id="map">
         {% if parent_division %}
-        <a id="map-drillup" class="btn btn-default drillup" href="#" data-code="{{ parent_division.code }}">
+        <a id="map-drillup" class="btn btn-default drillup control" href="#" data-code="{{ parent_division.code }}">
           <img src="{{('thinkhazard:static/images/zoom-out.png'|static_url)}}">
           Zoom out to {{ parent_division.name }}
         </a>
         {% endif %}
-        <img />
-        <div id="legend" class="text-center">
+        <div id="legend" class="text-center control">
           Maximum hazard level
           <ul>
             <li class="level-HIG">High</li>
@@ -125,4 +124,15 @@
       </div>
     </div>
   </div>
+{% endblock %}
+
+{% block scripts %}
+{% if debug %}
+    <script src="{{('%s/openlayers/dist/ol-debug.js' % node_modules)|static_url}}"></script>
+{% else %}
+    <script src="{{('%s/openlayers/dist/ol.js' % node_modules)|static_url}}"></script>
+{% endif %}
+    <script>
+      var divisionBounds = {{bounds}};
+    </script>
 {% endblock %}

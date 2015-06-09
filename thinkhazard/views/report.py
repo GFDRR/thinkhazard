@@ -1,3 +1,5 @@
+import geoalchemy2.shape
+
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest
 
@@ -68,5 +70,9 @@ def report(request):
     hazard_data = hazard_data.values()
     hazard_data = sorted(hazard_data, key=lambda d: d['categorytype'].order)
 
+    # Get the geometry for division and compute its extent
+    division_shape = geoalchemy2.shape.to_shape(division.geom)
+    division_bounds = list(division_shape.bounds)
+
     return {'hazards': hazard_data, 'division': division,
-            'parent_division': division.parent}
+            'parent_division': division.parent, 'bounds': division_bounds}
