@@ -71,11 +71,7 @@ def report(request):
     hazard_data = sorted(hazard_data, key=lambda d: d['categorytype'].order)
 
     # Get the geometry for division and compute its extent
-    # FIXME use box2d
-    division_geometry = DBSession.query(AdministrativeDivision.geom) \
-        .filter(AdministrativeDivision.code == division_code).one()
-
-    division_shape = geoalchemy2.shape.to_shape(division_geometry[0])
+    division_shape = geoalchemy2.shape.to_shape(division.geom)
     division_bounds = list(division_shape.bounds)
 
     return {'hazards': hazard_data, 'division': division,
