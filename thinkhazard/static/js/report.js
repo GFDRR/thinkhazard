@@ -26,7 +26,7 @@
     ],
     view: new ol.View({ })
   });
-  map.getView().fitExtent(division_bounds, map.getSize());
+  map.getView().fitExtent(divisionBounds, map.getSize());
 
   // Change the tab to active in the tablist when a item is selected
   // in the "overview" tabpanel
@@ -109,7 +109,7 @@
       map.removeLayer(hazardLayer);
     }
 
-    var bounds = division_bounds;
+    var bounds = divisionBounds;
     // we don't need an image bigger than the division area
     var width = (bounds[2] - bounds[0]) / map.getView().getResolution();
     var height = (bounds[3] - bounds[1]) / map.getView().getResolution();
@@ -126,7 +126,7 @@
     var url = app.mapImgUrl + '?' + $.param(params);
     hazardLayerSource = new ol.source.ImageStatic({
       url: url,
-      imageExtent: division_bounds
+      imageExtent: divisionBounds
     });
     hazardLayer = new ol.layer.Image({
       source: hazardLayerSource
