@@ -3,12 +3,6 @@
   // Map element selector
   var mapSelector = '#map';
 
-  // The hazard layer
-  var hazardLayer;
-
-  // Source for the hazard layer
-  var hazardLayerSource;
-
   // Array used as a temporary storage for event offsetX and offsetY
   var offsets = new Array(2);
 
@@ -27,6 +21,9 @@
     view: new ol.View({ })
   });
   map.getView().fitExtent(divisionBounds, map.getSize());
+
+  var hazardLayer = new ol.layer.Image({});
+  map.addLayer(hazardLayer);
 
   // Change the tab to active in the tablist when a item is selected
   // in the "overview" tabpanel
@@ -105,10 +102,6 @@
    * Adds or replaces the hazard image layer.
    */
   function showHazard(hazardType) {
-    if (hazardLayer) {
-      map.removeLayer(hazardLayer);
-    }
-
     var bounds = divisionBounds;
     // we don't need an image bigger than the division area
     var width = (bounds[2] - bounds[0]) / map.getView().getResolution();
@@ -124,13 +117,9 @@
         params.hazardtype = hazardType;
     }
     var url = app.mapImgUrl + '?' + $.param(params);
-    hazardLayerSource = new ol.source.ImageStatic({
+    hazardLayer.setSource(new ol.source.ImageStatic({
       url: url,
       imageExtent: divisionBounds
-    });
-    hazardLayer = new ol.layer.Image({
-      source: hazardLayerSource
-    });
-    map.addLayer(hazardLayer);
+    }));
   }
 })();
