@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Think hazard</title>
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
 {% if debug %}
     <link href="{{'thinkhazard:static/build/common.css'|static_url}}" rel="stylesheet">
     <link href="{{('thinkhazard:static/build/%s.css' % self.name())|static_url}}" rel="stylesheet">
@@ -25,12 +26,10 @@
     <script src="{{('%s/bootstrap/dist/js/bootstrap.min.js' % node_modules)|static_url}}"></script>
     <script src="{{('%s/typeahead.js/dist/typeahead.bundle.min.js' % node_modules)|static_url}}"></script>
 {% endif %}
-    {% block scripts %}
-    {% endblock scripts %}
     <script>
       var app = {};
       app.administrativedivisionUrl = '{{'administrativedivision'|route_url}}';
-      app.reportpageUrl = '{{'report'|route_url}}';
+      app.reportpageUrl = '{{'report_overview'|route_url(divisioncode='divisioncode')}}';
       app.mapImgUrl = '{{'map'|route_url(format='jpeg')}}';
       app.mapUtfUrl = '{{'map'|route_url(format='json')}}';
       {%- if division %}
@@ -39,6 +38,8 @@
       app.divisionCode = undefined;
       {%- endif %}
     </script>
+    {% block scripts %}
+    {% endblock scripts %}
     <script src="{{('thinkhazard:static/js/%s.js' % self.name())|static_url}}"></script>
     <script src="{{'thinkhazard:static/js/search.js'|static_url}}"></script>
   </body>

@@ -4,8 +4,16 @@
 
 {% block content %}
 
+  {% if hazard %}
+    {% set parent_url = request.route_url('report', divisioncode=parent_division.code, hazardtype=hazard.hazardtype.mnemonic) %}
+  {% else %}
+    {% set parent_url = request.route_url('report_overview', divisioncode=parent_division.code) %}
+  {% endif %}
+
+  {% set overview_url = 'report_overview'|route_url(divisioncode=division.code) %}
+
   <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid">
+    <div class="container">
       <div class="navbar-header">
         <a class="navbar-brand" href="{{'index'|route_url}}">
           <img src="{{('thinkhazard:static/images/logo-small.png'|static_url)}}">
@@ -28,101 +36,154 @@
       </div>
     </div>
   </nav>
-  <div id="wrapper">
-    <div id="report-wrapper" class="">
-      <div id="report" role="tabpanel">
-        <div id="report-header" class="text-center">
-          <div class="logo-gfdrr"></div>
-          <a id="pdf-link" href><img src="{{('thinkhazard:static/images/download.png'|static_url)}}">Download PDF</a>
-          <h3>Report on Hazards</h3>
-          <h2><a id="division-name" href="#" title="Go back to overview page">{{ division.name }}</a>&nbsp;</h2>
-          <h4><a class="drillup" href="#" data-code="{{ parent_division.code }}" title="Report on hazards in {{ parent_division.name }}">{{ parent_division.name }}</a>&nbsp;</h4>
-          <ul id="hazard-types-list" class="horizontal list-unstyled hazards" role="tablist">
-            <li>
-              <a href="#overview"></a>
-            </li>
-            {% for hazard in hazards %}
-            <li class="{{ hazard.categorytype.mnemonic }}">
-            {% if hazard.categorytype.mnemonic == 'no-data' %}
-                <img src="{{(('thinkhazard:static/images/hazard-icon-%s.png' % hazard.hazardtype.title.lower().replace(' ', '-'))|static_url)}}" />
-            {% else %}
-              <a href="#{{ hazard.hazardtype.mnemonic }}" aria-controls="{{ hazard.hazardtype.title }}" role="tab" data-toggle="tab">
-                <img src="{{(('thinkhazard:static/images/hazard-icon-%s.png' % hazard.hazardtype.title.lower().replace(' ', '-'))|static_url)}}" />
-                {{ hazard.hazardtype.title }}
-              </a>
-            {% endif %}
-            </li>
-            {% endfor %}
-          </ul>
-        </div>
-        <div id="report-body">
-          <div class="scrollable tab-content">
-            <div id="overview" class="tab-pane active" role="tabpanel">
-            {% for hazard in hazards %}
-              {% if hazard.categorytype.mnemonic == 'no-data' %}
-              <h1 class="page-header level-{{ hazard.categorytype.mnemonic }}">
-                {{ hazard.hazardtype.title }}
-                <small class="pull-right">{{ hazard.categorytype.title }}</small>
-              </h1>
-              {% else %}
-              <a href="#{{ hazard.hazardtype.mnemonic }}" aria-controls="{{ hazard.hazardtype.title }}" role="tab" data-toggle="tab">
-                <h1 class="page-header level-{{ hazard.categorytype.mnemonic }}">
-                  {{ hazard.hazardtype.title }}
-                  <small class="pull-right">{{ hazard.categorytype.title }}</small>
-                </h1>
-              </a>
-              {% endif %}
-            {% endfor %}
-            </div>
-            {% for hazard in hazards %}
-            <div id="{{ hazard.hazardtype.mnemonic }}" class="tab-pane" role="tabpanel">
-              <h1 class="page-header detail level-{{ hazard.categorytype.mnemonic }}">
-                {{ hazard.hazardtype.title }}
-                <small class="pull-right">{{ hazard.categorytype.title }}</small>
-              </h1>
-              {% if hazard.description %}
-              {{ hazard.description }}
-              {% else %}
-              {{ hazard.categorytype.description }}
-              {% endif %}
-              {% if hazard.recommendation_associations %}
-              <h2>Recommendations</h2>
-              {% for recommendation_association in hazard.recommendation_associations %}
-              <p>{{ recommendation_association.recommendation.description }}</p>
-              {% endfor %}
-              {% endif %}
-              {% if hazard.additionalinfo_associations %}
-              <h2>Additional Information</h2>
-              {% for additionalinfo_association in hazard.additionalinfo_associations %}
-              <p><a href="{{ additionalinfo_association.additionalinformation.accessurl }}">{{ additionalinfo_association.additionalinformation.title }}</a></p>
-              {% endfor %}
-              {% endif %}
-            </div>
-            {% endfor %}
-          </div>
-          <div class="footer-gradient"></div>
-        </div>
-      </div>
+
+  <div class="jumbotron">
+    <div class="container text-center">
+      <a id="pdf-link" class="btn btn-default" href>Download PDF</a>
+
+      <!-- breadcrumb -->
+      <h4>
+        <a href="{{ parent_url }}" title="Report on hazards in {{ parent_division.name }}">{{ parent_division.name }}</a>
+      </h4>
+
+      <!-- Division name -->
+      <h2>
+        <a id="division-name" href="{{ overview_url }}" title="Go back to overview page">{{ division.name }}</a>
+      </h2>
+
+      <a class="btn btn-default btn-xs" href="{{ overview_url }}" title="Go back to overview page">Overview</a>
+      <ul id="hazard-types-list" class="horizontal list-unstyled hazards" role="tablist">
+        {% for hazard in hazards %}
+          {{ hazard_type(hazard) }}
+        {% endfor %}
+      </ul>
     </div>
-    <div id="map-wrapper" class="">
-      <div id="map">
-        {% if parent_division %}
-        <a id="map-drillup" class="btn btn-default drillup" href="#" data-code="{{ parent_division.code }}">
-          <img src="{{('thinkhazard:static/images/zoom-out.png'|static_url)}}">
-          Zoom out to {{ parent_division.name }}
-        </a>
-        {% endif %}
-        <img />
-        <div id="legend" class="text-center">
-          Maximum hazard level
-          <ul>
-            <li class="level-HIG">High</li>
-            <li class="level-MED">Medium</li>
-            <li class="level-LOW">Low</li>
-            <li class="level-NPR">No evidence</li>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-7">
+        {% if hazard %}
+          <h1 class="page-header detail level-{{ hazard.categorytype.mnemonic }}">
+            {{ hazard.hazardtype.title }}
+            <em>
+              <small class="pull-right">Hazard level: <span class="level">{{ hazard.categorytype.title }}</span>
+              </small>
+            </em>
+          </h1>
+          {% if hazard.description %}
+          {{ hazard.description }}
+          {% else %}
+          {{ hazard.categorytype.description }}
+          {% endif %}
+          {% if hazard.recommendation_associations %}
+          <h3>Recommendations</h3>
+          <ul class="recommendations">
+          {% for recommendation_association in hazard.recommendation_associations %}
+            <li>{{ recommendation_association.recommendation.description }}</li>
+          {% endfor %}
           </ul>
+          {% endif %}
+        {% else %}
+          {% for hazard in hazards %}
+          <a href="{{ 'report'|route_url(divisioncode=division.code, hazardtype=hazard.hazardtype.mnemonic) }}" aria-controls="{{ hazard.hazardtype.title }}">
+            <h1 class="page-header level-{{ hazard.categorytype.mnemonic }}">
+              {{ hazard.hazardtype.title }}
+              <em>
+                <small class="pull-right">Hazard level: <span class="level">{{ hazard.categorytype.title }}</span>
+                </small>
+              </em>
+            </h1>
+          </a>
+          {% endfor %}
+        {% endif %}
+      </div>
+      <div class="col-md-5">
+        <div class="well">
+          <div id="map">
+            {% if parent_division %}
+            <a id="map-drillup" class="btn btn-default btn-xs drillup pull-left" href="{{ parent_url }}">
+              Zoom out to {{ parent_division.name }}
+            </a>
+            {% endif %}
+            <img />
+          </div>
+          {% if hazard %}
+          <div class="text-center">
+            {{ hazard.hazardtype.mnemonic}} hazard Level
+          </div>
+          <div class="text-center">
+            {{ division.name }}
+          </div>
+          <div id="legend">
+            <ul>
+              <li class="level-HIG">
+                <i class="square"></i>
+                High
+              </li>
+              <li class="level-MED">
+                <i class="square"></i>
+                Medium
+              </li>
+              <li class="level-LOW">
+                <i class="square"></i>
+                Low
+              </li>
+              <li class="level-NPR">
+                <i class="square"></i>
+                Not previously reported
+              </li>
+            </ul>
+          </div>
+
+          <div class="text-center">
+            <h5>DATA SOURCE</h5>
+            <div>** Put the sources here</div>
+          </div>
+          {% endif %}
+        </div>
+        {% if hazard.additionalinfo_associations %}
+        <div class="well">
+          <h3>Further resources</h3>
+          For further information the following resources could be consulted:
+          <ul>
+          {% for additionalinfo_association in hazard.additionalinfo_associations %}
+          <li>
+            <a href="{{ additionalinfo_association.additionalinformation.accessurl }}">
+              {{ additionalinfo_association.additionalinformation.title }}
+            </a>
+          </li>
+          {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+        <div class="text-center">
+          <a href="//www.gfdrr.org/" class="logo-gfdrr">Logo GFDRR</a>
         </div>
       </div>
     </div>
   </div>
 {% endblock %}
+
+{% block scripts %}
+  <script>
+    {% if hazard %}
+      app.hazardType = '{{hazard.hazardtype.mnemonic}}';
+    {% endif %}
+  </script>
+{% endblock %}
+
+{% macro hazard_type(hazard) %}
+<li class="{{ hazard.categorytype.mnemonic }}">
+  <a
+    {% if hazard.categorytype.mnemonic == 'no-data' %}
+    class="disabled"
+    {% else %}
+    href="{{'report'|route_url(divisioncode=parent_division.code, hazardtype=hazard.hazardtype.mnemonic)}}"
+    {% endif %}
+     >
+    <img src="{{(('thinkhazard:static/images/hazard-icon-%s.png' % hazard.hazardtype.title.lower().replace(' ', '-'))|static_url)}}" />
+    {{ hazard.hazardtype.title }}
+  </a>
+</li>
+{% endmacro %}

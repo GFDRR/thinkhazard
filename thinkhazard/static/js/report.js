@@ -11,44 +11,11 @@
   // Array used as a temporary storage for event offsetX and offsetY
   var offsets = new Array(2);
 
-  // Change the tab to active in the tablist when a item is selected
-  // in the "overview" tabpanel
-  $('#overview a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-    var target = this.href.split('#');
-    $('ul.hazards a').filter('[href="#' + target[1] + '"]').tab('show');
-  });
-
-  // Reload the map when a hazard type is selected
-  var hazardType;
-  $('#hazard-types-list a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-    var hash = this.hash;
-    hazardType = hash.substr(1);
-    addMap(hazardType);
-    $('#legend').show();
-    window.location.hash = hash;
-  });
-
-  // detect any change on hash (history back for example)
-  $(window).bind('hashchange', showTab);
-  // Load the hazard if already defined URL hash
-  if (window.location.hash) {
-    showTab();
-  }
-
   // Show the "overview" list when the division-name link is clicked
   $('#division-name').on('click', function() {
     if (hazardType) {
       showOverview();
     }
-  });
-
-  // Add a new map to the page when the window changes size
-  var timeoutId;
-  $(window).resize(function() {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(function() {
-      addMap(hazardType);
-    }, 500);
   });
 
   // Change the mouse cursor when an administrative division is detected
@@ -92,15 +59,6 @@
     if (data) {
       showDivision(data.code);
     }
-  });
-
-  // Add the map to the page
-  addMap(hazardType);
-
-  $('.drillup').on('click', function(e) {
-    var code = $(this).attr('data-code');
-    showDivision(code);
-    return false;
   });
 
   /**
@@ -149,68 +107,32 @@
   /**
    * Add the map image to the DOM and load the corresponding UTFGrid.
    */
-  function addMap(hazardType) {
 
-    var divisionCode = app.divisionCode;
+  var divisionCode = app.divisionCode;
 
-    var w = $(mapSelector).width();
-    var h = $(mapSelector).height();
+  var w = $(mapSelector).width();
+  var h = $(mapSelector).height();
 
-    var imgUrl = app.mapImgUrl + '?width=' + w + '&height=' + h +
-        '&divisioncode=' + divisionCode;
-    if (hazardType) {
-        imgUrl += '&hazardtype=' + hazardType;
-    }
-
-    $(mapSelector + ' > img').replaceWith('<img src="' + imgUrl + '" />');
-
-    grid = undefined;
-    keys = undefined;
-    data = undefined;
-
-    var utfUrl = app.mapUtfUrl + '?width=' + w + '&height=' + h +
-        '&divisioncode=' + divisionCode;
-    if (hazardType) {
-        utfUrl += '&hazardtype=' + hazardType;
-    }
-    $.ajax(utfUrl).then(function(json) {
-      grid = json.grid;
-      keys = json.keys;
-      data = json.data;
-    });
+  var imgUrl = app.mapImgUrl + '?width=' + w + '&height=' + h +
+      '&divisioncode=' + divisionCode;
+  if (app.hazardType) {
+      imgUrl += '&hazardtype=' + app.hazardType;
   }
 
-  /**
-   * Load page for given division code.
-   */
-  function showDivision(code) {
-    var url = app.reportpageUrl + '?divisioncode=' + code;
-    if (hazardType) {
-      url  += '#' + hazardType;
-    }
-    window.location.href = url;
-  }
+  $(mapSelector + ' > img').replaceWith('<img src="' + imgUrl + '" />');
 
-  /**
-   * Take the hash from URL to activate the tab corresponding to the hazard
-   * type.
-   */
-  function showTab() {
-    var hash = window.location.hash;
-    if (hash !== '') {
-      $('#hazard-types-list a[href=' + hash + ']').tab('show');
-    } else {
-      showOverview();
-    }
-  }
+  grid = undefined;
+  keys = undefined;
+  data = undefined;
 
-  /**
-   * Show overview (default) tab.
-   */
-  function showOverview() {
-    $('ul.hazards a').filter('[href="#overview"]').tab('show');
-    hazardType = undefined;
-    addMap(hazardType);
-    $('#legend').hide();
+  var utfUrl = app.mapUtfUrl + '?width=' + w + '&height=' + h +
+      '&divisioncode=' + divisionCode;
+  if (app.hazardType) {
+      utfUrl += '&hazardtype=' + app.hazardType;
   }
+  $.ajax(utfUrl).then(function(json) {
+    grid = json.grid;
+    keys = json.keys;
+    data = json.data;
+  });
 })();

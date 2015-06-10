@@ -19,13 +19,16 @@ _categorytype_nodata.description = 'No data for this hazard type.'
 _categorytype_nodata.order = float('inf')
 
 
+@view_config(route_name='report_overview', renderer='templates/report.jinja2')
 @view_config(route_name='report', renderer='templates/report.jinja2')
 def report(request):
     try:
-        division_code = int(request.params.get('divisioncode'))
+        division_code = request.matchdict.get('divisioncode')
     except:
         raise HTTPBadRequest(detail='incorrect value for parameter '
                                     '"divisioncode"')
+
+    hazard = request.matchdict.get('hazardtype', None)
 
     # Query 1: get the administrative division whose code is division_code.
     _alias = aliased(AdministrativeDivision)
@@ -63,10 +66,14 @@ def report(request):
         hazard_data[key]['additionalinfo_associations'] = \
             hazardcategory.additionalinformation_associations
 
+    if hazard is not None:
+        hazard = hazard_data[hazard]
     # Order the hazard data by category type (hazard types with the highest
     # risk are first in the UI).
     hazard_data = hazard_data.values()
     hazard_data = sorted(hazard_data, key=lambda d: d['categorytype'].order)
 
-    return {'hazards': hazard_data, 'division': division,
+    return {'hazards': hazard_data,
+            'hazard': hazard,
+            'division': division,
             'parent_division': division.parent}
