@@ -21,22 +21,17 @@
 
 
   var bounds = app.divisionBounds;
-  // we don't need an image bigger than the division area
-  var width = (bounds[2] - bounds[0]) / map.getView().getResolution();
-  var height = (bounds[3] - bounds[1]) / map.getView().getResolution();
 
   var extent = map.getView().calculateExtent(map.getSize());
-  var params = {
-    width: Math.round(width),
-    height: Math.round(height),
-    divisioncode: app.divisionCode
-  };
-  if (app.hazardType) {
-      params.hazardtype = app.hazardType;
-  }
-  var url = app.mapImgUrl + '?' + $.param(params);
-  hazardLayer.setSource(new ol.source.ImageStatic({
-    url: url,
-    imageExtent: app.divisionBounds
-  }));
+
+  var vector = new ol.layer.Vector({
+    source: new ol.source.Vector({
+      url: app.mapUrl,
+      format: new ol.format.GeoJSON({
+        defaultDataProjection: 'EPSG:3857'
+      })
+    })
+  });
+  map.addLayer(vector);
+  window.source = vector.getSource();
 })();

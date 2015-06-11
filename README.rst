@@ -17,7 +17,6 @@ The following packages must be installed on the system:
 * `python-devel`
 * `python-virtualenv`
 * `apache2`
-* `mapnik-utils`, `libmapnik2.2`, `libmapnik-dev`, `python-mapnik`
 
 Getting Started
 ===============

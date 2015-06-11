@@ -174,8 +174,11 @@
       var app = {};
       app.administrativedivisionUrl = '{{'administrativedivision'|route_url}}';
       app.reportpageUrl = '{{'report_overview'|route_url(divisioncode='divisioncode')}}';
-      app.mapImgUrl = '{{'map'|route_url(format='png')}}';
-      app.mapUtfUrl = '{{'map'|route_url(format='json')}}';
+      {% if hazard %}
+      app.mapUrl = '{{ 'report_json'|route_url(divisioncode=division.code, hazardtype=hazard.hazardtype.mnemonic)}}';
+      {% else %}
+      app.mapUrl = '{{ 'report_overview_json'|route_url(divisioncode=division.code)}}';
+      {% endif %}
 
       {%- if division %}
       app.divisionCode = {{division.code}};
