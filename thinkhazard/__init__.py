@@ -25,7 +25,7 @@ def main(global_config, **settings):
                            cache_max_age=86000, cachebust=True)
 
     config.add_route('index', '/')
-    config.add_route('report', '/report/{divisioncode:\d+}/{hazardtype\s+}')
+    config.add_route('report', '/report/{divisioncode:\d+}/{hazardtype:\s+}')
     config.add_route('report_overview', '/report/{divisioncode:\d+}')
     config.add_route('administrativedivision', '/administrativedivision')
     config.add_route('map', '/map.{format}')
