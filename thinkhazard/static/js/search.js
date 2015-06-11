@@ -42,7 +42,8 @@
 
   $('#search-field').on('typeahead:selected',
       function(e, d) {
-        window.location.href = app.reportpageUrl + '?divisioncode=' + d.code;
+        window.location.href = app.reportpageUrl.replace('divisioncode',
+            d.code);
       }
   );
 
