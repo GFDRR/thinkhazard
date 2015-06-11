@@ -27,13 +27,6 @@ def _create_map_object(division_code, hazard_type, mapfile, rasterfile,
     map_ = mapnik.Map(width, height)
     mapnik.load_map(map_, mapfile)
 
-    raster_datasource = mapnik.Gdal(file=rasterfile)
-    layer = mapnik.Layer('raster')
-    layer.srs = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
-    layer.styles.append('raster')
-    layer.datasource = raster_datasource
-    map_.layers.append(layer)
-
     division_geometry, division_leveltype = DBSession.query(
         AdministrativeDivision.geom, AdminLevelType.mnemonic) \
         .join(AdministrativeDivision.leveltype) \
@@ -41,11 +34,9 @@ def _create_map_object(division_code, hazard_type, mapfile, rasterfile,
 
     division_shape = geoalchemy2.shape.to_shape(division_geometry)
     division_bounds = division_shape.bounds
-    dx = (division_bounds[2] - division_bounds[0]) / 8
-    dy = (division_bounds[3] - division_bounds[1]) / 8
     division_box = mapnik.Box2d(
-        division_bounds[0] - dx, division_bounds[1] - dy,
-        division_bounds[2] + dx, division_bounds[3] + dy)
+        division_bounds[0], division_bounds[1],
+        division_bounds[2], division_bounds[3])
 
     _filter = None
     if division_leveltype == u'REG':
