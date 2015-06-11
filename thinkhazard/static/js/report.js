@@ -24,7 +24,26 @@
 
   var extent = map.getView().calculateExtent(map.getSize());
 
+  var styleFn = function(feature) {
+    return [new ol.style.Style({
+      fill: new ol.style.Fill({
+        color: 'rgba(0, 0, 0, .1)'
+      }),
+      stroke: new ol.style.Stroke({
+        color: '#000000',
+        width: 1
+      }),
+      text: new ol.style.Text({
+        text: 'toto',
+        fill: new ol.style.Fill({
+          color: 'black'
+        })
+      })
+    })];
+  };
+
   var vector = new ol.layer.Vector({
+    style: styleFn,
     source: new ol.source.Vector({
       url: app.mapUrl,
       format: new ol.format.GeoJSON({
