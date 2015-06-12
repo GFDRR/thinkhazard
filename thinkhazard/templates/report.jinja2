@@ -171,9 +171,6 @@
     <script src="{{('%s/openlayers/dist/ol.js' % node_modules)|static_url}}"></script>
 {% endif %}
     <script>
-      var app = {};
-      app.administrativedivisionUrl = '{{'administrativedivision'|route_url}}';
-      app.reportpageUrl = '{{'report_overview'|route_url(divisioncode='divisioncode')}}';
       {% if hazard %}
       app.mapUrl = '{{ 'report_json'|route_url(divisioncode=division.code, hazardtype=hazard.hazardtype.mnemonic)}}';
       {% else %}
