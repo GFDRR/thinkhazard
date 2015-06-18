@@ -24,6 +24,7 @@
     "less": "~1.7.5",
     "openlayers": "~3.6.0",
     "typeahead.js": "~0.10.5",
-    "typeahead.js-bootstrap3.less": "hyspace/typeahead.js-bootstrap3.less#a512760"
+    "typeahead.js-bootstrap3.less": "hyspace/typeahead.js-bootstrap3.less#a512760",
+    "font-awesome": "~4.3.0"
   }
 }
