@@ -21,8 +21,6 @@
   });
   map.getView().fitExtent(app.divisionBounds, map.getSize());
 
-  var extent = map.getView().calculateExtent(map.getSize());
-
   var vectorLayer = addVectorLayer(map, app.mapUrl);
   addSelectInteraction(map, vectorLayer);
 
