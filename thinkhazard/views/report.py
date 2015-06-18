@@ -7,6 +7,8 @@ from pyramid.httpexceptions import HTTPBadRequest
 from sqlalchemy.orm import aliased
 from sqlalchemy import and_
 
+from geoalchemy2.shape import to_shape
+
 from ..models import (
     DBSession,
     AdminLevelType,
@@ -112,19 +114,22 @@ def report_json(request):
         _filter = AdministrativeDivision.parent_code == division_code
 
     if hazard_type is not None:
-        subdivisions = DBSession.query(AdministrativeDivision,
-                                       CategoryType.mnemonic) \
+        subdivisions = DBSession.query(AdministrativeDivision) \
+            .add_columns(CategoryType.mnemonic) \
             .outerjoin(AdministrativeDivision.hazardcategories) \
-            .outerjoin(HazardType).outerjoin(CategoryType) \
+            .outerjoin(HazardType)\
+            .outerjoin(CategoryType) \
             .filter(and_(_filter, HazardType.mnemonic == hazard_type))
     else:
         subdivisions = itertools.izip(
             DBSession.query(AdministrativeDivision).filter(_filter),
             itertools.cycle(('NONE',)))
 
-    features = []
-
-    for subdivision, category in subdivisions:
-        features.append(subdivision)
-
-    return features
+    return [{
+        'type': 'Feature',
+        'geometry': to_shape(subdivision.geom),
+        'properties': {
+            'name': subdivision.name,
+            'hazardLevel': categorytype
+            }
+        } for subdivision, categorytype in subdivisions]

@@ -17,56 +17,64 @@
 
   var extent = map.getView().calculateExtent(map.getSize());
 
-  var defFill = new ol.style.Fill({color: 'rgba(0, 0, 0, .1)'});
-  var defStroke = new ol.style.Stroke({
-    color: '#000000',
-    width: 1
+  var defaultTextStyle = new ol.style.Text({
+    fill: new ol.style.Fill({
+      color: 'black'
+    }),
+    scale: 0.9,
+    stroke: new ol.style.Stroke({
+      color: 'rgba(255, 255, 255, 0.6)',
+      width: 5
+    }),
+    text: ''
   });
-  var defTextStroke = new ol.style.Stroke({
-    color: 'rgba(255, 255, 255, 0.6)',
-    width: 5
-    });
-  var defTextFill = new ol.style.Fill({
-    color: 'black'
-  });
+
+  var defaultStyles = [
+    new ol.style.Style({
+      fill: new ol.style.Fill({
+        color: 'rgba(0, 0, 0, .1)'
+      }),
+      stroke: new ol.style.Stroke({
+        color: '#000000',
+        width: 1
+      }),
+      text: defaultTextStyle
+    })
+  ];
+
   var styleFn = function(feature) {
-    return [new ol.style.Style({
-      fill: defFill,
-      stroke: defStroke,
-      text: new ol.style.Text({
-        text: feature.get('name'),
-        scale: 0.9,
-        stroke: defTextStroke,
-        fill: defTextFill
-      })
-    })];
+    defaultTextStyle.setText(feature.get('name'));
+    return defaultStyles;
   };
 
-  var hoverFill = new ol.style.Fill({
-    color: 'rgba(255, 120, 120, .3)'
+  var hoverTextStyle = new ol.style.Text({
+    text: '',
+    scale: 1.2,
+    stroke: new ol.style.Stroke({
+      color: 'white',
+      width: 5
+    }),
+    fill: new ol.style.Fill({
+      color: 'black'
+    })
   });
-  var hoverStroke = new ol.style.Stroke({
-    color: '#FF5555',
-    width: 1
-  });
-  var hoverTextStroke = new ol.style.Stroke({
-    color: 'white',
-    width: 5
-  });
-  var hoverFillStroke = new ol.style.Fill({
-    color: 'black'
-  });
+
+  var hoverStyles = [
+    new ol.style.Style({
+      fill: new ol.style.Fill({
+        color: 'rgba(255, 120, 120, .3)'
+      }),
+      stroke: new ol.style.Stroke({
+        color: '#FF5555',
+        width: 1
+      }),
+      text: hoverTextStyle
+    })
+  ];
+
   var styleHoverFn = function(feature) {
-    return [new ol.style.Style({
-      fill: hoverFill,
-      stroke: hoverStroke,
-      text: new ol.style.Text({
-        text: feature.get('name'),
-        scale: 1.2,
-        stroke: hoverTextStroke,
-        fill: hoverFillStroke
-      })
-    })];
+    hoverTextStyle.setText(feature.get('name'));
+    return hoverStyles;
   };
 
   var vector = new ol.layer.Vector({
@@ -79,7 +87,6 @@
     })
   });
   map.addLayer(vector);
-  window.source = vector.getSource();
 
   var select = new ol.interaction.Select({
     layers: [vector],
