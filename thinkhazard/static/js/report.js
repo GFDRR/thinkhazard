@@ -11,8 +11,7 @@
         }),
         opacity: 0.5
       })
-    ],
-    view: new ol.View({ })
+    ]
   });
   map.getView().fitExtent(app.divisionBounds, map.getSize());
 
