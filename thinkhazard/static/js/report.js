@@ -16,12 +16,6 @@
   });
   map.getView().fitExtent(app.divisionBounds, map.getSize());
 
-  var hazardLayer = new ol.layer.Image({});
-  map.addLayer(hazardLayer);
-
-
-  var bounds = app.divisionBounds;
-
   var extent = map.getView().calculateExtent(map.getSize());
 
   var styleFn = function(feature) {
@@ -91,15 +85,8 @@
 
   // change mouse cursor when over division
   map.on('pointermove', function(e) {
-    if (e.dragging) {
-      return;
-    }
     var pixel = map.getEventPixel(e.originalEvent);
-    var hit = map.hasFeatureAtPixel(pixel, function(layer) {
-      if (layer == vector) {
-        return true;
-      }
-    });
+    var hit = map.hasFeatureAtPixel(pixel);
     map.getTargetElement().style.cursor = hit ? 'zoom-in' : '';
   });
 })();
