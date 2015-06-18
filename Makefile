@@ -27,7 +27,7 @@ help:
 
 .PHONY: install
 install: .build/requirements.timestamp .build/node_modules.timestamp
-	
+
 .PHONY: build
 build: buildcss
 
@@ -88,7 +88,7 @@ watchless: .build/dev-requirements.timestamp
 	@echo "Watching less files…"
 	.build/venv/bin/nosier -p thinkhazard/static/less "make thinkhazard/static/build/index.css thinkhazard/static/build/report.css thinkhazard/static/build/common.css"
 
-thinkhazard/static/build/%.min.css: $(LESS_FILES) .build/node_modules.timestamp
+thinkhazard/static/build/%.min.css: $(LESS_FILES) .build/node_modules.timestamp .build/fonts.timestamp
 	mkdir -p $(dir $@)
 	./node_modules/.bin/lessc --clean-css thinkhazard/static/less/$*.less $@
 
@@ -138,6 +138,11 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 	sed -e 's#{{PYTHONPATH}}#$(shell .build/venv/bin/python -c "import distutils; print(distutils.sysconfig.get_python_lib())")#' \
 		-e 's#{{INSTANCEID}}#$(INSTANCEID)#' \
 		-e 's#{{WSGISCRIPT}}#$(abspath .build/venv/thinkhazard.wsgi)#' $< > $@
+
+.build/fonts.timestamp: .build/node_modules.timestamp
+	mkdir -p thinkhazard/static/build/fonts
+	cp node_modules/font-awesome/fonts/* thinkhazard/static/build/fonts/
+	touch $@
 
 .PHONY: clean
 clean:
