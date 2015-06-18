@@ -17,48 +17,54 @@
 
   var extent = map.getView().calculateExtent(map.getSize());
 
+  var defFill = new ol.style.Fill({color: 'rgba(0, 0, 0, .1)'});
+  var defStroke = new ol.style.Stroke({
+    color: '#000000',
+    width: 1
+  });
+  var defTextStroke = new ol.style.Stroke({
+    color: 'rgba(255, 255, 255, 0.6)',
+    width: 5
+    });
+  var defTextFill = new ol.style.Fill({
+    color: 'black'
+  });
   var styleFn = function(feature) {
     return [new ol.style.Style({
-      fill: new ol.style.Fill({
-        color: 'rgba(0, 0, 0, .1)'
-      }),
-      stroke: new ol.style.Stroke({
-        color: '#000000',
-        width: 1
-      }),
+      fill: defFill,
+      stroke: defStroke,
       text: new ol.style.Text({
         text: feature.get('name'),
         scale: 0.9,
-        stroke: new ol.style.Stroke({
-          color: 'rgba(255, 255, 255, 0.6)',
-          width: 5
-        }),
-        fill: new ol.style.Fill({
-          color: 'black'
-        })
+        stroke: defTextStroke,
+        fill: defTextFill
       })
     })];
   };
 
+  var hoverFill = new ol.style.Fill({
+    color: 'rgba(255, 120, 120, .3)'
+  });
+  var hoverStroke = new ol.style.Stroke({
+    color: '#FF5555',
+    width: 1
+  });
+  var hoverTextStroke = new ol.style.Stroke({
+    color: 'white',
+    width: 5
+  });
+  var hoverFillStroke = new ol.style.Fill({
+    color: 'black'
+  });
   var styleHoverFn = function(feature) {
     return [new ol.style.Style({
-      fill: new ol.style.Fill({
-        color: 'rgba(255, 120, 120, .3)'
-      }),
-      stroke: new ol.style.Stroke({
-        color: '#FF5555',
-        width: 1
-      }),
+      fill: hoverFill,
+      stroke: hoverStroke,
       text: new ol.style.Text({
         text: feature.get('name'),
         scale: 1.2,
-        stroke: new ol.style.Stroke({
-          color: 'white',
-          width: 5
-        }),
-        fill: new ol.style.Fill({
-          color: 'black'
-        })
+        stroke: hoverTextStroke,
+        fill: hoverFillStroke
       })
     })];
   };
