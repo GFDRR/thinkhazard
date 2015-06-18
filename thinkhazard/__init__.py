@@ -19,7 +19,7 @@ def main(global_config, **settings):
     config = Configurator(settings=settings)
 
     config.include('pyramid_jinja2')
-    config.include('papyrus.includeme')
+    config.include('papyrus')
 
     config.add_static_view('static', 'static', cache_max_age=3600,
                            cachebust=True)
