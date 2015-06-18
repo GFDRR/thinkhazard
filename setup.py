@@ -20,6 +20,7 @@ requires = [
     'transaction',
     'zope.sqlalchemy',
     'waitress',
+    'papyrus==2.0dev3',
     ]
 
 setup(name='thinkhazard',

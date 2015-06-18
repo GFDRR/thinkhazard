@@ -1,10 +1,15 @@
+import itertools
+import geoalchemy2.shape
+
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest
 
 from sqlalchemy.orm import aliased
+from sqlalchemy import and_
 
 from ..models import (
     DBSession,
+    AdminLevelType,
     AdministrativeDivision,
     CategoryType,
     HazardCategory,
@@ -73,7 +78,53 @@ def report(request):
     hazard_data = hazard_data.values()
     hazard_data = sorted(hazard_data, key=lambda d: d['categorytype'].order)
 
+    # Get the geometry for division and compute its extent
+    division_shape = geoalchemy2.shape.to_shape(division.geom)
+    division_bounds = list(division_shape.bounds)
+
     return {'hazards': hazard_data,
             'hazard': hazard,
             'division': division,
+            'bounds': division_bounds,
             'parent_division': division.parent}
+
+
+@view_config(route_name='report_json', renderer='geojson')
+@view_config(route_name='report_overview_json', renderer='geojson')
+def report_json(request):
+
+    try:
+        division_code = request.matchdict.get('divisioncode')
+    except:
+        raise HTTPBadRequest(detail='incorrect value for parameter '
+                                    '"divisioncode"')
+
+    hazard_type = request.matchdict.get('hazardtype', None)
+
+    division_leveltype, = DBSession.query(AdminLevelType.mnemonic) \
+        .join(AdministrativeDivision.leveltype) \
+        .filter(AdministrativeDivision.code == division_code).one()
+
+    _filter = None
+    if division_leveltype == u'REG':
+        _filter = AdministrativeDivision.code == division_code
+    else:
+        _filter = AdministrativeDivision.parent_code == division_code
+
+    if hazard_type is not None:
+        subdivisions = DBSession.query(AdministrativeDivision,
+                                       CategoryType.mnemonic) \
+            .outerjoin(AdministrativeDivision.hazardcategories) \
+            .outerjoin(HazardType).outerjoin(CategoryType) \
+            .filter(and_(_filter, HazardType.mnemonic == hazard_type))
+    else:
+        subdivisions = itertools.izip(
+            DBSession.query(AdministrativeDivision).filter(_filter),
+            itertools.cycle(('NONE',)))
+
+    features = []
+
+    for subdivision, category in subdivisions:
+        features.append(subdivision)
+
+    return features

@@ -1,138 +1,97 @@
 (function() {
 
-  // UTFGrid data
-  var grid;
-  var keys;
-  var data;
-
-  // Map element selector
-  var mapSelector = '#map';
-
-  // Array used as a temporary storage for event offsetX and offsetY
-  var offsets = new Array(2);
-
-  // Show the "overview" list when the division-name link is clicked
-  $('#division-name').on('click', function() {
-    if (hazardType) {
-      showOverview();
-    }
+  var map = new ol.Map({
+    target: 'map',
+    interactions: [],
+    controls: [],
+    layers: [
+      new ol.layer.Tile({
+        source: new ol.source.Stamen({
+          layer: 'watercolor'
+        }),
+        opacity: 0.5
+      })
+    ]
   });
+  map.getView().fitExtent(app.divisionBounds, map.getSize());
 
-  // Change the mouse cursor when an administrative division is detected
-  var currentCursor;
-  $('#map').on('mousemove', function(e) {
+  var extent = map.getView().calculateExtent(map.getSize());
 
-    var w = $(this).width();
-    var h = $(this).height();
-
-    if (!currentCursor) {
-      currentCursor = $(this).css('cursor');
-    }
-
-    getEventOffsets(e, offsets);
-
-    var xRelative = offsets[0] / w;
-    var yRelative = offsets[1] / h;
-
-    var data = getDataForPosition(xRelative, yRelative);
-
-    if (data && currentCursor != 'pointer') {
-      currentCursor = 'pointer';
-      $(this).css('cursor', currentCursor);
-    } else if (!data && currentCursor != 'auto') {
-      currentCursor = 'auto';
-      $(this).css('cursor', currentCursor);
-    }
+  var defFill = new ol.style.Fill({color: 'rgba(0, 0, 0, .1)'});
+  var defStroke = new ol.style.Stroke({
+    color: '#000000',
+    width: 1
   });
-
-  // Listen to click events on the map and reload the page for the clicked
-  // administrative division
-  $('#map').on('click', function(e) {
-    var w = $(this).width();
-    var h = $(this).height();
-
-    getEventOffsets(e, offsets);
-
-    var xRelative = offsets[0] / w;
-    var yRelative = offsets[1] / h;
-    var data = getDataForPosition(xRelative, yRelative);
-    if (data) {
-      showDivision(data.code);
-    }
+  var defTextStroke = new ol.style.Stroke({
+    color: 'rgba(255, 255, 255, 0.6)',
+    width: 5
+    });
+  var defTextFill = new ol.style.Fill({
+    color: 'black'
   });
+  var styleFn = function(feature) {
+    return [new ol.style.Style({
+      fill: defFill,
+      stroke: defStroke,
+      text: new ol.style.Text({
+        text: feature.get('name'),
+        scale: 0.9,
+        stroke: defTextStroke,
+        fill: defTextFill
+      })
+    })];
+  };
 
-  /**
-   * Return the UTFGrid data for a position (x, y). `null` is returned
-   * if there's no grid or there's no feature at this position.
-   */
-  function getDataForPosition(x, y) {
-    if (grid) {
-      var row = grid[Math.floor(y * grid.length)];
-      if (row) {
-        var code = row.charCodeAt(Math.floor(x * row.length));
-        if (code >= 93) {
-          code--;
-        }
-        if (code >= 35) {
-          code--;
-        }
-        code -= 32;
-        var key = keys[code];
-        if (key) {
-          return data[key];
-        }
-      }
-    }
-    return null;
-  }
+  var hoverFill = new ol.style.Fill({
+    color: 'rgba(255, 120, 120, .3)'
+  });
+  var hoverStroke = new ol.style.Stroke({
+    color: '#FF5555',
+    width: 1
+  });
+  var hoverTextStroke = new ol.style.Stroke({
+    color: 'white',
+    width: 5
+  });
+  var hoverFillStroke = new ol.style.Fill({
+    color: 'black'
+  });
+  var styleHoverFn = function(feature) {
+    return [new ol.style.Style({
+      fill: hoverFill,
+      stroke: hoverStroke,
+      text: new ol.style.Text({
+        text: feature.get('name'),
+        scale: 1.2,
+        stroke: hoverTextStroke,
+        fill: hoverFillStroke
+      })
+    })];
+  };
 
-  /**
-   * Get offsetX and offsetY from the event object.
-   *
-   * event.offsetX and event.offsetY are not defined in Firefox < 39.
-   * See https://bugzilla.mozilla.org/show_bug.cgi?id=69787
-   */
-  function getEventOffsets(evt, offsets) {
-    var offsetX = evt.offsetX;
-    var offsetY = evt.offsetY;
-    if (offsetX === undefined || offsetY === undefined) {
-      var targetOffset = $(evt.target).offset();
-      offsetX = evt.pageX - targetOffset.left;
-      offsetY = evt.pageY - targetOffset.top;
-    }
-    offsets[0] = offsetX;
-    offsets[1] = offsetY;
-  }
+  var vector = new ol.layer.Vector({
+    style: styleFn,
+    source: new ol.source.Vector({
+      url: app.mapUrl,
+      format: new ol.format.GeoJSON({
+        defaultDataProjection: 'EPSG:3857'
+      })
+    })
+  });
+  map.addLayer(vector);
+  window.source = vector.getSource();
 
-  /**
-   * Add the map image to the DOM and load the corresponding UTFGrid.
-   */
+  var select = new ol.interaction.Select({
+    layers: [vector],
+    condition: ol.events.condition.pointerMove,
+    style: styleHoverFn
+  });
+  map.addInteraction(select);
 
-  var divisionCode = app.divisionCode;
-
-  var w = $(mapSelector).width();
-  var h = $(mapSelector).height();
-
-  var imgUrl = app.mapImgUrl + '?width=' + w + '&height=' + h +
-      '&divisioncode=' + divisionCode;
-  if (app.hazardType) {
-      imgUrl += '&hazardtype=' + app.hazardType;
-  }
-
-  $(mapSelector + ' > img').replaceWith('<img src="' + imgUrl + '" />');
-
-  grid = undefined;
-  keys = undefined;
-  data = undefined;
-
-  var utfUrl = app.mapUtfUrl + '?width=' + w + '&height=' + h +
-      '&divisioncode=' + divisionCode;
-  if (app.hazardType) {
-      utfUrl += '&hazardtype=' + app.hazardType;
-  }
-  $.ajax(utfUrl).then(function(json) {
-    grid = json.grid;
-    keys = json.keys;
-    data = json.data;
+  // change mouse cursor when over division
+  map.on('pointermove', function(e) {
+    var pixel = map.getEventPixel(e.originalEvent);
+    var hit = map.hasFeatureAtPixel(pixel);
+    map.getTargetElement().style.cursor = hit ? 'zoom-in' : '';
   });
 })();

@@ -29,14 +29,7 @@
     <script>
       var app = {};
       app.administrativedivisionUrl = '{{'administrativedivision'|route_url}}';
-      app.reportpageUrl = '{{'report_overview'|route_url(divisioncode='divisioncode')}}';
-      app.mapImgUrl = '{{'map'|route_url(format='jpeg')}}';
-      app.mapUtfUrl = '{{'map'|route_url(format='json')}}';
-      {%- if division %}
-      app.divisionCode = {{division.code}};
-      {%- else %}
-      app.divisionCode = undefined;
-      {%- endif %}
+      app.reportpageUrl = '{{'report_overview'|route_url(divisioncode='__divisioncode__')}}';
     </script>
     {% block scripts %}
     {% endblock scripts %}

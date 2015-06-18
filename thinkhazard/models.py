@@ -18,6 +18,8 @@ from sqlalchemy.orm import (
 
 from geoalchemy2 import Geometry
 
+from papyrus.geo_interface import GeoInterface
+
 from zope.sqlalchemy import ZopeTransactionExtension
 
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
@@ -193,7 +195,7 @@ class HazardCategoryAdditionalInformationAssociation(Base):
                                          lazy='joined', innerjoin=True)
 
 
-class AdministrativeDivision(Base):
+class AdministrativeDivision(GeoInterface, Base):
     __tablename__ = 'administrativedivision'
 
     id = Column(Integer, primary_key=True)

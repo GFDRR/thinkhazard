@@ -16,7 +16,7 @@
     <div class="container">
       <div class="navbar-header">
         <a class="navbar-brand" href="{{'index'|route_url}}">
-          <img src="{{('thinkhazard:static/images/logo-small.png'|static_url)}}">
+          logo think hazard
         </a>
       </div>
       <form class="navbar-form navbar-left" role="search">
@@ -102,11 +102,10 @@
         <div class="well">
           <div id="map">
             {% if parent_division %}
-            <a id="map-drillup" class="btn btn-default btn-xs drillup pull-left" href="{{ parent_url }}">
+            <a id="map-drillup" class="btn btn-default btn-xs drillup control" href="{{ parent_url }}">
               Zoom out to {{ parent_division.name }}
             </a>
             {% endif %}
-            <img />
           </div>
           {% if hazard %}
           <div class="text-center">
@@ -166,11 +165,29 @@
 {% endblock %}
 
 {% block scripts %}
-  <script>
-    {% if hazard %}
-      app.hazardType = '{{hazard.hazardtype.mnemonic}}';
-    {% endif %}
-  </script>
+{% if debug %}
+    <script src="{{('%s/openlayers/dist/ol-debug.js' % node_modules)|static_url}}"></script>
+{% else %}
+    <script src="{{('%s/openlayers/dist/ol.js' % node_modules)|static_url}}"></script>
+{% endif %}
+    <script>
+      {% if hazard %}
+      app.mapUrl = '{{ 'report_json'|route_url(divisioncode=division.code, hazardtype=hazard.hazardtype.mnemonic)}}';
+      {% else %}
+      app.mapUrl = '{{ 'report_overview_json'|route_url(divisioncode=division.code)}}';
+      {% endif %}
+
+      {%- if division %}
+      app.divisionCode = {{division.code}};
+      {%- else %}
+      app.divisionCode = undefined;
+      {%- endif %}
+
+      app.divisionBounds = {{bounds}};
+      {% if hazard %}
+        app.hazardType = '{{hazard.hazardtype.mnemonic}}';
+      {% endif %}
+    </script>
 {% endblock %}
 
 {% macro hazard_type(hazard) %}
