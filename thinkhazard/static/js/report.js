@@ -87,7 +87,6 @@
     })
   });
   map.addLayer(vector);
-  window.source = vector.getSource();
 
   var select = new ol.interaction.Select({
     layers: [vector],
