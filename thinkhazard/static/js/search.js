@@ -15,6 +15,7 @@
     limit: 10,
     remote: {
       url: app.administrativedivisionUrl + '?q=%QUERY',
+      wildcard: '%QUERY',
       filter: function(parsedResponse) {
         return parsedResponse.data;
       }
@@ -29,13 +30,13 @@
     displayKey: function(s) {
       return getSortedTokens(s).join(', ');
     },
-    source: engine.ttAdapter(),
+    source: engine,
     templates: {
       suggestion: function(data) {
         var tokens = getSortedTokens(data);
         tokens[0] += '<small><em>';
         tokens[tokens.length - 1] += '</em></small>';
-        return tokens.join(', ');
+        return '<div>' + tokens.join(', ') + '</div>';
       }
     }
   });
