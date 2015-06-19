@@ -24,7 +24,6 @@
     "less": "~1.7.5",
     "openlayers": "~3.6.0",
     "typeahead.js": "~0.11.1",
-    "typeahead.js-bootstrap3.less": "",
     "font-awesome": "~4.3.0"
   }
 }
