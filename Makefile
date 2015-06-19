@@ -68,7 +68,11 @@ jshint: .build/node_modules.timestamp .build/jshint.timestamp
 bootlint: .build/node_modules.timestamp .build/bootlint.timestamp
 
 .PHONY: modwsgi
-modwsgi: install .build/venv/thinkhazard.wsgi .build/apache.conf
+modwsgi: install \
+	     .build/thinkhazard-production.wsgi \
+	     .build/thinkhazard-development.wsgi \
+	     .build/apache-production.conf \
+	     .build/apache-development.conf
 
 .PHONY: test
 test:
@@ -100,8 +104,8 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 	mkdir -p $(dir $@)
 	virtualenv .build/venv
 
-.build/venv/thinkhazard.wsgi: thinkhazard.wsgi
-	sed 's#{{DIR}}#$(CURDIR)#' $< > $@
+.build/thinkhazard-%.wsgi: thinkhazard.wsgi
+	sed 's#{{APP_INI_FILE}}#$(CURDIR)/$*.ini#' $< > $@
 	chmod 755 $@
 
 .build/node_modules.timestamp: package.json
@@ -134,10 +138,10 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 	./node_modules/.bin/bootlint $?
 	touch $@
 
-.build/apache.conf: apache.conf .build/venv
+.build/apache-%.conf: apache.conf .build/venv
 	sed -e 's#{{PYTHONPATH}}#$(shell .build/venv/bin/python -c "import distutils; print(distutils.sysconfig.get_python_lib())")#' \
 		-e 's#{{INSTANCEID}}#$(INSTANCEID)#' \
-		-e 's#{{WSGISCRIPT}}#$(abspath .build/venv/thinkhazard.wsgi)#' $< > $@
+		-e 's#{{WSGISCRIPT}}#$(abspath .build/thinkhazard-$*.wsgi)#' $< > $@
 
 .build/fonts.timestamp: .build/node_modules.timestamp
 	mkdir -p thinkhazard/static/build/fonts
@@ -146,8 +150,8 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 
 .PHONY: clean
 clean:
-	rm -f .build/venv/thinkhazard.wsgi
-	rm -f .build/apache.conf
+	rm -f .build/thinkhazard-*.wsgi
+	rm -f .build/apache-*.conf
 	rm -rf thinkhazard/static/build
 
 .PHONY: cleanall
