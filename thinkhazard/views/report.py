@@ -130,6 +130,7 @@ def report_json(request):
         'geometry': to_shape(subdivision.geom),
         'properties': {
             'name': subdivision.name,
+            'code': subdivision.code,
             'hazardLevel': categorytype
             }
         } for subdivision, categorytype in subdivisions]

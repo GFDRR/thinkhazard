@@ -22,7 +22,7 @@
   map.getView().fitExtent(app.divisionBounds, map.getSize());
 
   var vectorLayer = addVectorLayer(map, app.mapUrl);
-  addSelectInteraction(map, vectorLayer);
+  getSelectInteraction(map, vectorLayer);
 
   // change mouse cursor when over division
   map.on('pointermove', function(e) {
@@ -95,7 +95,7 @@
    * @param {ol.layer.Vector} layer
    * @return {ol.interaction.Select}
    */
-  function addSelectInteraction(map, layer) {
+  function getSelectInteractions(map, layer) {
     var textStyle = new ol.style.Text({
       text: '',
       scale: 1.2,
@@ -129,13 +129,31 @@
       fillStyle.setColor(fillColor);
       return styles;
     };
-    var interaction = new ol.interaction.Select({
+    var clickInteraction = new ol.interaction.Select({
       layers: [layer],
-      condition: ol.events.condition.pointerMove,
-      style: styleFn
+      condition: ol.events.condition.click
     });
-    map.addInteraction(interaction);
-    return interaction;
+    var interactions = [
+      new ol.interaction.Select({
+        layers: [layer],
+        condition: ol.events.condition.pointerMove,
+        style: styleFn
+      }),
+      clickInteraction
+    ];
+    clickInteraction.on('select', function(e) {
+      var feature = e.selected[0];
+      if (!feature) {
+        return;
+      }
+      var code = feature.get('code');
+      if (code) {
+        window.location = app.reportpageUrl.replace(
+          "__divisioncode__", code);
+      }
+    });
+    map.getInteractions().extend(interactions);
+    return interactions;
   }
 
 
