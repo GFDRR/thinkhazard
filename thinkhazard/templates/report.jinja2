@@ -2,6 +2,13 @@
 
 {% block name %}report{% endblock %}
 
+{% block title %}
+Think Hazard - {{ division.name}}
+{% if hazard %}
+ - {{ hazard.hazardtype.title }}
+{% endif %}
+{% endblock %}
+
 {% block content %}
 
   {% if hazard %}
