@@ -85,7 +85,7 @@ def report(request):
     division_bounds = list(division_shape.bounds)
 
     return {'hazards': hazard_data,
-            'hazard': hazard,
+            'current_hazard': hazard,
             'division': division,
             'bounds': division_bounds,
             'parent_division': division.parent}
