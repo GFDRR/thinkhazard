@@ -7,6 +7,11 @@
 @level-no-data-color: #F2F2F2;
 @font-regular: "Source Sans Pro Regural",sans-serif;
 
+@text-color: #333;
+
+@font-semibold: "Source Sans Pro Semibold",sans-serif;
+@font-regular: "Source Sans Pro Regural",sans-serif;
+
 body {
   padding-top: 50px;
   padding-bottom: 20px;
@@ -123,18 +128,28 @@ body {
   z-index: 2;
 }
 
-
 #legend {
   .square {
     display: inline-block;
-    width: 10px;
-    height: 10px;
+    width: 24px;
+    height: 24px;
   }
 
   .level(HIG);
   .level(MED);
   .level(LOW);
   .level(NPR);
+
+  vertical-align: middle;
+
+  ul {
+    list-style-type: none;
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 30px;
+    color: @text-color;
+    font-family: @font-regular;
+  }
 }
 
 .level(@level) {
@@ -155,5 +170,47 @@ body {
   background: url(../images/logo-gfdrr-small.png) 0 0 no-repeat;
   &:hover {
     background-position: 0 -60px;
+  }
+}
+
+#map-block {
+  .caption {
+    font-family: @font-semibold;
+    text-align: center;
+    &.location {
+      margin: 0px 20px 27px;
+    }
+    &.level{
+      margin: 4px 20px 0px;
+      font-size: 24px;
+    }
+  }
+
+  background-color: #fff;
+  padding: 10px;
+  .box-shadow(0px 0px 10px 0px rgba(0, 0, 0, 0.33));
+}
+
+.legend-heading {
+  font-family: @font-semibold;
+  text-align: center;
+}
+
+#data-source {
+  padding: 27px 0px 30px;
+  margin: 0 20px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #e6e6e6;
+  font-size: 14px;
+
+  h5 {
+    text-transform: uppercase;
+    font-family: @font-semibold;
+    margin-bottom: 4px;
+  }
+
+  div {
+    font-family: @font-regular;
   }
 }
