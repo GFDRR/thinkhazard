@@ -198,7 +198,7 @@ Think Hazard - {{ division.name}}
 {% endblock %}
 
 {% macro hazard_type(hazard) %}
-<li class="{{ hazard.categorytype.mnemonic }} text-center {{ 'active' if hazard.hazardtype.mnemonic == current_hazard.hazardtype.mnemonic else ''}}">
+<li class="{{ hazard.categorytype.mnemonic }} text-center {{ 'active' if current_hazard and hazard.hazardtype.mnemonic == current_hazard.hazardtype.mnemonic else ''}}">
   <a
     {% if hazard.categorytype.mnemonic != 'no-data' %}
     href="{{'report'|route_url(divisioncode=division.code, hazardtype=hazard.hazardtype.mnemonic)}}"
@@ -206,7 +206,7 @@ Think Hazard - {{ division.name}}
      >
     <i class="fa fa-check icon"></i><br>
     {{ hazard.hazardtype.title }}
-    {% if hazard.hazardtype.mnemonic == current_hazard.hazardtype.mnemonic %}
+    {% if current_hazard and hazard.hazardtype.mnemonic == current_hazard.hazardtype.mnemonic %}
     <div class="arrow"></div>
     {% endif %}
   </a>
