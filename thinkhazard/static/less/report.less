@@ -1,10 +1,11 @@
 @import "../../../node_modules/bootstrap/less/mixins.less";
 
-@level-HIG-color: #D91F2C;
-@level-MED-color: #D57C27;
-@level-LOW-color: #E0B025;
-@level-NPR-color: #8E9D92;
+@level-HIG-color: #d91f2c;
+@level-MED-color: #d57c27;
+@level-LOW-color: #e0b025;
+@level-NPR-color: #87988c;
 @level-no-data-color: #F2F2F2;
+@font-regular: "Source Sans Pro Regural",sans-serif;
 
 body {
   padding-top: 50px;
@@ -24,6 +25,89 @@ body {
 @media(min-width:768px) {
   .navbar-form .form-control {
     width: 350px;
+  }
+}
+
+.jumbotron {
+  padding: 48px 0 0 0;
+}
+
+#hazard-types-list {
+  @hazard-width: 104px;
+  @circle-border: 5px;
+  @icon-size: 64px;
+  @arrow-height: 10px;
+  @border-bottom: 5px;
+  margin-bottom: -(@border-bottom);
+  // remove space between items in the list
+  font-size: 0;
+  li {
+    font-family: @font-regular;
+    font-size: 16px;
+    width: @hazard-width;
+    border-bottom: @border-bottom solid;
+    position: relative;
+    margin-top: 50px;
+    padding-top: 20px;
+    &.no-data {
+      border-bottom-color: white;
+      a {
+        color: #a8a8a8;
+      }
+      .icon {
+        background-color: #f5f5f5;
+      }
+    }
+    &.active {
+      a {
+        color: white;
+      }
+    }
+    a {
+      color: #333;
+    }
+    .icon {
+      font-size: @icon-size;
+      border: @circle-border solid transparent;
+      border-radius: 50px;
+      position: absolute;
+      top: -@icon-size / 2 - @circle-border;
+      left: (@hazard-width - @icon-size) / 2 - @circle-border;
+      background-color: white;
+    }
+    &:not(.active) .icon {
+      .box-shadow(0px 0px 6px -1px rgba(0, 0, 0, 0.33));
+    }
+    .arrow {
+      position: absolute;
+      bottom: -15px;
+      width: 0;
+      height: 0;
+      border-left: 51px solid transparent;
+      border-right: 51px solid transparent;
+      border-top: @arrow-height solid;
+    }
+
+    .level(@level) {
+      @color: "level-@{level}-color";
+      &.@{level} {
+        border-color: @@color;
+        &.active {
+          background-color: @@color;
+          .arrow {
+            border-top-color: @@color;
+          }
+          .icon {
+            color: @@color;
+            border-color: @@color;
+          }
+        }
+      }
+    }
+    .level(HIG);
+    .level(MED);
+    .level(LOW);
+    .level(NPR);
   }
 }
 

@@ -4,15 +4,15 @@
 
 {% block title %}
 Think Hazard - {{ division.name}}
-{% if hazard %}
- - {{ hazard.hazardtype.title }}
+{% if current_hazard %}
+ - {{ current_hazard.hazardtype.title }}
 {% endif %}
 {% endblock %}
 
 {% block content %}
 
-  {% if hazard %}
-    {% set parent_url = request.route_url('report', divisioncode=parent_division.code, hazardtype=hazard.hazardtype.mnemonic) %}
+  {% if current_hazard %}
+    {% set parent_url = request.route_url('report', divisioncode=parent_division.code, hazardtype=current_hazard.hazardtype.mnemonic) %}
   {% else %}
     {% set parent_url = request.route_url('report_overview', divisioncode=parent_division.code) %}
   {% endif %}
@@ -70,23 +70,23 @@ Think Hazard - {{ division.name}}
   <div class="container">
     <div class="row">
       <div class="col-md-7">
-        {% if hazard %}
-          <h1 class="page-header detail level-{{ hazard.categorytype.mnemonic }}">
-            {{ hazard.hazardtype.title }}
+        {% if current_hazard %}
+          <h1 class="page-header detail level-{{ current_hazard.categorytype.mnemonic }}">
+            {{ current_hazard.hazardtype.title }}
             <em>
-              <small class="pull-right">Hazard level: <span class="level">{{ hazard.categorytype.title }}</span>
+              <small class="pull-right">Hazard level: <span class="level">{{ current_hazard.categorytype.title }}</span>
               </small>
             </em>
           </h1>
-          {% if hazard.description %}
-          {{ hazard.description }}
+          {% if current_hazard.description %}
+          {{ current_hazard.description }}
           {% else %}
-          {{ hazard.categorytype.description }}
+          {{ current_hazard.categorytype.description }}
           {% endif %}
-          {% if hazard.recommendation_associations %}
+          {% if current_hazard.recommendation_associations %}
           <h3>Recommendations</h3>
           <ul class="recommendations">
-          {% for recommendation_association in hazard.recommendation_associations %}
+          {% for recommendation_association in current_hazard.recommendation_associations %}
             <li>{{ recommendation_association.recommendation.description }}</li>
           {% endfor %}
           </ul>
@@ -114,9 +114,9 @@ Think Hazard - {{ division.name}}
             </a>
             {% endif %}
           </div>
-          {% if hazard %}
+          {% if current_hazard %}
           <div class="text-center">
-            {{ hazard.hazardtype.mnemonic}} hazard Level
+            {{ current_hazard.hazardtype.mnemonic}} hazard Level
           </div>
           <div class="text-center">
             {{ division.name }}
@@ -148,12 +148,12 @@ Think Hazard - {{ division.name}}
           </div>
           {% endif %}
         </div>
-        {% if hazard.additionalinfo_associations %}
+        {% if current_hazard.additionalinfo_associations %}
         <div class="well">
           <h3>Further resources</h3>
           For further information the following resources could be consulted:
           <ul>
-          {% for additionalinfo_association in hazard.additionalinfo_associations %}
+          {% for additionalinfo_association in current_hazard.additionalinfo_associations %}
           <li>
             <a href="{{ additionalinfo_association.additionalinformation.accessurl }}">
               {{ additionalinfo_association.additionalinformation.title }}
@@ -178,8 +178,8 @@ Think Hazard - {{ division.name}}
     <script src="{{('%s/openlayers/dist/ol.js' % node_modules)|static_url}}"></script>
 {% endif %}
     <script>
-      {% if hazard %}
-      app.mapUrl = '{{ 'report_json'|route_url(divisioncode=division.code, hazardtype=hazard.hazardtype.mnemonic)}}';
+      {% if current_hazard %}
+      app.mapUrl = '{{ 'report_json'|route_url(divisioncode=division.code, hazardtype=current_hazard.hazardtype.mnemonic)}}';
       {% else %}
       app.mapUrl = '{{ 'report_overview_json'|route_url(divisioncode=division.code)}}';
       {% endif %}
@@ -191,23 +191,24 @@ Think Hazard - {{ division.name}}
       {%- endif %}
 
       app.divisionBounds = {{bounds}};
-      {% if hazard %}
-        app.hazardType = '{{hazard.hazardtype.mnemonic}}';
+      {% if current_hazard %}
+        app.hazardType = '{{current_hazard.hazardtype.mnemonic}}';
       {% endif %}
     </script>
 {% endblock %}
 
 {% macro hazard_type(hazard) %}
-<li class="{{ hazard.categorytype.mnemonic }}">
+<li class="{{ hazard.categorytype.mnemonic }} text-center {{ 'active' if hazard.hazardtype.mnemonic == current_hazard.hazardtype.mnemonic else ''}}">
   <a
-    {% if hazard.categorytype.mnemonic == 'no-data' %}
-    class="disabled"
-    {% else %}
+    {% if hazard.categorytype.mnemonic != 'no-data' %}
     href="{{'report'|route_url(divisioncode=division.code, hazardtype=hazard.hazardtype.mnemonic)}}"
     {% endif %}
      >
-    <img src="{{(('thinkhazard:static/images/hazard-icon-%s.png' % hazard.hazardtype.title.lower().replace(' ', '-'))|static_url)}}" />
+    <i class="fa fa-check icon"></i><br>
     {{ hazard.hazardtype.title }}
+    {% if hazard.hazardtype.mnemonic == current_hazard.hazardtype.mnemonic %}
+    <div class="arrow"></div>
+    {% endif %}
   </a>
 </li>
 {% endmacro %}
