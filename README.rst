@@ -55,3 +55,15 @@ you can set ``INSTANCEID`` on the ``make modwsgi`` command line. For example::
     $ make modwsgi INSTANCEID=elemoine
 
 With this the application location will be ``/elemoine/wsgi``.
+
+Use ``local.ini``
+=================
+
+The settings defined in the ``[app:main]`` section of ``development.ini`` can
+be overriden by creating a ``local.ini`` file at the root of the project.
+
+For example, you can define a specific database connection with a ``local.ini``
+file that looks like this::
+
+    [app:main]
+    sqlalchemy.url = postgresql://www-data:www-data@localhost:9999/thinkhazard
