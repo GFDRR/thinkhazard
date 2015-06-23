@@ -140,7 +140,7 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 
 .build/apache-%.conf: apache.conf .build/venv
 	sed -e 's#{{PYTHONPATH}}#$(shell .build/venv/bin/python -c "import distutils; print(distutils.sysconfig.get_python_lib())")#' \
-		-e 's#{{INSTANCEID}}#$(INSTANCEID)#' \
+		-e 's#{{INSTANCEID}}#$(INSTANCEID)#g' \
 		-e 's#{{WSGISCRIPT}}#$(abspath .build/thinkhazard-$*.wsgi)#' $< > $@
 
 .build/fonts.timestamp: .build/node_modules.timestamp
