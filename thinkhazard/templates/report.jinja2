@@ -106,7 +106,7 @@ Think Hazard - {{ division.name}}
         {% endif %}
       </div>
       <div class="col-md-5">
-        <div class="well">
+        <div id="map-block" class="well">
           <div id="map">
             {% if parent_division %}
             <a id="map-drillup" class="btn btn-default btn-xs drillup control" href="{{ parent_url }}">
@@ -115,34 +115,34 @@ Think Hazard - {{ division.name}}
             {% endif %}
           </div>
           {% if current_hazard %}
-          <div class="text-center">
+          <div class="caption level">
             {{ current_hazard.hazardtype.mnemonic}} hazard Level
           </div>
-          <div class="text-center">
+          <div class="caption location">
             {{ division.name }}
           </div>
           <div id="legend">
             <ul>
-              <li class="level-HIG">
+              <li class="level-HIG col-md-6">
                 <i class="square"></i>
                 High
               </li>
-              <li class="level-MED">
+              <li class="level-MED col-md-6">
                 <i class="square"></i>
                 Medium
               </li>
-              <li class="level-LOW">
+              <li class="level-LOW col-md-6">
                 <i class="square"></i>
                 Low
               </li>
-              <li class="level-NPR">
+              <li class="level-NPR col-md-6">
                 <i class="square"></i>
                 Not previously reported
               </li>
             </ul>
           </div>
 
-          <div class="text-center">
+          <div id="data-source" class="text-center">
             <h5>DATA SOURCE</h5>
             <div>** Put the sources here</div>
           </div>
