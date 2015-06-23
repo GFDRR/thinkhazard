@@ -67,7 +67,7 @@ Think Hazard - {{ division.name}}
     </div>
   </div>
 
-  <div class="container">
+  <div class="container {{ 'level-' + current_hazard.categorytype.mnemonic if current_hazard else '' }}">
     <div class="row">
       <div class="col-md-7">
         {% if current_hazard %}
@@ -87,7 +87,7 @@ Think Hazard - {{ division.name}}
           <h3>Recommendations</h3>
           <ul class="recommendations">
           {% for recommendation_association in current_hazard.recommendation_associations %}
-            <li>{{ recommendation_association.recommendation.description }}</li>
+            <li class="list-unstyled">{{ recommendation_association.recommendation.description }}</li>
           {% endfor %}
           </ul>
           {% endif %}
