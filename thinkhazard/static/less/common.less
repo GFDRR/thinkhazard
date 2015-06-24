@@ -6,8 +6,16 @@
 
 @font-size-base: 18px;
 
-
 @font-family-base: "Source Sans Pro" !important;
+
+@navbar-height: 84px;
+@navbar-default-bg: #fff;
+@font-size-large: 24px;
+@input-color: #333;
+@input-border: #ccc;
+@input-border-focus: #58595b;
+@input-border-radius: 5px;
+
 
 h1, h2 {
   font-family: 'variableregular', Arial, sans-serif;
@@ -25,6 +33,27 @@ ul.horizontal li {
 
 .navbar {
   border: 0;
+  .box-shadow(0px 2px 10px -1px rgba(0, 0, 0, 0.33));
+}
+
+.navbar-brand {
+  font-family: 'variableblack', sans-serif;
+  font-size: 25.2px;
+  .logo-think {
+    color: #000;
+  }
+  .logo-hazard {
+    color: #d91f2c;
+  }
+  margin-right: 30px;
+}
+
+.navbar-form {
+  padding-left: 0;
+}
+
+.form-control {
+  font-family: 'variablelight', sans-serif;
 }
 
 
