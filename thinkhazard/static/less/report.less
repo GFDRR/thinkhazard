@@ -111,6 +111,34 @@ body {
   }
 }
 
+.recommendations {
+  margin: 0;
+  padding: 0;
+  li {
+    line-height: 27px;
+    border-left: 3px solid;
+    padding: 7px 0 7px 15px;
+    margin-top: 23px;
+    &:first-child {
+      margin-top: 30px;
+    }
+  }
+}
+
+.recommendations-level(@level) {
+  @color: "level-@{level}-color";
+  .level-@{level} {
+    .recommendations li {
+      border-color: @@color;
+    }
+  }
+}
+
+.recommendations-level(HIG);
+.recommendations-level(MED);
+.recommendations-level(LOW);
+.recommendations-level(NPR);
+
 #map {
   height: 350px;
   position: relative;
