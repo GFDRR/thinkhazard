@@ -22,7 +22,7 @@ help:
 	@echo "- test                    Run the unit tests"
 	@echo "- dist                    Build a source distribution"
 	@echo "- routes                  Show the application routes"
-	@echo "- watchless               Watch less files"
+	@echo "- watch                   Run the build target when files in static dir change"
 	@echo
 
 .PHONY: install
@@ -87,10 +87,10 @@ dbtunnel:
 	@echo "Opening tunnel…"
 	ssh -N -L 9999:localhost:5432 wb-thinkhazard-dev-1.sig.cloud.camptocamp.net
 
-.PHONY: watchless
-watchless: .build/dev-requirements.timestamp
-	@echo "Watching less files…"
-	.build/venv/bin/nosier -p thinkhazard/static/less "make thinkhazard/static/build/index.css thinkhazard/static/build/report.css thinkhazard/static/build/common.css"
+.PHONY: watch
+watch: .build/dev-requirements.timestamp
+	@echo "Watching static files..."
+	.build/venv/bin/nosier -p thinkhazard/static "make build"
 
 thinkhazard/static/build/%.min.css: $(LESS_FILES) .build/node_modules.timestamp .build/fonts.timestamp
 	mkdir -p $(dir $@)
