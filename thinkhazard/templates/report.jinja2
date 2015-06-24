@@ -149,12 +149,12 @@ Think Hazard - {{ division.name}}
           {% endif %}
         </div>
         {% if current_hazard.additionalinfo_associations %}
-        <div class="well">
+        <div id="further-resources" class="well">
           <h3>Further resources</h3>
-          For further information the following resources could be consulted:
-          <ul>
+          <p>For further information the following resources could be consulted:</p>
+          <ul class="fa-ul">
           {% for additionalinfo_association in current_hazard.additionalinfo_associations %}
-          <li>
+          <li><i class="fa-li fa fa-caret-right"></i>
             <a href="{{ additionalinfo_association.additionalinformation.accessurl }}">
               {{ additionalinfo_association.additionalinformation.title }}
             </a>
