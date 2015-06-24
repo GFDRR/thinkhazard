@@ -152,6 +152,10 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 clean:
 	rm -f .build/thinkhazard-*.wsgi
 	rm -f .build/apache-*.conf
+	rm -f .build/flake8.timestamp
+	rm -f .build/jshint.timestamp
+	rm -f .build/booltlint.timestamp
+	rm -f .build/fonts.timestamp
 	rm -rf thinkhazard/static/build
 
 .PHONY: cleanall
