@@ -11,11 +11,6 @@ Think Hazard - {{ division.name}}
 
 {% block content %}
 
-  {% if current_hazard %}
-    {% set parent_url = request.route_url('report', divisioncode=parent_division.code, hazardtype=current_hazard.hazardtype.mnemonic) %}
-  {% else %}
-    {% set parent_url = request.route_url('report_overview', divisioncode=parent_division.code) %}
-  {% endif %}
 
   {% set overview_url = 'report_overview'|route_url(divisioncode=division.code) %}
 
@@ -44,12 +39,23 @@ Think Hazard - {{ division.name}}
 
   <div class="jumbotron">
     <div class="container text-center">
-      <a id="pdf-link" class="btn btn-default" href><i class="fa fa-arrow-down"></i> Download PDF</a>
+      <a id="pdf-link" class="btn btn-default btn-xs" href><i class="fa fa-arrow-down"></i> Download PDF</a>
 
       <!-- breadcrumb -->
-      <h4>
-        <a href="{{ parent_url }}" title="Report on hazards in {{ parent_division.name }}">{{ parent_division.name }}</a>
-      </h4>
+      <div class="breadcrumb">
+        <div class="btn-group btn-group-xs">
+          <button class="btn btn-default"><i class="fa fa-map-marker"></i></button>
+          {% for parent in parents | reverse %}
+          <a href="{{ 'report' | route_url(divisioncode=parent.code, hazardtype=current_hazard.hazardtype.mnemonic if current_hazard else '')}}"
+             class="btn btn-default">
+          {{ parent.name }}
+          </a>
+          {% endfor %}
+          <button class="btn btn-default disabled">
+            {{ division.name }}
+          </button>
+        </div>
+      </div>
 
       <!-- Division name -->
       <h2>
@@ -106,8 +112,8 @@ Think Hazard - {{ division.name}}
       <div class="col-md-5">
         <div id="map-block" class="well">
           <div id="map">
-            {% if parent_division %}
-            <a id="map-drillup" class="btn btn-default btn-xs drillup control" href="{{ parent_url }}">
+            {% if parents.__len__() >= 1 %}
+            <a id="map-drillup" class="btn btn-default btn-xs drillup control" href="{{ 'report' | route_url(divisioncode=parents[0].code, hazardtype=current_hazard.hazardtype.mnemonic if current_hazard else '')}}">
               Zoom out to {{ parent_division.name }}
             </a>
             {% endif %}

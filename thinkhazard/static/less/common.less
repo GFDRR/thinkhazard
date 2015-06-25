@@ -168,3 +168,68 @@ ul.horizontal li {
     }
   }
 }
+
+/***************
+ * breadcrumbd *
+ **************/
+.breadcrumb-spacing(@font-size) {
+  .btn {
+    padding-left: @font-size;
+  }
+  .btn:first-child {
+    padding-left: @font-size / 2;
+  }
+  .btn:last-child {
+    padding-left: @font-size;
+    padding-right: @font-size / 2;
+  }
+}
+.breadcrumb {
+  .btn:not(:last-child):after,
+  .btn:not(:last-child):before {
+    content: " ";
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: @font-size-base solid transparent;
+    border-bottom: @font-size-base solid transparent;
+    position: absolute;
+    top: 50%;
+    margin-top: -(@font-size-base);
+    left: 100%;
+    z-index: 3;
+  }
+  .btn:not(:last-child):before {
+    border-left-color: rgb(173, 173, 173);
+    margin-left: 1px;
+  }
+
+  .btn-group {
+    .breadcrumb-spacing(@font-size-base);
+  }
+  .btn-group-xs {
+    .btn:not(:last-child):after,
+    .btn:not(:last-child):before {
+      @border: @font-size-small - @padding-xs-vertical * 2;
+      border-top: @border solid transparent;
+      border-bottom: @border solid transparent;
+      margin-top: -(@border);
+    }
+    .breadcrumb-spacing(@font-size-small);
+  }
+
+  .btn.btn-default:not(:last-child):after {
+    border-left: 10px solid @btn-default-bg;
+  }
+  .btn.btn-default:not(:last-child):before {
+    border-left: 10px solid @btn-default-border;
+  }
+  .btn.btn-default:hover:not(:last-child):after,
+  .btn.btn-default:focus:not(:last-child):after {
+    border-left: 10px solid darken(@btn-default-bg, 10%);
+  }
+  .breadcrumb .btn.btn-default:hover:not(:last-child):before,
+  .breadcrumb .btn.btn-default:focus:not(:last-child):before {
+    border-left: 10px solid darken(@btn-default-border, 25%);
+  }
+}
