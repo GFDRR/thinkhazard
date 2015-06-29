@@ -192,7 +192,7 @@ ul.horizontal li {
     display: block;
     width: 0;
     height: 0;
-    border-top: @font-size-base solid transparent;
+    border-top: @font-size-base dotted transparent;
     border-bottom: @font-size-base solid transparent;
     position: absolute;
     top: 50%;
@@ -212,8 +212,8 @@ ul.horizontal li {
     .btn:not(:last-child):after,
     .btn:not(:last-child):before {
       @border: @font-size-small - @padding-xs-vertical * 2;
-      border-top: @border solid transparent;
-      border-bottom: @border solid transparent;
+      border-top-width: @border;
+      border-bottom-width: @border;
       margin-top: -(@border);
     }
     .breadcrumb-spacing(@font-size-small);
