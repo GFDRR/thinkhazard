@@ -219,18 +219,18 @@ ul.horizontal li {
     .breadcrumb-spacing(@font-size-small);
   }
 
-  .btn.btn-default:not(:last-child):after {
-    border-left: 10px solid @btn-default-bg;
-  }
-  .btn.btn-default:not(:last-child):before {
-    border-left: 10px solid @btn-default-border;
-  }
-  .btn.btn-default:hover:not(:last-child):after,
-  .btn.btn-default:focus:not(:last-child):after {
-    border-left: 10px solid darken(@btn-default-bg, 10%);
-  }
-  .breadcrumb .btn.btn-default:hover:not(:last-child):before,
-  .breadcrumb .btn.btn-default:focus:not(:last-child):before {
-    border-left: 10px solid darken(@btn-default-border, 25%);
+  .btn.btn-default {
+    &:not(:last-child) {
+      &:after {
+        border-left: 10px solid @btn-default-bg;
+      }
+      &:before {
+        border-left: 10px solid @btn-default-border;
+      }
+    }
+    &:hover:not(:last-child):after,
+    &:focus:not(:last-child):after {
+      border-left: 10px solid darken(@btn-default-bg, 10%);
+    }
   }
 }
