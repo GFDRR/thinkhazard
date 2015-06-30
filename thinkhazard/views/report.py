@@ -27,6 +27,8 @@ _categorytype_nodata.order = float('inf')
 
 
 @view_config(route_name='report_overview', renderer='templates/report.jinja2')
+@view_config(route_name='report_overview_slash',
+             renderer='templates/report.jinja2')
 @view_config(route_name='report', renderer='templates/report.jinja2')
 def report(request):
     try:
@@ -84,10 +86,17 @@ def report(request):
     division_shape = geoalchemy2.shape.to_shape(division.geom)
     division_bounds = list(division_shape.bounds)
 
+    parents = []
+    if division.leveltype_id >= 2:
+        parents.append(division.parent)
+    if division.leveltype_id == 3:
+        parents.append(division.parent.parent)
+
     return {'hazards': hazard_data,
             'current_hazard': hazard,
             'division': division,
             'bounds': division_bounds,
+            'parents': parents,
             'parent_division': division.parent}
 
 

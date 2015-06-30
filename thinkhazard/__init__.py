@@ -37,6 +37,7 @@ def main(global_config, **settings):
     config.add_route('report_json',
                      '/report/{divisioncode:\d+}/{hazardtype:([A-Z]{2})}.json')
     config.add_route('report_overview', '/report/{divisioncode:\d+}')
+    config.add_route('report_overview_slash', '/report/{divisioncode:\d+}/')
     config.add_route('report_overview_json', '/report/{divisioncode:\d+}.json')
     config.add_route('administrativedivision', '/administrativedivision')
 

@@ -5,6 +5,7 @@
 @fa-font-path: "fonts";
 
 @font-size-base: 18px;
+@font-size-small: 14px;
 
 @font-family-base: "Source Sans Pro" !important;
 
@@ -165,6 +166,71 @@ ul.horizontal li {
       top: 0;
       left: 44px;
       width: 0;
+    }
+  }
+}
+
+/***************
+ * breadcrumbd *
+ **************/
+.breadcrumb-spacing(@font-size) {
+  .btn {
+    padding-left: @font-size;
+  }
+  .btn:first-child {
+    padding-left: @font-size / 2;
+  }
+  .btn:last-child {
+    padding-left: @font-size;
+    padding-right: @font-size / 2;
+  }
+}
+.breadcrumb {
+  .btn:not(:last-child):after,
+  .btn:not(:last-child):before {
+    content: " ";
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: @font-size-base dotted transparent;
+    border-bottom: @font-size-base solid transparent;
+    position: absolute;
+    top: 50%;
+    margin-top: -(@font-size-base);
+    left: 100%;
+    z-index: 3;
+  }
+  .btn:not(:last-child):before {
+    border-left-color: rgb(173, 173, 173);
+    margin-left: 1px;
+  }
+
+  .btn-group {
+    .breadcrumb-spacing(@font-size-base);
+  }
+  .btn-group-xs {
+    .btn:not(:last-child):after,
+    .btn:not(:last-child):before {
+      @border: @font-size-small - @padding-xs-vertical * 2;
+      border-top-width: @border;
+      border-bottom-width: @border;
+      margin-top: -(@border);
+    }
+    .breadcrumb-spacing(@font-size-small);
+  }
+
+  .btn.btn-default {
+    &:not(:last-child) {
+      &:after {
+        border-left: 10px solid @btn-default-bg;
+      }
+      &:before {
+        border-left: 10px solid @btn-default-border;
+      }
+    }
+    &:hover:not(:last-child):after,
+    &:focus:not(:last-child):after {
+      border-left: 10px solid darken(@btn-default-bg, 10%);
     }
   }
 }
