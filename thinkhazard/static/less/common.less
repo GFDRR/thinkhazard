@@ -129,3 +129,42 @@ ul.horizontal li {
 .tt-suggestion p {
   margin: 0;
 }
+
+/***********
+ * Search  *
+ **********/
+.navbar-form {
+  margin-top: ((@navbar-height - @input-height-large) / 2);
+  margin-bottom: ((@navbar-height - @input-height-large) / 2);
+}
+
+#search .form-control {
+  padding-left: 80px;
+  width: 450px;
+}
+
+#search {
+  .input-group-addon {
+    font-family: 'variablelight', sans-serif;
+    height: @input-height-large;
+    font-size: 24px;
+    position: absolute;
+    z-index: 2;
+    padding: 10px 6px 10px 16px;
+    color: white;
+    border-radius: 5px 0 0 5px;
+    background-color: black;
+
+    &:after {
+      border-left: 20px solid black;
+      border-bottom: 27px dotted transparent;
+      border-top: 27px dotted transparent;
+      content: "";
+      height: 0;
+      position: absolute;
+      top: 0;
+      left: 44px;
+      width: 0;
+    }
+  }
+}
