@@ -162,7 +162,7 @@ Think Hazard - {{ division.name}}
           <ul class="fa-ul">
           {% for additionalinfo_association in current_hazard.additionalinfo_associations %}
           <li><i class="fa-li fa fa-caret-right"></i>
-            <a href="{{ additionalinfo_association.additionalinformation.accessurl }}">
+            <a target="_blank" href="{{ additionalinfo_association.additionalinformation.accessurl }}">
               {{ additionalinfo_association.additionalinformation.title }}
             </a>
           </li>
