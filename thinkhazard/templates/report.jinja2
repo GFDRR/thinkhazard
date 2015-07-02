@@ -65,7 +65,9 @@ Think Hazard - {{ division.name}}
         <a href="{{ overview_url }}" title="Go back to overview page">{{ division.name }}</a>
       </h2>
 
+      {% if current_hazard %}
       <a id="overview-link" class="btn btn-default btn-xs" href="{{ overview_url }}" title="Go back to overview page"><i class="fa fa-home"></i> Overview</a>
+      {% endif %}
       <ul id="hazard-types-list" class="horizontal list-unstyled hazards" role="tablist">
         {% for hazard in hazards %}
           {{ hazard_type(hazard) }}
