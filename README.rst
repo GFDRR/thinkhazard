@@ -67,3 +67,19 @@ file that looks like this::
 
     [app:main]
     sqlalchemy.url = postgresql://www-data:www-data@localhost:9999/thinkhazard
+
+Deploy on server
+================
+
+The demo application is available at
+http://wb-thinkhazard.dev.sig.cloud.camptocamp.net/man/wsgi.
+
+To update the demo application use the following::
+
+    $ ssh <demo>
+    $ cd /var/www/vhosts/wb-thinkhazard/private/thinkhazard
+    $ sudo -u sigdev git fetch origin
+    $ sudo -u sigdev git merge --ff-only origin/master
+    $ sudo -u sigdev make clean install build modwsgi
+    $ sudo apache2ctl configtest
+    $ sudo apache2ctl graceful
