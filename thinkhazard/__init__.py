@@ -51,8 +51,8 @@ def load_local_settings(settings):
     """ Load local/user-specific settings.
     """
     local_settings_path = os.environ.get(
-        'LOCAL_SETTINGS_PATH', settings['local_settings_path'])
-    if os.path.exists(local_settings_path):
+        'LOCAL_SETTINGS_PATH', settings.get('local_settings_path'))
+    if local_settings_path and os.path.exists(local_settings_path):
         config = ConfigParser.ConfigParser()
         config.read(local_settings_path)
         settings.update(config.items('app:main'))
