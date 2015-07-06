@@ -72,7 +72,7 @@ Deploy on server
 ================
 
 The demo application is available at
-http://wb-thinkhazard.dev.sig.cloud.camptocamp.net/man/wsgi.
+http://wb-thinkhazard.dev.sig.cloud.camptocamp.net/main/wsgi.
 
 To update the demo application use the following::
 
