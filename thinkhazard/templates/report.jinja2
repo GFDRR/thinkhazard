@@ -77,10 +77,9 @@ Think Hazard - {{ division.name}}
         {% if current_hazard %}
           <h2 class="page-header detail">
             {{ current_hazard.hazardtype.title }}
-            <em>
-              <small class="pull-right">Hazard level: <span class="level">{{ current_hazard.categorytype.title }}</span>
-              </small>
-            </em>
+            <small>
+              Hazard level: <span class="level">{{ current_hazard.categorytype.title }}</span>
+            </small>
           </h2>
           {% if current_hazard.description %}
           {{ current_hazard.description }}
@@ -100,10 +99,9 @@ Think Hazard - {{ division.name}}
           <a href="{{ 'report'|route_url(divisioncode=division.code, hazardtype=hazard.hazardtype.mnemonic) }}" aria-controls="{{ hazard.hazardtype.title }}">
             <h1 class="page-header level-{{ hazard.categorytype.mnemonic }}">
               {{ hazard.hazardtype.title }}
-              <em>
-                <small class="pull-right">Hazard level: <span class="level">{{ hazard.categorytype.title }}</span>
-                </small>
-              </em>
+              <small>
+                Hazard level: <span class="level">{{ hazard.categorytype.title }}</span>
+              </small>
             </h1>
           </a>
           {% endfor %}
