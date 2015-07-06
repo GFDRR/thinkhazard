@@ -1,5 +1,7 @@
 {% extends "base.jinja2" %}
 
+{% from 'navbar.jinja2' import navbar%}
+
 {% block name %}report{% endblock %}
 
 {% block title %}
@@ -26,14 +28,7 @@ Think Hazard - {{ division.name}}
           {% include 'search.jinja2' %}
         </div>
       </form>
-      <ul class="nav navbar-nav navbar-right">
-        <li class="disabled">
-          <a href="">About</a>
-        </li>
-        <li class="disabled">
-          <a href="">Contact us</a>
-        </li>
-      </ul>
+      {{ navbar() }}
     </div>
   </nav>
 

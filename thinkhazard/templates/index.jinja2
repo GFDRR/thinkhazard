@@ -1,19 +1,14 @@
 {% extends "base.jinja2" %}
 
+{% from 'navbar.jinja2' import navbar%}
+
 {% block name %}index{% endblock %}
 
 {% block content %}
   <nav class="navbar navbar-default">
     <div class="container">
       <div id="navbar" class="navbar-collapse collapse">
-        <ul class="nav navbar-nav navbar-right">
-          <li class="disabled">
-            <a href="">About</a>
-          </li>
-          <li class="disabled">
-            <a href="">Contact us</a>
-          </li>
-        </ul>
+      {{ navbar() }}
       </div>
     </div>
   </nav>
