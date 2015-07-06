@@ -80,13 +80,13 @@ Think Hazard - {{ division.name}}
     <div class="row">
       <div class="col-md-7">
         {% if current_hazard %}
-          <h1 class="page-header detail level-{{ current_hazard.categorytype.mnemonic }}">
+          <h2 class="page-header detail">
             {{ current_hazard.hazardtype.title }}
             <em>
               <small class="pull-right">Hazard level: <span class="level">{{ current_hazard.categorytype.title }}</span>
               </small>
             </em>
-          </h1>
+          </h2>
           {% if current_hazard.description %}
           {{ current_hazard.description }}
           {% else %}

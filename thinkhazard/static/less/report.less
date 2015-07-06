@@ -102,6 +102,23 @@ body {
   }
 }
 
+.hazard-title-level(@level) {
+  @color: "level-@{level}-color";
+  .level-@{level} {
+    .page-header {
+      border-color: @@color;
+      .level {
+        color: @@color;
+      }
+    }
+  }
+}
+
+.hazard-title-level(HIG);
+.hazard-title-level(MED);
+.hazard-title-level(LOW);
+.hazard-title-level(NPR);
+
 .recommendations {
   margin: 0;
   padding: 0;
