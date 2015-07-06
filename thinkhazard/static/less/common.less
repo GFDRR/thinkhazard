@@ -166,14 +166,15 @@ ul.horizontal li {
 
     &:after {
       border-left: 20px solid black;
-      border-bottom: 27px dotted transparent;
-      border-top: 27px dotted transparent;
+      border-bottom: 27px solid transparent;
+      border-top: 27px solid transparent;
       content: "";
       height: 0;
       position: absolute;
       top: 0;
       left: 44px;
       width: 0;
+      -moz-transform: scale(.999);
     }
   }
 }
@@ -200,13 +201,14 @@ ul.horizontal li {
     display: block;
     width: 0;
     height: 0;
-    border-top: @font-size-base dotted transparent;
+    border-top: @font-size-base solid transparent;
     border-bottom: @font-size-base solid transparent;
     position: absolute;
     top: 50%;
     margin-top: -(@font-size-base);
     left: 100%;
     z-index: 3;
+    -moz-transform: scale(.999);
   }
   .btn:not(:last-child):before {
     border-left-color: rgb(173, 173, 173);
