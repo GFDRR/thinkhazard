@@ -3,6 +3,12 @@ JS_FILES = $(shell find thinkhazard/static/js -type f -name '*.js' 2> /dev/null)
 PY_FILES = $(shell find thinkhazard -type f -name '*.py' 2> /dev/null)
 INSTANCEID ?= main
 
+PKG_NAME ?= thinkhazard
+PKG_PREFIX := /opt/c2c/gis/$(PKG_NAME)
+PKG_DESC = "Think Hazard: Overcome Risk"
+#PKG_VERSION ?= $(shell cd .build/pkg/venv/bin/ && ./python -c 'import pkg_resources; print(pkg_resources.get_distribution("thinkhazard").version)')
+PKG_VERSION ?= $(shell date +%Y.%m.%d.%H.%M.%S)
+
 .PHONY: all
 all: help
 
@@ -23,6 +29,8 @@ help:
 	@echo "- dist                    Build a source distribution"
 	@echo "- routes                  Show the application routes"
 	@echo "- watch                   Run the build target when files in static dir change"
+	@echo "- rpm                     Create RPM package"
+	@echo "- deb                     Create DEB package"
 	@echo
 
 .PHONY: install
@@ -92,6 +100,19 @@ watch: .build/dev-requirements.timestamp
 	@echo "Watching static files..."
 	.build/venv/bin/nosier -p thinkhazard/static "make build"
 
+.PHONY: rpm deb
+rpm deb: build \
+         .build/node_modules.timestamp \
+         .build/bundle \
+         .build/pkg/requirements.timestamp \
+         .build/pkg/thinkhazard.wsgi \
+         .build/pkg/apache.conf
+	bundle exec fpm -f -s dir -t $@ -n $(PKG_NAME) -v $(PKG_VERSION) \
+	--template-scripts --after-install packaging/after-install.sh \
+	--description $(PKG_DESC) --prefix $(PKG_PREFIX) \
+    node_modules production.ini .build/pkg/venv=. \
+	.build/pkg/thinkhazard.wsgi=. .build/pkg/apache.conf=.
+
 thinkhazard/static/build/%.min.css: $(LESS_FILES) .build/node_modules.timestamp
 	mkdir -p $(dir $@)
 	./node_modules/.bin/lessc --clean-css thinkhazard/static/less/$*.less $@
@@ -100,13 +121,17 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 	mkdir -p $(dir $@)
 	./node_modules/.bin/lessc thinkhazard/static/less/$*.less $@
 
-.build/venv:
+.build/venv .build/pkg/venv:
 	mkdir -p $(dir $@)
-	virtualenv .build/venv
+	virtualenv $@
 
 .build/thinkhazard-%.wsgi: thinkhazard.wsgi
 	sed 's#{{APP_INI_FILE}}#$(CURDIR)/$*.ini#' $< > $@
 	chmod 755 $@
+
+.build/pkg/thinkhazard.wsgi: thinkhazard.wsgi
+	mkdir -p $(dir $@)
+	sed 's#{{APP_INI_FILE}}#$(PKG_PREFIX)/production.ini#' $< > $@
 
 .build/node_modules.timestamp: package.json
 	mkdir -p $(dir $@)
@@ -121,6 +146,11 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 .build/requirements.timestamp: .build/venv setup.py requirements.txt
 	mkdir -p $(dir $@)
 	.build/venv/bin/pip install -r requirements.txt
+	touch $@
+
+.build/pkg/requirements.timestamp: .build/pkg/venv setup.py
+	mkdir -p $(dir $@)
+	.build/pkg/venv/bin/pip install -r requirements.txt .
 	touch $@
 
 .build/flake8.timestamp: $(PY_FILES)
@@ -143,6 +173,20 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 		-e 's#{{INSTANCEID}}#$(INSTANCEID)#g' \
 		-e 's#{{WSGISCRIPT}}#$(abspath .build/thinkhazard-$*.wsgi)#' $< > $@
 
+.build/pkg/apache.conf: apache.conf .build/pkg/venv
+	sed -e 's#{{PYTHONPATH}}#$(PKG_PREFIX)/venv/lib/python2.7/site-packages#' \
+		-e 's#{{INSTANCEID}}#main#g' \
+		-e 's#{{WSGISCRIPT}}#$(PKG_PREFIX)/thinkhazard.wsgi#' $< > $@
+
+.build/fonts.timestamp: .build/node_modules.timestamp
+	mkdir -p thinkhazard/static/build/fonts
+	cp node_modules/font-awesome/fonts/* thinkhazard/static/build/fonts/
+	touch $@
+
+.build/bundle:
+	mkdir -p $(dir $@)
+	bundle install --path $@
+
 .PHONY: clean
 clean:
 	rm -f .build/thinkhazard-*.wsgi
@@ -150,6 +194,11 @@ clean:
 	rm -f .build/flake8.timestamp
 	rm -f .build/jshint.timestamp
 	rm -f .build/booltlint.timestamp
+	rm -f .build/pkg/thinkhazard.wsgi
+	rm -f .build/pkg/apache.conf
+	rm -f .build/pkg/requirements.timestamp
+	rm -f *.deb
+	rm -f *.rpm
 	rm -rf thinkhazard/static/build
 
 .PHONY: cleanall

@@ -1,4 +1,5 @@
 language: python
+sudo: false
 
 python:
 - 2.7
@@ -8,3 +9,6 @@ install:
 
 script:
 - make check
+
+after_script:
+- make deb

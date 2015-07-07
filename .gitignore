@@ -1,8 +1,12 @@
 *.pyc
 *.egg-info
 *.sqlite
+*.deb
+*.rpm
 npm-debug.log
 .build
+.bundle
 node_modules
 local.ini
 thinkhazard/static/build
+Gemfile.lock
