@@ -31,6 +31,17 @@
     map.getTargetElement().style.cursor = hit ? 'zoom-in' : '';
   });
 
+  // drill down
+  map.on('click', function(e) {
+    var feature = map.forEachFeatureAtPixel(e.pixel, function(feature) {
+      return feature;
+    });
+    if (feature) {
+      var code = feature.get('code');
+      window.location = app.reportpageUrl.replace('__divisioncode__', code);
+    }
+  });
+
 
   //
   // Functions
