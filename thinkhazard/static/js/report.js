@@ -29,8 +29,21 @@
     // change mouse cursor when over division
     map.on('pointermove', function(e) {
       var pixel = map.getEventPixel(e.originalEvent);
-      var hit = map.hasFeatureAtPixel(pixel);
-      map.getTargetElement().style.cursor = hit ? 'zoom-in' : '';
+      var feature = false;
+      map.forEachFeatureAtPixel(pixel, function(f) {
+        feature = f;
+      });
+      map.getTargetElement().style.cursor = feature ? 'zoom-in' : '';
+
+      $('#map .tooltip').empty().hide();
+      if (feature) {
+        $('#map .tooltip').show()
+          .css({
+            top: pixel[1] + 10,
+            left: pixel[0] + 10
+          })
+          .html(feature.get('name'));
+      }
     });
 
     // drill down
@@ -57,17 +70,6 @@
    * @return {ol.layer.Vector}
    */
   function addVectorLayer(map, url) {
-    var textStyle = new ol.style.Text({
-      fill: new ol.style.Fill({
-        color: 'black'
-      }),
-      scale: 0.9,
-      stroke: new ol.style.Stroke({
-        color: 'rgba(255, 255, 255, 0.6)',
-        width: 5
-      }),
-      text: ''
-    });
     var fillColors = getFillColors(0.5);
     var fillStyle = new ol.style.Fill({
       color: ''
@@ -78,12 +80,10 @@
         stroke: new ol.style.Stroke({
           color: '#333',
           width: 1
-        }),
-        text: textStyle
+        })
       })
     ];
     var styleFn = function(feature) {
-      textStyle.setText(feature.get('name'));
       var hazardLevel = feature.get('hazardLevel');
       var fillColor = hazardLevel in fillColors ?
           fillColors[hazardLevel] : 'rgba(1, 1, 1, 0.1)';
@@ -110,17 +110,6 @@
    * @return {ol.interaction.Select}
    */
   function addSelectInteraction(map, layer) {
-    var textStyle = new ol.style.Text({
-      text: '',
-      scale: 1.2,
-      stroke: new ol.style.Stroke({
-        color: 'white',
-        width: 5
-      }),
-      fill: new ol.style.Fill({
-        color: 'black'
-      })
-    });
     var fillColors = getFillColors(0.9);
     var fillStyle = new ol.style.Fill({
       color: ''
@@ -131,12 +120,10 @@
         stroke: new ol.style.Stroke({
           color: '#000000',
           width: 2
-        }),
-        text: textStyle
+        })
       })
     ];
     var styleFn = function(feature) {
-      textStyle.setText(feature.get('name'));
       var hazardLevel = feature.get('hazardLevel');
       var fillColor = hazardLevel in fillColors ?
           fillColors[hazardLevel] : 'rgba(1, 1, 1, 0.5)';
