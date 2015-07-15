@@ -199,6 +199,8 @@ Think Hazard - {{ division.name}}
       {% if current_hazard %}
         app.hazardType = '{{current_hazard.hazardtype.mnemonic}}';
       {% endif %}
+
+      app.leveltype = {{division.leveltype_id}};
     </script>
 {% endblock %}
 

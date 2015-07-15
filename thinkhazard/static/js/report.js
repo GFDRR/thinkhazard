@@ -22,25 +22,28 @@
   map.getView().fitExtent(app.divisionBounds, map.getSize());
 
   var vectorLayer = addVectorLayer(map, app.mapUrl);
-  addSelectInteraction(map, vectorLayer);
 
-  // change mouse cursor when over division
-  map.on('pointermove', function(e) {
-    var pixel = map.getEventPixel(e.originalEvent);
-    var hit = map.hasFeatureAtPixel(pixel);
-    map.getTargetElement().style.cursor = hit ? 'zoom-in' : '';
-  });
+  if (app.leveltype < 3) {
+    addSelectInteraction(map, vectorLayer);
 
-  // drill down
-  map.on('click', function(e) {
-    var feature = map.forEachFeatureAtPixel(e.pixel, function(feature) {
-      return feature;
+    // change mouse cursor when over division
+    map.on('pointermove', function(e) {
+      var pixel = map.getEventPixel(e.originalEvent);
+      var hit = map.hasFeatureAtPixel(pixel);
+      map.getTargetElement().style.cursor = hit ? 'zoom-in' : '';
     });
-    if (feature) {
-      var code = feature.get('code');
-      window.location = app.reportpageUrl.replace('__divisioncode__', code);
-    }
-  });
+
+    // drill down
+    map.on('click', function(e) {
+      var feature = map.forEachFeatureAtPixel(e.pixel, function(feature) {
+        return feature;
+      });
+      if (feature) {
+        var code = feature.get('code');
+        window.location = app.reportpageUrl.replace('__divisioncode__', code);
+      }
+    });
+  }
 
 
   //
