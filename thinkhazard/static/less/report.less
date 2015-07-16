@@ -146,9 +146,38 @@ body {
 .recommendations-level(LOW);
 .recommendations-level(NPR);
 
+@map-controls-padding: 5px;
 #map {
   height: 350px;
   position: relative;
+
+  .alert {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    z-index: 2;
+    background-color: #fff;
+    .box-shadow(0px 0px 10px 0px rgba(0, 0, 0, 0.15));
+  }
+  .alert.alert-dismissible {
+    padding-right: (@map-controls-padding + 15);
+
+    .close {
+      right: -10px;
+      font-size: 20px;
+      top: -6px;
+      right: -17px;
+    }
+  }
+
+  .zoomin-help {
+    width: 185px;
+  }
+
+  .control {
+    padding: @map-controls-padding;
+    line-height: 1;
+  }
 }
 
 #map-drillup {

@@ -113,11 +113,14 @@ Think Hazard - {{ division.name}}
         <div id="map-block" class="well">
           <div id="map">
             {% if parents.__len__() >= 1 %}
-            <a id="map-drillup" class="btn btn-default btn-xs drillup control" href="{{ 'report' | route_url(divisioncode=parents[0].code, hazardtype=current_hazard.hazardtype.mnemonic if current_hazard else '')}}">
+            <a id="map-drillup" class="btn btn-default btn-xs control" href="{{ 'report' | route_url(divisioncode=parents[0].code, hazardtype=current_hazard.hazardtype.mnemonic if current_hazard else '')}}">
               <i class="btn-xs fa fa-search-minus"></i>
               Zoom out to {{ parent_division.name }}
             </a>
             {% endif %}
+            <div class="alert alert-dismissible zoomin-help control btn-xs">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              Zoom in by clicking on an administrative area.</div>
             <div class="tooltip"></div>
           </div>
           {% if current_hazard %}
