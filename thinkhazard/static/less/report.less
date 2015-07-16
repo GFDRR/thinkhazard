@@ -22,7 +22,7 @@ body {
   padding: 48px 0 0 0;
 }
 
-#hazard-types-list {
+.hazard-types-list {
   @hazard-width: 104px;
   @circle-border: 5px;
   @icon-size: 64px;
@@ -147,7 +147,7 @@ body {
 .recommendations-level(NPR);
 
 @map-controls-padding: 5px;
-#map {
+.map {
   height: 350px;
   position: relative;
 
@@ -180,7 +180,7 @@ body {
   }
 }
 
-#map-drillup {
+.map-drillup {
   position: absolute;
   top: 5px;
   left: 5px;
@@ -201,7 +201,7 @@ body {
   }
 }
 
-#legend {
+.legend {
   .square {
     display: inline-block;
     width: 24px;
@@ -246,7 +246,7 @@ body {
   }
 }
 
-#map-block {
+.map-block {
   .caption {
     text-align: center;
     &.location {
@@ -275,7 +275,7 @@ body {
   text-align: center;
 }
 
-#data-source {
+.data-source {
   padding: 27px 0px 30px;
   margin: 0 20px;
   border-top-style: solid;
@@ -288,7 +288,7 @@ body {
   }
 }
 
-#further-resources {
+.further-resources {
   background-color: #f5f5f5;
   margin: 50px 0px;
   padding: 27px 30px;
@@ -309,7 +309,7 @@ body {
 .further-resources-level(@level) {
   @color: "level-@{level}-color";
   .level-@{level} {
-    #further-resources .fa-li {
+    .further-resources .fa-li {
       color: @@color;
     }
   }
@@ -320,9 +320,14 @@ body {
 .further-resources-level(LOW);
 .further-resources-level(NPR);
 
-#pdf-link, #overview-link {
-  border: 1px solid #d9d9d9;
+.btn-default {
   &:hover {
     .box-shadow(0 0 5px 0 rgba(0, 0, 0, 0.15));
+  }
+}
+
+.breadcrumb .btn-default {
+  &:hover {
+    .box-shadow(none);
   }
 }

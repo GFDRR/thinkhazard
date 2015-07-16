@@ -7,7 +7,7 @@
 // height of the search pane (ie. height of the background image)
 @search-pane-height: 266px;
 @search-field-height: 54px;
-#search-pane {
+.search-pane {
   height: @search-pane-height;
   background: url(../images/front-bg.png) no-repeat;
   background-position-x: center;
@@ -17,16 +17,17 @@
   }
 
   .form-control,
-  #search-field {
+  .search-field {
     height: @search-field-height;
     border: 0;
   }
-  #search-field, #search-field:focus {
+  .search-field,
+  .search-field:focus {
     .box-shadow(0 6px 12px rgba(0,0,0,.175));
   }
 
 }
-#search {
+.search {
   .input-group-addon {
     background-color: red;
     &:after {
@@ -37,7 +38,7 @@
 
 @icon-size: 64px;
 @front-icon-bg-size: 110px;
-#hazards {
+.hazards {
   li {
     width: @front-icon-bg-size;
     background: url(../images/front-icon-bg.png) no-repeat;
