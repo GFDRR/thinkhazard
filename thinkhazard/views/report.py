@@ -53,8 +53,8 @@ def report(request):
     hazard_data = {hazardtype.mnemonic: {'hazardtype': hazardtype,
                                          'categorytype': _categorytype_nodata,
                                          'description': None,
-                                         'recommendation_associations': None,
-                                         'additionalinfo_associations': None}
+                                         'recommendations': None,
+                                         'resources': None}
                    for hazardtype in hazardtype_query}
 
     # Query 3: get the hazard categories corresponding to the administrative
@@ -70,10 +70,12 @@ def report(request):
         key = hazardcategory.hazardtype.mnemonic
         hazard_data[key]['categorytype'] = hazardcategory.categorytype
         hazard_data[key]['description'] = hazardcategory.description
-        hazard_data[key]['recommendation_associations'] = \
-            hazardcategory.recommendation_associations
-        hazard_data[key]['additionalinfo_associations'] = \
-            hazardcategory.additionalinformation_associations
+        hazard_data[key]['recommendations'] = \
+            filter(lambda x: x.additionalinformation.type.mnemonic == 'REC',
+                   hazardcategory.additionalinformation_associations)
+        hazard_data[key]['resources'] = \
+            filter(lambda x: x.additionalinformation.type.mnemonic == 'AVD',
+                   hazardcategory.additionalinformation_associations)
 
     if hazard is not None:
         hazard = hazard_data[hazard]

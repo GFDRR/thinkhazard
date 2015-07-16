@@ -225,20 +225,6 @@ hazardcategory_administrativedivision_table = Table(
            ForeignKey('hazardcategory.id'), nullable=False, index=True))
 
 
-class HazardCategoryRecommendationAssociation(Base):
-    __tablename__ = 'rel_hazardcategory_recommendation'
-
-    id = Column(Integer, primary_key=True)
-    hazardcategory_id = Column(Integer, ForeignKey('hazardcategory.id'),
-                               nullable=False, index=True)
-    recommendation_id = Column(Integer, ForeignKey('recommendation.id'),
-                               nullable=False, index=True)
-    order = Column(Integer, nullable=False)
-
-    recommendation = relationship('Recommendation', lazy='joined',
-                                  innerjoin=True)
-
-
 class HazardCategoryAdditionalInformationAssociation(Base):
     __tablename__ = 'rel_hazardcategory_additionalinformation'
     id = Column(Integer, primary_key=True)
@@ -358,23 +344,10 @@ class HazardCategory(Base):
     intensitythreshold = relationship(IntensityThreshold)
     categorytype = relationship(CategoryType)
     status = relationship(TermStatus)
-    recommendation_associations = relationship(
-        'HazardCategoryRecommendationAssociation',
-        order_by='HazardCategoryRecommendationAssociation.order',
-        lazy='joined')
     additionalinformation_associations = relationship(
         'HazardCategoryAdditionalInformationAssociation',
         order_by='HazardCategoryAdditionalInformationAssociation.order',
         lazy='joined')
-
-
-class Recommendation(Base):
-    __tablename__ = 'recommendation'
-
-    id = Column(Integer, primary_key=True)
-    mnemonic = Column(Unicode, nullable=False)
-    title = Column(Unicode, nullable=False)
-    description = Column(Unicode, nullable=False)
 
 
 class UserFeedback(Base):

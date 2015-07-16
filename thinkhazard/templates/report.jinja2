@@ -86,11 +86,11 @@ Think Hazard - {{ division.name}}
           {% else %}
           {{ current_hazard.categorytype.description }}
           {% endif %}
-          {% if current_hazard.recommendation_associations %}
+          {% if current_hazard.recommendations %}
           <h3>Recommendations</h3>
           <ul class="recommendations">
-          {% for recommendation_association in current_hazard.recommendation_associations %}
-            <li class="list-unstyled">{{ recommendation_association.recommendation.description }}</li>
+          {% for recommendation in current_hazard.recommendations %}
+            <li class="list-unstyled">{{ recommendation.additionalinformation.description }}</li>
           {% endfor %}
           </ul>
           {% endif %}
@@ -165,15 +165,15 @@ Think Hazard - {{ division.name}}
           </div>
           {% endif %}
         </div>
-        {% if current_hazard.additionalinfo_associations %}
+        {% if current_hazard.resources %}
         <div class="further-resources well">
           <h3>Further resources</h3>
           <p>For further information the following resources could be consulted:</p>
           <ul>
           {% for additionalinfo_association in current_hazard.additionalinfo_associations %}
           <li><i class="icon-list-arrow"></i>
-            <a target="_blank" href="{{ additionalinfo_association.additionalinformation.accessurl }}">
-              {{ additionalinfo_association.additionalinformation.title }}
+            <a target="_blank" href="{{ resource.additionalinformation.accessurl }}">
+              {{ resource.additionalinformation.title }}
             </a>
           </li>
           {% endfor %}
