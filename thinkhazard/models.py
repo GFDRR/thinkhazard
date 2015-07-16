@@ -222,7 +222,8 @@ hazardcategory_administrativedivision_table = Table(
            ForeignKey('administrativedivision.id'), nullable=False,
            index=True),
     Column('hazardcategory_id', Integer,
-           ForeignKey('hazardcategory.id'), nullable=False, index=True))
+           ForeignKey('hazardcategory.id'), nullable=False, index=True),
+    Column('coverageratio', Integer))
 
 
 class HazardCategoryAdditionalInformationAssociation(Base):
