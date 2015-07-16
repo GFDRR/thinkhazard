@@ -397,7 +397,7 @@ class AdditionalInformation(Base):
     id = Column(Integer, primary_key=True)
     mnemonic = Column(Unicode, nullable=False)
     title = Column(Unicode, nullable=False)
-    accessurl = Column(Unicode, nullable=False)
+    accessurl = Column(Unicode)
     metadata_id = Column(Integer, ForeignKey(Metadata.id))
     type_id = Column(Integer, ForeignKey(AdditionalInformationType.id),
                      nullable=False)
