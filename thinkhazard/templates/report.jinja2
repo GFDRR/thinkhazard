@@ -8,8 +8,8 @@
 
 {% block title %}
 Think Hazard - {{ division.name}}
-{% if current_hazard %}
- - {{ current_hazard.hazardtype.title }}
+{% if hazard_category %}
+ - {{ hazard_category.hazardtype.title }}
 {% endif %}
 {% endblock %}
 
@@ -43,7 +43,7 @@ Think Hazard - {{ division.name}}
         <div class="btn-group btn-group-xs">
           <button class="btn btn-default"><i class="icon-pin"></i></button>
           {% for parent in parents | reverse %}
-          <a href="{{ 'report' | route_url(divisioncode=parent.code, hazardtype=current_hazard.hazardtype.mnemonic if current_hazard else '')}}"
+          <a href="{{ 'report' | route_url(divisioncode=parent.code, hazardtype=hazard_category.hazardtype.mnemonic if hazard_category else '')}}"
              class="btn btn-default">
           {{ parent.name }}
           </a>
@@ -71,26 +71,24 @@ Think Hazard - {{ division.name}}
     </div>
   </div>
 
-  <div class="container {{ 'level-' + current_hazard.categorytype.mnemonic if current_hazard else '' }}">
+  <div class="container {{ 'level-' + hazard_category.categorytype.mnemonic if hazard_category else '' }}">
     <div class="row">
       <div class="col-md-7">
-        {% if current_hazard %}
+        {% if hazard_category %}
           <h2 class="page-header detail">
-            {{ current_hazard.hazardtype.title }}
+            {{ hazard_category.hazardtype.title }}
             <small>
-              Hazard level: <span class="level">{{ current_hazard.categorytype.title }}</span>
+              Hazard level: <span class="level">{{ hazard_category.categorytype.title }}</span>
             </small>
           </h2>
-          {% if current_hazard.description %}
-          {{ current_hazard.description }}
-          {% else %}
-          {{ current_hazard.categorytype.description }}
+          {% if hazard_category.description %}
+          {{ hazard_category.description }}
           {% endif %}
-          {% if current_hazard.recommendations %}
+          {% if recommendations %}
           <h3>Recommendations</h3>
           <ul class="recommendations">
-          {% for recommendation in current_hazard.recommendations %}
-            <li class="list-unstyled">{{ recommendation.additionalinformation.description }}</li>
+          {% for recommendation in recommendations %}
+            <li class="list-unstyled">{{ recommendation.description }}</li>
           {% endfor %}
           </ul>
           {% endif %}
@@ -117,7 +115,7 @@ Think Hazard - {{ division.name}}
         <div class="map-block well">
           <div id="map" class="map">
             {% if parents.__len__() >= 1 %}
-            <a class="btn btn-xs btn-default drillup" href="{{ 'report' | route_url(divisioncode=parents[0].code, hazardtype=current_hazard.hazardtype.mnemonic if current_hazard else '')}}">
+            <a class="btn btn-xs btn-default drillup" href="{{ 'report' | route_url(divisioncode=parents[0].code, hazardtype=hazard_category.hazardtype.mnemonic if hazard_category else '')}}">
               <i class="btn-xs icon-zoom-out"></i>
               Zoom out to {{ parent_division.name }}
             </a>
@@ -127,9 +125,9 @@ Think Hazard - {{ division.name}}
               Zoom in by clicking on<br> an administrative area.</div>
             <div class="tooltip"></div>
           </div>
-          {% if current_hazard %}
+          {% if hazard_category %}
           <div class="caption level">
-            {{ current_hazard.hazardtype.title}} hazard level
+            {{ hazard_category.hazardtype.title}} hazard level
           </div>
           <div class="caption location">
             {{ division.name }}
@@ -165,15 +163,15 @@ Think Hazard - {{ division.name}}
           </div>
           {% endif %}
         </div>
-        {% if current_hazard.resources %}
+        {% if resources and resources|length > 0 %}
         <div class="further-resources well">
           <h3>Further resources</h3>
           <p>For further information the following resources could be consulted:</p>
           <ul>
-          {% for additionalinfo_association in current_hazard.additionalinfo_associations %}
+          {% for resource in resources %}
           <li><i class="icon-list-arrow"></i>
-            <a target="_blank" href="{{ resource.additionalinformation.accessurl }}">
-              {{ resource.additionalinformation.title }}
+            <a target="_blank" href="{{ resource.accessurl }}">
+              {{ resource.title }}
             </a>
           </li>
           {% endfor %}
@@ -193,8 +191,8 @@ Think Hazard - {{ division.name}}
     <script src="{{('%s/openlayers/dist/ol.js' % node_modules)|static_url}}"></script>
 {% endif %}
     <script>
-      {% if current_hazard %}
-      app.mapUrl = '{{ 'report_json'|route_url(divisioncode=division.code, hazardtype=current_hazard.hazardtype.mnemonic)}}';
+      {% if hazard_category %}
+      app.mapUrl = '{{ 'report_json'|route_url(divisioncode=division.code, hazardtype=hazard_category.hazardtype.mnemonic)}}';
       {% else %}
       app.mapUrl = '{{ 'report_overview_json'|route_url(divisioncode=division.code)}}';
       {% endif %}
@@ -206,8 +204,8 @@ Think Hazard - {{ division.name}}
       {%- endif %}
 
       app.divisionBounds = {{bounds}};
-      {% if current_hazard %}
-        app.hazardType = '{{current_hazard.hazardtype.mnemonic}}';
+      {% if hazard_category %}
+        app.hazardType = '{{hazard_category.hazardtype.mnemonic}}';
       {% endif %}
 
       app.leveltype = {{division.leveltype_id}};
@@ -215,7 +213,7 @@ Think Hazard - {{ division.name}}
 {% endblock %}
 
 {% macro hazard_type(hazard) %}
-<li class="{{ hazard.categorytype.mnemonic }} text-center {{ 'active' if current_hazard and hazard.hazardtype.mnemonic == current_hazard.hazardtype.mnemonic else ''}}">
+<li class="{{ hazard.categorytype.mnemonic }} text-center {{ 'active' if hazard_category and hazard.hazardtype.mnemonic == hazard_category.hazardtype.mnemonic else ''}}">
   <a
     {% if hazard.categorytype.mnemonic != 'no-data' %}
     href="{{'report'|route_url(divisioncode=division.code, hazardtype=hazard.hazardtype.mnemonic)}}"
@@ -223,7 +221,7 @@ Think Hazard - {{ division.name}}
      >
     <i class="fa hazard-icon icon-{{hazard.hazardtype.title|lower|replace(' ', '')}}"></i><br>
     {{ hazard.hazardtype.title }}
-    {% if current_hazard and hazard.hazardtype.mnemonic == current_hazard.hazardtype.mnemonic %}
+    {% if hazard_category and hazard.hazardtype.mnemonic == hazard_category.hazardtype.mnemonic %}
     <div class="arrow"></div>
     {% endif %}
   </a>

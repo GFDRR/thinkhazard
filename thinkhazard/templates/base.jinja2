@@ -30,8 +30,8 @@
     <script>
       var app = {};
       app.administrativedivisionUrl = '{{'administrativedivision'|route_url}}';
-      {% if current_hazard %}
-      app.reportpageUrl = '{{'report'|route_url(divisioncode='__divisioncode__', hazardtype=current_hazard.hazardtype.mnemonic)}}';
+      {% if hazard_category %}
+      app.reportpageUrl = '{{'report'|route_url(divisioncode='__divisioncode__', hazardtype=hazard_category.hazardtype.mnemonic)}}';
       {% else %}
       app.reportpageUrl = '{{'report_overview'|route_url(divisioncode='__divisioncode__')}}';
       {% endif %}

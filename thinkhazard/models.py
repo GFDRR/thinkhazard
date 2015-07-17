@@ -265,7 +265,7 @@ class AdministrativeDivision(Base):
     additionalinformations = relationship(
         'AdditionalInformation',
         secondary=administrativedivision_additionalinformation_table,
-        backref='admninistrativedivisions')
+        backref='administrativedivisions')
 
     def __json__(self, request):
         if self.leveltype_id == 1:
@@ -345,10 +345,6 @@ class HazardCategory(Base):
     intensitythreshold = relationship(IntensityThreshold)
     categorytype = relationship(CategoryType)
     status = relationship(TermStatus)
-    additionalinformation_associations = relationship(
-        'HazardCategoryAdditionalInformationAssociation',
-        order_by='HazardCategoryAdditionalInformationAssociation.order',
-        lazy='joined')
 
 
 class UserFeedback(Base):
@@ -389,3 +385,8 @@ class AdditionalInformation(Base):
         'UserFeedback',
         secondary=additionalinformation_userfeedback_table,
         backref='additionalinformations')
+
+    hazardcategory_associations = relationship(
+        'HazardCategoryAdditionalInformationAssociation',
+        order_by='HazardCategoryAdditionalInformationAssociation.order',
+        lazy='joined')
