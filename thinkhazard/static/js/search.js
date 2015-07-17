@@ -24,8 +24,8 @@
 
   engine.initialize();
 
-  var $search = $('#search-field');
-  var $divisionCode = $('#search-division-code');
+  var $search = $('#search .search-field');
+  var $divisionCode = $('#search .search-division-code');
 
   $search.typeahead({
     highlight: true

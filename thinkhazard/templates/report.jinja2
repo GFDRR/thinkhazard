@@ -23,7 +23,7 @@ Think Hazard - {{ division.name}}
           <span class="logo-think">Think</span><span class="logo-hazard">Hazard</span><span class="logo-think">!</span>
         </a>
       </div>
-      <form id="search" class="navbar-form navbar-left" role="search">
+      <form id="search" class="search navbar-form navbar-left" role="search">
         <div class="form-group form-group-lg">
           {% include 'search.jinja2' %}
         </div>
@@ -34,7 +34,7 @@ Think Hazard - {{ division.name}}
 
   <div class="jumbotron">
     <div class="container">
-      <a id="pdf-link" class="btn btn-default btn-xs pull-right" href><i class="fa fa-arrow-down"></i> Download PDF</a>
+      <a class="btn btn-default btn-xs pull-right" href><i class="fa fa-arrow-down"></i> Download PDF</a>
 
       <!-- breadcrumb -->
       <div class="breadcrumb">
@@ -61,9 +61,9 @@ Think Hazard - {{ division.name}}
       </h2>
 
       {% if current_hazard %}
-      <a id="overview-link" class="btn btn-default btn-xs pull-left" href="{{ overview_url }}" title="Go back to overview page"><i class="fa fa-home"></i> Overview</a>
+      <a class="btn btn-default btn-xs pull-left" href="{{ overview_url }}" title="Go back to overview page"><i class="fa fa-home"></i> Overview</a>
       {% endif %}
-      <ul id="hazard-types-list" class="horizontal list-unstyled hazards" role="tablist">
+      <ul class="hazard-types-list horizontal list-unstyled" role="tablist">
         {% for hazard in hazards %}
           {{ hazard_type(hazard) }}
         {% endfor %}
@@ -108,10 +108,10 @@ Think Hazard - {{ division.name}}
         {% endif %}
       </div>
       <div class="col-md-5">
-        <div id="map-block" class="well">
-          <div id="map">
+        <div class="map-block well">
+          <div id="map" class="map">
             {% if parents.__len__() >= 1 %}
-            <a id="map-drillup" class="btn btn-default btn-xs control" href="{{ 'report' | route_url(divisioncode=parents[0].code, hazardtype=current_hazard.hazardtype.mnemonic if current_hazard else '')}}">
+            <a class="map-drillup btn btn-xs drillup control" href="{{ 'report' | route_url(divisioncode=parents[0].code, hazardtype=current_hazard.hazardtype.mnemonic if current_hazard else '')}}">
               <i class="btn-xs fa fa-search-minus"></i>
               Zoom out to {{ parent_division.name }}
             </a>
@@ -128,7 +128,7 @@ Think Hazard - {{ division.name}}
           <div class="caption location">
             {{ division.name }}
           </div>
-          <div id="legend">
+          <div class="legend">
             <table class="table">
               <tr>
                 <td class="level-HIG">
@@ -153,14 +153,14 @@ Think Hazard - {{ division.name}}
             </table>
           </div>
 
-          <div id="data-source" class="text-center">
+          <div class="data-source text-center">
             <h5>DATA SOURCE</h5>
             <div>** Put the sources here</div>
           </div>
           {% endif %}
         </div>
         {% if current_hazard.additionalinfo_associations %}
-        <div id="further-resources" class="well">
+        <div class="further-resources well">
           <h3>Further resources</h3>
           <p>For further information the following resources could be consulted:</p>
           <ul class="fa-ul">
