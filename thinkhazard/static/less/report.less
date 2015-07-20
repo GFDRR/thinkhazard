@@ -77,46 +77,8 @@ body {
       border-top: @arrow-height solid;
       -moz-transform: scale(.999);
     }
-
-    .level(@level) {
-      @color: "level-@{level}-color";
-      &.@{level} {
-        border-color: @@color;
-        &.active {
-          background-color: @@color;
-          .arrow {
-            border-top-color: @@color;
-          }
-          .icon {
-            color: @@color;
-            border-color: @@color;
-          }
-        }
-      }
-    }
-    .level(HIG);
-    .level(MED);
-    .level(LOW);
-    .level(NPR);
   }
 }
-
-.hazard-title-level(@level) {
-  @color: "level-@{level}-color";
-  .level-@{level} {
-    .page-header {
-      border-color: @@color;
-      .level {
-        color: @@color;
-      }
-    }
-  }
-}
-
-.hazard-title-level(HIG);
-.hazard-title-level(MED);
-.hazard-title-level(LOW);
-.hazard-title-level(NPR);
 
 .recommendations {
   margin: 0;
@@ -131,20 +93,6 @@ body {
     }
   }
 }
-
-.recommendations-level(@level) {
-  @color: "level-@{level}-color";
-  .level-@{level} {
-    .recommendations li {
-      border-color: @@color;
-    }
-  }
-}
-
-.recommendations-level(HIG);
-.recommendations-level(MED);
-.recommendations-level(LOW);
-.recommendations-level(NPR);
 
 @map-controls-padding: 5px;
 .map {
@@ -208,11 +156,6 @@ body {
     height: 24px;
   }
 
-  .level(HIG);
-  .level(MED);
-  .level(LOW);
-  .level(NPR);
-
   vertical-align: middle;
   margin-left: 50px;
   margin-bottom: 30px;
@@ -221,15 +164,6 @@ body {
     width: 100%;
     td {
       vertical-align: top;
-    }
-  }
-}
-
-.level(@level) {
-  @color: "level-@{level}-color";
-  .level-@{level} {
-    .square {
-      background-color: fade(@@color, 50%);
     }
   }
 }
@@ -306,20 +240,6 @@ body {
   }
 }
 
-.further-resources-level(@level) {
-  @color: "level-@{level}-color";
-  .level-@{level} {
-    .further-resources .fa-li {
-      color: @@color;
-    }
-  }
-}
-
-.further-resources-level(HIG);
-.further-resources-level(MED);
-.further-resources-level(LOW);
-.further-resources-level(NPR);
-
 .btn-default {
   &:hover {
     .box-shadow(0 0 5px 0 rgba(0, 0, 0, 0.15));
@@ -331,3 +251,43 @@ body {
     .box-shadow(none);
   }
 }
+
+.set-level-color(@level) {
+  @color: "level-@{level}-color";
+
+  .hazard-types-list li {
+    &.@{level} {
+      border-color: @@color;
+      &.active {
+        background-color: @@color;
+        .arrow {
+          border-top-color: @@color;
+        }
+        .icon {
+          color: @@color;
+          border-color: @@color;
+        }
+      }
+    }
+  }
+
+  .level-@{level} {
+    .page-header,
+    .recommendations li {
+      border-color: @@color;
+    }
+    .page-header .level,
+    .further-resources .fa-li {
+        color: @@color;
+    }
+  }
+
+  .legend .level-@{level} .square {
+      background-color: fade(@@color, 50%);
+  }
+}
+
+.set-level-color(HIG);
+.set-level-color(MED);
+.set-level-color(LOW);
+.set-level-color(NPR);
