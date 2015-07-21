@@ -223,6 +223,21 @@ body {
   }
 }
 
+footer {
+  margin-top: 20px;
+  display: table;
+  white-space: nowrap;
+  &:before, &:after {
+    border-top: 5px solid #e6e6e6;
+    content: '';
+    display: table-cell;
+    position: relative;
+    @footer-line-height: 5px;
+    top: calc(0.5em + @footer-line-height);
+    width: 50%;
+  }
+}
+
 .set-level-color(@level) {
   @color: "level-@{level}-color";
 
