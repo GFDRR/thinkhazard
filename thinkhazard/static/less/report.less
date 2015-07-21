@@ -51,20 +51,25 @@ body {
       a {
         color: white;
       }
+      .hazard-icon {
+        border: @circle-border solid transparent;
+        top: -@icon-size / 2 - @circle-border;
+        left: (@hazard-width - @icon-size) / 2 - @circle-border;
+      }
     }
-    a {
+    a,
+    &.active .hazard-icon {
       color: #333;
     }
-    .icon {
+    .hazard-icon {
       font-size: @icon-size;
-      border: @circle-border solid transparent;
       border-radius: 50px;
       position: absolute;
-      top: -@icon-size / 2 - @circle-border;
-      left: (@hazard-width - @icon-size) / 2 - @circle-border;
+      top: -@icon-size / 2;
+      left: (@hazard-width - @icon-size) / 2;
       background-color: white;
     }
-    &:not(.active) .icon {
+    &:not(.active) .hazard-icon {
       .box-shadow(0px 0px 6px -1px rgba(0, 0, 0, 0.33));
     }
     .arrow {
@@ -263,7 +268,7 @@ body {
         .arrow {
           border-top-color: @@color;
         }
-        .icon {
+        .hazard-icon {
           color: @@color;
           border-color: @@color;
         }
