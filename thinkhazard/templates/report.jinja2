@@ -34,12 +34,12 @@ Think Hazard - {{ division.name}}
 
   <div class="jumbotron">
     <div class="container">
-      <a class="btn btn-default btn-xs pull-right" href><i class="fa fa-arrow-down"></i> Download PDF</a>
+      <a class="btn btn-default btn-xs pull-right" href><i class="icon-download-arrow"></i> Download PDF</a>
 
       <!-- breadcrumb -->
       <div class="breadcrumb">
         <div class="btn-group btn-group-xs">
-          <button class="btn btn-default"><i class="fa fa-map-marker"></i></button>
+          <button class="btn btn-default"><i class="icon-pin"></i></button>
           {% for parent in parents | reverse %}
           <a href="{{ 'report' | route_url(divisioncode=parent.code, hazardtype=current_hazard.hazardtype.mnemonic if current_hazard else '')}}"
              class="btn btn-default">
@@ -61,7 +61,7 @@ Think Hazard - {{ division.name}}
       </h2>
 
       {% if current_hazard %}
-      <a class="btn btn-default btn-xs pull-left" href="{{ overview_url }}" title="Go back to overview page"><i class="fa fa-home"></i> Overview</a>
+      <a class="btn btn-default btn-xs pull-left" href="{{ overview_url }}" title="Go back to overview page"><i class="icon-house"></i> Overview</a>
       {% endif %}
       <ul class="hazard-types-list horizontal list-unstyled" role="tablist">
         {% for hazard in hazards %}
@@ -112,7 +112,7 @@ Think Hazard - {{ division.name}}
           <div id="map" class="map">
             {% if parents.__len__() >= 1 %}
             <a class="map-drillup btn btn-xs drillup control" href="{{ 'report' | route_url(divisioncode=parents[0].code, hazardtype=current_hazard.hazardtype.mnemonic if current_hazard else '')}}">
-              <i class="btn-xs fa fa-search-minus"></i>
+              <i class="btn-xs icon-zoom-out"></i>
               Zoom out to {{ parent_division.name }}
             </a>
             {% endif %}
@@ -163,9 +163,9 @@ Think Hazard - {{ division.name}}
         <div class="further-resources well">
           <h3>Further resources</h3>
           <p>For further information the following resources could be consulted:</p>
-          <ul class="fa-ul">
+          <ul>
           {% for additionalinfo_association in current_hazard.additionalinfo_associations %}
-          <li><i class="fa-li fa fa-caret-right"></i>
+          <li><i class="icon-list-arrow"></i>
             <a target="_blank" href="{{ additionalinfo_association.additionalinformation.accessurl }}">
               {{ additionalinfo_association.additionalinformation.title }}
             </a>
