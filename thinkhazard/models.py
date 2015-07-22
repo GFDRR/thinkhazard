@@ -30,7 +30,7 @@ DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base(metadata=MetaData(schema='datamart'))
 
 event.listen(Base.metadata, 'before_create',
-             DDL("CREATE SCHEMA IF NOT EXISTS datamart"))
+             DDL("CREATE SCHEMA datamart"))
 
 
 class TermStatus(Base):

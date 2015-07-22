@@ -5,6 +5,14 @@ python:
 
 install:
 - make install
+- sudo -u postgres createuser www-data --no-superuser --no-createdb --no-createrole
+- sudo -u postgres createdb -O www-data thinkhazard_tests
+- sudo -u postgres psql -d thinkhazard_tests -c "CREATE EXTENSION postgis;"
 
 script:
 - make check
+- make build
+- echo [app:main] >> local.tests.ini
+- echo sqlalchemy.url = postgresql://www-data:www-data@localhost/thinkhazard_tests >> local.tests.ini
+- .build/venv/bin/initialize_thinkhazard_db tests.ini
+- make test
