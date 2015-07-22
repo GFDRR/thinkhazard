@@ -26,42 +26,13 @@
     </div>
   </div>
   <div class="container text-center">
-    <ul class="hazards horizontal list-unstyled">
-      <li>
-        <img src="{{('thinkhazard:static/images/hazard-icon-drought.png'|static_url)}}" />
-        <br>
-        Drought
+    <ul class="hazard-types-list horizontal list-unstyled">
+      {% for hazard in hazards %}
+      <li class="no-data text-center ">
+        <i class="fa hazard-icon icon-{{ hazard.title|lower|replace(' ', '') }}"></i><br>
+          {{ hazard.title }}
       </li>
-      <li>
-        <img src="{{('thinkhazard:static/images/hazard-icon-earthquake.png'|static_url)}}" />
-        <br>
-        Earthquake
-      </li>
-      <li>
-        <img src="{{('thinkhazard:static/images/hazard-icon-flood.png'|static_url)}}" />
-        <br>
-        Flood
-      </li>
-      <li>
-        <img src="{{('thinkhazard:static/images/hazard-icon-storm-surge.png'|static_url)}}" />
-        <br>
-        Storm surge
-      </li>
-      <li>
-        <img src="{{('thinkhazard:static/images/hazard-icon-strong-wind.png'|static_url)}}" />
-        <br>
-        Strong wind
-      </li>
-      <li>
-        <img src="{{('thinkhazard:static/images/hazard-icon-tsunami.png'|static_url)}}" />
-        <br>
-        Tsunami
-      </li>
-      <li>
-        <img src="{{('thinkhazard:static/images/hazard-icon-volcanic-ash.png'|static_url)}}" />
-        <br>
-        Volcanic ash
-      </li>
+      {% endfor %}
     </ul>
   </div>
   <div class="container text-center">
