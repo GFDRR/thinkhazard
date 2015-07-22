@@ -102,6 +102,7 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 .build/venv:
 	mkdir -p $(dir $@)
 	virtualenv .build/venv
+	.build/venv/bin/pip install --upgrade pip
 
 .build/thinkhazard-%.wsgi: thinkhazard.wsgi
 	sed 's#{{APP_INI_FILE}}#$(CURDIR)/$*.ini#' $< > $@

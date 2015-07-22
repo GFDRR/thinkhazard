@@ -1,11 +1,16 @@
 language: python
 
+cache:
+  directories:
+    - $HOME/.cache/pip
+
 python:
 - 2.7
 
 sudo: false
 
 install:
+- export PIP_DOWNLOAD_CACHE=~/.cache/pip
 - make install
 - createuser www-data --no-superuser --no-createdb --no-createrole -U postgres
 - createdb -O www-data thinkhazard_tests -U postgres
