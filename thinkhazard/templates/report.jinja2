@@ -1,6 +1,7 @@
 {% extends "base.jinja2" %}
 
-{% from 'navbar.jinja2' import navbar%}
+{% from 'common.jinja2' import navbar %}
+{% from 'common.jinja2' import thinkhazard_logo %}
 
 {% block name %}report{% endblock %}
 
@@ -19,9 +20,9 @@ Think Hazard - {{ division.name}}
   <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
       <div class="navbar-header">
-        <a class="navbar-brand" href="{{'index'|route_url}}">
-          <span class="logo-think">Think</span><span class="logo-hazard">Hazard</span><span class="logo-think">!</span>
-        </a>
+        <span class="navbar-brand">
+          {{ thinkhazard_logo() }}
+        </span>
       </div>
       <form id="search" class="search navbar-form navbar-left" role="search">
         <div class="form-group form-group-lg">
