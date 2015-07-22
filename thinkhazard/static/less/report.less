@@ -249,6 +249,27 @@ footer {
   margin-right: 10px;
 }
 
+.hazard-level-label {
+  position: relative;
+  border: 0;
+  small {
+    font-weight: 300;
+  }
+  hr {
+    position: absolute;
+    top: -10px;
+    right: 0;
+    height: 1px;
+    width: 50%;
+    background-image: linear-gradient(90deg, rgba(255,255,255,0), rgba(204, 204, 204, 1));
+    border-top-width: 0;
+  }
+}
+
+.level-no-data .page-header {
+  border-color: @level-overview-no-data-color;
+}
+
 .set-level-color(@level) {
   @color: "level-@{level}-color";
   @color-overview: "level-overview-@{level}-color";
