@@ -36,26 +36,14 @@
   }
 }
 
-@icon-size: 64px;
-@front-icon-bg-size: 110px;
-.hazards {
-  li {
-    width: @front-icon-bg-size;
-    background: url(../images/front-icon-bg.png) no-repeat;
-    background-position-x: center;
-    background-position-y: top;
-
-    img {
-      padding-top: (@front-icon-bg-size - @icon-size) / 2;
-      padding-bottom: 5px;
-    }
-  }
-}
-
 .logo-gfdrr {
   margin-top: 60px;
   height: 61px;
   width: 200px;
   display: inline-block;
   background: url(../images/logo-gfdrr-big.png) no-repeat;
+}
+
+.hazard-types-list li .hazard-icon {
+  .box-shadow(0px 0px 20px -1px rgba(0, 0, 0, 0.15));
 }
