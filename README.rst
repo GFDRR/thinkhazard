@@ -83,3 +83,22 @@ To update the demo application use the following::
     $ sudo -u sigdev make clean install build modwsgi
     $ sudo apache2ctl configtest
     $ sudo apache2ctl graceful
+
+Run tests
+=========
+
+In order to run tests, you'll need to create a separate Database::
+
+    sudo -u postgres createdb -O www-data thinkhazard_tests
+    sudo -u postgres psql -d thinkhazard_tests -c "CREATE EXTENSION postgis;"
+
+You'll also have to define the specific settings. For this purpose, you'll have
+to create a ``local.tests.ini`` with the following content (to be adapted to
+your environnement)::
+
+    [app:main]
+    sqlalchemy.url = postgresql://www-data:www-data@localhost/thinkhazard_tests
+
+Then you should be able to run the tests with the following command::
+
+    $ make test

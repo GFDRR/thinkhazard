@@ -76,7 +76,7 @@ modwsgi: install \
 
 .PHONY: test
 test:
-	.build/venv/bin/python setup.py test
+	.build/venv/bin/nosetests
 
 .PHONY: dist
 dist: .build/venv

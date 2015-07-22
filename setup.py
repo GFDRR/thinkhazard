@@ -22,6 +22,8 @@ requires = [
     'zope.sqlalchemy',
     'waitress',
     'papyrus==2.0dev3',
+    'WebTest==2.0.18',
+    'nose',
     ]
 
 setup(name='thinkhazard',
