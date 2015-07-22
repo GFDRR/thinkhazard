@@ -1,10 +1,5 @@
 import unittest
-import transaction
 import os
-
-from pyramid import testing
-
-from ..models import DBSession
 
 local_settings_path = 'local.tests.ini'
 
@@ -29,5 +24,6 @@ class TestIndexFunction(unittest.TestCase):
         del self.testapp
 
     def test_index(self):
-        print "blah"
-        self.testapp.get('/', status=200)
+        resp = self.testapp.get('/', status=200)
+        hazards = resp.html.select('.hazard-types-list .hazard-icon')
+        self.assertEqual(len(hazards), 8)
