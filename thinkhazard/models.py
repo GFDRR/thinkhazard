@@ -6,8 +6,6 @@ from sqlalchemy import (
     Unicode,
     DateTime,
     String,
-    DDL,
-    event,
     )
 
 from sqlalchemy.schema import MetaData, Table
@@ -28,9 +26,6 @@ import datetime
 
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base(metadata=MetaData(schema='datamart'))
-
-event.listen(Base.metadata, 'before_create',
-             DDL("CREATE SCHEMA datamart"))
 
 
 class TermStatus(Base):

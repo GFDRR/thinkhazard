@@ -13,7 +13,9 @@ install:
 - make install
 - createuser www-data --no-superuser --no-createdb --no-createrole -U postgres
 - createdb -O www-data thinkhazard_tests -U postgres
-- psql -d thinkhazard_tests -c "CREATE EXTENSION postgis;" -U postgres
+- psql -d thinkhazard_tests -c 'CREATE EXTENSION postgis;' -U postgres
+- psql -d thinkhazard_tests -c 'CREATE SCHEMA datamart;' -U postgres
+- psql -d thinkhazard_tests -c 'GRANT ALL ON SCHEMA datamart TO "www-data";' -U postgres
 
 script:
 - make check

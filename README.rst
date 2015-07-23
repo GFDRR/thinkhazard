@@ -90,7 +90,9 @@ Run tests
 In order to run tests, you'll need to create a separate Database::
 
     sudo -u postgres createdb -O www-data thinkhazard_tests
-    sudo -u postgres psql -d thinkhazard_tests -c "CREATE EXTENSION postgis;"
+    sudo -u postgres psql -d thinkhazard_tests -c 'CREATE EXTENSION postgis;'
+    sudo -u postgres psql -d thinkhazard_tests -c 'CREATE SCHEMA datamart;'
+    sudo -u postgres psql -d thinkhazard_tests -c 'GRANT ALL ON SCHEMA datamart TO "www-data";'
 
 You'll also have to define the specific settings. For this purpose, you'll have
 to create a ``local.tests.ini`` with the following content (to be adapted to

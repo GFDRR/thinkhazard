@@ -46,13 +46,15 @@ def main(argv=sys.argv):
     load_local_settings(settings)
 
     engine = engine_from_config(settings, 'sqlalchemy.')
-    DBSession.configure(bind=engine)
+    populate_db(engine)
 
+
+def populate_db(engine):
+    DBSession.configure(bind=engine)
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
 
     with transaction.manager:
-
         # TermStatus
         for i in [
             (u'VAL', u'Valid', u'The status of the enumeration term under consideration is valid, i.e. it can be used to reference data'),  # noqa
@@ -171,3 +173,4 @@ def main(argv=sys.argv):
                 .filter(HazardType.mnemonic == type_) \
                 .one()
             DBSession.add(r)
+    DBSession.remove()
