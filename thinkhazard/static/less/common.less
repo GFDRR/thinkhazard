@@ -1,6 +1,6 @@
 @import "bootstrap.less";
 @import "web-fonts.less";
-@import "../../../node_modules/font-awesome/less/font-awesome.less";
+@import "icons.less";
 
 @fa-font-path: "fonts";
 
@@ -56,7 +56,7 @@ ul.horizontal li {
   .logo-hazard {
     color: #d91f2c;
   }
-  margin-right: 30px;
+  margin-right: 10px;
 }
 
 .navbar-form {
@@ -82,34 +82,6 @@ ul.horizontal li {
 /****************
  * hazard icons *
  ***************/
-
-.hazard-icon {
-  font-family: 'thinkhazard';
-}
-.icon-drought:before {
-  content: "\e600";
-}
-.icon-earthquake:before {
-  content: "\e601";
-}
-.icon-flood:before {
-  content: "\e602";
-}
-.icon-landslide:before {
-  content: "\e603";
-}
-.icon-stormsurge:before {
-  content: "\e604";
-}
-.icon-tsunami:before {
-  content: "\e605";
-}
-.icon-volcanicash:before {
-  content: "\e606";
-}
-.icon-cyclone:before {
-  content: "\e607";
-}
 
 .hazard-types-list {
   @hazard-width: 104px;
@@ -161,7 +133,6 @@ ul.horizontal li {
     }
   }
 }
-
 
 /*************
  * typeahead *
@@ -244,9 +215,8 @@ ul.horizontal li {
   margin-bottom: ((@navbar-height - @input-height-large) / 2);
 }
 
-.search .form-control {
+.navbar-form .form-control {
   padding-left: 80px;
-  width: 450px;
 }
 
 .search {
@@ -256,7 +226,7 @@ ul.horizontal li {
     font-size: 24px;
     position: absolute;
     z-index: 2;
-    padding: 10px 6px 10px 16px;
+    padding: 10px 6px 10px 10px;
     color: white;
     border-radius: 5px 0 0 5px;
     background-color: black;
@@ -269,10 +239,14 @@ ul.horizontal li {
       height: 0;
       position: absolute;
       top: 0;
-      left: 44px;
+      left: 50px;
       width: 0;
       -moz-transform: scale(.999);
     }
+  }
+
+  .icon {
+    font-size: 34px;
   }
 }
 

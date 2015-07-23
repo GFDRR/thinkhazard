@@ -1,3 +1,4 @@
+@import "../../../node_modules/bootstrap/less/variables.less";
 @import "../../../node_modules/bootstrap/less/mixins.less";
 
 @level-HIG-color: #d91f2c;
@@ -12,9 +13,9 @@ body {
 }
 
 /* Media queries to adjust form width */
-@media(min-width:768px) {
+@media(min-width: @screen-lg-min) {
   .navbar-form .form-control {
-    width: 350px;
+    width: 450px;
   }
 }
 
@@ -197,10 +198,15 @@ body {
     line-height: 27px;
   }
   ul {
+    list-style-type: none;
+    padding-left: 0;
     margin-left: 0;
     li {
       margin-top: 15px;
-      margin-left: 10px;
+      .icon-list-arrow {
+        font-size: 10px;
+        top: -1px;
+      }
     }
   }
 }
@@ -242,7 +248,7 @@ body {
       border-color: @@color;
     }
     .page-header .level,
-    .further-resources .fa-li {
+    .further-resources .icon-list-arrow {
         color: @@color;
     }
   }
