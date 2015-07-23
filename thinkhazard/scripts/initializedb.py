@@ -173,4 +173,5 @@ def populate_db(engine):
                 .filter(HazardType.mnemonic == type_) \
                 .one()
             DBSession.add(r)
+
     DBSession.remove()
