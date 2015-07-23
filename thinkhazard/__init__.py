@@ -43,7 +43,7 @@ def main(global_config, **settings):
 
     config.add_renderer('geojson', GeoJSON())
 
-    config.scan(ignore=['tests'])
+    config.scan(ignore=['thinkhazard.tests'])
     return config.make_wsgi_app()
 
 
