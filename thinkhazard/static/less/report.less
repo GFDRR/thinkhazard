@@ -227,13 +227,13 @@ footer {
   margin-top: 20px;
   display: table;
   white-space: nowrap;
+  @footer-line-height: 5px;
   &:before, &:after {
-    border-top: 5px solid #e6e6e6;
+    border-top: @footer-line-height solid #e6e6e6;
     content: '';
     display: table-cell;
     position: relative;
-    @footer-line-height: 5px;
-    top: calc(0.5em + @footer-line-height);
+    top: ~"calc(0.5em + @{footer-line-height})";
     width: 50%;
   }
 }
