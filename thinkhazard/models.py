@@ -236,6 +236,7 @@ class HazardCategoryAdditionalInformationAssociation(Base):
                                       nullable=False, index=True)
     order = Column(Integer, nullable=False)
 
+    hazardcategory = relationship('HazardCategory')
     additionalinformation = relationship('AdditionalInformation',
                                          lazy='joined', innerjoin=True)
 

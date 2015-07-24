@@ -36,3 +36,13 @@ class TestReportFunction(BaseTestCase):
         # order should be 'EQ', 'FL'
         self.assertTrue('EQ' in hazards.eq(0).html())
         self.assertTrue('FL' in hazards.eq(1).html())
+
+    def test_report__hazard(self):
+        resp = self.testapp.get('/report/30/EQ', status=200)
+        self.assertEqual(len(resp.pyquery('.recommendations li')), 1)
+        self.assertEqual(len(resp.pyquery('.further-resources li')), 1)
+
+    def test_report__no_data(self):
+        # FIXME should be addressed
+        #resp = self.testapp.get('/report/30/DR', status=500)
+        pass
