@@ -9,6 +9,11 @@ from ..models import (
     Base,
     DBSession,
     AdministrativeDivision,
+    HazardCategory,
+    HazardType,
+    CategoryType,
+    IntensityThreshold,
+    TermStatus,
     )
 
 from shapely.geometry import (
@@ -36,32 +41,64 @@ def populate_db():
 
     with transaction.manager:
 
-        div_level_0 = AdministrativeDivision(**{
+        shape = MultiPolygon([
+            Polygon([(0, 0), (0, 1), (1, 1), (1, 0), (0, 0)])
+        ])
+        geometry = from_shape(shape, 3857)
+
+        div_level_1 = AdministrativeDivision(**{
             'code': 10,
             'leveltype_id': 1,
             'name': u'Division level 1'
         })
-        DBSession.add(div_level_0)
+        div_level_1.geom = geometry
+        DBSession.add(div_level_1)
 
-        div_level_1 = AdministrativeDivision(**{
+        div_level_2 = AdministrativeDivision(**{
             'code': 20,
             'leveltype_id': 2,
             'name': u'Division level 2'
         })
-        div_level_1.parent_code = div_level_0.code
-        DBSession.add(div_level_1)
+        div_level_2.parent_code = div_level_1.code
+        div_level_2.geom = geometry
+        DBSession.add(div_level_2)
 
-        div_level_2 = AdministrativeDivision(**{
+        div_level_3 = AdministrativeDivision(**{
             'code': 30,
             'leveltype_id': 3,
             'name': u'Division level 3'
         })
-        div_level_2.parent_code = div_level_1.code
-        shape = MultiPolygon([
-            Polygon([(7.23, 41.25), (7.23, 41.12), (7.41, 41.20)])])
-        geometry = from_shape(shape, 3857)
-        div_level_2.geom = geometry
-        DBSession.add(div_level_2)
+        div_level_3.parent_code = div_level_2.code
+        div_level_3.geom = geometry
+        div_level_3.hazardcategories = []
+
+        category = HazardCategory(**{
+            'description': u'Earthquake high threshold 1',
+        })
+        category.hazardtype = DBSession.query(HazardType) \
+            .filter(HazardType.mnemonic == u'EQ').one()
+        category.intensitythreshold = DBSession.query(IntensityThreshold) \
+            .filter(IntensityThreshold.mnemonic == u'EQ_IT_1').one()
+        category.categorytype = DBSession.query(CategoryType) \
+            .filter(CategoryType.mnemonic == u'HIG').one()
+        category.status = DBSession.query(TermStatus) \
+            .filter(TermStatus.mnemonic == u'VAL').one()
+        DBSession.add(category)
+        div_level_3.hazardcategories.append(category)
+        category = HazardCategory(**{
+            'description': u'Flood med threshold 1',
+        })
+        category.hazardtype = DBSession.query(HazardType) \
+            .filter(HazardType.mnemonic == u'FL').one()
+        category.intensitythreshold = DBSession.query(IntensityThreshold) \
+            .filter(IntensityThreshold.mnemonic == u'FL_IT_1').one()
+        category.categorytype = DBSession.query(CategoryType) \
+            .filter(CategoryType.mnemonic == u'MED').one()
+        category.status = DBSession.query(TermStatus) \
+            .filter(TermStatus.mnemonic == u'VAL').one()
+        DBSession.add(category)
+        div_level_3.hazardcategories.append(category)
+        DBSession.add(div_level_3)
 
 populate_db()
 
