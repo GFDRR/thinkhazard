@@ -1,6 +1,7 @@
 {% extends "base.jinja2" %}
 
-{% from 'navbar.jinja2' import navbar%}
+{% from 'common.jinja2' import navbar %}
+{% from 'common.jinja2' import thinkhazard_logo %}
 
 {% block name %}index{% endblock %}
 
@@ -14,7 +15,7 @@
   </nav>
   <div class="container">
     <header class="text-center">
-      <img src="{{('thinkhazard:static/images/logo-big.png'|static_url)}}" title="Think hazard - Overcome risk" alt="Think hazard - Overcome risk" />
+        {{ thinkhazard_logo() }}
       <div class="text-muted baseline first">
         Identify the hazards in your project area and
       </div>
