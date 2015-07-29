@@ -7,6 +7,12 @@
 @level-NPR-color: #87988c;
 @level-no-data-color: #F2F2F2;
 
+@level-overview-HIG-color: #fff7f8;
+@level-overview-MED-color: #fffbf7;
+@level-overview-LOW-color: #fffdf7;
+@level-overview-NPR-color: #f7fffa;
+@level-overview-no-data-color: #e6e6e6;
+
 body {
   padding-top: 50px;
   padding-bottom: 20px;
@@ -243,8 +249,13 @@ footer {
   margin-right: 10px;
 }
 
+.level-no-data .page-header {
+  border-color: @level-overview-no-data-color;
+}
+
 .set-level-color(@level) {
   @color: "level-@{level}-color";
+  @color-overview: "level-overview-@{level}-color";
 
   .hazard-types-list li {
     &.@{level} {
@@ -263,7 +274,14 @@ footer {
   }
 
   .level-@{level} {
-    .page-header,
+    .page-header.overview {
+      border-color: #ccc;
+      &:hover {
+        border-color: fade(@@color, 50%);
+        background-color: @@color-overview;
+      }
+    }
+    .page-header.detail, 
     .recommendations li {
       border-color: @@color;
     }
