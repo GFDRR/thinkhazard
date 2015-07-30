@@ -62,10 +62,6 @@ ul.horizontal li {
   padding-left: 0;
 }
 
-.form-control {
-  font-family: 'variablelight', sans-serif;
-}
-
 .page-header {
   position: relative;
   color: #333;
@@ -170,9 +166,11 @@ ul.horizontal li {
   color: #999
 }
 
+@suggestion-padding: 20px;
 .tt-menu {
-  width: 422px;
-  margin: 12px 0;
+  margin-left: @search-addon-width - @suggestion-padding;
+  right: 0;
+  margin-top: -5px;
   padding: 8px 0;
   background-color: #fff;
   border: 1px solid #ccc;
@@ -186,21 +184,18 @@ ul.horizontal li {
 }
 
 .tt-suggestion {
-  padding: 3px 20px;
+  padding: 3px @suggestion-padding;
   font-size: 18px;
   line-height: 24px;
 }
 
 .tt-suggestion:hover {
   cursor: pointer;
-  color: #fff;
-  background-color: #0097cf;
 }
 
+.tt-suggestion:hover,
 .tt-suggestion.tt-cursor {
-  color: #fff;
-  background-color: #0097cf;
-
+  background-color: #f2f2f2;
 }
 
 .tt-suggestion p {
@@ -215,13 +210,10 @@ ul.horizontal li {
   margin-bottom: ((@navbar-height - @input-height-large) / 2);
 }
 
-.navbar-form .form-control {
-  padding-left: 80px;
-}
-
+@search-addon-width: 80px;
 .search {
+  font-weight: 300;
   .input-group-addon {
-    font-family: 'variablelight', sans-serif;
     height: @input-height-large;
     font-size: 24px;
     position: absolute;
@@ -247,6 +239,10 @@ ul.horizontal li {
 
   .icon {
     font-size: 34px;
+  }
+
+  .form-control {
+    padding-left: @search-addon-width;
   }
 }
 
