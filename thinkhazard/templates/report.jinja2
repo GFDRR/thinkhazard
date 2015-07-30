@@ -2,6 +2,7 @@
 
 {% from 'common.jinja2' import navbar %}
 {% from 'common.jinja2' import thinkhazard_logo %}
+{% from 'common.jinja2' import gfdrr_logo %}
 
 {% block name %}report{% endblock %}
 
@@ -176,10 +177,8 @@ Think Hazard - {{ division.name}}
         </div>
         {% endif %}
       </div>
-      <footer class="col-md-12 text-center">
-        <a href="//www.gfdrr.org/" class="logo-gfdrr" title="Logo GFDRR" alt="Logo GFDRR"></a>
-      </footer>
     </div>
+    {{ gfdrr_logo() }}
   </div>
 {% endblock %}
 
