@@ -52,6 +52,15 @@ body {
   }
 }
 
+.logo,
+.hazard-types-list a,
+.overview {
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+}
+
 .recommendations {
   margin: 0;
   padding: 0;
@@ -287,7 +296,7 @@ footer {
   }
 
   .level-@{level} {
-    .page-header.overview {
+    &.overview .page-header {
       border-color: #ccc;
       &:hover {
         border-color: fade(@@color, 50%);
