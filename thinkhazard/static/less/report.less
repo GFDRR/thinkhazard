@@ -33,8 +33,12 @@ body {
   @arrow-height: 10px;
   li {
     &:not(.active) .hazard-icon {
-      .box-shadow(0px 0px 6px -1px rgba(0, 0, 0, 0.33));
+      .box-shadow(0px 0px 5px 0 rgba(0, 0, 0, 0.15));
     }
+    &:not(.active):hover .hazard-icon {
+      .box-shadow(0px 0px 5px 0 rgba(0, 0, 0, 0.33));
+    }
+    &.no-data:hover .hazard-icon,
     &.no-data .hazard-icon {
       .box-shadow(none);
       background-color: transparent;

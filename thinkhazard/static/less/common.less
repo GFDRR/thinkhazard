@@ -100,6 +100,7 @@ ul.horizontal li {
       border-bottom-color: white;
       color: #a8a8a8;
       a,
+      a:hover,
       .hazard-icon {
         color: #a8a8a8;
       }
@@ -108,7 +109,8 @@ ul.horizontal li {
       }
     }
     &.active {
-      a {
+      a,
+      a:hover {
         color: white;
       }
       .hazard-icon {
@@ -118,8 +120,11 @@ ul.horizontal li {
       }
     }
     a,
-    &.active .hazard-icon {
-      color: #333;
+    &.active {
+      color: #58595b;
+      &:hover {
+        color: #333;
+      }
     }
     .hazard-icon {
       font-size: @icon-size;
