@@ -79,7 +79,6 @@ body {
   }
 }
 
-@map-controls-padding: 5px;
 .map {
   height: 350px;
   position: relative;
@@ -93,46 +92,43 @@ body {
     .box-shadow(0px 0px 10px 0px rgba(0, 0, 0, 0.15));
   }
   .alert.alert-dismissible {
-    padding-right: (@map-controls-padding + 15);
-
+    padding-right: 15px;
     .close {
       right: -10px;
       font-size: 20px;
       top: -6px;
-      right: -17px;
     }
   }
 
   .zoomin-help {
-    width: 185px;
-  }
-
-  .control {
-    padding: @map-controls-padding;
+    padding: 5px;
     line-height: 1;
+    white-space: nowrap;
+  }
+
+  .drillup {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    z-index: 2;
+
+    background: rgba(255,255,255, 0.5);
+    border: none;
+    padding: 5px 10px 5px 5px;
+
+    &:hover {
+      background: rgba(255,255,255, 0.75);
+    }
+
+    i {
+      background: rgb(255,255,255);
+      color: #58595b;
+      display: inline-block;
+      line-height: 20px;
+    }
   }
 }
 
-.map-drillup {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  z-index: 2;
-
-  background: rgba(255,255,255, 0.5);
-  border: 2px solid rgba(255,255,255,0.75);
-
-  &:hover {
-    background: rgba(255,255,255, 0.75);
-  }
-
-  i {
-    background: rgb(255,255,255);
-    color: #58595b;
-    height: 20px;
-    width: 20px;
-  }
-}
 
 .legend {
   .square {
