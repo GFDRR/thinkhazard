@@ -79,7 +79,6 @@ body {
   }
 }
 
-@map-controls-padding: 5px;
 .map {
   height: 350px;
   position: relative;
@@ -93,25 +92,19 @@ body {
     .box-shadow(0px 0px 10px 0px rgba(0, 0, 0, 0.15));
   }
   .alert.alert-dismissible {
-    padding-right: (@map-controls-padding + 15);
-
+    padding-right: 15px;
     .close {
       right: -10px;
       font-size: 20px;
       top: -6px;
-      right: -17px;
     }
   }
 
   .zoomin-help {
-    width: 185px;
-  }
-
-  .control {
-    padding: @map-controls-padding;
+    padding: 5px;
     line-height: 1;
+    white-space: nowrap;
   }
-}
 
 .map-drillup {
   position: absolute;
