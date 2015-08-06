@@ -3,7 +3,7 @@
 SSH_OPTS="-o StrictHostKeyChecking=no -i id_rsa"
 SSH_HOST="reprepro@pkg.camptocamp.net"
 SECTION="ci"
-DISTRO="jessie"
+DISTRO="wheezy"
 PACKAGE_NAME="thinkhazard"
 
 if [ -z $TRAVIS_TAG ]; then
