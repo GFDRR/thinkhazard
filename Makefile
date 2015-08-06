@@ -92,7 +92,7 @@ watch: .build/dev-requirements.timestamp
 	@echo "Watching static files..."
 	.build/venv/bin/nosier -p thinkhazard/static "make build"
 
-thinkhazard/static/build/%.min.css: $(LESS_FILES) .build/node_modules.timestamp .build/fonts.timestamp
+thinkhazard/static/build/%.min.css: $(LESS_FILES) .build/node_modules.timestamp
 	mkdir -p $(dir $@)
 	./node_modules/.bin/lessc --clean-css thinkhazard/static/less/$*.less $@
 
@@ -143,11 +143,6 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 		-e 's#{{INSTANCEID}}#$(INSTANCEID)#g' \
 		-e 's#{{WSGISCRIPT}}#$(abspath .build/thinkhazard-$*.wsgi)#' $< > $@
 
-.build/fonts.timestamp: .build/node_modules.timestamp
-	mkdir -p thinkhazard/static/build/fonts
-	cp node_modules/font-awesome/fonts/* thinkhazard/static/build/fonts/
-	touch $@
-
 .PHONY: clean
 clean:
 	rm -f .build/thinkhazard-*.wsgi
@@ -155,7 +150,6 @@ clean:
 	rm -f .build/flake8.timestamp
 	rm -f .build/jshint.timestamp
 	rm -f .build/booltlint.timestamp
-	rm -f .build/fonts.timestamp
 	rm -rf thinkhazard/static/build
 
 .PHONY: cleanall
