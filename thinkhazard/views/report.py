@@ -112,12 +112,12 @@ def report_json(request):
 
     hazard_type = request.matchdict.get('hazardtype', None)
 
-    division_leveltype, = DBSession.query(AdminLevelType.mnemonic) \
-        .join(AdministrativeDivision.leveltype) \
+    division = DBSession.query(AdministrativeDivision) \
+        .join(AdminLevelType) \
         .filter(AdministrativeDivision.code == division_code).one()
 
     _filter = None
-    if division_leveltype == u'REG':
+    if division.leveltype.mnemonic == u'REG':
         _filter = AdministrativeDivision.code == division_code
     else:
         _filter = AdministrativeDivision.parent_code == division_code
@@ -134,12 +134,22 @@ def report_json(request):
             DBSession.query(AdministrativeDivision).filter(_filter),
             itertools.cycle(('NONE',)))
 
-    return [{
+    features = [{
         'type': 'Feature',
         'geometry': to_shape(subdivision.geom),
         'properties': {
             'name': subdivision.name,
             'code': subdivision.code,
             'hazardLevel': categorytype
-            }
-        } for subdivision, categorytype in subdivisions]
+        }
+    } for subdivision, categorytype in subdivisions]
+
+    features.append({
+        'type': 'Feature',
+        'geometry': to_shape(division.geom),
+        'properties': {
+            'code': division.code
+        }
+    })
+
+    return features
