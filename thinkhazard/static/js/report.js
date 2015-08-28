@@ -19,7 +19,7 @@
       })
     ]
   });
-  map.getView().fitExtent(app.divisionBounds, map.getSize());
+  map.getView().fit(app.divisionBounds, map.getSize());
 
   var vectorLayer = addVectorLayer(map, app.mapUrl);
 
@@ -28,19 +28,15 @@
 
     // change mouse cursor when over division
     map.on('pointermove', function(e) {
-      var pixel = map.getEventPixel(e.originalEvent);
-      var feature = false;
-      map.forEachFeatureAtPixel(pixel, function(f) {
-        feature = f;
-      });
+      var feature = map.forEachFeatureAtPixel(e.pixel, filterFn);
       map.getTargetElement().style.cursor = feature ? 'zoom-in' : '';
 
       $('#map .tooltip').empty().hide();
       if (feature) {
         $('#map .tooltip').show()
           .css({
-            top: pixel[1] + 10,
-            left: pixel[0] + 10
+            top: e.pixel[1] + 10,
+            left: e.pixel[0] + 10
           })
           .html(feature.get('name'));
       }
@@ -48,9 +44,7 @@
 
     // drill down
     map.on('click', function(e) {
-      var feature = map.forEachFeatureAtPixel(e.pixel, function(feature) {
-        return feature;
-      });
+      var feature = map.forEachFeatureAtPixel(e.pixel, filterFn);
       if (feature) {
         var code = feature.get('code');
         window.location = app.reportpageUrl.replace('__divisioncode__', code);
@@ -70,20 +64,20 @@
    * @return {ol.layer.Vector}
    */
   function addVectorLayer(map, url) {
-    var fillColors = getFillColors(0.5);
-    var fillStyle = new ol.style.Fill({
-      color: ''
-    });
-    var styles = [
-      new ol.style.Style({
-        fill: fillStyle,
-        stroke: new ol.style.Stroke({
-          color: '#333',
-          width: 1
-        })
-      })
-    ];
     var styleFn = function(feature) {
+      var fillColors = getFillColors(0.5);
+      var fillStyle = new ol.style.Fill({
+        color: ''
+      });
+      var styles = [
+        new ol.style.Style({
+          fill: fillStyle,
+          stroke: new ol.style.Stroke({
+            color: '#333',
+            width: isSubDivision(feature) ? 0.5 : 1.5
+          })
+        })
+      ];
       var hazardLevel = feature.get('hazardLevel');
       var fillColor = hazardLevel in fillColors ?
           fillColors[hazardLevel] : 'rgba(1, 1, 1, 0.1)';
@@ -101,6 +95,26 @@
     });
     map.addLayer(layer);
     return layer;
+  }
+
+
+  /**
+   * @param {ol.Feature} feature
+   * @return {?ol.Feature}
+   */
+  function filterFn(feature) {
+    if (isSubDivision(feature)) {
+      return feature;
+    }
+  }
+
+
+  /**
+   * @param {ol.Feature} feature
+   * @return {boolean}
+   */
+  function isSubDivision(feature) {
+    return feature.get('code') != app.divisionCode;
   }
 
 
@@ -133,7 +147,8 @@
     var interaction = new ol.interaction.Select({
       layers: [layer],
       condition: ol.events.condition.pointerMove,
-      style: styleFn
+      style: styleFn,
+      filter: isSubDivision
     });
     map.addInteraction(interaction);
     return interaction;
