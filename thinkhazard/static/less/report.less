@@ -79,9 +79,24 @@ body {
   }
 }
 
+/* Make it so the map is as high as large
+ * ie. ratio is 1:1 */
+#map-container {
+  position: relative;
+  &:before {
+    content: "";
+    display: block;
+    padding-top: 100%;
+  }
+}
+
 .map {
   height: 350px;
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
 
   .alert {
     position: absolute;
@@ -128,7 +143,6 @@ body {
     }
   }
 }
-
 
 .legend {
   .square {

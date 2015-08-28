@@ -36,10 +36,10 @@ Think Hazard - {{ division.name}}
 
   <div class="jumbotron">
     <div class="container">
-      <a class="btn btn-default btn-xs pull-right" href><i class="icon-download-arrow"></i> Download PDF</a>
+      <a class="btn btn-default btn-xs pull-right hidden-print" href onclick="window.print();"><i class="icon-download-arrow"></i> Download PDF</a>
 
       <!-- breadcrumb -->
-      <div class="breadcrumb">
+      <div class="breadcrumb hidden-print">
         <div class="btn-group btn-group-xs">
           <button class="btn btn-default"><i class="icon-pin"></i></button>
           {% for parent in parents | reverse %}
@@ -63,9 +63,9 @@ Think Hazard - {{ division.name}}
       </h2>
 
       {% if current_hazard %}
-      <a class="btn btn-default btn-xs pull-left" href="{{ overview_url }}" title="Go back to overview page"><i class="icon-house"></i> Overview</a>
+      <a class="btn btn-default btn-xs pull-left hidden-print" href="{{ overview_url }}" title="Go back to overview page"><i class="icon-house"></i> Overview</a>
       {% endif %}
-      <ul class="hazard-types-list horizontal list-unstyled" role="tablist">
+      <ul class="hazard-types-list horizontal list-unstyled hidden-print" role="tablist">
         {% for hazard in hazards %}
           {{ hazard_type(hazard) }}
         {% endfor %}
@@ -115,19 +115,21 @@ Think Hazard - {{ division.name}}
           {% endfor %}
         {% endif %}
       </div>
-      <div class="col-md-5">
-        <div class="map-block well">
-          <div id="map" class="map">
-            {% if parents.__len__() >= 1 %}
-            <a class="btn btn-xs btn-default drillup" href="{{ 'report' | route_url(divisioncode=parents[0].code, hazardtype=current_hazard.hazardtype.mnemonic if current_hazard else '')}}">
-              <i class="btn-xs icon-zoom-out"></i>
-              Zoom out to {{ parent_division.name }}
-            </a>
-            {% endif %}
-            <div class="alert alert-dismissible zoomin-help control btn-xs">
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              Zoom in by clicking on<br> an administrative area.</div>
-            <div class="tooltip"></div>
+      <div class="col-md-5 page-break">
+        <div class="map-block well print-col-sm-8 print-col-sm-offset-2">
+          <div id="map-container">
+            <div id="map" class="map">
+              {% if parents.__len__() >= 1 %}
+              <a class="btn btn-xs btn-default drillup hidden-print" href="{{ 'report' | route_url(divisioncode=parents[0].code, hazardtype=current_hazard.hazardtype.mnemonic if current_hazard else '')}}">
+                <i class="btn-xs icon-zoom-out"></i>
+                Zoom out to {{ parent_division.name }}
+              </a>
+              {% endif %}
+              <div class="alert alert-dismissible zoomin-help control btn-xs hidden-print">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                Zoom in by clicking on<br> an administrative area.</div>
+              <div class="tooltip"></div>
+            </div>
           </div>
           {% if current_hazard %}
           <div class="caption level">
@@ -168,7 +170,7 @@ Think Hazard - {{ division.name}}
           {% endif %}
         </div>
         {% if current_hazard.additionalinfo_associations %}
-        <div class="further-resources well">
+        <div class="further-resources well print-col-sm-12">
           <h3>Further resources</h3>
           <p>For further information the following resources could be consulted:</p>
           <ul>
