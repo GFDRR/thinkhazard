@@ -69,6 +69,7 @@ bootlint: .build/node_modules.timestamp .build/bootlint.timestamp
 
 .PHONY: modwsgi
 modwsgi: install \
+	     .build/thinkhazard.wsgi \
 	     .build/thinkhazard-production.wsgi \
 	     .build/thinkhazard-development.wsgi \
 	     .build/apache-production.conf \
@@ -103,6 +104,11 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 .build/venv:
 	mkdir -p $(dir $@)
 	virtualenv .build/venv
+
+.build/thinkhazard.wsgi: thinkhazard.wsgi
+	mkdir -p $(dir $@)
+	sed 's#{{APP_INI_FILE}}#production.ini#' $< > $@
+	chmod 755 $@
 
 .build/thinkhazard-%.wsgi: thinkhazard.wsgi
 	mkdir -p $(dir $@)

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+apt-get update
+apt-get install -y libpq-dev libgeos-dev libgeos-3.4.2
