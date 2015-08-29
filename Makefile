@@ -156,3 +156,4 @@ clean:
 .PHONY: cleanall
 cleanall:
 	rm -rf .build
+	rm -rf node_modules
