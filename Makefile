@@ -105,6 +105,7 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 	virtualenv .build/venv
 
 .build/thinkhazard-%.wsgi: thinkhazard.wsgi
+	mkdir -p $(dir $@)
 	sed 's#{{APP_INI_FILE}}#$(CURDIR)/$*.ini#' $< > $@
 	chmod 755 $@
 
