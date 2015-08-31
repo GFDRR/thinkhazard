@@ -30,6 +30,13 @@ body {
 }
 
 .hazard-types-list {
+  > .btn {
+    margin-top: 30px;
+    &.disabled {
+      background-color: #333;
+      color: white;
+    }
+  }
   @arrow-height: 10px;
   li {
     &:not(.active) .hazard-icon {
