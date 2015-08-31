@@ -80,7 +80,7 @@
       ];
       var hazardLevel = feature.get('hazardLevel');
       var fillColor = hazardLevel in fillColors ?
-          fillColors[hazardLevel] : 'rgba(1, 1, 1, 0.1)';
+          fillColors[hazardLevel] : 'rgba(1, 1, 1, 0)';
       fillStyle.setColor(fillColor);
       return styles;
     };
