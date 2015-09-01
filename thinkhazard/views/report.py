@@ -11,7 +11,6 @@ from geoalchemy2.shape import to_shape
 
 from ..models import (
     DBSession,
-    AdminLevelType,
     AdministrativeDivision,
     CategoryType,
     HazardCategory,
@@ -136,10 +135,6 @@ def report_json(request):
                                     '"divisioncode"')
 
     hazard_type = request.matchdict.get('hazardtype', None)
-
-    division = DBSession.query(AdministrativeDivision) \
-        .join(AdminLevelType) \
-        .filter(AdministrativeDivision.code == division_code).one()
 
     _filter = or_(AdministrativeDivision.code == division_code,
                   AdministrativeDivision.parent_code == division_code)
