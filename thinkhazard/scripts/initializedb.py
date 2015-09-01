@@ -165,6 +165,7 @@ def populate_db(engine):
             (u'EQ_IT_2', u'Intensity threshold 2 for earthquake : PGA', 0.1, u'g', u'', u'EQ'),  # noqa
             (u'FL_IT_1', u'Intensity threshold 1 for flood', 5, u'dm', u'', u'FL'),  # noqa
             (u'FL_IT_2', u'Intensity threshold 2 for flood', 0.5, u'm', u'', u'FL'),  # noqa
+            (u'CY_IT_1', u'Intensity threshold 1 for cyclone', 80, u'km/h', u'', u'CY'),  # noqa
         ]:
             r = IntensityThreshold()
             r.mnemonic, r.title, r.value, r.unit, r.description, type_ = i
