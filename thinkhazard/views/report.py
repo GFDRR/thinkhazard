@@ -1,4 +1,3 @@
-import itertools
 import geoalchemy2.shape
 
 from pyramid.view import view_config
@@ -6,8 +5,11 @@ from pyramid.httpexceptions import HTTPBadRequest
 
 from sqlalchemy.orm import aliased
 from sqlalchemy import and_, or_, null
+from sqlalchemy.sql import func
+from sqlalchemy.sql.expression import literal_column
 
 from geoalchemy2.shape import to_shape
+
 
 from ..models import (
     DBSession,
@@ -134,29 +136,36 @@ def report_json(request):
         raise HTTPBadRequest(detail='incorrect value for parameter '
                                     '"divisioncode"')
 
+    try:
+        resolution = float(request.params.get('resolution'))
+    except:
+        raise HTTPBadRequest(detail='invalid value for parameter "resolution"')
+
     hazard_type = request.matchdict.get('hazardtype', None)
 
     _filter = or_(AdministrativeDivision.code == division_code,
                   AdministrativeDivision.parent_code == division_code)
 
+    simplify = func.ST_Simplify(AdministrativeDivision.geom, resolution / 2)
+
     if hazard_type is not None:
         divisions = DBSession.query(AdministrativeDivision) \
-            .add_columns(CategoryType.mnemonic) \
+            .add_columns(simplify, CategoryType.mnemonic) \
             .outerjoin(AdministrativeDivision.hazardcategories) \
             .outerjoin(HazardType)\
             .outerjoin(CategoryType) \
             .filter(and_(_filter, HazardType.mnemonic == hazard_type))
     else:
-        divisions = itertools.izip(
-            DBSession.query(AdministrativeDivision).filter(_filter),
-            itertools.cycle(('NONE',)))
+        divisions = DBSession.query(AdministrativeDivision) \
+            .add_columns(simplify, literal_column("'None'")) \
+            .filter(_filter)
 
     return [{
         'type': 'Feature',
-        'geometry': to_shape(division.geom),
+        'geometry': to_shape(geom_simplified),
         'properties': {
             'name': division.name,
             'code': division.code,
             'hazardLevel': categorytype
         }
-    } for division, categorytype in divisions]
+    } for division, geom_simplified, categorytype in divisions]

@@ -90,7 +90,7 @@
     var layer = new ol.layer.Vector({
       style: styleFn,
       source: new ol.source.Vector({
-        url: url,
+        url: url + '?resolution=' + map.getView().getResolution(),
         format: new ol.format.GeoJSON({
           defaultDataProjection: 'EPSG:3857'
         })
