@@ -140,23 +140,23 @@ def report_json(request):
                   AdministrativeDivision.parent_code == division_code)
 
     if hazard_type is not None:
-        subdivisions = DBSession.query(AdministrativeDivision) \
+        divisions = DBSession.query(AdministrativeDivision) \
             .add_columns(CategoryType.mnemonic) \
             .outerjoin(AdministrativeDivision.hazardcategories) \
             .outerjoin(HazardType)\
             .outerjoin(CategoryType) \
             .filter(and_(_filter, HazardType.mnemonic == hazard_type))
     else:
-        subdivisions = itertools.izip(
+        divisions = itertools.izip(
             DBSession.query(AdministrativeDivision).filter(_filter),
             itertools.cycle(('NONE',)))
 
     return [{
         'type': 'Feature',
-        'geometry': to_shape(subdivision.geom),
+        'geometry': to_shape(division.geom),
         'properties': {
-            'name': subdivision.name,
-            'code': subdivision.code,
+            'name': division.name,
+            'code': division.code,
             'hazardLevel': categorytype
         }
-    } for subdivision, categorytype in subdivisions]
+    } for division, categorytype in divisions]
