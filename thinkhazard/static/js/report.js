@@ -66,8 +66,9 @@
   function addVectorLayer(map, url) {
     var styleFn = function(feature) {
       var fillColors = getFillColors(0.5);
+      var transparent = 'rgba(1, 1, 1, 0)';
       var fillStyle = new ol.style.Fill({
-        color: ''
+        color: fillColors[feature.get('hazardLevel')] || transparent
       });
       var styles = [
         new ol.style.Style({
@@ -78,16 +79,18 @@
           })
         })
       ];
-      var hazardLevel = feature.get('hazardLevel');
-      var fillColor = hazardLevel in fillColors ?
-          fillColors[hazardLevel] : 'rgba(1, 1, 1, 0)';
-      fillStyle.setColor(fillColor);
+      // More than one feature indicates that there are subdivision. We still
+      // want to show the parent division but with no fill.
+      if (layer.getSource().getFeatures().length > 1 &&
+          !isSubDivision(feature)) {
+        fillStyle.setColor(transparent);
+      }
       return styles;
     };
     var layer = new ol.layer.Vector({
       style: styleFn,
       source: new ol.source.Vector({
-        url: url,
+        url: url + '?resolution=' + map.getView().getResolution(),
         format: new ol.format.GeoJSON({
           defaultDataProjection: 'EPSG:3857'
         })

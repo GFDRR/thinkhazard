@@ -11,7 +11,7 @@ with open(os.path.join(here, 'CHANGES.rst')) as f:
 requires = [
     'geoalchemy2',
     'psycopg2',
-    'pyramid == 1.6.dev0',
+    'pyramid == 1.6.a2',
     'pyramid_jinja2',
     'pyramid_debugtoolbar',
     'pyramid_tm',
@@ -22,6 +22,9 @@ requires = [
     'zope.sqlalchemy',
     'waitress',
     'papyrus==2.0dev3',
+    'WebTest==2.0.18',
+    'nose',
+    'pyquery==1.2.9'
     ]
 
 setup(name='thinkhazard',

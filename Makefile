@@ -76,7 +76,7 @@ modwsgi: install \
 
 .PHONY: test
 test:
-	.build/venv/bin/python setup.py test
+	.build/venv/bin/nosetests
 
 .PHONY: dist
 dist: .build/venv
@@ -103,6 +103,7 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 .build/venv:
 	mkdir -p $(dir $@)
 	virtualenv .build/venv
+	.build/venv/bin/pip install --upgrade pip
 
 .build/thinkhazard-%.wsgi: thinkhazard.wsgi
 	mkdir -p $(dir $@)

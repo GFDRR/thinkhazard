@@ -6,3 +6,4 @@ npm-debug.log
 node_modules
 local.ini
 thinkhazard/static/build
+local.tests.ini

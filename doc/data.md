@@ -35,5 +35,6 @@ First of all, edit this script and check that the path to the
 Then run the following command as the ``postgres`` user:
 
 ```shell
-$ psql -d thinkhazard -f /var/sig/thor-data-backup_20150512_v3.backup
+$ psql -d thinkhazard -f /var/sig/thor_enum_updates_18-06-2015.sql
+$ psql -d thinkhazard -f /var/sig/thor_hazard-data_updates_22-06-2015.sql
 ```
