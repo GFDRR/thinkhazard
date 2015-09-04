@@ -4,7 +4,7 @@ from . import BaseTestCase
 class TestReportFunction(BaseTestCase):
 
     def test_report(self):
-        resp = self.testapp.get('/report/30', status=200)
+        self.testapp.get('/report/30', status=200)
 
     def test_report__division_desecendants(self):
         resp = self.testapp.get('/report/30', status=200)
@@ -41,8 +41,3 @@ class TestReportFunction(BaseTestCase):
         resp = self.testapp.get('/report/30/EQ', status=200)
         self.assertEqual(len(resp.pyquery('.recommendations li')), 1)
         self.assertEqual(len(resp.pyquery('.further-resources li')), 1)
-
-    def test_report__no_data(self):
-        # FIXME should be addressed
-        #resp = self.testapp.get('/report/30/DR', status=500)
-        pass

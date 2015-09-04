@@ -6,7 +6,6 @@ import transaction
 from paste.deploy import loadapp
 
 from ..models import (
-    Base,
     DBSession,
     AdministrativeDivision,
     HazardCategory,
@@ -30,6 +29,7 @@ local_settings_path = 'local.tests.ini'
 # raise an error if the file doesn't exist
 with open(local_settings_path):
     pass
+
 
 def populate_db():
     config = ConfigParser.ConfigParser()
@@ -80,7 +80,8 @@ def populate_db():
         })
         category_eq_hig.hazardtype = DBSession.query(HazardType) \
             .filter(HazardType.mnemonic == u'EQ').one()
-        category_eq_hig.intensitythreshold = DBSession.query(IntensityThreshold) \
+        category_eq_hig.intensitythreshold = DBSession.query(
+            IntensityThreshold) \
             .filter(IntensityThreshold.mnemonic == u'EQ_IT_1').one()
         category_eq_hig.categorytype = DBSession.query(CategoryType) \
             .filter(CategoryType.mnemonic == u'HIG').one()
@@ -90,10 +91,10 @@ def populate_db():
 
         info = AdditionalInformation(**{
             'mnemonic': u'REC1_EQ',
-            'title': u'Recommendation #1 for earthquake, applied to hazard' \
-                'categories HIG, MED and LOW',
-            'description': u'Recommendation #1 for earthquake, applied to' \
-                ' hazard categories HIG, MED and LOW'
+            'title': u'Recommendation #1 for earthquake, applied to hazard'
+                     'categories HIG, MED and LOW',
+            'description': u'Recommendation #1 for earthquake, applied to'
+                           ' hazard categories HIG, MED and LOW'
         })
         info.type = DBSession.query(AdditionalInformationType) \
             .filter(AdditionalInformationType.mnemonic == u'REC').one()
@@ -106,10 +107,10 @@ def populate_db():
 
         info = AdditionalInformation(**{
             'mnemonic': u'AVD1_EQ',
-            'title': u'Educational web resources on earthquakes and seismic' \
-                ' hazard',
-            'description': u'Educational web resources on earthquakes and' \
-                ' seismic hazard'
+            'title': u'Educational web resources on earthquakes and seismic'
+                     ' hazard',
+            'description': u'Educational web resources on earthquakes and'
+                           ' seismic hazard'
         })
         info.type = DBSession.query(AdditionalInformationType) \
             .filter(AdditionalInformationType.mnemonic == u'AVD').one()
@@ -125,7 +126,8 @@ def populate_db():
         })
         category_fl_med.hazardtype = DBSession.query(HazardType) \
             .filter(HazardType.mnemonic == u'FL').one()
-        category_fl_med.intensitythreshold = DBSession.query(IntensityThreshold) \
+        category_fl_med.intensitythreshold = DBSession.query(
+            IntensityThreshold) \
             .filter(IntensityThreshold.mnemonic == u'FL_IT_1').one()
         category_fl_med.categorytype = DBSession.query(CategoryType) \
             .filter(CategoryType.mnemonic == u'MED').one()
@@ -139,8 +141,7 @@ populate_db()
 
 class BaseTestCase(unittest.TestCase):
 
-    def setUp(self):
-        from .. import main
+    def setUp(self):  # NOQA
         from webtest import TestApp
 
         conf_dir = os.getcwd()
@@ -149,5 +150,5 @@ class BaseTestCase(unittest.TestCase):
         app = loadapp(config, relative_to=conf_dir)
         self.testapp = TestApp(app)
 
-    def tearDown(self):
+    def tearDown(self):  # NOQA
         del self.testapp
