@@ -36,7 +36,7 @@ def administrativedivision(request):
     if 'q' not in request.params:
         raise HTTPBadRequest(detail='parameter "q" is missing')
 
-    ilike = '%s%%' % request.params['q']
+    ilike = '%%%s%%' % request.params['q']
 
     admin0s = DBSession.query(AdministrativeDivision).filter(
         and_(AdministrativeDivision.leveltype_id == 1,
