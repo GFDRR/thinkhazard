@@ -12,10 +12,9 @@
     controls: [],
     layers: [
       new ol.layer.Tile({
-        source: new ol.source.Stamen({
-          layer: 'watercolor'
-        }),
-        opacity: 0.5
+        source: new ol.source.XYZ({
+          url: 'https://{a-c}.tiles.mapbox.com/v4/ingenieroariel.m9a2h374/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaW5nZW5pZXJvYXJpZWwiLCJhIjoibXhDZ3pIMCJ9.qTmPYCbnUKtaNFkvKKysAQ'
+        })
       })
     ]
   });
