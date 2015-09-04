@@ -16,13 +16,21 @@
 
   > div {
     padding-top: @search-pane-height / 2 - @search-field-height / 2;
+    margin-left: auto;
+    margin-right: auto;
+    width: 700px;
+  }
+
+  .form-control,
+  .search-field,
+  .twitter-typeahead {
+    width: 100%;
   }
 
   .form-control,
   .search-field {
     height: @search-field-height;
     border: 0;
-    width: 700px;
   }
   .search-field,
   .search-field:focus {
