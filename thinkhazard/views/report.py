@@ -1,5 +1,3 @@
-import geoalchemy2.shape
-
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest
 
@@ -107,8 +105,15 @@ def report(request):
         .filter(AdministrativeDivision.code == division_code).one()
 
     # Get the geometry for division and compute its extent
-    division_shape = geoalchemy2.shape.to_shape(division.geom)
-    division_bounds = list(division_shape.bounds)
+    bounds = func.ST_Shift_Longitude(
+            func.ST_Transform(AdministrativeDivision.geom, 4326))
+    division_bounds = DBSession.query(
+        func.ST_XMIN(bounds),
+        func.ST_YMIN(bounds),
+        func.ST_XMAX(bounds),
+        func.ST_YMAX(bounds)) \
+        .filter(AdministrativeDivision.code == division_code) \
+        .one()
 
     parents = []
     if division.leveltype_id >= 2:
@@ -121,7 +126,7 @@ def report(request):
             'resources': resources,
             'recommendations': recommendations,
             'division': division,
-            'bounds': division_bounds,
+            'bounds': list(division_bounds),
             'parents': parents,
             'parent_division': division.parent}
 

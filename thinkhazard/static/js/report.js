@@ -18,7 +18,9 @@
       })
     ]
   });
-  map.getView().fit(app.divisionBounds, map.getSize());
+  var bounds = ol.proj.transformExtent(app.divisionBounds, 'EPSG:4326',
+      'EPSG:3857');
+  map.getView().fit(bounds, map.getSize());
 
   var vectorLayer = addVectorLayer(map, app.mapUrl);
 
