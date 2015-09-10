@@ -43,29 +43,27 @@ def report(request):
     # Get all the hazard types.
     hazardtype_query = DBSession.query(HazardType)
 
-    # Create a dict containing the data sent to the report template. The keys
-    # are the hazard type mnemonics.
-    hazard_types = {hazardtype.mnemonic: {'hazardtype': hazardtype,
-                                          'categorytype': _categorytype_nodata}
-                    for hazardtype in hazardtype_query}
-
     # Get the hazard categories corresponding to the administrative
     # division whose code is division_code.
-    hazardcategories = DBSession.query(HazardCategory) \
+    hazardcategories_query = DBSession.query(HazardCategory) \
         .join(HazardCategory.administrativedivisions) \
         .join(HazardType) \
         .join(CategoryType) \
         .filter(AdministrativeDivision.code == division_code)
 
-    # Udpate the data (hazard_types).
-    for hazardcategory in hazardcategories:
-        key = hazardcategory.hazardtype.mnemonic
-        hazard_types[key]['categorytype'] = hazardcategory.categorytype
+    # Create a dict with the categories. Keys are the hazard type mnemonic.
+    hazardcategories = {d.hazardtype.mnemonic: d
+                        for d in hazardcategories_query}
 
-    # Order the hazard data by category type (hazard types with the highest
-    # risk are first in the UI).
-    hazard_types = hazard_types.values()
-    hazard_types = sorted(hazard_types, key=lambda d: d['categorytype'].order)
+    hazard_types = []
+    for hazardtype in hazardtype_query:
+        cat = _categorytype_nodata
+        if hazardtype.mnemonic in hazardcategories:
+            cat = hazardcategories[hazardtype.mnemonic].categorytype
+        hazard_types.append({
+            'hazardtype': hazardtype,
+            'categorytype': cat
+        })
 
     hazard_category = None
     resources = None
