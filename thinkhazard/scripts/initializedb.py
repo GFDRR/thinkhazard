@@ -126,17 +126,17 @@ def populate_db(engine):
 
         # HazardType
         for i in [
-            (u'EQ', u'Earthquake', u'Earthquake hazard'),
-            (u'FL', u'Flood', u'Flood'),
-            (u'DG', u'Drought', u'Drought'),
-            (u'VA', u'Volcanic ash', u'Volcanic ash'),
-            (u'CY', u'Cyclone', u'Cyclone'),
-            (u'TS', u'Tsunami', u'Tsunami'),
-            (u'SS', u'Storm surge', u'Storm surge'),
-            (u'LS', u'Landslide', u'Landslide'),
+            (u'EQ', u'Earthquake', u'Earthquake hazard', 2),
+            (u'FL', u'Flood', u'Flood', 1),
+            (u'DG', u'Drought', u'Drought', 3),
+            (u'VA', u'Volcanic ash', u'Volcanic ash', 7),
+            (u'CY', u'Cyclone', u'Cyclone', 4),
+            (u'TS', u'Tsunami', u'Tsunami', 6),
+            (u'SS', u'Storm surge', u'Storm surge', 5),
+            (u'LS', u'Landslide', u'Landslide', 8),
         ]:
             r = HazardType()
-            r.mnemonic, r.title, r.description = i
+            r.mnemonic, r.title, r.description, r.order = i
             r.status = status_val
             DBSession.add(r)
 

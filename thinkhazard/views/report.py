@@ -41,7 +41,7 @@ def report(request):
     hazard = request.matchdict.get('hazardtype', None)
 
     # Get all the hazard types.
-    hazardtype_query = DBSession.query(HazardType)
+    hazardtype_query = DBSession.query(HazardType).order_by(HazardType.order)
 
     # Get the hazard categories corresponding to the administrative
     # division whose code is division_code.
