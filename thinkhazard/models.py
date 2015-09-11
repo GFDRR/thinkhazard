@@ -127,6 +127,7 @@ class HazardType(Base):
     description = Column(Unicode)
     status_id = Column(Integer, ForeignKey(TermStatus.id), nullable=False)
     status = relationship(TermStatus)
+    order = Column(Integer)
 
 
 class IntensityThreshold(Base):

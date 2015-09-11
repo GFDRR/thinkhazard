@@ -33,9 +33,9 @@ class TestReportFunction(BaseTestCase):
 
         hazards = hazards_list.find('li')
 
-        # order should be 'EQ', 'FL'
-        self.assertTrue('EQ' in hazards.eq(0).html())
-        self.assertTrue('FL' in hazards.eq(1).html())
+        # order should be 'FL', 'EQ'
+        self.assertTrue('FL' in hazards.eq(0).html())
+        self.assertTrue('EQ' in hazards.eq(1).html())
 
     def test_report__hazard(self):
         resp = self.testapp.get('/report/30/EQ', status=200)
