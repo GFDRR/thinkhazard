@@ -2,7 +2,7 @@ from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest
 
 from sqlalchemy.orm import aliased
-from sqlalchemy import and_, or_, null
+from sqlalchemy import and_, or_, null, select
 from sqlalchemy.sql import func
 from sqlalchemy.sql.expression import literal_column
 
@@ -103,14 +103,17 @@ def report(request):
         .filter(AdministrativeDivision.code == division_code).one()
 
     # Get the geometry for division and compute its extent
-    bounds = func.ST_Shift_Longitude(
-            func.ST_Transform(AdministrativeDivision.geom, 4326))
+    bounds = select([
+        func.ST_Shift_Longitude(
+            func.ST_Transform(AdministrativeDivision.geom, 4326)
+        ).label('bounds')]) \
+        .where(AdministrativeDivision.code == division_code) \
+        .cte('bounds')
     division_bounds = DBSession.query(
-        func.ST_XMIN(bounds),
-        func.ST_YMIN(bounds),
-        func.ST_XMAX(bounds),
-        func.ST_YMAX(bounds)) \
-        .filter(AdministrativeDivision.code == division_code) \
+        func.ST_XMIN(bounds.c.bounds),
+        func.ST_YMIN(bounds.c.bounds),
+        func.ST_XMAX(bounds.c.bounds),
+        func.ST_YMAX(bounds.c.bounds)) \
         .one()
 
     parents = []
