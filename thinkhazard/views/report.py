@@ -103,18 +103,35 @@ def report(request):
         .filter(AdministrativeDivision.code == division_code).one()
 
     # Get the geometry for division and compute its extent
-    bounds = select([
-        func.ST_Shift_Longitude(
-            func.ST_Transform(AdministrativeDivision.geom, 4326)
-        ).label('bounds')]) \
+    cte = select([
+        func.ST_Transform(AdministrativeDivision.geom, 4326).label('geom')]) \
         .where(AdministrativeDivision.code == division_code) \
         .cte('bounds')
-    division_bounds = DBSession.query(
-        func.ST_XMIN(bounds.c.bounds),
-        func.ST_YMIN(bounds.c.bounds),
-        func.ST_XMAX(bounds.c.bounds),
-        func.ST_YMAX(bounds.c.bounds)) \
-        .one()
+    bounds = list(DBSession.query(
+        func.ST_XMIN(cte.c.geom),
+        func.ST_YMIN(cte.c.geom),
+        func.ST_XMAX(cte.c.geom),
+        func.ST_YMAX(cte.c.geom))
+        .one())
+    division_bounds = bounds
+
+    # compute a 0-360 version of the extent
+    cte = select([
+        func.ST_Shift_Longitude(
+            func.ST_Transform(AdministrativeDivision.geom, 4326)
+        ).label('shift')]) \
+        .where(AdministrativeDivision.code == division_code) \
+        .cte('bounds')
+    bounds_shifted = list(DBSession.query(
+        func.ST_XMIN(cte.c.shift),
+        func.ST_YMIN(cte.c.shift),
+        func.ST_XMAX(cte.c.shift),
+        func.ST_YMAX(cte.c.shift))
+        .one())
+
+    # Use the 0-360 if it's smaller
+    if bounds_shifted[2] - bounds_shifted[0] < bounds[2] - bounds[0]:
+        division_bounds = bounds_shifted
 
     parents = []
     if division.leveltype_id >= 2:
@@ -127,7 +144,7 @@ def report(request):
             'resources': resources,
             'recommendations': recommendations,
             'division': division,
-            'bounds': list(division_bounds),
+            'bounds': division_bounds,
             'parents': parents,
             'parent_division': division.parent}
 
