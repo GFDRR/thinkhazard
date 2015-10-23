@@ -195,6 +195,25 @@ class HazardCategory(Base):
 
     #processstatus = relationship(FeedbackStatus)
 
+#administrativedivision_additionalinformation_table = Table(
+    #'rel_administrativedivision_additionalinformation', Base.metadata,
+    #Column('id', Integer, primary_key=True),
+    #Column('administrativedivision_id', Integer,
+           #ForeignKey('administrativedivision.id'), nullable=False,
+           #index=True),
+    #Column('additionalinformation_id', Integer,
+           #ForeignKey('additionalinformation.id'), nullable=False, index=True))
+
+class ClimateChangeRecommendation(Base):
+    __tablename__ = 'climatechangerecommendation'
+    id = Column(Integer, primary_key=True)
+    text = Column(Unicode, nullable=False)
+    administrativedivision_id = Column(Integer,
+        ForeignKey(AdministrativeDivision.id), nullable=False)
+    hazardtype_id = Column(Integer, ForeignKey(HazardType.id), nullable=False)
+
+    administrativedivision = relationship(AdministrativeDivision)
+    hazardtype = relationship(HazardType)
 
 #class AdditionalInformation(Base):
     #__tablename__ = 'additionalinformation'

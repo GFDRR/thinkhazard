@@ -2,6 +2,7 @@ from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest
 
 from sqlalchemy.orm import aliased
+from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy import and_, or_, null, select
 from sqlalchemy.sql import func
 from sqlalchemy.sql.expression import literal_column
@@ -14,7 +15,9 @@ from ..models import (
     AdministrativeDivision,
     HazardLevel,
     HazardCategory,
-    HazardType,)
+    HazardType,
+    ClimateChangeRecommendation,
+)
     #AdditionalInformation,
     #AdditionalInformationType,)
 
@@ -68,6 +71,7 @@ def report(request):
     hazard_category = None
     resources = None
     recommendations = None
+    climate_change_recommendation = None
 
     if hazard is not None:
         hazard_category = DBSession.query(HazardCategory) \
@@ -77,6 +81,17 @@ def report(request):
             .filter(HazardType.mnemonic == hazard) \
             .filter(AdministrativeDivision.code == division_code) \
             .one()
+
+        try:
+            climate_change_recommendation = DBSession.query(
+                    ClimateChangeRecommendation) \
+                .join(AdministrativeDivision) \
+                .join(HazardType) \
+                .filter(AdministrativeDivision.code == division_code) \
+                .filter(HazardType.mnemonic == hazard) \
+                .one()
+        except NoResultFound:
+            pass
 
         #additional_informations = DBSession.query(AdditionalInformation) \
             #.join(AdditionalInformation.hazardcategory_associations) \
@@ -141,6 +156,7 @@ def report(request):
 
     return {'hazards': hazard_types,
             'hazard_category': hazard_category,
+            'climate_change_recommendation': climate_change_recommendation,
             #'resources': resources,
             #'recommendations': recommendations,
             'division': division,

@@ -11,6 +11,7 @@ from ..models import (
     HazardCategory,
     HazardType,
     HazardLevel,
+    ClimateChangeRecommendation,
     #AdditionalInformation,
     #AdditionalInformationType,
     #HazardCategoryAdditionalInformationAssociation,
@@ -81,6 +82,13 @@ def populate_db():
         category_eq_hig.hazardlevel = DBSession.query(HazardLevel) \
             .filter(HazardLevel.mnemonic == u'HIG').one()
         div_level_3.hazardcategories.append(category_eq_hig)
+
+        climate_rec = ClimateChangeRecommendation()
+        climate_rec.text = u'Climate change recommendation'
+        climate_rec.administrativedivision = div_level_3
+        climate_rec.hazardtype =  DBSession.query(HazardType) \
+            .filter(HazardType.mnemonic == u'EQ').one()
+        DBSession.add(climate_rec)
 
         #info = AdditionalInformation(**{
             #'mnemonic': u'REC1_EQ',

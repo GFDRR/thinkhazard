@@ -39,5 +39,5 @@ class TestReportFunction(BaseTestCase):
 
     def test_report__hazard(self):
         resp = self.testapp.get('/report/30/EQ', status=200)
-        #self.assertEqual(len(resp.pyquery('.recommendations li')), 1)
+        self.assertTrue('Climate change recommendation' in resp.body)
         #self.assertEqual(len(resp.pyquery('.further-resources li')), 1)

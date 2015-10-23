@@ -87,9 +87,9 @@ Think Hazard - {{ division.name}}
           </p>
           {% endif %}
 
-          {% if hazard_category.hazardtype.mnemonic == 'FL' %}
+          {% if climate_change_recommendation %}
           <p>
-          Climate change impact (sample text): High confidence in more frequent and intense precipitation days in winter and an increase in the number of extreme rainfall events.
+            {{ climate_change_recommendation.text }}
           </p>
           {% endif %}
 
