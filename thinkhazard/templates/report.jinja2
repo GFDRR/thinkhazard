@@ -71,19 +71,19 @@ Think Hazard - {{ division.name}}
     </div>
   </div>
 
-  <div class="container {{ 'level-' + hazard_category.categorytype.mnemonic if hazard_category else '' }}">
+  <div class="container {{ 'level-' + hazard_category.hazardlevel.mnemonic if hazard_category else '' }}">
     <div class="row">
       <div class="col-md-7">
         {% if hazard_category %}
           <h2 class="page-header detail">
             {{ hazard_category.hazardtype.title }}
             <small>
-              Hazard level: <span class="level">{{ hazard_category.categorytype.title }}</span>
+              Hazard level: <span class="level">{{ hazard_category.hazardlevel.title }}</span>
             </small>
           </h2>
-          {% if hazard_category.description %}
+          {% if hazard_category.general_recommendation %}
           <p>
-          {{ hazard_category.description }}
+          {{ hazard_category.general_recommendation }}
           </p>
           {% endif %}
 
@@ -115,11 +115,11 @@ Think Hazard - {{ division.name}}
             <hr />
           </h2>
           {% for hazard in hazards %}
-          <a href="{{ 'report'|route_url(divisioncode=division.code, hazardtype=hazard.hazardtype.mnemonic) }}" aria-controls="{{ hazard.hazardtype.title }}" class="level-{{ hazard.categorytype.mnemonic }} overview">
+          <a href="{{ 'report'|route_url(divisioncode=division.code, hazardtype=hazard.hazardtype.mnemonic) }}" aria-controls="{{ hazard.hazardtype.title }}" class="level-{{ hazard.hazardlevel.mnemonic }} overview">
             <h2 class="page-header">
               {{ hazard.hazardtype.title }}
               <small>
-                <span class="level">{{ hazard.categorytype.title }}</span>
+                <span class="level">{{ hazard.hazardlevel.title }}</span>
               </small>
             </h2>
           </a>
@@ -228,9 +228,9 @@ Think Hazard - {{ division.name}}
 {% endblock %}
 
 {% macro hazard_type(hazard) %}
-<li class="{{ hazard.categorytype.mnemonic }} text-center {{ 'active' if hazard_category and hazard.hazardtype.mnemonic == hazard_category.hazardtype.mnemonic else ''}}">
+<li class="{{ hazard.hazardlevel.mnemonic }} text-center {{ 'active' if hazard_category and hazard.hazardtype.mnemonic == hazard_category.hazardtype.mnemonic else ''}}">
   <a
-    {% if hazard.categorytype.mnemonic != 'no-data' %}
+    {% if hazard.hazardlevel.mnemonic != 'no-data' %}
     href="{{'report'|route_url(divisioncode=division.code, hazardtype=hazard.hazardtype.mnemonic)}}"
     {% endif %}
      >

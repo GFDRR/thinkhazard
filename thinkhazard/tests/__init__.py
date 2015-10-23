@@ -10,12 +10,10 @@ from ..models import (
     AdministrativeDivision,
     HazardCategory,
     HazardType,
-    CategoryType,
-    IntensityThreshold,
-    TermStatus,
-    AdditionalInformation,
-    AdditionalInformationType,
-    HazardCategoryAdditionalInformationAssociation,
+    HazardLevel,
+    #AdditionalInformation,
+    #AdditionalInformationType,
+    #HazardCategoryAdditionalInformationAssociation,
     )
 
 from shapely.geometry import (
@@ -76,63 +74,49 @@ def populate_db():
         div_level_3.hazardcategories = []
 
         category_eq_hig = HazardCategory(**{
-            'description': u'Earthquake high threshold 1',
+            'general_recommendation': u'General recommendation for EQ HIG',
         })
         category_eq_hig.hazardtype = DBSession.query(HazardType) \
             .filter(HazardType.mnemonic == u'EQ').one()
-        category_eq_hig.intensitythreshold = DBSession.query(
-            IntensityThreshold) \
-            .filter(IntensityThreshold.mnemonic == u'EQ_IT_1').one()
-        category_eq_hig.categorytype = DBSession.query(CategoryType) \
-            .filter(CategoryType.mnemonic == u'HIG').one()
-        category_eq_hig.status = DBSession.query(TermStatus) \
-            .filter(TermStatus.mnemonic == u'VAL').one()
+        category_eq_hig.hazardlevel = DBSession.query(HazardLevel) \
+            .filter(HazardLevel.mnemonic == u'HIG').one()
         div_level_3.hazardcategories.append(category_eq_hig)
 
-        info = AdditionalInformation(**{
-            'mnemonic': u'REC1_EQ',
-            'title': u'Recommendation #1 for earthquake, applied to hazard'
-                     'categories HIG, MED and LOW',
-            'description': u'Recommendation #1 for earthquake, applied to'
-                           ' hazard categories HIG, MED and LOW'
-        })
-        info.type = DBSession.query(AdditionalInformationType) \
-            .filter(AdditionalInformationType.mnemonic == u'REC').one()
-        info.status = DBSession.query(TermStatus) \
-            .filter(TermStatus.mnemonic == u'VAL').one()
-        association = HazardCategoryAdditionalInformationAssociation(order=1)
-        association.hazardcategory = category_eq_hig
-        info.hazardcategory_associations.append(association)
-        DBSession.add(info)
+        #info = AdditionalInformation(**{
+            #'mnemonic': u'REC1_EQ',
+            #'title': u'Recommendation #1 for earthquake, applied to hazard'
+                     #'categories HIG, MED and LOW',
+            #'description': u'Recommendation #1 for earthquake, applied to'
+                           #' hazard categories HIG, MED and LOW'
+        #})
+        #info.type = DBSession.query(AdditionalInformationType) \
+            #.filter(AdditionalInformationType.mnemonic == u'REC').one()
+        #association = HazardCategoryAdditionalInformationAssociation(order=1)
+        #association.hazardcategory = category_eq_hig
+        #info.hazardcategory_associations.append(association)
+        #DBSession.add(info)
 
-        info = AdditionalInformation(**{
-            'mnemonic': u'AVD1_EQ',
-            'title': u'Educational web resources on earthquakes and seismic'
-                     ' hazard',
-            'description': u'Educational web resources on earthquakes and'
-                           ' seismic hazard'
-        })
-        info.type = DBSession.query(AdditionalInformationType) \
-            .filter(AdditionalInformationType.mnemonic == u'AVD').one()
-        info.status = DBSession.query(TermStatus) \
-            .filter(TermStatus.mnemonic == u'VAL').one()
-        association = HazardCategoryAdditionalInformationAssociation(order=1)
-        association.hazardcategory = category_eq_hig
-        info.hazardcategory_associations.append(association)
-        DBSession.add(info)
+        #info = AdditionalInformation(**{
+            #'mnemonic': u'AVD1_EQ',
+            #'title': u'Educational web resources on earthquakes and seismic'
+                     #' hazard',
+            #'description': u'Educational web resources on earthquakes and'
+                           #' seismic hazard'
+        #})
+        #info.type = DBSession.query(AdditionalInformationType) \
+            #.filter(AdditionalInformationType.mnemonic == u'AVD').one()
+        #association = HazardCategoryAdditionalInformationAssociation(order=1)
+        #association.hazardcategory = category_eq_hig
+        #info.hazardcategory_associations.append(association)
+        #DBSession.add(info)
 
         category_fl_med = HazardCategory(**{
-            'description': u'Flood med threshold 1',
+            'general_recommendation': u'General recommendation for FL MED',
         })
         category_fl_med.hazardtype = DBSession.query(HazardType) \
             .filter(HazardType.mnemonic == u'FL').one()
-        category_fl_med.intensitythreshold = DBSession.query(
-            IntensityThreshold) \
-            .filter(IntensityThreshold.mnemonic == u'FL_IT_1').one()
-        category_fl_med.categorytype = DBSession.query(CategoryType) \
-            .filter(CategoryType.mnemonic == u'MED').one()
-        category_fl_med.status = DBSession.query(TermStatus) \
-            .filter(TermStatus.mnemonic == u'VAL').one()
+        category_fl_med.hazardlevel = DBSession.query(HazardLevel) \
+            .filter(HazardLevel.mnemonic == u'MED').one()
         div_level_3.hazardcategories.append(category_fl_med)
         DBSession.add(div_level_3)
 

@@ -17,6 +17,7 @@ from ..models import (
     AdminLevelType,
     HazardType,
     HazardLevel,
+    #HazardCategory,
     #AdditionalInformationGroup,
     #AdditionalInformationType,
     #FeedbackStatus,
@@ -86,15 +87,15 @@ def populate_db(engine):
             #r.mnemonic, r.title, r.description = i
             #DBSession.add(r)
 
-        ## AdminLevelType
-        #for i in [
-            #(u'COU', u'Country', u'Administrative division of level 0'),
-            #(u'PRO', u'Province', u'Administrative division of level 1'),
-            #(u'REG', u'Region', u'Administrative division of level 2'),
-        #]:
-            #r = AdminLevelType()
-            #r.mnemonic, r.title, r.description = i
-            #DBSession.add(r)
+        # AdminLevelType
+        for i in [
+            (u'COU', u'Country', u'Administrative division of level 0'),
+            (u'PRO', u'Province', u'Administrative division of level 1'),
+            (u'REG', u'Region', u'Administrative division of level 2'),
+        ]:
+            r = AdminLevelType()
+            r.mnemonic, r.title, r.description = i
+            DBSession.add(r)
 
         # HazardLevel
         for i in [

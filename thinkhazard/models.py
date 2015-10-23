@@ -102,15 +102,14 @@ class HazardType(Base):
            #ForeignKey('userfeedback.id'), nullable=False, index=True))
 
 
-#hazardcategory_administrativedivision_table = Table(
-    #'rel_hazardcategory_administrativedivision', Base.metadata,
-    #Column('id', Integer, primary_key=True),
-    #Column('administrativedivision_id', Integer,
-           #ForeignKey('administrativedivision.id'), nullable=False,
-           #index=True),
-    #Column('hazardcategory_id', Integer,
-           #ForeignKey('hazardcategory.id'), nullable=False, index=True),
-    #Column('coverageratio', Integer))
+hazardcategory_administrativedivision_table = Table(
+    'rel_hazardcategory_administrativedivision', Base.metadata,
+    Column('id', Integer, primary_key=True),
+    Column('administrativedivision_id', Integer,
+           ForeignKey('administrativedivision.id'), nullable=False,
+           index=True),
+    Column('hazardcategory_id', Integer,
+           ForeignKey('hazardcategory.id'), nullable=False, index=True))
 
 
 #class HazardCategoryAdditionalInformationAssociation(Base):
@@ -145,10 +144,10 @@ class AdministrativeDivision(Base):
     parent = relationship('AdministrativeDivision', uselist=False,
                           remote_side=code)
 
-    #hazardcategories = relationship(
-        #'HazardCategory',
-        #secondary=hazardcategory_administrativedivision_table,
-        #backref='administrativedivisions')
+    hazardcategories = relationship(
+        'HazardCategory',
+        secondary=hazardcategory_administrativedivision_table,
+        backref='administrativedivisions')
 
     #additionalinformations = relationship(
         #'AdditionalInformation',
@@ -177,7 +176,7 @@ class HazardCategory(Base):
     hazardtype_id = Column(Integer, ForeignKey(HazardType.id), nullable=False)
     hazardlevel_id = Column(Integer, ForeignKey(HazardLevel.id),
                              nullable=False)
-    description = Column(Unicode, nullable=False)
+    general_recommendation = Column(Unicode, nullable=False)
 
     hazardtype = relationship(HazardType)
     hazardlevel = relationship(HazardLevel)
