@@ -56,27 +56,6 @@ def populate_db(engine):
 
     with transaction.manager:
 
-        # AdditionalInformationGroup
-        #for i in [
-            #(u'BDG', u'Buildings', u'Buildings'),
-            #(u'SCL', u'Social', u'Social'),
-            #(u'INF', u'Infrastructure', u'Infrastructure'),
-        #]:
-            #r = AdditionalInformationGroup()
-            #r.mnemonic, r.title, r.description = i
-            #DBSession.add(r)
-
-        ## AdditionalInformationType
-        #for i in [
-            #(u'REC', u'Recommendation', u'Recommendations'),
-            #(u'RDA', u'Raw data', u'Raw data'),
-            #(u'AVD', u'Added-value data', u'Added-value data'),
-            #(u'PDF', u'PDF hazard report', u'Hazard report under Adobe PDF format'),  # noqa
-        #]:
-            #r = AdditionalInformationType()
-            #r.mnemonic, r.title, r.description = i
-            #DBSession.add(r)
-
         # FeedbackStatus
         for i in [
             (u'TBP', u'To be processed'),
@@ -122,38 +101,5 @@ def populate_db(engine):
             r = HazardType()
             r.mnemonic, r.title, r.order = i
             DBSession.add(r)
-
-        ## ReturnPeriod
-        #for i in [
-            #(u'EQ250', u'250 years', u'Return period of 250 years for earthquake', u'EQ'),  # noqa
-            #(u'EQ475', u'475 years', u'Return period of 475 years for earthquake', u'EQ'),  # noqa
-            #(u'EQ2500', u'2500 years', u'Return period of 2500 years for earthquake', u'EQ'),  # noqa
-            #(u'EQ>2500', u'Higher than 2500 years', u'Return period higher than 2500 years for earthquake', u'EQ'),  # noqa
-            #(u'FL10', u'10 years', u'Return period of 10 years for flood', u'FL'),  # noqa
-            #(u'FL50', u'50 years', u'Return period of 50 years for flood', u'FL'),  # noqa
-            #(u'FL100', u'100 years', u'Return period of 100 years for flood', u'FL'),  # noqa
-            #(u'FL>100', u'Higher than 100 years', u'Return period higher than 100 years for flood', u'FL'),  # noqa
-        #]:
-            #r = ReturnPeriod()
-            #r.mnemonic, r.title, r.description, type_ = i
-            #r.hazardtype = DBSession.query(HazardType) \
-                #.filter(HazardType.mnemonic == type_) \
-                #.one()
-            #DBSession.add(r)
-
-        #for i in [
-        ## IntensityThreshold
-            #(u'EQ_IT_1', u'Intensity threshold 1 for earthquake : PGA', 98.655, u'cm/s2', u'', u'EQ'),  # noqa
-            #(u'EQ_IT_2', u'Intensity threshold 2 for earthquake : PGA', 0.1, u'g', u'', u'EQ'),  # noqa
-            #(u'FL_IT_1', u'Intensity threshold 1 for flood', 5, u'dm', u'', u'FL'),  # noqa
-            #(u'FL_IT_2', u'Intensity threshold 2 for flood', 0.5, u'm', u'', u'FL'),  # noqa
-            #(u'CY_IT_1', u'Intensity threshold 1 for cyclone', 80, u'km/h', u'', u'CY'),  # noqa
-        #]:
-            #r = IntensityThreshold()
-            #r.mnemonic, r.title, r.value, r.unit, r.description, type_ = i
-            #r.hazardtype = DBSession.query(HazardType) \
-                #.filter(HazardType.mnemonic == type_) \
-                #.one()
-            #DBSession.add(r)
 
     DBSession.remove()
