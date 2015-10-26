@@ -77,14 +77,28 @@ class HazardCategoryTechnicalRecommendationAssociation(Base):
     id = Column(Integer, primary_key=True)
     hazardcategory_id = Column(Integer, ForeignKey('hazardcategory.id'),
                                nullable=False, index=True)
-    additionalinformation_id = Column(Integer,
-                                      ForeignKey('technicalrecommendation.id'),
-                                      nullable=False, index=True)
+    technicalrecommendation_id = Column(
+        Integer, ForeignKey('technicalrecommendation.id'),
+        nullable=False, index=True)
     order = Column(Integer, nullable=False)
 
     hazardcategory = relationship('HazardCategory')
-    additionalinformation = relationship('TechnicalRecommendation',
-                                         lazy='joined', innerjoin=True)
+
+
+class HazardCategoryFurtherResourceAssociation(Base):
+    __tablename__ = 'rel_hazardcategory_furtherresource'
+    id = Column(Integer, primary_key=True)
+    hazardcategory_id = Column(Integer, ForeignKey('hazardcategory.id'),
+                               nullable=False, index=True)
+    furtherresource_id = Column(Integer,
+                                ForeignKey('furtherresource.id'),
+                                nullable=False, index=True)
+    order = Column(Integer, nullable=False)
+    administrativedivision_id = Column(
+        Integer, ForeignKey('administrativedivision.id'))
+
+    hazardcategory = relationship('HazardCategory')
+    administrativedivision = relationship('AdministrativeDivision')
 
 
 class AdministrativeDivision(Base):
@@ -172,4 +186,16 @@ class TechnicalRecommendation(Base):
     hazardcategory_associations = relationship(
         'HazardCategoryTechnicalRecommendationAssociation',
         order_by='HazardCategoryTechnicalRecommendationAssociation.order',
+        lazy='joined')
+
+
+class FurtherResource(Base):
+    __tablename__ = 'furtherresource'
+    id = Column(Integer, primary_key=True)
+    text = Column(Unicode, nullable=False)
+    url = Column(Unicode, nullable=False)
+
+    hazardcategory_associations = relationship(
+        'HazardCategoryFurtherResourceAssociation',
+        order_by='HazardCategoryFurtherResourceAssociation.order',
         lazy='joined')

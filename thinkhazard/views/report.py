@@ -18,6 +18,7 @@ from ..models import (
     HazardType,
     ClimateChangeRecommendation,
     TechnicalRecommendation,
+    FurtherResource,
 )
 
 
@@ -69,6 +70,7 @@ def report(request):
 
     hazard_category = None
     technical_recommendations = None
+    further_resources = None
     climate_change_recommendation = None
 
     if hazard is not None:
@@ -99,6 +101,13 @@ def report(request):
         technical_recommendations = DBSession.query(TechnicalRecommendation) \
             .join(TechnicalRecommendation.hazardcategory_associations) \
             .join(HazardCategory) \
+            .filter(HazardCategory.id == hazard_category.id) \
+            .all()
+
+        further_resources = DBSession.query(FurtherResource) \
+            .join(FurtherResource.hazardcategory_associations) \
+            .join(HazardCategory) \
+            .outerjoin(AdministrativeDivision) \
             .filter(HazardCategory.id == hazard_category.id) \
             .filter(or_(AdministrativeDivision.code == division_code,
                         AdministrativeDivision.code == null())) \
@@ -151,6 +160,7 @@ def report(request):
             'hazard_category': hazard_category,
             'climate_change_recommendation': climate_change_recommendation,
             'recommendations': technical_recommendations,
+            'resources': further_resources,
             'division': division,
             'bounds': division_bounds,
             'parents': parents,
