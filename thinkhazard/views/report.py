@@ -1,5 +1,5 @@
 from pyramid.view import view_config
-from pyramid.httpexceptions import HTTPBadRequest
+from pyramid.httpexceptions import HTTPBadRequest, HTTPFound
 
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm.exc import NoResultFound
@@ -74,13 +74,18 @@ def report(request):
     climate_change_recommendation = None
 
     if hazard is not None:
-        hazard_category = DBSession.query(HazardCategory) \
-            .join(HazardCategory.administrativedivisions) \
-            .join(HazardLevel) \
-            .join(HazardType) \
-            .filter(HazardType.mnemonic == hazard) \
-            .filter(AdministrativeDivision.code == division_code) \
-            .one()
+        try:
+            hazard_category = DBSession.query(HazardCategory) \
+                .join(HazardCategory.administrativedivisions) \
+                .join(HazardLevel) \
+                .join(HazardType) \
+                .filter(HazardType.mnemonic == hazard) \
+                .filter(AdministrativeDivision.code == division_code) \
+                .one()
+        except NoResultFound:
+            url = request.route_url('report_overview',
+                divisioncode=division_code)
+            return HTTPFound(location=url)
 
         try:
             climate_change_recommendation = DBSession.query(
