@@ -55,23 +55,12 @@ class HazardType(Base):
     order = Column(Integer)
 
 
-#class FeedbackStatus(Base):
-    #__tablename__ = 'enum_feedbackstatus'
+class FeedbackStatus(Base):
+    __tablename__ = 'enum_feedbackstatus'
 
-    #id = Column(Integer, primary_key=True)
-    #mnemonic = Column(Unicode)
-    #title = Column(Unicode, nullable=False)
-    #description = Column(Unicode)
-
-
-#additionalinformation_userfeedback_table = Table(
-    #'rel_additionalinformation_userfeedback', Base.metadata,
-    #Column('id', Integer, primary_key=True),
-    #Column('additionalinformation_id', Integer,
-           #ForeignKey('additionalinformation.id'), nullable=False,
-           #index=True),
-    #Column('userfeedback_id', Integer,
-           #ForeignKey('userfeedback.id'), nullable=False, index=True))
+    id = Column(Integer, primary_key=True)
+    mnemonic = Column(Unicode)
+    title = Column(Unicode, nullable=False)
 
 
 hazardcategory_administrativedivision_table = Table(
@@ -149,18 +138,19 @@ class HazardCategory(Base):
     hazardlevel = relationship(HazardLevel)
 
 
-#class UserFeedback(Base):
-    #__tablename__ = 'userfeedback'
+class UserFeedback(Base):
+    __tablename__ = 'userfeedback'
 
-    #id = Column(Integer, primary_key=True)
-    #description = Column(Unicode, nullable=False)
-    #submissiondate = Column(DateTime, nullable=False,
-                            #default=datetime.datetime.utcnow)
-    #useremailaddress = Column(String(254))
-    #processstatus_id = Column(Integer, ForeignKey(FeedbackStatus.id),
-                              #nullable=False)
+    id = Column(Integer, primary_key=True)
+    description = Column(Unicode, nullable=False)
+    submissiondate = Column(DateTime, nullable=False,
+                            default=datetime.datetime.utcnow)
+    useremailaddress = Column(String(254))
+    url = Column(Unicode, nullable=False)
+    feedbackstatus_id = Column(Integer, ForeignKey(FeedbackStatus.id),
+                              nullable=False)
 
-    #processstatus = relationship(FeedbackStatus)
+    feedbackstatus = relationship(FeedbackStatus)
 
 
 class ClimateChangeRecommendation(Base):

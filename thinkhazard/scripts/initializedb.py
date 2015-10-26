@@ -17,10 +17,10 @@ from ..models import (
     AdminLevelType,
     HazardType,
     HazardLevel,
+    FeedbackStatus,
     #HazardCategory,
     #AdditionalInformationGroup,
     #AdditionalInformationType,
-    #FeedbackStatus,
     #ReturnPeriod,
     #IntensityThreshold,
     )
@@ -77,15 +77,15 @@ def populate_db(engine):
             #r.mnemonic, r.title, r.description = i
             #DBSession.add(r)
 
-        ## FeedbackStatus
-        #for i in [
-            #(u'TBP', u'To be process', u'User s feedback to be process'),
-            #(u'PIP', u'Process in progress', u'User s feedback process in progress'),  # noqa
-            #(u'PRD', u'Process done', u'User s feedback process done'),
-        #]:
-            #r = FeedbackStatus()
-            #r.mnemonic, r.title, r.description = i
-            #DBSession.add(r)
+        # FeedbackStatus
+        for i in [
+            (u'TBP', u'To be processed'),
+            (u'PIP', u'Process in progress'),  # noqa
+            (u'PRD', u'Process done'),
+        ]:
+            r = FeedbackStatus()
+            r.mnemonic, r.title = i
+            DBSession.add(r)
 
         # AdminLevelType
         for i in [
@@ -141,8 +141,8 @@ def populate_db(engine):
                 #.one()
             #DBSession.add(r)
 
-        ## IntensityThreshold
         #for i in [
+        ## IntensityThreshold
             #(u'EQ_IT_1', u'Intensity threshold 1 for earthquake : PGA', 98.655, u'cm/s2', u'', u'EQ'),  # noqa
             #(u'EQ_IT_2', u'Intensity threshold 2 for earthquake : PGA', 0.1, u'g', u'', u'EQ'),  # noqa
             #(u'FL_IT_1', u'Intensity threshold 1 for flood', 5, u'dm', u'', u'FL'),  # noqa
