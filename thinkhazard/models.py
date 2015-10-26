@@ -55,24 +55,6 @@ class HazardType(Base):
     order = Column(Integer)
 
 
-#class AdditionalInformationGroup(Base):
-    #__tablename__ = 'enum_additionalinformationgroup'
-
-    #id = Column(Integer, primary_key=True)
-    #mnemonic = Column(Unicode)
-    #title = Column(Unicode, nullable=False)
-    #description = Column(Unicode)
-
-
-#class AdditionalInformationType(Base):
-    #__tablename__ = 'enum_additionalinformationtype'
-
-    #id = Column(Integer, primary_key=True)
-    #mnemonic = Column(Unicode)
-    #title = Column(Unicode, nullable=False)
-    #description = Column(Unicode)
-
-
 #class FeedbackStatus(Base):
     #__tablename__ = 'enum_feedbackstatus'
 
@@ -80,16 +62,6 @@ class HazardType(Base):
     #mnemonic = Column(Unicode)
     #title = Column(Unicode, nullable=False)
     #description = Column(Unicode)
-
-
-#administrativedivision_additionalinformation_table = Table(
-    #'rel_administrativedivision_additionalinformation', Base.metadata,
-    #Column('id', Integer, primary_key=True),
-    #Column('administrativedivision_id', Integer,
-           #ForeignKey('administrativedivision.id'), nullable=False,
-           #index=True),
-    #Column('additionalinformation_id', Integer,
-           #ForeignKey('additionalinformation.id'), nullable=False, index=True))
 
 
 #additionalinformation_userfeedback_table = Table(
@@ -190,14 +162,6 @@ class HazardCategory(Base):
 
     #processstatus = relationship(FeedbackStatus)
 
-#administrativedivision_additionalinformation_table = Table(
-    #'rel_administrativedivision_additionalinformation', Base.metadata,
-    #Column('id', Integer, primary_key=True),
-    #Column('administrativedivision_id', Integer,
-           #ForeignKey('administrativedivision.id'), nullable=False,
-           #index=True),
-    #Column('additionalinformation_id', Integer,
-           #ForeignKey('additionalinformation.id'), nullable=False, index=True))
 
 class ClimateChangeRecommendation(Base):
     __tablename__ = 'climatechangerecommendation'
@@ -220,28 +184,3 @@ class TechnicalRecommendation(Base):
         'HazardCategoryTechnicalRecommendationAssociation',
         order_by='HazardCategoryTechnicalRecommendationAssociation.order',
         lazy='joined')
-
-#class AdditionalInformation(Base):
-    #__tablename__ = 'additionalinformation'
-
-    #id = Column(Integer, primary_key=True)
-    #mnemonic = Column(Unicode, nullable=False)
-    #title = Column(Unicode, nullable=False)
-    #accessurl = Column(Unicode)
-    #type_id = Column(Integer, ForeignKey(AdditionalInformationType.id),
-                     #nullable=False)
-    #group_id = Column(Integer, ForeignKey(AdditionalInformationGroup.id))
-    #generationdate = Column(DateTime, default=datetime.datetime.utcnow)
-    #description = Column(Unicode)
-
-    #type = relationship(AdditionalInformationType)
-    #group = relationship(AdditionalInformationGroup)
-    #userfeedbacks = relationship(
-        #'UserFeedback',
-        #secondary=additionalinformation_userfeedback_table,
-        #backref='additionalinformations')
-
-    #hazardcategory_associations = relationship(
-        #'HazardCategoryAdditionalInformationAssociation',
-        #order_by='HazardCategoryAdditionalInformationAssociation.order',
-        #lazy='joined')

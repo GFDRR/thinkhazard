@@ -107,14 +107,6 @@ def report(request):
                         AdministrativeDivision.code == null())) \
             .all()
 
-        #resources = filter(
-            #lambda x: x.type.mnemonic == 'AVD',
-            #additional_informations)
-
-        #recommendations = filter(
-            #lambda x: x.type.mnemonic == 'REC',
-            #additional_informations)
-
     # Get the administrative division whose code is division_code.
     _alias = aliased(AdministrativeDivision)
     division = DBSession.query(AdministrativeDivision) \
