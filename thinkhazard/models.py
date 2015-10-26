@@ -149,11 +149,6 @@ class AdministrativeDivision(Base):
         secondary=hazardcategory_administrativedivision_table,
         backref='administrativedivisions')
 
-    #additionalinformations = relationship(
-        #'AdditionalInformation',
-        #secondary=administrativedivision_additionalinformation_table,
-        #backref='administrativedivisions')
-
     def __json__(self, request):
         if self.leveltype_id == 1:
             return {'code': self.code,

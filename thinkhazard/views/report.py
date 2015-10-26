@@ -17,8 +17,9 @@ from ..models import (
     HazardCategory,
     HazardType,
     ClimateChangeRecommendation,
+    TechnicalRecommendation,
+    HazardCategoryTechnicalRecommendationAssociation,
 )
-    #AdditionalInformation,
     #AdditionalInformationType,)
 
 
@@ -70,7 +71,7 @@ def report(request):
 
     hazard_category = None
     resources = None
-    recommendations = None
+    technical_recommendations = None
     climate_change_recommendation = None
 
     if hazard is not None:
@@ -98,15 +99,13 @@ def report(request):
         except NoResultFound:
             pass
 
-        #additional_informations = DBSession.query(AdditionalInformation) \
-            #.join(AdditionalInformation.hazardcategory_associations) \
-            #.join(HazardCategory) \
-            #.join(AdditionalInformationType) \
-            #.outerjoin(AdditionalInformation.administrativedivisions) \
-            #.filter(HazardCategory.id == hazard_category.id) \
-            #.filter(or_(AdministrativeDivision.code == division_code,
-                        #AdministrativeDivision.code == null())) \
-            #.all()
+        technical_recommendations = DBSession.query(TechnicalRecommendation) \
+            .join(TechnicalRecommendation.hazardcategory_associations) \
+            .join(HazardCategory) \
+            .filter(HazardCategory.id == hazard_category.id) \
+            .filter(or_(AdministrativeDivision.code == division_code,
+                        AdministrativeDivision.code == null())) \
+            .all()
 
         #resources = filter(
             #lambda x: x.type.mnemonic == 'AVD',
@@ -163,7 +162,7 @@ def report(request):
             'hazard_category': hazard_category,
             'climate_change_recommendation': climate_change_recommendation,
             #'resources': resources,
-            #'recommendations': recommendations,
+            'recommendations': technical_recommendations,
             'division': division,
             'bounds': division_bounds,
             'parents': parents,
