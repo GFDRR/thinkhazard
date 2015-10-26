@@ -112,19 +112,19 @@ hazardcategory_administrativedivision_table = Table(
            ForeignKey('hazardcategory.id'), nullable=False, index=True))
 
 
-#class HazardCategoryAdditionalInformationAssociation(Base):
-    #__tablename__ = 'rel_hazardcategory_additionalinformation'
-    #id = Column(Integer, primary_key=True)
-    #hazardcategory_id = Column(Integer, ForeignKey('hazardcategory.id'),
-                               #nullable=False, index=True)
-    #additionalinformation_id = Column(Integer,
-                                      #ForeignKey('additionalinformation.id'),
-                                      #nullable=False, index=True)
-    #order = Column(Integer, nullable=False)
+class HazardCategoryTechnicalRecommendationAssociation(Base):
+    __tablename__ = 'rel_hazardcategory_technicalrecommendation'
+    id = Column(Integer, primary_key=True)
+    hazardcategory_id = Column(Integer, ForeignKey('hazardcategory.id'),
+                               nullable=False, index=True)
+    additionalinformation_id = Column(Integer,
+                                      ForeignKey('technicalrecommendation.id'),
+                                      nullable=False, index=True)
+    order = Column(Integer, nullable=False)
 
-    #hazardcategory = relationship('HazardCategory')
-    #additionalinformation = relationship('AdditionalInformation',
-                                         #lazy='joined', innerjoin=True)
+    hazardcategory = relationship('HazardCategory')
+    additionalinformation = relationship('TechnicalRecommendation',
+                                         lazy='joined', innerjoin=True)
 
 
 class AdministrativeDivision(Base):
@@ -214,6 +214,17 @@ class ClimateChangeRecommendation(Base):
 
     administrativedivision = relationship(AdministrativeDivision)
     hazardtype = relationship(HazardType)
+
+
+class TechnicalRecommendation(Base):
+    __tablename__ = 'technicalrecommendation'
+    id = Column(Integer, primary_key=True)
+    text = Column(Unicode, nullable=False)
+
+    hazardcategory_associations = relationship(
+        'HazardCategoryTechnicalRecommendationAssociation',
+        order_by='HazardCategoryTechnicalRecommendationAssociation.order',
+        lazy='joined')
 
 #class AdditionalInformation(Base):
     #__tablename__ = 'additionalinformation'

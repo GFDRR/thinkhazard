@@ -12,9 +12,9 @@ from ..models import (
     HazardType,
     HazardLevel,
     ClimateChangeRecommendation,
-    #AdditionalInformation,
-    #AdditionalInformationType,
-    #HazardCategoryAdditionalInformationAssociation,
+    TechnicalRecommendation,
+    HazardCategoryTechnicalRecommendationAssociation,
+    #TechnicalRecommendationType,
     )
 
 from shapely.geometry import (
@@ -90,33 +90,23 @@ def populate_db():
             .filter(HazardType.mnemonic == u'EQ').one()
         DBSession.add(climate_rec)
 
-        #info = AdditionalInformation(**{
-            #'mnemonic': u'REC1_EQ',
-            #'title': u'Recommendation #1 for earthquake, applied to hazard'
-                     #'categories HIG, MED and LOW',
-            #'description': u'Recommendation #1 for earthquake, applied to'
-                           #' hazard categories HIG, MED and LOW'
-        #})
-        #info.type = DBSession.query(AdditionalInformationType) \
-            #.filter(AdditionalInformationType.mnemonic == u'REC').one()
-        #association = HazardCategoryAdditionalInformationAssociation(order=1)
-        #association.hazardcategory = category_eq_hig
-        #info.hazardcategory_associations.append(association)
-        #DBSession.add(info)
+        technical_rec = TechnicalRecommendation(**{
+            'text': u'Recommendation #1 for earthquake, applied to'
+                           ' hazard categories HIG, MED and LOW'
+        })
+        association = HazardCategoryTechnicalRecommendationAssociation(order=1)
+        association.hazardcategory = category_eq_hig
+        technical_rec.hazardcategory_associations.append(association)
+        DBSession.add(technical_rec)
 
-        #info = AdditionalInformation(**{
-            #'mnemonic': u'AVD1_EQ',
-            #'title': u'Educational web resources on earthquakes and seismic'
-                     #' hazard',
-            #'description': u'Educational web resources on earthquakes and'
-                           #' seismic hazard'
-        #})
-        #info.type = DBSession.query(AdditionalInformationType) \
-            #.filter(AdditionalInformationType.mnemonic == u'AVD').one()
-        #association = HazardCategoryAdditionalInformationAssociation(order=1)
-        #association.hazardcategory = category_eq_hig
-        #info.hazardcategory_associations.append(association)
-        #DBSession.add(info)
+        technical_rec = TechnicalRecommendation(**{
+            'text': u'Educational web resources on earthquakes and'
+                           ' seismic hazard'
+        })
+        association = HazardCategoryTechnicalRecommendationAssociation(order=1)
+        association.hazardcategory = category_eq_hig
+        technical_rec.hazardcategory_associations.append(association)
+        DBSession.add(technical_rec)
 
         category_fl_med = HazardCategory(**{
             'general_recommendation': u'General recommendation for FL MED',
