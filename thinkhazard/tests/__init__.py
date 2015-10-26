@@ -14,7 +14,6 @@ from ..models import (
     ClimateChangeRecommendation,
     TechnicalRecommendation,
     HazardCategoryTechnicalRecommendationAssociation,
-    #TechnicalRecommendationType,
     )
 
 from shapely.geometry import (
@@ -86,13 +85,13 @@ def populate_db():
         climate_rec = ClimateChangeRecommendation()
         climate_rec.text = u'Climate change recommendation'
         climate_rec.administrativedivision = div_level_3
-        climate_rec.hazardtype =  DBSession.query(HazardType) \
+        climate_rec.hazardtype = DBSession.query(HazardType) \
             .filter(HazardType.mnemonic == u'EQ').one()
         DBSession.add(climate_rec)
 
         technical_rec = TechnicalRecommendation(**{
             'text': u'Recommendation #1 for earthquake, applied to'
-                           ' hazard categories HIG, MED and LOW'
+                    ' hazard categories HIG, MED and LOW'
         })
         association = HazardCategoryTechnicalRecommendationAssociation(order=1)
         association.hazardcategory = category_eq_hig
@@ -101,7 +100,7 @@ def populate_db():
 
         technical_rec = TechnicalRecommendation(**{
             'text': u'Educational web resources on earthquakes and'
-                           ' seismic hazard'
+                    ' seismic hazard'
         })
         association = HazardCategoryTechnicalRecommendationAssociation(order=1)
         association.hazardcategory = category_eq_hig

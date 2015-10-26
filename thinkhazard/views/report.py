@@ -18,9 +18,7 @@ from ..models import (
     HazardType,
     ClimateChangeRecommendation,
     TechnicalRecommendation,
-    HazardCategoryTechnicalRecommendationAssociation,
 )
-    #AdditionalInformationType,)
 
 
 # An object for the "no data" category type.
@@ -70,7 +68,6 @@ def report(request):
         })
 
     hazard_category = None
-    resources = None
     technical_recommendations = None
     climate_change_recommendation = None
 
@@ -85,7 +82,7 @@ def report(request):
                 .one()
         except NoResultFound:
             url = request.route_url('report_overview',
-                divisioncode=division_code)
+                                    divisioncode=division_code)
             return HTTPFound(location=url)
 
         try:
@@ -153,7 +150,6 @@ def report(request):
     return {'hazards': hazard_types,
             'hazard_category': hazard_category,
             'climate_change_recommendation': climate_change_recommendation,
-            #'resources': resources,
             'recommendations': technical_recommendations,
             'division': division,
             'bounds': division_bounds,

@@ -1,6 +1,5 @@
 from sqlalchemy import (
     Column,
-    Float,
     ForeignKey,
     Integer,
     Unicode,
@@ -131,7 +130,7 @@ class HazardCategory(Base):
     id = Column(Integer, primary_key=True)
     hazardtype_id = Column(Integer, ForeignKey(HazardType.id), nullable=False)
     hazardlevel_id = Column(Integer, ForeignKey(HazardLevel.id),
-                             nullable=False)
+                            nullable=False)
     general_recommendation = Column(Unicode, nullable=False)
 
     hazardtype = relationship(HazardType)
@@ -148,7 +147,7 @@ class UserFeedback(Base):
     useremailaddress = Column(String(254))
     url = Column(Unicode, nullable=False)
     feedbackstatus_id = Column(Integer, ForeignKey(FeedbackStatus.id),
-                              nullable=False)
+                               nullable=False)
 
     feedbackstatus = relationship(FeedbackStatus)
 
@@ -157,8 +156,8 @@ class ClimateChangeRecommendation(Base):
     __tablename__ = 'climatechangerecommendation'
     id = Column(Integer, primary_key=True)
     text = Column(Unicode, nullable=False)
-    administrativedivision_id = Column(Integer,
-        ForeignKey(AdministrativeDivision.id), nullable=False)
+    administrativedivision_id = Column(
+        Integer, ForeignKey(AdministrativeDivision.id), nullable=False)
     hazardtype_id = Column(Integer, ForeignKey(HazardType.id), nullable=False)
 
     administrativedivision = relationship(AdministrativeDivision)

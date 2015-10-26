@@ -18,11 +18,6 @@ from ..models import (
     HazardType,
     HazardLevel,
     FeedbackStatus,
-    #HazardCategory,
-    #AdditionalInformationGroup,
-    #AdditionalInformationType,
-    #ReturnPeriod,
-    #IntensityThreshold,
     )
 
 from .. import load_local_settings
