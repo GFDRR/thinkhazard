@@ -1,7 +1,8 @@
 from pyramid.view import view_config
-from pyramid.httpexceptions import HTTPBadRequest
+from pyramid.httpexceptions import HTTPBadRequest, HTTPFound
 
 from sqlalchemy.orm import aliased
+from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy import and_, or_, null, select
 from sqlalchemy.sql import func
 from sqlalchemy.sql.expression import literal_column
@@ -12,19 +13,21 @@ from geoalchemy2.shape import to_shape
 from ..models import (
     DBSession,
     AdministrativeDivision,
-    CategoryType,
+    HazardLevel,
     HazardCategory,
     HazardType,
-    AdditionalInformation,
-    AdditionalInformationType,)
+    ClimateChangeRecommendation,
+    TechnicalRecommendation,
+    FurtherResource,
+)
 
 
 # An object for the "no data" category type.
-_categorytype_nodata = CategoryType()
-_categorytype_nodata.mnemonic = 'no-data'
-_categorytype_nodata.title = 'No data available'
-_categorytype_nodata.description = 'No data for this hazard type.'
-_categorytype_nodata.order = float('inf')
+_hazardlevel_nodata = HazardLevel()
+_hazardlevel_nodata.mnemonic = 'no-data'
+_hazardlevel_nodata.title = 'No data available'
+_hazardlevel_nodata.description = 'No data for this hazard type.'
+_hazardlevel_nodata.order = float('inf')
 
 
 @view_config(route_name='report_overview', renderer='templates/report.jinja2')
@@ -48,7 +51,7 @@ def report(request):
     hazardcategories_query = DBSession.query(HazardCategory) \
         .join(HazardCategory.administrativedivisions) \
         .join(HazardType) \
-        .join(CategoryType) \
+        .join(HazardLevel) \
         .filter(AdministrativeDivision.code == division_code)
 
     # Create a dict with the categories. Keys are the hazard type mnemonic.
@@ -57,44 +60,58 @@ def report(request):
 
     hazard_types = []
     for hazardtype in hazardtype_query:
-        cat = _categorytype_nodata
+        cat = _hazardlevel_nodata
         if hazardtype.mnemonic in hazardcategories:
-            cat = hazardcategories[hazardtype.mnemonic].categorytype
+            cat = hazardcategories[hazardtype.mnemonic].hazardlevel
         hazard_types.append({
             'hazardtype': hazardtype,
-            'categorytype': cat
+            'hazardlevel': cat
         })
 
     hazard_category = None
-    resources = None
-    recommendations = None
+    technical_recommendations = None
+    further_resources = None
+    climate_change_recommendation = None
 
     if hazard is not None:
-        hazard_category = DBSession.query(HazardCategory) \
-            .join(HazardCategory.administrativedivisions) \
-            .join(CategoryType) \
-            .join(HazardType) \
-            .filter(HazardType.mnemonic == hazard) \
-            .filter(AdministrativeDivision.code == division_code) \
-            .one()
+        try:
+            hazard_category = DBSession.query(HazardCategory) \
+                .join(HazardCategory.administrativedivisions) \
+                .join(HazardLevel) \
+                .join(HazardType) \
+                .filter(HazardType.mnemonic == hazard) \
+                .filter(AdministrativeDivision.code == division_code) \
+                .one()
+        except NoResultFound:
+            url = request.route_url('report_overview',
+                                    divisioncode=division_code)
+            return HTTPFound(location=url)
 
-        additional_informations = DBSession.query(AdditionalInformation) \
-            .join(AdditionalInformation.hazardcategory_associations) \
+        try:
+            climate_change_recommendation = DBSession.query(
+                    ClimateChangeRecommendation) \
+                .join(AdministrativeDivision) \
+                .join(HazardType) \
+                .filter(AdministrativeDivision.code == division_code) \
+                .filter(HazardType.mnemonic == hazard) \
+                .one()
+        except NoResultFound:
+            pass
+
+        technical_recommendations = DBSession.query(TechnicalRecommendation) \
+            .join(TechnicalRecommendation.hazardcategory_associations) \
             .join(HazardCategory) \
-            .join(AdditionalInformationType) \
-            .outerjoin(AdditionalInformation.administrativedivisions) \
+            .filter(HazardCategory.id == hazard_category.id) \
+            .all()
+
+        further_resources = DBSession.query(FurtherResource) \
+            .join(FurtherResource.hazardcategory_associations) \
+            .join(HazardCategory) \
+            .outerjoin(AdministrativeDivision) \
             .filter(HazardCategory.id == hazard_category.id) \
             .filter(or_(AdministrativeDivision.code == division_code,
                         AdministrativeDivision.code == null())) \
             .all()
-
-        resources = filter(
-            lambda x: x.type.mnemonic == 'AVD',
-            additional_informations)
-
-        recommendations = filter(
-            lambda x: x.type.mnemonic == 'REC',
-            additional_informations)
 
     # Get the administrative division whose code is division_code.
     _alias = aliased(AdministrativeDivision)
@@ -141,8 +158,9 @@ def report(request):
 
     return {'hazards': hazard_types,
             'hazard_category': hazard_category,
-            'resources': resources,
-            'recommendations': recommendations,
+            'climate_change_recommendation': climate_change_recommendation,
+            'recommendations': technical_recommendations,
+            'resources': further_resources,
             'division': division,
             'bounds': division_bounds,
             'parents': parents,
@@ -173,10 +191,10 @@ def report_json(request):
 
     if hazard_type is not None:
         divisions = DBSession.query(AdministrativeDivision) \
-            .add_columns(simplify, CategoryType.mnemonic) \
+            .add_columns(simplify, HazardLevel.mnemonic) \
             .outerjoin(AdministrativeDivision.hazardcategories) \
             .outerjoin(HazardType)\
-            .outerjoin(CategoryType) \
+            .outerjoin(HazardLevel) \
             .filter(and_(_filter, HazardType.mnemonic == hazard_type))
     else:
         divisions = DBSession.query(AdministrativeDivision) \
@@ -189,6 +207,6 @@ def report_json(request):
         'properties': {
             'name': division.name,
             'code': division.code,
-            'hazardLevel': categorytype
+            'hazardLevel': hazardlevel
         }
-    } for division, geom_simplified, categorytype in divisions]
+    } for division, geom_simplified, hazardlevel in divisions]

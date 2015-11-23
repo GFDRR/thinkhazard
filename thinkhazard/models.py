@@ -1,6 +1,5 @@
 from sqlalchemy import (
     Column,
-    Float,
     ForeignKey,
     Integer,
     Unicode,
@@ -28,15 +27,6 @@ DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base(metadata=MetaData(schema='datamart'))
 
 
-class TermStatus(Base):
-    __tablename__ = 'enum_termstatus'
-
-    id = Column(Integer, primary_key=True)
-    mnemonic = Column(Unicode)
-    title = Column(Unicode, nullable=False)
-    description = Column(Unicode)
-
-
 class AdminLevelType(Base):
     __tablename__ = 'enum_adminleveltype'
 
@@ -44,78 +34,15 @@ class AdminLevelType(Base):
     mnemonic = Column(Unicode)
     title = Column(Unicode, nullable=False)
     description = Column(Unicode)
-    status_id = Column(Integer, ForeignKey(TermStatus.id), nullable=False)
-
-    status = relationship(TermStatus)
 
 
-class MetadataDateType(Base):
-    __tablename__ = 'enum_md_datetype'
-
-    id = Column(Integer, primary_key=True)
-    title = Column(Unicode)
-    description = Column(Unicode)
-
-
-class MetadataRole(Base):
-    __tablename__ = 'enum_md_role'
-
-    id = Column(Integer, primary_key=True)
-    title = Column(Unicode)
-    description = Column(Unicode)
-
-
-class MetadataTopicCategory(Base):
-    __tablename__ = 'enum_md_topiccategory'
-
-    id = Column(Integer, primary_key=True)
-    title = Column(Unicode)
-    description = Column(Unicode)
-
-
-class MetadataUseConstraints(Base):
-    __tablename__ = 'enum_md_useconstraints'
-
-    id = Column(Integer, primary_key=True)
-    title = Column(Unicode)
-    description = Column(Unicode)
-
-
-class MetadataMaintenanceFrequency(Base):
-    __tablename__ = 'enum_md_maintenancefrequency'
-
-    id = Column(Integer, primary_key=True)
-    title = Column(Unicode)
-    description = Column(Unicode)
-
-
-class MetadataLanguage(Base):
-    __tablename__ = 'enum_md_language'
-
-    id = Column(Integer, primary_key=True)
-    title = Column(Unicode)
-    description = Column(Unicode)
-
-
-class MetadataLicensing(Base):
-    __tablename__ = 'enum_md_licensing'
-
-    id = Column(Integer, primary_key=True)
-    title = Column(Unicode)
-    description = Column(Unicode)
-
-
-class CategoryType(Base):
-    __tablename__ = 'enum_categorytype'
+class HazardLevel(Base):
+    __tablename__ = 'enum_hazardlevel'
 
     id = Column(Integer, primary_key=True)
     mnemonic = Column(Unicode)
     title = Column(Unicode, nullable=False)
-    color = Column(Unicode, nullable=False)
-    description = Column(Unicode)
     order = Column(Integer)
-    status_id = Column(Integer, ForeignKey(TermStatus.id), nullable=False)
-    status = relationship(TermStatus)
 
 
 class HazardType(Base):
@@ -124,64 +51,7 @@ class HazardType(Base):
     id = Column(Integer, primary_key=True)
     mnemonic = Column(Unicode)
     title = Column(Unicode, nullable=False)
-    description = Column(Unicode)
-    status_id = Column(Integer, ForeignKey(TermStatus.id), nullable=False)
-    status = relationship(TermStatus)
     order = Column(Integer)
-
-
-class IntensityThreshold(Base):
-    __tablename__ = 'enum_intensitythreshold'
-
-    id = Column(Integer, primary_key=True)
-    mnemonic = Column(Unicode)
-    title = Column(Unicode, nullable=False)
-    value = Column(Float, nullable=False)
-    unit = Column(Unicode, nullable=False)
-    description = Column(Unicode)
-    status_id = Column(Integer, ForeignKey(TermStatus.id), nullable=False)
-    hazardtype_id = Column(Integer, ForeignKey(HazardType.id), nullable=False)
-
-    status = relationship(TermStatus)
-    hazardtype = relationship(HazardType)
-
-
-class ReturnPeriod(Base):
-    __tablename__ = 'enum_returnperiod'
-
-    id = Column(Integer, primary_key=True)
-    mnemonic = Column(Unicode)
-    title = Column(Unicode, nullable=False)
-    description = Column(Unicode)
-    status_id = Column(Integer, ForeignKey(TermStatus.id), nullable=False)
-    hazardtype_id = Column(Integer, ForeignKey(HazardType.id), nullable=False)
-
-    status = relationship(TermStatus)
-    hazardtype = relationship(HazardType)
-
-
-class AdditionalInformationGroup(Base):
-    __tablename__ = 'enum_additionalinformationgroup'
-
-    id = Column(Integer, primary_key=True)
-    mnemonic = Column(Unicode)
-    title = Column(Unicode, nullable=False)
-    description = Column(Unicode)
-    status_id = Column(Integer, ForeignKey(TermStatus.id), nullable=False)
-
-    status = relationship(TermStatus)
-
-
-class AdditionalInformationType(Base):
-    __tablename__ = 'enum_additionalinformationtype'
-
-    id = Column(Integer, primary_key=True)
-    mnemonic = Column(Unicode)
-    title = Column(Unicode, nullable=False)
-    description = Column(Unicode)
-    status_id = Column(Integer, ForeignKey(TermStatus.id), nullable=False)
-
-    status = relationship(TermStatus)
 
 
 class FeedbackStatus(Base):
@@ -190,30 +60,6 @@ class FeedbackStatus(Base):
     id = Column(Integer, primary_key=True)
     mnemonic = Column(Unicode)
     title = Column(Unicode, nullable=False)
-    description = Column(Unicode)
-    status_id = Column(Integer, ForeignKey(TermStatus.id), nullable=False)
-
-    status = relationship(TermStatus)
-
-
-administrativedivision_additionalinformation_table = Table(
-    'rel_administrativedivision_additionalinformation', Base.metadata,
-    Column('id', Integer, primary_key=True),
-    Column('administrativedivision_id', Integer,
-           ForeignKey('administrativedivision.id'), nullable=False,
-           index=True),
-    Column('additionalinformation_id', Integer,
-           ForeignKey('additionalinformation.id'), nullable=False, index=True))
-
-
-additionalinformation_userfeedback_table = Table(
-    'rel_additionalinformation_userfeedback', Base.metadata,
-    Column('id', Integer, primary_key=True),
-    Column('additionalinformation_id', Integer,
-           ForeignKey('additionalinformation.id'), nullable=False,
-           index=True),
-    Column('userfeedback_id', Integer,
-           ForeignKey('userfeedback.id'), nullable=False, index=True))
 
 
 hazardcategory_administrativedivision_table = Table(
@@ -223,23 +69,36 @@ hazardcategory_administrativedivision_table = Table(
            ForeignKey('administrativedivision.id'), nullable=False,
            index=True),
     Column('hazardcategory_id', Integer,
-           ForeignKey('hazardcategory.id'), nullable=False, index=True),
-    Column('coverageratio', Integer))
+           ForeignKey('hazardcategory.id'), nullable=False, index=True))
 
 
-class HazardCategoryAdditionalInformationAssociation(Base):
-    __tablename__ = 'rel_hazardcategory_additionalinformation'
+class HazardCategoryTechnicalRecommendationAssociation(Base):
+    __tablename__ = 'rel_hazardcategory_technicalrecommendation'
     id = Column(Integer, primary_key=True)
     hazardcategory_id = Column(Integer, ForeignKey('hazardcategory.id'),
                                nullable=False, index=True)
-    additionalinformation_id = Column(Integer,
-                                      ForeignKey('additionalinformation.id'),
-                                      nullable=False, index=True)
+    technicalrecommendation_id = Column(
+        Integer, ForeignKey('technicalrecommendation.id'),
+        nullable=False, index=True)
     order = Column(Integer, nullable=False)
 
     hazardcategory = relationship('HazardCategory')
-    additionalinformation = relationship('AdditionalInformation',
-                                         lazy='joined', innerjoin=True)
+
+
+class HazardCategoryFurtherResourceAssociation(Base):
+    __tablename__ = 'rel_hazardcategory_furtherresource'
+    id = Column(Integer, primary_key=True)
+    hazardcategory_id = Column(Integer, ForeignKey('hazardcategory.id'),
+                               nullable=False, index=True)
+    furtherresource_id = Column(Integer,
+                                ForeignKey('furtherresource.id'),
+                                nullable=False, index=True)
+    order = Column(Integer, nullable=False)
+    administrativedivision_id = Column(
+        Integer, ForeignKey('administrativedivision.id'))
+
+    hazardcategory = relationship('HazardCategory')
+    administrativedivision = relationship('AdministrativeDivision')
 
 
 class AdministrativeDivision(Base):
@@ -264,11 +123,6 @@ class AdministrativeDivision(Base):
         secondary=hazardcategory_administrativedivision_table,
         backref='administrativedivisions')
 
-    additionalinformations = relationship(
-        'AdditionalInformation',
-        secondary=administrativedivision_additionalinformation_table,
-        backref='administrativedivisions')
-
     def __json__(self, request):
         if self.leveltype_id == 1:
             return {'code': self.code,
@@ -284,69 +138,17 @@ class AdministrativeDivision(Base):
                     'admin2': self.name}
 
 
-class Metadata(Base):
-    __tablename__ = 'metadata'
-
-    id = Column(Integer, primary_key=True)
-    localcode = Column(Unicode)
-    title = Column(Unicode, nullable=False)
-    date = Column(Unicode, nullable=False)
-    datetype_id = Column(Integer, ForeignKey(MetadataDateType.id),
-                         nullable=False)
-    abstract = Column(Unicode, nullable=False)
-    keywords = Column(Unicode, nullable=False)
-    pointofcontactindividualname = Column(Unicode, nullable=False)
-    organizationname = Column(Unicode, nullable=False)
-    role_id = Column(Integer, ForeignKey(MetadataRole.id), nullable=False)
-    useconstraints_id = Column(Integer, ForeignKey(MetadataUseConstraints.id),
-                               nullable=False)
-    licensing_id = Column(Integer, ForeignKey(MetadataLicensing.id))
-    licensingsupplemental = Column(Unicode)
-    maintenancefrequency_id = Column(Integer, ForeignKey(
-        MetadataMaintenanceFrequency.id))
-    language_id = Column(Integer, ForeignKey(MetadataLanguage.id),
-                         nullable=False)
-    sourceurl = Column(Unicode)
-    dataqualityinfo = Column(Unicode)
-    topiccategory_id = Column(Integer, ForeignKey(MetadataTopicCategory.id),
-                              nullable=False)
-    countryregion_id = Column(Integer, ForeignKey(AdministrativeDivision.id),
-                              nullable=False)
-    hazardtype_id = Column(Integer, ForeignKey(HazardType.id), nullable=False)
-    hazardsetid = Column(Integer)
-    glidenumber = Column(Integer)
-    intensityunit = Column(Unicode)
-    returnperiod_id = Column(Integer, ForeignKey(ReturnPeriod.id))
-    mdauthorindividualorganisationnames = Column(Unicode)
-
-    datetype = relationship(MetadataDateType)
-    role = relationship(MetadataRole)
-    useconstraints = relationship(MetadataUseConstraints)
-    licensing = relationship(MetadataLicensing)
-    maintenancefrequency = relationship(MetadataMaintenanceFrequency)
-    language = relationship(MetadataLanguage)
-    topiccategory = relationship(MetadataTopicCategory)
-    countryregion = relationship(AdministrativeDivision)
-    returnperiod = relationship(ReturnPeriod)
-    hazardtype = relationship(HazardType)
-
-
 class HazardCategory(Base):
     __tablename__ = 'hazardcategory'
 
     id = Column(Integer, primary_key=True)
     hazardtype_id = Column(Integer, ForeignKey(HazardType.id), nullable=False)
-    intensitythreshold_id = Column(Integer, ForeignKey(IntensityThreshold.id),
-                                   nullable=False)
-    categorytype_id = Column(Integer, ForeignKey(CategoryType.id),
-                             nullable=False)
-    description = Column(Unicode, nullable=False)
-    status_id = Column(Integer, ForeignKey(TermStatus.id), nullable=False)
+    hazardlevel_id = Column(Integer, ForeignKey(HazardLevel.id),
+                            nullable=False)
+    general_recommendation = Column(Unicode, nullable=False)
 
     hazardtype = relationship(HazardType)
-    intensitythreshold = relationship(IntensityThreshold)
-    categorytype = relationship(CategoryType)
-    status = relationship(TermStatus)
+    hazardlevel = relationship(HazardLevel)
 
 
 class UserFeedback(Base):
@@ -357,38 +159,43 @@ class UserFeedback(Base):
     submissiondate = Column(DateTime, nullable=False,
                             default=datetime.datetime.utcnow)
     useremailaddress = Column(String(254))
-    processstatus_id = Column(Integer, ForeignKey(FeedbackStatus.id),
-                              nullable=False)
+    url = Column(Unicode, nullable=False)
+    feedbackstatus_id = Column(Integer, ForeignKey(FeedbackStatus.id),
+                               nullable=False)
 
-    processstatus = relationship(FeedbackStatus)
+    feedbackstatus = relationship(FeedbackStatus)
 
 
-class AdditionalInformation(Base):
-    __tablename__ = 'additionalinformation'
-
+class ClimateChangeRecommendation(Base):
+    __tablename__ = 'climatechangerecommendation'
     id = Column(Integer, primary_key=True)
-    mnemonic = Column(Unicode, nullable=False)
-    title = Column(Unicode, nullable=False)
-    accessurl = Column(Unicode)
-    metadata_id = Column(Integer, ForeignKey(Metadata.id))
-    type_id = Column(Integer, ForeignKey(AdditionalInformationType.id),
-                     nullable=False)
-    group_id = Column(Integer, ForeignKey(AdditionalInformationGroup.id))
-    status_id = Column(Integer, ForeignKey(TermStatus.id), nullable=False)
-    generationdate = Column(DateTime, default=datetime.datetime.utcnow)
-    description = Column(Unicode)
+    text = Column(Unicode, nullable=False)
+    administrativedivision_id = Column(
+        Integer, ForeignKey(AdministrativeDivision.id), nullable=False)
+    hazardtype_id = Column(Integer, ForeignKey(HazardType.id), nullable=False)
 
-    metadata_ = relationship(Metadata)
+    administrativedivision = relationship(AdministrativeDivision)
+    hazardtype = relationship(HazardType)
 
-    type = relationship(AdditionalInformationType)
-    group = relationship(AdditionalInformationGroup)
-    status = relationship(TermStatus)
-    userfeedbacks = relationship(
-        'UserFeedback',
-        secondary=additionalinformation_userfeedback_table,
-        backref='additionalinformations')
+
+class TechnicalRecommendation(Base):
+    __tablename__ = 'technicalrecommendation'
+    id = Column(Integer, primary_key=True)
+    text = Column(Unicode, nullable=False)
 
     hazardcategory_associations = relationship(
-        'HazardCategoryAdditionalInformationAssociation',
-        order_by='HazardCategoryAdditionalInformationAssociation.order',
+        'HazardCategoryTechnicalRecommendationAssociation',
+        order_by='HazardCategoryTechnicalRecommendationAssociation.order',
+        lazy='joined')
+
+
+class FurtherResource(Base):
+    __tablename__ = 'furtherresource'
+    id = Column(Integer, primary_key=True)
+    text = Column(Unicode, nullable=False)
+    url = Column(Unicode, nullable=False)
+
+    hazardcategory_associations = relationship(
+        'HazardCategoryFurtherResourceAssociation',
+        order_by='HazardCategoryFurtherResourceAssociation.order',
         lazy='joined')

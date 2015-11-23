@@ -4,10 +4,10 @@ from . import BaseTestCase
 class TestReportFunction(BaseTestCase):
 
     def test_report(self):
-        self.testapp.get('/report/30', status=200)
+        self.testapp.get('/report/31', status=200)
 
     def test_report__division_desecendants(self):
-        resp = self.testapp.get('/report/30', status=200)
+        resp = self.testapp.get('/report/31', status=200)
         # 3 divisions + pin icon
         self.assertEqual(len(resp.pyquery('.breadcrumb .btn')), 4)
 
@@ -25,7 +25,7 @@ class TestReportFunction(BaseTestCase):
         self.assertTrue('drillup' in resp.body)
 
     def test_report__hazard_categories(self):
-        resp = self.testapp.get('/report/30')
+        resp = self.testapp.get('/report/31')
         hazards_list = resp.pyquery('.hazard-types-list')
 
         # only two categories with data
@@ -38,6 +38,13 @@ class TestReportFunction(BaseTestCase):
         self.assertTrue('EQ' in hazards.eq(1).html())
 
     def test_report__hazard(self):
+        resp = self.testapp.get('/report/31/EQ', status=200)
+        self.assertTrue('Climate change recommendation' in resp.body)
+        self.assertEqual(len(resp.pyquery('.recommendations li')), 2)
+
+    def test_report__further_resources(self):
         resp = self.testapp.get('/report/30/EQ', status=200)
-        self.assertEqual(len(resp.pyquery('.recommendations li')), 1)
-        self.assertEqual(len(resp.pyquery('.further-resources li')), 1)
+        self.assertEqual(len(resp.pyquery('.further-resources ul li')), 1)
+
+        resp = self.testapp.get('/report/31/EQ', status=200)
+        self.assertEqual(len(resp.pyquery('.further-resources ul li')), 2)
