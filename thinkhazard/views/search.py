@@ -5,7 +5,10 @@ from pyramid.httpexceptions import HTTPBadRequest
 
 from sqlalchemy import and_
 
-from ..models import DBSession, AdministrativeDivision
+from thinkhazard_common.models import (
+    DBSession,
+    AdministrativeDivision,
+    )
 
 
 def _roundrobin(*iterables, **kwargs):

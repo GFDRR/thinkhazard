@@ -5,7 +5,7 @@ from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
 from papyrus.renderers import GeoJSON
 
-from .models import (
+from thinkhazard_common.models import (
     DBSession,
     Base,
     )

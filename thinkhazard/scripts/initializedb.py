@@ -11,12 +11,15 @@ from pyramid.paster import (
 
 from pyramid.scripts.common import parse_vars
 
-from ..models import (
+from thinkhazard_common.models import (
     DBSession,
     Base,
     AdminLevelType,
     HazardType,
     HazardLevel,
+    )
+
+from ..models import (
     FeedbackStatus,
     )
 

@@ -5,7 +5,7 @@ import transaction
 
 from paste.deploy import loadapp
 
-from ..models import (
+from thinkhazard_common.models import (
     DBSession,
     AdministrativeDivision,
     HazardCategory,
