@@ -1,8 +1,9 @@
 from pyramid.view import view_config
 
-from ..models import (
+from thinkhazard_common.models import (
     DBSession,
-    HazardType)
+    HazardType,
+    )
 
 
 @view_config(route_name='index', renderer='templates/index.jinja2')
