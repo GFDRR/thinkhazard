@@ -66,7 +66,7 @@
    */
   function addVectorLayer(map, url) {
     var styleFn = function(feature) {
-      var fillColors = getFillColors(0.5);
+      var fillColors = getFillColors(0.75);
       var transparent = 'rgba(1, 1, 1, 0)';
       var fillStyle = new ol.style.Fill({
         color: fillColors[feature.get('hazardLevel')] || transparent
@@ -128,7 +128,7 @@
    * @return {ol.interaction.Select}
    */
   function addSelectInteraction(map, layer) {
-    var fillColors = getFillColors(0.9);
+    var fillColors = getFillColors(1);
     var fillStyle = new ol.style.Fill({
       color: ''
     });
@@ -144,7 +144,7 @@
     var styleFn = function(feature) {
       var hazardLevel = feature.get('hazardLevel');
       var fillColor = hazardLevel in fillColors ?
-          fillColors[hazardLevel] : 'rgba(1, 1, 1, 0.5)';
+          fillColors[hazardLevel] : 'rgba(255, 255, 255, 0.5)';
       fillStyle.setColor(fillColor);
       return styles;
     };
