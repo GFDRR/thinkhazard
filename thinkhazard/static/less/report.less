@@ -39,6 +39,7 @@ body {
   }
   @arrow-height: 10px;
   li {
+    border-bottom-color: white;
     &:not(.active) .hazard-icon {
       .box-shadow(0px 0px 5px 0 rgba(0, 0, 0, 0.15));
     }
@@ -59,6 +60,19 @@ body {
       border-right: 51px solid transparent;
       border-top: @arrow-height solid;
       -moz-transform: scale(.999);
+    }
+
+    &.overview.active {
+      @color: #58595b;
+      background-color: @color;
+      border-bottom-color: @color;
+      .hazard-icon {
+        color: @color;
+        border-color: @color;
+      }
+      .arrow {
+        border-top-color: @color;
+      }
     }
   }
 }
