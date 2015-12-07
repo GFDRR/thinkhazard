@@ -167,10 +167,10 @@
    */
   function getFillColors(opacity) {
     return {
-      'HIG': [217, 31, 44, opacity],
-      'MED': [213, 124, 39, opacity],
-      'LOW': [224, 176, 37, opacity],
-      'NPR': [142, 157, 146, opacity]
+      'HIG': [217, 31, 45, opacity],
+      'MED': [223, 113, 32, opacity],
+      'LOW': [223, 156, 32, opacity],
+      'NPR': [223, 187, 32, opacity]
     };
   }
 
