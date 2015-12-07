@@ -1,10 +1,10 @@
 @font-face {
 	font-family: 'thinkhazard';
-	src:url('fonts/thinkhazard.eot?ozbh3u');
-	src:url('fonts/thinkhazard.eot?ozbh3u#iefix') format('embedded-opentype'),
-		url('fonts/thinkhazard.ttf?ozbh3u') format('truetype'),
-		url('fonts/thinkhazard.woff?ozbh3u') format('woff'),
-		url('fonts/thinkhazard.svg?ozbh3u#thinkhazard') format('svg');
+	src:url('fonts/thinkhazard.eot?8ddcbz');
+	src:url('fonts/thinkhazard.eot?8ddcbz#iefix') format('embedded-opentype'),
+		url('fonts/thinkhazard.ttf?8ddcbz') format('truetype'),
+		url('fonts/thinkhazard.woff?8ddcbz') format('woff'),
+		url('fonts/thinkhazard.svg?8ddcbz#thinkhazard') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -24,6 +24,9 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.icon-stop:before {
+	content: "\f04d";
+}
 .icon-zoom-out:before {
 	content: "\e613";
 }
