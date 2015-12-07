@@ -21,6 +21,10 @@ body {
 
 .jumbotron {
   padding: 48px 0 0 0;
+
+  h2 {
+    margin-top: 10px;
+  }
 }
 
 .hazard-types-list {
@@ -288,25 +292,6 @@ footer {
   margin-right: 10px;
 }
 
-.hazard-level-label {
-  position: relative;
-  margin: 25px 0 25px;
-  border: 0;
-  small {
-    font-weight: 300;
-    padding-bottom: 0;
-  }
-  hr {
-    position: absolute;
-    top: -5px;
-    right: 0;
-    height: 1px;
-    width: 50%;
-    background-image: linear-gradient(90deg, rgba(255,255,255,0), rgba(204, 204, 204, 1));
-    border-top-width: 0;
-  }
-}
-
 .set-level-color(@level) {
   @color: "level-@{level}-color";
 
@@ -354,6 +339,9 @@ footer {
 .set-level-color(LOW);
 .set-level-color(NPR);
 
+.page-header {
+  font-size: 32px;
+}
 .page-header .level {
   font-weight: 600;
 }
