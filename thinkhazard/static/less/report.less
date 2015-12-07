@@ -86,12 +86,7 @@ body {
   padding: 0;
   li {
     line-height: 27px;
-    border-left: 3px solid;
-    padding: 7px 0 7px 15px;
     margin-top: 23px;
-    &:first-child {
-      margin-top: 30px;
-    }
   }
 }
 
@@ -251,12 +246,14 @@ body {
     margin-left: 0;
     li {
       margin-top: 15px;
-      .icon-list-arrow {
-        font-size: 10px;
-        top: -1px;
-      }
     }
   }
+}
+
+.icon-list-square,
+.icon-list-arrow {
+  font-size: 10px;
+  top: -1px;
 }
 
 .btn-default {
@@ -337,12 +334,12 @@ footer {
         background-color: fade(@@color, 7%);
       }
     }
-    .page-header.detail,
-    .recommendations li {
+    .page-header.detail {
       border-color: @@color;
     }
     .page-header .level,
-    .further-resources .icon-list-arrow {
+    .icon-list-square,
+    .icon-list-arrow {
         color: @@color;
     }
   }
