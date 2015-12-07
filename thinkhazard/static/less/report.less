@@ -1,17 +1,11 @@
 @import "../../../node_modules/bootstrap/less/variables.less";
 @import "../../../node_modules/bootstrap/less/mixins.less";
 
-@level-HIG-color: #d91f2c;
-@level-MED-color: #d57c27;
-@level-LOW-color: #e0b025;
-@level-NPR-color: #87988c;
-@level-no-data-color: #F2F2F2;
-
-@level-overview-HIG-color: #fff7f8;
-@level-overview-MED-color: #fffbf7;
-@level-overview-LOW-color: #fffdf7;
-@level-overview-NPR-color: #f7fffa;
-@level-overview-no-data-color: #e6e6e6;
+@level-HIG-color: #d91f2d;
+@level-MED-color: #df7120;
+@level-LOW-color: #df9c20;
+@level-NPR-color: #dfbb20;
+@level-no-data-color: #d9d9d9;
 
 body {
   padding-top: 50px;
@@ -318,7 +312,6 @@ footer {
 
 .set-level-color(@level) {
   @color: "level-@{level}-color";
-  @color-overview: "level-overview-@{level}-color";
 
   .hazard-types-list li {
     &.@{level} {
@@ -341,7 +334,7 @@ footer {
       border-color: #ccc;
       &:hover {
         border-color: fade(@@color, 50%);
-        background-color: @@color-overview;
+        background-color: fade(@@color, 7%);
       }
     }
     .page-header.detail,
@@ -355,7 +348,7 @@ footer {
   }
 
   .legend .level-@{level} .square {
-      background-color: fade(@@color, 50%);
+      background-color: fade(@@color, 75%);
   }
 }
 
@@ -369,7 +362,7 @@ footer {
 }
 
 .level-no-data .page-header {
-  border-color: @level-overview-no-data-color;
+  border-color: fade(@level-no-data-color, 7%);
   color: #ccc;
   .level {
     font-weight: 400;
