@@ -22,6 +22,8 @@
       'EPSG:3857');
   map.getView().fit(bounds, map.getSize());
 
+  map.addControl(new ol.control.ScaleLine());
+
   var vectorLayer = addVectorLayer(map, app.mapUrl);
 
   if (app.leveltype < 3) {
