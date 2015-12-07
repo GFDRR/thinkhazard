@@ -41,7 +41,8 @@
             top: e.pixel[1] + 10,
             left: e.pixel[0] + 10
           })
-          .html(feature.get('name'));
+          .html('Zoom in to <b>' + feature.get('name') + '</b><br/><em>' +
+            feature.get('hazardLevel') + '</em>');
       }
     });
 
