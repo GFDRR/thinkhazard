@@ -34,13 +34,13 @@ class TestReportFunction(BaseTestCase):
         hazards = hazards_list.find('li')
 
         # order should be 'FL', 'EQ' in icons list
-        self.assertTrue('FL' in hazards.eq(0).html())
-        self.assertTrue('EQ' in hazards.eq(1).html())
+        self.assertTrue('fl' in hazards.eq(0).html())
+        self.assertTrue('eq' in hazards.eq(1).html())
 
         # whereas order should be 'EQ', 'FL' in overview list
         hazards = resp.pyquery('.overview')
         self.assertTrue('Earthquake' in hazards.eq(0).html())
-        self.assertTrue('Flood' in hazards.eq(1).html())
+        self.assertTrue('River flood' in hazards.eq(1).html())
 
     def test_report__hazard(self):
         resp = self.testapp.get('/report/31/EQ', status=200)
