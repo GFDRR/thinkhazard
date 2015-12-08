@@ -157,6 +157,8 @@ def report(request):
         parents.append(division.parent.parent)
 
     return {'hazards': hazard_types,
+            'hazards_sorted': sorted(hazard_types,
+                                     key=lambda a: a['hazardlevel'].order),
             'hazard_category': hazard_category,
             'climate_change_recommendation': climate_change_recommendation,
             'recommendations': technical_recommendations,
