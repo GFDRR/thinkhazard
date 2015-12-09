@@ -39,7 +39,7 @@ class TestReportFunction(BaseTestCase):
         self.assertTrue('eq' in hazards.eq(2).html())
 
         # whereas order should be 'EQ', 'FL' in overview list
-        hazards = resp.pyquery('.overview')
+        hazards = resp.pyquery('a.overview')
         self.assertTrue('Earthquake' in hazards.eq(0).html())
         self.assertTrue('River flood' in hazards.eq(1).html())
 
