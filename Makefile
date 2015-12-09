@@ -102,8 +102,12 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 
 .build/venv:
 	mkdir -p $(dir $@)
-	virtualenv .build/venv
-	.build/venv/bin/pip install --upgrade pip
+	# make a first virtualenv to get a recent version of virtualenv
+	virtualenv venv
+	venv/bin/pip install virtualenv
+	venv/bin/virtualenv .build/venv
+	# remove the temporary virtualenv
+	rm -rf venv
 
 .build/thinkhazard-%.wsgi: thinkhazard.wsgi
 	mkdir -p $(dir $@)
@@ -141,7 +145,7 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 	touch $@
 
 .build/apache-%.conf: apache.conf .build/venv
-	sed -e 's#{{PYTHONPATH}}#$(shell .build/venv/bin/python -c "import distutils; print(distutils.sysconfig.get_python_lib())")#' \
+	sed -e 's#{{PYTHONPATH}}#$(shell .build/venv/bin/python -c "import sys; print(sys.path[-1])")#' \
 		-e 's#{{INSTANCEID}}#$(INSTANCEID)#g' \
 		-e 's#{{WSGISCRIPT}}#$(abspath .build/thinkhazard-$*.wsgi)#' $< > $@
 
