@@ -32,6 +32,8 @@ def main(global_config, **settings):
                            cache_max_age=86000, cachebust=True)
 
     config.add_route('index', '/')
+    config.add_route('about', '/about')
+    config.add_route('faq', '/faq')
     config.add_route('report',
                      '/report/{divisioncode:\d+}/{hazardtype:([A-Z]{2})}')
     config.add_route('report_json',

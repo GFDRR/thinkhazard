@@ -1,10 +1,10 @@
 {% macro navbar() %}
       <ul class="nav navbar-nav navbar-right">
-        <li class="disabled">
-          <a href="">About</a>
+        <li>
+          <a href="{{'about'|route_url}}">About</a>
         </li>
-        <li class="disabled">
-          <a href="">FAQ</a>
+        <li>
+          <a href="{{'faq'|route_url}}">FAQ</a>
         </li>
         <li class="disabled">
           <a href="">References</a>
@@ -29,7 +29,5 @@
 {% endmacro %}
 
 {% macro gfdrr_logo() %}
-<footer class="text-center">
-  <a href="//www.gfdrr.org/" class="logo-gfdrr" title="Logo GFDRR" alt="Logo GFDRR"></a>
-</footer>
+<a href="//www.gfdrr.org/" class="logo-gfdrr" title="Logo GFDRR" alt="Logo GFDRR"></a>
 {% endmacro %}
