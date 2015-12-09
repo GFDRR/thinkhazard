@@ -15,3 +15,8 @@ def index(request):
 @view_config(route_name='about', renderer='templates/about.jinja2')
 def about(request):
     return {}
+
+
+@view_config(route_name='faq', renderer='templates/faq.jinja2')
+def faq(request):
+    return {}
