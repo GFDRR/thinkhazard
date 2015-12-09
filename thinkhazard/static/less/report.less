@@ -76,6 +76,39 @@ body {
   }
 }
 
+.hazard-level {
+  background: @jumbotron-bg;
+  outline: .2em solid white;
+  position: absolute;
+  right: 40px;
+  text-align: center;
+  text-transform: uppercase;
+  transform: rotate(-90deg);
+  transform-origin: right top;
+  width: ~"calc(24.7em + 7px)";
+  z-index: 2;
+  &:before,
+  &:after {
+    border-left: 10px solid @jumbotron-bg;
+    border-bottom: 13px solid white;
+    border-top: 13px solid white;
+    content: "";
+    height: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    transform: scale(0.999);
+  }
+  &:before {
+    border-left-color: white;
+    border-bottom: 12px solid @jumbotron-bg;
+    border-top-color: @jumbotron-bg;
+    right: auto;
+    left: -1px;
+  }
+}
+
 .logo,
 .hazard-types-list a,
 .overview {
