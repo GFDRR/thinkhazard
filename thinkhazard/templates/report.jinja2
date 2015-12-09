@@ -119,6 +119,7 @@ Think Hazard - {{ division.name}}
           </ul>
           {% endif %}
         {% else %}
+          <aside class="hazard-level">Hazard level</aside>
           {% for hazard in hazards_sorted %}
           <a href="{{ 'report'|route_url(divisioncode=division.code, hazardtype=hazard.hazardtype.mnemonic) }}" aria-controls="{{ hazard.hazardtype.title }}" class="level-{{ hazard.hazardlevel.mnemonic }} overview">
             <h2 class="page-header">
