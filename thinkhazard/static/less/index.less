@@ -3,6 +3,7 @@
 .navbar-default {
   background-color: transparent;
   margin-bottom: 27px;
+  .box-shadow(none);
 }
 
 // height of the search pane (ie. height of the background image)
@@ -11,8 +12,7 @@
 .search-pane {
   margin-top: 30px;
   height: @search-pane-height;
-  background: url(../images/front-bg.png) no-repeat;
-  background-position-x: center;
+  background: url(../images/front-bg.png) no-repeat 50% 50%;
 
   > div {
     padding-top: @search-pane-height / 2 - @search-field-height / 2;

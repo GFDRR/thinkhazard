@@ -29,13 +29,14 @@ class TestReportFunction(BaseTestCase):
         hazards_list = resp.pyquery('.hazard-types-list')
 
         # only two categories with data
-        self.assertEqual(len(hazards_list.find('li:not(.no-data)')), 2)
+        # + the one for overview
+        self.assertEqual(len(hazards_list.find('li:not(.no-data)')), 3)
 
         hazards = hazards_list.find('li')
 
         # order should be 'FL', 'EQ' in icons list
-        self.assertTrue('fl' in hazards.eq(0).html())
-        self.assertTrue('eq' in hazards.eq(1).html())
+        self.assertTrue('fl' in hazards.eq(1).html())
+        self.assertTrue('eq' in hazards.eq(2).html())
 
         # whereas order should be 'EQ', 'FL' in overview list
         hazards = resp.pyquery('.overview')

@@ -22,6 +22,8 @@
       'EPSG:3857');
   map.getView().fit(bounds, map.getSize());
 
+  map.addControl(new ol.control.ScaleLine());
+
   var vectorLayer = addVectorLayer(map, app.mapUrl);
 
   if (app.leveltype < 3) {
@@ -39,7 +41,8 @@
             top: e.pixel[1] + 10,
             left: e.pixel[0] + 10
           })
-          .html(feature.get('name'));
+          .html('Zoom in to <b>' + feature.get('name') + '</b><br/><em>' +
+            feature.get('hazardLevel') + '</em>');
       }
     });
 
@@ -66,7 +69,7 @@
    */
   function addVectorLayer(map, url) {
     var styleFn = function(feature) {
-      var fillColors = getFillColors(0.5);
+      var fillColors = getFillColors(0.75);
       var transparent = 'rgba(1, 1, 1, 0)';
       var fillStyle = new ol.style.Fill({
         color: fillColors[feature.get('hazardLevel')] || transparent
@@ -128,7 +131,7 @@
    * @return {ol.interaction.Select}
    */
   function addSelectInteraction(map, layer) {
-    var fillColors = getFillColors(0.9);
+    var fillColors = getFillColors(1);
     var fillStyle = new ol.style.Fill({
       color: ''
     });
@@ -144,7 +147,7 @@
     var styleFn = function(feature) {
       var hazardLevel = feature.get('hazardLevel');
       var fillColor = hazardLevel in fillColors ?
-          fillColors[hazardLevel] : 'rgba(1, 1, 1, 0.5)';
+          fillColors[hazardLevel] : 'rgba(255, 255, 255, 0.5)';
       fillStyle.setColor(fillColor);
       return styles;
     };
@@ -165,10 +168,10 @@
    */
   function getFillColors(opacity) {
     return {
-      'HIG': [217, 31, 44, opacity],
-      'MED': [213, 124, 39, opacity],
-      'LOW': [224, 176, 37, opacity],
-      'VLO': [142, 157, 146, opacity]
+      'HIG': [217, 31, 45, opacity],
+      'MED': [223, 113, 32, opacity],
+      'LOW': [223, 156, 32, opacity],
+      'VLO': [223, 187, 32, opacity]
     };
   }
 

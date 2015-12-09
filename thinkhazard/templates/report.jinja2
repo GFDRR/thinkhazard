@@ -63,7 +63,15 @@ Think Hazard - {{ division.name}}
       </h2>
 
       <ul class="hazard-types-list horizontal list-unstyled" role="tablist">
-        <a class="btn btn-default btn-xs pull-left {% if not hazard_category %}disabled{% endif %}" href="{{ overview_url }}" title="Go back to overview page"><i class="icon-house"></i> Overview</a>
+        <li class="overview text-center {{ 'active' if not hazard_category}}">
+          <a href="{{ overview_url }}" title="Go back to overview page">
+            <i class="fa hazard-icon icon-overview"></i><br>
+            Overview
+            {% if not hazard_category %}
+            <div class="arrow"></div>
+            {% endif %}
+          </a>
+        </li>
         {% for hazard in hazards %}
           {{ hazard_type(hazard) }}
         {% endfor %}
@@ -103,17 +111,14 @@ Think Hazard - {{ division.name}}
           <h3>Recommendations</h3>
           <ul class="recommendations">
           {% for recommendation in recommendations %}
-            <li class="list-unstyled">{{ recommendation.text }}</li>
+            <li class="list-unstyled">
+              <i class="icon-list-square"></i>
+              {{ recommendation.text }}
+            </li>
           {% endfor %}
           </ul>
           {% endif %}
         {% else %}
-          <h2 class="page-header hazard-level-label">
-            <small class="text-muted">
-              Hazard level
-            </small>
-            <hr />
-          </h2>
           {% for hazard in hazards_sorted %}
           <a href="{{ 'report'|route_url(divisioncode=division.code, hazardtype=hazard.hazardtype.mnemonic) }}" aria-controls="{{ hazard.hazardtype.title }}" class="level-{{ hazard.hazardlevel.mnemonic }} overview">
             <h2 class="page-header">

@@ -4,6 +4,32 @@
 		{
 			"icon": {
 				"paths": [
+					"M877.714 109.714v804.571q0 14.857-10.857 25.714t-25.714 10.857h-804.571q-14.857 0-25.714-10.857t-10.857-25.714v-804.571q0-14.857 10.857-25.714t25.714-10.857h804.571q14.857 0 25.714 10.857t10.857 25.714z"
+				],
+				"width": 877.7150535583496,
+				"attrs": [],
+				"isMulticolor": false,
+				"tags": [
+					"stop"
+				],
+				"defaultCode": 61517,
+				"grid": 14
+			},
+			"attrs": [],
+			"properties": {
+				"id": 73,
+				"order": 23,
+				"name": "stop",
+				"prevSize": 14,
+				"code": 61517
+			},
+			"setIdx": 1,
+			"setId": 2,
+			"iconIdx": 73
+		},
+		{
+			"icon": {
+				"paths": [
 					"M1022.617 910.791c-1.793-11.014-4.764-21.464-8.913-30.479-2.1-4.559-4.457-8.708-7.172-12.397-1.332-1.895-2.766-3.637-4.252-5.327s-3.125-3.227-4.764-4.662c-128.32-111.416-217.606-192.403-247.778-219.912 44.105-65.261 69.872-143.944 69.872-228.62 0-226.11-183.49-409.395-409.805-409.395s-409.805 183.285-409.805 409.395c0 226.059 183.49 409.395 409.805 409.395 84.727 0 163.461-25.715 228.876-69.769 69.769 79.246 153.165 170.889 220.065 247.983 1.383 1.69 2.971 3.227 4.61 4.815 1.69 1.434 3.432 2.92 5.327 4.252 3.739 2.715 7.889 5.071 12.397 7.172 9.016 4.149 19.466 7.172 30.428 8.913 21.976 3.432 45.642 2.51 60.805-6.967 18.339-11.475 31.965-25.101 43.439-43.542 9.323-15.163 10.245-38.88 6.864-60.856zM102.451 409.395c0-169.608 137.592-307.098 307.354-307.098 169.71 0 307.354 137.541 307.354 307.098s-137.643 307.046-307.354 307.046c-169.762 0-307.354-137.438-307.354-307.046z",
 					"M563.482 358.579h-307.354c-28.328 0-51.226 22.898-51.226 51.226 0 28.277 22.898 51.226 51.226 51.226h307.354c28.277 0 51.226-22.949 51.226-51.226 0-28.328-22.949-51.226-51.226-51.226z"
 				],
@@ -22,13 +48,13 @@
 				{}
 			],
 			"properties": {
-				"order": 34,
+				"order": 9,
 				"id": 20,
 				"prevSize": 16,
 				"code": 58899,
 				"name": "zoom-out"
 			},
-			"setIdx": 0,
+			"setIdx": 2,
 			"setId": 1,
 			"iconIdx": 0
 		},
@@ -50,13 +76,13 @@
 				{}
 			],
 			"properties": {
-				"order": 35,
+				"order": 10,
 				"id": 18,
 				"prevSize": 16,
 				"code": 58888,
 				"name": "cross"
 			},
-			"setIdx": 0,
+			"setIdx": 2,
 			"setId": 1,
 			"iconIdx": 2
 		},
@@ -78,13 +104,13 @@
 				{}
 			],
 			"properties": {
-				"order": 36,
+				"order": 11,
 				"id": 17,
 				"prevSize": 16,
 				"code": 58889,
 				"name": "download-arrow"
 			},
-			"setIdx": 0,
+			"setIdx": 2,
 			"setId": 1,
 			"iconIdx": 3
 		},
@@ -106,13 +132,13 @@
 				{}
 			],
 			"properties": {
-				"order": 37,
+				"order": 12,
 				"id": 7,
 				"prevSize": 16,
 				"code": 58890,
 				"name": "house"
 			},
-			"setIdx": 0,
+			"setIdx": 2,
 			"setId": 1,
 			"iconIdx": 13
 		},
@@ -134,13 +160,13 @@
 				{}
 			],
 			"properties": {
-				"order": 38,
+				"order": 13,
 				"id": 6,
 				"prevSize": 16,
 				"code": 58891,
 				"name": "list-arrow"
 			},
-			"setIdx": 0,
+			"setIdx": 2,
 			"setId": 1,
 			"iconIdx": 14
 		},
@@ -162,13 +188,13 @@
 				{}
 			],
 			"properties": {
-				"order": 39,
+				"order": 14,
 				"id": 5,
 				"prevSize": 16,
 				"code": 58892,
 				"name": "magnifying-glass"
 			},
-			"setIdx": 0,
+			"setIdx": 2,
 			"setId": 1,
 			"iconIdx": 15
 		},
@@ -190,13 +216,13 @@
 				{}
 			],
 			"properties": {
-				"order": 40,
+				"order": 15,
 				"id": 4,
 				"prevSize": 16,
 				"code": 58893,
 				"name": "pin"
 			},
-			"setIdx": 0,
+			"setIdx": 2,
 			"setId": 1,
 			"iconIdx": 16
 		},
@@ -218,13 +244,13 @@
 				{}
 			],
 			"properties": {
-				"order": 41,
+				"order": 16,
 				"id": 3,
 				"prevSize": 16,
 				"code": 58894,
 				"name": "selector-arrow"
 			},
-			"setIdx": 0,
+			"setIdx": 2,
 			"setId": 1,
 			"iconIdx": 17
 		},
@@ -246,13 +272,13 @@
 				{}
 			],
 			"properties": {
-				"order": 42,
+				"order": 17,
 				"id": 2,
 				"prevSize": 16,
 				"code": 58895,
 				"name": "separator"
 			},
-			"setIdx": 0,
+			"setIdx": 2,
 			"setId": 1,
 			"iconIdx": 18
 		},
@@ -298,7 +324,7 @@
 				}
 			],
 			"properties": {
-				"order": 43,
+				"order": 18,
 				"id": 1,
 				"prevSize": 16,
 				"code": 58896,
@@ -309,9 +335,38 @@
 				],
 				"name": "zoom-in"
 			},
-			"setIdx": 0,
+			"setIdx": 2,
 			"setId": 1,
 			"iconIdx": 19
+		},
+		{
+			"icon": {
+				"paths": [
+					"M400 352h352c17.664 0 32 14.336 32 32s-14.336 32-32 32h-352c-17.664 0-32-14.336-32-32s14.336-32 32-32z",
+					"M304 384c0 17.673-14.327 32-32 32s-32-14.327-32-32c0-17.673 14.327-32 32-32s32 14.327 32 32z",
+					"M400 480h352c17.664 0 32 14.336 32 32s-14.336 32-32 32h-352c-17.664 0-32-14.336-32-32s14.336-32 32-32z",
+					"M304 512c0 17.673-14.327 32-32 32s-32-14.327-32-32c0-17.673 14.327-32 32-32s32 14.327 32 32z",
+					"M400 608h352c17.664 0 32 14.336 32 32s-14.336 32-32 32h-352c-17.664 0-32-14.336-32-32s14.336-32 32-32z",
+					"M304 640c0 17.673-14.327 32-32 32s-32-14.327-32-32c0-17.673 14.327-32 32-32s32 14.327 32 32z"
+				],
+				"attrs": [],
+				"isMulticolor": false,
+				"grid": 64,
+				"tags": [
+					"overview"
+				]
+			},
+			"attrs": [],
+			"properties": {
+				"order": 19,
+				"id": 8,
+				"prevSize": 32,
+				"code": 59649,
+				"name": "Overview"
+			},
+			"setIdx": 3,
+			"setId": 0,
+			"iconIdx": 0
 		},
 		{
 			"icon": {
@@ -331,15 +386,15 @@
 				{}
 			],
 			"properties": {
-				"order": 3,
+				"order": 2,
 				"id": 7,
 				"prevSize": 32,
 				"code": 58880,
 				"name": "Drought"
 			},
-			"setIdx": 1,
+			"setIdx": 3,
 			"setId": 0,
-			"iconIdx": 0
+			"iconIdx": 1
 		},
 		{
 			"icon": {
@@ -359,15 +414,15 @@
 				{}
 			],
 			"properties": {
-				"order": 4,
+				"order": 3,
 				"id": 6,
 				"prevSize": 32,
 				"code": 58881,
 				"name": "Earthquake"
 			},
-			"setIdx": 1,
+			"setIdx": 3,
 			"setId": 0,
-			"iconIdx": 1
+			"iconIdx": 2
 		},
 		{
 			"icon": {
@@ -396,15 +451,15 @@
 				{}
 			],
 			"properties": {
-				"order": 5,
+				"order": 4,
 				"id": 5,
 				"prevSize": 32,
 				"code": 58882,
 				"name": "Flood"
 			},
-			"setIdx": 1,
+			"setIdx": 3,
 			"setId": 0,
-			"iconIdx": 2
+			"iconIdx": 3
 		},
 		{
 			"icon": {
@@ -445,15 +500,15 @@
 				{}
 			],
 			"properties": {
-				"order": 6,
+				"order": 5,
 				"id": 4,
 				"prevSize": 32,
 				"code": 58883,
 				"name": "Landslide"
 			},
-			"setIdx": 1,
+			"setIdx": 3,
 			"setId": 0,
-			"iconIdx": 3
+			"iconIdx": 4
 		},
 		{
 			"icon": {
@@ -485,15 +540,15 @@
 				{}
 			],
 			"properties": {
-				"order": 7,
+				"order": 6,
 				"id": 3,
 				"prevSize": 32,
 				"code": 58884,
 				"name": "StormSurge"
 			},
-			"setIdx": 1,
+			"setIdx": 3,
 			"setId": 0,
-			"iconIdx": 4
+			"iconIdx": 5
 		},
 		{
 			"icon": {
@@ -513,15 +568,15 @@
 				{}
 			],
 			"properties": {
-				"order": 8,
+				"order": 7,
 				"id": 2,
 				"prevSize": 32,
 				"code": 58885,
 				"name": "Tsunami"
 			},
-			"setIdx": 1,
+			"setIdx": 3,
 			"setId": 0,
-			"iconIdx": 5
+			"iconIdx": 6
 		},
 		{
 			"icon": {
@@ -544,15 +599,15 @@
 				{}
 			],
 			"properties": {
-				"order": 9,
+				"order": 8,
 				"id": 1,
 				"prevSize": 32,
 				"code": 58886,
 				"name": "VolcanicAsh"
 			},
-			"setIdx": 1,
+			"setIdx": 3,
 			"setId": 0,
-			"iconIdx": 6
+			"iconIdx": 7
 		},
 		{
 			"icon": {
@@ -575,15 +630,15 @@
 				{}
 			],
 			"properties": {
-				"order": 2,
+				"order": 1,
 				"id": 0,
 				"prevSize": 32,
 				"code": 58887,
 				"name": "Cyclone"
 			},
-			"setIdx": 1,
+			"setIdx": 3,
 			"setId": 0,
-			"iconIdx": 7
+			"iconIdx": 8
 		}
 	],
 	"height": 1024,
@@ -619,6 +674,7 @@
 		},
 		"historySize": 100,
 		"gridSize": 16,
-		"showGrid": false
+		"showGrid": false,
+		"showCodes": true
 	}
 }

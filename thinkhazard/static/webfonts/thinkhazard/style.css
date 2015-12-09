@@ -1,16 +1,17 @@
 @font-face {
 	font-family: 'thinkhazard';
-	src:url('fonts/thinkhazard.eot?8pj2d5');
-	src:url('fonts/thinkhazard.eot?#iefix8pj2d5') format('embedded-opentype'),
-		url('fonts/thinkhazard.ttf?8pj2d5') format('truetype'),
-		url('fonts/thinkhazard.woff?8pj2d5') format('woff'),
-		url('fonts/thinkhazard.svg?8pj2d5#thinkhazard') format('svg');
+	src:url('fonts/thinkhazard.eot?8ddcbz');
+	src:url('fonts/thinkhazard.eot?8ddcbz#iefix') format('embedded-opentype'),
+		url('fonts/thinkhazard.ttf?8ddcbz') format('truetype'),
+		url('fonts/thinkhazard.woff?8ddcbz') format('woff'),
+		url('fonts/thinkhazard.svg?8ddcbz#thinkhazard') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
 
 [class^="icon-"], [class*=" icon-"] {
-	font-family: 'thinkhazard';
+    /* use !important to prevent issues with browser extensions that change fonts */
+	font-family: 'thinkhazard' !important;
 	speak: none;
 	font-style: normal;
 	font-weight: normal;
@@ -23,6 +24,9 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.icon-stop:before {
+	content: "\f04d";
+}
 .icon-zoom-out:before {
 	content: "\e613";
 }
@@ -53,6 +57,9 @@
 .icon-zoom-in:before {
 	content: "\e610";
 }
+.icon-Overview:before {
+	content: "\e901";
+}
 .icon-Drought:before {
 	content: "\e600";
 }
@@ -77,3 +84,4 @@
 .icon-Cyclone:before {
 	content: "\e607";
 }
+
