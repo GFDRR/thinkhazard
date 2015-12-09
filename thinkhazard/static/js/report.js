@@ -168,7 +168,7 @@
       'HIG': [217, 31, 44, opacity],
       'MED': [213, 124, 39, opacity],
       'LOW': [224, 176, 37, opacity],
-      'NPR': [142, 157, 146, opacity]
+      'VLO': [142, 157, 146, opacity]
     };
   }
 
