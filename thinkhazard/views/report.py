@@ -193,14 +193,15 @@ def report_json(request):
 
     if hazard_type is not None:
         divisions = DBSession.query(AdministrativeDivision) \
-            .add_columns(simplify, HazardLevel.mnemonic) \
+            .add_columns(simplify, HazardLevel.mnemonic, HazardLevel.title) \
             .outerjoin(AdministrativeDivision.hazardcategories) \
             .outerjoin(HazardType)\
             .outerjoin(HazardLevel) \
             .filter(and_(_filter, HazardType.mnemonic == hazard_type))
     else:
         divisions = DBSession.query(AdministrativeDivision) \
-            .add_columns(simplify, literal_column("'None'")) \
+            .add_columns(simplify, literal_column("'None'"),
+                         literal_column("'blah'")) \
             .filter(_filter)
 
     return [{
@@ -209,6 +210,8 @@ def report_json(request):
         'properties': {
             'name': division.name,
             'code': division.code,
-            'hazardLevel': hazardlevel
+            'hazardLevelMnemonic': hazardlevel_mnemonic,
+            'hazardLevelTitle': hazardlevel_title
         }
-    } for division, geom_simplified, hazardlevel in divisions]
+    } for division, geom_simplified, hazardlevel_mnemonic,
+          hazardlevel_title in divisions]
