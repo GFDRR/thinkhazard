@@ -24,7 +24,8 @@ requires = [
     'papyrus==2.0dev3',
     'WebTest==2.0.18',
     'nose',
-    'pyquery==1.2.9'
+    'pyquery==1.2.9',
+    'markdown==2.6.5',
     ]
 
 setup(name='thinkhazard',
