@@ -56,5 +56,7 @@ setup(name='thinkhazard',
         thinkhazard.scripts.import_recommendations:main
       import_further_resources = \
         thinkhazard.scripts.import_further_resources:main
+      import_climate_change_recommendations = \
+        thinkhazard.scripts.import_climate_change_recommendations:main
       """,
       )
