@@ -24,17 +24,15 @@ $ .build/venv/bin/initialize_thinkhazard_db production.ini
 Database data
 -------------
 
-The BRGM team is currently responsible for the database data (a.k.a. the
-``datamart``). They provide a SQL script that populates the database. This
-script is ``/var/sig/thor-data-backup_20150512_v3.backup`` on the demo server.
+The recommendations are currently provided as documents (xls or doc files).
 
-First of all, edit this script and check that the path to the
-``adm-div_20150505.csv`` file is correct. It should be
-``/var/sig/adm-div_20150505.csv``.
+In order to be put in the database a script has been developed to import these
+recommendations into the database.
 
-Then run the following command as the ``postgres`` user:
+Here are the commands to be run:
 
 ```shell
-$ psql -d thinkhazard -f /var/sig/thor_enum_updates_18-06-2015.sql
-$ psql -d thinkhazard -f /var/sig/thor_hazard-data_updates_22-06-2015.sql
+.build/venv/bin/import_recommandations
 ```
+
+See the script in order to get more information.
