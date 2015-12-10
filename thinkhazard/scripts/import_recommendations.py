@@ -49,8 +49,7 @@ def main(argv=sys.argv):
 
         # First load general recommendations
 
-        path = os.path.dirname(os.path.abspath(__file__)) + '/../data'
-        with open(path + '/general_recommendations.csv', 'rb') as csvfile:
+        with open('data/general_recommendations.csv', 'rb') as csvfile:
             recommendations = csv.reader(csvfile, delimiter=',')
             for row in recommendations:
 
@@ -78,7 +77,7 @@ def main(argv=sys.argv):
 
         hctra = HazardCategoryTechnicalRecommendationAssociation
 
-        with open(path + '/technical_recommendations.csv', 'rb') as csvfile:
+        with open('data/technical_recommendations.csv', 'rb') as csvfile:
             recommendations = csv.reader(csvfile, delimiter=',')
             for row in recommendations:
                 technical_rec = TechnicalRecommendation(**{
