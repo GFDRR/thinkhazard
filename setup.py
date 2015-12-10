@@ -53,5 +53,7 @@ setup(name='thinkhazard',
       initialize_thinkhazard_db = thinkhazard.scripts.initializedb:main
       import_recommendations = \
         thinkhazard.scripts.import_recommendations:main
+      import_further_resources = \
+        thinkhazard.scripts.import_further_resources:main
       """,
       )
