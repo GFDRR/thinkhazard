@@ -59,7 +59,7 @@ def main(argv=sys.argv):
                     .filter(HazardLevel.mnemonic == row[1]) \
                     .filter(HazardType.mnemonic == row[0]) \
                     .one()
-                hazardcategory.recommendation = row[2]
+                hazardcategory.general_recommendation = row[2]
                 DBSession.add(hazardcategory)
 
         categories = []
