@@ -34,15 +34,16 @@
   }
   .search-field,
   .search-field:focus {
-    .box-shadow(0 0 0 5px rgba(0,0,0,.15));
+    .box-shadow(0 0 0 10px rgba(0,0,0,.15));
   }
 
 }
 .search {
+  @color: #d91f2c;
   .input-group-addon {
-    background-color: red;
+    background-color: @color;
     &:after {
-      border-left-color: red;
+      border-left-color: @color;
     }
   }
 }
