@@ -36,13 +36,16 @@
 
       $('#map .tooltip').empty().hide();
       if (feature) {
+        var html = 'Zoom in to <b>' + feature.get('name') + '</b>';
+        if (feature.get('hazardLevelMnemonic') != 'None') {
+          html += '<br/><em>' + feature.get('hazardLevelTitle') + '</em>';
+        }
         $('#map .tooltip').show()
           .css({
             top: e.pixel[1] + 10,
             left: e.pixel[0] + 10
           })
-          .html('Zoom in to <b>' + feature.get('name') + '</b><br/><em>' +
-            feature.get('hazardLevel') + '</em>');
+          .html(html);
       }
     });
 
@@ -72,7 +75,7 @@
       var fillColors = getFillColors(0.75);
       var transparent = 'rgba(1, 1, 1, 0)';
       var fillStyle = new ol.style.Fill({
-        color: fillColors[feature.get('hazardLevel')] || transparent
+        color: fillColors[feature.get('hazardLevelMnemonic')] || transparent
       });
       var styles = [
         new ol.style.Style({
@@ -145,7 +148,7 @@
       })
     ];
     var styleFn = function(feature) {
-      var hazardLevel = feature.get('hazardLevel');
+      var hazardLevel = feature.get('hazardLevelMnemonic');
       var fillColor = hazardLevel in fillColors ?
           fillColors[hazardLevel] : 'rgba(255, 255, 255, 0.5)';
       fillStyle.setColor(fillColor);
