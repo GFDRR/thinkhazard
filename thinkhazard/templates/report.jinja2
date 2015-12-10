@@ -91,7 +91,7 @@ Think Hazard - {{ division.name}}
           </h2>
           {% if hazard_category.general_recommendation %}
           <p>
-          {{ hazard_category.general_recommendation }}
+          {{ hazard_category.general_recommendation|markdown }}
           </p>
           {% endif %}
 
