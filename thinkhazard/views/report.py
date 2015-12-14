@@ -74,15 +74,17 @@ def report(request):
             'association': association,
         })
 
-    hazard_category = None
+    association = None
     technical_recommendations = None
     further_resources = None
     climate_change_recommendation = None
 
     if hazard is not None:
         try:
-            hazard_category = DBSession.query(HazardCategory) \
-                .join(HazardCategory.administrativedivisions) \
+            association = DBSession.query(
+                HazardCategoryAdministrativeDivisionAssociation) \
+                .join(AdministrativeDivision) \
+                .join(HazardCategory) \
                 .join(HazardLevel) \
                 .join(HazardType) \
                 .filter(HazardType.mnemonic == hazard) \
@@ -107,14 +109,14 @@ def report(request):
         technical_recommendations = DBSession.query(TechnicalRecommendation) \
             .join(TechnicalRecommendation.hazardcategory_associations) \
             .join(HazardCategory) \
-            .filter(HazardCategory.id == hazard_category.id) \
+            .filter(HazardCategory.id == association.hazardcategory.id) \
             .all()
 
         further_resources = DBSession.query(FurtherResource) \
             .join(FurtherResource.hazardcategory_associations) \
             .join(HazardCategory) \
             .outerjoin(AdministrativeDivision) \
-            .filter(HazardCategory.id == hazard_category.id) \
+            .filter(HazardCategory.id == association.hazardcategory.id) \
             .filter(or_(AdministrativeDivision.code == division_code,
                         AdministrativeDivision.code == null())) \
             .all()
@@ -165,7 +167,10 @@ def report(request):
     return {'hazards': hazard_types,
             'hazards_sorted': sorted(hazard_types,
                                      key=lambda a: a['hazardlevel'].order),
-            'hazard_category': hazard_category,
+            'hazard_category': association.hazardcategory
+            if association else '',
+            'source': association.source
+            if association else '',
             'climate_change_recommendation': climate_change_recommendation,
             'recommendations': technical_recommendations,
             'resources': further_resources,
