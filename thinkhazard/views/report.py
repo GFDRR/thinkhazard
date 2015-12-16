@@ -15,7 +15,6 @@ from thinkhazard_common.models import (
     AdministrativeDivision,
     HazardLevel,
     HazardCategory,
-    HazardCategoryAdministrativeDivisionAssociation,
     HazardType,
     ClimateChangeRecommendation,
     TechnicalRecommendation,
@@ -49,29 +48,24 @@ def report(request):
 
     # Get the hazard categories corresponding to the administrative
     # division whose code is division_code.
-    associations_query = DBSession.query(
-        HazardCategoryAdministrativeDivisionAssociation) \
-        .join(AdministrativeDivision) \
-        .join(HazardCategory) \
+    hazardcategories_query = DBSession.query(HazardCategory) \
+        .join(HazardCategory.administrativedivisions) \
         .join(HazardType) \
         .join(HazardLevel) \
         .filter(AdministrativeDivision.code == division_code)
 
-    # Create a dict with the associations. Keys are the hazard type mnemonic.
-    associations = {d.hazardcategory.hazardtype.mnemonic: d
-                    for d in associations_query}
+    # Create a dict with the categories. Keys are the hazard type mnemonic.
+    hazardcategories = {d.hazardtype.mnemonic: d
+                        for d in hazardcategories_query}
 
     hazard_types = []
     for hazardtype in hazardtype_query:
-        hazardlevel = _hazardlevel_nodata
-        association = {'source': ''}
-        if hazardtype.mnemonic in associations:
-            association = associations[hazardtype.mnemonic]
-            hazardlevel = association.hazardcategory.hazardlevel
+        cat = _hazardlevel_nodata
+        if hazardtype.mnemonic in hazardcategories:
+            cat = hazardcategories[hazardtype.mnemonic].hazardlevel
         hazard_types.append({
             'hazardtype': hazardtype,
-            'hazardlevel': hazardlevel,
-            'association': association,
+            'hazardlevel': cat
         })
 
     association = None
