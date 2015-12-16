@@ -15,6 +15,7 @@ from thinkhazard_common.models import (
     AdministrativeDivision,
     HazardLevel,
     HazardCategory,
+    HazardCategoryAdministrativeDivisionAssociation,
     HazardType,
     ClimateChangeRecommendation,
     TechnicalRecommendation,
