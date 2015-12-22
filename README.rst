@@ -68,6 +68,23 @@ file that looks like this::
     [app:main]
     sqlalchemy.url = postgresql://www-data:www-data@localhost:9999/thinkhazard
 
+Initialize database
+===================
+
+In order to work properly, the application needs initial data.
+
+First of all, the database needs to be created with the proper schema, and
+tables.
+Also, the database needs to be populated with some data like the administrative
+divisions, some enumerations, or recommendations.
+
+To create an initial working database, you can run the following command::
+
+    thinkhazard/scripts/createdb.sh
+
+WARNING: this command SHOULD NOT be used in a running application, otherwise
+all the data will be lost.
+
 Deploy on server
 ================
 
