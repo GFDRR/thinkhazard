@@ -120,8 +120,7 @@ def report(request):
         .filter(AdministrativeDivision.code == division_code).one()
 
     # Get the geometry for division and compute its extent
-    cte = select([
-        func.ST_Transform(AdministrativeDivision.geom, 4326).label('geom')]) \
+    cte = select([AdministrativeDivision.geom]) \
         .where(AdministrativeDivision.code == division_code) \
         .cte('bounds')
     bounds = list(DBSession.query(
@@ -134,9 +133,7 @@ def report(request):
 
     # compute a 0-360 version of the extent
     cte = select([
-        func.ST_Shift_Longitude(
-            func.ST_Transform(AdministrativeDivision.geom, 4326)
-        ).label('shift')]) \
+        func.ST_Shift_Longitude(AdministrativeDivision.geom).label('shift')]) \
         .where(AdministrativeDivision.code == division_code) \
         .cte('bounds')
     bounds_shifted = list(DBSession.query(
@@ -189,7 +186,8 @@ def report_json(request):
     _filter = or_(AdministrativeDivision.code == division_code,
                   AdministrativeDivision.parent_code == division_code)
 
-    simplify = func.ST_Simplify(AdministrativeDivision.geom, resolution / 2)
+    simplify = func.ST_Simplify(
+        func.ST_Transform(AdministrativeDivision.geom, 3857), resolution / 2)
 
     if hazard_type is not None:
         divisions = DBSession.query(AdministrativeDivision) \
