@@ -104,7 +104,7 @@ def populate_db():
 
     climate_rec = ClimateChangeRecommendation()
     climate_rec.text = u'Climate change recommendation'
-    climate_rec.administrativedivision = div_level_3_2
+    climate_rec.administrativedivision = div_level_1
     climate_rec.hazardtype = DBSession.query(HazardType) \
         .filter(HazardType.mnemonic == u'EQ').one()
     DBSession.add(climate_rec)
