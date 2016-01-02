@@ -73,6 +73,12 @@ def report(request):
     further_resources = None
     climate_change_recommendation = None
 
+    # Get the administrative division whose code is division_code.
+    _alias = aliased(AdministrativeDivision)
+    division = DBSession.query(AdministrativeDivision) \
+        .outerjoin(_alias, _alias.code == AdministrativeDivision.parent_code) \
+        .filter(AdministrativeDivision.code == division_code).one()
+
     if hazard is not None:
         try:
             hazard_category = DBSession.query(HazardCategory) \
@@ -88,11 +94,17 @@ def report(request):
             return HTTPFound(location=url)
 
         try:
+            # get the code for level 0 division
+            code = division.code
+            if division.leveltype_id == 2:
+                code = division.parent.code
+            if division.leveltype_id == 3:
+                code = division.parent.parent.code
             climate_change_recommendation = DBSession.query(
                     ClimateChangeRecommendation) \
                 .join(AdministrativeDivision) \
                 .join(HazardType) \
-                .filter(AdministrativeDivision.code == division_code) \
+                .filter(AdministrativeDivision.code == code) \
                 .filter(HazardType.mnemonic == hazard) \
                 .one()
         except NoResultFound:
@@ -112,12 +124,6 @@ def report(request):
             .filter(or_(AdministrativeDivision.code == division_code,
                         AdministrativeDivision.code == null())) \
             .all()
-
-    # Get the administrative division whose code is division_code.
-    _alias = aliased(AdministrativeDivision)
-    division = DBSession.query(AdministrativeDivision) \
-        .outerjoin(_alias, _alias.code == AdministrativeDivision.parent_code) \
-        .filter(AdministrativeDivision.code == division_code).one()
 
     # Get the geometry for division and compute its extent
     cte = select([AdministrativeDivision.geom]) \
