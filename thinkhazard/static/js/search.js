@@ -12,7 +12,6 @@
       return tokens;
     },
     queryTokenizer: Bloodhound.tokenizers.whitespace,
-    limit: 10,
     remote: {
       url: app.administrativedivisionUrl + '?q=%QUERY',
       wildcard: '%QUERY',
@@ -34,6 +33,7 @@
       return getSortedTokens(s).join(', ');
     },
     source: engine,
+    limit: Infinity,
     templates: {
       suggestion: function(data) {
         var tokens = getSortedTokens(data);
