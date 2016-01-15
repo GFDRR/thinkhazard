@@ -46,7 +46,7 @@ def populate_db():
     shape = MultiPolygon([
         Polygon([(0, 0), (0, 1), (1, 1), (1, 0), (0, 0)])
     ])
-    geometry = from_shape(shape, 3857)
+    geometry = from_shape(shape, 4326)
 
     div_level_1 = AdministrativeDivision(**{
         'code': 10,
@@ -68,7 +68,7 @@ def populate_db():
     shape = MultiPolygon([
         Polygon([(0, 0), (0, 1), (.5, 1), (.5, 0), (0, 0)])
     ])
-    geometry = from_shape(shape, 3857)
+    geometry = from_shape(shape, 4326)
 
     div_level_3_1 = AdministrativeDivision(**{
         'code': 30,
@@ -82,7 +82,7 @@ def populate_db():
     shape = MultiPolygon([
         Polygon([(.5, 0), (.5, 1), (1, 1), (1, 0), (.5, 0)])
     ])
-    geometry = from_shape(shape, 3857)
+    geometry = from_shape(shape, 4326)
 
     div_level_3_2 = AdministrativeDivision(**{
         'code': 31,
