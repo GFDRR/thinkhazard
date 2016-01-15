@@ -205,6 +205,7 @@ def report_json(request):
         divisions = DBSession.query(AdministrativeDivision) \
             .add_columns(simplify, HazardLevel.mnemonic, HazardLevel.title) \
             .outerjoin(AdministrativeDivision.hazardcategories) \
+            .join(HazardCategory) \
             .outerjoin(HazardType)\
             .outerjoin(HazardLevel) \
             .filter(and_(_filter, HazardType.mnemonic == hazard_type))

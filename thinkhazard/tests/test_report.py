@@ -54,3 +54,6 @@ class TestReportFunction(BaseTestCase):
 
         resp = self.testapp.get('/report/31/EQ', status=200)
         self.assertEqual(len(resp.pyquery('.further-resources ul li')), 2)
+
+    def test_report__json(self):
+        self.testapp.get('/report/30/EQ.json?resolution=1000', status=200)
