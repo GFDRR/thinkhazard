@@ -75,7 +75,7 @@ modwsgi: install \
 	     .build/apache-development.conf
 
 .PHONY: test
-test:
+test: install
 	.build/venv/bin/nosetests
 
 .PHONY: dist
