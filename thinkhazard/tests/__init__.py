@@ -15,9 +15,8 @@ from thinkhazard_common.models import (
     HazardCategoryTechnicalRecommendationAssociation,
     FurtherResource,
     HazardCategoryFurtherResourceAssociation,
+    HazardCategoryAdministrativeDivisionAssociation,
     )
-
-from thinkhazard_common.utils import associate_admindiv_hazardcategory
 
 from shapely.geometry import (
     MultiPolygon,
@@ -101,8 +100,16 @@ def populate_db():
     category_eq_hig.hazardlevel = DBSession.query(HazardLevel) \
         .filter(HazardLevel.mnemonic == u'HIG').one()
 
-    associate_admindiv_hazardcategory(div_level_3_1, category_eq_hig, u'test')
-    associate_admindiv_hazardcategory(div_level_3_2, category_eq_hig, u'test')
+    div_level_3_1.hazardcategories.append(
+        HazardCategoryAdministrativeDivisionAssociation(**{
+            'hazardcategory': category_eq_hig
+        })
+    )
+    div_level_3_2.hazardcategories.append(
+        HazardCategoryAdministrativeDivisionAssociation(**{
+            'hazardcategory': category_eq_hig
+        })
+    )
 
     climate_rec = ClimateChangeRecommendation()
     climate_rec.text = u'Climate change recommendation'
@@ -137,9 +144,17 @@ def populate_db():
     category_fl_med.hazardlevel = DBSession.query(HazardLevel) \
         .filter(HazardLevel.mnemonic == u'MED').one()
 
-    associate_admindiv_hazardcategory(div_level_3_1, category_fl_med, u'test')
+    div_level_3_1.hazardcategories.append(
+        HazardCategoryAdministrativeDivisionAssociation(**{
+            'hazardcategory': category_fl_med
+        })
+    )
     DBSession.add(div_level_3_1)
-    associate_admindiv_hazardcategory(div_level_3_2, category_fl_med, u'test')
+    div_level_3_2.hazardcategories.append(
+        HazardCategoryAdministrativeDivisionAssociation(**{
+            'hazardcategory': category_fl_med
+        })
+    )
     DBSession.add(div_level_3_2)
 
     further_resource = FurtherResource(**{

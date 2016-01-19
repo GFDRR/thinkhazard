@@ -15,11 +15,11 @@ from thinkhazard_common.models import (
     AdministrativeDivision,
     HazardLevel,
     HazardCategory,
-    HazardCategoryAdministrativeDivisionAssociation,
     HazardType,
     ClimateChangeRecommendation,
     TechnicalRecommendation,
     FurtherResource,
+    HazardCategoryAdministrativeDivisionAssociation,
 )
 
 
@@ -69,7 +69,7 @@ def report(request):
             'hazardlevel': cat
         })
 
-    association = None
+    hazard_category = None
     technical_recommendations = None
     further_resources = None
     climate_change_recommendation = None
@@ -82,10 +82,9 @@ def report(request):
 
     if hazard is not None:
         try:
-            association = DBSession.query(
-                HazardCategoryAdministrativeDivisionAssociation) \
+            hazard_category = DBSession.query(HazardCategory) \
+                .join(HazardCategoryAdministrativeDivisionAssociation) \
                 .join(AdministrativeDivision) \
-                .join(HazardCategory) \
                 .join(HazardLevel) \
                 .join(HazardType) \
                 .filter(HazardType.mnemonic == hazard) \
@@ -116,14 +115,14 @@ def report(request):
         technical_recommendations = DBSession.query(TechnicalRecommendation) \
             .join(TechnicalRecommendation.hazardcategory_associations) \
             .join(HazardCategory) \
-            .filter(HazardCategory.id == association.hazardcategory.id) \
+            .filter(HazardCategory.id == hazard_category.id) \
             .all()
 
         further_resources = DBSession.query(FurtherResource) \
             .join(FurtherResource.hazardcategory_associations) \
             .join(HazardCategory) \
             .outerjoin(AdministrativeDivision) \
-            .filter(HazardCategory.id == association.hazardcategory.id) \
+            .filter(HazardCategory.id == hazard_category.id) \
             .filter(or_(AdministrativeDivision.code == division_code,
                         AdministrativeDivision.code == null())) \
             .all()
@@ -165,10 +164,7 @@ def report(request):
     return {'hazards': hazard_types,
             'hazards_sorted': sorted(hazard_types,
                                      key=lambda a: a['hazardlevel'].order),
-            'hazard_category': association.hazardcategory
-            if association else '',
-            'source': association.source
-            if association else '',
+            'hazard_category': hazard_category,
             'climate_change_recommendation': climate_change_recommendation,
             'recommendations': technical_recommendations,
             'resources': further_resources,
