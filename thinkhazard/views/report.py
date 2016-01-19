@@ -50,7 +50,8 @@ def report(request):
     # Get the hazard categories corresponding to the administrative
     # division whose code is division_code.
     hazardcategories_query = DBSession.query(HazardCategory) \
-        .join(HazardCategory.administrativedivisions) \
+        .join(HazardCategoryAdministrativeDivisionAssociation) \
+        .join(AdministrativeDivision) \
         .join(HazardType) \
         .join(HazardLevel) \
         .filter(AdministrativeDivision.code == division_code)

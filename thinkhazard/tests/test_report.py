@@ -15,6 +15,17 @@ class TestReportFunction(BaseTestCase):
         # 1 division + pin icon
         self.assertEqual(len(resp.pyquery('.breadcrumb .btn')), 2)
 
+    def test_report__hazardcategories(self):
+        resp = self.testapp.get('/report/10', status=200)
+        # admin div 10 is not linked to any hazard category
+        self.assertEqual(len(resp.pyquery('.level-no-data.overview')), 8)
+
+        resp = self.testapp.get('/report/31', status=200)
+        # admin div 10 is not linked to hazard categories with one with high
+        # level and one with medium level
+        self.assertEqual(len(resp.pyquery('.level-HIG.overview')), 1)
+        self.assertEqual(len(resp.pyquery('.level-MED.overview')), 1)
+
     def test_report__zoom_out(self):
         resp = self.testapp.get('/report/10')
         # no zoom out for level 1
