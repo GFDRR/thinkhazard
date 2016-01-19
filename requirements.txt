@@ -1,2 +1,2 @@
-git+https://github.com/GFDRR/thinkhazard_common.git@9dfa950#egg=thinkhazard_common
+git+https://github.com/GFDRR/thinkhazard_common.git@88c6425#egg=thinkhazard_common
 -e .
