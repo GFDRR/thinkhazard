@@ -178,7 +178,9 @@ Think Hazard - {{ division.name}}
 
           <div class="data-source text-center">
             <h5>DATA SOURCE</h5>
-            <div>HazardSet {{source}}</div>
+            <div>
+              {{ sources|join(', ') }}
+            </div>
           </div>
           {% endif %}
         </div>

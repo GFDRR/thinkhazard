@@ -73,6 +73,7 @@ def report(request):
     hazard_category = None
     technical_recommendations = None
     further_resources = None
+    sources = None
     climate_change_recommendation = None
 
     # Get the administrative division whose code is division_code.
@@ -128,6 +129,15 @@ def report(request):
                         AdministrativeDivision.code == null())) \
             .all()
 
+        sources = DBSession.query(
+                HazardCategoryAdministrativeDivisionAssociation) \
+            .join(AdministrativeDivision) \
+            .join(HazardCategory) \
+            .filter(HazardCategory.id == hazard_category.id) \
+            .filter(AdministrativeDivision.code == division_code) \
+            .one() \
+            .hazardsets
+
     # Get the geometry for division and compute its extent
     cte = select([AdministrativeDivision.geom]) \
         .where(AdministrativeDivision.code == division_code) \
@@ -169,6 +179,7 @@ def report(request):
             'climate_change_recommendation': climate_change_recommendation,
             'recommendations': technical_recommendations,
             'resources': further_resources,
+            'sources': [source.id for source in sources] if sources else '',
             'division': division,
             'bounds': division_bounds,
             'parents': parents,
