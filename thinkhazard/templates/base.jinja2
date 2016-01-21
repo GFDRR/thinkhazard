@@ -18,6 +18,8 @@
   <body>
     {% block content %}
     {% endblock %}
+    {% include 'faq.jinja2' %}
+    {% include 'about.jinja2' %}
 {% if debug %}
     <script src="{{('%s/jquery/dist/jquery.js' % node_modules)|static_url}}"></script>
     <script src="{{('%s/bootstrap/dist/js/bootstrap.js' % node_modules)|static_url}}"></script>

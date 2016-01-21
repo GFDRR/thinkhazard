@@ -1,32 +1,14 @@
-{% extends "base.jinja2" %}
-
-{% from 'common.jinja2' import navbar %}
-{% from 'common.jinja2' import thinkhazard_logo %}
-{% from 'common.jinja2' import gfdrr_logo %}
-
-{% block name %}index{% endblock %}
-
-{% block content %}
-  <nav class="navbar navbar-default">
-    <div class="container">
-      <div class="navbar-header">
-        <span class="navbar-brand">
-          {{ thinkhazard_logo() }}
-        </span>
+<!-- Modal -->
+<div class="modal fade" id="faqModal" tabindex="-1" role="dialog" aria-labelledby="faqModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="faqModalLabel">
+          Frequently Asked Questions
+        </h4>
       </div>
-      <div id="navbar" class="navbar-collapse collapse">
-      {{ navbar() }}
-      </div>
-    </div>
-  </nav>
-  <div class="container">
-    <header class="text-center">
-      <h1>Frequently Asked Questions</h1>
-    </header>
-  </div>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
+      <div class="modal-body">
         <dl>
           <dt>
           What are the aims of this tool?
@@ -136,10 +118,13 @@
           What do the hazard levels mean?
           </dt>
           <dd>
-          Hazard level is calculated according the frequency, at which that hazard is expected to occur with a damaging level of intensity. For each hazard we have set an intensity threshold, above which the intensity parameter is considered to be able to cause damage to a development project of undefined type. 
+          Hazard level is calculated according the frequency, at which that hazard is expected to occur with a damaging level of intensity. For each hazard we have set an intensity threshold, above which the intensity parameter is considered to be able to cause damage to a development project of undefined type.
           </dd>
         </dl>
       </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
     </div>
   </div>
-{% endblock %}
+</div>
