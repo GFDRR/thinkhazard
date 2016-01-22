@@ -5,7 +5,7 @@ from pyramid.httpexceptions import HTTPBadRequest
 
 from sqlalchemy import and_
 
-from thinkhazard_common.models import (
+from ..models import (
     DBSession,
     AdministrativeDivision,
     )

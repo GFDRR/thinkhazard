@@ -4,7 +4,7 @@ import ConfigParser
 
 from paste.deploy import loadapp
 
-from thinkhazard_common.models import (
+from ..models import (
     DBSession,
     AdministrativeDivision,
     HazardCategory,
@@ -39,8 +39,8 @@ def populate_db():
     from sqlalchemy import create_engine
     engine = create_engine(db_url)
 
-    from ..scripts.initializedb import populate_db as populate
-    populate(engine, drop_all=True)
+    from ..scripts.initializedb import initdb
+    initdb(engine, drop_all=True)
 
     shape = MultiPolygon([
         Polygon([(0, 0), (0, 1), (1, 1), (1, 0), (0, 0)])
