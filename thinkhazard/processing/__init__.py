@@ -9,13 +9,13 @@ from .. import load_local_settings
 def load_settings():
     settings = get_appsettings('development.ini')
 
-    load_local_settings(settings)
-
     root_folder = os.path.join(os.path.dirname(__file__), '..', '..')
     main_settings_path = os.path.join(root_folder,
                                       'thinkhazard_processing.yaml')
     with open(main_settings_path, 'r') as f:
         settings.update(yaml.load(f.read()))
+
+    load_local_settings(settings)
 
     return settings
 
