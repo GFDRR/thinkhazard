@@ -57,15 +57,15 @@ initdb:
 
 .PHONY: import_admindivs
 import_admindivs: .build/requirements.timestamp \
-		/var/sig/admindiv/$(DATA)/g2015_2014_0.sql \
-		/var/sig/admindiv/$(DATA)/g2015_2014_1.sql \
-		/var/sig/admindiv/$(DATA)/g2015_2014_2.sql
-	.build/venv/bin/import_admindivs development.ini folder=/var/sig/admindiv/$(DATA)
+		/tmp/thinkhazard/admindiv/$(DATA)/g2015_2014_0.sql \
+		/tmp/thinkhazard/admindiv/$(DATA)/g2015_2014_1.sql \
+		/tmp/thinkhazard/admindiv/$(DATA)/g2015_2014_2.sql
+	.build/venv/bin/import_admindivs development.ini folder=/tmp/thinkhazard/admindiv/$(DATA)
 
-/var/sig/admindiv/$(DATA)/%.sql: /var/sig/admindiv/$(DATA)/%.sql.zip
-	unzip -o $< -d /var/sig/admindiv/$(DATA)
+/tmp/thinkhazard/admindiv/$(DATA)/%.sql: /tmp/thinkhazard/admindiv/$(DATA)/%.sql.zip
+	unzip -o $< -d /tmp/thinkhazard/admindiv/$(DATA)
 
-/var/sig/admindiv/$(DATA)/%.sql.zip:
+/tmp/thinkhazard/admindiv/$(DATA)/%.sql.zip:
 	mkdir -p $(dir $@)
 	wget -nc "http://dev.camptocamp.com/files/thinkhazard/$(DATA)/$(notdir $@)" -O $@
 
