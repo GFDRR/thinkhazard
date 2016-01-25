@@ -1,0 +1,75 @@
+data_path: /var/sig
+
+geonode:
+  scheme: http
+  netloc: 45.55.174.20
+
+hazard_types:
+  FL:
+    hazard_type: river_flood
+    return_periods:
+      HIG: [10, 25]
+      MED: 50
+      LOW: [100, 1000]
+    mask_return_period: 5
+    thresholds:
+      global:
+        cm: 100
+        dm: 10
+        m: 1
+      local:
+        cm: 50
+        dm: 5
+        m: 0.5
+
+  EQ:
+    hazard_type: earthquake
+    return_periods:
+      HIG: [100, 250]
+      MED: [475, 475]
+      LOW: [2475, 2500]
+    thresholds: 98.0665
+
+  DG:
+    hazard_type: drought
+    return_periods:
+      HIG: 5
+      MED: 50
+      LOW: 1000
+    inverted_comparison: True
+    thresholds: 1700
+
+  VA:
+    hazard_type: volcanic_ash
+    values:
+      HIG: [103]
+      MED: [102]
+      LOW: [101]
+      VLO: [100, 0]
+
+  CY:
+    hazard_type: strong_wind
+    return_periods:
+      HIG: 50
+      MED: 100
+      LOW: 1000
+    thresholds:
+      "km/h": 80
+
+  TS:
+    hazard_type: tsunami
+    values:
+      HIG: [1]
+      MED: [2]
+      LOW: [3]
+
+  CF:
+    hazard_type: coastal_flood
+    return_periods:
+      HIG: 10
+      MED: 50
+      LOW: 100
+    thresholds:
+      HIG: 2
+      MED: 0.5
+      LOW: 0.5

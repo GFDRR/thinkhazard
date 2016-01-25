@@ -20,6 +20,11 @@ help:
 	@echo "- import_admindivs        Import administrative divisions. Use DATA=turkey or DATA=indonesia if you want to work with a sample data set"
 	@echo "- import_recommendations  Import recommendations"
 	@echo "- import_furtherresources Import further resources"
+	@echo "- harvest                 Harvest GeoNode layers metadata"
+	@echo "- download                Download raster data from GeoNode"
+	@echo "- complete                Mark complete hazardsets as such"
+	@echo "- process                 Compute hazard levels from hazardsets for administrative divisions level 2"
+	@echo "- decisiontree            Run the decision tree and perform upscaling"
 	@echo "- serve                   Run the dev server"
 	@echo "- check                   Check the code with flake8, jshint and bootlint"
 	@echo "- modwsgi                 Create files for Apache mod_wsgi"
@@ -71,6 +76,30 @@ import_recommendations: .build/requirements.timestamp
 .PHONY: import_furtherresources
 import_furtherresources: .build/requirements.timestamp
 	.build/venv/bin/import_further_resources development.ini
+
+.PHONY: harvest
+harvest: .build/requirements.timestamp
+	.build/venv/bin/harvest
+
+.PHONY: download
+download: .build/requirements.timestamp
+	.build/venv/bin/download
+
+.PHONY: complete
+complete: .build/requirements.timestamp
+	.build/venv/bin/complete
+
+.PHONY: process
+process: .build/requirements.timestamp
+	.build/venv/bin/process
+
+.PHONY: dt
+dt: .build/requirements.timestamp
+	.build/venv/bin/decision_tree
+
+.PHONY: decisiontree
+decisiontree: .build/requirements.timestamp
+	.build/venv/bin/decision_tree
 
 .PHONY: serve
 serve: build
@@ -151,6 +180,7 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 
 .build/requirements.timestamp: .build/venv setup.py requirements.txt
 	mkdir -p $(dir $@)
+	.build/venv/bin/pip install numpy==1.10.1
 	.build/venv/bin/pip install -r requirements.txt
 	touch $@
 

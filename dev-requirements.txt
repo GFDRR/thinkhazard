@@ -4,3 +4,4 @@
 flake8==2.2.2
 pep8-naming==0.2.2
 nosier==1.1
+mock

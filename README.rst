@@ -25,6 +25,39 @@ Create a Python virtual environment and install the project into it::
 
     $ make install
 
+Create a database::
+
+    $ sudo -u postgres createdb -O www-data thinkhazard_processing
+    $ sudo -u postgres psql -d thinkhazard_processing -c 'CREATE EXTENSION postgis;'
+
+If you want to use a different user or different database name, you'll have to
+provide your own configuration file. See "Use local.ini" section
+below.
+
+Create the required schema and tables and populate the enumeration tables::
+
+    $ make populatedb
+
+Note: this may take a while.
+
+If you don't want to import all the world administrative divisions, you can
+import only a subset::
+
+    $ make populatedb DATA=turkey
+    $ make populatedb DATA=indonesia
+
+You're now ready to harvest, download and process the data::
+
+    $ make harvest
+    $ make download
+    $ make complete
+    $ make process
+    $ make decision_tree
+
+For more options, see::
+
+    $ make help
+
 Build CSS files (from less files)::
 
     $ make build
@@ -34,6 +67,118 @@ Run the development server::
     $ make serve
 
 Now point your browser to http://localhost:6543.
+
+Configure using thinkhazard_processing.yaml
+===========================================
+
+Keys in processing configuration file:
+
+data_path
+---------
+
+Path to main data folder, example:
+
+.. code:: yaml
+
+    data_path: /var/sig
+
+For production, we recommend a dedicated disk partition.
+
+hazard_types
+------------
+
+Harvesting and processing configuration for each hazard type.
+One entry for each hazard type mnemonic.
+
+Possible subkeys include the following:
+
+- ``hazard_type``: Corresponding hazard_type value in geonode.
+
+- ``return_periods``: One entry per hazard level mnemonic with
+  corresponding return periods. Each return period can be a value or a list
+  with minimum and maximum values, example:
+
+  .. code:: yaml
+
+      return_periods:
+        HIG: [10, 25]
+        MED: 50
+        LOW: [100, 1000]
+
+- ``thresholds``: Flexible threshold configuration.
+
+  This can be a simple and global value per hazardtype. Example:
+
+  .. code:: yaml
+
+       thresholds: 1700
+
+  But it can also contain one or many sublevels for complex configurations:
+
+  1) ``global`` and ``local`` entries for corresponding hazardsets.
+  2) One entry per hazard level mnemonic.
+  3) One entry per hazard unit from geonode.
+
+  Example:
+
+  .. code:: yaml
+
+       thresholds:
+         global:
+           HIG:
+             unit1: value1
+             unit2: value2
+           MED:
+             unit1: value1
+             unit2: value2
+           LOW:
+             unit1: value1
+             unit2: value2
+         local:
+           unit1: value1
+           unit2: value2
+
+- ``values``: One entry per hazard level,
+  with list of corresponding values in preprocessed layer.
+  If present, the layer is considered as preprocessed, and the above
+  ``thresholds`` and ``return_periods`` are not taken into account.
+  Example:
+
+  .. code:: yaml
+
+      values:
+        HIG: [103]
+        MED: [102]
+        LOW: [101]
+        VLO: [100, 0]
+
+Processing tasks
+================
+
+Thinkhazard_processing provides several consecutive tasks to populate the
+thinkhazard datamart database. These are:
+
+``.build/venv/bin/harvest [--force] [--dry-run]``
+
+Harvest metadata from GeoNode, create HazardSet and Layer records.
+
+``.build/venv/bin/download [--title] [--force] [--dry-run]``
+
+Download raster files in data folder.
+
+``.build/venv/bin/complete [--force] [--dry-run]``
+
+Identify hazardsets whose layers have been fully downloaded, infer several
+fields and mark these hazardsets complete.
+
+``.build/venv/bin/process [--hazarset_id ...] [--force] [--dry-run]``
+
+Calculate output from hazardsets and administrative divisions.
+
+``.build/venv/bin/decision_tree [--force] [--dry-run]``
+
+Apply the decision tree followed by upscaling on process outputs to get the final
+relations between administrative divisions and hazard categories.
 
 Use Apache ``mod_wsgi``
 =======================
