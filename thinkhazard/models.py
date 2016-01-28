@@ -130,7 +130,7 @@ hazardcategory_administrativedivision_hazardset_table = Table(
            ForeignKey('rel_hazardcategory_administrativedivision.id'),
            primary_key=True),
     Column('hazardset_id', String,
-           ForeignKey('processing.hazardset.id'),
+           ForeignKey('processing.hazardset.id', ondelete="CASCADE"),
            primary_key=True))
 
 

@@ -1,6 +1,7 @@
 import unittest
 import os
 import transaction
+from datetime import datetime
 
 from paste.deploy import loadapp
 
@@ -41,6 +42,17 @@ def populate_db():
     DBSession.query(HazardCategory).delete()
     DBSession.query(AdministrativeDivision).delete()
 
+    hazardtype_eq = DBSession.query(HazardType) \
+        .filter(HazardType.mnemonic == u'EQ').one()
+    hazardset1 = HazardSet()
+    hazardset1.id = u'hazardset1'
+    hazardset1.hazardtype = hazardtype_eq
+    hazardset1.data_lastupdated_date = datetime.now()
+    hazardset1.metadata_lastupdated_date = datetime.now()
+    hazardset1.distribution_url = u'http://domain.com/path/'
+    hazardset1.owner_organization = u'data_provider'
+    DBSession.add(hazardset1)
+
     shape = MultiPolygon([
         Polygon([(0, 0), (0, 1), (1, 1), (1, 0), (0, 0)])
     ])
@@ -69,7 +81,7 @@ def populate_db():
     geometry = from_shape(shape, 4326)
 
     div_level_3_1 = AdministrativeDivision(**{
-        'code': 30,
+        'code': 31,
         'leveltype_id': 3,
         'name': u'Division level 3 - 1'
     })
@@ -83,7 +95,7 @@ def populate_db():
     geometry = from_shape(shape, 4326)
 
     div_level_3_2 = AdministrativeDivision(**{
-        'code': 31,
+        'code': 32,
         'leveltype_id': 3,
         'name': u'Division level 3 - 2'
     })
@@ -94,16 +106,15 @@ def populate_db():
     category_eq_hig = HazardCategory(**{
         'general_recommendation': u'General recommendation for EQ HIG',
     })
-    category_eq_hig.hazardtype = DBSession.query(HazardType) \
-        .filter(HazardType.mnemonic == u'EQ').one()
+    category_eq_hig.hazardtype = hazardtype_eq
     category_eq_hig.hazardlevel = DBSession.query(HazardLevel) \
         .filter(HazardLevel.mnemonic == u'HIG').one()
 
-    div_level_3_1.hazardcategories.append(
-        HazardCategoryAdministrativeDivisionAssociation(**{
-            'hazardcategory': category_eq_hig
-        })
-    )
+    association = HazardCategoryAdministrativeDivisionAssociation(**{
+        'hazardcategory': category_eq_hig
+    })
+    association.hazardsets.append(hazardset1)
+    div_level_3_1.hazardcategories.append(association)
     div_level_3_2.hazardcategories.append(
         HazardCategoryAdministrativeDivisionAssociation(**{
             'hazardcategory': category_eq_hig
