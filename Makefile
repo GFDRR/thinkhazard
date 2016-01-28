@@ -46,7 +46,9 @@ buildcss: thinkhazard/static/build/index.css \
 	      thinkhazard/static/build/report.css \
 	      thinkhazard/static/build/report.min.css \
 	      thinkhazard/static/build/common.css \
-	      thinkhazard/static/build/common.min.css
+	      thinkhazard/static/build/common.min.css \
+	      thinkhazard/static/build/admin.css \
+	      thinkhazard/static/build/admin.min.css
 
 .PHONY: populatedb
 populatedb: initdb import_admindivs import_recommendations import_furtherresources

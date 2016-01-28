@@ -1,0 +1,26 @@
+{% extends "base.jinja2" %}
+
+{% from 'common.jinja2' import navbar %}
+
+{% block name %}admin{% endblock %}
+
+{% block content %}
+  {{ navbar(request) }}
+  <div class="admin-index container">
+    <h3>Hazard categories</h3>
+    <table class="table">
+      {% for hazard_type in hazard_types %}
+      <tr>
+        <td>{{ hazard_type.title }}</td>
+        {% for hazard_level in hazard_levels %}
+        <td>
+          <a class="hazardcategory-link"
+            href="{{ request.route_url('admin_hazardcategory', hazard_type=hazard_type.mnemonic, hazard_level=hazard_level.mnemonic) }}"
+            >{{ hazard_level.title }}</a>
+        </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+{% endblock %}

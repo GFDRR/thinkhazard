@@ -1,0 +1,64 @@
+{% extends "base.jinja2" %}
+
+{% from 'common.jinja2' import navbar %}
+
+{% block name %}admin{% endblock %}
+
+{% block content %}
+  {{ navbar(request) }}
+  <div class="admin-technicalrecommendation container">
+    <h3>Technical Recommendation</h3>
+    <form
+      id="technicalrecommendation-form"
+      action="{{ action }}"
+      accept-charset="utf-8"
+      enctype="multipart/form-data"
+      method="POST"
+    >
+      <input type="hidden" name="id" value="{{ obj.id }}">
+
+      <div class="form-group item-text">
+        <textarea
+            id="general_recommendation"
+            class="form-control"
+            type="textarea"
+            name="text"
+            placeholder="Enter text here"
+            rows=8
+            >{{ obj.text or '' }}</textarea>
+      </div>
+
+      <div class="form-group item-associations">
+        <table class="item-associations">
+          <tr>
+            <th></th>
+            {% for hazard_level in hazard_levels %}
+            <th>{{ hazard_level.mnemonic }}</th>
+            {% endfor %}
+          </tr>
+          {% for hazard_type in hazard_types %}
+          <tr>
+            <th>{{ hazard_type.mnemonic }}</th>
+            {% for hazard_level in hazard_levels %}
+            <td>
+              <div class="item-association">
+                <input
+                  type="checkbox"
+                  name="associations[]"
+                  {{ 'checked' if obj.has_association(hazard_type, hazard_level) else '' }}
+                  value="{{ hazard_type.mnemonic }} - {{ hazard_level.mnemonic }}"></input>
+              </div>
+            </td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+
+      <button class="btn btn-primary" type="submit">Save changes</button>
+    </form>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

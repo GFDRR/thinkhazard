@@ -43,6 +43,13 @@ def main(global_config, **settings):
     config.add_route('report_overview_json', '/report/{divisioncode:\d+}.json')
     config.add_route('administrativedivision', '/administrativedivision')
 
+    config.add_route('admin_index', '/admin')
+    config.add_route('admin_technical_rec', '/admin/technical_rec')
+    config.add_route('admin_technical_rec_new', '/admin/technical_rec/new')
+    config.add_route('admin_technical_rec_edit', '/admin/technical_rec/{id}')
+    config.add_route('admin_hazardcategory',
+                     '/admin/{hazard_type}/{hazard_level}')
+
     config.add_renderer('geojson', GeoJSON())
 
     config.scan(ignore=['thinkhazard.tests'])

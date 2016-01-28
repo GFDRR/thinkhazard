@@ -33,7 +33,6 @@ from ...models import (
     HazardCategoryAdministrativeDivisionAssociation,
     HazardCategoryFurtherResourceAssociation,
     HazardCategoryTechnicalRecommendationAssociation,
-    HazardLevel,
     HazardSet,
     HazardType,
     Layer,
@@ -58,7 +57,6 @@ def populate_db():
     DBSession.query(HazardCategoryTechnicalRecommendationAssociation).delete()
     DBSession.query(ClimateChangeRecommendation).delete()
     DBSession.query(HazardCategoryAdministrativeDivisionAssociation).delete()
-    DBSession.query(HazardCategory).delete()
     DBSession.query(AdministrativeDivision).delete()
 
     hazardtype_eq = DBSession.query(HazardType) \
@@ -122,12 +120,9 @@ def populate_db():
     div_level_3_2.geom = geometry
     div_level_3_2.hazardcategories = []
 
-    category_eq_hig = HazardCategory(**{
-        'general_recommendation': u'General recommendation for EQ HIG',
-    })
-    category_eq_hig.hazardtype = hazardtype_eq
-    category_eq_hig.hazardlevel = DBSession.query(HazardLevel) \
-        .filter(HazardLevel.mnemonic == u'HIG').one()
+    category_eq_hig = HazardCategory.get('EQ', 'HIG')
+    category_eq_hig.general_recommendation = \
+        u'General recommendation for EQ HIG'
 
     association = HazardCategoryAdministrativeDivisionAssociation(**{
         'hazardcategory': category_eq_hig
@@ -165,13 +160,9 @@ def populate_db():
     technical_rec.hazardcategory_associations.append(association)
     DBSession.add(technical_rec)
 
-    category_fl_med = HazardCategory(**{
-        'general_recommendation': u'General recommendation for FL MED',
-    })
-    category_fl_med.hazardtype = DBSession.query(HazardType) \
-        .filter(HazardType.mnemonic == u'FL').one()
-    category_fl_med.hazardlevel = DBSession.query(HazardLevel) \
-        .filter(HazardLevel.mnemonic == u'MED').one()
+    category_fl_med = HazardCategory.get('FL', 'MED')
+    category_fl_med.general_recommendation = \
+        u'General recommendation for FL MED'
 
     div_level_3_1.hazardcategories.append(
         HazardCategoryAdministrativeDivisionAssociation(**{
