@@ -52,7 +52,7 @@ You're now ready to harvest, download and process the data::
     $ make download
     $ make complete
     $ make process
-    $ make decision_tree
+    $ make decisiontree
 
 For more options, see::
 
