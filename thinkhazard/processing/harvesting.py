@@ -186,6 +186,9 @@ def harvest_layer(object, dry_run=False):
         hazardset.hazardtype = hazardtype
         hazardset.data_lastupdated_date = data_update_date
         hazardset.metadata_lastupdated_date = metadata_update_date
+        # get distribution_url and owner_organization from 1st layer of dataset
+        hazardset.distribution_url = object['distribution_url']
+        hazardset.owner_organization = object['owner__organization']
         DBSession.add(hazardset)
     else:
         # print '  Hazardset {} found'.format(hazardset_id)

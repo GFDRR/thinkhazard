@@ -298,6 +298,10 @@ class HazardSet(Base):
     # ranges from 0 (bad) to 2 (excellent)
     # this value comes from the linked layers
     scientific_quality = Column(Integer)
+    # url to website where the data or information about them can be found
+    distribution_url = Column(String)
+    # name or the organization from which the data comes
+    owner_organization = Column(String)
 
     # processing steps:
     # a hazardset starts incomplete.
