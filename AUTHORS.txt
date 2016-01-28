@@ -1,0 +1,6 @@
+Authors ordered by first contribution.
+
+Eric Lemoine <eric.lemoine@camptocamp.com>
+François Van Der Biest <francois.vanderbiest@camptocamp.com>
+Pierre Giraud <pierre.giraud@camptocamp.com>
+Arnaud Morvan <arnaud.morvan@camptocamp.com>
