@@ -11,6 +11,9 @@ from ..processing.harvesting import harvest
 def main(argv=sys.argv):
     parser = argparse.ArgumentParser()
     parser.add_argument(
+        '--hazard-type',  dest='hazard_type', action='store',
+        help='The hazard type (ie. earthquake, ...)')
+    parser.add_argument(
         '-f', '--force', dest='force',
         action='store_const', const=True, default=False,
         help='Force execution even if layer metadata have already \
@@ -24,5 +27,6 @@ def main(argv=sys.argv):
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
 
-    harvest(force=args.force,
+    harvest(hazard_type=args.hazard_type,
+            force=args.force,
             dry_run=args.dry_run)
