@@ -23,10 +23,10 @@ from . import BaseTestCase
 class TestReportFunction(BaseTestCase):
 
     def test_report(self):
-        self.testapp.get('/report/31', status=200)
+        self.testapp.get('/report/32', status=200)
 
     def test_report__division_desecendants(self):
-        resp = self.testapp.get('/report/31', status=200)
+        resp = self.testapp.get('/report/32', status=200)
         # 3 divisions + pin icon
         self.assertEqual(len(resp.pyquery('.breadcrumb .btn')), 4)
 
@@ -39,7 +39,7 @@ class TestReportFunction(BaseTestCase):
         # admin div 10 is not linked to any hazard category
         self.assertEqual(len(resp.pyquery('.level-no-data.overview')), 8)
 
-        resp = self.testapp.get('/report/31', status=200)
+        resp = self.testapp.get('/report/32', status=200)
         # admin div 10 is not linked to hazard categories with one with high
         # level and one with medium level
         self.assertEqual(len(resp.pyquery('.level-HIG.overview')), 1)
@@ -55,7 +55,7 @@ class TestReportFunction(BaseTestCase):
         self.assertTrue('drillup' in resp.body)
 
     def test_report__hazard_categories(self):
-        resp = self.testapp.get('/report/31')
+        resp = self.testapp.get('/report/32')
         hazards_list = resp.pyquery('.hazard-types-list')
 
         # only two categories with data
@@ -74,16 +74,21 @@ class TestReportFunction(BaseTestCase):
         self.assertTrue('River flood' in hazards.eq(1).html())
 
     def test_report__hazard(self):
-        resp = self.testapp.get('/report/31/EQ', status=200)
+        resp = self.testapp.get('/report/32/EQ', status=200)
         self.assertTrue('Climate change recommendation' in resp.body)
         self.assertEqual(len(resp.pyquery('.recommendations li')), 2)
 
     def test_report__further_resources(self):
-        resp = self.testapp.get('/report/30/EQ', status=200)
+        resp = self.testapp.get('/report/31/EQ', status=200)
         self.assertEqual(len(resp.pyquery('.further-resources ul li')), 1)
 
-        resp = self.testapp.get('/report/31/EQ', status=200)
+        resp = self.testapp.get('/report/32/EQ', status=200)
         self.assertEqual(len(resp.pyquery('.further-resources ul li')), 2)
 
     def test_report__json(self):
-        self.testapp.get('/report/30/EQ.json?resolution=1000', status=200)
+        self.testapp.get('/report/31/EQ.json?resolution=1000', status=200)
+
+    def test_report__data_sources(self):
+        resp = self.testapp.get('/report/31/EQ')
+        print resp.body
+        self.assertTrue('data_provider' in resp.body)

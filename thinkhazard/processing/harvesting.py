@@ -103,11 +103,6 @@ def harvest(hazard_type=None, force=False, dry_run=False):
 
 def harvest_layer(object, dry_run=False):
     title = object['title']
-    '''
-    typename = urllib.unquote(
-        object['distribution_url'].split('/').pop())
-    # print title
-    '''
 
     hazardset_id = object['hazard_set']
     if not hazardset_id:
@@ -127,24 +122,7 @@ def harvest_layer(object, dry_run=False):
     type_settings = settings['hazard_types'][hazardtype.mnemonic]
     preprocessed = 'values' in type_settings
 
-    '''
-    csw_wkt_geometry = object['csw_wkt_geometry']
-    bounds = wkt_loads(csw_wkt_geometry).bounds
-    # print '  bounds :', bounds
-
-    # TODO: minimum global bbox should be defined in settings
-    minimum_global_bounds = (-175, -45, 175, 45)
-    from shapely.geometry import box
-    local = not box(bounds).contains(box(minimum_global_bounds))
-    '''
     local = 'GLOBAL' not in hazardset_id
-    '''
-    local = (
-        bounds[0] > -175 or
-        bounds[1] > -45 or
-        bounds[2] < 175 or
-        bounds[3] < 45)
-    '''
 
     mask = False
     if preprocessed is True:
@@ -227,6 +205,9 @@ def harvest_layer(object, dry_run=False):
         hazardset.hazardtype = hazardtype
         hazardset.data_lastupdated_date = data_update_date
         hazardset.metadata_lastupdated_date = metadata_update_date
+        # get distribution_url and owner_organization from 1st layer of dataset
+        hazardset.distribution_url = object['distribution_url']
+        hazardset.owner_organization = object['owner__organization']
         DBSession.add(hazardset)
     else:
         # print '  Hazardset {} found'.format(hazardset_id)

@@ -198,7 +198,7 @@ def report(request):
             'climate_change_recommendation': climate_change_recommendation,
             'recommendations': technical_recommendations,
             'resources': further_resources,
-            'sources': [source.id for source in sources] if sources else '',
+            'sources': sources,
             'division': division,
             'bounds': division_bounds,
             'parents': parents,

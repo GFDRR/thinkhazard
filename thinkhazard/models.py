@@ -149,7 +149,7 @@ hazardcategory_administrativedivision_hazardset_table = Table(
            ForeignKey('rel_hazardcategory_administrativedivision.id'),
            primary_key=True),
     Column('hazardset_id', String,
-           ForeignKey('processing.hazardset.id'),
+           ForeignKey('processing.hazardset.id', ondelete="CASCADE"),
            primary_key=True))
 
 
@@ -317,6 +317,10 @@ class HazardSet(Base):
     # ranges from 0 (bad) to 2 (excellent)
     # this value comes from the linked layers
     scientific_quality = Column(Integer)
+    # url to website where the data or information about them can be found
+    distribution_url = Column(String)
+    # name or the organization from which the data comes
+    owner_organization = Column(String)
 
     # processing steps:
     # a hazardset starts incomplete.
