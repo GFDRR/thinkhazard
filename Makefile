@@ -2,6 +2,7 @@ LESS_FILES = $(shell find thinkhazard/static/less -type f -name '*.less' 2> /dev
 JS_FILES = $(shell find thinkhazard/static/js -type f -name '*.js' 2> /dev/null)
 PY_FILES = $(shell find thinkhazard -type f -name '*.py' 2> /dev/null)
 INSTANCEID ?= main
+DATA ?= world
 
 .PHONY: all
 all: help
@@ -14,8 +15,16 @@ help:
 	@echo
 	@echo "- install                 Install thinkhazard"
 	@echo "- build                   Build CSS and JS"
-	@echo "- initdb-dev              Initialize db using development.ini"
-	@echo "- initdb-prod             Initialize db using production.ini"
+	@echo "- populatedb              Populates database. Use DATA=turkey if you want to work with a sample data set"
+	@echo "- initdb                  Initialize db using development.ini"
+	@echo "- import_admindivs        Import administrative divisions. Use DATA=turkey or DATA=indonesia if you want to work with a sample data set"
+	@echo "- import_recommendations  Import recommendations"
+	@echo "- import_furtherresources Import further resources"
+	@echo "- harvest                 Harvest GeoNode layers metadata"
+	@echo "- download                Download raster data from GeoNode"
+	@echo "- complete                Mark complete hazardsets as such"
+	@echo "- process                 Compute hazard levels from hazardsets for administrative divisions level 2"
+	@echo "- decisiontree            Run the decision tree and perform upscaling"
 	@echo "- serve                   Run the dev server"
 	@echo "- check                   Check the code with flake8, jshint and bootlint"
 	@echo "- modwsgi                 Create files for Apache mod_wsgi"
@@ -39,13 +48,58 @@ buildcss: thinkhazard/static/build/index.css \
 	      thinkhazard/static/build/common.css \
 	      thinkhazard/static/build/common.min.css
 
-.PHONY: initdb-dev
-initdb-dev:
+.PHONY: populatedb
+populatedb: initdb import_admindivs import_recommendations import_furtherresources
+
+.PHONY: initdb
+initdb:
 	.build/venv/bin/initialize_thinkhazard_db development.ini
 
-.PHONY: initdb-prod
-initdb-prod:
-	.build/venv/bin/initialize_thinkhazard_db production.ini
+.PHONY: import_admindivs
+import_admindivs: .build/requirements.timestamp \
+		/tmp/thinkhazard/admindiv/$(DATA)/g2015_2014_0.sql \
+		/tmp/thinkhazard/admindiv/$(DATA)/g2015_2014_1.sql \
+		/tmp/thinkhazard/admindiv/$(DATA)/g2015_2014_2.sql
+	.build/venv/bin/import_admindivs development.ini folder=/tmp/thinkhazard/admindiv/$(DATA)
+
+/tmp/thinkhazard/admindiv/$(DATA)/%.sql: /tmp/thinkhazard/admindiv/$(DATA)/%.sql.zip
+	unzip -o $< -d /tmp/thinkhazard/admindiv/$(DATA)
+
+/tmp/thinkhazard/admindiv/$(DATA)/%.sql.zip:
+	mkdir -p $(dir $@)
+	wget -nc "http://dev.camptocamp.com/files/thinkhazard/$(DATA)/$(notdir $@)" -O $@
+
+.PHONY: import_recommendations
+import_recommendations: .build/requirements.timestamp
+	.build/venv/bin/import_recommendations development.ini
+
+.PHONY: import_furtherresources
+import_furtherresources: .build/requirements.timestamp
+	.build/venv/bin/import_further_resources development.ini
+
+.PHONY: harvest
+harvest: .build/requirements.timestamp
+	.build/venv/bin/harvest
+
+.PHONY: download
+download: .build/requirements.timestamp
+	.build/venv/bin/download
+
+.PHONY: complete
+complete: .build/requirements.timestamp
+	.build/venv/bin/complete
+
+.PHONY: process
+process: .build/requirements.timestamp
+	.build/venv/bin/process
+
+.PHONY: dt
+dt: .build/requirements.timestamp
+	.build/venv/bin/decision_tree
+
+.PHONY: decisiontree
+decisiontree: .build/requirements.timestamp
+	.build/venv/bin/decision_tree
 
 .PHONY: serve
 serve: build
@@ -126,6 +180,7 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 
 .build/requirements.timestamp: .build/venv setup.py requirements.txt
 	mkdir -p $(dir $@)
+	.build/venv/bin/pip install numpy==1.10.1
 	.build/venv/bin/pip install -r requirements.txt
 	touch $@
 

@@ -1,6 +1,6 @@
 from pyramid.view import view_config
 
-from thinkhazard_common.models import (
+from ..models import (
     DBSession,
     HazardType,
     )

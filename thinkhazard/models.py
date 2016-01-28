@@ -1,21 +1,405 @@
-from sqlalchemy import (
-    Column,
-    ForeignKey,
-    Integer,
-    Unicode,
-    DateTime,
-    String,
-    )
-
-
-from sqlalchemy.orm import (
-    relationship,
-    )
+import threading
 import datetime
 
-from thinkhazard_common.models import (
-    Base,
+from sqlalchemy import (
+    Boolean,
+    Column,
+    Date,
+    DateTime,
+    ForeignKey,
+    inspect,
+    Integer,
+    String,
+    Table,
+    Unicode,
     )
+from sqlalchemy.schema import MetaData
+
+from sqlalchemy.ext.declarative import declarative_base
+
+from sqlalchemy.orm import (
+    scoped_session,
+    sessionmaker,
+    relationship,
+    )
+
+from geoalchemy2 import Geometry
+
+from zope.sqlalchemy import ZopeTransactionExtension
+
+DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
+Base = declarative_base(metadata=MetaData(schema='datamart'))
+
+
+_enum_cache = threading.local()
+_enum_cache.adminleveltypes = {}
+_enum_cache.hazardlevels = {}
+_enum_cache.hazardtypes = {}
+
+
+class AdminLevelType(Base):
+    __tablename__ = 'enum_adminleveltype'
+
+    id = Column(Integer, primary_key=True)
+    mnemonic = Column(Unicode, unique=True)
+    title = Column(Unicode, nullable=False)
+    description = Column(Unicode)
+
+    @classmethod
+    def get(cls, mnemonic):
+        if mnemonic in _enum_cache.adminleveltypes:
+            adminleveltype = _enum_cache.adminleveltypes[mnemonic]
+            insp = inspect(adminleveltype)
+            if not insp.detached:
+                return adminleveltype
+        with DBSession.no_autoflush:
+            adminleveltype = DBSession.query(cls) \
+                .filter(cls.mnemonic == mnemonic) \
+                .one_or_none()
+            if adminleveltype is not None:
+                _enum_cache.adminleveltypes[mnemonic] = adminleveltype
+            return adminleveltype
+
+
+level_weights = {
+    None: 0,
+    u'VLO': 1,
+    u'LOW': 2,
+    u'MED': 3,
+    u'HIG': 4
+}
+
+
+class HazardLevel(Base):
+    __tablename__ = 'enum_hazardlevel'
+
+    id = Column(Integer, primary_key=True)
+    mnemonic = Column(Unicode, unique=True)
+    title = Column(Unicode, nullable=False)
+    order = Column(Integer)
+
+    def __cmp__(self, other):
+        if other is None:
+            return 1
+        return cmp(level_weights[self.mnemonic],
+                   level_weights[other.mnemonic])
+
+    @classmethod
+    def get(cls, mnemonic):
+        if mnemonic in _enum_cache.hazardlevels:
+            hazardlevel = _enum_cache.hazardlevels[mnemonic]
+            insp = inspect(hazardlevel)
+            if not insp.detached:
+                return hazardlevel
+        with DBSession.no_autoflush:
+            hazardlevel = DBSession.query(cls) \
+                .filter(cls.mnemonic == mnemonic) \
+                .one_or_none()
+            if hazardlevel is not None:
+                _enum_cache.hazardlevels[mnemonic] = hazardlevel
+            return hazardlevel
+
+
+class HazardType(Base):
+    __tablename__ = 'enum_hazardtype'
+
+    id = Column(Integer, primary_key=True)
+    mnemonic = Column(Unicode, unique=True)
+    title = Column(Unicode, nullable=False)
+    order = Column(Integer)
+
+    @classmethod
+    def get(cls, mnemonic):
+        if mnemonic in _enum_cache.hazardtypes:
+            hazardtype = _enum_cache.hazardtypes[mnemonic]
+            insp = inspect(hazardtype)
+            if not insp.detached:
+                return hazardtype
+        with DBSession.no_autoflush:
+            hazardtype = DBSession.query(cls) \
+                .filter(cls.mnemonic == mnemonic) \
+                .one_or_none()
+            if hazardtype is not None:
+                _enum_cache.hazardtypes[mnemonic] = hazardtype
+            return hazardtype
+
+
+hazardcategory_administrativedivision_hazardset_table = Table(
+    'rel_hazardcategory_administrativedivision_hazardset', Base.metadata,
+    Column('rel_hazardcategory_administrativedivision_id', Integer,
+           ForeignKey('rel_hazardcategory_administrativedivision.id'),
+           primary_key=True),
+    Column('hazardset_id', String,
+           ForeignKey('processing.hazardset.id'),
+           primary_key=True))
+
+
+class HazardCategoryAdministrativeDivisionAssociation(Base):
+    __tablename__ = 'rel_hazardcategory_administrativedivision'
+
+    id = Column(Integer, primary_key=True)
+    administrativedivision_id = Column(Integer,
+                                       ForeignKey('administrativedivision.id'),
+                                       nullable=False, index=True)
+    hazardcategory_id = Column(Integer,
+                               ForeignKey('hazardcategory.id'),
+                               nullable=False, index=True)
+    administrativedivision = relationship('AdministrativeDivision',
+                                          back_populates='hazardcategories')
+    hazardcategory = relationship('HazardCategory',
+                                  back_populates='administrativedivisions')
+    hazardsets = relationship(
+        'HazardSet',
+        secondary=hazardcategory_administrativedivision_hazardset_table)
+
+
+class HazardCategoryTechnicalRecommendationAssociation(Base):
+    __tablename__ = 'rel_hazardcategory_technicalrecommendation'
+    id = Column(Integer, primary_key=True)
+    hazardcategory_id = Column(Integer, ForeignKey('hazardcategory.id'),
+                               nullable=False, index=True)
+    technicalrecommendation_id = Column(
+        Integer, ForeignKey('technicalrecommendation.id'),
+        nullable=False, index=True)
+    order = Column(Integer, nullable=False)
+
+    hazardcategory = relationship('HazardCategory')
+
+
+class HazardCategoryFurtherResourceAssociation(Base):
+    __tablename__ = 'rel_hazardcategory_furtherresource'
+    id = Column(Integer, primary_key=True)
+    hazardcategory_id = Column(Integer, ForeignKey('hazardcategory.id'),
+                               nullable=False, index=True)
+    furtherresource_id = Column(Integer,
+                                ForeignKey('furtherresource.id'),
+                                nullable=False, index=True)
+    order = Column(Integer, nullable=False)
+    administrativedivision_id = Column(
+        Integer, ForeignKey('administrativedivision.id'))
+
+    hazardcategory = relationship('HazardCategory')
+    administrativedivision = relationship('AdministrativeDivision')
+
+
+class AdministrativeDivision(Base):
+    __tablename__ = 'administrativedivision'
+
+    id = Column(Integer, primary_key=True)
+    code = Column(Integer, index=True, unique=True, nullable=False)
+    leveltype_id = Column(Integer, ForeignKey(AdminLevelType.id),
+                          nullable=False, index=True)
+    name = Column(Unicode, nullable=False)
+    parent_code = Column(Integer, ForeignKey(
+        'administrativedivision.code', use_alter=True,
+        name='administrativedivision_parent_code_fkey'))
+    geom = Column(Geometry('MULTIPOLYGON', 4326))
+
+    leveltype = relationship(AdminLevelType)
+    parent = relationship('AdministrativeDivision', uselist=False,
+                          remote_side=code)
+    hazardcategories = relationship(
+        'HazardCategoryAdministrativeDivisionAssociation',
+        back_populates='administrativedivision')
+
+    def __json__(self, request):
+        if self.leveltype_id == 1:
+            return {'code': self.code,
+                    'admin0': self.name}
+        if self.leveltype_id == 2:
+            return {'code': self.code,
+                    'admin0': self.parent.name,
+                    'admin1': self.name}
+        if self.leveltype_id == 3:
+            return {'code': self.code,
+                    'admin0': self.parent.parent.name,
+                    'admin1': self.parent.name,
+                    'admin2': self.name}
+
+
+class HazardCategory(Base):
+    __tablename__ = 'hazardcategory'
+
+    id = Column(Integer, primary_key=True)
+    hazardtype_id = Column(Integer, ForeignKey(HazardType.id), nullable=False)
+    hazardlevel_id = Column(Integer, ForeignKey(HazardLevel.id),
+                            nullable=False)
+    general_recommendation = Column(Unicode, nullable=False)
+
+    hazardtype = relationship(HazardType)
+    hazardlevel = relationship(HazardLevel)
+    administrativedivisions = relationship(
+        'HazardCategoryAdministrativeDivisionAssociation',
+        back_populates='hazardcategory')
+
+
+class ClimateChangeRecommendation(Base):
+    __tablename__ = 'climatechangerecommendation'
+    id = Column(Integer, primary_key=True)
+    text = Column(Unicode, nullable=False)
+    administrativedivision_id = Column(
+        Integer, ForeignKey(AdministrativeDivision.id), nullable=False)
+    hazardtype_id = Column(Integer, ForeignKey(HazardType.id), nullable=False)
+
+    administrativedivision = relationship(AdministrativeDivision)
+    hazardtype = relationship(HazardType)
+
+
+class TechnicalRecommendation(Base):
+    __tablename__ = 'technicalrecommendation'
+    id = Column(Integer, primary_key=True)
+    text = Column(Unicode, nullable=False)
+
+    hazardcategory_associations = relationship(
+        'HazardCategoryTechnicalRecommendationAssociation',
+        order_by='HazardCategoryTechnicalRecommendationAssociation.order',
+        lazy='joined')
+
+
+class FurtherResource(Base):
+    __tablename__ = 'furtherresource'
+    id = Column(Integer, primary_key=True)
+    text = Column(Unicode, nullable=False)
+    url = Column(Unicode, nullable=False)
+
+    hazardcategory_associations = relationship(
+        'HazardCategoryFurtherResourceAssociation',
+        order_by='HazardCategoryFurtherResourceAssociation.order',
+        lazy='joined')
+
+
+class HazardSet(Base):
+    __tablename__ = 'hazardset'
+    __table_args__ = {u'schema': 'processing'}
+
+    # id is the string id common to the 3 layers,
+    # as reported by geonode ("hazard_set" field), eg: "EQ-PA"
+    id = Column(String, primary_key=True)
+
+    # a hazardset is related to a hazard type:
+    hazardtype_id = Column(Integer,
+                           ForeignKey('datamart.enum_hazardtype.id'),
+                           nullable=False)
+
+    # "local" is set to false when bounds = -180/-90/180/90
+    # this value comes from the linked layers
+    local = Column(Boolean)
+    # date the data was last updated (defaults to created):
+    # this value comes from the linked layers
+    data_lastupdated_date = Column(Date, nullable=False)
+    # date the metadata was last updated (defaults to created):
+    # this value comes from the linked layers
+    metadata_lastupdated_date = Column(Date, nullable=False)
+    # quality rating for the hazard calculation method
+    # ranges from 0 (bad) to 10 (excellent).
+    # this value comes from the linked layers
+    calculation_method_quality = Column(Integer)
+    # quality rating for the study
+    # ranges from 0 (bad) to 2 (excellent)
+    # this value comes from the linked layers
+    scientific_quality = Column(Integer)
+
+    # processing steps:
+    # a hazardset starts incomplete.
+    # then it becomes complete, which means:
+    #   * all layers have been downloaded
+    #   * the date, quality, etc fields of the hazardset has been updated
+    complete = Column(Boolean, nullable=False, default=False)
+    # finally it is processed:
+    processed = Column(Boolean, nullable=False, default=False)
+
+    hazardtype = relationship('HazardType', backref="hazardsets")
+
+    def layer_by_level(self, level):
+        hazardlevel = HazardLevel.get(level)
+        return DBSession.query(Layer) \
+            .filter(Layer.hazardset_id == self.id) \
+            .filter(Layer.hazardlevel_id == hazardlevel.id) \
+            .one_or_none()
+
+
+class Layer(Base):
+    __tablename__ = 'layer'
+    __table_args__ = {u'schema': 'processing'}
+
+    # the layer is referenced in geonode with an id:
+    geonode_id = Column(Integer, primary_key=True)
+
+    # a layer is identified by it's return_period and hazard_set:
+    hazardset_id = Column(String, ForeignKey('processing.hazardset.id'),
+                          nullable=False)
+    # the related hazard_level, inferred from return_period
+    hazardlevel_id = Column(Integer,
+                            ForeignKey('datamart.enum_hazardlevel.id'))
+    # the return period is typically 100, 475, 2475 years but it can vary
+    return_period = Column(Integer)
+
+    # Flood hazardtype requires a mask layer
+    mask = Column(Boolean, nullable=False)
+
+    # pixel values have a unit:
+    hazardunit = Column(String)
+
+    # date the data was last updated (defaults to created):
+    data_lastupdated_date = Column(Date, nullable=False)
+    # date the metadata was last updated (defaults to created):
+    metadata_lastupdated_date = Column(Date, nullable=False)
+
+    # the data can be downloaded at this URL:
+    download_url = Column(String, nullable=False)
+
+    # quality rating for the hazard calculation method
+    # ranges from 0 (bad) to 10 (excellent)
+    calculation_method_quality = Column(Integer, nullable=False)
+    # quality rating for the study
+    # ranges from 0 (bad) to 2 (excellent)
+    scientific_quality = Column(Integer, nullable=False)
+
+    # "local" is set to false when bounds = -180/-90/180/90
+    # true otherwise
+    local = Column(Boolean, nullable=False)
+
+    # "downloaded" is set to true
+    # when the geotiff file has been downloaded
+    downloaded = Column(Boolean, nullable=False, default=False)
+
+    hazardset = relationship('HazardSet', backref='layers')
+    hazardlevel = relationship('HazardLevel')
+
+    def name(self):
+        if self.return_period is None:
+            if self.mask:
+                return '{}-MASK'.format(self.hazardset_id)
+            return self.hazardset_id
+        else:
+            return '{}-{}'.format(self.hazardset_id, self.return_period)
+
+
+class Output(Base):
+    __tablename__ = 'output'
+    __table_args__ = {u'schema': 'processing'}
+    # processing results are identified by:
+    #  * the hazardset they come from
+    #  * the administrative division that they qualify
+    hazardset_id = Column(String,
+                          ForeignKey('processing.hazardset.id'),
+                          primary_key=True)
+    admin_id = Column(Integer,
+                      ForeignKey('datamart.administrativedivision.id'),
+                      primary_key=True)
+    # the coverage_ratio ranges from 0 to 100
+    # it represents the percentage of the admin division area
+    # covered by the data in the hazardset
+    # (NO-DATA values are not taken into account here)
+    coverage_ratio = Column(Integer, nullable=False)
+    # hazard_level_id is the processing result
+    hazardlevel_id = Column(Integer,
+                            ForeignKey('datamart.enum_hazardlevel.id'),
+                            nullable=False)
+
+    hazardset = relationship('HazardSet')
+    administrativedivision = relationship('AdministrativeDivision')
+    hazardlevel = relationship('HazardLevel')
 
 
 class FeedbackStatus(Base):

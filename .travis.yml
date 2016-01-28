@@ -7,7 +7,18 @@ cache:
 python:
 - 2.7
 
-sudo: false
+addons:
+  postgresql: "9.1"
+
+before_install:
+- sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable -y
+- sudo rm -f /etc/apt/sources.list.d/pgdg-source.list
+- sudo apt-get remove postgresql-9.1-postgis-2.1
+- sudo apt-get update -qq
+- apt-cache search postgresql
+- sudo apt-get install --no-install-recommends
+    libgdal-dev
+    postgresql-9.1-postgis-2.1
 
 install:
 - make install

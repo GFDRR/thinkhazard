@@ -10,7 +10,7 @@ from sqlalchemy.sql.expression import literal_column
 from geoalchemy2.shape import to_shape
 
 
-from thinkhazard_common.models import (
+from ..models import (
     DBSession,
     AdministrativeDivision,
     HazardLevel,
