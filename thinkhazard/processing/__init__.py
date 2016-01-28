@@ -25,5 +25,4 @@ settings = load_settings()
 def layer_path(layer):
     return os.path.join(settings['data_path'],
                         'hazardsets',
-                        layer.hazardset_id,
-                        '{}.tif'.format(layer.return_period))
+                        layer.filename())

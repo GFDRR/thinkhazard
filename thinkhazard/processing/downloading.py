@@ -1,5 +1,7 @@
 import logging
+import traceback
 import os
+from datetime import datetime
 from urlparse import urlunsplit
 from httplib2 import Http
 import transaction
@@ -61,10 +63,9 @@ def download(title=None, force=False, dry_run=False):
                 transaction.abort()
             else:
                 transaction.commit()
-        except Exception as e:
+        except Exception:
             transaction.abort()
-            logger.error('{} raise an exception :\n{}'
-                         .format(geonode_id, e.message))
+            logger.error(traceback.format_exc())
 
 
 def download_layer(geonode_id):
@@ -74,28 +75,40 @@ def download_layer(geonode_id):
 
     logger.info('Downloading layer {}'.format(layer.name()))
 
-    dir_path = os.path.dirname(layer_path(layer))
+    path = layer_path(layer)
+
+    dir_path = os.path.dirname(path)
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
 
-    if os.path.isfile(layer_path(layer)):
-        layer.downloaded = True
-    else:
+    # If file is obsolete, unlink
+    if os.path.isfile(path):
+        cache_mtime = datetime.fromtimestamp(os.path.getmtime(path))
+        if layer.data_lastupdated_date > cache_mtime:
+            os.unlink(path)
+        else:
+            logger.info('  File {} found in cache'.format(layer.filename()))
+
+    # If file not in cache, download it
+    if not os.path.isfile(path):
         h = Http()
         url = urlunsplit((geonode['scheme'],
                           geonode['netloc'],
                           layer.download_url,
                           '',
                           ''))
-        logger.info('Retrieving {}'.format(url))
+        logger.info('  Retrieving {}'.format(url))
         response, content = h.request(url)
 
+        logger.info('  Saving to {}'.format(path))
         try:
-            with open(layer_path(layer), 'wb') as f:
+            with open(path, 'wb') as f:
                 f.write(content)
-                layer.downloaded = True
         except EnvironmentError:
-            logger.error('Writing data from layer {} failed'.format(
+            logger.error('  Writing data from layer {} failed'.format(
                 layer.name()))
+            logger.error(traceback.format_exc())
+
+    layer.downloaded = os.path.isfile(path)
 
     DBSession.flush()
