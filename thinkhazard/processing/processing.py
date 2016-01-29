@@ -255,13 +255,14 @@ def preprocessed_hazardlevel(type_settings, layer, reader, geometry):
         if data.mask.all():
             continue
 
-        mask = features.geometry_mask(
+        geometry_mask = features.geometry_mask(
             [polygon],
             out_shape=data.shape,
             transform=reader.window_transform(window),
             all_touched=True)
 
-        data.mask = data.mask | mask
+        data.mask = data.mask | geometry_mask
+        del geometry_mask
 
         if data.mask.all():
             continue
@@ -290,7 +291,7 @@ def notpreprocessed_hazardlevel(hazardtype, type_settings, layers, readers,
     # Create some optimization caches
     polygons = {}
     bboxes = {}
-    masks = {}
+    geometry_masks = {}  # Storage for the geometry geometry_masks
 
     inverted_comparison = ('inverted_comparison' in type_settings and
                            type_settings['inverted_comparison'])
@@ -322,10 +323,13 @@ def notpreprocessed_hazardlevel(hazardtype, type_settings, layers, readers,
                 bbox = bboxes[i]
 
             window = reader.window(*bbox)
+            # data: MaskedArray
             data = reader.read(1, window=window, masked=True)
 
+            # check if data is empty (cols x rows)
             if data.shape[0] * data.shape[1] == 0:
                 continue
+            # all data is masked which means that all is NODATA
             if data.mask.all():
                 continue
 
@@ -334,6 +338,9 @@ def notpreprocessed_hazardlevel(hazardtype, type_settings, layers, readers,
             else:
                 data = data > threshold
 
+            # some hazard types have a specific mask layer with very low
+            # return period which should be used as mask for other layers
+            # for example River Flood
             if ('mask_return_period' in type_settings):
                 mask = readers['mask'].read(1, window=window, masked=True)
                 if inverted_comparison:
@@ -341,34 +348,44 @@ def notpreprocessed_hazardlevel(hazardtype, type_settings, layers, readers,
                 else:
                     mask = mask > threshold
 
+                # apply the specific layer mask
                 data.mask = ma.getmaskarray(data) | mask.filled(False)
+                del mask
                 if data.mask.all():
                     continue
 
-            if i in masks:
-                mask = masks[i]
+            if i in geometry_masks:
+                geometry_mask = geometry_masks[i]
             else:
-                mask = features.geometry_mask(
+                geometry_mask = features.geometry_mask(
                     [polygon],
                     out_shape=data.shape,
                     transform=reader.window_transform(window),
                     all_touched=True)
-                masks[i] = mask
+                geometry_masks[i] = geometry_mask
 
-            data.mask = ma.getmaskarray(data) | mask
+            data.mask = ma.getmaskarray(data) | geometry_mask
+            del geometry_mask
 
+            # If at least one value is True this means that there's at least
+            # one raw value > threshold
             if data.any():
                 hazardlevel = layer.hazardlevel
-                break  # No need to go further
+                break
 
+            # check one last time is array is filled with NODATA
             if data.mask.all():
                 continue
 
+            # Here we have at least one value lower than the current level
+            # threshold
             if hazardlevel is None:
                 hazardlevel = level_vlo
 
+        # we got a value for the level, no need to go further, this will be
+        # the highest one
         if hazardlevel == layer.hazardlevel:
-            break  # No need to go further
+            break
 
     return hazardlevel
 
