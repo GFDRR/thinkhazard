@@ -71,7 +71,6 @@ def report(request):
 
     selected_hazard = request.matchdict.get('hazardtype', None)
 
-
     hazard_types = get_hazard_types(division_code)
 
     hazard_category = None
@@ -187,13 +186,26 @@ def report_print(request):
                                     '"divisioncode"')
     division = get_division(division_code)
     hazard_types = get_hazard_types(division_code)
-    return {
+
+    hazards_sorted = sorted(hazard_types, key=lambda a: a['hazardlevel'].order)
+
+    hazard_categories = []
+    for h in hazards_sorted:
+        if h['hazardlevel'].mnemonic == _hazardlevel_nodata.mnemonic:
+            continue
+        hazard_categories.append(get_info_for_hazard_type(
+            h['hazardtype'].mnemonic, division))
+
+    context = {
         'hazards': hazard_types,
         'hazards_sorted': sorted(hazard_types,
                                  key=lambda a: a['hazardlevel'].order),
         'parents': get_parents(division),
-        'division': division
+        'division': division,
+        'hazard_categories': hazard_categories
     }
+
+    return context
 
 @view_config(route_name='report_pdf')
 def report_pdf(request):

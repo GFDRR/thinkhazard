@@ -28,6 +28,12 @@
   <div class="container page-break">
     {% include 'about_body.jinja2' %}
   </div>
+  {% for hazard in hazard_categories %}
+  <div class="container page-break">
+    {{ hazard.hazardtype.title }}
+    {{ hazard.hazardlevel.title }}
+  </div>
+  {% endfor %}
 {% endblock %}
 
 {% macro hazard_type(hazard) %}
