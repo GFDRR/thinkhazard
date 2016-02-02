@@ -69,74 +69,23 @@ def report(request):
         raise HTTPBadRequest(detail='incorrect value for parameter '
                                     '"divisioncode"')
 
-    hazard = request.matchdict.get('hazardtype', None)
+    selected_hazard = request.matchdict.get('hazardtype', None)
 
 
     hazard_types = get_hazard_types(division_code)
 
     hazard_category = None
-    technical_recommendations = None
-    further_resources = None
-    sources = None
-    climate_change_recommendation = None
 
     division = get_division(division_code)
 
-    if hazard is not None:
+    if selected_hazard is not None:
         try:
-            hazard_category = DBSession.query(HazardCategory) \
-                .join(HazardCategoryAdministrativeDivisionAssociation) \
-                .join(AdministrativeDivision) \
-                .join(HazardLevel) \
-                .join(HazardType) \
-                .filter(HazardType.mnemonic == hazard) \
-                .filter(AdministrativeDivision.code == division_code) \
-                .one()
+            hazard_category = get_info_for_hazard_type(selected_hazard,
+                                                       division)
         except NoResultFound:
             url = request.route_url('report_overview',
-                                    divisioncode=division_code)
+                                    divisioncode=division.code)
             return HTTPFound(location=url)
-
-        try:
-            # get the code for level 0 division
-            code = division.code
-            if division.leveltype_id == 2:
-                code = division.parent.code
-            if division.leveltype_id == 3:
-                code = division.parent.parent.code
-            climate_change_recommendation = DBSession.query(
-                    ClimateChangeRecommendation) \
-                .join(AdministrativeDivision) \
-                .join(HazardType) \
-                .filter(AdministrativeDivision.code == code) \
-                .filter(HazardType.mnemonic == hazard) \
-                .one()
-        except NoResultFound:
-            pass
-
-        technical_recommendations = DBSession.query(TechnicalRecommendation) \
-            .join(TechnicalRecommendation.hazardcategory_associations) \
-            .join(HazardCategory) \
-            .filter(HazardCategory.id == hazard_category.id) \
-            .all()
-
-        further_resources = DBSession.query(FurtherResource) \
-            .join(FurtherResource.hazardcategory_associations) \
-            .join(HazardCategory) \
-            .outerjoin(AdministrativeDivision) \
-            .filter(HazardCategory.id == hazard_category.id) \
-            .filter(or_(AdministrativeDivision.code == division_code,
-                        AdministrativeDivision.code == null())) \
-            .all()
-
-        sources = DBSession.query(
-                HazardCategoryAdministrativeDivisionAssociation) \
-            .join(AdministrativeDivision) \
-            .join(HazardCategory) \
-            .filter(HazardCategory.id == hazard_category.id) \
-            .filter(AdministrativeDivision.code == division_code) \
-            .one() \
-            .hazardsets
 
     # Get the geometry for division and compute its extent
     cte = select([AdministrativeDivision.geom]) \
@@ -166,18 +115,18 @@ def report(request):
     if bounds_shifted[2] - bounds_shifted[0] < bounds[2] - bounds[0]:
         division_bounds = bounds_shifted
 
-    return {'hazards': hazard_types,
-            'hazards_sorted': sorted(hazard_types,
-                                     key=lambda a: a['hazardlevel'].order),
-            'hazard_category': hazard_category,
-            'climate_change_recommendation': climate_change_recommendation,
-            'recommendations': technical_recommendations,
-            'resources': further_resources,
-            'sources': sources,
-            'division': division,
-            'bounds': division_bounds,
-            'parents': get_parents(division),
-            'parent_division': division.parent}
+    context = {
+        'hazards': hazard_types,
+        'hazards_sorted': sorted(hazard_types,
+            key=lambda a: a['hazardlevel'].order),
+        'division': division,
+        'bounds': division_bounds,
+        'parents': get_parents(division),
+        'parent_division': division.parent
+    }
+    if hazard_category is not None:
+        context.update(hazard_category)
+    return context
 
 
 @view_config(route_name='report_json', renderer='geojson')
@@ -322,3 +271,72 @@ def get_hazard_types(code):
             'hazardlevel': cat
         })
     return hazard_types
+
+
+def get_info_for_hazard_type(hazard_type, division):
+    technical_recommendations = None
+    further_resources = None
+    sources = None
+    climate_change_recommendation = None
+
+    try:
+        hazard_category = DBSession.query(HazardCategory) \
+            .join(HazardCategoryAdministrativeDivisionAssociation) \
+            .join(AdministrativeDivision) \
+            .join(HazardLevel) \
+            .join(HazardType) \
+            .filter(HazardType.mnemonic == hazard_type) \
+            .filter(AdministrativeDivision.code == division.code) \
+            .one()
+    except NoResultFound:
+        raise NoResultFound
+
+    try:
+        # get the code for level 0 division
+        code = division.code
+        if division.leveltype_id == 2:
+            code = division.parent.code
+        if division.leveltype_id == 3:
+            code = division.parent.parent.code
+        climate_change_recommendation = DBSession.query(
+                ClimateChangeRecommendation) \
+            .join(AdministrativeDivision) \
+            .join(HazardType) \
+            .filter(AdministrativeDivision.code == code) \
+            .filter(HazardType.mnemonic == hazard_type) \
+            .one()
+    except NoResultFound:
+        pass
+
+    technical_recommendations = DBSession.query(TechnicalRecommendation) \
+        .join(TechnicalRecommendation.hazardcategory_associations) \
+        .join(HazardCategory) \
+        .filter(HazardCategory.id == hazard_category.id) \
+        .all()
+
+    further_resources = DBSession.query(FurtherResource) \
+        .join(FurtherResource.hazardcategory_associations) \
+        .join(HazardCategory) \
+        .outerjoin(AdministrativeDivision) \
+        .filter(HazardCategory.id == hazard_category.id) \
+        .filter(or_(AdministrativeDivision == division,
+                    AdministrativeDivision.code == null())) \
+        .all()
+
+    sources = DBSession.query(
+            HazardCategoryAdministrativeDivisionAssociation) \
+        .join(AdministrativeDivision) \
+        .join(HazardCategory) \
+        .filter(HazardCategory.id == hazard_category.id) \
+        .filter(AdministrativeDivision.code == division.code) \
+        .one() \
+        .hazardsets
+
+    return {
+        'hazard_category': hazard_category,
+        'climate_change_recommendation': climate_change_recommendation,
+        'recommendations': technical_recommendations,
+        'resources': further_resources,
+        'sources': sources,
+    }
+
