@@ -38,9 +38,11 @@ def main(global_config, **settings):
                      '/report/{divisioncode:\d+}/{hazardtype:([A-Z]{2})}')
     config.add_route('report_json',
                      '/report/{divisioncode:\d+}/{hazardtype:([A-Z]{2})}.json')
+    config.add_route('report_pdf', '/report/{divisioncode:\d+}.pdf')
     config.add_route('report_overview', '/report/{divisioncode:\d+}')
     config.add_route('report_overview_slash', '/report/{divisioncode:\d+}/')
     config.add_route('report_overview_json', '/report/{divisioncode:\d+}.json')
+    config.add_route('report_print', '/report/print/{divisioncode:\d+}')
     config.add_route('administrativedivision', '/administrativedivision')
 
     config.add_renderer('geojson', GeoJSON())

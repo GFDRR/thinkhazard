@@ -17,8 +17,16 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
+import datetime
+
+from subprocess import (
+    Popen,
+    PIPE,
+)
+
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest, HTTPFound
+from pyramid.response import Response
 
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm.exc import NoResultFound
@@ -63,31 +71,8 @@ def report(request):
 
     hazard = request.matchdict.get('hazardtype', None)
 
-    # Get all the hazard types.
-    hazardtype_query = DBSession.query(HazardType).order_by(HazardType.order)
 
-    # Get the hazard categories corresponding to the administrative
-    # division whose code is division_code.
-    hazardcategories_query = DBSession.query(HazardCategory) \
-        .join(HazardCategoryAdministrativeDivisionAssociation) \
-        .join(AdministrativeDivision) \
-        .join(HazardType) \
-        .join(HazardLevel) \
-        .filter(AdministrativeDivision.code == division_code)
-
-    # Create a dict with the categories. Keys are the hazard type mnemonic.
-    hazardcategories = {d.hazardtype.mnemonic: d
-                        for d in hazardcategories_query}
-
-    hazard_types = []
-    for hazardtype in hazardtype_query:
-        cat = _hazardlevel_nodata
-        if hazardtype.mnemonic in hazardcategories:
-            cat = hazardcategories[hazardtype.mnemonic].hazardlevel
-        hazard_types.append({
-            'hazardtype': hazardtype,
-            'hazardlevel': cat
-        })
+    hazard_types = get_hazard_types(division_code)
 
     hazard_category = None
     technical_recommendations = None
@@ -95,11 +80,7 @@ def report(request):
     sources = None
     climate_change_recommendation = None
 
-    # Get the administrative division whose code is division_code.
-    _alias = aliased(AdministrativeDivision)
-    division = DBSession.query(AdministrativeDivision) \
-        .outerjoin(_alias, _alias.code == AdministrativeDivision.parent_code) \
-        .filter(AdministrativeDivision.code == division_code).one()
+    division = get_division(division_code)
 
     if hazard is not None:
         try:
@@ -185,12 +166,6 @@ def report(request):
     if bounds_shifted[2] - bounds_shifted[0] < bounds[2] - bounds[0]:
         division_bounds = bounds_shifted
 
-    parents = []
-    if division.leveltype_id >= 2:
-        parents.append(division.parent)
-    if division.leveltype_id == 3:
-        parents.append(division.parent.parent)
-
     return {'hazards': hazard_types,
             'hazards_sorted': sorted(hazard_types,
                                      key=lambda a: a['hazardlevel'].order),
@@ -201,7 +176,7 @@ def report(request):
             'sources': sources,
             'division': division,
             'bounds': division_bounds,
-            'parents': parents,
+            'parents': get_parents(division),
             'parent_division': division.parent}
 
 
@@ -253,3 +228,97 @@ def report_json(request):
         }
     } for division, geom_simplified, hazardlevel_mnemonic,
           hazardlevel_title in divisions]
+
+@view_config(route_name='report_print', renderer='templates/report_print.jinja2')
+def report_print(request):
+    try:
+        division_code = request.matchdict.get('divisioncode')
+    except:
+        raise HTTPBadRequest(detail='incorrect value for parameter '
+                                    '"divisioncode"')
+    division = get_division(division_code)
+    hazard_types = get_hazard_types(division_code)
+    return {
+        'hazards': hazard_types,
+        'hazards_sorted': sorted(hazard_types,
+                                 key=lambda a: a['hazardlevel'].order),
+        'parents': get_parents(division),
+        'division': division
+    }
+
+@view_config(route_name='report_pdf')
+def report_pdf(request):
+    try:
+        division_code = request.matchdict.get('divisioncode')
+    except:
+        raise HTTPBadRequest(detail='incorrect value for parameter '
+                                    '"divisioncode"')
+
+    date = datetime.datetime.now()
+    filename = division_code + '-' + date.strftime("%Y%m%d-%H:%M") + '.pdf'
+
+    url = request.route_url('report_print', divisioncode=division_code)
+    command = '.build/wkhtmltox/bin/wkhtmltopdf "%s" "%s" >> /tmp/wkhtp.log' % (
+        url,
+        filename
+    )
+    try:
+        p = Popen(command, shell=True, stdout=PIPE, stderr=PIPE, close_fds=True)
+        stdout, stderr = p.communicate()
+        retcode = p.returncode
+
+        if retcode == 0:
+            response = Response()
+            response.text = u'done'
+            return response
+        elif retcode < 0:
+            raise Exception("Terminated by signal: ", -retcode)
+        else:
+            raise Exception(stderr)
+
+    except OSError as exc:
+        raise exc
+
+def get_parents(division):
+    parents = []
+    if division.leveltype_id >= 2:
+        parents.append(division.parent)
+    if division.leveltype_id == 3:
+        parents.append(division.parent.parent)
+    return parents
+
+def get_division(code):
+    # Get the administrative division whose code is division_code.
+    _alias = aliased(AdministrativeDivision)
+    return DBSession.query(AdministrativeDivision) \
+        .outerjoin(_alias, _alias.code == AdministrativeDivision.parent_code) \
+        .filter(AdministrativeDivision.code == code).one()
+
+def get_hazard_types(code):
+
+    # Get all the hazard types.
+    hazardtype_query = DBSession.query(HazardType).order_by(HazardType.order)
+
+    # Get the hazard categories corresponding to the administrative
+    # division whose code is division_code.
+    hazardcategories_query = DBSession.query(HazardCategory) \
+        .join(HazardCategoryAdministrativeDivisionAssociation) \
+        .join(AdministrativeDivision) \
+        .join(HazardType) \
+        .join(HazardLevel) \
+        .filter(AdministrativeDivision.code == code)
+
+    # Create a dict with the categories. Keys are the hazard type mnemonic.
+    hazardcategories = {d.hazardtype.mnemonic: d
+                        for d in hazardcategories_query}
+
+    hazard_types = []
+    for hazardtype in hazardtype_query:
+        cat = _hazardlevel_nodata
+        if hazardtype.mnemonic in hazardcategories:
+            cat = hazardcategories[hazardtype.mnemonic].hazardlevel
+        hazard_types.append({
+            'hazardtype': hazardtype,
+            'hazardlevel': cat
+        })
+    return hazard_types
