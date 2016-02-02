@@ -1,0 +1,152 @@
+{% macro report_for_hazard(division, hazard_category, recommendations,
+   climate_change_recommendation, sources, resources) %}
+<div class="row">
+  <div class="col-sm-12">
+    <h2 class="page-header detail">
+      {{ hazard_category.hazardtype.title }}
+      <small>
+        Hazard level: <span class="level">{{ hazard_category.hazardlevel.title }}</span>
+      </small>
+    </h2>
+    {% if hazard_category.general_recommendation %}
+    <p>
+    {{ hazard_category.general_recommendation|replace("name of location", "(" + division.name + ")")|markdown }}
+    </p>
+    {% endif %}
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-7">
+    {% if climate_change_recommendation %}
+    <p>
+      {{ climate_change_recommendation.text }}
+    </p>
+    {% endif %}
+
+    {% if recommendations %}
+    <h3>Recommendations</h3>
+    <ul class="recommendations">
+    {% for recommendation in recommendations %}
+      <li class="list-unstyled">
+        <i class="icon-list-square"></i>
+        {{ recommendation.text }}
+      </li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+  <div class="col-sm-5">
+    <div class="map-block">
+      <div id="map" class="map" data-hazardtype="{{hazard_category.hazardtype.mnemonic if hazard_category else ''}}">
+      </div>
+      <div class="attribution">
+        <small>
+          © <a href='https://www.mapbox.com/about/maps/'>Mapbox</a>
+          © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>
+        </small>
+      </div>
+      <div class="caption level">
+        {{ hazard_category.hazardtype.title}} hazard level
+      </div>
+      <div class="caption location">
+        {{ division.name }}
+      </div>
+      <div class="legend">
+        <table class="table">
+          <tr>
+            <td class="level-HIG">
+              <i class="square"></i>
+              High
+            </td>
+            <td class="level-LOW">
+              <i class="square"></i>
+              Low
+            </td>
+            <td class="level-MED">
+              <i class="square"></i>
+              Medium
+            </td>
+            <td class="level-VLO">
+              <i class="square"></i>
+              Very low
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="data-source text-center small">
+        Data source{% if sources|length > 1 %}s{% endif %}:
+        {% for source in sources %}
+        {{ source.owner_organization}}
+        {% if not loop.last %},&nbsp;{% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    {% if resources and resources|length > 0 %}
+    <div class="further-resources well">
+      <h4>Further resources</h4>
+      <ul>
+      {% for resource in resources %}
+      <li class="small"><i class="icon-list-arrow"></i>
+        <a target="_blank" href="{{ resource.url }}">
+          {{ resource.text }}
+        </a>
+      </li>
+      {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endmacro %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600' rel='stylesheet' type='text/css'>
+    <link href="{{'thinkhazard:static/build/report_print.min.css'|static_url}}" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="pull-right">
+        {{date.strftime('%Y-%m-%d')}} |
+        {{request.route_url('report', divisioncode=division.code, hazardtype=hazard_category.hazardtype.mnemonic)}}
+      </div>
+      <div class="">
+        ThinkHazard!
+      </div>
+    </div>
+    <div class="container-fluid well">
+      <h2>
+        {{ division.name }}
+        <br>
+        <small>
+        {% for parent in parents | reverse %}
+          {{ parent.name }}
+          {% if not loop.last %},&nbsp;{% endif %}
+        {% endfor %}
+        </small>
+      </h2>
+    </div>
+    <div class="container-fluid level-{{hazard_category.hazardlevel.mnemonic}}">
+      {{ report_for_hazard(
+          division,
+          hazard_category,
+          recommendations,
+          climate_change_recommendation,
+          sources,
+          resources) }}
+    </div>
+    <script src="{{('%s/jquery/dist/jquery.min.js' % node_modules)|static_url}}"></script>
+    <script>
+      var app = {};
+      app.mapUrl = '{{ 'report_json'|route_url(divisioncode=division.code, hazardtype=hazard_category.hazardtype.mnemonic)}}';
+      app.divisionCode = {{division.code}};
+      app.divisionBounds = {{bounds}};
+    </script>
+    <script src="{{('%s/openlayers/dist/ol.js' % node_modules)|static_url}}"></script>
+    <script src="{{'thinkhazard:static/js/report.js'|static_url}}"></script>
+  </body>
+</html>

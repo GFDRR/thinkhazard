@@ -17,10 +17,21 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
+import shutil
+import re
+
+from mock.mock import patch
 from . import BaseTestCase
 
 
 class TestReportFunction(BaseTestCase):
+
+    def tearDown(self):  # noqa
+        # delete pdf archive directory
+        pdf_archive_path = self.testapp.app.registry.settings.get(
+            'pdf_archive_path')
+        shutil.rmtree(pdf_archive_path)
+        super(TestReportFunction, self).tearDown()
 
     def test_report(self):
         self.testapp.get('/report/32', status=200)
@@ -104,3 +115,30 @@ class TestReportFunction(BaseTestCase):
         resp = self.testapp.get('/report/31/EQ')
         print resp.body
         self.assertTrue('data_provider' in resp.body)
+
+    @patch('thinkhazard.views.pdf.Popen')
+    def test_report__pdf(self, mock):
+        # tests that wkhtmltopdf is called and that the generated pdf file is
+        # returned
+        def popen_mock(command, **kwargs):
+            pdf_file = re. \
+                search('"([^"]*?32-.*?.pdf)"', command, re.IGNORECASE). \
+                group(1)
+
+            # create a dummy pdf file
+            with open(pdf_file, 'w') as file:
+                file.write('The pdf file')
+
+            class PopenMock:
+                def __init__(self):
+                    self.returncode = 0
+
+                def communicate(self):
+                    return '', ''
+
+            return PopenMock()
+        mock.side_effect = popen_mock
+
+        resp = self.testapp.get('/report/32.pdf', status=200)
+        self.assertEqual(resp.body, 'The pdf file')
+        self.assertEqual(resp.content_type, 'application/pdf')

@@ -36,12 +36,17 @@ def main(global_config, **settings):
     config.add_route('faq', '/faq')
     config.add_route('report',
                      '/report/{divisioncode:\d+}/{hazardtype:([A-Z]{2})}')
+    config.add_route(
+        'report_print',
+        '/report/print/{divisioncode:\d+}/{hazardtype:([A-Z]{2})}')
     config.add_route('report_json',
                      '/report/{divisioncode:\d+}/{hazardtype:([A-Z]{2})}.json')
+    config.add_route('report_pdf', '/report/{divisioncode:\d+}.pdf')
     config.add_route('report_overview', '/report/{divisioncode:\d+}')
     config.add_route('report_overview_slash', '/report/{divisioncode:\d+}/')
     config.add_route('report_overview_json', '/report/{divisioncode:\d+}.json')
     config.add_route('administrativedivision', '/administrativedivision')
+    config.add_route('pdf_cover', '/pdf_cover/{divisioncode:\d+}')
 
     config.add_route('admin_index', '/admin')
 
@@ -69,6 +74,8 @@ def main(global_config, **settings):
 
     config.add_renderer('geojson', GeoJSON())
 
+    init_pdf_archive_directory(settings.get('pdf_archive_path'))
+
     config.scan(ignore=['thinkhazard.tests'])
     return config.make_wsgi_app()
 
@@ -82,3 +89,10 @@ def load_local_settings(settings):
         config = ConfigParser.ConfigParser()
         config.read(local_settings_path)
         settings.update(config.items('app:main'))
+
+
+def init_pdf_archive_directory(pdf_archive_path):
+    """Make sure that the directory used as report archive exists.
+    """
+    if not os.path.exists(pdf_archive_path):
+        os.makedirs(pdf_archive_path)
