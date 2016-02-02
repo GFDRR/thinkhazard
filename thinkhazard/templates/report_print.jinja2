@@ -1,5 +1,7 @@
 {% extends "base.jinja2" %}
 
+{% from 'report_hazard_category.jinja2' import report_for_hazard %}
+
 {% block name %}report{% endblock %}
 
 {% block content %}
@@ -30,8 +32,15 @@
   </div>
   {% for hazard in hazard_categories %}
   <div class="container page-break">
-    {{ hazard.hazardtype.title }}
-    {{ hazard.hazardlevel.title }}
+    {{ report_for_hazard(
+         division,
+         hazard.hazard_category,
+         hazard.recommendations,
+         hazard.climate_change_recommendation,
+         hazard.sources,
+         hazard.resources,
+         hazards_sorted=hazards_sorted) }}
+    {{ hazard }}
   </div>
   {% endfor %}
 {% endblock %}
