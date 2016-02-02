@@ -28,7 +28,19 @@ hazard_types:
       HIG: [100, 250]
       MED: [475, 475]
       LOW: [2475, 2500]
-    thresholds: 98.0665
+    thresholds:
+      HIG:
+        PGA-g: 0.2
+        PGA-gal: 196.133
+        PGA-g-per: 20
+      MED:
+        PGA-g: 0.1
+        PGA-gal: 98.0665
+        PGA-g-per: 10
+      LOW:
+        PGA-g: 0.1
+        PGA-gal: 98.0665
+        PGA-g-per: 10
 
   DG:
     hazard_type: drought
@@ -37,7 +49,10 @@ hazard_types:
       MED: 50
       LOW: 1000
     inverted_comparison: True
-    thresholds: 1700
+    thresholds:
+      # WCI = m³ ?
+      WCI: 1700
+      #WA: NA
 
   VA:
     hazard_type: volcanic_ash
@@ -55,6 +70,7 @@ hazard_types:
       LOW: 1000
     thresholds:
       "km/h": 80
+      "m/s": 22.22
 
   TS:
     hazard_type: tsunami
@@ -70,6 +86,15 @@ hazard_types:
       MED: 50
       LOW: 100
     thresholds:
-      HIG: 2
-      MED: 0.5
-      LOW: 0.5
+      HIG:
+        m: 2
+        dm: 20
+        cm: 200
+      MED:
+        m: 0.5
+        dm: 5
+        cm: 50
+      LOW:
+        m: 0.5
+        dm: 5
+        cm: 50
