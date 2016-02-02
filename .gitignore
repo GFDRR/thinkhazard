@@ -1,9 +1,8 @@
 *.pyc
 *.egg-info
 *.sqlite
-npm-debug.log
+*.log
+local*.ini
 .build
 node_modules
-local.ini
 thinkhazard/static/build
-local.tests.ini
