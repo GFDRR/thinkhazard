@@ -27,8 +27,8 @@ Create a Python virtual environment and install the project into it::
 
 Create a database::
 
-    $ sudo -u postgres createdb -O www-data thinkhazard_processing
-    $ sudo -u postgres psql -d thinkhazard_processing -c 'CREATE EXTENSION postgis;'
+    $ sudo -u postgres createdb -O www-data thinkhazard
+    $ sudo -u postgres psql -d thinkhazard -c 'CREATE EXTENSION postgis;'
 
 If you want to use a different user or different database name, you'll have to
 provide your own configuration file. See "Use local.ini" section
