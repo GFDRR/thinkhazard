@@ -1,0 +1,108 @@
+@import "common.less";
+@import "report.less";
+
+@font-size-base: 14px;
+
+body {
+  font-weight: 300;
+  padding-top: 20px;
+}
+
+a.logo {
+  font-size: 42px;
+  margin-right: 0;
+}
+
+.recommendations li {
+  margin-top: 10px;
+}
+
+.map-block {
+  padding: 0;
+  .box-shadow(none);
+
+  .caption.location {
+    margin: 0 0 10px;
+  }
+}
+
+.map {
+  height: 230px;
+  width: 290px;
+}
+
+.legend {
+  margin-left: 0;
+  margin-bottom: 0;
+
+  table {
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    td {
+      padding: 0 5px;
+    }
+  }
+  .square {
+    height: 10px;
+    width: 10px;
+  }
+}
+
+.data-source {
+  padding: 10px 0;
+}
+
+.further-resources {
+  margin: 0;
+  padding: 1px 10px;
+
+  ul li {
+    margin-top: 10px;
+  }
+
+  p {
+    line-height: normal;
+  }
+  &.well {
+    border: none;
+    .box-shadow(none);
+  }
+}
+
+.hazard-types-list {
+  padding: 0;
+  li {
+    border: 0;
+    padding-top: 25px;
+    @padding-size: 6px;
+    .hazard-icon {
+      padding: 6px;
+      .box-shadow(none) !important;
+      color: white;
+      left: (@hazard-width - @icon-size) / 2 - @padding-size;
+    }
+
+    &.no-data .hazard-icon {
+      padding: @padding-size - 1px;
+      border: 1px solid @text-inactive;
+    }
+  }
+}
+
+.set-level-color(@level) {
+  @color: "level-@{level}-color";
+
+  .hazard-types-list li {
+    &.@{level} {
+      .hazard-icon {
+        background-color: @@color;
+      }
+    }
+  }
+}
+
+.set-level-color(HIG);
+.set-level-color(MED);
+.set-level-color(LOW);
+.set-level-color(VLO);

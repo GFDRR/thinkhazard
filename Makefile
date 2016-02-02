@@ -36,7 +36,7 @@ help:
 	@echo
 
 .PHONY: install
-install: .build/requirements.timestamp .build/node_modules.timestamp
+install: .build/requirements.timestamp .build/node_modules.timestamp .build/wkhtmltopdf.timestamp
 
 .PHONY: build
 build: buildcss
@@ -46,6 +46,8 @@ buildcss: thinkhazard/static/build/index.css \
 	      thinkhazard/static/build/index.min.css \
 	      thinkhazard/static/build/report.css \
 	      thinkhazard/static/build/report.min.css \
+	      thinkhazard/static/build/report_print.css \
+	      thinkhazard/static/build/report_print.min.css \
 	      thinkhazard/static/build/common.css \
 	      thinkhazard/static/build/common.min.css \
 	      thinkhazard/static/build/admin.css \
@@ -211,6 +213,11 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 		-e 's#{{AUTHUSERFILE}}#$(AUTHUSERFILE)#g' \
 		-e 's#{{WSGISCRIPT}}#$(abspath .build/thinkhazard-$*.wsgi)#' $< > $@
 
+.build/wkhtmltopdf.timestamp:
+	curl -o- http://download.gna.org/wkhtmltopdf/0.12/0.12.3/wkhtmltox-0.12.3_linux-generic-amd64.tar.xz | tar -xvJ
+	mv wkhtmltox .build
+	touch $@
+
 .PHONY: clean
 clean:
 	rm -f .build/thinkhazard-*.wsgi
@@ -218,6 +225,7 @@ clean:
 	rm -f .build/flake8.timestamp
 	rm -f .build/jshint.timestamp
 	rm -f .build/booltlint.timestamp
+	rm -f .build/wkhtmltopdf.timestamp
 	rm -rf thinkhazard/static/build
 
 .PHONY: cleanall
