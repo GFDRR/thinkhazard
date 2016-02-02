@@ -1,1 +1,38 @@
-empty for now
+{% extends "base.jinja2" %}
+
+{% block name %}report{% endblock %}
+
+{% block content %}
+  <div class="container text-center">
+    <h2>
+      {{ division.name }}
+      <br>
+      <small>
+      {% for parent in parents | reverse %}
+        {{ parent.name }}
+        {% if not loop.last %},&nbsp;{% endif %}
+      {% endfor %}
+      </small>
+    </h2>
+    <div class="container text-center">
+
+      <!-- Division name -->
+
+      <ul class="hazard-types-list horizontal">
+        {% for hazard in hazards_sorted %}
+          {{ hazard_type(hazard) }}
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container page-break">
+    {% include 'about_body.jinja2' %}
+  </div>
+{% endblock %}
+
+{% macro hazard_type(hazard) %}
+<li class="{{ hazard.hazardlevel.mnemonic }} text-center">
+  <i class="fa hazard-icon icon-{{hazard.hazardtype.mnemonic|lower|replace(' ', '')}}"></i><br>
+  {{ hazard.hazardtype.title }}
+</li>
+{% endmacro %}
