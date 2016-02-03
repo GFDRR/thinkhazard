@@ -2,7 +2,7 @@
    climate_change_recommendation, sources, resources, hazards_sorted=None,
    parents=[],
    parent_division=None) %}
-<div class="col-md-7">
+<div class="col-sm-7">
   {% if hazard_category %}
     <h2 class="page-header detail">
       {{ hazard_category.hazardtype.title }}
@@ -47,7 +47,7 @@
     {% endfor %}
   {% endif %}
 </div>
-<div class="col-md-5">
+<div class="col-sm-5">
   <div class="map-block well">
     <div id="map" class="map" data-hazardtype="{{hazard_category.hazardtype.mnemonic if hazard_category else ''}}">
       {% if parents.__len__() >= 1 %}

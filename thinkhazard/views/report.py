@@ -196,7 +196,8 @@ def report_pdf(request):
     filename = division_code + '-' + date.strftime("%Y%m%d-%H:%M") + '.pdf'
 
     url = request.route_url('report_print', divisioncode=division_code)
-    command = '.build/wkhtmltox/bin/wkhtmltopdf --javascript-delay 2000 ' \
+    command = '.build/wkhtmltox/bin/wkhtmltopdf' \
+            '--viewport-size 800x600 --javascript-delay 2000 ' \
             '"%s" "%s" >> /tmp/wkhtp.log' % (
         url,
         filename

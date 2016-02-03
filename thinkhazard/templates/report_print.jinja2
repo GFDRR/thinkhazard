@@ -7,14 +7,116 @@
 </li>
 {% endmacro %}
 
+{% macro report_for_hazard(division, hazard_category, recommendations,
+   climate_change_recommendation, sources, resources) %}
+<div class="row">
+  <div class="col-sm-12">
+    <h2 class="page-header detail">
+      {{ hazard_category.hazardtype.title }}
+      <small>
+        Hazard level: <span class="level">{{ hazard_category.hazardlevel.title }}</span>
+      </small>
+    </h2>
+    {% if hazard_category.general_recommendation %}
+    <p>
+    {{ hazard_category.general_recommendation|replace("name of location", "(" + division.name + ")")|markdown }}
+    </p>
+    {% endif %}
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-7">
+    {% if climate_change_recommendation %}
+    <p>
+      {{ climate_change_recommendation.text }}
+    </p>
+    {% endif %}
+
+    {% if recommendations %}
+    <h3>Recommendations</h3>
+    <ul class="recommendations">
+    {% for recommendation in recommendations %}
+      <li class="list-unstyled">
+        <i class="icon-list-square"></i>
+        {{ recommendation.text }}
+      </li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+  <div class="col-sm-5">
+    <div class="map-block">
+      <div id="map" class="map" data-hazardtype="{{hazard_category.hazardtype.mnemonic if hazard_category else ''}}">
+      </div>
+      <div class="attribution">
+        © <a href='https://www.mapbox.com/about/maps/'>Mapbox</a>
+        © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>
+      </div>
+      <div class="caption level">
+        {{ hazard_category.hazardtype.title}} hazard level
+      </div>
+      <div class="caption location">
+        {{ division.name }}
+      </div>
+      <div class="legend">
+        <table class="table">
+          <tr>
+            <td class="level-HIG">
+              <i class="square"></i>
+              High
+            </td>
+            <td class="level-LOW">
+              <i class="square"></i>
+              Low
+            </td>
+          </tr>
+          <tr>
+            <td class="level-MED">
+              <i class="square"></i>
+              Medium
+            </td>
+            <td class="level-VLO">
+              <i class="square"></i>
+              Very low
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="data-source text-center">
+        <h5>DATA SOURCE{% if sources|length > 1 %}S{% endif %}</h5>
+        {% for source in sources %}
+        <a href="{{ source.distribution_url }}">{{ source.owner_organization}}</a>
+        {% if not loop.last %},&nbsp;{% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    {% if resources and resources|length > 0 %}
+    <div class="further-resources well">
+      <h3>Further resources</h3>
+      <p>For further information the following resources could be consulted:</p>
+      <ul>
+      {% for resource in resources %}
+      <li><i class="icon-list-arrow"></i>
+        <a target="_blank" href="{{ resource.url }}">
+          {{ resource.text }}
+        </a>
+      </li>
+      {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endmacro %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600' rel='stylesheet' type='text/css'>
-    <link href="{{'thinkhazard:static/build/common.min.css'|static_url}}" rel="stylesheet">
-    <link href="{{'thinkhazard:static/build/report.min.css'|static_url}}" rel="stylesheet">
+    <link href="{{'thinkhazard:static/build/report_print.min.css'|static_url}}" rel="stylesheet">
   </head>
   <body>
     <div class="container-fluid text-center">
@@ -43,6 +145,7 @@
       {% include 'about_body.jinja2' %}
     </div>
     {% for hazard in hazard_categories %}
+    {% if loop.first %}
     <div class="container-fluid page-break">
       {{ report_for_hazard(
            division,
@@ -50,8 +153,8 @@
            hazard.recommendations,
            hazard.climate_change_recommendation,
            hazard.sources,
-           hazard.resources,
-           hazards_sorted=hazards_sorted) }}
+           hazard.resources) }}
+    {% endif %}
     </div>
     {% endfor %}
     <script src="{{('%s/jquery/dist/jquery.min.js' % node_modules)|static_url}}"></script>

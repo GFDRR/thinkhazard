@@ -45,6 +45,8 @@ buildcss: thinkhazard/static/build/index.css \
 	      thinkhazard/static/build/index.min.css \
 	      thinkhazard/static/build/report.css \
 	      thinkhazard/static/build/report.min.css \
+	      thinkhazard/static/build/report_print.css \
+	      thinkhazard/static/build/report_print.min.css \
 	      thinkhazard/static/build/common.css \
 	      thinkhazard/static/build/common.min.css
 
