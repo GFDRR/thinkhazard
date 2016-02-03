@@ -105,11 +105,7 @@ Think Hazard - {{ division.name}}
     <script src="{{('%s/openlayers/dist/ol.js' % node_modules)|static_url}}"></script>
 {% endif %}
     <script>
-      {% if hazard_category %}
-      app.mapUrl = '{{ 'report_json'|route_url(divisioncode=division.code, hazardtype=hazard_category.hazardtype.mnemonic)}}';
-      {% else %}
       app.mapUrl = '{{ 'report_overview_json'|route_url(divisioncode=division.code)}}';
-      {% endif %}
 
       {%- if division %}
       app.divisionCode = {{division.code}};

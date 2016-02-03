@@ -49,7 +49,7 @@
 </div>
 <div class="col-md-5">
   <div class="map-block well">
-    <div id="map" class="map">
+    <div id="map" class="map" data-hazardtype="{{hazard_category.hazardtype.mnemonic if hazard_category else ''}}">
       {% if parents.__len__() >= 1 %}
       <a class="btn btn-xs btn-default drillup" href="{{ 'report' | route_url(divisioncode=parents[0].code, hazardtype=hazard_category.hazardtype.mnemonic if hazard_category else '')}}">
         <i class="btn-xs icon-zoom-out"></i>

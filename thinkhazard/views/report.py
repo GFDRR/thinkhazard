@@ -86,33 +86,7 @@ def report(request):
                                     divisioncode=division.code)
             return HTTPFound(location=url)
 
-    # Get the geometry for division and compute its extent
-    cte = select([AdministrativeDivision.geom]) \
-        .where(AdministrativeDivision.code == division_code) \
-        .cte('bounds')
-    bounds = list(DBSession.query(
-        func.ST_XMIN(cte.c.geom),
-        func.ST_YMIN(cte.c.geom),
-        func.ST_XMAX(cte.c.geom),
-        func.ST_YMAX(cte.c.geom))
-        .one())
-    division_bounds = bounds
-
-    # compute a 0-360 version of the extent
-    cte = select([
-        func.ST_Shift_Longitude(AdministrativeDivision.geom).label('shift')]) \
-        .where(AdministrativeDivision.code == division_code) \
-        .cte('bounds')
-    bounds_shifted = list(DBSession.query(
-        func.ST_XMIN(cte.c.shift),
-        func.ST_YMIN(cte.c.shift),
-        func.ST_XMAX(cte.c.shift),
-        func.ST_YMAX(cte.c.shift))
-        .one())
-
-    # Use the 0-360 if it's smaller
-    if bounds_shifted[2] - bounds_shifted[0] < bounds[2] - bounds[0]:
-        division_bounds = bounds_shifted
+    division_bounds = get_bounds(division.code)
 
     context = {
         'hazards': hazard_types,
@@ -196,12 +170,15 @@ def report_print(request):
         hazard_categories.append(get_info_for_hazard_type(
             h['hazardtype'].mnemonic, division))
 
+    division_bounds = get_bounds(division.code)
+
     context = {
         'hazards': hazard_types,
         'hazards_sorted': sorted(hazard_types,
                                  key=lambda a: a['hazardlevel'].order),
         'parents': get_parents(division),
         'division': division,
+        'bounds': division_bounds,
         'hazard_categories': hazard_categories
     }
 
@@ -352,3 +329,33 @@ def get_info_for_hazard_type(hazard_type, division):
         'sources': sources,
     }
 
+
+def get_bounds(code):
+    # Get the geometry for division and compute its extent
+    cte = select([AdministrativeDivision.geom]) \
+        .where(AdministrativeDivision.code == code) \
+        .cte('bounds')
+    bounds = list(DBSession.query(
+        func.ST_XMIN(cte.c.geom),
+        func.ST_YMIN(cte.c.geom),
+        func.ST_XMAX(cte.c.geom),
+        func.ST_YMAX(cte.c.geom))
+        .one())
+    division_bounds = bounds
+
+    # compute a 0-360 version of the extent
+    cte = select([
+        func.ST_Shift_Longitude(AdministrativeDivision.geom).label('shift')]) \
+        .where(AdministrativeDivision.code == code) \
+        .cte('bounds')
+    bounds_shifted = list(DBSession.query(
+        func.ST_XMIN(cte.c.shift),
+        func.ST_YMIN(cte.c.shift),
+        func.ST_XMAX(cte.c.shift),
+        func.ST_YMAX(cte.c.shift))
+        .one())
+
+    # Use the 0-360 if it's smaller
+    if bounds_shifted[2] - bounds_shifted[0] < bounds[2] - bounds[0]:
+        division_bounds = bounds_shifted
+    return division_bounds

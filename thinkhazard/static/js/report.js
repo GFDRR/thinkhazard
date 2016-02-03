@@ -5,72 +5,80 @@
   // Main
   //
 
+  var mapContainers = $('.map');
 
-  var map = new ol.Map({
-    target: 'map',
-    interactions: [],
-    controls: [],
-    layers: [
-      new ol.layer.Tile({
-        source: new ol.source.XYZ({
-          url: 'https://{a-c}.tiles.mapbox.com/v4/ingenieroariel.m9a2h374/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaW5nZW5pZXJvYXJpZWwiLCJhIjoibXhDZ3pIMCJ9.qTmPYCbnUKtaNFkvKKysAQ'
-        })
-      })
-    ]
+  mapContainers.each(function(index, container) {
+    var hazardtype = $(container).attr('data-hazardtype');
+    createMap(container, hazardtype);
   });
-  var bounds = ol.proj.transformExtent(app.divisionBounds, 'EPSG:4326',
-      'EPSG:3857');
-  map.getView().fit(bounds, map.getSize());
-
-  map.addControl(new ol.control.ScaleLine());
-
-  var vectorLayer = addVectorLayer(map, app.mapUrl);
-
-  if (app.leveltype < 3) {
-    addSelectInteraction(map, vectorLayer);
-
-    // change mouse cursor when over division
-    map.on('pointermove', function(e) {
-      var feature = map.forEachFeatureAtPixel(e.pixel, filterFn);
-      map.getTargetElement().style.cursor = feature ? 'zoom-in' : '';
-
-      $('#map .tooltip').empty().hide();
-      if (feature) {
-        var html = 'Zoom in to <b>' + feature.get('name') + '</b>';
-        if (feature.get('hazardLevelMnemonic') != 'None') {
-          html += '<br/><em>' + feature.get('hazardLevelTitle') + '</em>';
-        }
-        $('#map .tooltip').show()
-          .css({
-            top: e.pixel[1] + 10,
-            left: e.pixel[0] + 10
-          })
-          .html(html);
-      }
-    });
-
-    // drill down
-    map.on('click', function(e) {
-      var feature = map.forEachFeatureAtPixel(e.pixel, filterFn);
-      if (feature) {
-        var code = feature.get('code');
-        window.location = app.reportpageUrl.replace('__divisioncode__', code);
-      }
-    });
-  }
 
 
   //
   // Functions
   //
 
+  function createMap(container, hazardtype) {
+    var map = new ol.Map({
+      target: container,
+      interactions: [],
+      controls: [],
+      layers: [
+        new ol.layer.Tile({
+          source: new ol.source.XYZ({
+            url: 'https://{a-c}.tiles.mapbox.com/v4/ingenieroariel.m9a2h374/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaW5nZW5pZXJvYXJpZWwiLCJhIjoibXhDZ3pIMCJ9.qTmPYCbnUKtaNFkvKKysAQ'
+          })
+        })
+      ]
+    });
+    var bounds = ol.proj.transformExtent(app.divisionBounds, 'EPSG:4326',
+        'EPSG:3857');
+    map.getView().fit(bounds, map.getSize());
+
+    map.addControl(new ol.control.ScaleLine());
+
+    var vectorLayer = addVectorLayer(map, hazardtype);
+
+    if (app.leveltype < 3) {
+      addSelectInteraction(map, vectorLayer);
+
+      // change mouse cursor when over division
+      map.on('pointermove', function(e) {
+        var feature = map.forEachFeatureAtPixel(e.pixel, filterFn);
+        map.getTargetElement().style.cursor = feature ? 'zoom-in' : '';
+
+        $('#map .tooltip').empty().hide();
+        if (feature) {
+          var html = 'Zoom in to <b>' + feature.get('name') + '</b>';
+          if (feature.get('hazardLevelMnemonic') != 'None') {
+            html += '<br/><em>' + feature.get('hazardLevelTitle') + '</em>';
+          }
+          $('#map .tooltip').show()
+            .css({
+              top: e.pixel[1] + 10,
+              left: e.pixel[0] + 10
+            })
+            .html(html);
+        }
+      });
+
+      // drill down
+      map.on('click', function(e) {
+        var feature = map.forEachFeatureAtPixel(e.pixel, filterFn);
+        if (feature) {
+          var code = feature.get('code');
+          window.location = app.reportpageUrl.replace('__divisioncode__', code);
+        }
+      });
+    }
+  }
+
 
   /**
    * @param {ol.Map} map
-   * @param {string} url
+   * @param {string} hazardtype
    * @return {ol.layer.Vector}
    */
-  function addVectorLayer(map, url) {
+  function addVectorLayer(map, hazardtype) {
     var styleFn = function(feature) {
       var fillColors = getFillColors(0.75);
       var transparent = 'rgba(1, 1, 1, 0)';
@@ -94,6 +102,10 @@
       }
       return styles;
     };
+    var url = app.mapUrl;
+    if (hazardtype) {
+      url = url.substring(0, url.length - 5) + '/' + hazardtype + '.json';
+    }
     var layer = new ol.layer.Vector({
       style: styleFn,
       source: new ol.source.Vector({

@@ -40,7 +40,6 @@
          hazard.sources,
          hazard.resources,
          hazards_sorted=hazards_sorted) }}
-    {{ hazard }}
   </div>
   {% endfor %}
 {% endblock %}
@@ -51,3 +50,31 @@
   {{ hazard.hazardtype.title }}
 </li>
 {% endmacro %}
+
+{% block scripts %}
+{% if debug %}
+    <script src="{{('%s/openlayers/dist/ol-debug.js' % node_modules)|static_url}}"></script>
+{% else %}
+    <script src="{{('%s/openlayers/dist/ol.js' % node_modules)|static_url}}"></script>
+{% endif %}
+    <script>
+      {% if hazard_category %}
+      app.mapUrl = '{{ 'report_json'|route_url(divisioncode=division.code, hazardtype=hazard_category.hazardtype.mnemonic)}}';
+      {% else %}
+      app.mapUrl = '{{ 'report_overview_json'|route_url(divisioncode=division.code)}}';
+      {% endif %}
+
+      {%- if division %}
+      app.divisionCode = {{division.code}};
+      {%- else %}
+      app.divisionCode = undefined;
+      {%- endif %}
+
+      app.divisionBounds = {{bounds}};
+      {% if hazard_category %}
+        app.hazardType = '{{hazard_category.hazardtype.mnemonic}}';
+      {% endif %}
+
+      app.leveltype = {{division.leveltype_id}};
+    </script>
+{% endblock %}
