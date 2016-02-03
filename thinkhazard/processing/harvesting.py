@@ -32,6 +32,7 @@ from ..models import (
     HazardType,
     Layer,
     Output,
+    FurtherResource,
     )
 
 from . import settings
@@ -56,7 +57,16 @@ def clearall():
     DBSession.query(Output).delete()
     DBSession.query(Layer).delete()
     DBSession.query(HazardSet).delete()
+    DBSession.query(FurtherResource).delete()
     DBSession.flush()
+
+
+def fetch(url):
+    logger.info('Retrieving {}'.format(url))
+    h = httplib2.Http()
+    response, content = h.request(url)
+    o = json.loads(content)
+    return sorted(o['objects'], key=lambda object: object['title'])
 
 
 def harvest(hazard_type=None, force=False, dry_run=False):
@@ -75,21 +85,17 @@ def harvest(hazard_type=None, force=False, dry_run=False):
     if hazard_type is not None:
         params['hazard_type__in'] = hazard_type
 
-    hazard_type_url = urlunsplit((geonode['scheme'],
-                                  geonode['netloc'],
-                                  'api/layers/',
-                                  urlencode(params),
-                                  ''))
+    layers_url = urlunsplit((geonode['scheme'],
+                             geonode['netloc'],
+                             'api/layers/',
+                             urlencode(params),
+                             ''))
 
-    logger.info('Retrieving {}'.format(hazard_type_url))
-    h = httplib2.Http()
-    response, content = h.request(hazard_type_url)
-    metadata = json.loads(content)
+    layers = fetch(layers_url)
+    documents = fetch(layers_url.replace('layers', 'documents'))
 
-    objects = sorted(metadata['objects'], key=lambda object: object['title'])
-
-    for object in objects:
-        if harvest_layer(object):
+    for layer in layers:
+        if harvest_layer(layer):
             try:
                 if dry_run:
                     transaction.abort()
@@ -98,17 +104,23 @@ def harvest(hazard_type=None, force=False, dry_run=False):
             except Exception as e:
                 transaction.abort()
                 logger.error('{} raise an exception :\n{}'
-                             .format(object['title'], e.message))
+                             .format(layer['title'], e.message))
+
+    for doc in documents:
+        if harvest_document(doc):
+            try:
+                if dry_run:
+                    transaction.abort()
+                else:
+                    transaction.commit()
+            except Exception as e:
+                transaction.abort()
+                logger.error('{} raise an exception :\n{}'
+                             .format(doc['title'], e.message))
 
 
-def harvest_layer(object, dry_run=False):
+def check_hazard_type(object):
     title = object['title']
-
-    hazardset_id = object['hazard_set']
-    if not hazardset_id:
-        logger.info('{} - hazard_set is empty'.format(title))
-        return False
-
     hazard_type = object['hazard_type']
     if not hazard_type:
         logger.warning('{} - hazard_type is empty'.format(title))
@@ -117,6 +129,46 @@ def harvest_layer(object, dry_run=False):
     if hazardtype is None:
         logger.warning('{} - hazard_type not supported: {}'
                        .format(title, hazard_type))
+    return hazardtype
+
+
+def harvest_document(object):
+    title = object['title']
+
+    hazardtype = check_hazard_type(object)
+    if not hazardtype:
+        return False
+
+    furtherresource = DBSession.query(FurtherResource) \
+        .filter(FurtherResource.id == object['id']) \
+        .one()
+
+    if furtherresource is None:
+        furtherresource = FurtherResource()
+        logger.info('{} - Create new FurtherResource {}'.format(title, title))
+        DBSession.add(furtherresource)
+    else:
+        if object['id'] == furtherresource.id:
+            # TODO: metadata change
+            return False
+
+    # TODO: create association with hazardtype
+    furtherresource.id = object['id']
+    furtherresource.title = title
+    DBSession.flush()
+    return True
+
+
+def harvest_layer(object):
+    title = object['title']
+
+    hazardset_id = object['hazard_set']
+    if not hazardset_id:
+        logger.info('{} - hazard_set is empty'.format(title))
+        return False
+
+    hazardtype = check_hazard_type(object)
+    if not hazardtype:
         return False
 
     type_settings = settings['hazard_types'][hazardtype.mnemonic]

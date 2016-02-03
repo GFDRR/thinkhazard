@@ -189,7 +189,7 @@ def populate_db():
     further_resource = FurtherResource(**{
         'text': u'Educational web resources on earthquakes and' +
                 ' seismic hazard',
-        'url': u'http://earthquake.usgs.gov/learn/?source=sitemap'
+        'id': 3
     })
     association = HazardTypeFurtherResourceAssociation(order=1)
     association.hazardtype = hazardtype_eq
@@ -198,7 +198,7 @@ def populate_db():
 
     further_resource = FurtherResource(**{
         'text': u'Further resource for earthquake',
-        'url': u'http://domain.com/the.EQ.document.txt'
+        'id': 5
     })
     association = HazardTypeFurtherResourceAssociation(order=2)
     association.hazardtype = hazardtype_eq

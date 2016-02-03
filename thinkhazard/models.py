@@ -279,7 +279,6 @@ class FurtherResource(Base):
     # the resource is referenced in geonode with an id:
     id = Column(Integer, primary_key=True)
     text = Column(Unicode, nullable=False)
-    url = Column(Unicode, nullable=False)
 
     hazardtype_associations = relationship(
         'HazardTypeFurtherResourceAssociation',
