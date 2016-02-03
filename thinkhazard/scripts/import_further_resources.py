@@ -37,9 +37,8 @@ from pyramid.scripts.common import parse_vars
 from ..models import (
     DBSession,
     HazardType,
-    HazardCategory,
     FurtherResource,
-    HazardCategoryFurtherResourceAssociation,
+    HazardTypeFurtherResourceAssociation,
     )
 
 from .. import load_local_settings
@@ -71,7 +70,7 @@ def main(argv=sys.argv):
 def import_further_resources():
     with transaction.manager:
 
-        DBSession.query(HazardCategoryFurtherResourceAssociation).delete()
+        DBSession.query(HazardTypeFurtherResourceAssociation).delete()
         DBSession.query(FurtherResource).delete()
         DBSession.flush()
 
@@ -183,11 +182,10 @@ def import_further_resources():
 
 
 def add_resource(hazard_type, resource):
-    categories = DBSession.query(HazardCategory) \
-        .join(HazardType) \
+    types = DBSession.query(HazardType) \
         .filter(HazardType.mnemonic == hazard_type)
-    for category in categories:
-        association = HazardCategoryFurtherResourceAssociation(order=1)
-        association.hazardcategory = category
-        resource.hazardcategory_associations.append(association)
+    for type in types:
+        association = HazardTypeFurtherResourceAssociation(order=1)
+        association.hazardtype = type
+        resource.hazardtype_associations.append(association)
     DBSession.add(resource)
