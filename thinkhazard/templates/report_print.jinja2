@@ -1,48 +1,4 @@
-{% extends "base.jinja2" %}
-
 {% from 'report_hazard_category.jinja2' import report_for_hazard %}
-
-{% block name %}report{% endblock %}
-
-{% block content %}
-  <div class="container text-center">
-    <h2>
-      {{ division.name }}
-      <br>
-      <small>
-      {% for parent in parents | reverse %}
-        {{ parent.name }}
-        {% if not loop.last %},&nbsp;{% endif %}
-      {% endfor %}
-      </small>
-    </h2>
-    <div class="container text-center">
-
-      <!-- Division name -->
-
-      <ul class="hazard-types-list horizontal">
-        {% for hazard in hazards_sorted %}
-          {{ hazard_type(hazard) }}
-        {% endfor %}
-      </ul>
-    </div>
-  </div>
-  <div class="container page-break">
-    {% include 'about_body.jinja2' %}
-  </div>
-  {% for hazard in hazard_categories %}
-  <div class="container page-break">
-    {{ report_for_hazard(
-         division,
-         hazard.hazard_category,
-         hazard.recommendations,
-         hazard.climate_change_recommendation,
-         hazard.sources,
-         hazard.resources,
-         hazards_sorted=hazards_sorted) }}
-  </div>
-  {% endfor %}
-{% endblock %}
 
 {% macro hazard_type(hazard) %}
 <li class="{{ hazard.hazardlevel.mnemonic }} text-center">
@@ -51,30 +7,61 @@
 </li>
 {% endmacro %}
 
-{% block scripts %}
-{% if debug %}
-    <script src="{{('%s/openlayers/dist/ol-debug.js' % node_modules)|static_url}}"></script>
-{% else %}
-    <script src="{{('%s/openlayers/dist/ol.js' % node_modules)|static_url}}"></script>
-{% endif %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600' rel='stylesheet' type='text/css'>
+    <link href="{{'thinkhazard:static/build/common.min.css'|static_url}}" rel="stylesheet">
+    <link href="{{'thinkhazard:static/build/report.min.css'|static_url}}" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container-fluid text-center">
+      <h2>
+        {{ division.name }}
+        <br>
+        <small>
+        {% for parent in parents | reverse %}
+          {{ parent.name }}
+          {% if not loop.last %},&nbsp;{% endif %}
+        {% endfor %}
+        </small>
+      </h2>
+      <div class="container-fluid text-center">
+
+        <!-- Division name -->
+
+        <ul class="hazard-types-list horizontal">
+          {% for hazard in hazards_sorted %}
+            {{ hazard_type(hazard) }}
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <div class="container-fluid page-break">
+      {% include 'about_body.jinja2' %}
+    </div>
+    {% for hazard in hazard_categories %}
+    <div class="container-fluid page-break">
+      {{ report_for_hazard(
+           division,
+           hazard.hazard_category,
+           hazard.recommendations,
+           hazard.climate_change_recommendation,
+           hazard.sources,
+           hazard.resources,
+           hazards_sorted=hazards_sorted) }}
+    </div>
+    {% endfor %}
+    <script src="{{('%s/jquery/dist/jquery.min.js' % node_modules)|static_url}}"></script>
     <script>
-      {% if hazard_category %}
-      app.mapUrl = '{{ 'report_json'|route_url(divisioncode=division.code, hazardtype=hazard_category.hazardtype.mnemonic)}}';
-      {% else %}
+      var app = {};
       app.mapUrl = '{{ 'report_overview_json'|route_url(divisioncode=division.code)}}';
-      {% endif %}
-
-      {%- if division %}
       app.divisionCode = {{division.code}};
-      {%- else %}
-      app.divisionCode = undefined;
-      {%- endif %}
-
       app.divisionBounds = {{bounds}};
-      {% if hazard_category %}
-        app.hazardType = '{{hazard_category.hazardtype.mnemonic}}';
-      {% endif %}
-
-      app.leveltype = {{division.leveltype_id}};
     </script>
-{% endblock %}
+    <script src="{{('%s/openlayers/dist/ol.js' % node_modules)|static_url}}"></script>
+    <script src="{{'thinkhazard:static/js/report.js'|static_url}}"></script>
+  </body>
+</html>
