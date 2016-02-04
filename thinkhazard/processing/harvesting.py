@@ -122,6 +122,7 @@ def harvest(hazard_type=None, force=False, dry_run=False):
 def check_hazard_type(object):
     title = object['title']
     hazard_type = object['hazard_type']
+
     if not hazard_type:
         logger.warning(u'{} - hazard_type is empty'.format(title))
         return False
@@ -132,16 +133,43 @@ def check_hazard_type(object):
     return hazardtype
 
 
+def collect_hazard_types(object):
+    # handle documents linked to several hazard types
+    # eg, those with:
+    #   hazard_type: "river_flood",
+    #   supplemental_information: "drought, climate_change",
+    primary_type = check_hazard_type(object)
+    if not primary_type:
+        return False
+    if object['csw_type'] == "document":
+        # supplemental information holds additional hazard types
+        hazard_types = [primary_type]
+        more = object['supplemental_information']
+        if more == u'No information provided':
+            logger.info(u'{} - supplemental_information is empty'
+                        .format(object['title']))
+        else:
+            # we assume the form:
+            # "drought, river_flood, tsunami, coastal_flood, strong_wind"
+            logger.info(u'{} - supplemental_information is {}'
+                        .format(object['title'], more))
+            types = more.split(', ')
+            for type in types:
+                object['hazard_type'] = type
+                hazardtype = check_hazard_type(object)
+                if hazardtype:
+                    hazard_types.append(hazardtype)
+        return hazard_types
+    else:
+        return [primary_type]
+
+
 def harvest_document(object, dry_run=False):
     title = object['title']
     id = object['id']
 
-    # TODO: handle documents linked to several hazard types
-    # eg, those with:
-    #   hazard_type: "river_flood",
-    #   supplemental_information: "drought, climate_change",
-    hazardtype = check_hazard_type(object)
-    if not hazardtype:
+    hazardtypes = collect_hazard_types(object)
+    if not hazardtypes:
         return False
 
     furtherresource = DBSession.query(FurtherResource) \
@@ -163,10 +191,12 @@ def harvest_document(object, dry_run=False):
                 DBSession.delete(a)
 
     furtherresource.text = title
-    # TODO: handle relationship order (?):
-    association = HazardTypeFurtherResourceAssociation(order=1)
-    association.hazardtype = hazardtype
-    furtherresource.hazardtype_associations.append(association)
+    for type in hazardtypes:
+        # TODO: handle relationship order (?):
+        association = HazardTypeFurtherResourceAssociation(order=1)
+        association.hazardtype = type
+        furtherresource.hazardtype_associations.append(association)
+
     DBSession.add(furtherresource)
     DBSession.flush()
 
