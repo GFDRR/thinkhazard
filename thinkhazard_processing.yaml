@@ -30,15 +30,15 @@ hazard_types:
       LOW: [2475, 2500]
     thresholds:
       HIG:
-        PGA-g: 0.2
+        PGA-g-dec: 0.2
         PGA-gal: 196.133
         PGA-g-per: 20
       MED:
-        PGA-g: 0.1
+        PGA-g-dec: 0.1
         PGA-gal: 98.0665
         PGA-g-per: 10
       LOW:
-        PGA-g: 0.1
+        PGA-g-dec: 0.1
         PGA-gal: 98.0665
         PGA-g-per: 10
 
