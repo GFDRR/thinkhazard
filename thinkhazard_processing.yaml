@@ -1,4 +1,4 @@
-data_path: /var/sig
+data_path: /tmp
 
 geonode:
   scheme: http
