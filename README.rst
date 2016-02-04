@@ -80,9 +80,9 @@ Path to main data folder, example:
 
 .. code:: yaml
 
-    data_path: /var/sig
+    data_path: /tmp
 
-For production, we recommend a dedicated disk partition.
+For production, we recommend you change this location to a dedicated disk partition.
 
 hazard_types
 ------------
