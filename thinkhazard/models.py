@@ -163,12 +163,15 @@ class HazardCategoryAdministrativeDivisionAssociation(Base):
                                ForeignKey('hazardcategory.id'),
                                nullable=False, index=True)
     administrativedivision = relationship('AdministrativeDivision',
-                                          back_populates='hazardcategories')
+                                          back_populates='hazardcategories',
+                                          lazy='joined')
     hazardcategory = relationship('HazardCategory',
-                                  back_populates='administrativedivisions')
+                                  back_populates='administrativedivisions',
+                                  lazy='joined')
     hazardsets = relationship(
         'HazardSet',
-        secondary=hazardcategory_administrativedivision_hazardset_table)
+        secondary=hazardcategory_administrativedivision_hazardset_table,
+        lazy="joined")
 
 
 class HazardCategoryTechnicalRecommendationAssociation(Base):
@@ -243,7 +246,7 @@ class HazardCategory(Base):
                             nullable=False)
     general_recommendation = Column(Unicode, nullable=False)
 
-    hazardtype = relationship(HazardType)
+    hazardtype = relationship(HazardType, lazy="joined")
     hazardlevel = relationship(HazardLevel)
     administrativedivisions = relationship(
         'HazardCategoryAdministrativeDivisionAssociation',
