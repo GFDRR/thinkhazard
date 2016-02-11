@@ -17,7 +17,6 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
-import ConfigParser
 from sqlalchemy import engine_from_config
 from pyramid.paster import (
     get_appsettings,
@@ -33,8 +32,6 @@ with open(local_settings_path):
 
 
 def populatedb():
-    config = ConfigParser.ConfigParser()
-    config.read(local_settings_path)
     settings = get_appsettings('development.ini', options={})
 
     settings['local_settings_path'] = local_settings_path
