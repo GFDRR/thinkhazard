@@ -24,6 +24,7 @@ from subprocess import (
     PIPE,
 )
 from os import path
+from random import randint
 
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest, HTTPFound
@@ -199,7 +200,8 @@ def report_pdf(request):
     date = datetime.datetime.now()
     filename = path.join(
         request.registry.settings.get('pdf_archive_path'),
-        division_code + '-' + date.strftime("%Y%m%d-%H:%M") + '.pdf')
+        division_code + '-' + date.strftime('%Y-%m-%d-%H:%M:%S') +
+        '-{:d}'.format(randint(1, 1E6)) + '.pdf')
 
     url = request.route_url('report_print', divisioncode=division_code)
     command = \
