@@ -23,6 +23,7 @@ from subprocess import (
     Popen,
     PIPE,
 )
+from os import path
 
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest, HTTPFound
@@ -193,10 +194,12 @@ def report_pdf(request):
                                     '"divisioncode"')
 
     date = datetime.datetime.now()
-    filename = division_code + '-' + date.strftime("%Y%m%d-%H:%M") + '.pdf'
+    filename = path.join(
+        request.registry.settings.get('pdf_archive_path'),
+        division_code + '-' + date.strftime("%Y%m%d-%H:%M") + '.pdf')
 
     url = request.route_url('report_print', divisioncode=division_code)
-    command = '.build/wkhtmltox/bin/wkhtmltopdf' \
+    command = '.build/wkhtmltox/bin/wkhtmltopdf ' \
             '--viewport-size 800x600 --javascript-delay 2000 ' \
             '"%s" "%s" >> /tmp/wkhtp.log' % (
         url,

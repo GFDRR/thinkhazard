@@ -47,6 +47,8 @@ def main(global_config, **settings):
 
     config.add_renderer('geojson', GeoJSON())
 
+    init_pdf_archive_directory(settings.get('pdf_archive_path'))
+
     config.scan(ignore=['thinkhazard.tests'])
     return config.make_wsgi_app()
 
@@ -60,3 +62,9 @@ def load_local_settings(settings):
         config = ConfigParser.ConfigParser()
         config.read(local_settings_path)
         settings.update(config.items('app:main'))
+
+def init_pdf_archive_directory(pdf_archive_path):
+    """Make sure that the directory used as report archive exists.
+    """
+    if not os.path.exists(pdf_archive_path):
+        os.makedirs(pdf_archive_path)
