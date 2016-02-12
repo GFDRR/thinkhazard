@@ -27,7 +27,7 @@ from os import path
 
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest, HTTPFound
-from pyramid.response import Response
+from pyramid.response import FileResponse
 
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm.exc import NoResultFound
@@ -211,9 +211,11 @@ def report_pdf(request):
         retcode = p.returncode
 
         if retcode == 0:
-            response = Response()
-            response.text = u'done'
-            return response
+            return FileResponse(
+                filename,
+                request=request,
+                content_type='application/pdf'
+            )
         elif retcode < 0:
             raise Exception("Terminated by signal: ", -retcode)
         else:
