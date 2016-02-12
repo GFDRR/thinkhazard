@@ -63,6 +63,7 @@ def load_local_settings(settings):
         config.read(local_settings_path)
         settings.update(config.items('app:main'))
 
+
 def init_pdf_archive_directory(pdf_archive_path):
     """Make sure that the directory used as report archive exists.
     """

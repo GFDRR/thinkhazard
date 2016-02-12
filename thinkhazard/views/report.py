@@ -91,8 +91,8 @@ def report(request):
 
     context = {
         'hazards': hazard_types,
-        'hazards_sorted': sorted(hazard_types,
-            key=lambda a: a['hazardlevel'].order),
+        'hazards_sorted': sorted(
+            hazard_types, key=lambda a: a['hazardlevel'].order),
         'division': division,
         'bounds': division_bounds,
         'parents': get_parents(division),
@@ -152,7 +152,9 @@ def report_json(request):
     } for division, geom_simplified, hazardlevel_mnemonic,
           hazardlevel_title in divisions]
 
-@view_config(route_name='report_print', renderer='templates/report_print.jinja2')
+
+@view_config(
+    route_name='report_print', renderer='templates/report_print.jinja2')
 def report_print(request):
     try:
         division_code = request.matchdict.get('divisioncode')
@@ -185,6 +187,7 @@ def report_print(request):
 
     return context
 
+
 @view_config(route_name='report_pdf')
 def report_pdf(request):
     try:
@@ -199,14 +202,14 @@ def report_pdf(request):
         division_code + '-' + date.strftime("%Y%m%d-%H:%M") + '.pdf')
 
     url = request.route_url('report_print', divisioncode=division_code)
-    command = '.build/wkhtmltox/bin/wkhtmltopdf ' \
-            '--viewport-size 800x600 --javascript-delay 2000 ' \
-            '"%s" "%s" >> /tmp/wkhtp.log' % (
-        url,
-        filename
-    )
+    command = \
+        '.build/wkhtmltox/bin/wkhtmltopdf ' \
+        '--viewport-size 800x600 --javascript-delay 2000 ' \
+        '"%s" "%s" >> /tmp/wkhtp.log' % (url, filename)
+
     try:
-        p = Popen(command, shell=True, stdout=PIPE, stderr=PIPE, close_fds=True)
+        p = Popen(
+            command, shell=True, stdout=PIPE, stderr=PIPE, close_fds=True)
         stdout, stderr = p.communicate()
         retcode = p.returncode
 
@@ -224,6 +227,7 @@ def report_pdf(request):
     except OSError as exc:
         raise exc
 
+
 def get_parents(division):
     parents = []
     if division.leveltype_id >= 2:
@@ -232,12 +236,14 @@ def get_parents(division):
         parents.append(division.parent.parent)
     return parents
 
+
 def get_division(code):
     # Get the administrative division whose code is division_code.
     _alias = aliased(AdministrativeDivision)
     return DBSession.query(AdministrativeDivision) \
         .outerjoin(_alias, _alias.code == AdministrativeDivision.parent_code) \
         .filter(AdministrativeDivision.code == code).one()
+
 
 def get_hazard_types(code):
 
