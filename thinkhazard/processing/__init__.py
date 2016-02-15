@@ -26,7 +26,8 @@ from .. import load_local_settings
 
 
 def load_settings():
-    settings = get_appsettings('development.ini')
+    settings = get_appsettings(os.path.join(os.path.dirname(__file__),
+                                            '../../development.ini'))
 
     root_folder = os.path.join(os.path.dirname(__file__), '..', '..')
     main_settings_path = os.path.join(root_folder,
