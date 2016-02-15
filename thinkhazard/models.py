@@ -364,9 +364,9 @@ class Layer(Base):
     hazardunit = Column(String)
 
     # date the data was last updated (defaults to created):
-    data_lastupdated_date = Column(Date, nullable=False)
+    data_lastupdated_date = Column(DateTime, nullable=False)
     # date the metadata was last updated (defaults to created):
-    metadata_lastupdated_date = Column(Date, nullable=False)
+    metadata_lastupdated_date = Column(DateTime, nullable=False)
 
     # the data can be downloaded at this URL:
     download_url = Column(String, nullable=False)
@@ -396,6 +396,9 @@ class Layer(Base):
             return self.hazardset_id
         else:
             return '{}-{}'.format(self.hazardset_id, self.return_period)
+
+    def filename(self):
+        return self.download_url.split('/').pop()
 
 
 class Output(Base):
