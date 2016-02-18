@@ -107,7 +107,7 @@ def harvest(hazard_type=None, force=False, dry_run=False):
                              .format(layer['title'], e.message))
 
     for doc in documents:
-        harvest_document(doc, dry_run)
+        harvest_document(doc)
         try:
             if dry_run:
                 transaction.abort()
@@ -164,7 +164,7 @@ def collect_hazard_types(object):
         return [primary_type]
 
 
-def harvest_document(object, dry_run=False):
+def harvest_document(object):
     title = object['title']
     id = object['id']
 
@@ -183,12 +183,11 @@ def harvest_document(object, dry_run=False):
     else:
         logger.info(u'Updating FurtherResource - {}'.format(title))
         # drop existing relationships
-        if not dry_run:
-            assocs = DBSession.query(HazardTypeFurtherResourceAssociation) \
-                .filter(HazardTypeFurtherResourceAssociation
-                        .furtherresource_id == id).all()
-            for a in assocs:
-                DBSession.delete(a)
+        assocs = DBSession.query(HazardTypeFurtherResourceAssociation) \
+            .filter(HazardTypeFurtherResourceAssociation
+                    .furtherresource_id == id).all()
+        for a in assocs:
+            DBSession.delete(a)
 
     furtherresource.text = title
     for type in hazardtypes:
