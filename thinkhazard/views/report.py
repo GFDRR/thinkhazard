@@ -128,7 +128,8 @@ def report(request):
                 code = division.parent.parent.code
             climate_change_recommendation = DBSession.query(
                     ClimateChangeRecommendation) \
-                .join(AdministrativeDivision) \
+                .join((AdministrativeDivision,
+                       ClimateChangeRecommendation.administrativedivisions)) \
                 .join(HazardType) \
                 .filter(AdministrativeDivision.code == code) \
                 .filter(HazardType.mnemonic == hazard) \

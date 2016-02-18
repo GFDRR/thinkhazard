@@ -267,16 +267,31 @@ class HazardCategory(Base):
             .one()
 
 
+climatechangerec_administrativedivision = Table(
+    'rel_climatechangerecommendation_administrativedivision',
+    Base.metadata,
+    Column('climatechangerecommendation_id', Integer,
+           ForeignKey('climatechangerecommendation.id',
+                      ondelete="CASCADE"),
+           primary_key=True),
+    Column('administrativedivision_id', Integer,
+           ForeignKey('administrativedivision.id'),
+           primary_key=True))
+
+
 class ClimateChangeRecommendation(Base):
     __tablename__ = 'climatechangerecommendation'
     id = Column(Integer, primary_key=True)
     text = Column(Unicode, nullable=False)
-    administrativedivision_id = Column(
-        Integer, ForeignKey(AdministrativeDivision.id), nullable=False)
-    hazardtype_id = Column(Integer, ForeignKey(HazardType.id), nullable=False)
+    hazardtype_id = Column(Integer,
+                           ForeignKey('enum_hazardtype.id'),
+                           nullable=False)
 
-    administrativedivision = relationship(AdministrativeDivision)
-    hazardtype = relationship(HazardType)
+    hazardtype = relationship('HazardType')
+
+    administrativedivisions = \
+        relationship("AdministrativeDivision",
+                     secondary=climatechangerec_administrativedivision)
 
 
 class TechnicalRecommendation(Base):

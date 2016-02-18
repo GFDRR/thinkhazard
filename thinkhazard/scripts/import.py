@@ -231,13 +231,21 @@ def import_recommendations(argv=sys.argv):
                 if not division:
                     continue
                 for hazard_type, column in hazard_types:
+                    hazardtype = HazardType.get(hazard_type)
                     text = row[column]
                     if text == 'NA':
                         continue
 
-                    climate_rec = ClimateChangeRecommendation()
-                    climate_rec.text = row[column]
-                    climate_rec.administrativedivision = division
-                    climate_rec.hazardtype = DBSession.query(HazardType) \
-                        .filter(HazardType.mnemonic == hazard_type).one()
-                    DBSession.add(climate_rec)
+                    climate_rec = DBSession.query(
+                            ClimateChangeRecommendation) \
+                        .filter(ClimateChangeRecommendation.text == text) \
+                        .filter(ClimateChangeRecommendation.hazardtype ==
+                                hazardtype) \
+                        .first()
+                    if climate_rec is None:
+                        climate_rec = ClimateChangeRecommendation()
+                        climate_rec.text = text
+                        climate_rec.hazardtype = hazardtype
+                        DBSession.add(climate_rec)
+
+                    climate_rec.administrativedivisions.append(division)
