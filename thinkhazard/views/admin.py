@@ -16,6 +16,7 @@ from ..models import (
     HazardCategoryTechnicalRecommendationAssociation as HcTr,
     HazardLevel,
     HazardType,
+    HazardSet,
     TechnicalRecommendation,
     )
 
@@ -167,3 +168,11 @@ def technical_rec_process(request, obj):
         DBSession.flush()
         return HTTPFound(request.route_url('admin_technical_rec_edit',
                                            id=obj.id))
+
+
+@view_config(route_name='admin_hazardsets',
+             renderer='templates/admin/hazardsets.jinja2')
+def hazardsets(request):
+    return {
+        'hazardsets': DBSession.query(HazardSet)
+    }

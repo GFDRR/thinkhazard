@@ -1,0 +1,38 @@
+{% extends "base.jinja2" %}
+
+{% from 'common.jinja2' import navbar %}
+
+{% block name %}admin{% endblock %}
+
+{% block content %}
+  {{ navbar(request) }}
+  <div class="container">
+    <style>
+      .invalid {
+        text-decoration: line-through;
+      }
+    </style>
+    <table class="table">
+      <tr>
+        <th></th>
+        <th>Hazard Type</th>
+        <th>Local</th>
+        <th>Calculation Method</th>
+        <th>Scientific Quality</th>
+        <th>Complete</th>
+        <th>Processed</th>
+      </tr>
+    {% for set in hazardsets %}
+      <tr class="{{ 'invalid' if not set.processed }}" >
+        <td>{{set.id}}</td>
+        <td>{{set.hazardtype.mnemonic}}</td>
+        <td>{{set.local}}</td>
+        <td>{{set.calculation_method_quality}}</td>
+        <td>{{set.scientific_quality}}</td>
+        <td>{{set.complete}}</td>
+        <td>{{set.processed}}</td>
+      </tr>
+    {% endfor %}
+    </table>
+  </div>
+{% endblock %}

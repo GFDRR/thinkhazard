@@ -50,6 +50,8 @@ def main(global_config, **settings):
     config.add_route('admin_hazardcategory',
                      '/admin/{hazard_type}/{hazard_level}')
 
+    config.add_route('admin_hazardsets', '/admin/hazardsets')
+
     config.add_renderer('geojson', GeoJSON())
 
     config.scan(ignore=['thinkhazard.tests'])
