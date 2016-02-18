@@ -32,6 +32,8 @@ from ..models import (
     HazardType,
     Layer,
     Output,
+    FurtherResource,
+    HazardTypeFurtherResourceAssociation,
     )
 
 from . import settings
@@ -52,11 +54,19 @@ geonode = settings['geonode']
 
 
 def clearall():
-    logger.info('Cleaning previous data')
+    logger.info(u'Cleaning previous data')
     DBSession.query(Output).delete()
     DBSession.query(Layer).delete()
     DBSession.query(HazardSet).delete()
     DBSession.flush()
+
+
+def fetch(url):
+    logger.info(u'Retrieving {}'.format(url))
+    h = httplib2.Http()
+    response, content = h.request(url)
+    o = json.loads(content)
+    return sorted(o['objects'], key=lambda object: object['title'])
 
 
 def harvest(hazard_type=None, force=False, dry_run=False):
@@ -75,21 +85,17 @@ def harvest(hazard_type=None, force=False, dry_run=False):
     if hazard_type is not None:
         params['hazard_type__in'] = hazard_type
 
-    hazard_type_url = urlunsplit((geonode['scheme'],
-                                  geonode['netloc'],
-                                  'api/layers/',
-                                  urlencode(params),
-                                  ''))
+    layers_url = urlunsplit((geonode['scheme'],
+                             geonode['netloc'],
+                             'api/layers/',
+                             urlencode(params),
+                             ''))
 
-    logger.info('Retrieving {}'.format(hazard_type_url))
-    h = httplib2.Http()
-    response, content = h.request(hazard_type_url)
-    metadata = json.loads(content)
+    layers = fetch(layers_url)
+    documents = fetch(layers_url.replace('layers', 'documents'))
 
-    objects = sorted(metadata['objects'], key=lambda object: object['title'])
-
-    for object in objects:
-        if harvest_layer(object):
+    for layer in layers:
+        if harvest_layer(layer):
             try:
                 if dry_run:
                     transaction.abort()
@@ -97,26 +103,114 @@ def harvest(hazard_type=None, force=False, dry_run=False):
                     transaction.commit()
             except Exception as e:
                 transaction.abort()
-                logger.error('{} raise an exception :\n{}'
-                             .format(object['title'], e.message))
+                logger.error(u'{} raise an exception :\n{}'
+                             .format(layer['title'], e.message))
+
+    for doc in documents:
+        harvest_document(doc, dry_run)
+        try:
+            if dry_run:
+                transaction.abort()
+            else:
+                transaction.commit()
+        except Exception as e:
+            transaction.abort()
+            logger.error(u'{} raise an exception :\n{}'
+                         .format(doc['title'], e.message))
 
 
-def harvest_layer(object, dry_run=False):
+def check_hazard_type(object):
+    title = object['title']
+    hazard_type = object['hazard_type']
+
+    if not hazard_type:
+        logger.warning(u'{} - hazard_type is empty'.format(title))
+        return False
+    hazardtype = hazardtype_from_geonode(hazard_type)
+    if hazardtype is None:
+        logger.warning(u'{} - hazard_type not supported: {}'
+                       .format(title, hazard_type))
+    return hazardtype
+
+
+def collect_hazard_types(object):
+    # handle documents linked to several hazard types
+    # eg, those with:
+    #   hazard_type: "river_flood",
+    #   supplemental_information: "drought, climate_change",
+    primary_type = check_hazard_type(object)
+    if not primary_type:
+        return False
+    if object['csw_type'] == "document":
+        # supplemental information holds additional hazard types
+        hazard_types = [primary_type]
+        more = object['supplemental_information']
+        if more == u'No information provided':
+            logger.info(u'{} - supplemental_information is empty'
+                        .format(object['title']))
+        else:
+            # we assume the form:
+            # "drought, river_flood, tsunami, coastal_flood, strong_wind"
+            logger.info(u'{} - supplemental_information is {}'
+                        .format(object['title'], more))
+            types = more.split(', ')
+            for type in types:
+                object['hazard_type'] = type
+                hazardtype = check_hazard_type(object)
+                if hazardtype:
+                    hazard_types.append(hazardtype)
+        return hazard_types
+    else:
+        return [primary_type]
+
+
+def harvest_document(object, dry_run=False):
+    title = object['title']
+    id = object['id']
+
+    hazardtypes = collect_hazard_types(object)
+    if not hazardtypes:
+        return False
+
+    furtherresource = DBSession.query(FurtherResource) \
+        .filter(FurtherResource.id == id) \
+        .one_or_none()
+
+    if furtherresource is None:
+        furtherresource = FurtherResource()
+        furtherresource.id = id
+        logger.info(u'Creating new FurtherResource - {}'.format(title))
+    else:
+        logger.info(u'Updating FurtherResource - {}'.format(title))
+        # drop existing relationships
+        if not dry_run:
+            assocs = DBSession.query(HazardTypeFurtherResourceAssociation) \
+                .filter(HazardTypeFurtherResourceAssociation
+                        .furtherresource_id == id).all()
+            for a in assocs:
+                DBSession.delete(a)
+
+    furtherresource.text = title
+    for type in hazardtypes:
+        # TODO: handle relationship order (?):
+        association = HazardTypeFurtherResourceAssociation(order=1)
+        association.hazardtype = type
+        furtherresource.hazardtype_associations.append(association)
+
+    DBSession.add(furtherresource)
+    DBSession.flush()
+
+
+def harvest_layer(object):
     title = object['title']
 
     hazardset_id = object['hazard_set']
     if not hazardset_id:
-        logger.info('{} - hazard_set is empty'.format(title))
+        logger.info(u'{} - hazard_set is empty'.format(title))
         return False
 
-    hazard_type = object['hazard_type']
-    if not hazard_type:
-        logger.warning('{} - hazard_type is empty'.format(title))
-        return False
-    hazardtype = hazardtype_from_geonode(hazard_type)
-    if hazardtype is None:
-        logger.warning('{} - hazard_type not supported: {}'
-                       .format(title, hazard_type))
+    hazardtype = check_hazard_type(object)
+    if not hazardtype:
         return False
 
     type_settings = settings['hazard_types'][hazardtype.mnemonic]
@@ -129,7 +223,7 @@ def harvest_layer(object, dry_run=False):
         hazardlevel = None
         hazard_unit = None
         if object['hazard_period']:
-            logger.info('{} - Has a return period'.format(title))
+            logger.info(u'{} - Has a return period'.format(title))
             return False
         hazard_period = None
     else:
@@ -151,54 +245,54 @@ def harvest_layer(object, dry_run=False):
             mask = True
 
         if hazardlevel is None and not mask:
-            logger.info('{} - No corresponding hazard_level'.format(title))
+            logger.info(u'{} - No corresponding hazard_level'.format(title))
             return False
 
         hazard_unit = object['hazard_unit']
         if hazard_unit == '':
-            logger.info('{} -  hazard_unit is empty'.format(title))
+            logger.info(u'{} -  hazard_unit is empty'.format(title))
             return False
 
     if object['srid'] != 'EPSG:4326':
-        logger.info('{} - srid is different from "EPSG:4326"'
+        logger.info(u'{} - srid is different from "EPSG:4326"'
                     .format(title))
         return False
 
     data_update_date = object['data_update_date']
     if not data_update_date:
-        logger.warning('{} - data_update_date is empty'.format(title))
+        logger.warning(u'{} - data_update_date is empty'.format(title))
         # TODO: Restore bypassed constraint to get Volcanic data
         # return False
         data_update_date = datetime.now()
 
     metadata_update_date = object['metadata_update_date']
     if not metadata_update_date:
-        logger.warning('{} - metadata_update_date is empty'.format(title))
+        logger.warning(u'{} - metadata_update_date is empty'.format(title))
         # return False
         metadata_update_date = datetime.now()
 
     calculation_method_quality = object['calculation_method_quality']
     if not calculation_method_quality:
-        logger.warning('{} - calculation_method_quality is empty'
+        logger.warning(u'{} - calculation_method_quality is empty'
                        .format(title))
         return False
     calculation_method_quality = int(float(calculation_method_quality))
 
     scientific_quality = object['scientific_quality']
     if not scientific_quality:
-        logger.warning('{} - scientific_quality is empty'.format(title))
+        logger.warning(u'{} - scientific_quality is empty'.format(title))
         return False
     scientific_quality = int(float(scientific_quality))
 
     download_url = object['download_url']
     if not download_url:
-        logger.warning('{} - download_url is empty'.format(title))
+        logger.warning(u'{} - download_url is empty'.format(title))
         return False
 
     hazardset = DBSession.query(HazardSet).get(hazardset_id)
     if hazardset is None:
 
-        logger.info('{} - Create new hazardset {}'
+        logger.info(u'{} - Create new hazardset {}'
                     .format(title, hazardset_id))
         hazardset = HazardSet()
         hazardset.id = hazardset_id
@@ -223,7 +317,7 @@ def harvest_layer(object, dry_run=False):
 
     if layer is None:
         layer = Layer()
-        logger.info('{} - Create new Layer {}'.format(title, title))
+        logger.info(u'Creating new Layer - {}'.format(title))
         DBSession.add(layer)
 
     else:
@@ -232,11 +326,11 @@ def harvest_layer(object, dry_run=False):
             return False
 
         if hazard_period > layer.return_period:
-            logger.info('{} - Use preferred return period {}'
+            logger.info(u'{} - Use preferred return period {}'
                         .format(title, layer.return_period))
             return False
 
-        logger.info('{} - Replace layer for level {}'
+        logger.info(u'{} - Replace layer for level {}'
                     .format(title, hazardlevel.mnemonic))
 
     layer.hazardset = hazardset

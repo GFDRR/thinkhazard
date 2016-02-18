@@ -22,12 +22,14 @@ from pyramid.httpexceptions import HTTPBadRequest, HTTPFound
 
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy import and_, or_, null, select
+from sqlalchemy import and_, or_, select
 from sqlalchemy.sql import func
 from sqlalchemy.sql.expression import literal_column
 
 from geoalchemy2.shape import to_shape
+from urlparse import urlunsplit
 
+from ..processing import settings
 
 from ..models import (
     DBSession,
@@ -139,14 +141,21 @@ def report(request):
             .filter(HazardCategory.id == hazard_category.id) \
             .all()
 
-        further_resources = DBSession.query(FurtherResource) \
-            .join(FurtherResource.hazardcategory_associations) \
-            .join(HazardCategory) \
-            .outerjoin(AdministrativeDivision) \
-            .filter(HazardCategory.id == hazard_category.id) \
-            .filter(or_(AdministrativeDivision.code == division_code,
-                        AdministrativeDivision.code == null())) \
-            .all()
+        further_resources_query = DBSession.query(FurtherResource) \
+            .join(FurtherResource.hazardtype_associations) \
+            .join(HazardType) \
+            .filter(HazardType.id == hazard_category.hazardtype.id)
+
+        further_resources = []
+        for fr in further_resources_query:
+            further_resources.append({
+                'id': fr.id,
+                'text': fr.text,
+                'url': urlunsplit((settings['geonode']['scheme'],
+                                   settings['geonode']['netloc'],
+                                   'documents/{}/download'.format(fr.id),
+                                   '', ''))
+            })
 
         sources = DBSession.query(
                 HazardCategoryAdministrativeDivisionAssociation) \

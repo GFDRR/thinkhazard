@@ -186,20 +186,18 @@ class HazardCategoryTechnicalRecommendationAssociation(Base):
     hazardcategory = relationship('HazardCategory')
 
 
-class HazardCategoryFurtherResourceAssociation(Base):
-    __tablename__ = 'rel_hazardcategory_furtherresource'
+class HazardTypeFurtherResourceAssociation(Base):
+    __tablename__ = 'rel_hazardtype_furtherresource'
     id = Column(Integer, primary_key=True)
-    hazardcategory_id = Column(Integer, ForeignKey('hazardcategory.id'),
-                               nullable=False, index=True)
+    hazardtype_id = Column(Integer,
+                           ForeignKey('datamart.enum_hazardtype.id'),
+                           nullable=False, index=True)
     furtherresource_id = Column(Integer,
                                 ForeignKey('furtherresource.id'),
                                 nullable=False, index=True)
     order = Column(Integer, nullable=False)
-    administrativedivision_id = Column(
-        Integer, ForeignKey('administrativedivision.id'))
 
-    hazardcategory = relationship('HazardCategory')
-    administrativedivision = relationship('AdministrativeDivision')
+    hazardtype = relationship('HazardType')
 
 
 class AdministrativeDivision(Base):
@@ -278,13 +276,14 @@ class TechnicalRecommendation(Base):
 
 class FurtherResource(Base):
     __tablename__ = 'furtherresource'
+
+    # the resource is referenced in geonode with an id:
     id = Column(Integer, primary_key=True)
     text = Column(Unicode, nullable=False)
-    url = Column(Unicode, nullable=False)
 
-    hazardcategory_associations = relationship(
-        'HazardCategoryFurtherResourceAssociation',
-        order_by='HazardCategoryFurtherResourceAssociation.order',
+    hazardtype_associations = relationship(
+        'HazardTypeFurtherResourceAssociation',
+        order_by='HazardTypeFurtherResourceAssociation.order',
         lazy='joined')
 
 

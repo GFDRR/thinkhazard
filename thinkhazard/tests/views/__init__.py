@@ -31,7 +31,7 @@ from ...models import (
     FurtherResource,
     HazardCategory,
     HazardCategoryAdministrativeDivisionAssociation,
-    HazardCategoryFurtherResourceAssociation,
+    HazardTypeFurtherResourceAssociation,
     HazardCategoryTechnicalRecommendationAssociation,
     HazardLevel,
     HazardSet,
@@ -53,7 +53,7 @@ def populate_db():
     DBSession.query(Layer).delete()
     DBSession.query(HazardSet).delete()
 
-    DBSession.query(HazardCategoryFurtherResourceAssociation).delete()
+    DBSession.query(HazardTypeFurtherResourceAssociation).delete()
     DBSession.query(FurtherResource).delete()
     DBSession.query(HazardCategoryTechnicalRecommendationAssociation).delete()
     DBSession.query(ClimateChangeRecommendation).delete()
@@ -189,22 +189,20 @@ def populate_db():
     further_resource = FurtherResource(**{
         'text': u'Educational web resources on earthquakes and' +
                 ' seismic hazard',
-        'url': u'http://earthquake.usgs.gov/learn/?source=sitemap'
+        'id': 3
     })
-    association = HazardCategoryFurtherResourceAssociation(order=1)
-    association.hazardcategory = category_eq_hig
-    further_resource.hazardcategory_associations.append(association)
+    association = HazardTypeFurtherResourceAssociation(order=1)
+    association.hazardtype = hazardtype_eq
+    further_resource.hazardtype_associations.append(association)
     DBSession.add(further_resource)
 
-    # Add further resource for one division only
     further_resource = FurtherResource(**{
-        'text': u'Further resource specific to division level 3 - 2',
-        'url': u'http://domain.com/the/document/url.txt'
+        'text': u'Further resource for earthquake',
+        'id': 5
     })
-    association = HazardCategoryFurtherResourceAssociation(order=2)
-    association.hazardcategory = category_eq_hig
-    association.administrativedivision = div_level_3_2
-    further_resource.hazardcategory_associations.append(association)
+    association = HazardTypeFurtherResourceAssociation(order=2)
+    association.hazardtype = hazardtype_eq
+    further_resource.hazardtype_associations.append(association)
     DBSession.add(further_resource)
 
     transaction.commit()

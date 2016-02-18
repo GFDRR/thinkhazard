@@ -80,7 +80,7 @@ class TestReportFunction(BaseTestCase):
 
     def test_report__further_resources(self):
         resp = self.testapp.get('/report/31/EQ', status=200)
-        self.assertEqual(len(resp.pyquery('.further-resources ul li')), 1)
+        self.assertEqual(len(resp.pyquery('.further-resources ul li')), 2)
 
         resp = self.testapp.get('/report/32/EQ', status=200)
         self.assertEqual(len(resp.pyquery('.further-resources ul li')), 2)

@@ -19,7 +19,6 @@ help:
 	@echo "- initdb                  Initialize db using development.ini"
 	@echo "- import_admindivs        Import administrative divisions. Use DATA=turkey or DATA=indonesia if you want to work with a sample data set"
 	@echo "- import_recommendations  Import recommendations"
-	@echo "- import_furtherresources Import further resources"
 	@echo "- harvest                 Harvest GeoNode layers metadata"
 	@echo "- download                Download raster data from GeoNode"
 	@echo "- complete                Mark complete hazardsets as such"
@@ -49,7 +48,7 @@ buildcss: thinkhazard/static/build/index.css \
 	      thinkhazard/static/build/common.min.css
 
 .PHONY: populatedb
-populatedb: initdb import_admindivs import_recommendations import_furtherresources
+populatedb: initdb import_admindivs import_recommendations
 
 .PHONY: initdb
 initdb:
@@ -72,10 +71,6 @@ import_admindivs: .build/requirements.timestamp \
 .PHONY: import_recommendations
 import_recommendations: .build/requirements.timestamp
 	.build/venv/bin/import_recommendations development.ini
-
-.PHONY: import_furtherresources
-import_furtherresources: .build/requirements.timestamp
-	.build/venv/bin/import_further_resources development.ini
 
 .PHONY: harvest
 harvest: .build/requirements.timestamp
