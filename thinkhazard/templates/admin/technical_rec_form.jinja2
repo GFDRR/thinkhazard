@@ -44,7 +44,7 @@
               <div class="item-association">
                 <input
                   type="checkbox"
-                  name="associations[]"
+                  name="associations"
                   {{ 'checked' if obj.has_association(hazard_type, hazard_level) else '' }}
                   value="{{ hazard_type.mnemonic }} - {{ hazard_level.mnemonic }}"></input>
               </div>

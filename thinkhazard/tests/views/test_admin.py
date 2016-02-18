@@ -42,12 +42,12 @@ class TestAdminFunction(BaseTestCase):
         resp = self.testapp.get('/admin/technical_rec/new', status=200)
         form = resp.form
         form['text'] = 'Bar'
-        form['associations[]'] = ['EQ - MED', 'EQ - LOW']
+        form['associations'] = ['EQ - MED', 'EQ - LOW']
         form.submit(status=302)
 
     def test_technical_rec_edit(self):
         resp = self.testapp.get('/admin/technical_rec/7', status=200)
         form = resp.form
         # here we get ['EQ - HIG'] for associations
-        form['associations[]'] = ['EQ - MED', 'EQ - LOW']
+        form['associations'] = ['EQ - MED', 'EQ - LOW']
         form.submit(status=302)
