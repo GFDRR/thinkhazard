@@ -258,18 +258,17 @@ def harvest_layer(object):
                     .format(title))
         return False
 
-    data_update_date = object['data_update_date']
+    data_update_date = parse_date(object['data_update_date'])
     if not data_update_date:
-        logger.warning(u'{} - data_update_date is empty'.format(title))
-        # TODO: Restore bypassed constraint to get Volcanic data
-        # return False
-        data_update_date = datetime.now()
+        logger.warning('{} - data_update_date is empty'.format(title))
+        # We use a very old date for good comparison in decision tree
+        data_update_date = datetime.fromtimestamp(0)
 
-    metadata_update_date = object['metadata_update_date']
+    metadata_update_date = parse_date(object['metadata_update_date'])
     if not metadata_update_date:
-        logger.warning(u'{} - metadata_update_date is empty'.format(title))
-        # return False
-        metadata_update_date = datetime.now()
+        logger.warning('{} - metadata_update_date is empty'.format(title))
+        # We use a very old date for good comparison in decision tree
+        metadata_update_date = datetime.fromtimestamp(0)
 
     calculation_method_quality = object['calculation_method_quality']
     if not calculation_method_quality:
@@ -290,48 +289,72 @@ def harvest_layer(object):
         return False
 
     hazardset = DBSession.query(HazardSet).get(hazardset_id)
-    if hazardset is None:
 
-        logger.info(u'{} - Create new hazardset {}'
-                    .format(title, hazardset_id))
-        hazardset = HazardSet()
-        hazardset.id = hazardset_id
-        hazardset.hazardtype = hazardtype
-        hazardset.data_lastupdated_date = data_update_date
-        hazardset.metadata_lastupdated_date = metadata_update_date
-        # get distribution_url and owner_organization from 1st layer of dataset
-        hazardset.distribution_url = object['distribution_url']
-        hazardset.owner_organization = object['owner__organization']
-        DBSession.add(hazardset)
-    else:
-        # print '  Hazardset {} found'.format(hazardset_id)
-        pass
-
+    # Test if another layer exists for same hazardlevel (or mask)
     layer = DBSession.query(Layer) \
+        .filter(Layer.geonode_id != object['id']) \
         .filter(Layer.hazardset_id == hazardset_id)
     if hazardlevel is not None:
         layer = layer.filter(Layer.hazardlevel_id == hazardlevel.id)
     if mask:
         layer = layer.filter(Layer.mask.is_(True))
     layer = layer.first()
-
-    if layer is None:
-        layer = Layer()
-        logger.info(u'Creating new Layer - {}'.format(title))
-        DBSession.add(layer)
-
-    else:
-        if object['id'] == layer.geonode_id:
-            # TODO: metadata change
-            return False
-
+    if layer is not None:
         if hazard_period > layer.return_period:
-            logger.info(u'{} - Use preferred return period {}'
+            logger.info('{} - Superseded by shorter return period {}'
                         .format(title, layer.return_period))
             return False
+        logger.info('{} - Supersede longer return period {}'
+                    .format(title, layer.return_period))
+        DBSession.delete(layer)
+        hazardset.complete = False
+        hazardset.processed = False
 
-        logger.info(u'{} - Replace layer for level {}'
-                    .format(title, hazardlevel.mnemonic))
+    # Create hazardset before layer
+    if hazardset is None:
+        logger.info('{} - Create new hazardset {}'
+                    .format(title, hazardset_id))
+        hazardset = HazardSet()
+        hazardset.id = hazardset_id
+        hazardset.hazardtype = hazardtype
+        DBSession.add(hazardset)
+
+    # get distribution_url and owner_organization from last updated layer
+    if object['distribution_url']:
+        hazardset.distribution_url = object['distribution_url']
+    if object['owner__organization']:
+        hazardset.owner_organization = object['owner__organization']
+
+    layer = DBSession.query(Layer).get(object['id'])
+    if layer is None:
+        logger.info('{} - Create new Layer {}'.format(title, title))
+        layer = Layer()
+        layer.geonode_id = object['id']
+        DBSession.add(layer)
+        hazardset.complete = False
+        hazardset.processed = False
+
+    else:
+        # If data has changed
+        if (layer.data_lastupdated_date != data_update_date or
+                layer.download_url != download_url):
+            logger.info('{} - Invalidate downloaded'.format(title))
+            layer.downloaded = False
+            hazardset.completed = False
+            hazardset.processed = False
+
+        # Some hazardset fields are calculated during completing
+        if (layer.calculation_method_quality != calculation_method_quality or
+                layer.scientific_quality != scientific_quality or
+                layer.data_lastupdated_date != data_update_date or
+                layer.metadata_lastupdated_date != metadata_update_date):
+            logger.info('{} - Invalidate completed'.format(title))
+            hazardset.completed = False
+
+        # Some fields invalidate outputs
+        if (layer.hazardunit != hazard_unit):
+            logger.info('{} - Invalidate processed'.format(title))
+            hazardset.processed = False
 
     layer.hazardset = hazardset
     layer.hazardlevel = hazardlevel
@@ -340,13 +363,13 @@ def harvest_layer(object):
     layer.hazardunit = hazard_unit
     layer.data_lastupdated_date = data_update_date
     layer.metadata_lastupdated_date = metadata_update_date
-    layer.geonode_id = object['id']
     layer.download_url = download_url
 
     # TODO: retrieve quality attributes
     layer.calculation_method_quality = calculation_method_quality
     layer.scientific_quality = scientific_quality
     layer.local = local
+
     DBSession.flush()
     return True
 
@@ -356,3 +379,12 @@ def hazardtype_from_geonode(geonode_name):
         if type_settings['hazard_type'] == geonode_name:
             return HazardType.get(unicode(mnemonic))
     return None
+
+
+def parse_date(str):
+    if str is None or len(str) == 0:
+        return None
+    if '.' in str:
+        return datetime.strptime(str, '%Y-%m-%dT%H:%M:%S.%f')
+    else:
+        return datetime.strptime(str, '%Y-%m-%dT%H:%M:%S')
