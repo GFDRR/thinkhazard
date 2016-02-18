@@ -1,0 +1,70 @@
+{% extends "base.jinja2" %}
+
+{% from 'common.jinja2' import navbar %}
+
+{% block name %}admin{% endblock %}
+
+{% block content %}
+  {{ navbar(request) }}
+  <div class="admin-hazardcategory container">
+    <h3>{{ hazard_category.hazardtype.title }} - {{ hazard_category.hazardlevel.title }}</h3>
+    <form
+      id="hazardcategory-form"
+      action="{{ action }}"
+      accept-charset="utf-8"
+      enctype="multipart/form-data"
+      method="POST"
+    >
+      <input type="hidden" name="id" value="{{ hazard_category.id }}">
+
+      <div class="form-group item-general_recommendation">
+        <label
+            for="general_recommendation"
+            class="control-label"
+            >
+          General Recommandation
+        </label>
+        <textarea
+            id="general_recommendation"
+            class="form-control"
+            type="textarea"
+            name="general_recommendation"
+            placeholder="Enter text here"
+            rows=8
+            >{{ hazard_category.general_recommendation }}</textarea>
+      </div>
+
+      <div class="form-group item-general_recommendation">
+        <label
+            for="associations"
+            class="control-label"
+            >
+          Technical Recommandations
+        </label>
+        <ul id="associations">
+          {% for association in associations %}
+          <li class="item-association">
+            <input type="hidden" name="associations[]" value="{{ association.id }}"></input>
+            {{ association.technicalrecommendation.text }}
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <button class="btn btn-primary" type="submit">Save changes</button>
+    </form>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+{% if debug %}
+    <script src="{{'thinkhazard:static/jquery-ui/jquery-ui.js'|static_url}}"></script>
+{% else %}
+    <script src="{{'thinkhazard:static/jquery-ui/jquery-ui.min.js'|static_url}}"></script>
+{% endif %}
+    <script type="text/javascript">
+    (function() {
+      $('#associations').sortable();
+    })();
+    </script>
+{% endblock %}

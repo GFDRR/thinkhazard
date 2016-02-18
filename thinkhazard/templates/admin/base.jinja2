@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Think Hazard{% endblock %}</title>
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600' rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" href="https://www.gfdrr.org/sites/all/themes/at_subtheme/favicon.ico" type="image/vnd.microsoft.icon" />
+{% if debug %}
+    <link href="{{'thinkhazard:static/build/common.css'|static_url}}" rel="stylesheet">
+    <link href="{{('thinkhazard:static/build/%s.css' % self.name())|static_url}}" rel="stylesheet">
+{% else %}
+    <link href="{{'thinkhazard:static/build/common.min.css'|static_url}}" rel="stylesheet">
+    <link href="{{('thinkhazard:static/build/%s.min.css' % self.name())|static_url}}" rel="stylesheet">
+{% endif %}
+  </head>
+  <body>
+    {% block content %}
+    {% endblock %}
+{% if debug %}
+    <script src="{{('%s/jquery/dist/jquery.js' % node_modules)|static_url}}"></script>
+    <script src="{{('%s/bootstrap/dist/js/bootstrap.js' % node_modules)|static_url}}"></script>
+{% else %}
+    <script src="{{('%s/jquery/dist/jquery.min.js' % node_modules)|static_url}}"></script>
+    <script src="{{('%s/bootstrap/dist/js/bootstrap.min.js' % node_modules)|static_url}}"></script>
+{% endif %}
+    {% block scripts %}
+    {% endblock scripts %}
+  </body>
+</html>

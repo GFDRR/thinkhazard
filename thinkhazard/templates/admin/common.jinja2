@@ -1,0 +1,20 @@
+{% macro navbar(request) %}
+  <div class="admin-navbar container">
+    <ul class="nav nav-pills">
+      <li>
+        <a
+          href="{{ request.route_url('admin_index') }}"
+          class="'active' if request.matched_route.name == 'admin_index' else ''">
+          Hazard categories
+         </a>
+      </li>
+      <li>
+        <a
+          href="{{ request.route_url('admin_technical_rec') }}"
+          class="'active' if request.matched_route.name == 'admin_technical_rec' else ''">
+          Technical recommendations
+        </a>
+      </li>
+    </ul>
+  </div>
+{% endmacro %}

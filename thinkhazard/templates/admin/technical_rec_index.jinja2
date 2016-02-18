@@ -1,0 +1,28 @@
+{% extends "base.jinja2" %}
+
+{% from 'common.jinja2' import navbar %}
+
+{% block name %}admin{% endblock %}
+
+{% block content %}
+  {{ navbar(request) }}
+  <div class="admin-technicalrecommendations container">
+    
+    <h3>Technical Recommendations
+      <a class="btn btn-primary pull-right"
+        href="{{ 'admin_technical_rec_new' | route_url }}"
+        >New Recommendation</a></h3>
+    <ul>
+      {% for technical_rec in technical_recs %}
+      <li class="item-technicalrecommendation">
+        <div>{{ technical_rec.text }}</div>
+        <div>{{ technical_rec.hazardcategories }}</div>
+        <div>
+          <a href="{{ 'admin_technical_rec_edit' | route_url(id=technical_rec.id) }}"
+            >Edit</a>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

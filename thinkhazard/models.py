@@ -51,10 +51,9 @@ DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base(metadata=MetaData(schema='datamart'))
 
 
-_enum_cache = threading.local()
-_enum_cache.adminleveltypes = {}
-_enum_cache.hazardlevels = {}
-_enum_cache.hazardtypes = {}
+adminleveltypes = threading.local().__dict__
+hazardlevels = threading.local().__dict__
+hazardtypes = threading.local().__dict__
 
 
 class AdminLevelType(Base):
@@ -67,8 +66,8 @@ class AdminLevelType(Base):
 
     @classmethod
     def get(cls, mnemonic):
-        if mnemonic in _enum_cache.adminleveltypes:
-            adminleveltype = _enum_cache.adminleveltypes[mnemonic]
+        if mnemonic in adminleveltypes:
+            adminleveltype = adminleveltypes[mnemonic]
             insp = inspect(adminleveltype)
             if not insp.detached:
                 return adminleveltype
@@ -77,7 +76,7 @@ class AdminLevelType(Base):
                 .filter(cls.mnemonic == mnemonic) \
                 .one_or_none()
             if adminleveltype is not None:
-                _enum_cache.adminleveltypes[mnemonic] = adminleveltype
+                adminleveltypes[mnemonic] = adminleveltype
             return adminleveltype
 
 
@@ -106,8 +105,8 @@ class HazardLevel(Base):
 
     @classmethod
     def get(cls, mnemonic):
-        if mnemonic in _enum_cache.hazardlevels:
-            hazardlevel = _enum_cache.hazardlevels[mnemonic]
+        if mnemonic in hazardlevels:
+            hazardlevel = hazardlevels[mnemonic]
             insp = inspect(hazardlevel)
             if not insp.detached:
                 return hazardlevel
@@ -116,7 +115,7 @@ class HazardLevel(Base):
                 .filter(cls.mnemonic == mnemonic) \
                 .one_or_none()
             if hazardlevel is not None:
-                _enum_cache.hazardlevels[mnemonic] = hazardlevel
+                hazardlevels[mnemonic] = hazardlevel
             return hazardlevel
 
 
@@ -130,8 +129,8 @@ class HazardType(Base):
 
     @classmethod
     def get(cls, mnemonic):
-        if mnemonic in _enum_cache.hazardtypes:
-            hazardtype = _enum_cache.hazardtypes[mnemonic]
+        if mnemonic in hazardtypes:
+            hazardtype = hazardtypes[mnemonic]
             insp = inspect(hazardtype)
             if not insp.detached:
                 return hazardtype
@@ -140,7 +139,7 @@ class HazardType(Base):
                 .filter(cls.mnemonic == mnemonic) \
                 .one_or_none()
             if hazardtype is not None:
-                _enum_cache.hazardtypes[mnemonic] = hazardtype
+                hazardtypes[mnemonic] = hazardtype
             return hazardtype
 
 
@@ -184,6 +183,7 @@ class HazardCategoryTechnicalRecommendationAssociation(Base):
     order = Column(Integer, nullable=False)
 
     hazardcategory = relationship('HazardCategory')
+    technicalrecommendation = relationship('TechnicalRecommendation')
 
 
 class HazardTypeFurtherResourceAssociation(Base):
@@ -250,6 +250,23 @@ class HazardCategory(Base):
         'HazardCategoryAdministrativeDivisionAssociation',
         back_populates='hazardcategory')
 
+    def name(self):
+        return '{} - {}'.format(self.hazardtype.mnemonic,
+                                self.hazardlevel.mnemonic)
+
+    @classmethod
+    def get(cls, hazardtype, hazardlevel):
+        if not isinstance(hazardtype, HazardType):
+            hazardtype = HazardType.get(unicode(hazardtype))
+
+        if not isinstance(hazardlevel, HazardLevel):
+            hazardlevel = HazardLevel.get(unicode(hazardlevel))
+
+        return DBSession.query(cls) \
+            .filter(cls.hazardtype == hazardtype) \
+            .filter(cls.hazardlevel == hazardlevel) \
+            .one()
+
 
 class ClimateChangeRecommendation(Base):
     __tablename__ = 'climatechangerecommendation'
@@ -272,6 +289,28 @@ class TechnicalRecommendation(Base):
         'HazardCategoryTechnicalRecommendationAssociation',
         order_by='HazardCategoryTechnicalRecommendationAssociation.order',
         lazy='joined')
+
+    def has_association(self, hazardtype, hazardlevel):
+        """Test if this technical recommendation is associated with specified
+        hazardcategory
+        @param hazardtype: HazardType instance or mnemonic
+        @param hazardlevel: HazardLevel instance or mnemonic
+        @return boolean: True if association exists
+        """
+        if not isinstance(hazardtype, HazardType):
+            hazardtype = HazardType.get(unicode(hazardtype))
+
+        if not isinstance(hazardlevel, HazardLevel):
+            hazardlevel = HazardLevel.get(unicode(hazardlevel))
+
+        for association in self.hazardcategory_associations:
+            if (
+                    association.hazardcategory.hazardtype == hazardtype and
+                    association.hazardcategory.hazardlevel == hazardlevel):
+                if inspect(association).deleted:
+                    return False
+                return True
+        return False
 
 
 class FurtherResource(Base):
