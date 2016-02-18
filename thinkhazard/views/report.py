@@ -41,6 +41,7 @@ from ..models import (
     TechnicalRecommendation,
     FurtherResource,
     HazardCategoryAdministrativeDivisionAssociation,
+    HazardCategoryTechnicalRecommendationAssociation,
 )
 
 
@@ -139,6 +140,7 @@ def report(request):
             .join(TechnicalRecommendation.hazardcategory_associations) \
             .join(HazardCategory) \
             .filter(HazardCategory.id == hazard_category.id) \
+            .order_by(HazardCategoryTechnicalRecommendationAssociation.order) \
             .all()
 
         further_resources_query = DBSession.query(FurtherResource) \
