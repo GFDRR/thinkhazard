@@ -104,6 +104,10 @@ def download_layer(geonode_id):
     if os.path.isfile(path):
         cache_mtime = datetime.fromtimestamp(os.path.getmtime(path))
         if layer.data_lastupdated_date > cache_mtime:
+            logger.debug('  File {} considered as obsolete {} > {}'
+                         .format(layer.filename(),
+                                 layer.data_lastupdated_date,
+                                 cache_mtime))
             os.unlink(path)
         else:
             logger.info('  File {} found in cache'.format(layer.filename()))
