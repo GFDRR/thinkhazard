@@ -44,7 +44,7 @@
         <ul id="associations">
           {% for association in associations %}
           <li class="item-association">
-            <input type="hidden" name="associations[]" value="{{ association.id }}"></input>
+            <input type="hidden" name="associations" value="{{ association.id }}"></input>
             {{ association.technicalrecommendation.text }}
           </li>
           {% endfor %}
