@@ -186,9 +186,16 @@ def hazardsets(request):
     }
 
 
-@view_config(route_name='admin_admindiv_hazardsets',
-             renderer='templates/admin/admindiv_hazardsets.jinja2')
+@view_config(route_name='admin_admindiv_hazardsets')
 def admindiv_hazardsets(request):
+    hazardtype = DBSession.query(HazardType).first()
+    return HTTPFound(request.route_url('admin_admindiv_hazardsets_hazardtype',
+                                       hazardtype=hazardtype.mnemonic))
+
+
+@view_config(route_name='admin_admindiv_hazardsets_hazardtype',
+             renderer='templates/admin/admindiv_hazardsets.jinja2')
+def admindiv_hazardsets_hazardtype(request):
 
     try:
         hazardtype = request.matchdict.get('hazardtype')
@@ -213,7 +220,10 @@ def admindiv_hazardsets(request):
         'name': row.administrativedivision.name,
         'hazardset': row.hazardsets[0].id
     } for row in query]
+
+    hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
     return {
+        'hazard_types': hazard_types,
         'data': json.dumps(data)
     }
 
