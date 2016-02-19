@@ -2,6 +2,7 @@ from pyramid.view import view_config
 from pyramid.httpexceptions import (
     HTTPFound,
     HTTPNotFound,
+    HTTPBadRequest,
     )
 
 from sqlalchemy import (
@@ -10,10 +11,15 @@ from sqlalchemy import (
     Integer,
     )
 
+import json
+
 from ..models import (
     DBSession,
+    AdministrativeDivision,
+    AdminLevelType,
     HazardCategory,
     HazardCategoryTechnicalRecommendationAssociation as HcTr,
+    HazardCategoryAdministrativeDivisionAssociation,
     HazardLevel,
     HazardType,
     HazardSet,
@@ -175,4 +181,36 @@ def technical_rec_process(request, obj):
 def hazardsets(request):
     return {
         'hazardsets': DBSession.query(HazardSet)
+    }
+
+
+@view_config(route_name='admin_admindiv_hazardsets',
+             renderer='templates/admin/admindiv_hazardsets.jinja2')
+def admindiv_hazardsets(request):
+
+    try:
+        hazardtype = request.matchdict.get('hazardtype')
+    except:
+        raise HTTPBadRequest(detail='incorrect value for parameter '
+                                    '"hazardtype"')
+
+    if HazardType.get(hazardtype) is None:
+        raise HTTPBadRequest(detail='hazardtype doesn\'t exist')
+
+    query = DBSession.query(HazardCategoryAdministrativeDivisionAssociation) \
+        .join(AdministrativeDivision) \
+        .join(HazardCategory) \
+        .join(HazardType) \
+        .filter(HazardType.mnemonic == hazardtype) \
+        .join(AdminLevelType) \
+        .filter(AdminLevelType.id == 3) \
+        .order_by(AdministrativeDivision.name)
+
+    data = [{
+        'code': row.administrativedivision.code,
+        'name': row.administrativedivision.name,
+        'hazardset': row.hazardsets[0].id
+    } for row in query]
+    return {
+        'data': json.dumps(data)
     }

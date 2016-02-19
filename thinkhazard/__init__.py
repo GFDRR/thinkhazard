@@ -47,6 +47,8 @@ def main(global_config, **settings):
     config.add_route('admin_technical_rec', '/admin/technical_rec')
     config.add_route('admin_technical_rec_new', '/admin/technical_rec/new')
     config.add_route('admin_technical_rec_edit', '/admin/technical_rec/{id}')
+    config.add_route('admin_admindiv_hazardsets',
+                     '/admin/admindiv_hazardsets/{hazardtype:([A-Z]{2})}')
     config.add_route('admin_hazardcategory',
                      '/admin/{hazard_type}/{hazard_level}')
 
