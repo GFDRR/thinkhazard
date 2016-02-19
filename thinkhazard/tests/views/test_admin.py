@@ -24,6 +24,7 @@ from thinkhazard.models import (
     AdminLevelType,
     AdministrativeDivision,
     ClimateChangeRecommendation,
+    TechnicalRecommendation,
     )
 
 
@@ -53,7 +54,10 @@ class TestAdminFunction(BaseTestCase):
         form.submit(status=302)
 
     def test_technical_rec_edit(self):
-        resp = self.testapp.get('/admin/technical_rec/7', status=200)
+        technical_rec = DBSession.query(TechnicalRecommendation).first()
+        resp = self.testapp.get('/admin/technical_rec/{}'
+                                .format(technical_rec.id),
+                                status=200)
         form = resp.form
         # here we get ['EQ - HIG'] for associations
         form['associations'] = ['EQ - MED', 'EQ - LOW']
