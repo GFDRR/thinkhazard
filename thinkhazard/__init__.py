@@ -44,11 +44,21 @@ def main(global_config, **settings):
     config.add_route('administrativedivision', '/administrativedivision')
 
     config.add_route('admin_index', '/admin')
+
     config.add_route('admin_technical_rec', '/admin/technical_rec')
     config.add_route('admin_technical_rec_new', '/admin/technical_rec/new')
     config.add_route('admin_technical_rec_edit', '/admin/technical_rec/{id}')
+
     config.add_route('admin_admindiv_hazardsets',
                      '/admin/admindiv_hazardsets/{hazardtype:([A-Z]{2})}')
+
+    config.add_route('admin_climate_rec', '/admin/climate_rec')
+    config.add_route('admin_climate_rec_hazardtype',
+                     '/admin/climate_rec_{hazard_type}')
+    config.add_route('admin_climate_rec_new',
+                     '/admin/climate_rec/{hazard_type}/new')
+    config.add_route('admin_climate_rec_edit', '/admin/climate_rec/{id}')
+
     config.add_route('admin_hazardcategory',
                      '/admin/{hazard_type}/{hazard_level}')
 

@@ -9,19 +9,29 @@
   margin-bottom: 10px;
 }
 
-.admin-technicalrecommendations ul {
+.admin-technicalrecommendations ul,
+.admin-climatechangerecommendations ul {
   padding: 0px;
 }
-.admin-technicalrecommendations li {
-  margin-bottom: 10px;
+.admin-technicalrecommendations li,
+.admin-climatechangerecommendations li.item-climatechangerecommendation {
+  margin: 10px 0px;
   list-style: none;
 }
 
-.admin-technicalrecommendation .item-associations th,
-.admin-technicalrecommendation .item-associations td {
-  padding: 5px;
+.admin-technicalrecommendation .item-associations {
+  th,
+  td {
+    padding: 5px;
+    .item-association {
+      text-align: center;
+      vertical-align: middle;
+    }
+  }
 }
-.admin-technicalrecommendation .item-association {
-  text-align: center;
-  vertical-align: middle;
+
+.admin-climatechangerecommendation .item-association {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

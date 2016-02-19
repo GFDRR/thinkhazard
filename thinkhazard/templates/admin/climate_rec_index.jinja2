@@ -1,0 +1,38 @@
+{% extends "base.jinja2" %}
+
+{% from 'common.jinja2' import navbar %}
+
+{% block name %}admin{% endblock %}
+
+{% block content %}
+  {{ navbar(request) }}
+  <div class="admin-climatechangerecommendations container">
+    <h3>Climate Change Recommendations</h3>
+    <a class="btn btn-primary pull-right"
+        href="{{ request.route_url('admin_climate_rec_new', hazard_type=request.matchdict['hazard_type']) }}"
+        >New Recommendation</a>
+    <div class="admin-climatechangerecommendations-navbar container">
+      <ul class="nav nav-tabs">
+        {% for hazard_type in hazard_types %}
+        <li role="presentation" class="{{ 'active' if request.matchdict['hazard_type'] == hazard_type.mnemonic else '' }}">
+          <a
+            href="{{ request.route_url('admin_climate_rec_hazardtype', hazard_type=hazard_type.mnemonic) }}"
+            title="{{ hazard_type.title }}"
+            >{{ hazard_type.title }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <ul>
+      {% for climate_rec in climate_recs %}
+      <li class="item-climatechangerecommendation">
+        <div>{{ climate_rec.text }}</div>
+        <div>
+          <a href="{{ 'admin_climate_rec_edit' | route_url(id=climate_rec.id) }}"
+            >Edit</a>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

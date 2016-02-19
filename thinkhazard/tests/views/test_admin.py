@@ -19,6 +19,13 @@
 
 from . import BaseTestCase
 
+from thinkhazard.models import (
+    DBSession,
+    AdminLevelType,
+    AdministrativeDivision,
+    ClimateChangeRecommendation,
+    )
+
 
 class TestAdminFunction(BaseTestCase):
 
@@ -36,7 +43,7 @@ class TestAdminFunction(BaseTestCase):
     def test_technical_rec(self):
         resp = self.testapp.get('/admin/technical_rec', status=200)
         records = resp.html.select('.item-technicalrecommendation')
-        self.assertEqual(len(records), 6)
+        self.assertEqual(len(records), 2)
 
     def test_technical_rec_new(self):
         resp = self.testapp.get('/admin/technical_rec/new', status=200)
@@ -50,4 +57,36 @@ class TestAdminFunction(BaseTestCase):
         form = resp.form
         # here we get ['EQ - HIG'] for associations
         form['associations'] = ['EQ - MED', 'EQ - LOW']
+        form.submit(status=302)
+
+    def test_climate_rec(self):
+        self.testapp.get('/admin/climate_rec', status=302)
+
+    def test_climate_rec_hazardtype(self):
+        resp = self.testapp.get('/admin/climate_rec_EQ', status=200)
+        records = resp.html.select('.item-climatechangerecommendation')
+        self.assertEqual(len(records), 2)
+
+    def test_climate_rec_new(self):
+        resp = self.testapp.get('/admin/climate_rec/FL/new', status=200)
+        form = resp.form
+        form['text'] = 'Bar'
+        admindivs = DBSession.query(AdministrativeDivision) \
+            .join(AdminLevelType) \
+            .filter(AdminLevelType.mnemonic == u'COU')
+        form['associations'] = [admindiv.id for admindiv in admindivs]
+        form.submit(status=302)
+
+    def test_climate_rec_edit(self):
+        climate_rec = DBSession.query(ClimateChangeRecommendation).first()
+        resp = self.testapp.get('/admin/climate_rec/{}'
+                                .format(climate_rec.id),
+                                status=200)
+        form = resp.form
+        form['text'] = 'Bar'
+        admindivs = DBSession.query(AdministrativeDivision) \
+            .join(AdminLevelType) \
+            .filter(AdminLevelType.mnemonic == u'COU') \
+            .filter(AdministrativeDivision.code == 11)
+        form['associations'] = [admindiv.id for admindiv in admindivs]
         form.submit(status=302)
