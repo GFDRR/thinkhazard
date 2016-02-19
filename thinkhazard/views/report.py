@@ -22,7 +22,7 @@ from pyramid.httpexceptions import HTTPBadRequest, HTTPFound
 
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy import and_, or_, select, desc
+from sqlalchemy import and_, or_, select
 from sqlalchemy.sql import func
 from sqlalchemy.sql.expression import literal_column
 
@@ -155,9 +155,9 @@ def report(request):
             .filter(HazardType.id == hazard_category.hazardtype.id) \
             .filter(AdministrativeDivision.code == code) \
             .order_by(Region.level.desc())
-            # "first class" documents are those which relate directly with the country
-            # "second class" documents do not relate directly with the country
-            # they appear lower in the page
+        # "first class" documents relate directly with the country
+        # "second class" documents do not relate directly with the country,
+        # they appear lower in the page
 
         further_resources = []
         for fr in further_resources_query:
