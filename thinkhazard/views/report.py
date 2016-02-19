@@ -38,6 +38,7 @@ from ..models import (
     HazardCategory,
     HazardType,
     ClimateChangeRecommendation,
+    ClimateChangeRecAdministrativeDivisionAssociation as CcrAd,
     TechnicalRecommendation,
     FurtherResource,
     HazardCategoryAdministrativeDivisionAssociation,
@@ -128,12 +129,13 @@ def report(request):
                 code = division.parent.parent.code
             climate_change_recommendation = DBSession.query(
                     ClimateChangeRecommendation) \
-                .join((AdministrativeDivision,
-                       ClimateChangeRecommendation.administrativedivisions)) \
+                .join(CcrAd) \
                 .join(HazardType) \
+                .join(AdministrativeDivision) \
                 .filter(AdministrativeDivision.code == code) \
                 .filter(HazardType.mnemonic == hazard) \
                 .one()
+
         except NoResultFound:
             pass
 
