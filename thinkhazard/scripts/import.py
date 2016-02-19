@@ -36,6 +36,7 @@ from ..models import (
     DBSession,
     AdministrativeDivision,
     ClimateChangeRecommendation,
+    ClimateChangeRecAdministrativeDivisionAssociation as CcrAd,
     HazardType,
     HazardLevel,
     HazardCategory,
@@ -248,4 +249,8 @@ def import_recommendations(argv=sys.argv):
                         climate_rec.hazardtype = hazardtype
                         DBSession.add(climate_rec)
 
-                    climate_rec.administrativedivisions.append(division)
+                    association = CcrAd(
+                        administrativedivision=division,
+                        hazardtype=hazardtype)
+
+                    climate_rec.associations.append(association)

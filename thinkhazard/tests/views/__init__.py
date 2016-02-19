@@ -28,6 +28,7 @@ from ...models import (
     DBSession,
     AdministrativeDivision,
     ClimateChangeRecommendation,
+    ClimateChangeRecAdministrativeDivisionAssociation as CcrAd,
     FurtherResource,
     HazardCategory,
     HazardCategoryAdministrativeDivisionAssociation,
@@ -55,6 +56,7 @@ def populate_db():
     DBSession.query(HazardTypeFurtherResourceAssociation).delete()
     DBSession.query(FurtherResource).delete()
     DBSession.query(HazardCategoryTechnicalRecommendationAssociation).delete()
+    DBSession.query(TechnicalRecommendation).delete()
     DBSession.query(ClimateChangeRecommendation).delete()
     DBSession.query(HazardCategoryAdministrativeDivisionAssociation).delete()
     DBSession.query(AdministrativeDivision).delete()
@@ -82,6 +84,14 @@ def populate_db():
     })
     div_level_1.geom = geometry
     DBSession.add(div_level_1)
+
+    div_level_1_2 = AdministrativeDivision(**{
+        'code': 11,
+        'leveltype_id': 1,
+        'name': u'Division level 1 2'
+    })
+    div_level_1_2.geom = geometry
+    DBSession.add(div_level_1_2)
 
     div_level_2 = AdministrativeDivision(**{
         'code': 20,
@@ -135,10 +145,20 @@ def populate_db():
         })
     )
 
-    climate_rec = ClimateChangeRecommendation()
-    climate_rec.text = u'Climate change recommendation'
-    climate_rec.hazardtype = HazardType.get(u'EQ')
-    climate_rec.administrativedivisions.append(div_level_1)
+    climate_rec = ClimateChangeRecommendation(
+        text=u'Climate change recommendation',
+        hazardtype=HazardType.get(u'EQ'))
+    climate_rec.associations.append(CcrAd(
+        administrativedivision=div_level_1,
+        hazardtype=HazardType.get(u'EQ')))
+    DBSession.add(climate_rec)
+
+    climate_rec = ClimateChangeRecommendation(
+        text=u'Climate change recommendation 2',
+        hazardtype=HazardType.get(u'EQ'))
+    climate_rec.associations.append(CcrAd(
+        administrativedivision=div_level_1_2,
+        hazardtype=HazardType.get(u'EQ')))
     DBSession.add(climate_rec)
 
     technical_rec = TechnicalRecommendation(**{

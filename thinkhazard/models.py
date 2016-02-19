@@ -270,18 +270,6 @@ class HazardCategory(Base):
             .one()
 
 
-climatechangerec_administrativedivision = Table(
-    'rel_climatechangerecommendation_administrativedivision',
-    Base.metadata,
-    Column('climatechangerecommendation_id', Integer,
-           ForeignKey('climatechangerecommendation.id',
-                      ondelete="CASCADE"),
-           primary_key=True),
-    Column('administrativedivision_id', Integer,
-           ForeignKey('administrativedivision.id'),
-           primary_key=True))
-
-
 class ClimateChangeRecommendation(Base):
     __tablename__ = 'climatechangerecommendation'
     id = Column(Integer, primary_key=True)
@@ -289,12 +277,34 @@ class ClimateChangeRecommendation(Base):
     hazardtype_id = Column(Integer,
                            ForeignKey('enum_hazardtype.id'),
                            nullable=False)
-
     hazardtype = relationship('HazardType')
 
-    administrativedivisions = \
-        relationship("AdministrativeDivision",
-                     secondary=climatechangerec_administrativedivision)
+
+class ClimateChangeRecAdministrativeDivisionAssociation(Base):
+    __tablename__ = 'rel_climatechangerecommendation_administrativedivision'
+    administrativedivision_id = Column(
+        Integer,
+        ForeignKey('administrativedivision.id'),
+        primary_key=True
+        )
+    # hazardtype_id is duplicate with climatechangerecommendation.hazardtype_id
+    # but here it take part in primary key and ease associations handling
+    hazardtype_id = Column(
+        Integer,
+        ForeignKey('enum_hazardtype.id'),
+        primary_key=True
+        )
+    climatechangerecommendation_id = Column(
+        Integer,
+        ForeignKey('climatechangerecommendation.id', ondelete="CASCADE"),
+        nullable=False)
+    administrativedivision = relationship('AdministrativeDivision')
+    hazardtype = relationship('HazardType')
+    climatechangerecommendation = relationship(
+        'ClimateChangeRecommendation',
+        foreign_keys=('ClimateChangeRecAdministrativeDivisionAssociation.'
+                      'climatechangerecommendation_id'),
+        backref="associations")
 
 
 class TechnicalRecommendation(Base):

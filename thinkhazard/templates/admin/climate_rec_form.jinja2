@@ -1,0 +1,75 @@
+{% extends "base.jinja2" %}
+
+{% from 'common.jinja2' import navbar %}
+
+{% block name %}admin{% endblock %}
+
+{% block content %}
+  {{ navbar(request) }}
+  <div class="admin-climatechangerecommendation container">
+    <h3>Climate Change Recommendation</h3>
+    <form
+      id="climatechangerecommendation-form"
+      action="{{ action }}"
+      accept-charset="utf-8"
+      enctype="multipart/form-data"
+      method="POST"
+    >
+      <input type="hidden" name="id" value="{{ obj.id }}">
+      <input type="hidden" name="hazard_type" value="{{ obj.hazardtype.mnemonic }}">
+
+      <div class="form-group item-hazardtype">
+        <label for="hazardtype_id">Hazard Type</label>
+        <select
+            id="hazardtype_id"
+            class="form-control"
+            disabled
+            >
+          {% for hazard_type in hazard_types %}
+          <option {{ 'selected' if obj.hazardtype == hazard_type else '' }} value="{{ hazard_type.mnemonic }}">{{ hazard_type.title }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group item-text">
+        <label for="text">Text</label>
+        <textarea
+            id="text"
+            class="form-control"
+            type="textarea"
+            name="text"
+            placeholder="Enter text here"
+            rows=8
+            >{{ obj.text or '' }}</textarea>
+      </div>
+
+      <div class="form-group item-associations">
+        <label>Administrative Divisions</label>
+        {% for (admin_div, current_rec) in admin_divs %}
+        <div class="item-association checkbox">
+          <label>
+            <input
+              type="checkbox"
+              name="associations"
+              {{ 'checked' if current_rec.id == obj.id else '' }}
+              value="{{ admin_div.id }}">
+              {{ admin_div.name }}
+          </label>
+          {% if (current_rec and current_rec.id != obj.id) %}
+          &nbsp;
+          <a
+            href="{{ request.route_url('admin_climate_rec_edit', id=current_rec.id) }}"
+            title="{{ current_rec.text }}"
+            ><span class="current_rec text-muted"><i>{{ current_rec.text }}</i></span></a>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+
+      <button class="btn btn-primary" type="submit">Save changes</button>
+    </form>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

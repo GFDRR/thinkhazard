@@ -7,6 +7,9 @@
       <li role="presentation" class="{{ 'active' if request.matched_route.name == 'admin_technical_rec' else '' }}">
         <a href="{{ request.route_url('admin_technical_rec') }}">Technical recommendations</a>
       </li>
+      <li role="presentation" class="{{ 'active' if request.matched_route.name == 'admin_climate_rec_hazardtype' else '' }}">
+        <a href="{{ request.route_url('admin_climate_rec') }}">Climate Change Recommendations</a>
+      </li>
     </ul>
   </div>
 {% endmacro %}

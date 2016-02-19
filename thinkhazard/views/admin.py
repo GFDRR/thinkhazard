@@ -15,8 +15,10 @@ import json
 
 from ..models import (
     DBSession,
-    AdministrativeDivision,
     AdminLevelType,
+    AdministrativeDivision,
+    ClimateChangeRecommendation,
+    ClimateChangeRecAdministrativeDivisionAssociation as CcrAd,
     HazardCategory,
     HazardCategoryTechnicalRecommendationAssociation as HcTr,
     HazardCategoryAdministrativeDivisionAssociation,
@@ -214,3 +216,116 @@ def admindiv_hazardsets(request):
     return {
         'data': json.dumps(data)
     }
+
+
+@view_config(route_name='admin_climate_rec')
+def climate_rec(request):
+    hazardtype = DBSession.query(HazardType).first()
+    return HTTPFound(request.route_url('admin_climate_rec_hazardtype',
+                                       hazard_type=hazardtype.mnemonic))
+
+
+@view_config(route_name='admin_climate_rec_hazardtype',
+             renderer='templates/admin/climate_rec_index.jinja2')
+def climate_rec_hazardtype(request):
+    hazard_type = request.matchdict['hazard_type']
+    hazardtype = HazardType.get(hazard_type)
+    if hazardtype is None:
+        raise HTTPNotFound
+
+    hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
+
+    climate_recs = DBSession.query(ClimateChangeRecommendation) \
+        .filter(ClimateChangeRecommendation.hazardtype == hazardtype)
+    return {
+        'hazard_types': hazard_types,
+        'climate_recs': climate_recs
+        }
+
+
+@view_config(route_name='admin_climate_rec_new',
+             renderer='templates/admin/climate_rec_form.jinja2')
+def climate_rec_new(request):
+    hazard_type = request.matchdict['hazard_type']
+    hazardtype = HazardType.get(hazard_type)
+    if hazardtype is None:
+        raise HTTPNotFound
+
+    obj = ClimateChangeRecommendation()
+    obj.hazardtype = hazardtype
+    return climate_rec_process(request, obj)
+
+
+@view_config(route_name='admin_climate_rec_edit',
+             renderer='templates/admin/climate_rec_form.jinja2')
+def climate_rec_edit(request):
+    id = request.matchdict['id']
+    obj = DBSession.query(ClimateChangeRecommendation).get(id)
+    if obj is None:
+        raise HTTPNotFound()
+    return climate_rec_process(request, obj)
+
+
+def climate_rec_process(request, obj):
+    if request.method == 'GET':
+        hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
+
+        association_subq = DBSession.query(CcrAd) \
+            .filter(CcrAd.hazardtype == obj.hazardtype) \
+            .subquery()
+
+        admin_divs = DBSession.query(
+                AdministrativeDivision,
+                ClimateChangeRecommendation) \
+            .select_from(AdministrativeDivision) \
+            .outerjoin(association_subq,
+                       association_subq.c.administrativedivision_id ==
+                       AdministrativeDivision.id) \
+            .outerjoin(ClimateChangeRecommendation,
+                       ClimateChangeRecommendation.id ==
+                       association_subq.c.climatechangerecommendation_id) \
+            .join(AdminLevelType) \
+            .filter(AdminLevelType.mnemonic == u'COU') \
+            .order_by(AdministrativeDivision.name)
+
+        if obj.id is None:
+            action = request.route_url('admin_climate_rec_new',
+                                       hazard_type=obj.hazardtype.mnemonic)
+        else:
+            action = request.route_url('admin_climate_rec_edit', id=obj.id)
+        return {
+            'obj': obj,
+            'action': action,
+            'hazard_types': hazard_types,
+            'admin_divs': admin_divs
+        }
+
+    if request.method == 'POST':
+        if inspect(obj).transient:
+            DBSession.add(obj)
+
+        obj.hazardtype = HazardType.get(request.POST.get('hazard_type'))
+        obj.text = request.POST.get('text')
+
+        admindiv_ids = request.POST.getall('associations')
+
+        # Remove unchecked ones
+        for association in obj.associations:
+            if association.administrativedivision_id not in admindiv_ids:
+                DBSession.delete(association)
+
+        # Add new ones
+        for admindiv_id in admindiv_ids:
+            association = DBSession.query(CcrAd) \
+                .get((admindiv_id, obj.hazardtype.id))
+            if association is None:
+                association = CcrAd(
+                    administrativedivision_id=admindiv_id,
+                    hazardtype=obj.hazardtype)
+                obj.associations.append(association)
+            else:
+                association.climatechangerecommendation = obj
+
+        DBSession.flush()
+        return HTTPFound(request.route_url('admin_climate_rec_edit',
+                                           id=obj.id))
