@@ -46,12 +46,15 @@
       <div class="form-group item-associations">
         <label>Administrative Divisions</label>
         {% for (admin_div, current_rec) in admin_divs %}
-        <div class="item-association">
-          <input
-            type="checkbox"
-            name="associations"
-            {{ 'checked' if current_rec.id == obj.id else '' }}
-            value="{{ admin_div.id }}"> {{ admin_div.name }}</input>
+        <div class="item-association checkbox">
+          <label>
+            <input
+              type="checkbox"
+              name="associations"
+              {{ 'checked' if current_rec.id == obj.id else '' }}
+              value="{{ admin_div.id }}">
+              {{ admin_div.name }}
+          </label>
           {% if (current_rec and current_rec.id != obj.id) %}
           &nbsp;
           <a
