@@ -50,7 +50,8 @@ def main(global_config, **settings):
     config.add_route('admin_technical_rec_edit',
                      '/admin/technical_rec/{id:\d+}')
 
-    config.add_route('admin_admindiv_hazardsets',
+    config.add_route('admin_admindiv_hazardsets', '/admin/admindiv_hazardsets')
+    config.add_route('admin_admindiv_hazardsets_hazardtype',
                      '/admin/admindiv_hazardsets/{hazardtype:([A-Z]{2})}')
 
     config.add_route('admin_climate_rec', '/admin/climate_rec')

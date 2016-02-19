@@ -1,6 +1,12 @@
 {% macro navbar(request) %}
   <div class="admin-navbar container">
     <ul class="nav nav-pills">
+      <li role="presentation" class="{{ 'active' if request.matched_route.name == 'admin_hazardsets' else '' }}">
+        <a href="{{ request.route_url('admin_hazardsets') }}">Hazard sets</a>
+      </li>
+      <li role="presentation" class="{{ 'active' if request.matched_route.name == 'admin_admindiv_hazardsets' else '' }}">
+        <a href="{{ request.route_url('admin_admindiv_hazardsets') }}">Hazardsets / admin div</a>
+      </li>
       <li role="presentation" class="{{ 'active' if request.matched_route.name == 'admin_index' else '' }}">
         <a href="{{ request.route_url('admin_index') }}">Hazard categories</a>
       </li>
