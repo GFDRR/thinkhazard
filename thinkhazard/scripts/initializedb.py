@@ -60,10 +60,14 @@ def main(argv=sys.argv):
 
     engine = engine_from_config(settings, 'sqlalchemy.')
     with engine.begin() as db:
-        initdb(db)
+        initdb(db, drop_all='--force' in options)
 
 
 def initdb(engine, drop_all=False):
+    if drop_all:
+        engine.execute("DROP SCHEMA processing CASCADE;")
+        engine.execute("DROP SCHEMA datamart CASCADE;")
+
     if not schema_exists(engine, 'datamart'):
         engine.execute("CREATE SCHEMA datamart;")
 
