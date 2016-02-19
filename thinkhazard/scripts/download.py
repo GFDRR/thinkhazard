@@ -30,8 +30,8 @@ from ..processing.downloading import download
 def main(argv=sys.argv):
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        '--title', dest='title', action='store',
-        help='The layer title')
+        '--hazardset_id', dest='hazardset_id', action='store',
+        help='The hazardset id')
     parser.add_argument(
         '--force', dest='force',
         action='store_const', const=True, default=False,
@@ -46,6 +46,6 @@ def main(argv=sys.argv):
     DBSession.configure(bind=engine)
 
     download(
-        title=args.title,
+        hazardset_id=args.hazardset_id,
         force=args.force,
         dry_run=args.dry_run)

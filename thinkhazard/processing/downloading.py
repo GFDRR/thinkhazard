@@ -55,7 +55,7 @@ def clearall():
     DBSession.flush()
 
 
-def download(title=None, force=False, dry_run=False):
+def download(hazardset_id=None, force=False, dry_run=False):
     if force:
         try:
             clearall()
@@ -72,8 +72,8 @@ def download(title=None, force=False, dry_run=False):
     if not force:
         geonode_ids = geonode_ids.filter(Layer.downloaded.is_(False))
 
-    if title is not None:
-        geonode_ids = geonode_ids.filter(Layer.title == title)
+    if hazardset_id is not None:
+        geonode_ids = geonode_ids.filter(Layer.hazardset_id == hazardset_id)
 
     for geonode_id in geonode_ids:
         try:
@@ -104,6 +104,10 @@ def download_layer(geonode_id):
     if os.path.isfile(path):
         cache_mtime = datetime.fromtimestamp(os.path.getmtime(path))
         if layer.data_lastupdated_date > cache_mtime:
+            logger.debug('  File {} considered as obsolete {} > {}'
+                         .format(layer.filename(),
+                                 layer.data_lastupdated_date,
+                                 cache_mtime))
             os.unlink(path)
         else:
             logger.info('  File {} found in cache'.format(layer.filename()))
