@@ -10,6 +10,21 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ng-table/1.0.0-beta.9/ng-table.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/ng-table/1.0.0-beta.9/ng-table.min.js"></script>
   <div class="container" ng-app="myApp" ng-controller="MainCtrl as ctrl">
+    <div class="changerecommendations-navbar container">
+      <ul class="nav nav-tabs">
+        {% for hazard_type in hazard_types %}
+        <li role="presentation" class="{{ 'active' if request.matchdict['hazardtype'] == hazard_type.mnemonic else '' }}">
+        <a
+          href="{{ request.route_url('admin_admindiv_hazardsets_hazardtype', hazardtype=hazard_type.mnemonic) }}"
+          title="{{ hazard_type.title }}"
+          >{{ hazard_type.title }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="text-muted">
+      List of admin divisions (level 2) and corresponding chosen hazard set
+    </div>
     <table ng-table="ctrl.data" class="table table-condensed" show-filter="true">
       <tr ng-repeat="row in $data">
         <td sortable"'code'" title="'Code'">

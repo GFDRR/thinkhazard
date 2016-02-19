@@ -220,7 +220,10 @@ def admindiv_hazardsets_hazardtype(request):
         'name': row.administrativedivision.name,
         'hazardset': row.hazardsets[0].id
     } for row in query]
+
+    hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
     return {
+        'hazard_types': hazard_types,
         'data': json.dumps(data)
     }
 
