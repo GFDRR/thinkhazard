@@ -67,7 +67,7 @@ class TestAdminFunction(BaseTestCase):
         self.testapp.get('/admin/climate_rec', status=302)
 
     def test_climate_rec_hazardtype(self):
-        resp = self.testapp.get('/admin/climate_rec_EQ', status=200)
+        resp = self.testapp.get('/admin/climate_rec/EQ', status=200)
         records = resp.html.select('.item-climatechangerecommendation')
         self.assertEqual(len(records), 2)
 
