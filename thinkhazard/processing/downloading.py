@@ -55,7 +55,7 @@ def clearall():
     DBSession.flush()
 
 
-def download(title=None, force=False, dry_run=False):
+def download(hazardset_id=None, force=False, dry_run=False):
     if force:
         try:
             clearall()
@@ -72,8 +72,8 @@ def download(title=None, force=False, dry_run=False):
     if not force:
         geonode_ids = geonode_ids.filter(Layer.downloaded.is_(False))
 
-    if title is not None:
-        geonode_ids = geonode_ids.filter(Layer.title == title)
+    if hazardset_id is not None:
+        geonode_ids = geonode_ids.filter(Layer.hazardset_id == hazardset_id)
 
     for geonode_id in geonode_ids:
         try:
