@@ -17,6 +17,7 @@ help:
 	@echo "- build                   Build CSS and JS"
 	@echo "- populatedb              Populates database. Use DATA=turkey if you want to work with a sample data set"
 	@echo "- initdb                  Initialize db using development.ini"
+	@echo "- reinit_all              Completely clear and re-init database. Only for developement purpose.
 	@echo "- import_admindivs        Import administrative divisions. Use DATA=turkey or DATA=indonesia if you want to work with a sample data set"
 	@echo "- import_recommendations  Import recommendations"
 	@echo "- harvest                 Harvest GeoNode layers metadata"
@@ -52,9 +53,16 @@ buildcss: thinkhazard/static/build/index.css \
 .PHONY: populatedb
 populatedb: initdb import_admindivs import_recommendations
 
+.PHONY: reinit_all
+reinit_all: initdb_force import_admindivs import_recommendations harvest download complete process decisiontree
+
 .PHONY: initdb
 initdb:
 	.build/venv/bin/initialize_thinkhazard_db development.ini
+
+.PHONY: initdb_force
+initdb_force:
+	.build/venv/bin/initialize_thinkhazard_db development.ini --force=1
 
 .PHONY: import_admindivs
 import_admindivs: .build/requirements.timestamp \
