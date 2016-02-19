@@ -233,7 +233,6 @@ class HazardTypeFurtherResourceAssociation(Base):
     region_id = Column(Integer,
                        ForeignKey('enum_region.id'),
                        nullable=False, index=True)
-    order = Column(Integer, nullable=False)
 
     hazardtype = relationship('HazardType')
     region = relationship('Region')
@@ -379,7 +378,6 @@ class FurtherResource(Base):
 
     hazardtype_associations = relationship(
         'HazardTypeFurtherResourceAssociation',
-        order_by='HazardTypeFurtherResourceAssociation.order',
         lazy='joined')
 
 

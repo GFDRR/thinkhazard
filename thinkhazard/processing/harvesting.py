@@ -298,8 +298,7 @@ def harvest_document(object):
     furtherresource.text = title
     for region in regions:
         for type in hazardtypes:
-            # TODO: handle relationship order (?):
-            association = HazardTypeFurtherResourceAssociation(order=1)
+            association = HazardTypeFurtherResourceAssociation()
             association.hazardtype = type
             association.region = region
             logger.info(u'Document {} linked with Region {} for HazardType {}'
