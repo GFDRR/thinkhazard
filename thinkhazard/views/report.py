@@ -37,6 +37,7 @@ from ..models import (
     HazardLevel,
     HazardCategory,
     HazardType,
+    Region,
     ClimateChangeRecommendation,
     ClimateChangeRecAdministrativeDivisionAssociation as CcrAd,
     TechnicalRecommendation,
@@ -149,7 +150,14 @@ def report(request):
         further_resources_query = DBSession.query(FurtherResource) \
             .join(FurtherResource.hazardtype_associations) \
             .join(HazardType) \
-            .filter(HazardType.id == hazard_category.hazardtype.id)
+            .join(Region) \
+            .join(Region.administrativedivisions) \
+            .filter(HazardType.id == hazard_category.hazardtype.id) \
+            .filter(AdministrativeDivision.code == code) \
+            .order_by(Region.level.desc())
+        # "first class" documents relate directly with the country
+        # "second class" documents do not relate directly with the country,
+        # they appear lower in the page
 
         further_resources = []
         for fr in further_resources_query:

@@ -188,6 +188,38 @@ class HazardCategoryTechnicalRecommendationAssociation(Base):
     technicalrecommendation = relationship('TechnicalRecommendation')
 
 
+class Region(Base):
+    __tablename__ = 'enum_region'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(Unicode, nullable=False)
+    # level:
+    # 0 is global
+    # 1 is continent
+    # 2 is sub-continent
+    # 3 is country
+    level = Column(Integer, nullable=False)
+
+    administrativedivisions = relationship(
+        'RegionAdministrativeDivisionAssociation')
+
+
+class RegionAdministrativeDivisionAssociation(Base):
+    __tablename__ = 'rel_region_administrativedivision'
+
+    id = Column(Integer, primary_key=True)
+    region_id = Column(Integer,
+                       ForeignKey('datamart.enum_region.id'),
+                       nullable=False, index=True)
+    administrativedivision_id = Column(
+        Integer,
+        ForeignKey('administrativedivision.id'),
+        nullable=False, index=True)
+
+    administrativedivision = relationship('AdministrativeDivision')
+    region = relationship('Region')
+
+
 class HazardTypeFurtherResourceAssociation(Base):
     __tablename__ = 'rel_hazardtype_furtherresource'
     id = Column(Integer, primary_key=True)
@@ -197,9 +229,13 @@ class HazardTypeFurtherResourceAssociation(Base):
     furtherresource_id = Column(Integer,
                                 ForeignKey('furtherresource.id'),
                                 nullable=False, index=True)
-    order = Column(Integer, nullable=False)
+    # FIXME: should the region_id be nullable or not ?
+    region_id = Column(Integer,
+                       ForeignKey('enum_region.id'),
+                       nullable=False, index=True)
 
     hazardtype = relationship('HazardType')
+    region = relationship('Region')
 
 
 class AdministrativeDivision(Base):
@@ -221,6 +257,9 @@ class AdministrativeDivision(Base):
     hazardcategories = relationship(
         'HazardCategoryAdministrativeDivisionAssociation',
         back_populates='administrativedivision')
+
+    regions = relationship(
+        'RegionAdministrativeDivisionAssociation')
 
     def __json__(self, request):
         if self.leveltype_id == 1:
@@ -349,7 +388,6 @@ class FurtherResource(Base):
 
     hazardtype_associations = relationship(
         'HazardTypeFurtherResourceAssociation',
-        order_by='HazardTypeFurtherResourceAssociation.order',
         lazy='joined')
 
 

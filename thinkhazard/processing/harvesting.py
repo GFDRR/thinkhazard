@@ -23,6 +23,7 @@ from urllib import urlencode
 from urlparse import urlunsplit
 import json
 import transaction
+import csv
 from datetime import datetime
 
 from ..models import (
@@ -32,6 +33,9 @@ from ..models import (
     HazardType,
     Layer,
     Output,
+    Region,
+    AdministrativeDivision,
+    RegionAdministrativeDivisionAssociation,
     FurtherResource,
     HazardTypeFurtherResourceAssociation,
     )
@@ -61,12 +65,12 @@ def clearall():
     DBSession.flush()
 
 
-def fetch(url):
+def fetch(url, order_by='title'):
     logger.info(u'Retrieving {}'.format(url))
     h = httplib2.Http()
     response, content = h.request(url)
     o = json.loads(content)
-    return sorted(o['objects'], key=lambda object: object['title'])
+    return sorted(o['objects'], key=lambda object: object[order_by])
 
 
 def harvest(hazard_type=None, force=False, dry_run=False):
@@ -93,6 +97,20 @@ def harvest(hazard_type=None, force=False, dry_run=False):
 
     layers = fetch(layers_url)
     documents = fetch(layers_url.replace('layers', 'documents'))
+    regions = fetch(layers_url.replace('layers', 'regions'), 'name')
+
+    for region in regions:
+        if harvest_region(region):
+            try:
+                if dry_run:
+                    transaction.abort()
+                else:
+                    transaction.commit()
+            except Exception as e:
+                transaction.abort()
+                logger.error(u'Region {} raises an exception :\n{}'
+                             .format(region['name'], e.message))
+    populate_region_administrativedivision_association(dry_run)
 
     for layer in layers:
         if harvest_layer(layer):
@@ -103,7 +121,7 @@ def harvest(hazard_type=None, force=False, dry_run=False):
                     transaction.commit()
             except Exception as e:
                 transaction.abort()
-                logger.error(u'{} raise an exception :\n{}'
+                logger.error(u'Layer {} raises an exception :\n{}'
                              .format(layer['title'], e.message))
 
     for doc in documents:
@@ -115,7 +133,7 @@ def harvest(hazard_type=None, force=False, dry_run=False):
                 transaction.commit()
         except Exception as e:
             transaction.abort()
-            logger.error(u'{} raise an exception :\n{}'
+            logger.error(u'Document {} raises an exception :\n{}'
                          .format(doc['title'], e.message))
 
 
@@ -164,9 +182,97 @@ def collect_hazard_types(object):
         return [primary_type]
 
 
+def populate_region_administrativedivision_association(dry_run=False):
+    with open('data/geonode_regions_to_administrative_divisions_code.csv',
+              'rb') as csvfile:
+        rows = csv.reader(csvfile, delimiter=',')
+        for row in rows:
+            # row[0] is geonode region's name_en (useless here)
+            # row[1] is geonode region id
+            # row[2] is GAUL administrative division **code** (not id!)
+            region = DBSession.query(Region) \
+                .filter(Region.id == row[1]) \
+                .one_or_none()
+
+            if region is None:
+                logger.warning(u'Region {} id {} does not exist in GeoNode'
+                               .format(row[0], row[1]))
+                continue
+
+            admindiv = DBSession.query(AdministrativeDivision) \
+                .filter(AdministrativeDivision.code == row[2]) \
+                .one_or_none()
+
+            if admindiv is None:
+                logger.warning(u'AdminUnit code {} is not in our GAUL dataset'
+                               .format(row[2]))
+                continue
+
+            try:
+                association = RegionAdministrativeDivisionAssociation()
+                association.administrativedivision = admindiv
+                region.administrativedivisions.append(association)
+                DBSession.add(region)
+                DBSession.flush()
+            except Exception as e:
+                transaction.abort()
+                logger.error(u'Linking region {} & admin unit {} failed:\n{}'
+                             .format(region.name, admindiv.name, e.message))
+
+    if dry_run:
+        transaction.abort()
+    else:
+        transaction.commit()
+
+
+def harvest_region(object):
+    name = object['name_en']
+    id = object['id']
+
+    region = DBSession.query(Region) \
+        .filter(Region.id == id) \
+        .one_or_none()
+
+    if region is None:
+        region = Region()
+        region.id = id
+        logger.info(u'Creating new Region - {}'.format(name))
+    else:
+        logger.info(u'Updating Region - {}'.format(name))
+        # drop existing relationships with GAUL administrative divisions
+        assocs = DBSession.query(RegionAdministrativeDivisionAssociation) \
+            .filter(RegionAdministrativeDivisionAssociation
+                    .region_id == id).all()
+        for a in assocs:
+            DBSession.delete(a)
+
+    region.name = name
+    region.level = object['level']
+    DBSession.add(region)
+    DBSession.flush()
+
+
 def harvest_document(object):
     title = object['title']
     id = object['id']
+    # we need to retrieve more information on this document
+    # since the regions array is not advertised by the main
+    # regions listing from GeoNode
+    doc_url = urlunsplit((geonode['scheme'],
+                          geonode['netloc'],
+                          'api/documents/{}/'.format(id), '', ''))
+    logger.info(u'Retrieving {}'.format(doc_url))
+    h = httplib2.Http()
+    response, content = h.request(doc_url)
+    o = json.loads(content)
+    region_ids = []
+    for r in o['regions']:
+        # r is like "/api/regions/1/"
+        region_ids.append(r.split('/')[3])
+
+    regions = DBSession.query(Region) \
+        .filter(Region.id.in_(region_ids)) \
+        .all()
 
     hazardtypes = collect_hazard_types(object)
     if not hazardtypes:
@@ -190,11 +296,14 @@ def harvest_document(object):
             DBSession.delete(a)
 
     furtherresource.text = title
-    for type in hazardtypes:
-        # TODO: handle relationship order (?):
-        association = HazardTypeFurtherResourceAssociation(order=1)
-        association.hazardtype = type
-        furtherresource.hazardtype_associations.append(association)
+    for region in regions:
+        for type in hazardtypes:
+            association = HazardTypeFurtherResourceAssociation()
+            association.hazardtype = type
+            association.region = region
+            logger.info(u'Document {} linked with Region {} for HazardType {}'
+                        .format(id, region.id, type.mnemonic))
+            furtherresource.hazardtype_associations.append(association)
 
     DBSession.add(furtherresource)
     DBSession.flush()

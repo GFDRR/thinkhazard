@@ -30,6 +30,8 @@ from ...models import (
     ClimateChangeRecommendation,
     ClimateChangeRecAdministrativeDivisionAssociation as CcrAd,
     FurtherResource,
+    Region,
+    RegionAdministrativeDivisionAssociation,
     HazardCategory,
     HazardCategoryAdministrativeDivisionAssociation,
     HazardTypeFurtherResourceAssociation,
@@ -59,7 +61,10 @@ def populate_db():
     DBSession.query(TechnicalRecommendation).delete()
     DBSession.query(ClimateChangeRecommendation).delete()
     DBSession.query(HazardCategoryAdministrativeDivisionAssociation).delete()
+    DBSession.query(RegionAdministrativeDivisionAssociation).delete()
     DBSession.query(AdministrativeDivision).delete()
+
+    DBSession.query(Region).delete()
 
     hazardtype_eq = DBSession.query(HazardType) \
         .filter(HazardType.mnemonic == u'EQ').one()
@@ -129,6 +134,26 @@ def populate_db():
     div_level_3_2.parent_code = div_level_2.code
     div_level_3_2.geom = geometry
     div_level_3_2.hazardcategories = []
+
+    global_region = Region(**{
+        'id': 1,
+        'level': 0,
+        'name': u'Global region'
+    })
+
+    country_region = Region(**{
+        'id': 2,
+        'level': 3,
+        'name': u'France'
+    })
+
+    association = RegionAdministrativeDivisionAssociation()
+    association.administrativedivision = div_level_1
+    global_region.administrativedivisions.append(association)
+
+    association = RegionAdministrativeDivisionAssociation()
+    association.administrativedivision = div_level_1
+    country_region.administrativedivisions.append(association)
 
     category_eq_hig = HazardCategory.get('EQ', 'HIG')
     category_eq_hig.general_recommendation = \
@@ -201,8 +226,9 @@ def populate_db():
                 ' seismic hazard',
         'id': 3
     })
-    association = HazardTypeFurtherResourceAssociation(order=1)
+    association = HazardTypeFurtherResourceAssociation()
     association.hazardtype = hazardtype_eq
+    association.region = global_region
     further_resource.hazardtype_associations.append(association)
     DBSession.add(further_resource)
 
@@ -210,8 +236,9 @@ def populate_db():
         'text': u'Further resource for earthquake',
         'id': 5
     })
-    association = HazardTypeFurtherResourceAssociation(order=2)
+    association = HazardTypeFurtherResourceAssociation()
     association.hazardtype = hazardtype_eq
+    association.region = country_region
     further_resource.hazardtype_associations.append(association)
     DBSession.add(further_resource)
 
