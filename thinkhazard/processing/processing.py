@@ -55,8 +55,8 @@ logger.setLevel(logging.DEBUG)
 
 
 class ProcessException(Exception):
-    def __init__(self, message):
-        self.message = message
+    def __init__(self, *args, **kwargs):
+        Exception.__init__(self, *args, **kwargs)
 
 
 def process(hazardset_id=None, force=False, dry_run=False):
