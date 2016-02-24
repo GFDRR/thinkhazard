@@ -14,8 +14,6 @@ Think Hazard - {{ division.name}}
 {% endblock %}
 
 {% block content %}
-
-
   {% set overview_url = 'report_overview'|route_url(divisioncode=division.code) %}
 
   <nav class="navbar navbar-default navbar-fixed-top">
@@ -200,6 +198,17 @@ Think Hazard - {{ division.name}}
           </ul>
         </div>
         {% endif %}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <div class="panel panel-default">
+          <div class="panel-body text-muted">
+            We welcome any suggestions for improvements to the tool, including suggestions of data, recommendations, or resources to include.
+            <br>
+            If you have any, please <a href="{{ feedback_form_url }}" target="_blank">provide feedback</a>.
+          </div>
+        </div>
       </div>
     </div>
     <footer class="text-center">
