@@ -15,7 +15,7 @@
         {% for hazard_type in hazard_types %}
         <li role="presentation" class="{{ 'active' if request.matchdict['hazardtype'] == hazard_type.mnemonic else '' }}">
         <a
-          href="{{ request.route_url('admin_admindiv_hazardsets_hazardtype', hazardtype=hazard_type.mnemonic) }}"
+          href="{{ 'admin_admindiv_hazardsets_hazardtype' | route_url(hazardtype=hazard_type.mnemonic) }}"
           title="{{ hazard_type.title }}"
           >{{ hazard_type.title }}</a>
         </li>

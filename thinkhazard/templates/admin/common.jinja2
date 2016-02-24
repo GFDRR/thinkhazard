@@ -2,19 +2,19 @@
   <div class="admin-navbar container">
     <ul class="nav nav-pills">
       <li role="presentation" class="{{ 'active' if request.matched_route.name == 'admin_hazardsets' else '' }}">
-        <a href="{{ request.route_url('admin_hazardsets') }}">Hazard sets</a>
+        <a href="{{ 'admin_hazardsets' | route_url }}">Hazard sets</a>
       </li>
       <li role="presentation" class="{{ 'active' if request.matched_route.name == 'admin_admindiv_hazardsets' else '' }}">
-        <a href="{{ request.route_url('admin_admindiv_hazardsets') }}">Hazardsets / admin div</a>
+        <a href="{{ 'admin_admindiv_hazardsets' | route_url }}">Hazardsets / admin div</a>
       </li>
       <li role="presentation" class="{{ 'active' if request.matched_route.name == 'admin_index' else '' }}">
-        <a href="{{ request.route_url('admin_index') }}">Hazard categories</a>
+        <a href="{{ 'admin_index' | route_url }}">Hazard categories</a>
       </li>
       <li role="presentation" class="{{ 'active' if request.matched_route.name == 'admin_technical_rec' else '' }}">
-        <a href="{{ request.route_url('admin_technical_rec') }}">Technical recommendations</a>
+        <a href="{{ 'admin_technical_rec' | route_url }}">Technical recommendations</a>
       </li>
       <li role="presentation" class="{{ 'active' if request.matched_route.name == 'admin_climate_rec_hazardtype' else '' }}">
-        <a href="{{ request.route_url('admin_climate_rec') }}">Climate Change Recommendations</a>
+        <a href="{{ 'admin_climate_rec' | route_url }}">Climate Change Recommendations</a>
       </li>
     </ul>
   </div>

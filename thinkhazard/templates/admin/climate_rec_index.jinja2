@@ -9,14 +9,14 @@
   <div class="admin-climatechangerecommendations container">
     <h3>Climate Change Recommendations</h3>
     <a class="btn btn-primary pull-right"
-        href="{{ request.route_url('admin_climate_rec_new', hazard_type=request.matchdict['hazard_type']) }}"
+        href="{{ 'admin_climate_rec_new' | route_url(hazard_type=request.matchdict['hazard_type']) }}"
         >New Recommendation</a>
     <div class="admin-climatechangerecommendations-navbar container">
       <ul class="nav nav-tabs">
         {% for hazard_type in hazard_types %}
         <li role="presentation" class="{{ 'active' if request.matchdict['hazard_type'] == hazard_type.mnemonic else '' }}">
           <a
-            href="{{ request.route_url('admin_climate_rec_hazardtype', hazard_type=hazard_type.mnemonic) }}"
+            href="{{ 'admin_climate_rec_hazardtype' | route_url(hazard_type=hazard_type.mnemonic) }}"
             title="{{ hazard_type.title }}"
             >{{ hazard_type.title }}</a>
         </li>

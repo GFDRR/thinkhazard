@@ -58,7 +58,7 @@
           {% if (current_rec and current_rec.id != obj.id) %}
           &nbsp;
           <a
-            href="{{ request.route_url('admin_climate_rec_edit', id=current_rec.id) }}"
+            href="{{ 'admin_climate_rec_edit' | route_url(id=current_rec.id) }}"
             title="{{ current_rec.text }}"
             ><span class="current_rec text-muted"><i>{{ current_rec.text }}</i></span></a>
           {% endif %}
