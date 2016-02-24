@@ -15,7 +15,7 @@
         {% for hazard_level in hazard_levels %}
         <td>
           <a class="hazardcategory-link"
-            href="{{ request.route_url('admin_hazardcategory', hazard_type=hazard_type.mnemonic, hazard_level=hazard_level.mnemonic) }}"
+            href="{{ 'admin_hazardcategory' | route_url(hazard_type=hazard_type.mnemonic, hazard_level=hazard_level.mnemonic) }}"
             >{{ hazard_level.title }}</a>
         </td>
         {% endfor %}
