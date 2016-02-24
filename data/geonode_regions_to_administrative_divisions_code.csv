@@ -1,4 +1,234 @@
-"Turkey",233,249
+"Afghanistan",17,1
+"Albania",19,3
+"Algeria",20,4
+"American Samoa",21,5
+"Andorra",22,7
+"Angola",23,8
+"Anguilla",24,9
+"Antarctica",16,10
+"Antigua and Barbuda",25,11
+"Argentina",26,12
+"Armenia",27,13
+"Aruba",28,14
+"Australia",29,17
+"Austria",30,18
+"Azerbaijan",31,19
+"Bahamas",32,20
+"Bahrain",33,21
+"Bangladesh",34,23
+"Barbados",35,24
+"Belarus",36,26
+"Belgium",37,27
+"Belize",38,28
+"Benin",39,29
+"Bermuda",40,30
+"Bhutan",41,31
+"Bolivia",42,33
+"Bosnia and Herzegovina",43,34
+"Botswana",44,35
+"Brazil",45,37
+"British Virgin Islands",46,39
+"Brunei Darussalam",47,40
+"Bulgaria",48,41
+"Burkina Faso",49,42
+"Burundi",50,43
+"Cambodia",51,44
+"Cameroon",52,45
+"Canada",53,46
+"Cape Verde",54,47
+"Cayman Islands",55,48
+"Central African Republic",56,49
+"Chad",57,50
+"Chile",59,51
+"China",60,147295
+"Colombia",63,57
+"Comoros",64,58
+"Congo",65,59
+"Cook Islands",66,60
+"Costa Rica",67,61
+"Cote d'Ivoire",68,66
+"Croatia",69,62
+"Cuba",70,63
+"Cyprus",71,64
+"Czech Republic",72,65
+"Democratic People's Republic of Korea",73,67
+"Democratic Republic of the Congo",74,68
+"Denmark",75,69
+"Djibouti",76,70
+"Dominica",77,71
+"Dominican Republic",78,72
+"Ecuador",79,73
+"Egypt",80,40765
+"El Salvador",81,75
+"Equatorial Guinea",82,76
+"Eritrea",83,77
+"Estonia",84,78
+"Ethiopia",85,79
+"Faeroe Islands",86,82
+"Falkland Islands (Malvinas)",87,81
+"Fiji",88,83
+"Finland",89,84
+"France",90,85
+"French Guiana",91,86
+"French Polynesia",92,87
+"Gabon",93,89
+"Gambia",94,90
+"Gaza Strip",175,91
+"Georgia",95,92
+"Germany",96,93
+"Ghana",97,94
+"Gibraltar",98,95
+"Greece",99,97
+"Greenland",100,98
+"Grenada",101,99
+"Guadeloupe",102,100
+"Guam",103,101
+"Guatemala",104,103
+"Guernsey",105,104
+"Guinea",106,106
+"Guinea-Bissau",107,105
+"Guyana",108,107
+"Haiti",109,108
+"Holy See",110,110
+"Honduras",111,111
+"Hong Kong",61,33364
+"Hungary",112,113
+"Iceland",113,114
+"India",114,115
 "Indonesia",115,116
-"Global",1,116
-"Global",1,249
+"Iran  (Islamic Republic of)",116,117
+"Iraq",117,118
+"Ireland",118,119
+"Isle of Man",119,120
+"Israel",120,121
+"Italy",121,122
+"Jamaica",122,123
+"Japan",123,126
+"Jersey",124,128
+"Jordan",125,130
+"Kazakhstan",126,132
+"Kenya",127,133
+"Kiribati",128,135
+"Kuwait",129,137
+"Kyrgyzstan",130,138
+"Lao People's Democratic Republic",131,139
+"Latvia",132,140
+"Lebanon",133,141
+"Lesotho",134,142
+"Liberia",135,144
+"Libya",136,145
+"Liechtenstein",137,146
+"Lithuania",138,147
+"Luxembourg",139,148
+"Macau",62,149
+"Macedonia",140,241
+"Madagascar",141,150
+"Malawi",142,152
+"Malaysia",143,153
+"Maldives",144,154
+"Mali",145,155
+"Malta",146,156
+"Marshall Islands",147,157
+"Martinique",148,158
+"Mauritania",149,159
+"Mauritius",150,160
+"Mayotte",151,161
+"Mexico",152,162
+"Micronesia Federated States of",153,163
+"Monaco",154,166
+"Mongolia",155,167
+"Montenegro",156,2647
+"Montserrat",157,168
+"Morocco",158,169
+"Mozambique",159,170
+"Myanmar",160,171
+"Namibia",161,172
+"Nauru",162,173
+"Nepal",163,175
+"Netherlands",164,177
+"Netherlands Antilles",165,176
+"New Caledonia",166,178
+"New Zealand",167,179
+"Nicaragua",168,180
+"Niger",169,181
+"Nigeria",170,182
+"Niue",171,183
+"Norfolk Island",172,184
+"Northern Mariana Islands",173,185
+"Norway",174,186
+"Oman",176,187
+"Pakistan",177,188
+"Palau",178,189
+"Panama",179,191
+"Papua New Guinea",180,192
+"Paraguay",181,194
+"Peru",182,195
+"Philippines",183,196
+"Pitcairn",184,197
+"Poland",185,198
+"Portugal",186,199
+"Puerto Rico",187,200
+"Qatar",188,201
+"Republic of Korea",189,202
+"Republic of Moldova",190,165
+"Reunion",191,206
+"Romania",192,203
+"Russian Federation",193,204
+"Rwanda",194,205
+"Saint Helena",195,207
+"Saint Kitts and Nevis",196,208
+"Saint Lucia",197,209
+"Saint Pierre and Miquelon",198,210
+"Saint Vincent and the Grenadines",199,211
+"Samoa",202,212
+"San Marino",203,213
+"Sao Tome and Principe",204,214
+"Saudi Arabia",205,215
+"Senegal",206,217
+"Serbia",207,2648
+"Seychelles",208,220
+"Sierra Leone",209,221
+"Singapore",210,222
+"Slovakia",211,223
+"Slovenia",212,224
+"Solomon Islands",213,225
+"Somalia",214,226
+"South Africa",215,227
+"Spain",216,229
+"Sri Lanka",217,231
+"Sudan",218,6
+"Suriname",219,233
+"Svalbard and Jan Mayen Islands",220,234
+"Swaziland",221,235
+"Sweden",222,236
+"Switzerland",223,237
+"Syrian Arab Republic",224,238
+"Tajikistan",225,239
+"Thailand",226,240
+"Timor-Leste",227,242
+"Togo",228,243
+"Tokelau",229,244
+"Tonga",230,245
+"Trinidad and Tobago",231,246
+"Tunisia",232,248
+"Turkey",233,249
+"Turkmenistan",234,250
+"Turks and Caicos Islands",235,251
+"Tuvalu",236,252
+"Uganda",237,253
+"Ukraine",238,254
+"United Arab Emirates",239,255
+"United Kingdom",240,256
+"United Republic of Tanzania",241,257
+"United States Virgin Islands",242,258
+"United States of America",243,259
+"Uruguay",244,260
+"Uzbekistan",245,261
+"Vanuatu",246,262
+"Venezuela (Bolivarian Republic of)",247,263
+"Viet Nam",248,264
+"Wallis and Futuna Islands",249,266
+"Western Sahara",250,268
+"Yemen",251,269
+"Zambia",252,270
+"Zimbabwe",253,271
