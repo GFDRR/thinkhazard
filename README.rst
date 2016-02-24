@@ -247,3 +247,8 @@ your environnement)::
 Then you should be able to run the tests with the following command::
 
     $ make test
+
+Feedback
+========
+
+The ``feedback_form_url`` can be configured in the ``local.ini`` file.

@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
+import urllib
+
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest, HTTPFound
 
@@ -213,18 +215,30 @@ def report(request):
     if division.leveltype_id == 3:
         parents.append(division.parent.parent)
 
-    return {'hazards': hazard_types,
-            'hazards_sorted': sorted(hazard_types,
-                                     key=lambda a: a['hazardlevel'].order),
-            'hazard_category': hazard_category,
-            'climate_change_recommendation': climate_change_recommendation,
-            'recommendations': technical_recommendations,
-            'resources': further_resources,
-            'sources': sources,
-            'division': division,
-            'bounds': division_bounds,
-            'parents': parents,
-            'parent_division': division.parent}
+    feedback_params = {}
+    feedback_params['entry.1144401731'] = str(division.code) + ' - ' + \
+        division.name
+    if hazard_category is not None:
+        feedback_params['entry.93444540'] = hazard_category.hazardtype.title
+
+    feedback_form_url = settings['feedback_form_url'] + '?' + \
+        urllib.urlencode(feedback_params)
+
+    return {
+        'hazards': hazard_types,
+        'hazards_sorted': sorted(hazard_types,
+                                 key=lambda a: a['hazardlevel'].order),
+        'hazard_category': hazard_category,
+        'climate_change_recommendation': climate_change_recommendation,
+        'recommendations': technical_recommendations,
+        'resources': further_resources,
+        'sources': sources,
+        'division': division,
+        'bounds': division_bounds,
+        'parents': parents,
+        'parent_division': division.parent,
+        'feedback_form_url': feedback_form_url,
+    }
 
 
 @view_config(route_name='report_json', renderer='geojson')
