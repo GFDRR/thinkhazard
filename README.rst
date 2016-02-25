@@ -201,6 +201,24 @@ you can set ``INSTANCEID`` on the ``make modwsgi`` command line. For example::
 
 With this the application location will be ``/elemoine/wsgi``.
 
+Configure admin username/password
+---------------------------------
+
+By default, the admin interface authentification file is
+``/var/www/vhosts/wb-thinkhazard/conf/.htpasswd``. To change the location you
+can set ``AUTHUSERFILE`` on the ``make modwsgi`` command line.
+
+To create a authentification file ``.htpassword`` with ``admin`` as the initial
+user ::
+
+    $ htpasswd -c .htpassword username
+
+It will prompt for the password.
+
+Add or modify ``username2`` in the password file ``.htpassword``::
+
+   $ htpasswd .htpassword username2
+
 Use ``local.ini``
 =================
 
