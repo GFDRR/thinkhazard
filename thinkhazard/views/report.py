@@ -195,7 +195,10 @@ def report(request):
 
     # compute a 0-360 version of the extent
     cte = select([
-        func.ST_Shift_Longitude(AdministrativeDivision.geom).label('shift')]) \
+        func.ST_Translate(
+            func.ST_Shift_Longitude(
+                func.ST_Translate(AdministrativeDivision.geom, 180, 0)),
+            -180, 0).label('shift')]) \
         .where(AdministrativeDivision.code == division_code) \
         .cte('bounds')
     bounds_shifted = list(DBSession.query(
