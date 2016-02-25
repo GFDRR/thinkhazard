@@ -31,7 +31,6 @@ from ...models import (
     ClimateChangeRecAdministrativeDivisionAssociation as CcrAd,
     FurtherResource,
     Region,
-    RegionAdministrativeDivisionAssociation,
     HazardCategory,
     HazardCategoryAdministrativeDivisionAssociation,
     HazardTypeFurtherResourceAssociation,
@@ -61,10 +60,8 @@ def populate_db():
     DBSession.query(TechnicalRecommendation).delete()
     DBSession.query(ClimateChangeRecommendation).delete()
     DBSession.query(HazardCategoryAdministrativeDivisionAssociation).delete()
-    DBSession.query(RegionAdministrativeDivisionAssociation).delete()
-    DBSession.query(AdministrativeDivision).delete()
-
     DBSession.query(Region).delete()
+    DBSession.query(AdministrativeDivision).delete()
 
     hazardtype_eq = DBSession.query(HazardType) \
         .filter(HazardType.mnemonic == u'EQ').one()
@@ -153,17 +150,10 @@ def populate_db():
         'name': u'Country 2'
     })
 
-    association = RegionAdministrativeDivisionAssociation()
-    association.administrativedivision = div_level_1
-    global_region.administrativedivisions.append(association)
 
-    association = RegionAdministrativeDivisionAssociation()
-    association.administrativedivision = div_level_1
-    country_region.administrativedivisions.append(association)
-
-    association = RegionAdministrativeDivisionAssociation()
-    association.administrativedivision = div_level_1_2
-    country_region_2.administrativedivisions.append(association)
+    global_region.administrativedivisions.append(div_level_1)
+    country_region.administrativedivisions.append(div_level_1)
+    country_region_2.administrativedivisions.append(div_level_1_2)
 
     category_eq_hig = HazardCategory.get('EQ', 'HIG')
     category_eq_hig.general_recommendation = \

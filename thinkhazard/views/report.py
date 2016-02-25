@@ -152,7 +152,6 @@ def report(request):
         further_resources_query = DBSession.query(FurtherResource) \
             .join(FurtherResource.hazardtype_associations) \
             .join(HazardType) \
-            .join(Region) \
             .join(Region.administrativedivisions) \
             .filter(HazardType.id == hazard_category.hazardtype.id) \
             .filter(AdministrativeDivision.code == code) \
