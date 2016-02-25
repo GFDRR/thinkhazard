@@ -144,7 +144,13 @@ def populate_db():
     country_region = Region(**{
         'id': 2,
         'level': 3,
-        'name': u'France'
+        'name': u'Country 1'
+    })
+
+    country_region_2 = Region(**{
+        'id': 3,
+        'level': 3,
+        'name': u'Country 2'
     })
 
     association = RegionAdministrativeDivisionAssociation()
@@ -154,6 +160,10 @@ def populate_db():
     association = RegionAdministrativeDivisionAssociation()
     association.administrativedivision = div_level_1
     country_region.administrativedivisions.append(association)
+
+    association = RegionAdministrativeDivisionAssociation()
+    association.administrativedivision = div_level_1_2
+    country_region_2.administrativedivisions.append(association)
 
     category_eq_hig = HazardCategory.get('EQ', 'HIG')
     category_eq_hig.general_recommendation = \
@@ -233,12 +243,22 @@ def populate_db():
     DBSession.add(further_resource)
 
     further_resource = FurtherResource(**{
-        'text': u'Further resource for earthquake',
+        'text': u'Further resource for earthquake for country 1',
         'id': 5
     })
     association = HazardTypeFurtherResourceAssociation()
     association.hazardtype = hazardtype_eq
     association.region = country_region
+    further_resource.hazardtype_associations.append(association)
+    DBSession.add(further_resource)
+
+    further_resource = FurtherResource(**{
+        'text': u'Further resource for earthquake for country 2',
+        'id': 6
+    })
+    association = HazardTypeFurtherResourceAssociation()
+    association.hazardtype = hazardtype_eq
+    association.region = country_region_2
     further_resource.hazardtype_associations.append(association)
     DBSession.add(further_resource)
 

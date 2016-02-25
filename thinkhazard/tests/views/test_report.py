@@ -79,6 +79,10 @@ class TestReportFunction(BaseTestCase):
         self.assertEqual(len(resp.pyquery('.recommendations li')), 2)
 
     def test_report__further_resources(self):
+        resp = self.testapp.get('/report/10/EQ', status=200)
+        self.assertEqual(len(resp.pyquery('.further-resources ul li')), 2)
+
+    def test_report__further_resources(self):
         resp = self.testapp.get('/report/31/EQ', status=200)
         self.assertEqual(len(resp.pyquery('.further-resources ul li')), 2)
 
