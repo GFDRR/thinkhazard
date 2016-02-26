@@ -247,17 +247,14 @@ def get_info_for_hazard_type(hazard_type, division):
     sources = None
     climate_change_recommendation = None
 
-    try:
-        hazard_category = DBSession.query(HazardCategory) \
-            .join(HazardCategoryAdministrativeDivisionAssociation) \
-            .join(AdministrativeDivision) \
-            .join(HazardLevel) \
-            .join(HazardType) \
-            .filter(HazardType.mnemonic == hazard_type) \
-            .filter(AdministrativeDivision.code == division.code) \
-            .one()
-    except NoResultFound:
-        raise NoResultFound
+    hazard_category = DBSession.query(HazardCategory) \
+        .join(HazardCategoryAdministrativeDivisionAssociation) \
+        .join(AdministrativeDivision) \
+        .join(HazardLevel) \
+        .join(HazardType) \
+        .filter(HazardType.mnemonic == hazard_type) \
+        .filter(AdministrativeDivision.code == division.code) \
+        .one()
 
     try:
         # get the code for level 0 division
