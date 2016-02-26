@@ -218,6 +218,8 @@ def admindiv_hazardsets_hazardtype(request):
     data = [{
         'code': row.administrativedivision.code,
         'name': row.administrativedivision.name,
+        'level_2': row.administrativedivision.parent.name,
+        'level_1': row.administrativedivision.parent.parent.name,
         'hazardset': row.hazardsets[0].id
     } for row in query]
 

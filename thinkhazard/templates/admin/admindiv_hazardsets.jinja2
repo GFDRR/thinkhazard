@@ -23,7 +23,7 @@
       </ul>
     </div>
     <div class="text-muted">
-      List of admin divisions (level 2) and corresponding chosen hazard set
+      List of admin divisions (level 3) and corresponding chosen hazard set
     </div>
     <table ng-table="ctrl.data" class="table table-condensed" show-filter="true">
       <tr ng-repeat="row in $data">
@@ -32,9 +32,19 @@
           {{row.code}}
           {% endraw %}
         </td>
-        <td filter="{ name: 'text'}" sortable="'name'" title="'Name'">
+        <td filter="{ name: 'text'}" sortable="'name'" title="'REG'">
           {% raw %}
           {{row.name}}
+          {% endraw %}
+        </td>
+        <td filter="{ level_2: 'text'}" sortable="'level_2'" title="'PRO'">
+          {% raw %}
+          {{row.level_2}}
+          {% endraw %}
+        </td>
+        <td filter="{ level_1: 'text'}" sortable="'level_1'" title="'COU'">
+          {% raw %}
+          {{row.level_1}}
           {% endraw %}
         </td>
         <td filter="{ hazardset: 'text'}" sortable="'hazarset'" title="'HazardSet'">
