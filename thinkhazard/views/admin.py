@@ -339,4 +339,4 @@ def climate_rec_process(request, obj):
 
         DBSession.flush()
         return HTTPFound(request.route_url('admin_climate_rec_edit',
-                                           id=obj.id))
+                         id=obj.hazardtype.mnemonic))
