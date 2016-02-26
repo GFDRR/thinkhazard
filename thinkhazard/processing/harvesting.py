@@ -18,6 +18,7 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+import traceback
 import httplib2
 from urllib import urlencode
 from urlparse import urlunsplit
@@ -99,6 +100,7 @@ def harvest(hazard_type=None, force=False, dry_run=False):
                 transaction.abort()
                 logger.error(u'Region {} raises an exception :\n{}'
                              .format(region['name'], e.message))
+                logger.error(traceback.format_exc())
     populate_region_administrativedivision_association(dry_run)
 
     for layer in layers:
@@ -112,6 +114,7 @@ def harvest(hazard_type=None, force=False, dry_run=False):
                 transaction.abort()
                 logger.error(u'Layer {} raises an exception :\n{}'
                              .format(layer['title'], e.message))
+                logger.error(traceback.format_exc())
 
     for doc in documents:
         harvest_document(doc)
@@ -124,6 +127,7 @@ def harvest(hazard_type=None, force=False, dry_run=False):
             transaction.abort()
             logger.error(u'Document {} raises an exception :\n{}'
                          .format(doc['title'], e.message))
+            logger.error(traceback.format_exc())
 
 
 def check_hazard_type(object):

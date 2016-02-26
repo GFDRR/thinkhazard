@@ -18,6 +18,7 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+import traceback
 import transaction
 from sqlalchemy import func
 
@@ -72,9 +73,9 @@ def complete(hazardset_id=None, force=False, dry_run=False):
                 transaction.abort()
             else:
                 transaction.commit()
-        except Exception as e:
+        except Exception:
             transaction.abort()
-            logger.error(e.message)
+            logger.error(traceback.format_exc())
 
 
 def complete_hazardset(hazardset_id, dry_run=False):
