@@ -174,8 +174,7 @@ def technical_rec_process(request, obj):
                 obj.hazardcategory_associations.append(record)
 
         DBSession.flush()
-        return HTTPFound(request.route_url('admin_technical_rec_edit',
-                                           id=obj.id))
+        return HTTPFound(request.route_url('admin_technical_rec'))
 
 
 @view_config(route_name='admin_hazardsets',
@@ -340,4 +339,4 @@ def climate_rec_process(request, obj):
 
         DBSession.flush()
         return HTTPFound(request.route_url('admin_climate_rec_edit',
-                                           id=obj.id))
+                         id=obj.hazardtype.mnemonic))
