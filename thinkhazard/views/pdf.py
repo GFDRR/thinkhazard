@@ -130,7 +130,8 @@ def report_pdf(request):
 
     cover_url = request.route_url('pdf_cover', divisioncode=division_code)
 
-    wkhtmltopdf = path.join(path.dirname(__file__),
+    wkhtmltopdf = path.join(
+        path.dirname(__file__),
         '../../.build/wkhtmltox/bin/wkhtmltopdf')
 
     command = wkhtmltopdf + \
