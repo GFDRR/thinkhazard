@@ -19,10 +19,22 @@
 
 import os
 import yaml
+import logging
 from pyramid.paster import (
     get_appsettings,
     )
 from .. import load_local_settings
+
+
+logger = logging.getLogger(__name__)
+
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(levelname)s - %(message)s')
+ch.setFormatter(formatter)
+logger.addHandler(ch)
+
+logger.setLevel(logging.DEBUG)
 
 
 def load_settings():
