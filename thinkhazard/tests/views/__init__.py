@@ -79,79 +79,95 @@ def populate_db():
     ])
     geometry = from_shape(shape, 4326)
 
-    div_level_1 = AdministrativeDivision(**{
+    # admin_div_10 is a country (division level 1)
+    admin_div_10 = AdministrativeDivision(**{
         'code': 10,
         'leveltype_id': 1,
         'name': u'Division level 1'
     })
-    div_level_1.geom = geometry
-    DBSession.add(div_level_1)
+    admin_div_10.geom = geometry
+    DBSession.add(admin_div_10)
 
-    div_level_1_2 = AdministrativeDivision(**{
+    # admin_div_11 is another country (division level 1)
+    admin_div_11 = AdministrativeDivision(**{
         'code': 11,
         'leveltype_id': 1,
         'name': u'Division level 1 2'
     })
-    div_level_1_2.geom = geometry
-    DBSession.add(div_level_1_2)
+    admin_div_11.geom = geometry
+    DBSession.add(admin_div_11)
 
-    div_level_2 = AdministrativeDivision(**{
+    # admin_div_20 is a region (division level 2)
+    # it's parent is admin_div_10
+    admin_div_20 = AdministrativeDivision(**{
         'code': 20,
         'leveltype_id': 2,
         'name': u'Division level 2'
     })
-    div_level_2.parent_code = div_level_1.code
-    div_level_2.geom = geometry
-    DBSession.add(div_level_2)
+    admin_div_20.parent_code = admin_div_10.code
+    admin_div_20.geom = geometry
+    DBSession.add(admin_div_20)
 
     shape = MultiPolygon([
         Polygon([(0, 0), (0, 1), (.5, 1), (.5, 0), (0, 0)])
     ])
     geometry = from_shape(shape, 4326)
 
-    div_level_3_1 = AdministrativeDivision(**{
+    # admin_div_31 is a department (division level 3)
+    # it's parent is admin_div_20
+    admin_div_31 = AdministrativeDivision(**{
         'code': 31,
         'leveltype_id': 3,
         'name': u'Division level 3 - 1'
     })
-    div_level_3_1.parent_code = div_level_2.code
-    div_level_3_1.geom = geometry
-    div_level_3_1.hazardcategories = []
+    admin_div_31.parent_code = admin_div_20.code
+    admin_div_31.geom = geometry
+    admin_div_31.hazardcategories = []
 
     shape = MultiPolygon([
         Polygon([(.5, 0), (.5, 1), (1, 1), (1, 0), (.5, 0)])
     ])
     geometry = from_shape(shape, 4326)
 
-    div_level_3_2 = AdministrativeDivision(**{
+    # admin_div_32 is a department (division level 3)
+    # it's parent is also admin_div_20
+    admin_div_32 = AdministrativeDivision(**{
         'code': 32,
         'leveltype_id': 3,
         'name': u'Division level 3 - 2'
     })
-    div_level_3_2.parent_code = div_level_2.code
-    div_level_3_2.geom = geometry
-    div_level_3_2.hazardcategories = []
+    admin_div_32.parent_code = admin_div_20.code
+    admin_div_32.geom = geometry
+    admin_div_32.hazardcategories = []
 
+    # Here's a quick, graphical recap:
+    #
+    # admin_div_10 -> admin_div_20 -> admin_div_31
+    #                             `-> admin_div_32
+    # admin_div_11
+
+    # GeoNode Regions
+    # global_region contains all countries
     global_region = Region(**{
         'id': 1,
         'level': 0,
         'name': u'Global region'
     })
-    global_region.administrativedivisions.append(div_level_1)
+    global_region.administrativedivisions.append(admin_div_10)
 
     country_region = Region(**{
         'id': 2,
         'level': 3,
         'name': u'Country 1'
     })
-    country_region.administrativedivisions.append(div_level_1)
+    country_region.administrativedivisions.append(admin_div_10)
 
     country_region_2 = Region(**{
         'id': 3,
         'level': 3,
         'name': u'Country 2'
     })
-    country_region_2.administrativedivisions.append(div_level_1_2)
+    country_region_2.administrativedivisions.append(admin_div_11)
 
     category_eq_hig = HazardCategory.get('EQ', 'HIG')
     category_eq_hig.general_recommendation = \
@@ -161,8 +177,8 @@ def populate_db():
         'hazardcategory': category_eq_hig
     })
     association.hazardsets.append(hazardset1)
-    div_level_3_1.hazardcategories.append(association)
-    div_level_3_2.hazardcategories.append(
+    admin_div_31.hazardcategories.append(association)
+    admin_div_32.hazardcategories.append(
         HazardCategoryAdministrativeDivisionAssociation(**{
             'hazardcategory': category_eq_hig
         })
@@ -172,7 +188,7 @@ def populate_db():
         text=u'Climate change recommendation',
         hazardtype=HazardType.get(u'EQ'))
     climate_rec.associations.append(CcrAd(
-        administrativedivision=div_level_1,
+        administrativedivision=admin_div_10,
         hazardtype=HazardType.get(u'EQ')))
     DBSession.add(climate_rec)
 
@@ -180,7 +196,7 @@ def populate_db():
         text=u'Climate change recommendation 2',
         hazardtype=HazardType.get(u'EQ'))
     climate_rec.associations.append(CcrAd(
-        administrativedivision=div_level_1_2,
+        administrativedivision=admin_div_11,
         hazardtype=HazardType.get(u'EQ')))
     DBSession.add(climate_rec)
 
@@ -206,18 +222,18 @@ def populate_db():
     category_fl_med.general_recommendation = \
         u'General recommendation for FL MED'
 
-    div_level_3_1.hazardcategories.append(
+    admin_div_31.hazardcategories.append(
         HazardCategoryAdministrativeDivisionAssociation(**{
             'hazardcategory': category_fl_med
         })
     )
-    DBSession.add(div_level_3_1)
-    div_level_3_2.hazardcategories.append(
+    DBSession.add(admin_div_31)
+    admin_div_32.hazardcategories.append(
         HazardCategoryAdministrativeDivisionAssociation(**{
             'hazardcategory': category_fl_med
         })
     )
-    DBSession.add(div_level_3_2)
+    DBSession.add(admin_div_32)
 
     # Further Resources
     further_resource = FurtherResource(**{
