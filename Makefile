@@ -2,6 +2,7 @@ LESS_FILES = $(shell find thinkhazard/static/less -type f -name '*.less' 2> /dev
 JS_FILES = $(shell find thinkhazard/static/js -type f -name '*.js' 2> /dev/null)
 PY_FILES = $(shell find thinkhazard -type f -name '*.py' 2> /dev/null)
 INSTANCEID ?= main
+AUTHUSERFILE ?= /var/www/vhosts/wb-thinkhazard/conf/.htpasswd
 DATA ?= world
 
 .PHONY: all
@@ -207,6 +208,7 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 .build/apache-%.conf: apache.conf .build/venv
 	sed -e 's#{{PYTHONPATH}}#$(shell .build/venv/bin/python -c "import sys; print(sys.path[-1])")#' \
 		-e 's#{{INSTANCEID}}#$(INSTANCEID)#g' \
+		-e 's#{{AUTHUSERFILE}}#$(AUTHUSERFILE)#g' \
 		-e 's#{{WSGISCRIPT}}#$(abspath .build/thinkhazard-$*.wsgi)#' $< > $@
 
 .PHONY: clean
