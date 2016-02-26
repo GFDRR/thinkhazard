@@ -97,6 +97,24 @@ def populate_db():
     admin_div_11.geom = geometry
     DBSession.add(admin_div_11)
 
+    # admin_div_12 is another country (division level 1)
+    admin_div_12 = AdministrativeDivision(**{
+        'code': 12,
+        'leveltype_id': 1,
+        'name': u'Division level 1 3'
+    })
+    admin_div_12.geom = geometry
+    DBSession.add(admin_div_12)
+
+    # admin_div_13 is another country (division level 1)
+    admin_div_13 = AdministrativeDivision(**{
+        'code': 13,
+        'leveltype_id': 1,
+        'name': u'Division level 1 4'
+    })
+    admin_div_13.geom = geometry
+    DBSession.add(admin_div_13)
+
     # admin_div_20 is a region (division level 2)
     # it's parent is admin_div_10
     admin_div_20 = AdministrativeDivision(**{
@@ -145,40 +163,90 @@ def populate_db():
     # admin_div_10 -> admin_div_20 -> admin_div_31
     #                             `-> admin_div_32
     # admin_div_11
+    # admin_div_12
+    # admin_div_13
 
     # GeoNode Regions
-    # global_region contains all countries
+    # global_region contains all countries, **except admin_div_12**
     global_region = Region(**{
         'id': 1,
         'level': 0,
         'name': u'Global region'
     })
     global_region.administrativedivisions.append(admin_div_10)
+    global_region.administrativedivisions.append(admin_div_11)
+    global_region.administrativedivisions.append(admin_div_13)
 
-    country_region = Region(**{
+    # region_1 is a country
+    # it matches GAULS's admin_div_10
+    region_1 = Region(**{
         'id': 2,
         'level': 3,
         'name': u'Country 1'
     })
-    country_region.administrativedivisions.append(admin_div_10)
+    region_1.administrativedivisions.append(admin_div_10)
 
-    country_region_2 = Region(**{
+    # region_2 is another country
+    # it matches GAULS's admin_div_11
+    region_2 = Region(**{
         'id': 3,
         'level': 3,
         'name': u'Country 2'
     })
-    country_region_2.administrativedivisions.append(admin_div_11)
+    region_2.administrativedivisions.append(admin_div_11)
+
+    # region_3 is another country
+    # it matches GAULS's admin_div_12
+    region_3 = Region(**{
+        'id': 4,
+        'level': 3,
+        'name': u'Country 3'
+    })
+    region_3.administrativedivisions.append(admin_div_12)
+
+    # Here's a quick, graphical recap:
+    #
+    # global_region  -> admin_div_10 (region_1) -> admin_div_20 -> admin_div_31
+    #            `                                             `-> admin_div_32
+    #             `
+    #              ` -> admin_div_11 (region_2)
+    #               `-> admin_div_13
+    #
+    # region_3 = admin_div_12
 
     category_eq_hig = HazardCategory.get('EQ', 'HIG')
     category_eq_hig.general_recommendation = \
         u'General recommendation for EQ HIG'
 
+    # admin_div_31 has (EQ, HIGH)
     association = HazardCategoryAdministrativeDivisionAssociation(**{
         'hazardcategory': category_eq_hig
     })
     association.hazardsets.append(hazardset1)
     admin_div_31.hazardcategories.append(association)
+
+    # admin_div_32 has (EQ, HIGH)
     admin_div_32.hazardcategories.append(
+        HazardCategoryAdministrativeDivisionAssociation(**{
+            'hazardcategory': category_eq_hig
+        })
+    )
+
+    # admin_div_10 has (EQ, HIGH)
+    admin_div_10.hazardcategories.append(
+        HazardCategoryAdministrativeDivisionAssociation(**{
+            'hazardcategory': category_eq_hig
+        })
+    )
+    # admin_div_11 has no category (this is tested)
+    # admin_div_12 has (EQ, HIGH)
+    admin_div_12.hazardcategories.append(
+        HazardCategoryAdministrativeDivisionAssociation(**{
+            'hazardcategory': category_eq_hig
+        })
+    )
+    # admin_div_13 has (EQ, HIGH)
+    admin_div_13.hazardcategories.append(
         HazardCategoryAdministrativeDivisionAssociation(**{
             'hazardcategory': category_eq_hig
         })
@@ -235,7 +303,8 @@ def populate_db():
     )
     DBSession.add(admin_div_32)
 
-    # Further Resources
+    # generic further resource for EQ:
+    # it should be found on every EQ report page
     further_resource = FurtherResource(**{
         'text': u'Educational web resources on earthquakes and' +
                 ' seismic hazard',
@@ -247,23 +316,15 @@ def populate_db():
     further_resource.hazardtype_associations.append(association)
     DBSession.add(further_resource)
 
+    # further resource for EQ & region 1:
+    # it should be found only on region 1 (and sub-divisions) page
     further_resource = FurtherResource(**{
-        'text': u'Further resource for earthquake for country 1',
+        'text': u'Further resource for earthquake for region 1',
         'id': 5
     })
     association = HazardTypeFurtherResourceAssociation()
     association.hazardtype = hazardtype_eq
-    association.region = country_region
-    further_resource.hazardtype_associations.append(association)
-    DBSession.add(further_resource)
-
-    further_resource = FurtherResource(**{
-        'text': u'Further resource for earthquake for country 2',
-        'id': 6
-    })
-    association = HazardTypeFurtherResourceAssociation()
-    association.hazardtype = hazardtype_eq
-    association.region = country_region_2
+    association.region = region_1
     further_resource.hazardtype_associations.append(association)
     DBSession.add(further_resource)
 
