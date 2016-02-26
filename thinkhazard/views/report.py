@@ -258,24 +258,20 @@ def get_info_for_hazard_type(hazard, division):
         .filter(AdministrativeDivision.code == division.code) \
         .one()
 
-    try:
-        # get the code for level 0 division
-        code = division.code
-        if division.leveltype_id == 2:
-            code = division.parent.code
-        if division.leveltype_id == 3:
-            code = division.parent.parent.code
-        climate_change_recommendation = DBSession.query(
-                ClimateChangeRecommendation) \
-            .join(CcrAd) \
-            .join(HazardType) \
-            .join(AdministrativeDivision) \
-            .filter(AdministrativeDivision.code == code) \
-            .filter(HazardType.mnemonic == hazard) \
-            .one()
-
-    except NoResultFound:
-        pass
+    # get the code for level 0 division
+    code = division.code
+    if division.leveltype_id == 2:
+        code = division.parent.code
+    if division.leveltype_id == 3:
+        code = division.parent.parent.code
+    climate_change_recommendation = DBSession.query(
+            ClimateChangeRecommendation) \
+        .join(CcrAd) \
+        .join(HazardType) \
+        .join(AdministrativeDivision) \
+        .filter(AdministrativeDivision.code == code) \
+        .filter(HazardType.mnemonic == hazard) \
+        .one_or_none()
 
     technical_recommendations = DBSession.query(TechnicalRecommendation) \
         .join(TechnicalRecommendation.hazardcategory_associations) \
