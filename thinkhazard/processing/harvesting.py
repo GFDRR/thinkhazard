@@ -35,7 +35,6 @@ from ..models import (
     Output,
     Region,
     AdministrativeDivision,
-    RegionAdministrativeDivisionAssociation,
     FurtherResource,
     HazardTypeFurtherResourceAssociation,
     )
@@ -209,10 +208,7 @@ def populate_region_administrativedivision_association(dry_run=False):
                 continue
 
             try:
-                association = RegionAdministrativeDivisionAssociation()
-                association.administrativedivision = admindiv
-                region.administrativedivisions.append(association)
-                DBSession.add(region)
+                region.administrativedivisions.append(admindiv)
                 DBSession.flush()
             except Exception as e:
                 transaction.abort()
@@ -240,11 +236,8 @@ def harvest_region(object):
     else:
         logger.info(u'Updating Region - {}'.format(name))
         # drop existing relationships with GAUL administrative divisions
-        assocs = DBSession.query(RegionAdministrativeDivisionAssociation) \
-            .filter(RegionAdministrativeDivisionAssociation
-                    .region_id == id).all()
-        for a in assocs:
-            DBSession.delete(a)
+        for ad in region.administrativedivisions:
+            region.administrativedivisions.remove(ad)
 
     region.name = name
     region.level = object['level']

@@ -188,6 +188,16 @@ class HazardCategoryTechnicalRecommendationAssociation(Base):
     technicalrecommendation = relationship('TechnicalRecommendation')
 
 
+region_administrativedivision_table = Table(
+    'rel_region_administrativedivision',
+    Base.metadata,
+    Column('region_id', Integer,
+           ForeignKey('datamart.enum_region.id', ondelete="CASCADE")),
+    Column('administrativedivision_id', Integer,
+           ForeignKey('administrativedivision.id', ondelete="CASCADE"))
+)
+
+
 class Region(Base):
     __tablename__ = 'enum_region'
 
@@ -201,23 +211,9 @@ class Region(Base):
     level = Column(Integer, nullable=False)
 
     administrativedivisions = relationship(
-        'RegionAdministrativeDivisionAssociation')
-
-
-class RegionAdministrativeDivisionAssociation(Base):
-    __tablename__ = 'rel_region_administrativedivision'
-
-    id = Column(Integer, primary_key=True)
-    region_id = Column(Integer,
-                       ForeignKey('datamart.enum_region.id'),
-                       nullable=False, index=True)
-    administrativedivision_id = Column(
-        Integer,
-        ForeignKey('administrativedivision.id'),
-        nullable=False, index=True)
-
-    administrativedivision = relationship('AdministrativeDivision')
-    region = relationship('Region')
+        'AdministrativeDivision',
+        secondary=region_administrativedivision_table,
+        backref='regions')
 
 
 class HazardTypeFurtherResourceAssociation(Base):
@@ -236,6 +232,7 @@ class HazardTypeFurtherResourceAssociation(Base):
 
     hazardtype = relationship('HazardType')
     region = relationship('Region')
+    furtherresource = relationship('FurtherResource', lazy="joined")
 
 
 class AdministrativeDivision(Base):
@@ -258,9 +255,6 @@ class AdministrativeDivision(Base):
     hazardcategories = relationship(
         'HazardCategoryAdministrativeDivisionAssociation',
         back_populates='administrativedivision')
-
-    regions = relationship(
-        'RegionAdministrativeDivisionAssociation')
 
     def __json__(self, request):
         if self.leveltype_id == 1:

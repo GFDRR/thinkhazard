@@ -35,8 +35,8 @@ class TestReportFunction(BaseTestCase):
         self.assertEqual(len(resp.pyquery('.breadcrumb .btn')), 2)
 
     def test_report__hazardcategories(self):
-        resp = self.testapp.get('/report/10', status=200)
-        # admin div 10 is not linked to any hazard category
+        resp = self.testapp.get('/report/11', status=200)
+        # admin div 11 is not linked to any hazard category
         self.assertEqual(len(resp.pyquery('.level-no-data.overview')), 8)
 
         resp = self.testapp.get('/report/32', status=200)
@@ -78,11 +78,23 @@ class TestReportFunction(BaseTestCase):
         self.assertTrue('Climate change recommendation' in resp.body)
         self.assertEqual(len(resp.pyquery('.recommendations li')), 2)
 
-    def test_report__further_resources(self):
-        resp = self.testapp.get('/report/31/EQ', status=200)
+    def test_report__further_resources_division(self):
+        # admin div 12 is not linked with any region => no further resource
+        resp = self.testapp.get('/report/12/EQ', status=200)
+        self.assertEqual(len(resp.pyquery('.further-resources ul li')), 0)
+
+        # admin div 13 is linked with global region => one single resource
+        resp = self.testapp.get('/report/13/EQ', status=200)
+        self.assertEqual(len(resp.pyquery('.further-resources ul li')), 1)
+
+        # admin div 10 is linked with global region and one country
+        # => gets one resource for each
+        resp = self.testapp.get('/report/10/EQ', status=200)
         self.assertEqual(len(resp.pyquery('.further-resources ul li')), 2)
 
-        resp = self.testapp.get('/report/32/EQ', status=200)
+        # admin div 31 is grand child of admin div 10
+        # => hence inherits the same number of further resources
+        resp = self.testapp.get('/report/31/EQ', status=200)
         self.assertEqual(len(resp.pyquery('.further-resources ul li')), 2)
 
     def test_report__json(self):
