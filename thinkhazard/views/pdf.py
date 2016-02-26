@@ -19,10 +19,13 @@
 
 import datetime
 import logging
+import re
+
+import os
 import traceback
+from uuid import uuid4
 
 from os import path
-from random import randint
 
 from subprocess import (
     Popen,
@@ -30,8 +33,9 @@ from subprocess import (
 )
 
 from pyramid.view import view_config
-from pyramid.httpexceptions import HTTPBadRequest
+from pyramid.httpexceptions import HTTPBadRequest, HTTPNotFound
 from pyramid.response import FileResponse
+from thinkhazard import scheduler
 
 from .report import (
     _hazardlevel_nodata,
@@ -51,6 +55,7 @@ from ..models import (
 
 from sqlalchemy.orm import joinedload
 
+REPORT_ID_REGEX = re.compile('\w{8}(-\w{4}){3}-\w{12}?')
 
 logger = logging.getLogger(__name__)
 
@@ -96,19 +101,54 @@ def pdf_cover(request):
     return context
 
 
-@view_config(route_name='report_pdf')
-def report_pdf(request):
-    try:
-        division_code = request.matchdict.get('divisioncode')
-    except:
-        raise HTTPBadRequest(detail='incorrect value for parameter '
-                                    '"divisioncode"')
+def create_pdf(file_name, file_name_temp, cover_url, pages):
+    """Create a PDF file with the given pages using wkhtmltopdf.
+    wkhtmltopdf is writing the PDF in `file_name_temp`, once the generation
+    has finished, the file is renamed to `file_name`.
+    """
+    wkhtmltopdf = path.join(
+        path.dirname(__file__),
+        '../../.build/wkhtmltox/bin/wkhtmltopdf')
 
-    date = datetime.datetime.now()
-    filename = path.join(
-        request.registry.settings.get('pdf_archive_path'),
-        division_code + '-' + date.strftime('%Y-%m-%d-%H:%M:%S') +
-        '-{:d}'.format(randint(1, 1E6)) + '.pdf')
+    command = wkhtmltopdf + \
+        ' --viewport-size 800x600 --javascript-delay 2000 ' \
+        'cover "%s"' \
+        '%s "%s" >> /tmp/wkhtp.log' % (cover_url, pages, file_name_temp)
+
+    try:
+        p = Popen(
+            command, shell=True, stdout=PIPE, stderr=PIPE, close_fds=True)
+        stdout, stderr = p.communicate()
+        retcode = p.returncode
+
+        if retcode == 0:
+            # once the generation has succeeded, rename the file so that
+            # waiting clients know that it is finished
+            os.rename(file_name_temp, file_name)
+        elif retcode < 0:
+            raise Exception("Terminated by signal: ", -retcode)
+        else:
+            raise Exception(stderr)
+
+    except OSError as exc:
+        logger.error(traceback.format_exc())
+        raise exc
+    finally:
+        try:
+            os.remove(file_name_temp)
+        except OSError:
+            pass
+
+
+@view_config(
+    route_name='create_pdf_report', request_method='POST', renderer='json')
+def create_pdf_report(request):
+    """View to create an asynchronous print job.
+    """
+    division_code = get_divison_code(request)
+
+    base_path = request.registry.settings.get('pdf_archive_path')
+    report_id = _get_report_id(division_code, base_path)
 
     categories = DBSession.query(HazardCategory) \
         .options(joinedload(HazardCategory.hazardtype)) \
@@ -120,7 +160,7 @@ def report_pdf(request):
 
     pages = ''
     for cat in categories:
-        pages = pages + ' page "{}"'.format(
+        pages += ' page "{}"'.format(
             request.route_url(
                 'report_print',
                 divisioncode=division_code,
@@ -130,32 +170,109 @@ def report_pdf(request):
 
     cover_url = request.route_url('pdf_cover', divisioncode=division_code)
 
-    wkhtmltopdf = path.join(
-        path.dirname(__file__),
-        '../../.build/wkhtmltox/bin/wkhtmltopdf')
+    file_name = _get_report_filename(base_path, division_code, report_id)
+    file_name_temp = _get_report_filename(
+        base_path, division_code, report_id, temp=True)
 
-    command = wkhtmltopdf + \
-        ' --viewport-size 800x600 --javascript-delay 2000 ' \
-        'cover "%s"' \
-        '%s "%s" >> /tmp/wkhtp.log' % (cover_url, pages, filename)
+    # already create the file, so that the client can poll the status
+    _touch(file_name_temp)
 
+    scheduler.add_job(
+        create_pdf,
+        args=[file_name, file_name_temp, cover_url, pages])
+
+    return {
+        'divisioncode': division_code,
+        'report_id': report_id
+    }
+
+
+@view_config(route_name='get_report_status', renderer='json')
+def get_report_status(request):
+    """View to poll the status of a print job.
+    """
+    division_code = get_divison_code(request)
+    report_id = get_report_id(request)
+
+    base_path = request.registry.settings.get('pdf_archive_path')
+    file_name = _get_report_filename(base_path, division_code, report_id)
+    file_name_temp = _get_report_filename(
+        base_path, division_code, report_id, temp=True)
+
+    if path.isfile(file_name):
+        return {
+            'status': 'done'
+        }
+    elif path.isfile(file_name_temp):
+        return {
+            'status': 'running'
+        }
+    else:
+        raise HTTPNotFound('No job found or job has failed')
+
+
+@view_config(route_name='get_pdf_report')
+def get_pdf_report(request):
+    """Return the PDF file for finished print jobs.
+    """
+    division_code = get_divison_code(request)
+    report_id = get_report_id(request)
+
+    base_path = request.registry.settings.get('pdf_archive_path')
+    file_name = _get_report_filename(base_path, division_code, report_id)
+    file_name_temp = _get_report_filename(
+        base_path, division_code, report_id, temp=True)
+
+    if path.isfile(file_name):
+        return FileResponse(
+            file_name,
+            request=request,
+            content_type='application/pdf'
+        )
+    elif path.isfile(file_name_temp):
+        return HTTPBadRequest('Not finished yet')
+    else:
+        raise HTTPNotFound('No job found')
+
+
+def _get_report_id(division_code, base_path):
+    """Generate a random report id. Check that there is no existing file with
+    the generated id.
+    """
+    while True:
+        report_id = str(uuid4())
+        file_name = _get_report_filename(
+            base_path, division_code, report_id)
+        file_name_temp = _get_report_filename(
+            base_path, division_code, report_id, temp=True)
+        if not (path.isfile(file_name) or path.isfile(file_name_temp)):
+            return report_id
+
+
+def _get_report_filename(base_path, division_code, report_id, temp=False):
+    return path.join(
+        base_path,
+        ('_' if temp else '') + '{:s}-{:s}.pdf'.format(
+            division_code, report_id))
+
+
+def _touch(file):
+    with open(file, 'a'):
+        os.utime(file, None)
+
+
+def get_divison_code(request):
     try:
-        p = Popen(
-            command, shell=True, stdout=PIPE, stderr=PIPE, close_fds=True)
-        stdout, stderr = p.communicate()
-        retcode = p.returncode
+        return request.matchdict.get('divisioncode')
+    except:
+        raise HTTPBadRequest(detail='incorrect value for parameter '
+                                    '"divisioncode"')
 
-        if retcode == 0:
-            return FileResponse(
-                filename,
-                request=request,
-                content_type='application/pdf'
-            )
-        elif retcode < 0:
-            raise Exception("Terminated by signal: ", -retcode)
-        else:
-            raise Exception(stderr)
 
-    except OSError as exc:
-        logger.error(traceback.format_exc())
-        raise exc
+def get_report_id(request):
+    report_id = request.matchdict.get('id')
+    if report_id and REPORT_ID_REGEX.match(report_id):
+        return report_id
+    else:
+        raise HTTPBadRequest(detail='incorrect value for parameter '
+                                    '"report_id"')

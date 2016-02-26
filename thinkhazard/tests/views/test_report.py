@@ -16,9 +16,8 @@
 #
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
-
+import os
 import shutil
-import re
 
 from mock.mock import patch
 from . import BaseTestCase
@@ -26,11 +25,14 @@ from . import BaseTestCase
 
 class TestReportFunction(BaseTestCase):
 
+    def setUp(self):  # noqa
+        super(TestReportFunction, self).setUp()
+        self.pdf_archive_path = self.testapp.app.registry.settings.get(
+            'pdf_archive_path')
+
     def tearDown(self):  # noqa
         # delete pdf archive directory
-        pdf_archive_path = self.testapp.app.registry.settings.get(
-            'pdf_archive_path')
-        shutil.rmtree(pdf_archive_path)
+        shutil.rmtree(self.pdf_archive_path)
         super(TestReportFunction, self).tearDown()
 
     def test_report(self):
@@ -117,18 +119,10 @@ class TestReportFunction(BaseTestCase):
         self.assertTrue('data_provider' in resp.body)
 
     @patch('thinkhazard.views.pdf.Popen')
-    def test_report__pdf(self, mock):
+    def test_create_pdf(self, mock):
         # tests that wkhtmltopdf is called and that the generated pdf file is
         # returned
         def popen_mock(command, **kwargs):
-            pdf_file = re. \
-                search('"([^"]*?32-.*?.pdf)"', command, re.IGNORECASE). \
-                group(1)
-
-            # create a dummy pdf file
-            with open(pdf_file, 'w') as file:
-                file.write('The pdf file')
-
             class PopenMock:
                 def __init__(self):
                     self.returncode = 0
@@ -139,6 +133,59 @@ class TestReportFunction(BaseTestCase):
             return PopenMock()
         mock.side_effect = popen_mock
 
-        resp = self.testapp.get('/report/32.pdf', status=200)
+        pdf_file = '116-1d235e51-44d5-47ac-b6da-a96c46f21639.pdf'
+        file_name = os.path.join(self.pdf_archive_path, pdf_file)
+        file_name_temp = os.path.join(self.pdf_archive_path, '_' + pdf_file)
+        self._touch_file('_' + pdf_file)
+
+        from thinkhazard.views.pdf import create_pdf
+        create_pdf(file_name, file_name_temp, 'cover_url', 'pages')
+
+        self.assertTrue(os.path.isfile(file_name))
+
+    @patch('thinkhazard.scheduler.add_job')
+    def test_create_pdf_report(self, mock):
+        def add_job(func, **kwargs):
+            pass
+        mock.side_effect = add_job
+
+        resp = self.testapp.post('/report/create/32', status=200)
+        self.assertEqual(resp.json['divisioncode'], '32')
+        self.assertIsNotNone(resp.json['report_id'])
+
+    def test_get_report_status__finished(self):
+        self._touch_file('116-1d235e51-44d5-47ac-b6da-a96c46f21639.pdf')
+        resp = self.testapp.get(
+            '/report/status/116/1d235e51-44d5-47ac-b6da-a96c46f21639.json')
+        self.assertEqual(resp.json['status'], 'done')
+
+    def test_get_report_status__still_running(self):
+        self._touch_file('_116-1d235e51-44d5-47ac-b6da-a96c46f21639.pdf')
+        resp = self.testapp.get(
+            '/report/status/116/1d235e51-44d5-47ac-b6da-a96c46f21639.json')
+        self.assertEqual(resp.json['status'], 'running')
+
+    def test_get_pdf_report__not_found(self):
+        self.testapp.get(
+            '/report/status/116/1d235e51-44d5-47ac-b6da-a96c46f21639.json',
+            status=404)
+
+    def test_get_pdf_report__found(self):
+        self._touch_file('116-1d235e51-44d5-47ac-b6da-a96c46f21639.pdf')
+        resp = self.testapp.get(
+            '/report/116/1d235e51-44d5-47ac-b6da-a96c46f21639.pdf')
         self.assertEqual(resp.body, 'The pdf file')
         self.assertEqual(resp.content_type, 'application/pdf')
+
+    def test_get_pdf_report__still_running(self):
+        self._touch_file('_116-1d235e51-44d5-47ac-b6da-a96c46f21639.pdf')
+        self.testapp.get(
+            '/report/116/1d235e51-44d5-47ac-b6da-a96c46f21639.pdf', status=400)
+
+    def test_get_pdf_report__not_found_bis(self):
+        self.testapp.get(
+            '/report/116/1d235e51-44d5-47ac-b6da-a96c46f21639.pdf', status=404)
+
+    def _touch_file(self, file_name):
+        with open(os.path.join(self.pdf_archive_path, file_name), 'w') as file:
+            file.write('The pdf file')
