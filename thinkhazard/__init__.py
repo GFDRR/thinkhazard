@@ -10,6 +10,14 @@ from .models import (
     Base,
     )
 
+from apscheduler.schedulers.background import BackgroundScheduler
+
+# background scheduler to run print jobs asynchronously. by default a thread
+# pool with 10 threads is used. to change the number of parallel print jobs,
+# see https://apscheduler.readthedocs.org/en/latest/userguide.html#configuring-the-scheduler  # noqa
+scheduler = BackgroundScheduler()
+scheduler.start()
+
 
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
@@ -41,7 +49,10 @@ def main(global_config, **settings):
         '/report/print/{divisioncode:\d+}/{hazardtype:([A-Z]{2})}')
     config.add_route('report_json',
                      '/report/{divisioncode:\d+}/{hazardtype:([A-Z]{2})}.json')
-    config.add_route('report_pdf', '/report/{divisioncode:\d+}.pdf')
+    config.add_route('create_pdf_report', '/report/create/{divisioncode:\d+}')
+    config.add_route(
+        'get_report_status', '/report/status/{divisioncode:\d+}/{id}.json')
+    config.add_route('get_pdf_report', '/report/{divisioncode:\d+}/{id}.pdf')
     config.add_route('report_overview', '/report/{divisioncode:\d+}')
     config.add_route('report_overview_slash', '/report/{divisioncode:\d+}/')
     config.add_route('report_overview_json', '/report/{divisioncode:\d+}.json')
