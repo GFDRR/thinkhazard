@@ -73,16 +73,6 @@ Configure using thinkhazard_processing.yaml
 
 Keys in processing configuration file:
 
-data_path
----------
-
-Path to main data folder, example:
-
-.. code:: yaml
-
-    data_path: /tmp
-
-For production, we recommend you change this location to a dedicated disk partition.
 
 hazard_types
 ------------
@@ -230,6 +220,12 @@ file that looks like this::
 
     [app:main]
     sqlalchemy.url = postgresql://www-data:www-data@localhost:9999/thinkhazard
+    data_path: /path/to/data/folder
+
+``data_path`` is the path to data folder. It will contain the donwloaded raster
+files as well as archive to generated PDF reports.
+It defaults to ``/tmp``. For production, we recommend you change this location
+to a dedicated disk partition.
 
 Deploy on server
 ================

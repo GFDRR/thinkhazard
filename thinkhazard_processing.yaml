@@ -1,5 +1,3 @@
-data_path: /tmp
-
 geonode:
   scheme: http
   netloc: 45.55.174.20
