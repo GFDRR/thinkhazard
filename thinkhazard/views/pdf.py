@@ -130,9 +130,12 @@ def report_pdf(request):
 
     cover_url = request.route_url('pdf_cover', divisioncode=division_code)
 
-    command = \
-        '.build/wkhtmltox/bin/wkhtmltopdf ' \
-        '--viewport-size 800x600 --javascript-delay 2000 ' \
+    wkhtmltopdf = path.join(
+        path.dirname(__file__),
+        '../../.build/wkhtmltox/bin/wkhtmltopdf')
+
+    command = wkhtmltopdf + \
+        ' --viewport-size 800x600 --javascript-delay 2000 ' \
         'cover "%s"' \
         '%s "%s" >> /tmp/wkhtp.log' % (cover_url, pages, filename)
 
