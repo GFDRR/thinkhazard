@@ -60,12 +60,11 @@ def complete(hazardset_id=None, force=False, dry_run=False):
     if hazardset_id is not None:
         ids = ids.filter(HazardSet.id == hazardset_id)
     for id in ids:
-        logger.info('  Working on hazardset {}'.format(id[0]))
         try:
             if not complete_hazardset(id[0]):
                 hazardset = DBSession.query(HazardSet).get(id)
                 if hazardset.processed:
-                    logger.info('Deleting {} previous outputs related \
+                    logger.info('  Deleting {} previous outputs related \
                                 to this hazardset'.format(
                                 hazardset.outputs.count()))
                     hazardset.outputs.delete()
@@ -79,6 +78,7 @@ def complete(hazardset_id=None, force=False, dry_run=False):
 
 
 def complete_hazardset(hazardset_id, dry_run=False):
+    logger.info('Completing hazardset {}'.format(hazardset_id))
     hazardset = DBSession.query(HazardSet).get(hazardset_id)
     if hazardset is None:
         raise Exception('Hazardset {} does not exist.'
