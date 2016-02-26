@@ -115,8 +115,8 @@ def populate_db():
     admin_div_13.geom = geometry
     DBSession.add(admin_div_13)
 
-    # admin_div_20 is a region (division level 2)
-    # it's parent is admin_div_10
+    # admin_div_20 is a province (division level 2)
+    # its parent is admin_div_10
     admin_div_20 = AdministrativeDivision(**{
         'code': 20,
         'leveltype_id': 2,
@@ -131,8 +131,8 @@ def populate_db():
     ])
     geometry = from_shape(shape, 4326)
 
-    # admin_div_31 is a department (division level 3)
-    # it's parent is admin_div_20
+    # admin_div_31 is a region (division level 3)
+    # its parent is admin_div_20
     admin_div_31 = AdministrativeDivision(**{
         'code': 31,
         'leveltype_id': 3,
@@ -147,8 +147,8 @@ def populate_db():
     ])
     geometry = from_shape(shape, 4326)
 
-    # admin_div_32 is a department (division level 3)
-    # it's parent is also admin_div_20
+    # admin_div_32 is a region (division level 3)
+    # its parent is also admin_div_20
     admin_div_32 = AdministrativeDivision(**{
         'code': 32,
         'leveltype_id': 3,
@@ -238,6 +238,7 @@ def populate_db():
             'hazardcategory': category_eq_hig
         })
     )
+
     # admin_div_11 has no category (this is tested)
     # admin_div_12 has (EQ, HIGH)
     admin_div_12.hazardcategories.append(
@@ -245,6 +246,7 @@ def populate_db():
             'hazardcategory': category_eq_hig
         })
     )
+
     # admin_div_13 has (EQ, HIGH)
     admin_div_13.hazardcategories.append(
         HazardCategoryAdministrativeDivisionAssociation(**{
@@ -305,6 +307,7 @@ def populate_db():
 
     # generic further resource for EQ:
     # it should be found on every EQ report page
+    # (except admin_div_12 which is not linked with global region)
     further_resource = FurtherResource(**{
         'text': u'Educational web resources on earthquakes and' +
                 ' seismic hazard',

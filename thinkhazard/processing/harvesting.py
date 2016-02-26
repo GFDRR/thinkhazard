@@ -209,7 +209,6 @@ def populate_region_administrativedivision_association(dry_run=False):
 
             try:
                 region.administrativedivisions.append(admindiv)
-                DBSession.add(region)
                 DBSession.flush()
             except Exception as e:
                 transaction.abort()
