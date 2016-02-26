@@ -240,7 +240,6 @@ def harvest_region(object):
         for ad in region.administrativedivisions:
             region.administrativedivisions.remove(ad)
 
-
     region.name = name
     region.level = object['level']
     DBSession.add(region)

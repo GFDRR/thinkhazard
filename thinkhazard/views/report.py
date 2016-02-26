@@ -40,10 +40,11 @@ from ..models import (
     HazardCategory,
     HazardType,
     Region,
+    FurtherResource,
     ClimateChangeRecommendation,
+    HazardTypeFurtherResourceAssociation,
     ClimateChangeRecAdministrativeDivisionAssociation as CcrAd,
     TechnicalRecommendation,
-    FurtherResource,
     HazardCategoryAdministrativeDivisionAssociation,
     HazardCategoryTechnicalRecommendationAssociation,
 )
@@ -149,19 +150,24 @@ def report(request):
             .order_by(HazardCategoryTechnicalRecommendationAssociation.order) \
             .all()
 
-        further_resources_query = DBSession.query(FurtherResource) \
-            .join(FurtherResource.hazardtype_associations) \
-            .join(HazardType) \
+        regions_subq = DBSession.query(Region.id) \
             .join(Region.administrativedivisions) \
+            .filter(AdministrativeDivision.code == code).subquery()
+        further_resources_query = DBSession.query(
+            HazardTypeFurtherResourceAssociation) \
+            .join(FurtherResource) \
+            .join(HazardType) \
+            .join(Region) \
+            .filter(Region.id.in_(regions_subq)) \
             .filter(HazardType.id == hazard_category.hazardtype.id) \
-            .filter(AdministrativeDivision.code == code) \
             .order_by(Region.level.desc())
         # "first class" documents relate directly with the country
         # "second class" documents do not relate directly with the country,
         # they appear lower in the page
 
         further_resources = []
-        for fr in further_resources_query:
+        for frq in further_resources_query:
+            fr = frq.furtherresource
             further_resources.append({
                 'id': fr.id,
                 'text': fr.text,

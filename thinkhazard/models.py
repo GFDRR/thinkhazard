@@ -188,9 +188,13 @@ class HazardCategoryTechnicalRecommendationAssociation(Base):
     technicalrecommendation = relationship('TechnicalRecommendation')
 
 
-region_administrativedivision_table = Table('rel_region_administrativedivision', Base.metadata,
-    Column('region_id', Integer, ForeignKey('datamart.enum_region.id', ondelete="CASCADE")),
-    Column('administrativedivision_id', Integer, ForeignKey('administrativedivision.id', ondelete="CASCADE"))
+region_administrativedivision_table = Table(
+    'rel_region_administrativedivision',
+    Base.metadata,
+    Column('region_id', Integer,
+           ForeignKey('datamart.enum_region.id', ondelete="CASCADE")),
+    Column('administrativedivision_id', Integer,
+           ForeignKey('administrativedivision.id', ondelete="CASCADE"))
 )
 
 
@@ -206,9 +210,10 @@ class Region(Base):
     # 3 is country
     level = Column(Integer, nullable=False)
 
-    administrativedivisions = relationship('AdministrativeDivision',
-                    secondary=region_administrativedivision_table,
-                    backref='regions')
+    administrativedivisions = relationship(
+        'AdministrativeDivision',
+        secondary=region_administrativedivision_table,
+        backref='regions')
 
 
 class HazardTypeFurtherResourceAssociation(Base):
@@ -227,6 +232,7 @@ class HazardTypeFurtherResourceAssociation(Base):
 
     hazardtype = relationship('HazardType')
     region = relationship('Region')
+    furtherresource = relationship('FurtherResource', lazy="joined")
 
 
 class AdministrativeDivision(Base):

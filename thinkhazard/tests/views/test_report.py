@@ -78,11 +78,13 @@ class TestReportFunction(BaseTestCase):
         self.assertTrue('Climate change recommendation' in resp.body)
         self.assertEqual(len(resp.pyquery('.recommendations li')), 2)
 
-    def test_report__further_resources(self):
+    def test_report__further_resources_division_level1(self):
         resp = self.testapp.get('/report/10/EQ', status=200)
+        # The resource was found at http://localhost/report/10;
+        # you should be redirected automatically.
         self.assertEqual(len(resp.pyquery('.further-resources ul li')), 2)
 
-    def test_report__further_resources(self):
+    def test_report__further_resources_division_level3(self):
         resp = self.testapp.get('/report/31/EQ', status=200)
         self.assertEqual(len(resp.pyquery('.further-resources ul li')), 2)
 

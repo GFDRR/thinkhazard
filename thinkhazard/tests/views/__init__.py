@@ -137,22 +137,20 @@ def populate_db():
         'level': 0,
         'name': u'Global region'
     })
+    global_region.administrativedivisions.append(div_level_1)
 
     country_region = Region(**{
         'id': 2,
         'level': 3,
         'name': u'Country 1'
     })
+    country_region.administrativedivisions.append(div_level_1)
 
     country_region_2 = Region(**{
         'id': 3,
         'level': 3,
         'name': u'Country 2'
     })
-
-
-    global_region.administrativedivisions.append(div_level_1)
-    country_region.administrativedivisions.append(div_level_1)
     country_region_2.administrativedivisions.append(div_level_1_2)
 
     category_eq_hig = HazardCategory.get('EQ', 'HIG')
@@ -221,6 +219,7 @@ def populate_db():
     )
     DBSession.add(div_level_3_2)
 
+    # Further Resources
     further_resource = FurtherResource(**{
         'text': u'Educational web resources on earthquakes and' +
                 ' seismic hazard',
