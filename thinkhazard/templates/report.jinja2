@@ -34,7 +34,16 @@ Think Hazard - {{ division.name}}
 
   <div class="jumbotron">
     <div class="container">
-      <a class="btn btn-default btn-xs pull-right" href="#TODO" target="_blank"><i class="icon-download-arrow"></i> Download PDF</a>
+      <div class="pull-right">
+        <em id="download-waiter" class="small text-muted hide">
+          <span class="icon-spinner fa-spin"></span>
+          Generating, please wait
+        </em>&nbsp;
+        <a class="btn btn-default btn-xs" href id="download">
+          <i class="icon-download-arrow"></i>
+          Download PDF
+        </a>
+      </div>
 
       <!-- breadcrumb -->
       <div class="breadcrumb">
@@ -132,6 +141,10 @@ Think Hazard - {{ division.name}}
       {% endif %}
 
       app.leveltype = {{division.leveltype_id}};
+
+      app.createPdfReportUrl = '{{ 'create_pdf_report'|route_url(divisioncode=division.code)}}'
+      app.getReportStatusUrl = '{{ 'get_report_status'|route_url(divisioncode=division.code, id=999)}}'
+      app.getPdfReportUrl = '{{ 'get_pdf_report'|route_url(divisioncode=division.code, id=999)}}'
     </script>
 {% endblock %}
 

@@ -178,4 +178,48 @@
     };
   }
 
+  $('#download').on('click', function(e) {
+    e.preventDefault();
+    $.post(app.createPdfReportUrl)
+      .done(function(data) {
+        console.log (data);
+        btnStatus(true);
+        checkPdfStatus(data.report_id);
+      })
+      .error(function() {
+        alert("Something went wrong");
+        btnStatus(false);
+      });
+  });
+
+  function checkPdfStatus(id) {
+    var url = app.getReportStatusUrl.replace(999, id);
+    $.get(url)
+      .done(function(data) {
+        if (data.status == 'running') {
+          window.setTimeout(function() {
+            checkPdfStatus(id);
+          }, 1000);
+        } else {
+          btnStatus(false);
+          downloadPdf(id);
+        }
+      })
+      .error(function() {
+        alert("Something went wrong");
+        btnStatus(false);
+      });
+  }
+
+  function downloadPdf(id) {
+    window.location.href = app.getPdfReportUrl.replace(999, id);
+  }
+
+  // status:
+  // true: generating, false: finished
+  function btnStatus(status) {
+    $('#download-waiter').toggleClass('hide', !status);
+    $('#download').attr('disabled', status);
+  }
+
 })();
