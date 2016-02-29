@@ -48,7 +48,7 @@
   {% endif %}
 </div>
 <div class="col-sm-5">
-  <div class="map-block well">
+  <div class="map-block">
     <div id="map" class="map">
       {% if parents.__len__() >= 1 %}
       <a class="btn btn-xs btn-default drillup" href="{{ 'report' | route_url(divisioncode=parents[0].code, hazardtype=hazard_category.hazardtype.mnemonic if hazard_category else '')}}">
@@ -107,7 +107,7 @@
     {% endif %}
   </div>
   {% if resources and resources|length > 0 %}
-  <div class="further-resources well">
+  <div class="further-resources">
     <h3>Further resources</h3>
     <p>For further information the following resources could be consulted:</p>
     <ul>
