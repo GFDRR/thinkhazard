@@ -1,10 +1,18 @@
 (function() {
 
+  // Tells whether all the background layer tiles are loaded
+  var tilesLoaded = false;
+
+  // Tells whether the vector layer is displayed
+  var vectorLoaded = false;
 
   //
   // Main
   //
-
+  var source = new ol.source.XYZ({
+    url: 'https://{a-c}.tiles.mapbox.com/v4/ingenieroariel.m9a2h374/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaW5nZW5pZXJvYXJpZWwiLCJhIjoibXhDZ3pIMCJ9.qTmPYCbnUKtaNFkvKKysAQ'
+  });
+  waitForTiles();
 
   var map = new ol.Map({
     target: 'map',
@@ -12,9 +20,7 @@
     controls: [],
     layers: [
       new ol.layer.Tile({
-        source: new ol.source.XYZ({
-          url: 'https://{a-c}.tiles.mapbox.com/v4/ingenieroariel.m9a2h374/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaW5nZW5pZXJvYXJpZWwiLCJhIjoibXhDZ3pIMCJ9.qTmPYCbnUKtaNFkvKKysAQ'
-        })
+        source: source
       })
     ]
   });
@@ -94,16 +100,25 @@
       }
       return styles;
     };
-    var layer = new ol.layer.Vector({
-      style: styleFn,
-      source: new ol.source.Vector({
-        url: url + '?resolution=' + map.getView().getResolution(),
-        format: new ol.format.GeoJSON({
-          defaultDataProjection: 'EPSG:3857'
-        })
+
+    var source = new ol.source.Vector({
+      url: url + '?resolution=' + map.getView().getResolution(),
+      format: new ol.format.GeoJSON({
+        defaultDataProjection: 'EPSG:3857'
       })
     });
+    var layer = new ol.layer.Vector({
+      style: styleFn,
+      source: source
+    });
     map.addLayer(layer);
+    source.on('addfeature', function() {
+      console.log ('addfeature');
+      map.on('postcompose', function(event) {
+        vectorLoaded = true;
+        checkFinished();
+      });
+    });
     return layer;
   }
 
@@ -220,6 +235,36 @@
   function btnStatus(status) {
     $('#download-waiter').toggleClass('hide', !status);
     $('#download').attr('disabled', status);
+  }
+
+  function waitForTiles() {
+    var tilesLoading = 0;
+    var tilesLoaded = 0;
+
+    var update = function() {
+      if (tilesLoading == tilesLoaded) {
+        onTilesLoaded();
+      }
+    };
+
+    source.on('tileloadstart', function(event) {
+      tilesLoading++;
+    });
+    source.on('tileloadend', function(event) {
+      tilesLoaded++;
+      update();
+    });
+  }
+
+  function onTilesLoaded() {
+    tilesLoaded = true;
+    checkFinished();
+  }
+
+  function checkFinished() {
+    if (vectorLoaded && tilesLoaded) {
+      window.status = 'finished';
+    }
   }
 
 })();

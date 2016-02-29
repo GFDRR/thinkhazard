@@ -106,14 +106,14 @@ def create_pdf(file_name, file_name_temp, cover_url, pages):
     wkhtmltopdf is writing the PDF in `file_name_temp`, once the generation
     has finished, the file is renamed to `file_name`.
     """
-    wkhtmltopdf = path.join(
+    command = path.join(
         path.dirname(__file__),
         '../../.build/wkhtmltox/bin/wkhtmltopdf')
 
-    command = wkhtmltopdf + \
-        ' --viewport-size 800x600 --javascript-delay 2000 ' \
-        'cover "%s"' \
-        '%s "%s" >> /tmp/wkhtp.log' % (cover_url, pages, file_name_temp)
+    command += ' --viewport-size 800x600'
+    command += ' --window-status "finished"'
+    command += ' cover "%s"' % cover_url
+    command += ' %s "%s" >> /tmp/wkhtp.log' % (pages, file_name_temp)
 
     try:
         p = Popen(
