@@ -58,6 +58,7 @@ def main(global_config, **settings):
     config.add_route('report_overview_json', '/report/{divisioncode:\d+}.json')
     config.add_route('administrativedivision', '/administrativedivision')
     config.add_route('pdf_cover', '/pdf_cover/{divisioncode:\d+}')
+    config.add_route('pdf_about', '/pdf_about')
 
     config.add_route('admin_index', '/admin')
 

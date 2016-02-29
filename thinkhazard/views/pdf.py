@@ -101,6 +101,12 @@ def pdf_cover(request):
     return context
 
 
+@view_config(
+    route_name='pdf_about', renderer='templates/pdf_about.jinja2')
+def pdf_about(request):
+    return {}
+
+
 def create_pdf(file_name, file_name_temp, cover_url, pages):
     """Create a PDF file with the given pages using wkhtmltopdf.
     wkhtmltopdf is writing the PDF in `file_name_temp`, once the generation
@@ -158,7 +164,7 @@ def create_pdf_report(request):
         .filter(AdministrativeDivision.code == division_code) \
         .order_by(HazardLevel.order)
 
-    pages = ''
+    pages = ' page "%s"' % request.route_url('pdf_about')
     for cat in categories:
         pages += ' page "{}"'.format(
             request.route_url(
