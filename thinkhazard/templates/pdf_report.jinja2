@@ -118,17 +118,26 @@
         ThinkHazard!
       </div>
     </div>
-    <div class="container-fluid">
-      <h2>
-        {{ division.name }}
-        <br>
-        <small>
-        {% for parent in parents | reverse %}
-          {{ parent.name }}
-          {% if not loop.last %},&nbsp;{% endif %}
-        {% endfor %}
-        </small>
-      </h2>
+    <div class="container-fluid header {{ hazard_category.hazardlevel.mnemonic }}">
+      <table>
+        <tr>
+          <td>
+            <i class="fa hazard-icon icon-{{hazard_category.hazardtype.mnemonic|lower|replace(' ', '')}}"></i>
+          </td>
+          <td>
+            <h2>
+            {{ division.name }}
+            <br>
+            <small>
+            {% for parent in parents | reverse %}
+              {{ parent.name }}
+              {% if not loop.last %},&nbsp;{% endif %}
+            {% endfor %}
+            </small>
+            </h2>
+          </td>
+        </tr>
+      </table>
     </div>
     <div class="container-fluid level-{{hazard_category.hazardlevel.mnemonic}}">
       {{ report_for_hazard(

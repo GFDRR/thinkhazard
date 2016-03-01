@@ -13,6 +13,17 @@ a.logo {
   margin-right: 0;
 }
 
+.header {
+  background-color: #f5f5f5;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  table {
+    td {
+      padding-right: 20px;
+    }
+  }
+}
+
 .recommendations li {
   margin-top: 10px;
 }
@@ -66,35 +77,39 @@ a.logo {
   }
 }
 
+@padding-size: 6px;
+
 .hazard-types-list {
   padding: 0;
   li {
     border: 0;
     padding-top: 25px;
-    @padding-size: 6px;
     .hazard-icon {
-      padding: 6px;
-      .box-shadow(none) !important;
-      color: white;
       left: (@hazard-width - @icon-size) / 2 - @padding-size;
     }
-
-    &.no-data .hazard-icon {
-      padding: @padding-size - 1px;
-      border: 1px solid @text-inactive;
-    }
   }
+}
+
+.hazard-icon {
+  padding: 6px;
+  .box-shadow(none) !important;
+  color: white;
+}
+
+.no-data .hazard-icon {
+  padding: @padding-size - 1px;
+  border: 1px solid @text-inactive;
 }
 
 .set-level-color(@level) {
   @color: "level-@{level}-color";
 
-  .hazard-types-list li {
-    &.@{level} {
-      .hazard-icon {
-        background-color: @@color;
-      }
-    }
+  .@{level} .hazard-icon {
+    background-color: @@color;
+  }
+
+  .header.@{level} {
+    border-right: 5px solid @@color;
   }
 }
 
