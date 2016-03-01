@@ -230,11 +230,18 @@ def get_pdf_report(request):
         base_path, division_code, report_id, temp=True)
 
     if path.isfile(file_name):
-        return FileResponse(
+        division_name = DBSession.query(AdministrativeDivision.name) \
+            .filter(AdministrativeDivision.code == division_code) \
+            .scalar()
+        response = FileResponse(
             file_name,
             request=request,
             content_type='application/pdf'
         )
+        response.headers['Content-Disposition'] = \
+            'attachment; filename="ThinkHazard - %s.pdf"' \
+            % str(division_name)
+        return response
     elif path.isfile(file_name_temp):
         return HTTPBadRequest('Not finished yet')
     else:

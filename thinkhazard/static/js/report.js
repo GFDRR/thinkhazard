@@ -233,7 +233,8 @@
   // status:
   // true: generating, false: finished
   function btnStatus(status) {
-    $('#download-waiter').toggleClass('hide', !status);
+    $('#download').find('.fa-spin').toggleClass('hide', !status);
+    $('#download').find('.icon-download-arrow').toggleClass('hide', status);
     $('#download').attr('disabled', status);
   }
 
