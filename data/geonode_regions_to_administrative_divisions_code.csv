@@ -1,471 +1,472 @@
-"Afghanistan",17,1
-"Albania",19,3
-"Algeria",20,4
-"American Samoa",21,5
-"Andorra",22,7
-"Angola",23,8
-"Anguilla",24,9
-"Antarctica",16,10
-"Antigua and Barbuda",25,11
-"Argentina",26,12
-"Armenia",27,13
-"Aruba",28,14
-"Australia",29,17
-"Austria",30,18
-"Azerbaijan",31,19
-"Bahamas",32,20
-"Bahrain",33,21
-"Bangladesh",34,23
-"Barbados",35,24
-"Belarus",36,26
-"Belgium",37,27
-"Belize",38,28
-"Benin",39,29
-"Bermuda",40,30
-"Bhutan",41,31
-"Bolivia",42,33
-"Bosnia and Herzegovina",43,34
-"Botswana",44,35
-"Brazil",45,37
-"British Virgin Islands",46,39
-"Brunei Darussalam",47,40
-"Bulgaria",48,41
-"Burkina Faso",49,42
-"Burundi",50,43
-"Cambodia",51,44
-"Cameroon",52,45
-"Canada",53,46
-"Cape Verde",54,47
-"Cayman Islands",55,48
-"Central African Republic",56,49
-"Chad",57,50
-"Chile",59,51
-"China",60,147295
-"Colombia",63,57
-"Comoros",64,58
-"Congo",65,59
-"Cook Islands",66,60
-"Costa Rica",67,61
-"Cote d'Ivoire",68,66
-"Croatia",69,62
-"Cuba",70,63
-"Cyprus",71,64
-"Czech Republic",72,65
-"Democratic People's Republic of Korea",73,67
-"Democratic Republic of the Congo",74,68
-"Denmark",75,69
-"Djibouti",76,70
-"Dominica",77,71
-"Dominican Republic",78,72
-"Ecuador",79,73
-"Egypt",80,40765
-"El Salvador",81,75
-"Equatorial Guinea",82,76
-"Eritrea",83,77
-"Estonia",84,78
-"Ethiopia",85,79
-"Faeroe Islands",86,82
-"Falkland Islands (Malvinas)",87,81
-"Fiji",88,83
-"Finland",89,84
-"France",90,85
-"French Guiana",91,86
-"French Polynesia",92,87
-"Gabon",93,89
-"Gambia",94,90
-"Gaza Strip",175,91
-"Georgia",95,92
-"Germany",96,93
-"Ghana",97,94
-"Gibraltar",98,95
-"Greece",99,97
-"Greenland",100,98
-"Grenada",101,99
-"Guadeloupe",102,100
-"Guam",103,101
-"Guatemala",104,103
-"Guernsey",105,104
-"Guinea",106,106
-"Guinea-Bissau",107,105
-"Guyana",108,107
-"Haiti",109,108
-"Holy See",110,110
-"Honduras",111,111
-"Hong Kong",61,33364
-"Hungary",112,113
-"Iceland",113,114
-"India",114,115
-"Indonesia",115,116
-"Iran  (Islamic Republic of)",116,117
-"Iraq",117,118
-"Ireland",118,119
-"Isle of Man",119,120
-"Israel",120,121
-"Italy",121,122
-"Jamaica",122,123
-"Japan",123,126
-"Jersey",124,128
-"Jordan",125,130
-"Kazakhstan",126,132
-"Kenya",127,133
-"Kiribati",128,135
-"Kuwait",129,137
-"Kyrgyzstan",130,138
-"Lao People's Democratic Republic",131,139
-"Latvia",132,140
-"Lebanon",133,141
-"Lesotho",134,142
-"Liberia",135,144
-"Libya",136,145
-"Liechtenstein",137,146
-"Lithuania",138,147
-"Luxembourg",139,148
-"Macau",62,149
-"Macedonia",140,241
-"Madagascar",141,150
-"Malawi",142,152
-"Malaysia",143,153
-"Maldives",144,154
-"Mali",145,155
-"Malta",146,156
-"Marshall Islands",147,157
-"Martinique",148,158
-"Mauritania",149,159
-"Mauritius",150,160
-"Mayotte",151,161
-"Mexico",152,162
-"Micronesia Federated States of",153,163
-"Monaco",154,166
-"Mongolia",155,167
-"Montenegro",156,2647
-"Montserrat",157,168
-"Morocco",158,169
-"Mozambique",159,170
-"Myanmar",160,171
-"Namibia",161,172
-"Nauru",162,173
-"Nepal",163,175
-"Netherlands",164,177
-"Netherlands Antilles",165,176
-"New Caledonia",166,178
-"New Zealand",167,179
-"Nicaragua",168,180
-"Niger",169,181
-"Nigeria",170,182
-"Niue",171,183
-"Norfolk Island",172,184
-"Northern Mariana Islands",173,185
-"Norway",174,186
-"Oman",176,187
-"Pakistan",177,188
-"Palau",178,189
-"Panama",179,191
-"Papua New Guinea",180,192
-"Paraguay",181,194
-"Peru",182,195
-"Philippines",183,196
-"Pitcairn",184,197
-"Poland",185,198
-"Portugal",186,199
-"Puerto Rico",187,200
-"Qatar",188,201
-"Republic of Korea",189,202
-"Republic of Moldova",190,165
-"Reunion",191,206
-"Romania",192,203
-"Russian Federation",193,204
-"Rwanda",194,205
-"Saint Helena",195,207
-"Saint Kitts and Nevis",196,208
-"Saint Lucia",197,209
-"Saint Pierre and Miquelon",198,210
-"Saint Vincent and the Grenadines",199,211
-"Samoa",202,212
-"San Marino",203,213
-"Sao Tome and Principe",204,214
-"Saudi Arabia",205,215
-"Senegal",206,217
-"Serbia",207,2648
-"Seychelles",208,220
-"Sierra Leone",209,221
-"Singapore",210,222
-"Slovakia",211,223
-"Slovenia",212,224
-"Solomon Islands",213,225
-"Somalia",214,226
-"South Africa",215,227
-"Spain",216,229
-"Sri Lanka",217,231
-"Sudan",218,6
-"Suriname",219,233
-"Svalbard and Jan Mayen Islands",220,234
-"Swaziland",221,235
-"Sweden",222,236
-"Switzerland",223,237
-"Syrian Arab Republic",224,238
-"Tajikistan",225,239
-"Thailand",226,240
-"Timor-Leste",227,242
-"Togo",228,243
-"Tokelau",229,244
-"Tonga",230,245
-"Trinidad and Tobago",231,246
-"Tunisia",232,248
-"Turkey",233,249
-"Turkmenistan",234,250
-"Turks and Caicos Islands",235,251
-"Tuvalu",236,252
-"Uganda",237,253
-"Ukraine",238,254
-"United Arab Emirates",239,255
-"United Kingdom",240,256
-"United Republic of Tanzania",241,257
-"United States Virgin Islands",242,258
-"United States of America",243,259
-"Uruguay",244,260
-"Uzbekistan",245,261
-"Vanuatu",246,262
-"Venezuela (Bolivarian Republic of)",247,263
-"Viet Nam",248,264
-"Wallis and Futuna Islands",249,266
-"Western Sahara",250,268
-"Yemen",251,269
-"Zambia",252,270
-"Zimbabwe",253,271
-"Caribbean",255,210
-"Caribbean",255,14
-"Caribbean",255,71
-"Caribbean",255,258
-"Caribbean",255,123
-"Caribbean",255,211
-"Caribbean",255,209
-"Caribbean",255,30
-"Caribbean",255,63
-"Caribbean",255,208
-"Caribbean",255,72
-"Caribbean",255,168
-"Caribbean",255,48
-"Caribbean",255,39
-"Caribbean",255,20
-"Caribbean",255,200
-"Caribbean",255,176
-"Caribbean",255,108
-"Caribbean",255,99
-"Caribbean",255,11
-"Caribbean",255,251
-"Caribbean",255,24
-"Caribbean",255,9
-"Caribbean",255,158
-"Caribbean",255,246
-"Caribbean",255,100
-"Central Africa",257,49
-"Central Africa",257,50
-"Central Africa",257,68
-"Central Africa",257,59
-"Central America",3,103
-"Central America",3,180
-"Central America",3,191
-"Central America",3,61
-"Central America",3,75
-"Central America",3,28
-"Central America",3,111
-"Central Asia",8,250
-"Central Asia",8,239
-"Central Asia",8,1
-"Central Asia",8,261
-"Central Asia",8,132
-"Central Asia",8,138
-"East Africa",12,79
-"East Africa",12,133
-"East Africa",12,226
-"East Africa",12,160
-"East Africa",12,170
-"East Africa",12,253
-"East Africa",12,257
-"East Africa",12,220
-"East Africa",12,70
-"East Africa",12,205
-"East Africa",12,206
-"East Africa",12,43
-"East Africa",12,150
-"East Africa",12,152
-"East Africa",12,77
-"East Africa",12,161
-"East Africa",12,58
-"East Asia",258,149
-"East Asia",258,167
-"East Asia",258,147295
-"East Asia",258,202
-"East Asia",258,126
-"East Asia",258,33364
-"East Asia",258,67
-"Europe",5,104
-"Europe",5,2647
-"Europe",5,147
-"Europe",5,234
-"Europe",5,224
-"Europe",5,34
-"Europe",5,204
-"Europe",5,128
-"Europe",5,3
-"Europe",5,84
-"Europe",5,166
-"Europe",5,69
-"Europe",5,19
-"Europe",5,249
-"Europe",5,113
-"Europe",5,213
-"Europe",5,64
-"Europe",5,85
-"Europe",5,223
-"Europe",5,186
-"Europe",5,13
-"Europe",5,254
-"Europe",5,146
-"Europe",5,241
-"Europe",5,236
-"Europe",5,41
-"Europe",5,203
-"Europe",5,120
-"Europe",5,165
-"Europe",5,148
-"Europe",5,95
-"Europe",5,119
-"Europe",5,65
-"Europe",5,26
-"Europe",5,27
-"Europe",5,92
-"Europe",5,237
-"Europe",5,199
-"Europe",5,78
-"Europe",5,229
-"Europe",5,122
-"Europe",5,2648
-"Europe",5,156
-"Europe",5,177
-"Europe",5,256
-"Europe",5,110
-"Europe",5,114
-"Europe",5,18
-"Europe",5,93
-"Europe",5,198
-"Europe",5,7
-"Europe",5,140
-"Europe",5,62
-"Europe",5,82
-"Europe",5,97
-"Middle East",15,215
-"Middle East",15,137
-"Middle East",15,130
-"Middle East",15,187
-"Middle East",15,269
-"Middle East",15,255
-"Middle East",15,238
-"Middle East",15,117
-"Middle East",15,21
-"Middle East",15,201
-"Middle East",15,141
-"Middle East",15,121
-"Middle East",15,91
-"Middle East",15,118
-"North Africa",11,145
-"North Africa",11,268
-"North Africa",11,4
-"North Africa",11,169
-"North Africa",11,248
-"North Africa",11,6
-"North Africa",11,74
-"North Africa",11,40765
-"North America",2,46
-"North America",2,98
-"North America",2,259
-"North America",2,162
-"Pacific",256,83
-"Pacific",256,185
-"Pacific",256,179
-"Pacific",256,212
-"Pacific",256,184
-"Pacific",256,101
-"Pacific",256,163
-"Pacific",256,225
-"Pacific",256,262
-"Pacific",256,173
-"Pacific",256,60
-"Pacific",256,245
-"Pacific",256,178
-"Pacific",256,17
-"Pacific",256,244
-"Pacific",256,197
-"Pacific",256,5
-"Pacific",256,189
-"Pacific",256,252
-"Pacific",256,157
-"Pacific",256,87
-"Pacific",256,266
-"Pacific",256,135
-"Pacific",256,192
-"Pacific",256,183
-"South America",4,12
-"South America",4,33
-"South America",4,195
-"South America",4,81
-"South America",4,37
-"South America",4,73
-"South America",4,51
-"South America",4,263
-"South America",4,260
-"South America",4,57
-"South America",4,233
-"South America",4,107
-"South America",4,194
-"South America",4,86
-"South Asia",9,231
-"South Asia",9,154
-"South Asia",9,188
-"South Asia",9,115
-"South Asia",9,23
-"South Asia",9,31
-"South Asia",9,175
-"Southeast Asia",7,44
-"Southeast Asia",7,264
-"Southeast Asia",7,153
-"Southeast Asia",7,240
-"Southeast Asia",7,139
-"Southeast Asia",7,196
-"Southeast Asia",7,40
-"Southeast Asia",7,116
-"Southeast Asia",7,171
-"Southeast Asia",7,222
-"Southeast Asia",7,242
-"Southern Africa",14,207
-"Southern Africa",14,235
-"Southern Africa",14,142
-"Southern Africa",14,227
-"Southern Africa",14,172
-"Southern Africa",14,270
-"Southern Africa",14,271
-"Southern Africa",14,35
-"West Africa",13,214
-"West Africa",13,45
-"West Africa",13,42
-"West Africa",13,94
-"West Africa",13,47
-"West Africa",13,144
-"West Africa",13,89
-"West Africa",13,159
-"West Africa",13,66
-"West Africa",13,29
-"West Africa",13,243
-"West Africa",13,155
-"West Africa",13,8
-"West Africa",13,217
-"West Africa",13,181
-"West Africa",13,106
-"West Africa",13,182
-"West Africa",13,221
-"West Africa",13,90
-"West Africa",13,105
-"West Africa",13,76
+"Afghanistan",17,1,"Afghanistan"
+"Albania",19,3,"Albania"
+"Algeria",20,4,"Algeria"
+"American Samoa",21,5,"American Samoa"
+"Andorra",22,7,"Andorra"
+"Angola",23,8,"Angola"
+"Anguilla",24,9,"Anguilla"
+"Antarctica",16,10,"Antarctica"
+"Antigua and Barbuda",25,11,"Antigua and Barbuda"
+"Argentina",26,12,"Argentina"
+"Armenia",27,13,"Armenia"
+"Aruba",28,14,"Aruba"
+"Australia",29,17,"Australia"
+"Austria",30,18,"Austria"
+"Azerbaijan",31,19,"Azerbaijan"
+"Bahamas",32,20,"Bahamas"
+"Bahrain",33,21,"Bahrain"
+"Bangladesh",34,23,"Bangladesh"
+"Barbados",35,24,"Barbados"
+"Belarus",36,26,"Belarus"
+"Belgium",37,27,"Belgium"
+"Belize",38,28,"Belize"
+"Benin",39,29,"Benin"
+"Bermuda",40,30,"Bermuda"
+"Bhutan",41,31,"Bhutan"
+"Bolivia",42,33,"Bolivia"
+"Bosnia and Herzegovina",43,34,"Bosnia and Herzegovina"
+"Botswana",44,35,"Botswana"
+"Brazil",45,37,"Brazil"
+"British Virgin Islands",46,39,"British Virgin Islands"
+"Brunei Darussalam",47,40,"Brunei Darussalam"
+"Bulgaria",48,41,"Bulgaria"
+"Burkina Faso",49,42,"Burkina Faso"
+"Burundi",50,43,"Burundi"
+"Cambodia",51,44,"Cambodia"
+"Cameroon",52,45,"Cameroon"
+"Canada",53,46,"Canada"
+"Cape Verde",54,47,"Cape Verde"
+"Cayman Islands",55,48,"Cayman Islands"
+"Central African Republic",56,49,"Central African Republic"
+"Chad",57,50,"Chad"
+"Chile",59,51,"Chile"
+"China",60,147295,"China"
+"China - Hong Kong",61,33364,"Hong Kong"
+"China - Macao",62,149,"Macau"
+"Colombia",63,57,"Colombia"
+"Comoros",64,58,"Comoros"
+"Congo",65,59,"Congo"
+"Cook Islands",66,60,"Cook Islands"
+"Costa Rica",67,61,"Costa Rica"
+"Cote d'Ivoire",68,66,"Cote d'Ivoire"
+"Croatia",69,62,"Croatia"
+"Cuba",70,63,"Cuba"
+"Cyprus",71,64,"Cyprus"
+"Czech Republic",72,65,"Czech Republic"
+"Democratic People's Republic of Korea",73,67,"Democratic People's Republic of Korea"
+"Democratic Republic of the Congo",74,68,"Democratic Republic of the Congo"
+"Denmark",75,69,"Denmark"
+"Djibouti",76,70,"Djibouti"
+"Dominica",77,71,"Dominica"
+"Dominican Republic",78,72,"Dominican Republic"
+"Ecuador",79,73,"Ecuador"
+"Egypt",80,40765,"Egypt"
+"El Salvador",81,75,"El Salvador"
+"Equatorial Guinea",82,76,"Equatorial Guinea"
+"Eritrea",83,77,"Eritrea"
+"Estonia",84,78,"Estonia"
+"Ethiopia",85,79,"Ethiopia"
+"Faeroe Islands",86,82,"Faeroe Islands"
+"Falkland Islands (Malvinas)",87,81,"Falkland Islands (Malvinas)"
+"Fiji",88,83,"Fiji"
+"Finland",89,84,"Finland"
+"France",90,85,"France"
+"French Guiana",91,86,"French Guiana"
+"French Polynesia",92,87,"French Polynesia"
+"Gabon",93,89,"Gabon"
+"Gambia",94,90,"Gambia"
+"Georgia",95,92,"Georgia"
+"Germany",96,93,"Germany"
+"Ghana",97,94,"Ghana"
+"Gibraltar",98,95,"Gibraltar"
+"Greece",99,97,"Greece"
+"Greenland",100,98,"Greenland"
+"Grenada",101,99,"Grenada"
+"Guadeloupe",102,100,"Guadeloupe"
+"Guam",103,101,"Guam"
+"Guatemala",104,103,"Guatemala"
+"Guernsey",105,104,"Guernsey"
+"Guinea",106,106,"Guinea"
+"Guinea-Bissau",107,105,"Guinea-Bissau"
+"Guyana",108,107,"Guyana"
+"Haiti",109,108,"Haiti"
+"Honduras",111,111,"Honduras"
+"Holy See (Vatican City)",110,110,"Holy See"
+"Hungary",112,113,"Hungary"
+"Iceland",113,114,"Iceland"
+"India",114,115,"India"
+"Indonesia",115,116,"Indonesia"
+"Iran",116,117,"Iran  (Islamic Republic of)"
+"Iraq",117,118,"Iraq"
+"Ireland",118,119,"Ireland"
+"Isle of Man",119,120,"Isle of Man"
+"Israel",120,121,"Israel"
+"Italy",121,122,"Italy"
+"Jamaica",122,123,"Jamaica"
+"Japan",123,126,"Japan"
+"Jersey",124,128,"Jersey"
+"Jordan",125,130,"Jordan"
+"Kazakhstan",126,132,"Kazakhstan"
+"Kenya",127,133,"Kenya"
+"Kiribati",128,135,"Kiribati"
+"Kuwait",129,137,"Kuwait"
+"Kyrgyzstan",130,138,"Kyrgyzstan"
+"Lao People's Democratic Republic",131,139,"Lao People's Democratic Republic"
+"Latvia",132,140,"Latvia"
+"Lebanon",133,141,"Lebanon"
+"Lesotho",134,142,"Lesotho"
+"Liberia",135,144,"Liberia"
+"Libyan Arab Jamahiriya",136,145,"Libya"
+"Liechtenstein",137,146,"Liechtenstein"
+"Lithuania",138,147,"Lithuania"
+"Luxembourg",139,148,"Luxembourg"
+"Macedonia",140,241,"Macedonia"
+"Madagascar",141,150,"Madagascar"
+"Malawi",142,152,"Malawi"
+"Malaysia",143,153,"Malaysia"
+"Maldives",144,154,"Maldives"
+"Mali",145,155,"Mali"
+"Malta",146,156,"Malta"
+"Marshall Islands",147,157,"Marshall Islands"
+"Martinique",148,158,"Martinique"
+"Mauritania",149,159,"Mauritania"
+"Mauritius",150,160,"Mauritius"
+"Mayotte",151,161,"Mayotte"
+"Mexico",152,162,"Mexico"
+"Micronesia Federated States of",153,163,"Micronesia Federated States of"
+"Monaco",154,166,"Monaco"
+"Mongolia",155,167,"Mongolia"
+"Montenegro",156,2647,"Montenegro"
+"Montserrat",157,168,"Montserrat"
+"Morocco",158,169,"Morocco"
+"Mozambique",159,170,"Mozambique"
+"Myanmar",160,171,"Myanmar"
+"Namibia",161,172,"Namibia"
+"Nauru",162,173,"Nauru"
+"Nepal",163,175,"Nepal"
+"Netherlands",164,177,"Netherlands"
+"Netherlands Antilles",165,176,"Netherlands Antilles"
+"New Caledonia",166,178,"New Caledonia"
+"New Zealand",167,179,"New Zealand"
+"Nicaragua",168,180,"Nicaragua"
+"Niger",169,181,"Niger"
+"Nigeria",170,182,"Nigeria"
+"Niue",171,183,"Niue"
+"Norfolk Island",172,184,"Norfolk Island"
+"Northern Mariana Islands",173,185,"Northern Mariana Islands"
+"Norway",174,186,"Norway"
+"Occupied Palestinian Territory",175,91,"Gaza Strip"
+"Oman",176,187,"Oman"
+"Pakistan",177,188,"Pakistan"
+"Palau",178,189,"Palau"
+"Panama",179,191,"Panama"
+"Papua New Guinea",180,192,"Papua New Guinea"
+"Paraguay",181,194,"Paraguay"
+"Peru",182,195,"Peru"
+"Philippines",183,196,"Philippines"
+"Pitcairn",184,197,"Pitcairn"
+"Poland",185,198,"Poland"
+"Portugal",186,199,"Portugal"
+"Puerto Rico",187,200,"Puerto Rico"
+"Qatar",188,201,"Qatar"
+"Republic of Korea",189,202,"Republic of Korea"
+"Republic of Moldova",190,165,"Republic of Moldova"
+"Reunion",191,206,"Reunion"
+"Romania",192,203,"Romania"
+"Russian Federation",193,204,"Russian Federation"
+"Rwanda",194,205,"Rwanda"
+"Saint Helena",195,207,"Saint Helena"
+"Saint Kitts and Nevis",196,208,"Saint Kitts and Nevis"
+"Saint Lucia",197,209,"Saint Lucia"
+"Saint Pierre and Miquelon",198,210,"Saint Pierre and Miquelon"
+"Saint Vincent and the Grenadines",199,211,"Saint Vincent and the Grenadines"
+"Samoa",202,212,"Samoa"
+"San Marino",203,213,"San Marino"
+"Sao Tome and Principe",204,214,"Sao Tome and Principe"
+"Saudi Arabia",205,215,"Saudi Arabia"
+"Senegal",206,217,"Senegal"
+"Serbia",207,2648,"Serbia"
+"Seychelles",208,220,"Seychelles"
+"Sierra Leone",209,221,"Sierra Leone"
+"Singapore",210,222,"Singapore"
+"Slovakia",211,223,"Slovakia"
+"Slovenia",212,224,"Slovenia"
+"Solomon Islands",213,225,"Solomon Islands"
+"Somalia",214,226,"Somalia"
+"South Sudan",259,74,"South Sudan"
+"Spain",216,229,"Spain"
+"Sri Lanka",217,231,"Sri Lanka"
+"Sudan",218,6,"Sudan"
+"Suriname",219,233,"Suriname"
+"Svalbard and Jan Mayen Islands",220,234,"Svalbard and Jan Mayen Islands"
+"Swaziland",221,235,"Swaziland"
+"Sweden",222,236,"Sweden"
+"Switzerland",223,237,"Switzerland"
+"Syrian Arab Republic",224,238,"Syrian Arab Republic"
+"Tajikistan",225,239,"Tajikistan"
+"Thailand",226,240,"Thailand"
+"Timor-Leste",227,242,"Timor-Leste"
+"Togo",228,243,"Togo"
+"Tokelau",229,244,"Tokelau"
+"Tonga",230,245,"Tonga"
+"Trinidad and Tobago",231,246,"Trinidad and Tobago"
+"Tunisia",232,248,"Tunisia"
+"Turkey",233,249,"Turkey"
+"Turkmenistan",234,250,"Turkmenistan"
+"Turks and Caicos Islands",235,251,"Turks and Caicos Islands"
+"Tuvalu",236,252,"Tuvalu"
+"Uganda",237,253,"Uganda"
+"Ukraine",238,254,"Ukraine"
+"United Arab Emirates",239,255,"United Arab Emirates"
+"United Kingdom",240,256,"United Kingdom"
+"United Republic of Tanzania",241,257,"United Republic of Tanzania"
+"United States Virgin Islands",242,258,"United States Virgin Islands"
+"United States of America",243,259,"United States of America"
+"Uruguay",244,260,"Uruguay"
+"Uzbekistan",245,261,"Uzbekistan"
+"Vanuatu",246,262,"Vanuatu"
+"Venezuela (Bolivarian Republic of)",247,263,"Venezuela (Bolivarian Republic of)"
+"Viet Nam",248,264,"Viet Nam"
+"Wallis and Futuna Islands",249,266,"Wallis and Futuna Islands"
+"Western Sahara",250,268,"Western Sahara"
+"Yemen",251,269,"Yemen"
+"Zambia",252,270,"Zambia"
+"Zimbabwe",253,271,"Zimbabwe"
+"Caribbean",255,100,"Guadeloupe"
+"Caribbean",255,108,"Haiti"
+"Caribbean",255,11,"Antigua and Barbuda"
+"Caribbean",255,123,"Jamaica"
+"Caribbean",255,14,"Aruba"
+"Caribbean",255,158,"Martinique"
+"Caribbean",255,168,"Montserrat"
+"Caribbean",255,176,"Netherlands Antilles"
+"Caribbean",255,200,"Puerto Rico"
+"Caribbean",255,208,"Saint Kitts and Nevis"
+"Caribbean",255,209,"Saint Lucia"
+"Caribbean",255,20,"Bahamas"
+"Caribbean",255,210,"Saint Pierre and Miquelon"
+"Caribbean",255,211,"Saint Vincent and the Grenadines"
+"Caribbean",255,246,"Trinidad and Tobago"
+"Caribbean",255,24,"Barbados"
+"Caribbean",255,251,"Turks and Caicos Islands"
+"Caribbean",255,258,"United States Virgin Islands"
+"Caribbean",255,30,"Bermuda"
+"Caribbean",255,39,"British Virgin Islands"
+"Caribbean",255,48,"Cayman Islands"
+"Caribbean",255,63,"Cuba"
+"Caribbean",255,71,"Dominica"
+"Caribbean",255,72,"Dominican Republic"
+"Caribbean",255,99,"Grenada"
+"Caribbean",255,9,"Anguilla"
+"Central Africa",257,49,"Central African Republic"
+"Central Africa",257,50,"Chad"
+"Central Africa",257,59,"Congo"
+"Central Africa",257,68,"Democratic Republic of the Congo"
+"Central America",3,103,"Guatemala"
+"Central America",3,111,"Honduras"
+"Central America",3,180,"Nicaragua"
+"Central America",3,191,"Panama"
+"Central America",3,28,"Belize"
+"Central America",3,61,"Costa Rica"
+"Central America",3,75,"El Salvador"
+"Central Asia",8,132,"Kazakhstan"
+"Central Asia",8,138,"Kyrgyzstan"
+"Central Asia",8,1,"Afghanistan"
+"Central Asia",8,239,"Tajikistan"
+"Central Asia",8,250,"Turkmenistan"
+"Central Asia",8,261,"Uzbekistan"
+"East Africa",12,133,"Kenya"
+"East Africa",12,150,"Madagascar"
+"East Africa",12,152,"Malawi"
+"East Africa",12,160,"Mauritius"
+"East Africa",12,161,"Mayotte"
+"East Africa",12,170,"Mozambique"
+"East Africa",12,205,"Rwanda"
+"East Africa",12,206,"Reunion"
+"East Africa",12,220,"Seychelles"
+"East Africa",12,226,"Somalia"
+"East Africa",12,253,"Uganda"
+"East Africa",12,257,"United Republic of Tanzania"
+"East Africa",12,43,"Burundi"
+"East Africa",12,58,"Comoros"
+"East Africa",12,70,"Djibouti"
+"East Africa",12,77,"Eritrea"
+"East Africa",12,79,"Ethiopia"
+"East Asia",258,126,"Japan"
+"East Asia",258,147295,"China"
+"East Asia",258,149,"Macau"
+"East Asia",258,167,"Mongolia"
+"East Asia",258,202,"Republic of Korea"
+"East Asia",258,33364,"Hong Kong"
+"East Asia",258,67,"Democratic People's Republic of Korea"
+"Europe",5,104,"Guernsey"
+"Europe",5,110,"Holy See"
+"Europe",5,113,"Hungary"
+"Europe",5,114,"Iceland"
+"Europe",5,119,"Ireland"
+"Europe",5,120,"Isle of Man"
+"Europe",5,122,"Italy"
+"Europe",5,128,"Jersey"
+"Europe",5,13,"Armenia"
+"Europe",5,140,"Latvia"
+"Europe",5,146,"Liechtenstein"
+"Europe",5,147,"Lithuania"
+"Europe",5,148,"Luxembourg"
+"Europe",5,156,"Malta"
+"Europe",5,165,"Republic of Moldova"
+"Europe",5,166,"Monaco"
+"Europe",5,177,"Netherlands"
+"Europe",5,186,"Norway"
+"Europe",5,18,"Austria"
+"Europe",5,198,"Poland"
+"Europe",5,199,"Portugal"
+"Europe",5,19,"Azerbaijan"
+"Europe",5,203,"Romania"
+"Europe",5,204,"Russian Federation"
+"Europe",5,213,"San Marino"
+"Europe",5,223,"Slovakia"
+"Europe",5,224,"Slovenia"
+"Europe",5,229,"Spain"
+"Europe",5,234,"Svalbard and Jan Mayen Islands"
+"Europe",5,236,"Sweden"
+"Europe",5,237,"Switzerland"
+"Europe",5,241,"Macedonia"
+"Europe",5,249,"Turkey"
+"Europe",5,254,"Ukraine"
+"Europe",5,256,"United Kingdom"
+"Europe",5,2647,"Montenegro"
+"Europe",5,2648,"Serbia"
+"Europe",5,26,"Belarus"
+"Europe",5,27,"Belgium"
+"Europe",5,34,"Bosnia and Herzegovina"
+"Europe",5,3,"Albania"
+"Europe",5,41,"Bulgaria"
+"Europe",5,62,"Croatia"
+"Europe",5,64,"Cyprus"
+"Europe",5,65,"Czech Republic"
+"Europe",5,69,"Denmark"
+"Europe",5,78,"Estonia"
+"Europe",5,7,"Andorra"
+"Europe",5,82,"Faeroe Islands"
+"Europe",5,84,"Finland"
+"Europe",5,85,"France"
+"Europe",5,92,"Georgia"
+"Europe",5,93,"Germany"
+"Europe",5,95,"Gibraltar"
+"Europe",5,97,"Greece"
+"Middle East",15,117,"Iran  (Islamic Republic of)"
+"Middle East",15,118,"Iraq"
+"Middle East",15,121,"Israel"
+"Middle East",15,130,"Jordan"
+"Middle East",15,137,"Kuwait"
+"Middle East",15,141,"Lebanon"
+"Middle East",15,187,"Oman"
+"Middle East",15,201,"Qatar"
+"Middle East",15,215,"Saudi Arabia"
+"Middle East",15,21,"Bahrain"
+"Middle East",15,238,"Syrian Arab Republic"
+"Middle East",15,255,"United Arab Emirates"
+"Middle East",15,269,"Yemen"
+"Middle East",15,91,"Gaza Strip"
+"North Africa",11,145,"Libya"
+"North Africa",11,169,"Morocco"
+"North Africa",11,248,"Tunisia"
+"North Africa",11,268,"Western Sahara"
+"North Africa",11,40765,"Egypt"
+"North Africa",11,4,"Algeria"
+"North Africa",11,6,"Sudan"
+"North Africa",11,74,"South Sudan"
+"North America",2,162,"Mexico"
+"North America",2,259,"United States of America"
+"North America",2,46,"Canada"
+"North America",2,98,"Greenland"
+"Pacific",256,101,"Guam"
+"Pacific",256,135,"Kiribati"
+"Pacific",256,157,"Marshall Islands"
+"Pacific",256,163,"Micronesia Federated States of"
+"Pacific",256,173,"Nauru"
+"Pacific",256,178,"New Caledonia"
+"Pacific",256,179,"New Zealand"
+"Pacific",256,17,"Australia"
+"Pacific",256,183,"Niue"
+"Pacific",256,184,"Norfolk Island"
+"Pacific",256,185,"Northern Mariana Islands"
+"Pacific",256,189,"Palau"
+"Pacific",256,192,"Papua New Guinea"
+"Pacific",256,197,"Pitcairn"
+"Pacific",256,212,"Samoa"
+"Pacific",256,225,"Solomon Islands"
+"Pacific",256,244,"Tokelau"
+"Pacific",256,245,"Tonga"
+"Pacific",256,252,"Tuvalu"
+"Pacific",256,262,"Vanuatu"
+"Pacific",256,266,"Wallis and Futuna Islands"
+"Pacific",256,5,"American Samoa"
+"Pacific",256,60,"Cook Islands"
+"Pacific",256,83,"Fiji"
+"Pacific",256,87,"French Polynesia"
+"South America",4,107,"Guyana"
+"South America",4,12,"Argentina"
+"South America",4,194,"Paraguay"
+"South America",4,195,"Peru"
+"South America",4,233,"Suriname"
+"South America",4,260,"Uruguay"
+"South America",4,263,"Venezuela (Bolivarian Republic of)"
+"South America",4,33,"Bolivia"
+"South America",4,37,"Brazil"
+"South America",4,51,"Chile"
+"South America",4,57,"Colombia"
+"South America",4,73,"Ecuador"
+"South America",4,81,"Falkland Islands (Malvinas)"
+"South America",4,86,"French Guiana"
+"South Asia",9,115,"India"
+"South Asia",9,154,"Maldives"
+"South Asia",9,175,"Nepal"
+"South Asia",9,188,"Pakistan"
+"South Asia",9,231,"Sri Lanka"
+"South Asia",9,23,"Bangladesh"
+"South Asia",9,31,"Bhutan"
+"Southeast Asia",7,116,"Indonesia"
+"Southeast Asia",7,139,"Lao People's Democratic Republic"
+"Southeast Asia",7,153,"Malaysia"
+"Southeast Asia",7,171,"Myanmar"
+"Southeast Asia",7,196,"Philippines"
+"Southeast Asia",7,222,"Singapore"
+"Southeast Asia",7,240,"Thailand"
+"Southeast Asia",7,242,"Timor-Leste"
+"Southeast Asia",7,264,"Viet Nam"
+"Southeast Asia",7,40,"Brunei Darussalam"
+"Southeast Asia",7,44,"Cambodia"
+"Southern Africa",14,142,"Lesotho"
+"Southern Africa",14,172,"Namibia"
+"Southern Africa",14,207,"Saint Helena"
+"Southern Africa",14,227,"South Africa"
+"Southern Africa",14,235,"Swaziland"
+"Southern Africa",14,270,"Zambia"
+"Southern Africa",14,271,"Zimbabwe"
+"Southern Africa",14,35,"Botswana"
+"West Africa",13,105,"Guinea-Bissau"
+"West Africa",13,106,"Guinea"
+"West Africa",13,144,"Liberia"
+"West Africa",13,155,"Mali"
+"West Africa",13,159,"Mauritania"
+"West Africa",13,181,"Niger"
+"West Africa",13,182,"Nigeria"
+"West Africa",13,214,"Sao Tome and Principe"
+"West Africa",13,217,"Senegal"
+"West Africa",13,221,"Sierra Leone"
+"West Africa",13,243,"Togo"
+"West Africa",13,29,"Benin"
+"West Africa",13,42,"Burkina Faso"
+"West Africa",13,45,"Cameroon"
+"West Africa",13,47,"Cape Verde"
+"West Africa",13,66,"Cote d'Ivoire"
+"West Africa",13,76,"Equatorial Guinea"
+"West Africa",13,89,"Gabon"
+"West Africa",13,8,"Angola"
+"West Africa",13,90,"Gambia"
+"West Africa",13,94,"Ghana"
+"Global",1,10,"Antarctica"
 "Global",1,46,"Canada"
 "Global",1,244,"Tokelau"
 "Global",1,87,"French Polynesia"
@@ -741,3 +742,143 @@
 "Global",1,152,"Malawi"
 "Global",1,160,"Mauritius"
 "Global",1,170,"Mozambique"
+"Africa",10,214,"Sao Tome and Principe"
+"Africa",10,207,"Saint Helena"
+"Africa",10,79,"Ethiopia"
+"Africa",10,235,"Swaziland"
+"Africa",10,45,"Cameroon"
+"Africa",10,42,"Burkina Faso"
+"Africa",10,94,"Ghana"
+"Africa",10,47,"Cape Verde"
+"Africa",10,144,"Liberia"
+"Africa",10,89,"Gabon"
+"Africa",10,142,"Lesotho"
+"Africa",10,133,"Kenya"
+"Africa",10,159,"Mauritania"
+"Africa",10,226,"Somalia"
+"Africa",10,66,"Cote d'Ivoire"
+"Africa",10,29,"Benin"
+"Africa",10,145,"Libya"
+"Africa",10,243,"Togo"
+"Africa",10,268,"Western Sahara"
+"Africa",10,49,"Central African Republic"
+"Africa",10,160,"Mauritius"
+"Africa",10,155,"Mali"
+"Africa",10,8,"Angola"
+"Africa",10,50,"Chad"
+"Africa",10,227,"South Africa"
+"Africa",10,217,"Senegal"
+"Africa",10,170,"Mozambique"
+"Africa",10,253,"Uganda"
+"Africa",10,181,"Niger"
+"Africa",10,106,"Guinea"
+"Africa",10,182,"Nigeria"
+"Africa",10,4,"Algeria"
+"Africa",10,221,"Sierra Leone"
+"Africa",10,90,"Gambia"
+"Africa",10,169,"Morocco"
+"Africa",10,172,"Namibia"
+"Africa",10,105,"Guinea-Bissau"
+"Africa",10,257,"United Republic of Tanzania"
+"Africa",10,220,"Seychelles"
+"Africa",10,76,"Equatorial Guinea"
+"Africa",10,248,"Tunisia"
+"Africa",10,70,"Djibouti"
+"Africa",10,205,"Rwanda"
+"Africa",10,206,"Reunion"
+"Africa",10,43,"Burundi"
+"Africa",10,150,"Madagascar"
+"Africa",10,6,"Sudan"
+"Africa",10,68,"Democratic Republic of the Congo"
+"Africa",10,270,"Zambia"
+"Africa",10,152,"Malawi"
+"Africa",10,271,"Zimbabwe"
+"Africa",10,77,"Eritrea"
+"Africa",10,161,"Mayotte"
+"Africa",10,74,"South Sudan"
+"Africa",10,40765,"Egypt"
+"Africa",10,58,"Comoros"
+"Africa",10,59,"Congo"
+"Africa",10,35,"Botswana"
+"Asia",6,250,"Turkmenistan"
+"Asia",6,231,"Sri Lanka"
+"Asia",6,154,"Maldives"
+"Asia",6,188,"Pakistan"
+"Asia",6,44,"Cambodia"
+"Asia",6,149,"Macau"
+"Asia",6,115,"India"
+"Asia",6,239,"Tajikistan"
+"Asia",6,1,"Afghanistan"
+"Asia",6,23,"Bangladesh"
+"Asia",6,264,"Viet Nam"
+"Asia",6,167,"Mongolia"
+"Asia",6,147295,"China"
+"Asia",6,202,"Republic of Korea"
+"Asia",6,153,"Malaysia"
+"Asia",6,126,"Japan"
+"Asia",6,240,"Thailand"
+"Asia",6,33364,"Hong Kong"
+"Asia",6,139,"Lao People's Democratic Republic"
+"Asia",6,196,"Philippines"
+"Asia",6,261,"Uzbekistan"
+"Asia",6,31,"Bhutan"
+"Asia",6,175,"Nepal"
+"Asia",6,40,"Brunei Darussalam"
+"Asia",6,116,"Indonesia"
+"Asia",6,132,"Kazakhstan"
+"Asia",6,138,"Kyrgyzstan"
+"Asia",6,171,"Myanmar"
+"Asia",6,222,"Singapore"
+"Asia",6,67,"Democratic People's Republic of Korea"
+"Asia",6,242,"Timor-Leste"
+"Americas",254,46,"Canada"
+"Americas",254,210,"Saint Pierre and Miquelon"
+"Americas",254,14,"Aruba"
+"Americas",254,12,"Argentina"
+"Americas",254,33,"Bolivia"
+"Americas",254,103,"Guatemala"
+"Americas",254,71,"Dominica"
+"Americas",254,258,"United States Virgin Islands"
+"Americas",254,123,"Jamaica"
+"Americas",254,98,"Greenland"
+"Americas",254,211,"Saint Vincent and the Grenadines"
+"Americas",254,209,"Saint Lucia"
+"Americas",254,30,"Bermuda"
+"Americas",254,195,"Peru"
+"Americas",254,63,"Cuba"
+"Americas",254,259,"United States of America"
+"Americas",254,208,"Saint Kitts and Nevis"
+"Americas",254,72,"Dominican Republic"
+"Americas",254,168,"Montserrat"
+"Americas",254,48,"Cayman Islands"
+"Americas",254,39,"British Virgin Islands"
+"Americas",254,180,"Nicaragua"
+"Americas",254,81,"Falkland Islands (Malvinas)"
+"Americas",254,37,"Brazil"
+"Americas",254,191,"Panama"
+"Americas",254,61,"Costa Rica"
+"Americas",254,20,"Bahamas"
+"Americas",254,73,"Ecuador"
+"Americas",254,75,"El Salvador"
+"Americas",254,51,"Chile"
+"Americas",254,200,"Puerto Rico"
+"Americas",254,176,"Netherlands Antilles"
+"Americas",254,108,"Haiti"
+"Americas",254,28,"Belize"
+"Americas",254,99,"Grenada"
+"Americas",254,263,"Venezuela (Bolivarian Republic of)"
+"Americas",254,260,"Uruguay"
+"Americas",254,11,"Antigua and Barbuda"
+"Americas",254,57,"Colombia"
+"Americas",254,251,"Turks and Caicos Islands"
+"Americas",254,24,"Barbados"
+"Americas",254,233,"Suriname"
+"Americas",254,9,"Anguilla"
+"Americas",254,158,"Martinique"
+"Americas",254,162,"Mexico"
+"Americas",254,246,"Trinidad and Tobago"
+"Americas",254,107,"Guyana"
+"Americas",254,100,"Guadeloupe"
+"Americas",254,111,"Honduras"
+"Americas",254,194,"Paraguay"
+"Americas",254,86,"French Guiana"
