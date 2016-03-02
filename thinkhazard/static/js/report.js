@@ -113,7 +113,6 @@
     });
     map.addLayer(layer);
     source.on('addfeature', function() {
-      console.log ('addfeature');
       map.on('postcompose', function(event) {
         vectorLoaded = true;
         checkFinished();
