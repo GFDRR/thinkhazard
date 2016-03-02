@@ -6,7 +6,6 @@
 @fa-font-path: "fonts";
 
 @font-size-base: 18px;
-@font-size-small: 14px;
 @font-size-h2: ((@font-size-base * 2));
 
 @font-family-base: "Source Sans Pro" !important;
@@ -76,37 +75,19 @@ ul.horizontal li {
   }
 }
 
-.modal {
-  .logo-brgm,
-  .logo-camptocamp,
-  .logo-deltares,
-  .logo-gfdrr {
-    display: inline-block;
+.logo-gfdrr {
+  opacity: 0.7;
+  &:hover {
+    opacity: 1;
   }
+}
 
-  .logo-gfdrr {
-    height: 61px;
-    width: 200px;
-    background: url(../images/logo-gfdrr-big.png) no-repeat;
-    &:hover {
-      background-position: 0 -76px;
-    }
-  }
-  .logo-brgm {
-    height: 67px;
-    width: 173px;
-    background: url(../images/logo-brgm.png) no-repeat;
-  }
-  .logo-camptocamp {
-    height: 67px;
-    width: 170px;
-    background: url(../images/logo-camptocamp.png) no-repeat;
-  }
-  .logo-deltares {
-    height: 67px;
-    width: 132px;
-    background: url(../images/logo-deltares.png) no-repeat;
-  }
+.logo-md img {
+  height: 55px;
+}
+
+.logo-sm img {
+  height: 30px;
 }
 
 
@@ -115,9 +96,7 @@ ul.horizontal li {
  ***************/
 
 .hazard-types-list {
-  @hazard-width: 104px;
   @circle-border: 5px;
-  @icon-size: 64px;
   @border-bottom: 5px;
   margin-bottom: -(@border-bottom);
   // remove space between items in the list
@@ -159,14 +138,17 @@ ul.horizontal li {
       }
     }
     .hazard-icon {
-      font-size: @icon-size;
-      border-radius: 50px;
       position: absolute;
       top: -@icon-size / 2;
       left: (@hazard-width - @icon-size) / 2;
-      background-color: white;
     }
   }
+}
+
+.hazard-icon {
+  font-size: @icon-size;
+  border-radius: 50px;
+  background-color: white;
 }
 
 /*************

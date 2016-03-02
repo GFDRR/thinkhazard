@@ -2,7 +2,7 @@
 
 {% from 'common.jinja2' import navbar %}
 {% from 'common.jinja2' import thinkhazard_logo %}
-{% from 'common.jinja2' import gfdrr_logo %}
+{% from 'report_hazard_category.jinja2' import report_for_hazard %}
 
 {% block name %}report{% endblock %}
 
@@ -34,7 +34,13 @@ Think Hazard - {{ division.name}}
 
   <div class="jumbotron">
     <div class="container">
-      <a class="btn btn-default btn-xs pull-right" href="{{'thinkhazard:static/thor-pdf-report.pdf'|static_url}}"><i class="icon-download-arrow"></i> Download PDF</a>
+      <div class="pull-right">
+        <a class="btn btn-default btn-xs" href id="download">
+          <i class="icon-spinner fa-spin hide"></i>
+          <i class="icon-download-arrow"></i>
+          Download PDF
+        </a>
+      </div>
 
       <!-- breadcrumb -->
       <div class="breadcrumb">
@@ -79,126 +85,16 @@ Think Hazard - {{ division.name}}
 
   <div class="container {{ 'level-' + hazard_category.hazardlevel.mnemonic if hazard_category else '' }}">
     <div class="row">
-      <div class="col-md-7">
-        {% if hazard_category %}
-          <h2 class="page-header detail">
-            {{ hazard_category.hazardtype.title }}
-            <small>
-              Hazard level: <span class="level">{{ hazard_category.hazardlevel.title }}</span>
-            </small>
-          </h2>
-          {% if hazard_category.general_recommendation %}
-          <p>
-          {{ hazard_category.general_recommendation|replace("name of location", "(" + division.name + ")")|markdown }}
-          </p>
-          {% endif %}
-
-          {% if climate_change_recommendation %}
-          <p>
-            {{ climate_change_recommendation.text }}
-          </p>
-          {% endif %}
-
-          {% if recommendations %}
-          <h3>Recommendations</h3>
-          <ul class="recommendations">
-          {% for recommendation in recommendations %}
-            <li class="list-unstyled">
-              <i class="icon-list-square"></i>
-              {{ recommendation.text }}
-            </li>
-          {% endfor %}
-          </ul>
-          {% endif %}
-        {% else %}
-          <aside class="hazard-level">Hazard level</aside>
-          {% for hazard in hazards_sorted %}
-          <a href="{{ 'report'|route_url(divisioncode=division.code, hazardtype=hazard.hazardtype.mnemonic) }}" aria-controls="{{ hazard.hazardtype.title }}" class="level-{{ hazard.hazardlevel.mnemonic }} overview">
-            <h2 class="page-header">
-              {{ hazard.hazardtype.title }}
-              <small>
-                <span class="level">{{ hazard.hazardlevel.title }}</span>
-              </small>
-            </h2>
-          </a>
-          {% endfor %}
-        {% endif %}
-      </div>
-      <div class="col-md-5">
-        <div class="map-block well">
-          <div id="map" class="map">
-            {% if parents.__len__() >= 1 %}
-            <a class="btn btn-xs btn-default drillup" href="{{ 'report' | route_url(divisioncode=parents[0].code, hazardtype=hazard_category.hazardtype.mnemonic if hazard_category else '')}}">
-              <i class="btn-xs icon-zoom-out"></i>
-              Zoom out to {{ parent_division.name }}
-            </a>
-            {% endif %}
-            <div class="alert alert-dismissible zoomin-help control btn-xs">
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              Zoom in by clicking on<br> an administrative area.</div>
-            <div class="tooltip"></div>
-            <div class="attribution">
-              © <a href='https://www.mapbox.com/about/maps/'>Mapbox</a>
-              © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>
-            </div>
-          </div>
-          {% if hazard_category %}
-          <div class="caption level">
-            {{ hazard_category.hazardtype.title}} hazard level
-          </div>
-          <div class="caption location">
-            {{ division.name }}
-          </div>
-          <div class="legend">
-            <table class="table">
-              <tr>
-                <td class="level-HIG">
-                  <i class="square"></i>
-                  High
-                </td>
-                <td class="level-LOW">
-                  <i class="square"></i>
-                  Low
-                </td>
-              </tr>
-              <tr>
-                <td class="level-MED">
-                  <i class="square"></i>
-                  Medium
-                </td>
-                <td class="level-VLO">
-                  <i class="square"></i>
-                  Very low
-                </td>
-              </tr>
-            </table>
-          </div>
-
-          <div class="data-source text-center">
-            <h5>DATA SOURCE{% if sources|length > 1 %}S{% endif %}</h5>
-            {% for source in sources %}
-            <a href="{{ source.distribution_url }}">{{ source.owner_organization}}</a>
-            {% if not loop.last %},&nbsp;{% endif %}
-            {% endfor %}
-          </div>
-          {% endif %}
-        </div>
-        {% if resources and resources|length > 0 %}
-        <div class="further-resources well">
-          <h3>Further resources</h3>
-          <p>For further information the following resources could be consulted:</p>
-          <ul>
-          {% for resource in resources %}
-          <li><i class="icon-list-arrow"></i>
-            <a target="_blank" href="{{ resource.url }}">
-              {{ resource.text }}
-            </a>
-          </li>
-          {% endfor %}
-          </ul>
-        </div>
-        {% endif %}
-      </div>
+      {{ report_for_hazard(
+          division,
+          hazard_category,
+          recommendations,
+          climate_change_recommendation,
+          sources,
+          resources,
+          hazards_sorted=hazards_sorted,
+          parents=parents,
+          parent_division=parent_division) }}
     </div>
     <div class="row">
       <div class="col-md-6 col-md-offset-3">
@@ -212,7 +108,7 @@ Think Hazard - {{ division.name}}
       </div>
     </div>
     <footer class="text-center">
-      {{ gfdrr_logo() }}
+      <a href="//www.gfdrr.org/" class="logo-gfdrr logo-sm" title="Logo GFDRR" alt="Logo GFDRR"><img src="{{'thinkhazard:static/images/logo-gfdrr.svg'|static_url}}"></a>
     </footer>
   </div>
 {% endblock %}
@@ -242,6 +138,10 @@ Think Hazard - {{ division.name}}
       {% endif %}
 
       app.leveltype = {{division.leveltype_id}};
+
+      app.createPdfReportUrl = '{{ 'create_pdf_report'|route_url(divisioncode=division.code)}}'
+      app.getReportStatusUrl = '{{ 'get_report_status'|route_url(divisioncode=division.code, id=999)}}'
+      app.getPdfReportUrl = '{{ 'get_pdf_report'|route_url(divisioncode=division.code, id=999)}}'
     </script>
 {% endblock %}
 

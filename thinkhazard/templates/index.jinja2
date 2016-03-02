@@ -2,7 +2,6 @@
 
 {% from 'common.jinja2' import navbar %}
 {% from 'common.jinja2' import thinkhazard_logo %}
-{% from 'common.jinja2' import gfdrr_logo %}
 
 {% block name %}index{% endblock %}
 
@@ -41,6 +40,6 @@
     </ul>
   </div>
   <footer class="text-center">
-    {{ gfdrr_logo() }}
+    <a href="//www.gfdrr.org/" class="logo-gfdrr logo-md" title="Logo GFDRR" alt="Logo GFDRR"><img src="{{'thinkhazard:static/images/logo-gfdrr.svg'|static_url}}"></a>
   </footer>
 {% endblock %}

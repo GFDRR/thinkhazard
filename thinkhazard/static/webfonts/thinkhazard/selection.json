@@ -20,12 +20,38 @@
 				"id": 73,
 				"order": 23,
 				"name": "stop",
-				"prevSize": 14,
+				"prevSize": 28,
 				"code": 61517
 			},
-			"setIdx": 1,
+			"setIdx": 2,
 			"setId": 2,
 			"iconIdx": 73
+		},
+		{
+			"icon": {
+				"paths": [
+					"M300.571 796.571q0 30.286-21.429 51.714t-51.714 21.429q-29.714 0-51.429-21.714t-21.714-51.429q0-30.286 21.429-51.714t51.714-21.429 51.714 21.429 21.429 51.714zM585.143 914.286q0 30.286-21.429 51.714t-51.714 21.429-51.714-21.429-21.429-51.714 21.429-51.714 51.714-21.429 51.714 21.429 21.429 51.714zM182.857 512q0 30.286-21.429 51.714t-51.714 21.429-51.714-21.429-21.429-51.714 21.429-51.714 51.714-21.429 51.714 21.429 21.429 51.714zM869.714 796.571q0 29.714-21.714 51.429t-51.429 21.714q-30.286 0-51.714-21.429t-21.429-51.714 21.429-51.714 51.714-21.429 51.714 21.429 21.429 51.714zM318.857 227.429q0 37.714-26.857 64.571t-64.571 26.857-64.571-26.857-26.857-64.571 26.857-64.571 64.571-26.857 64.571 26.857 26.857 64.571zM987.429 512q0 30.286-21.429 51.714t-51.714 21.429-51.714-21.429-21.429-51.714 21.429-51.714 51.714-21.429 51.714 21.429 21.429 51.714zM621.714 109.714q0 45.714-32 77.714t-77.714 32-77.714-32-32-77.714 32-77.714 77.714-32 77.714 32 32 77.714zM924.571 227.429q0 53.143-37.714 90.571t-90.286 37.429q-53.143 0-90.571-37.429t-37.429-90.571q0-52.571 37.429-90.286t90.571-37.714q52.571 0 90.286 37.714t37.714 90.286z"
+				],
+				"width": 1024.0000610351562,
+				"attrs": [],
+				"isMulticolor": false,
+				"tags": [
+					"spinner"
+				],
+				"defaultCode": 61712,
+				"grid": 14
+			},
+			"attrs": [],
+			"properties": {
+				"id": 243,
+				"order": 24,
+				"name": "spinner",
+				"prevSize": 28,
+				"code": 61712
+			},
+			"setIdx": 2,
+			"setId": 2,
+			"iconIdx": 243
 		},
 		{
 			"icon": {
@@ -54,7 +80,7 @@
 				"code": 58899,
 				"name": "zoom-out"
 			},
-			"setIdx": 2,
+			"setIdx": 3,
 			"setId": 1,
 			"iconIdx": 0
 		},
@@ -82,7 +108,7 @@
 				"code": 58888,
 				"name": "cross"
 			},
-			"setIdx": 2,
+			"setIdx": 3,
 			"setId": 1,
 			"iconIdx": 2
 		},
@@ -110,7 +136,7 @@
 				"code": 58889,
 				"name": "download-arrow"
 			},
-			"setIdx": 2,
+			"setIdx": 3,
 			"setId": 1,
 			"iconIdx": 3
 		},
@@ -138,7 +164,7 @@
 				"code": 58890,
 				"name": "house"
 			},
-			"setIdx": 2,
+			"setIdx": 3,
 			"setId": 1,
 			"iconIdx": 13
 		},
@@ -166,7 +192,7 @@
 				"code": 58891,
 				"name": "list-arrow"
 			},
-			"setIdx": 2,
+			"setIdx": 3,
 			"setId": 1,
 			"iconIdx": 14
 		},
@@ -194,7 +220,7 @@
 				"code": 58892,
 				"name": "magnifying-glass"
 			},
-			"setIdx": 2,
+			"setIdx": 3,
 			"setId": 1,
 			"iconIdx": 15
 		},
@@ -222,7 +248,7 @@
 				"code": 58893,
 				"name": "pin"
 			},
-			"setIdx": 2,
+			"setIdx": 3,
 			"setId": 1,
 			"iconIdx": 16
 		},
@@ -250,7 +276,7 @@
 				"code": 58894,
 				"name": "selector-arrow"
 			},
-			"setIdx": 2,
+			"setIdx": 3,
 			"setId": 1,
 			"iconIdx": 17
 		},
@@ -278,7 +304,7 @@
 				"code": 58895,
 				"name": "separator"
 			},
-			"setIdx": 2,
+			"setIdx": 3,
 			"setId": 1,
 			"iconIdx": 18
 		},
@@ -335,7 +361,7 @@
 				],
 				"name": "zoom-in"
 			},
-			"setIdx": 2,
+			"setIdx": 3,
 			"setId": 1,
 			"iconIdx": 19
 		},
@@ -364,7 +390,7 @@
 				"code": 59649,
 				"name": "Overview"
 			},
-			"setIdx": 3,
+			"setIdx": 4,
 			"setId": 0,
 			"iconIdx": 0
 		},
@@ -392,7 +418,7 @@
 				"code": 58880,
 				"name": "Drought"
 			},
-			"setIdx": 3,
+			"setIdx": 4,
 			"setId": 0,
 			"iconIdx": 1
 		},
@@ -420,7 +446,7 @@
 				"code": 58881,
 				"name": "Earthquake"
 			},
-			"setIdx": 3,
+			"setIdx": 4,
 			"setId": 0,
 			"iconIdx": 2
 		},
@@ -457,7 +483,7 @@
 				"code": 58882,
 				"name": "Flood"
 			},
-			"setIdx": 3,
+			"setIdx": 4,
 			"setId": 0,
 			"iconIdx": 3
 		},
@@ -506,7 +532,7 @@
 				"code": 58883,
 				"name": "Landslide"
 			},
-			"setIdx": 3,
+			"setIdx": 4,
 			"setId": 0,
 			"iconIdx": 4
 		},
@@ -546,7 +572,7 @@
 				"code": 58884,
 				"name": "StormSurge"
 			},
-			"setIdx": 3,
+			"setIdx": 4,
 			"setId": 0,
 			"iconIdx": 5
 		},
@@ -574,7 +600,7 @@
 				"code": 58885,
 				"name": "Tsunami"
 			},
-			"setIdx": 3,
+			"setIdx": 4,
 			"setId": 0,
 			"iconIdx": 6
 		},
@@ -605,7 +631,7 @@
 				"code": 58886,
 				"name": "VolcanicAsh"
 			},
-			"setIdx": 3,
+			"setIdx": 4,
 			"setId": 0,
 			"iconIdx": 7
 		},
@@ -636,7 +662,7 @@
 				"code": 58887,
 				"name": "Cyclone"
 			},
-			"setIdx": 3,
+			"setIdx": 4,
 			"setId": 0,
 			"iconIdx": 8
 		}

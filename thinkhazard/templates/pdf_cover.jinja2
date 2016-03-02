@@ -1,0 +1,59 @@
+{% from 'common.jinja2' import thinkhazard_logo %}
+
+{% macro hazard_type(hazard) %}
+<li class="{{ hazard.hazardlevel.mnemonic }} text-center">
+  <i class="fa hazard-icon icon-{{hazard.hazardtype.mnemonic|lower|replace(' ', '')}}"></i><br>
+  {{ hazard.hazardtype.title }}
+</li>
+{% endmacro %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600' rel='stylesheet' type='text/css'>
+    <link href="{{'thinkhazard:static/build/report_print.min.css'|static_url}}" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <header class="text-center">
+          {{ thinkhazard_logo() }}
+        <div class="text-muted">
+        Identify natural hazards in your project area<br>
+        and understand how to reduce their impact
+        </div>
+      </header>
+    </div>
+    <div class="container-fluid text-center">
+      <h2>
+        {{ division.name }}
+        <br>
+        <small>
+        {% for parent in parents | reverse %}
+          {{ parent.name }}
+          {% if not loop.last %},&nbsp;{% endif %}
+        {% endfor %}
+        </small>
+      </h2>
+      <div class="container-fluid text-center col-sm-8 col-sm-offset-2">
+
+        <!-- Division name -->
+
+        <ul class="hazard-types-list horizontal">
+          {% for hazard in hazards_sorted %}
+            {{ hazard_type(hazard) }}
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <div class="container text-center">
+      Report generated on {{date.strftime('%Y-%m-%d')}}
+      <br>
+      from <a href="{{'report_overview'|route_url(divisioncode=division.code)}}">{{'report_overview'|route_url(divisioncode=division.code)}}</a>
+    </div>
+  </body>
+  <script>
+    window.status = 'finished';
+  </script>
+</html>
