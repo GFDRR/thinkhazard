@@ -32,13 +32,14 @@
     height: @search-field-height;
     border: 0;
   }
-  .search-field,
-  .search-field:focus {
-    .box-shadow(0 0 0 5px rgba(0,0,0,.15));
-  }
-
 }
 .search {
+  margin-top: -10px;
+  background-color: rgba(88, 89, 91, 0.15);
+  border: 10px solid transparent;
+  border-radius: 5px;
+  // prevents errors with margin added at the bottom of form in FF
+  line-height: 0;
   .input-group-addon {
     background-color: red;
     &:after {
