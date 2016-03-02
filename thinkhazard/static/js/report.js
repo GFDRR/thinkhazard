@@ -208,7 +208,7 @@
 
   function checkPdfStatus(id) {
     var url = app.getReportStatusUrl.replace(999, id);
-    $.get(url)
+    $.get(url, {salt: new Date().getTime()})
       .done(function(data) {
         if (data.status == 'running') {
           window.setTimeout(function() {
