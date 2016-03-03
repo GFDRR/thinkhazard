@@ -121,11 +121,11 @@ def report(request):
         division_bounds = bounds_shifted
 
     feedback_params = {}
-    feedback_params['entry.1144401731'] = str(division.code) + ' - ' + \
-        division.name
+    feedback_params['entry.1144401731'] = u'{} - {}'.format(
+        division.code, division.name).encode('utf8')
     if selected_hazard is not None:
         feedback_params['entry.93444540'] = \
-            HazardType.get(selected_hazard).title
+            HazardType.get(selected_hazard).title.encode('utf8')
 
     feedback_form_url = settings['feedback_form_url'] + '?' + \
         urllib.urlencode(feedback_params)
