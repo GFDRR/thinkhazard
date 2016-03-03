@@ -12,6 +12,10 @@
       return tokens;
     },
     queryTokenizer: Bloodhound.tokenizers.whitespace,
+    identity: function(d) {
+      return d.code;
+    },
+    sufficient: 11,
     remote: {
       url: app.administrativedivisionUrl + '?q=%QUERY',
       wildcard: '%QUERY',
