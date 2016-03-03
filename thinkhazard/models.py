@@ -250,7 +250,7 @@ class AdministrativeDivision(Base):
 
     leveltype = relationship(AdminLevelType)
     parent = relationship('AdministrativeDivision', uselist=False,
-                          lazy='joined', join_depth=3,
+                          lazy='joined', join_depth=2,
                           remote_side=code)
     hazardcategories = relationship(
         'HazardCategoryAdministrativeDivisionAssociation',
