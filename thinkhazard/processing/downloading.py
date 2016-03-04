@@ -30,98 +30,101 @@ from ..models import (
     Layer,
     )
 
-from . import settings, layer_path
+from . import (
+    settings,
+    layer_path,
+    BaseProcessor,
+    )
 
 
 logger = logging.getLogger(__name__)
 geonode = settings['geonode']
 
 
-def clearall():
-    logger.info('Reset all layer to not downloaded state.')
-    DBSession.query(Layer).update({
-        Layer.downloaded: False
-    })
-    DBSession.flush()
+class Downloader(BaseProcessor):
 
+    @staticmethod
+    def argument_parser():
+        parser = BaseProcessor.argument_parser()
+        parser.add_argument(
+            '--hazardset_id', dest='hazardset_id', action='store',
+            help='The hazardset id')
+        return parser
 
-def download(hazardset_id=None, force=False, dry_run=False):
-    if force:
-        try:
-            clearall()
-            if dry_run:
+    def do_execute(self, hazardset_id=None):
+        if self.force:
+            try:
+                logger.info('Reset all layer to not downloaded state.')
+                DBSession.query(Layer).update({
+                    Layer.downloaded: False
+                })
+                DBSession.flush()
+            except:
                 transaction.abort()
-            else:
+                raise
+
+        ids = DBSession.query(Layer.geonode_id)
+
+        if not self.force:
+            ids = ids.filter(Layer.downloaded.is_(False))
+
+        if hazardset_id is not None:
+            ids = ids.filter(Layer.hazardset_id == hazardset_id)
+
+        for id in ids:
+            try:
+                self.download_layer(id)
                 transaction.commit()
-        except:
-            transaction.abort()
-            raise
-
-    geonode_ids = DBSession.query(Layer.geonode_id)
-
-    if not force:
-        geonode_ids = geonode_ids.filter(Layer.downloaded.is_(False))
-
-    if hazardset_id is not None:
-        geonode_ids = geonode_ids.filter(Layer.hazardset_id == hazardset_id)
-
-    for geonode_id in geonode_ids:
-        try:
-            download_layer(geonode_id)
-            if dry_run:
+            except Exception:
                 transaction.abort()
+                logger.error(traceback.format_exc())
+
+    def download_layer(self, id):
+        layer = DBSession.query(Layer).get(id)
+        if layer is None:
+            raise Exception('Layer {} does not exist.'.format(id))
+
+        logger.info('Downloading layer {}'.format(layer.name()))
+
+        path = layer_path(layer)
+
+        dir_path = os.path.dirname(path)
+        if not os.path.exists(dir_path):
+            os.makedirs(dir_path)
+
+        # If file is obsolete, unlink
+        if os.path.isfile(path):
+            cache_mtime = datetime.fromtimestamp(os.path.getmtime(path))
+            if layer.data_lastupdated_date > cache_mtime:
+                logger.debug('  File {} considered as obsolete {} > {}'
+                             .format(layer.filename(),
+                                     layer.data_lastupdated_date,
+                                     cache_mtime))
+                os.unlink(path)
             else:
-                transaction.commit()
-        except Exception:
-            transaction.abort()
-            logger.error(traceback.format_exc())
+                logger.info('  File {} found in cache'
+                            .format(layer.filename()))
 
+        # If file not in cache, download it
+        if not os.path.isfile(path):
+            h = Http()
+            url = urlunsplit((geonode['scheme'],
+                              geonode['netloc'],
+                              layer.download_url,
+                              '',
+                              ''))
+            logger.info('  Retrieving {}'.format(url))
+            response, content = h.request(url)
 
-def download_layer(geonode_id):
-    layer = DBSession.query(Layer).get(geonode_id)
-    if layer is None:
-        raise Exception('Layer {} does not exist.'.format(geonode_id))
+            logger.info('  Saving to {}'.format(path))
+            try:
+                with open(path, 'wb') as f:
+                    f.write(content)
+            except EnvironmentError:
+                logger.error('  Writing data from layer {} failed'.format(
+                    layer.name()))
+                logger.error(traceback.format_exc())
 
-    logger.info('Downloading layer {}'.format(layer.name()))
+        layer.downloaded = os.path.isfile(path)
 
-    path = layer_path(layer)
-
-    dir_path = os.path.dirname(path)
-    if not os.path.exists(dir_path):
-        os.makedirs(dir_path)
-
-    # If file is obsolete, unlink
-    if os.path.isfile(path):
-        cache_mtime = datetime.fromtimestamp(os.path.getmtime(path))
-        if layer.data_lastupdated_date > cache_mtime:
-            logger.debug('  File {} considered as obsolete {} > {}'
-                         .format(layer.filename(),
-                                 layer.data_lastupdated_date,
-                                 cache_mtime))
-            os.unlink(path)
-        else:
-            logger.info('  File {} found in cache'.format(layer.filename()))
-
-    # If file not in cache, download it
-    if not os.path.isfile(path):
-        h = Http()
-        url = urlunsplit((geonode['scheme'],
-                          geonode['netloc'],
-                          layer.download_url,
-                          '',
-                          ''))
-        logger.info('  Retrieving {}'.format(url))
-        response, content = h.request(url)
-
-        logger.info('  Saving to {}'.format(path))
-        try:
-            with open(path, 'wb') as f:
-                f.write(content)
-        except EnvironmentError:
-            logger.error('  Writing data from layer {} failed'.format(
-                layer.name()))
-            logger.error(traceback.format_exc())
-
-    layer.downloaded = os.path.isfile(path)
-
-    DBSession.flush()
+        DBSession.flush()

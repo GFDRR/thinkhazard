@@ -77,7 +77,7 @@ setup(name='thinkhazard',
       import_further_resources = \
           thinkhazard.scripts.import_further_resources:main
       harvest = thinkhazard.processing.harvesting:Harvester.run
-      download = thinkhazard.scripts.download:main
+      download = thinkhazard.processing.downloading:Downloader.run
       complete = thinkhazard.scripts.complete:main
       process = thinkhazard.scripts.process:main
       decision_tree = thinkhazard.scripts.decision_tree:main
