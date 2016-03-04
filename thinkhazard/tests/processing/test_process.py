@@ -19,7 +19,6 @@
 
 import unittest
 import transaction
-import logging
 from datetime import datetime
 from shapely.geometry import (
     MultiPolygon,
@@ -43,11 +42,8 @@ from ...models import (
     )
 
 from ...processing import settings
-from ...processing.processing import process
+from ...processing.processing import Processor
 from common import new_geonode_id
-
-
-logging.getLogger(process.__module__).setLevel(logging.WARN)
 
 
 preprocessed_type = u'VA'
@@ -100,7 +96,7 @@ class TestProcess(unittest.TestCase):
             global_reader(),
             global_reader()
         ]
-        process(hazardset_id='notpreprocessed')
+        Processor().execute(hazardset_id='notpreprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output, None)
 
@@ -113,7 +109,7 @@ class TestProcess(unittest.TestCase):
             global_reader(),
             global_reader()
         ]
-        process(hazardset_id='notpreprocessed')
+        Processor().execute(hazardset_id='notpreprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, 'VLO')
 
@@ -126,7 +122,7 @@ class TestProcess(unittest.TestCase):
             global_reader(100.0),
             global_reader(),
         ]
-        process(hazardset_id='notpreprocessed')
+        Processor().execute(hazardset_id='notpreprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, u'LOW')
 
@@ -139,7 +135,7 @@ class TestProcess(unittest.TestCase):
             global_reader(),
             global_reader(),
         ]
-        process(hazardset_id='notpreprocessed')
+        Processor().execute(hazardset_id='notpreprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, u'MED')
 
@@ -152,7 +148,7 @@ class TestProcess(unittest.TestCase):
             global_reader(),
             global_reader()
         ]
-        process(hazardset_id='notpreprocessed')
+        Processor().execute(hazardset_id='notpreprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, u'HIG')
 
@@ -165,7 +161,7 @@ class TestProcess(unittest.TestCase):
             global_reader(),
             global_reader(100.0)
         ]
-        process(hazardset_id='notpreprocessed')
+        Processor().execute(hazardset_id='notpreprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output, None)
 
@@ -175,7 +171,7 @@ class TestProcess(unittest.TestCase):
         open_mock.side_effect = [
             global_reader(),
         ]
-        process(hazardset_id='preprocessed')
+        Processor().execute(hazardset_id='preprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output, None)
 
@@ -187,7 +183,7 @@ class TestProcess(unittest.TestCase):
         open_mock.side_effect = [
             global_reader(hazardtype_settings['values']['VLO'][0]),
         ]
-        process(hazardset_id='preprocessed')
+        Processor().execute(hazardset_id='preprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, u'VLO')
 
@@ -199,7 +195,7 @@ class TestProcess(unittest.TestCase):
         open_mock.side_effect = [
             global_reader(hazardtype_settings['values']['VLO'][0]),
         ]
-        process(hazardset_id='preprocessed')
+        Processor().execute(hazardset_id='preprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, u'VLO')
 
@@ -211,7 +207,7 @@ class TestProcess(unittest.TestCase):
         open_mock.side_effect = [
             global_reader(hazardtype_settings['values']['MED'][0]),
         ]
-        process(hazardset_id='preprocessed')
+        Processor().execute(hazardset_id='preprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, u'MED')
 
@@ -223,7 +219,7 @@ class TestProcess(unittest.TestCase):
         open_mock.side_effect = [
             global_reader(hazardtype_settings['values']['HIG'][0]),
         ]
-        process(hazardset_id='preprocessed')
+        Processor().execute(hazardset_id='preprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, u'HIG')
 

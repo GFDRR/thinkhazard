@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
+import sys
+import argparse
 import os
 import yaml
 import logging
@@ -24,7 +26,10 @@ import colorlog
 from pyramid.paster import (
     get_appsettings,
     )
+from sqlalchemy import engine_from_config
+
 from .. import load_local_settings
+from ..models import DBSession
 
 
 logger = colorlog.getLogger(__name__)
@@ -41,8 +46,6 @@ formatter = colorlog.ColoredFormatter(
         'CRITICAL': 'red,bg_white'})
 ch.setFormatter(formatter)
 logger.addHandler(ch)
-
-logger.setLevel(logging.DEBUG)
 
 
 def load_settings():
@@ -66,3 +69,53 @@ def layer_path(layer):
     return os.path.join(settings['data_path'],
                         'hazardsets',
                         layer.filename())
+
+
+class BaseProcessor():
+
+    @classmethod
+    def run(cls, argv=sys.argv):
+        parser = cls.argument_parser()
+        args = parser.parse_args(argv[1:])
+
+        engine = engine_from_config(settings, 'sqlalchemy.')
+        DBSession.configure(bind=engine)
+
+        processor = cls()
+        processor.execute(**vars(args))
+
+    @staticmethod
+    def argument_parser():
+        parser = argparse.ArgumentParser()
+        parser.add_argument(
+            '-f', '--force', dest='force',
+            action='store_const', const=True, default=False,
+            help='Force execution even if layer metadata have already \
+                  been fetched')
+        parser.add_argument(
+            '--dry-run', dest='dry_run',
+            action='store_const', const=True, default=False,
+            help='Perform a trial run that does not commit changes')
+        parser.add_argument(
+            '-v', '--verbose', dest='verbose',
+            action='store_const', const=True, default=False,
+            help='Increase verbosity')
+        return parser
+
+    def execute(self, dry_run=False, force=False, verbose=False, **kwargs):
+        self.dry_run = dry_run
+        self.force = force
+        if verbose:
+            logger.setLevel(logging.DEBUG)
+        else:
+            logger.setLevel(logging.WARNING)
+
+        if dry_run:
+            connection = DBSession.bind.connect()
+            trans = connection.begin()
+
+        self.do_execute(**kwargs)
+
+        if dry_run:
+            logger.info(u'Dry run : rolling back transaction')
+            trans.rollback()

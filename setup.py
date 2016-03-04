@@ -76,10 +76,10 @@ setup(name='thinkhazard',
           thinkhazard.scripts.import:import_recommendations
       import_further_resources = \
           thinkhazard.scripts.import_further_resources:main
-      harvest = thinkhazard.scripts.harvest:main
-      download = thinkhazard.scripts.download:main
-      complete = thinkhazard.scripts.complete:main
-      process = thinkhazard.scripts.process:main
-      decision_tree = thinkhazard.scripts.decision_tree:main
+      harvest = thinkhazard.processing.harvesting:Harvester.run
+      download = thinkhazard.processing.downloading:Downloader.run
+      complete = thinkhazard.processing.completing:Completer.run
+      process = thinkhazard.processing.processing:Processor.run
+      decision_tree = thinkhazard.processing.decisiontree:DecisionMaker.run
       """,
       )
