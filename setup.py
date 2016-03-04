@@ -79,7 +79,7 @@ setup(name='thinkhazard',
       harvest = thinkhazard.processing.harvesting:Harvester.run
       download = thinkhazard.processing.downloading:Downloader.run
       complete = thinkhazard.processing.completing:Completer.run
-      process = thinkhazard.scripts.process:main
+      process = thinkhazard.processing.processing:Processor.run
       decision_tree = thinkhazard.scripts.decision_tree:main
       """,
       )
