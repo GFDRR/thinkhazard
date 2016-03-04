@@ -35,10 +35,10 @@ def administrativedivision(request):
     term = request.params['q']
 
     query = DBSession.query(AdministrativeDivision) \
-        .filter(AdministrativeDivision.name.ilike('%{}%'.format(term))) \
+        .filter(AdministrativeDivision.name.ilike(u'%{}%'.format(term))) \
         .order_by(
-            AdministrativeDivision.name.ilike('{}'.format(term)).desc(),
-            AdministrativeDivision.name.ilike('{}%'.format(term)).desc(),
+            AdministrativeDivision.name.ilike(term).desc(),
+            AdministrativeDivision.name.ilike(u'{}%'.format(term)).desc(),
             AdministrativeDivision.leveltype_id,
             AdministrativeDivision.name) \
         .limit(10)
