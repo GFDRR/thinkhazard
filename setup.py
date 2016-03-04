@@ -80,6 +80,6 @@ setup(name='thinkhazard',
       download = thinkhazard.processing.downloading:Downloader.run
       complete = thinkhazard.processing.completing:Completer.run
       process = thinkhazard.processing.processing:Processor.run
-      decision_tree = thinkhazard.scripts.decision_tree:main
+      decision_tree = thinkhazard.processing.decisiontree:DecisionMaker.run
       """,
       )

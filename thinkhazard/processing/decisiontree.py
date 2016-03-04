@@ -17,31 +17,39 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
 from ..models import (
     DBSession,
     AdminLevelType,
     )
 
+from . import BaseProcessor
 
-def apply_decision_tree(dry_run=False):
-    connection = DBSession.bind.connect()
-    trans = connection.begin()
-    try:
-        print "Purging previous relations"
-        connection.execute(clearall_query())
-        print "Calculating level REG"
-        connection.execute(level_reg_query())
-        print "Upscaling to PRO"
-        connection.execute(upscaling_query(u'PRO'))
-        print "Upscaling to COU"
-        connection.execute(upscaling_query(u'COU'))
-        if dry_run:
-            trans.rollback()
-        else:
+
+logger = logging.getLogger(__name__)
+
+
+class DecisionMaker(BaseProcessor):
+
+    def do_execute(self, hazardset_id=None):
+        connection = DBSession.bind.connect()
+        trans = connection.begin()
+        try:
+            logger.info("Purging previous relations")
+            connection.execute(clearall_query())
+
+            logger.info("Calculating level REG")
+            connection.execute(level_reg_query())
+
+            logger.info("Upscaling to PRO")
+            connection.execute(upscaling_query(u'PRO'))
+
+            logger.info("Upscaling to COU")
+            connection.execute(upscaling_query(u'COU'))
+
             trans.commit()
-    except:
-        trans.rollback()
-        raise
+        except:
+            trans.rollback()
 
 
 def clearall_query():
