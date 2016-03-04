@@ -94,35 +94,35 @@ def harvest(hazard_type=None, force=False, dry_run=False):
     regions = fetch(layers_url.replace('layers', 'regions'), 'name')
 
     for region in regions:
-        if harvest_region(region):
-            try:
+        try:
+            if harvest_region(region):
                 if dry_run:
                     transaction.abort()
                 else:
                     transaction.commit()
-            except Exception as e:
-                transaction.abort()
-                logger.error(u'Region {} raises an exception :\n{}'
-                             .format(region['name'], e.message))
-                logger.error(traceback.format_exc())
+        except Exception as e:
+            transaction.abort()
+            logger.error(u'Region {} raises an exception :\n{}'
+                         .format(region['name'], e.message))
+            logger.error(traceback.format_exc())
     populate_region_administrativedivision_association(dry_run)
 
     for layer in layers:
-        if harvest_layer(layer):
-            try:
+        try:
+            if harvest_layer(layer):
                 if dry_run:
                     transaction.abort()
                 else:
                     transaction.commit()
-            except Exception as e:
-                transaction.abort()
-                logger.error(u'Layer {} raises an exception :\n{}'
-                             .format(layer['title'], e.message))
-                logger.error(traceback.format_exc())
+        except Exception as e:
+            transaction.abort()
+            logger.error(u'Layer {} raises an exception :\n{}'
+                         .format(layer['title'], e.message))
+            logger.error(traceback.format_exc())
 
     for doc in documents:
-        harvest_document(doc)
         try:
+            harvest_document(doc)
             if dry_run:
                 transaction.abort()
             else:
