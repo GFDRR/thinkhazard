@@ -2,16 +2,14 @@
 
   var engine = new Bloodhound({
     datumTokenizer: function(d) {
-      var tokens = [d.admin0];
-      if (d.admin1) {
-        tokens.push(d.admin1);
-      }
-      if (d.admin2) {
-        tokens.push(d.admin2);
-      }
-      return tokens;
+      return Bloodhound.tokenizers.whitespace(
+          d.admin2 || d.admin1 || d.admin0);
     },
     queryTokenizer: Bloodhound.tokenizers.whitespace,
+    identity: function(d) {
+      return d.code;
+    },
+    sufficient: 11,
     remote: {
       url: app.administrativedivisionUrl + '?q=%QUERY',
       wildcard: '%QUERY',
