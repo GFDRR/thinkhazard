@@ -18,6 +18,7 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+import traceback
 import httplib2
 from urllib import urlencode
 from urlparse import urlunsplit
@@ -43,17 +44,11 @@ from . import settings
 
 
 logger = logging.getLogger(__name__)
-
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(levelname)s - %(message)s')
-ch.setFormatter(formatter)
-logger.addHandler(ch)
-
-logger.setLevel(logging.DEBUG)
-
-
 geonode = settings['geonode']
+
+
+def warning(object, msg):
+    logger.warning(('{csw_type} - {id} - '+msg).format(**object))
 
 
 def clearall():
@@ -109,6 +104,7 @@ def harvest(hazard_type=None, force=False, dry_run=False):
                 transaction.abort()
                 logger.error(u'Region {} raises an exception :\n{}'
                              .format(region['name'], e.message))
+                logger.error(traceback.format_exc())
     populate_region_administrativedivision_association(dry_run)
 
     for layer in layers:
@@ -122,6 +118,7 @@ def harvest(hazard_type=None, force=False, dry_run=False):
                 transaction.abort()
                 logger.error(u'Layer {} raises an exception :\n{}'
                              .format(layer['title'], e.message))
+                logger.error(traceback.format_exc())
 
     for doc in documents:
         harvest_document(doc)
@@ -134,19 +131,17 @@ def harvest(hazard_type=None, force=False, dry_run=False):
             transaction.abort()
             logger.error(u'Document {} raises an exception :\n{}'
                          .format(doc['title'], e.message))
+            logger.error(traceback.format_exc())
 
 
 def check_hazard_type(object):
-    title = object['title']
     hazard_type = object['hazard_type']
-
     if not hazard_type:
-        logger.warning(u'{} - hazard_type is empty'.format(title))
+        warning(object, 'hazard_type is empty')
         return False
     hazardtype = hazardtype_from_geonode(hazard_type)
     if hazardtype is None:
-        logger.warning(u'{} - hazard_type not supported: {}'
-                       .format(title, hazard_type))
+        warning(object, 'hazard_type not supported: {hazard_type}')
     return hazardtype
 
 
@@ -163,19 +158,23 @@ def collect_hazard_types(object):
         hazard_types = [primary_type]
         more = object['supplemental_information']
         if more == u'No information provided':
-            logger.info(u'{} - supplemental_information is empty'
-                        .format(object['title']))
+            logger.info(u'  Supplemental_information is empty')
         else:
             # we assume the form:
             # "drought, river_flood, tsunami, coastal_flood, strong_wind"
-            logger.info(u'{} - supplemental_information is {}'
-                        .format(object['title'], more))
+            logger.info(u'  Supplemental_information is {}'.format(more))
             types = more.split(', ')
             for type in types:
-                object['hazard_type'] = type
-                hazardtype = check_hazard_type(object)
-                if hazardtype:
-                    hazard_types.append(hazardtype)
+                if type != '':
+                    tmp_object = {
+                        'csw_type': object['csw_type'],
+                        'id': object['id'],
+                        'title': object['title'],
+                        'hazard_type': type
+                    }
+                    hazardtype = check_hazard_type(tmp_object)
+                    if hazardtype:
+                        hazard_types.append(hazardtype)
         return hazard_types
     else:
         return [primary_type]
@@ -222,6 +221,7 @@ def populate_region_administrativedivision_association(dry_run=False):
 
 
 def harvest_region(object):
+    logger.info(u'Harvesting region {id} - {name_en}'.format(**object))
     name = object['name_en']
     id = object['id']
 
@@ -232,9 +232,9 @@ def harvest_region(object):
     if region is None:
         region = Region()
         region.id = id
-        logger.info(u'Creating new Region - {}'.format(name))
+        logger.info(u'  Creating new Region - {}'.format(name))
     else:
-        logger.info(u'Updating Region - {}'.format(name))
+        logger.info(u'  Updating Region - {}'.format(name))
         # drop existing relationships with GAUL administrative divisions
         for ad in region.administrativedivisions:
             region.administrativedivisions.remove(ad)
@@ -246,15 +246,17 @@ def harvest_region(object):
 
 
 def harvest_document(object):
+    logger.info(u'Harvesting document {id} - {title}'.format(**object))
     title = object['title']
     id = object['id']
+
     # we need to retrieve more information on this document
     # since the regions array is not advertised by the main
     # regions listing from GeoNode
     doc_url = urlunsplit((geonode['scheme'],
                           geonode['netloc'],
                           'api/documents/{}/'.format(id), '', ''))
-    logger.info(u'Retrieving {}'.format(doc_url))
+    logger.info(u'  Retrieving {}'.format(doc_url))
     h = httplib2.Http()
     response, content = h.request(doc_url)
     o = json.loads(content)
@@ -278,9 +280,9 @@ def harvest_document(object):
     if furtherresource is None:
         furtherresource = FurtherResource()
         furtherresource.id = id
-        logger.info(u'Creating new FurtherResource - {}'.format(title))
+        logger.info(u'  Creating new FurtherResource')
     else:
-        logger.info(u'Updating FurtherResource - {}'.format(title))
+        logger.info(u'  Updating FurtherResource')
         # drop existing relationships
         assocs = DBSession.query(HazardTypeFurtherResourceAssociation) \
             .filter(HazardTypeFurtherResourceAssociation
@@ -294,8 +296,8 @@ def harvest_document(object):
             association = HazardTypeFurtherResourceAssociation()
             association.hazardtype = type
             association.region = region
-            logger.info(u'Document {} linked with Region {} for HazardType {}'
-                        .format(id, region.id, type.mnemonic))
+            logger.info(u'  Linked with Region {} for HazardType {}'
+                        .format(region.name, type.mnemonic))
             furtherresource.hazardtype_associations.append(association)
 
     DBSession.add(furtherresource)
@@ -303,11 +305,12 @@ def harvest_document(object):
 
 
 def harvest_layer(object):
+    logger.info(u'Harvesting layer {id} - {title}'.format(**object))
     title = object['title']
 
     hazardset_id = object['hazard_set']
     if not hazardset_id:
-        logger.info(u'{} - hazard_set is empty'.format(title))
+        logger.info(u'  hazard_set is empty')
         return False
 
     hazardtype = check_hazard_type(object)
@@ -324,7 +327,7 @@ def harvest_layer(object):
         hazardlevel = None
         hazard_unit = None
         if object['hazard_period']:
-            logger.info(u'{} - Has a return period'.format(title))
+            logger.info(u'  return period found for preprocessed hazardset')
             return False
         hazard_period = None
     else:
@@ -346,47 +349,45 @@ def harvest_layer(object):
             mask = True
 
         if hazardlevel is None and not mask:
-            logger.info(u'{} - No corresponding hazard_level'.format(title))
+            logger.info(u'  No corresponding hazard_level')
             return False
 
         hazard_unit = object['hazard_unit']
         if hazard_unit == '':
-            logger.info(u'{} -  hazard_unit is empty'.format(title))
+            logger.info(u'  hazard_unit is empty')
             return False
 
     if object['srid'] != 'EPSG:4326':
-        logger.info(u'{} - srid is different from "EPSG:4326"'
-                    .format(title))
+        logger.info(u'  srid is different from "EPSG:4326"')
         return False
 
     data_update_date = parse_date(object['data_update_date'])
     if not data_update_date:
-        logger.warning('{} - data_update_date is empty'.format(title))
+        warning(object, 'data_update_date is empty')
         # We use a very old date for good comparison in decision tree
         data_update_date = datetime.fromtimestamp(0)
 
     metadata_update_date = parse_date(object['metadata_update_date'])
     if not metadata_update_date:
-        logger.warning('{} - metadata_update_date is empty'.format(title))
+        warning(object, 'metadata_update_date is empty')
         # We use a very old date for good comparison in decision tree
         metadata_update_date = datetime.fromtimestamp(0)
 
     calculation_method_quality = object['calculation_method_quality']
     if not calculation_method_quality:
-        logger.warning(u'{} - calculation_method_quality is empty'
-                       .format(title))
+        warning(object, 'calculation_method_quality is empty')
         return False
     calculation_method_quality = int(float(calculation_method_quality))
 
     scientific_quality = object['scientific_quality']
     if not scientific_quality:
-        logger.warning(u'{} - scientific_quality is empty'.format(title))
+        warning(object, 'scientific_quality is empty')
         return False
     scientific_quality = int(float(scientific_quality))
 
     download_url = object['download_url']
     if not download_url:
-        logger.warning(u'{} - download_url is empty'.format(title))
+        warning(object, 'download_url is empty')
         return False
 
     hazardset = DBSession.query(HazardSet).get(hazardset_id)
@@ -402,19 +403,19 @@ def harvest_layer(object):
     layer = layer.first()
     if layer is not None:
         if hazard_period > layer.return_period:
-            logger.info('{} - Superseded by shorter return period {}'
-                        .format(title, layer.return_period))
+            logger.info('  Superseded by shorter return period {}'
+                        .format(layer.return_period))
             return False
-        logger.info('{} - Supersede longer return period {}'
-                    .format(title, layer.return_period))
+        logger.info('  Supersede longer return period {}'
+                    .format(layer.return_period))
         DBSession.delete(layer)
         hazardset.complete = False
         hazardset.processed = False
 
     # Create hazardset before layer
     if hazardset is None:
-        logger.info('{} - Create new hazardset {}'
-                    .format(title, hazardset_id))
+        logger.info('  Create new hazardset {}'
+                    .format(hazardset_id))
         hazardset = HazardSet()
         hazardset.id = hazardset_id
         hazardset.hazardtype = hazardtype
@@ -428,7 +429,7 @@ def harvest_layer(object):
 
     layer = DBSession.query(Layer).get(object['id'])
     if layer is None:
-        logger.info('{} - Create new Layer {}'.format(title, title))
+        logger.info('  Create new Layer {}'.format(title))
         layer = Layer()
         layer.geonode_id = object['id']
         DBSession.add(layer)
@@ -439,7 +440,7 @@ def harvest_layer(object):
         # If data has changed
         if (layer.data_lastupdated_date != data_update_date or
                 layer.download_url != download_url):
-            logger.info('{} - Invalidate downloaded'.format(title))
+            logger.info('  Invalidate downloaded')
             layer.downloaded = False
             hazardset.completed = False
             hazardset.processed = False
@@ -449,12 +450,12 @@ def harvest_layer(object):
                 layer.scientific_quality != scientific_quality or
                 layer.data_lastupdated_date != data_update_date or
                 layer.metadata_lastupdated_date != metadata_update_date):
-            logger.info('{} - Invalidate completed'.format(title))
+            logger.info('  Invalidate completed')
             hazardset.completed = False
 
         # Some fields invalidate outputs
         if (layer.hazardunit != hazard_unit):
-            logger.info('{} - Invalidate processed'.format(title))
+            logger.info('  Invalidate processed')
             hazardset.processed = False
 
     layer.hazardset = hazardset

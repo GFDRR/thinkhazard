@@ -34,16 +34,6 @@ from . import settings, layer_path
 
 
 logger = logging.getLogger(__name__)
-
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(levelname)s - %(message)s')
-ch.setFormatter(formatter)
-logger.addHandler(ch)
-
-logger.setLevel(logging.DEBUG)
-
-
 geonode = settings['geonode']
 
 

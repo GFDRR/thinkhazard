@@ -19,10 +19,30 @@
 
 import os
 import yaml
+import logging
+import colorlog
 from pyramid.paster import (
     get_appsettings,
     )
 from .. import load_local_settings
+
+
+logger = colorlog.getLogger(__name__)
+
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+formatter = colorlog.ColoredFormatter(
+    '%(log_color)s%(levelname)-8s %(message)s',
+    log_colors={
+        'DEBUG': 'cyan',
+        'INFO': 'green',
+        'WARNING': 'yellow',
+        'ERROR': 'red',
+        'CRITICAL': 'red,bg_white'})
+ch.setFormatter(formatter)
+logger.addHandler(ch)
+
+logger.setLevel(logging.DEBUG)
 
 
 def load_settings():

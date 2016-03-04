@@ -18,6 +18,7 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+import traceback
 import transaction
 from sqlalchemy import func
 
@@ -31,14 +32,6 @@ from ..processing import settings
 
 
 logger = logging.getLogger(__name__)
-
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(levelname)s - %(message)s')
-ch.setFormatter(formatter)
-logger.addHandler(ch)
-
-logger.setLevel(logging.DEBUG)
 
 
 def clearall():
@@ -67,12 +60,11 @@ def complete(hazardset_id=None, force=False, dry_run=False):
     if hazardset_id is not None:
         ids = ids.filter(HazardSet.id == hazardset_id)
     for id in ids:
-        logger.info('  Working on hazardset {}'.format(id[0]))
         try:
             if not complete_hazardset(id[0]):
                 hazardset = DBSession.query(HazardSet).get(id)
                 if hazardset.processed:
-                    logger.info('Deleting {} previous outputs related \
+                    logger.info('  Deleting {} previous outputs related \
                                 to this hazardset'.format(
                                 hazardset.outputs.count()))
                     hazardset.outputs.delete()
@@ -80,12 +72,13 @@ def complete(hazardset_id=None, force=False, dry_run=False):
                 transaction.abort()
             else:
                 transaction.commit()
-        except Exception as e:
+        except Exception:
             transaction.abort()
-            logger.error(e.message)
+            logger.error(traceback.format_exc())
 
 
 def complete_hazardset(hazardset_id, dry_run=False):
+    logger.info('Completing hazardset {}'.format(hazardset_id))
     hazardset = DBSession.query(HazardSet).get(hazardset_id)
     if hazardset is None:
         raise Exception('Hazardset {} does not exist.'
