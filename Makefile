@@ -4,6 +4,7 @@ PY_FILES = $(shell find thinkhazard -type f -name '*.py' 2> /dev/null)
 INSTANCEID ?= main
 AUTHUSERFILE ?= /var/www/vhosts/wb-thinkhazard/conf/.htpasswd
 DATA ?= world
+INI_FILE ?= development.ini
 
 .PHONY: all
 all: help
@@ -64,18 +65,18 @@ reinit_all: initdb_force import_admindivs import_recommendations harvest downloa
 
 .PHONY: initdb
 initdb:
-	.build/venv/bin/initialize_thinkhazard_db development.ini
+	.build/venv/bin/initialize_thinkhazard_db $(INI_FILE)
 
 .PHONY: initdb_force
 initdb_force:
-	.build/venv/bin/initialize_thinkhazard_db development.ini --force=1
+	.build/venv/bin/initialize_thinkhazard_db $(INI_FILE) --force=1
 
 .PHONY: import_admindivs
 import_admindivs: .build/requirements.timestamp \
 		/tmp/thinkhazard/admindiv/$(DATA)/g2015_2014_0.sql \
 		/tmp/thinkhazard/admindiv/$(DATA)/g2015_2014_1.sql \
 		/tmp/thinkhazard/admindiv/$(DATA)/g2015_2014_2.sql
-	.build/venv/bin/import_admindivs development.ini folder=/tmp/thinkhazard/admindiv/$(DATA)
+	.build/venv/bin/import_admindivs $(INI_FILE) folder=/tmp/thinkhazard/admindiv/$(DATA)
 
 /tmp/thinkhazard/admindiv/$(DATA)/%.sql: /tmp/thinkhazard/admindiv/$(DATA)/%.sql.zip
 	unzip -o $< -d /tmp/thinkhazard/admindiv/$(DATA)
@@ -86,7 +87,7 @@ import_admindivs: .build/requirements.timestamp \
 
 .PHONY: import_recommendations
 import_recommendations: .build/requirements.timestamp
-	.build/venv/bin/import_recommendations development.ini
+	.build/venv/bin/import_recommendations $(INI_FILE)
 
 .PHONY: harvest
 harvest: .build/requirements.timestamp
@@ -114,11 +115,11 @@ decisiontree: .build/requirements.timestamp
 
 .PHONY: serve
 serve: build
-	.build/venv/bin/pserve --reload development.ini
+	.build/venv/bin/pserve --reload $(INI_FILE)
 
 .PHONY: routes
 routes:
-	.build/venv/bin/proutes development.ini
+	.build/venv/bin/proutes $(INI_FILE)
 
 .PHONY: check
 check: flake8 jshint bootlint
