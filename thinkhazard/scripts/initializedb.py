@@ -65,8 +65,10 @@ def main(argv=sys.argv):
 
 def initdb(engine, drop_all=False):
     if drop_all:
-        engine.execute("DROP SCHEMA processing CASCADE;")
-        engine.execute("DROP SCHEMA datamart CASCADE;")
+        if schema_exists(engine, 'processing'):
+            engine.execute("DROP SCHEMA processing CASCADE;")
+        if schema_exists(engine, 'datamart'):
+            engine.execute("DROP SCHEMA datamart CASCADE;")
 
     if not schema_exists(engine, 'datamart'):
         engine.execute("CREATE SCHEMA datamart;")
@@ -74,8 +76,6 @@ def initdb(engine, drop_all=False):
     if not schema_exists(engine, 'processing'):
         engine.execute("CREATE SCHEMA processing;")
 
-    if drop_all:
-        Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
 
     DBSession.configure(bind=engine)
