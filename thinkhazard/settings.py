@@ -4,9 +4,10 @@ import yaml
 from pyramid.paster import get_appsettings
 
 
-def load_full_settings(config_uri, name='processingapp', options={}):
+def load_full_settings(config_uri, name='admin', options={}):
     """Load app settings, processing settings and local settings.
-    As this should mainly be used by scripts it's default to processingapp.
+    Fallback to admin app by default as this should mainly be used by admin
+    scripts.
     """
     settings = get_appsettings(config_uri,
                                name=name,

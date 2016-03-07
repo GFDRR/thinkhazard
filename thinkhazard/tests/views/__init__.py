@@ -336,6 +336,8 @@ def populate_db():
 
 class BaseTestCase(unittest.TestCase):
 
+    app_name = 'public'
+
     def setUp(self):  # NOQA
         populate_db()
 
@@ -344,7 +346,7 @@ class BaseTestCase(unittest.TestCase):
         conf_dir = os.getcwd()
         config = 'config:tests.ini'
 
-        app = loadapp(config, relative_to=conf_dir)
+        app = loadapp(config, name=self.app_name, relative_to=conf_dir)
         self.testapp = TestApp(app)
 
     def tearDown(self):  # NOQA

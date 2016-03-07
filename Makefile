@@ -27,7 +27,9 @@ help:
 	@echo "- complete                Mark complete hazardsets as such"
 	@echo "- process                 Compute hazard levels from hazardsets for administrative divisions level 2"
 	@echo "- decisiontree            Run the decision tree and perform upscaling"
-	@echo "- serve                   Run the dev server"
+	@echo "- publish                 Publish validated data on public web site"
+	@echo "- serve_public            Run the dev server (public app)"
+	@echo "- serve_admin             Run the dev server (admin app)"
 	@echo "- check                   Check the code with flake8, jshint and bootlint"
 	@echo "- modwsgi                 Create files for Apache mod_wsgi"
 	@echo "- test                    Run the unit tests"
@@ -113,9 +115,13 @@ dt: .build/requirements.timestamp
 decisiontree: .build/requirements.timestamp
 	.build/venv/bin/decision_tree
 
-.PHONY: serve
-serve: build
-	.build/venv/bin/pserve --reload $(INI_FILE)
+.PHONY: serve_public
+serve_public: build
+	.build/venv/bin/pserve --reload $(INI_FILE) --app-name=public
+
+.PHONY: serve_admin
+serve_admin: build
+	.build/venv/bin/pserve --reload $(INI_FILE) --app-name=admin
 
 .PHONY: routes
 routes:
@@ -134,11 +140,7 @@ jshint: .build/node_modules.timestamp .build/jshint.timestamp
 bootlint: .build/node_modules.timestamp .build/bootlint.timestamp
 
 .PHONY: modwsgi
-modwsgi: install \
-	     .build/thinkhazard-production.wsgi \
-	     .build/thinkhazard-development.wsgi \
-	     .build/apache-production.conf \
-	     .build/apache-development.conf
+modwsgi: .build/apache.timestamp
 
 .PHONY: test
 test: install
@@ -175,11 +177,6 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 	# remove the temporary virtualenv
 	rm -rf venv
 
-.build/thinkhazard-%.wsgi: thinkhazard.wsgi
-	mkdir -p $(dir $@)
-	sed 's#{{APP_INI_FILE}}#$(CURDIR)/$*.ini#' $< > $@
-	chmod 755 $@
-
 .build/node_modules.timestamp: package.json
 	mkdir -p $(dir $@)
 	npm install
@@ -211,11 +208,32 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 	./node_modules/.bin/bootlint $?
 	touch $@
 
+.build/apache.timestamp: \
+		.build/thinkhazard_public-production.wsgi \
+		.build/thinkhazard_public-development.wsgi \
+		.build/thinkhazard_admin-production.wsgi \
+		.build/thinkhazard_admin-development.wsgi \
+		.build/apache-production.conf \
+		.build/apache-development.conf
+	sudo apache2ctl graceful
+	touch $@
+
+.build/thinkhazard_public-%.wsgi: thinkhazard_public.wsgi
+	mkdir -p $(dir $@)
+	sed 's#{{APP_INI_FILE}}#$(CURDIR)/$*.ini#' $< > $@
+	chmod 755 $@
+
+.build/thinkhazard_admin-%.wsgi: thinkhazard_admin.wsgi
+	mkdir -p $(dir $@)
+	sed 's#{{APP_INI_FILE}}#$(CURDIR)/$*.ini#' $< > $@
+	chmod 755 $@
+
 .build/apache-%.conf: apache.conf .build/venv
 	sed -e 's#{{PYTHONPATH}}#$(shell .build/venv/bin/python -c "import sys; print(sys.path[-1])")#' \
 		-e 's#{{INSTANCEID}}#$(INSTANCEID)#g' \
 		-e 's#{{AUTHUSERFILE}}#$(AUTHUSERFILE)#g' \
-		-e 's#{{WSGISCRIPT}}#$(abspath .build/thinkhazard-$*.wsgi)#' $< > $@
+		-e 's#{{WSGISCRIPT}}#$(abspath .build/thinkhazard_public-$*.wsgi)#' \
+		-e 's#{{WSGISCRIPT_ADMIN}}#$(abspath .build/thinkhazard_admin-$*.wsgi)#' $< > $@
 
 .build/wkhtmltox:
 	curl -o- http://download.gna.org/wkhtmltopdf/0.12/0.12.3/wkhtmltox-0.12.3_linux-generic-amd64.tar.xz | tar -xvJ

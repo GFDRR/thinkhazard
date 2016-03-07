@@ -69,8 +69,8 @@ class BaseProcessor():
             '--config_uri', dest='config_uri', default='development.ini',
             help='Configuration uri. Defaults to development.ini')
         parser.add_argument(
-            '--name', dest='name', default='processingapp',
-            help='Application name. Default to processingapp')
+            '--name', dest='name', default='admin',
+            help='Application name. Default to admin app')
         parser.add_argument(
             '-f', '--force', dest='force',
             action='store_const', const=True, default=False,

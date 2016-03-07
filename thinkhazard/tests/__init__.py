@@ -23,7 +23,7 @@ from ..scripts.initializedb import initdb
 
 
 settings = load_full_settings('tests.ini',
-                              name='main')
+                              name='admin')
 
 
 def populatedb():
