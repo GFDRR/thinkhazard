@@ -82,5 +82,6 @@ setup(name='thinkhazard',
       complete = thinkhazard.processing.completing:Completer.run
       process = thinkhazard.processing.processing:Processor.run
       decision_tree = thinkhazard.processing.decisiontree:DecisionMaker.run
+      publish = thinkhazard.scripts.publish:main
       """,
       )
