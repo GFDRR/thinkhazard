@@ -15,13 +15,15 @@ from apscheduler.schedulers.background import BackgroundScheduler
 # background scheduler to run print jobs asynchronously. by default a thread
 # pool with 10 threads is used. to change the number of parallel print jobs,
 # see https://apscheduler.readthedocs.org/en/latest/userguide.html#configuring-the-scheduler  # noqa
-scheduler = BackgroundScheduler()
-scheduler.start()
+scheduler = None
 
 
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
+    global scheduler
+    scheduler = BackgroundScheduler()
+    scheduler.start()
 
     load_local_settings(settings)
 
