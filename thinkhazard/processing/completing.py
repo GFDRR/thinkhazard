@@ -28,10 +28,7 @@ from ..models import (
     Layer,
     )
 
-from ..processing import (
-    settings,
-    BaseProcessor,
-    )
+from ..processing import BaseProcessor
 
 
 logger = logging.getLogger(__name__)
@@ -87,7 +84,7 @@ class Completer(BaseProcessor):
                             .format(hazardset_id))
 
         hazardtype = hazardset.hazardtype
-        type_settings = settings['hazard_types'][hazardtype.mnemonic]
+        type_settings = self.settings['hazard_types'][hazardtype.mnemonic]
         preprocessed = 'values' in type_settings
 
         layers = []

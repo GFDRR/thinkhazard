@@ -21,14 +21,10 @@ import os
 import sys
 
 from sqlalchemy import engine_from_config
-
-from pyramid.paster import (
-    get_appsettings,
-    setup_logging,
-    )
-
+from pyramid.paster import setup_logging
 from pyramid.scripts.common import parse_vars
 
+from ..settings import load_full_settings
 from ..models import (
     Base,
     DBSession,
@@ -37,8 +33,6 @@ from ..models import (
     HazardLevel,
     HazardType,
     )
-
-from .. import load_local_settings
 
 
 def usage(argv):
@@ -54,9 +48,7 @@ def main(argv=sys.argv):
     config_uri = argv[1]
     options = parse_vars(argv[2:])
     setup_logging(config_uri)
-    settings = get_appsettings(config_uri, options=options)
-
-    load_local_settings(settings)
+    settings = load_full_settings(config_uri, options=options)
 
     engine = engine_from_config(settings, 'sqlalchemy.')
     with engine.begin() as db:

@@ -18,25 +18,15 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 from sqlalchemy import engine_from_config
-from pyramid.paster import (
-    get_appsettings,
-)
-from .. import load_local_settings
+from ..settings import load_full_settings
 from ..scripts.initializedb import initdb
 
-local_settings_path = 'local.tests.ini'
 
-# raise an error if the file doesn't exist
-with open(local_settings_path):
-    pass
+settings = load_full_settings('tests.ini',
+                              name='main')
 
 
 def populatedb():
-    settings = get_appsettings('development.ini', options={})
-
-    settings['local_settings_path'] = local_settings_path
-    load_local_settings(settings)
-
     engine = engine_from_config(settings, 'sqlalchemy.')
     initdb(engine, True)
 

@@ -40,14 +40,10 @@ from ..models import (
     HazardTypeFurtherResourceAssociation,
     )
 
-from . import (
-    settings,
-    BaseProcessor,
-    )
+from . import BaseProcessor
 
 
 logger = logging.getLogger(__name__)
-geonode = settings['geonode']
 
 region_admindiv_csv_path = \
     'data/geonode_regions_to_administrative_divisions_code.csv'
@@ -57,27 +53,6 @@ def warning(object, msg):
     logger.warning(('{csw_type} {id}: '+msg).format(**object))
 
 
-def fetch(category, params={}, order_by='title'):
-    url = urlunsplit((
-        geonode['scheme'],
-        geonode['netloc'],
-        'api/{}/'.format(category),
-        urlencode(params),
-        ''))
-    logger.info(u'Retrieving {}'.format(url))
-    h = httplib2.Http()
-    response, content = h.request(url)
-    o = json.loads(content)
-    return sorted(o['objects'], key=lambda object: object[order_by])
-
-
-def hazardtype_from_geonode(geonode_name):
-    for mnemonic, type_settings in settings['hazard_types'].iteritems():
-        if type_settings['hazard_type'] == geonode_name:
-            return HazardType.get(unicode(mnemonic))
-    return None
-
-
 def parse_date(str):
     if str is None or len(str) == 0:
         return None
@@ -85,52 +60,6 @@ def parse_date(str):
         return datetime.strptime(str, '%Y-%m-%dT%H:%M:%S.%f')
     else:
         return datetime.strptime(str, '%Y-%m-%dT%H:%M:%S')
-
-
-def check_hazard_type(object):
-    hazard_type = object['hazard_type']
-    if not hazard_type:
-        warning(object, 'hazard_type is empty')
-        return False
-    hazardtype = hazardtype_from_geonode(hazard_type)
-    if hazardtype is None:
-        warning(object, 'hazard_type not supported: {hazard_type}')
-    return hazardtype
-
-
-def collect_hazard_types(object):
-    # handle documents linked to several hazard types
-    # eg, those with:
-    #   hazard_type: "river_flood",
-    #   supplemental_information: "drought, climate_change",
-    primary_type = check_hazard_type(object)
-    if not primary_type:
-        return False
-    if object['csw_type'] == "document":
-        # supplemental information holds additional hazard types
-        hazard_types = [primary_type]
-        more = object['supplemental_information']
-        if more == u'No information provided':
-            logger.info(u'  Supplemental_information is empty')
-        else:
-            # we assume the form:
-            # "drought, river_flood, tsunami, coastal_flood, strong_wind"
-            logger.info(u'  Supplemental_information is {}'.format(more))
-            types = more.split(', ')
-            for type in types:
-                if type != '':
-                    tmp_object = {
-                        'csw_type': object['csw_type'],
-                        'id': object['id'],
-                        'title': object['title'],
-                        'hazard_type': type
-                    }
-                    hazardtype = check_hazard_type(tmp_object)
-                    if hazardtype:
-                        hazard_types.append(hazardtype)
-        return hazard_types
-    else:
-        return [primary_type]
 
 
 class Harvester(BaseProcessor):
@@ -161,6 +90,37 @@ class Harvester(BaseProcessor):
             self.harvest_documents()
         except Exception:
             logger.error(traceback.format_exc())
+
+    def fetch(self, category, params={}, order_by='title'):
+        geonode = self.settings['geonode']
+        url = urlunsplit((
+            geonode['scheme'],
+            geonode['netloc'],
+            'api/{}/'.format(category),
+            urlencode(params),
+            ''))
+        logger.info(u'Retrieving {}'.format(url))
+        h = httplib2.Http()
+        response, content = h.request(url)
+        o = json.loads(content)
+        return sorted(o['objects'], key=lambda object: object[order_by])
+
+    def hazardtype_from_geonode(self, geonode_name):
+        for mnemonic, type_settings in \
+                self.settings['hazard_types'].iteritems():
+            if type_settings['hazard_type'] == geonode_name:
+                return HazardType.get(unicode(mnemonic))
+        return None
+
+    def check_hazard_type(self, object):
+        hazard_type = object['hazard_type']
+        if not hazard_type:
+            warning(object, 'hazard_type is empty')
+            return False
+        hazardtype = self.hazardtype_from_geonode(hazard_type)
+        if hazardtype is None:
+            warning(object, 'hazard_type not supported: {hazard_type}')
+        return hazardtype
 
     def create_region_admindiv_associations(self):
         with open(region_admindiv_csv_path, 'rb') as csvfile:
@@ -201,7 +161,7 @@ class Harvester(BaseProcessor):
         DBSession.flush()
 
     def harvest_regions(self):
-        regions = fetch('regions', order_by='name')
+        regions = self.fetch('regions', order_by='name')
         for region in regions:
             try:
                 self.harvest_region(region)
@@ -237,7 +197,7 @@ class Harvester(BaseProcessor):
         DBSession.flush()
 
     def harvest_documents(self):
-        documents = fetch('documents')
+        documents = self.fetch('documents')
         for doc in documents:
             try:
                 self.harvest_document(doc)
@@ -256,6 +216,7 @@ class Harvester(BaseProcessor):
         # we need to retrieve more information on this document
         # since the regions array is not advertised by the main
         # regions listing from GeoNode
+        geonode = self.settings['geonode']
         doc_url = urlunsplit((geonode['scheme'],
                               geonode['netloc'],
                               'api/documents/{}/'.format(id), '', ''))
@@ -272,7 +233,7 @@ class Harvester(BaseProcessor):
             .filter(Region.id.in_(region_ids)) \
             .all()
 
-        hazardtypes = collect_hazard_types(object)
+        hazardtypes = self.collect_hazard_types(object)
         if not hazardtypes:
             return False
 
@@ -306,6 +267,40 @@ class Harvester(BaseProcessor):
         DBSession.add(furtherresource)
         DBSession.flush()
 
+    def collect_hazard_types(self, object):
+        # handle documents linked to several hazard types
+        # eg, those with:
+        #   hazard_type: "river_flood",
+        #   supplemental_information: "drought, climate_change",
+        primary_type = self.check_hazard_type(object)
+        if not primary_type:
+            return False
+        if object['csw_type'] == "document":
+            # supplemental information holds additional hazard types
+            hazard_types = [primary_type]
+            more = object['supplemental_information']
+            if more == u'No information provided':
+                logger.info(u'  Supplemental_information is empty')
+            else:
+                # we assume the form:
+                # "drought, river_flood, tsunami, coastal_flood, strong_wind"
+                logger.info(u'  Supplemental_information is {}'.format(more))
+                types = more.split(', ')
+                for type in types:
+                    if type != '':
+                        tmp_object = {
+                            'csw_type': object['csw_type'],
+                            'id': object['id'],
+                            'title': object['title'],
+                            'hazard_type': type
+                        }
+                        hazardtype = self.check_hazard_type(tmp_object)
+                        if hazardtype:
+                            hazard_types.append(hazardtype)
+            return hazard_types
+        else:
+            return [primary_type]
+
     def harvest_layers(self, hazard_type=None):
         if self.force:
             try:
@@ -321,7 +316,7 @@ class Harvester(BaseProcessor):
         params = {}
         if hazard_type is not None:
             params['hazard_type__in'] = hazard_type
-        layers = fetch('layers', params)
+        layers = self.fetch('layers', params)
         for layer in layers:
             try:
                 self.harvest_layer(layer)
@@ -341,11 +336,11 @@ class Harvester(BaseProcessor):
             logger.info(u'  hazard_set is empty')
             return False
 
-        hazardtype = check_hazard_type(object)
+        hazardtype = self.check_hazard_type(object)
         if not hazardtype:
             return False
 
-        type_settings = settings['hazard_types'][hazardtype.mnemonic]
+        type_settings = self.settings['hazard_types'][hazardtype.mnemonic]
         preprocessed = 'values' in type_settings
 
         local = 'GLOBAL' not in hazardset_id

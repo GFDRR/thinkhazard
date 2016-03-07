@@ -1,10 +1,13 @@
 import os
-import ConfigParser
 
 from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
 from papyrus.renderers import GeoJSON
 
+from .settings import (
+    load_processing_settings,
+    load_local_settings,
+    )
 from .models import (
     DBSession,
     Base,
@@ -25,6 +28,7 @@ def main(global_config, **settings):
     scheduler = BackgroundScheduler()
     scheduler.start()
 
+    load_processing_settings(settings)
     load_local_settings(settings)
 
     engine = engine_from_config(settings, 'sqlalchemy.')
@@ -92,17 +96,6 @@ def main(global_config, **settings):
 
     config.scan(ignore=['thinkhazard.tests'])
     return config.make_wsgi_app()
-
-
-def load_local_settings(settings):
-    """ Load local/user-specific settings.
-    """
-    local_settings_path = os.environ.get(
-        'LOCAL_SETTINGS_PATH', settings.get('local_settings_path'))
-    if local_settings_path and os.path.exists(local_settings_path):
-        config = ConfigParser.ConfigParser()
-        config.read(local_settings_path)
-        settings.update(config.items('app:main'))
 
 
 def init_pdf_archive_directory(pdf_archive_path):

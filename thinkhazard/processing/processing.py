@@ -40,11 +40,7 @@ from ..models import (
     Output,
     )
 
-from . import (
-    settings,
-    layer_path,
-    BaseProcessor,
-    )
+from . import BaseProcessor
 
 
 logger = logging.getLogger(__name__)
@@ -106,7 +102,7 @@ class Processor(BaseProcessor):
             .delete()
         DBSession.flush()
 
-        self.type_settings = settings['hazard_types'][
+        self.type_settings = self.settings['hazard_types'][
             hazardset.hazardtype.mnemonic]
 
         with rasterio.drivers():
@@ -120,7 +116,7 @@ class Processor(BaseProcessor):
                     layer = DBSession.query(Layer) \
                         .filter(Layer.hazardset_id == hazardset.id) \
                         .one()
-                    reader = rasterio.open(layer_path(layer))
+                    reader = rasterio.open(self.layer_path(layer))
 
                     self.layers[0] = layer
                     self.readers[0] = reader
@@ -132,7 +128,7 @@ class Processor(BaseProcessor):
                             .filter(Layer.hazardset_id == hazardset.id) \
                             .filter(Layer.hazardlevel_id == hazardlevel.id) \
                             .one()
-                        reader = rasterio.open(layer_path(layer))
+                        reader = rasterio.open(self.layer_path(layer))
 
                         self.layers[level] = layer
                         self.readers[level] = reader
@@ -141,7 +137,7 @@ class Processor(BaseProcessor):
                             .filter(Layer.hazardset_id == hazardset.id) \
                             .filter(Layer.mask.is_(True)) \
                             .one()
-                        reader = rasterio.open(layer_path(layer))
+                        reader = rasterio.open(self.layer_path(layer))
                         self.layers['mask'] = layer
                         self.readers['mask'] = reader
 
@@ -300,10 +296,10 @@ class Processor(BaseProcessor):
             layer = self.layers[level]
             reader = self.readers[level]
 
-            threshold = get_threshold(hazardtype,
-                                      layer.local,
-                                      layer.hazardlevel.mnemonic,
-                                      layer.hazardunit)
+            threshold = self.get_threshold(hazardtype,
+                                           layer.local,
+                                           layer.hazardlevel.mnemonic,
+                                           layer.hazardunit)
             if threshold is None:
                 raise ProcessException(
                     'No threshold found for {} {} {} {}'
@@ -391,23 +387,22 @@ class Processor(BaseProcessor):
 
         return hazardlevel
 
+    def get_threshold(self, hazardtype, local, level, unit):
+        mysettings = self.settings['hazard_types'][hazardtype]['thresholds']
+        while type(mysettings) is dict:
+            if 'local' in mysettings.keys():
+                mysettings = mysettings['local' if local else 'global']
+            elif 'HIG' in mysettings.keys():
+                mysettings = mysettings[level]
+            elif unit in mysettings.keys():
+                mysettings = mysettings[unit]
+            else:
+                return None
+        return float(mysettings)
+
 
 def polygon_from_boundingbox(boundingbox):
     return box(boundingbox[0],
                boundingbox[1],
                boundingbox[2],
                boundingbox[3])
-
-
-def get_threshold(hazardtype, local, level, unit):
-    mysettings = settings['hazard_types'][hazardtype]['thresholds']
-    while type(mysettings) is dict:
-        if 'local' in mysettings.keys():
-            mysettings = mysettings['local'] if local else mysettings['global']
-        elif 'HIG' in mysettings.keys():
-            mysettings = mysettings[level]
-        elif unit in mysettings.keys():
-            mysettings = mysettings[unit]
-        else:
-            return None
-    return float(mysettings)
