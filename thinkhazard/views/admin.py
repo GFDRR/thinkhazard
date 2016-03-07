@@ -11,6 +11,8 @@ from sqlalchemy import (
     Integer,
     )
 
+from sqlalchemy.orm import contains_eager
+
 import json
 
 from ..models import (
@@ -205,21 +207,22 @@ def admindiv_hazardsets_hazardtype(request):
     if HazardType.get(hazardtype) is None:
         raise HTTPBadRequest(detail='hazardtype doesn\'t exist')
 
-    query = DBSession.query(HazardCategoryAdministrativeDivisionAssociation) \
-        .join(AdministrativeDivision) \
+    query = DBSession.query(AdministrativeDivision) \
+        .join(HazardCategoryAdministrativeDivisionAssociation) \
         .join(HazardCategory) \
         .join(HazardType) \
         .filter(HazardType.mnemonic == hazardtype) \
         .join(AdminLevelType) \
         .filter(AdminLevelType.id == 3) \
-        .order_by(AdministrativeDivision.name)
+        .order_by(AdministrativeDivision.name) \
+        .options(contains_eager(AdministrativeDivision.hazardcategories))
 
     data = [{
-        'code': row.administrativedivision.code,
-        'name': row.administrativedivision.name,
-        'level_2': row.administrativedivision.parent.name,
-        'level_1': row.administrativedivision.parent.parent.name,
-        'hazardset': row.hazardsets[0].id
+        'code': row.code,
+        'name': row.name,
+        'level_2': row.parent.name,
+        'level_1': row.parent.parent.name,
+        'hazardset': row.hazardcategories[0].hazardsets[0].id
     } for row in query]
 
     hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
