@@ -37,7 +37,9 @@ from ..models import (
     AdministrativeDivision,
     HazardLevel,
     HazardCategory,
+    HazardSet,
     HazardType,
+    Layer,
     Region,
     FurtherResource,
     ClimateChangeRecommendation,
@@ -329,3 +331,20 @@ def get_info_for_hazard_type(request, hazard, division):
         'resources': further_resources,
         'sources': sources,
     }
+
+
+@view_config(route_name='data_source', renderer='templates/data_source.jinja2')
+def data_source(request):
+    try:
+        hazardset_id = request.matchdict.get('hazardset')
+        hazardset = DBSession.query(HazardSet) \
+            .join(Layer) \
+            .filter(HazardSet.id == hazardset_id) \
+            .order_by(Layer.return_period) \
+            .options(contains_eager(HazardSet.layers)) \
+            .one()
+    except:
+        raise HTTPBadRequest(detail='incorrect value for parameter '
+                                    '"hazardset"')
+
+    return {'hazardset': hazardset}

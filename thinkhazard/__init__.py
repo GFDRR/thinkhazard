@@ -117,6 +117,7 @@ def add_public_routes(config, prefix=''):
 
     config.add_route('pdf_cover', prefix + '/pdf_cover/{divisioncode:\d+}')
     config.add_route('pdf_about', prefix + '/pdf_about')
+    config.add_route('data_source', '/data_source/{hazardset}')
 
 
 def init_pdf_archive_directory(pdf_archive_path):
