@@ -427,6 +427,8 @@ class HazardSet(Base):
     #   * all layers have been downloaded
     #   * the date, quality, etc fields of the hazardset has been updated
     complete = Column(Boolean, nullable=False, default=False)
+    # If not complete, reason why
+    complete_error = Column(String)
     # finally it is processed:
     processed = Column(Boolean, nullable=False, default=False)
 

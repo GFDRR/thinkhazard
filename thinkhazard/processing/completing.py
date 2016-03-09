@@ -67,13 +67,19 @@ class Completer(BaseProcessor):
             ids = ids.filter(HazardSet.id == hazardset_id)
         for id in ids:
             try:
-                if not self.complete_hazardset(id[0]):
+                # complete can be either True or an error message
+                complete = self.complete_hazardset(id[0])
+                if complete is not True:
                     hazardset = DBSession.query(HazardSet).get(id)
                     if hazardset.processed:
                         logger.info('  Deleting {} previous outputs related \
                                     to this hazardset'.format(
                                     hazardset.outputs.count()))
                         hazardset.outputs.delete()
+                    hazardset.complete_error = complete
+                    DBSession.add(hazardset)
+                    logger.warning('Hazardset {} incomplete: {}'
+                                   .format(hazardset.id, complete))
                 transaction.commit()
             except Exception:
                 transaction.abort()
@@ -93,29 +99,26 @@ class Completer(BaseProcessor):
         layers = []
         if preprocessed:
             if len(hazardset.layers) == 0:
-                logger.info('  No layer found')
-                return False
+                return 'No layer found'
             layers.append(hazardset.layers[0])
         else:
             for level in (u'LOW', u'MED', u'HIG'):
                 layer = hazardset.layer_by_level(level)
                 if layer is None:
-                    logger.info('  No layer for level {}'.format(level))
-                    return False
+                    return 'No layer for level {}'.format(level)
+
                 layers.append(layer)
             if ('mask_return_period' in type_settings):
                 layer = DBSession.query(Layer) \
                     .filter(Layer.hazardset_id == hazardset_id) \
                     .filter(Layer.mask.is_(True))
                 if layer.count() == 0:
-                    logger.info('  No mask layer')
-                    return False
+                    return 'Missing mask layer'
                 layers.append(layer.one())
 
         for layer in layers:
             if not layer.downloaded:
-                logger.info('  No data for layer {}'.format(layer.name()))
-                return False
+                return 'No data for layer {}'.format(layer.name())
 
         stats = DBSession.query(
             Layer.local,
@@ -127,8 +130,7 @@ class Completer(BaseProcessor):
             .group_by(Layer.local)
 
         if stats.count() > 1:
-            logger.warning('  Mixed local and global layers')
-            return False
+            return 'Mixed local and global layers'
 
         stat = stats.one()
 
