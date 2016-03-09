@@ -37,7 +37,9 @@
           class="fa fa-{{'check' if set.complete else 'times'}}"
           ></span>
         </td>
-        <td>{{set.processed}}</td>
+        <td>
+          <span class="fa fa-{{'check' if set.processed else 'times'}}"></span>
+        </td>
       </tr>
     {% endfor %}
     </table>
