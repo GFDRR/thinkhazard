@@ -15,7 +15,7 @@
     <link href="{{('thinkhazard:static/build/%s.min.css' % self.name())|static_url}}" rel="stylesheet">
 {% endif %}
   </head>
-  <body>
+  <body class="{{'preview' if request.registry['settings'].appname == 'admin' }}">
     {% block content %}
     {% endblock %}
     {% include 'faq.jinja2' %}
@@ -42,5 +42,9 @@
     {% endblock scripts %}
     <script src="{{('thinkhazard:static/js/%s.js' % self.name())|static_url}}"></script>
     <script src="{{'thinkhazard:static/js/search.js'|static_url}}"></script>
+    {% if request.registry['settings'].appname == 'admin' %}
+    <div class="ribbon"><span>PREVIEW</span></div>
+    {% endif %}
+
   </body>
 </html>
