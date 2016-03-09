@@ -29,7 +29,14 @@
         <td>{{set.local}}</td>
         <td>{{set.calculation_method_quality}}</td>
         <td>{{set.scientific_quality}}</td>
-        <td>{{set.complete}}</td>
+        <td>
+          <span
+          {% if set.complete_error %}
+          data-toggle="tooltip" title="{{set.complete_error}}"
+          {% endif %}
+          class="fa fa-{{'check' if set.complete else 'times'}}"
+          ></span>
+        </td>
         <td>{{set.processed}}</td>
       </tr>
     {% endfor %}

@@ -51,7 +51,8 @@ buildcss: thinkhazard/static/build/index.css \
 	      thinkhazard/static/build/common.css \
 	      thinkhazard/static/build/common.min.css \
 	      thinkhazard/static/build/admin.css \
-	      thinkhazard/static/build/admin.min.css
+	      thinkhazard/static/build/admin.min.css \
+	      $(addprefix thinkhazard/static/fonts/fontawesome-webfont., eot ttf woff woff2)
 
 .PHONY: populatedb
 populatedb: initdb import_admindivs import_recommendations
@@ -218,6 +219,14 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 	mv wkhtmltox .build
 	touch $@
 
+.PRECIOUS: node_modules/font-awesome/fonts/fontawesome-webfont.%
+node_modules/font-awesome/fonts/fontawesome-webfont.%: .build/node_modules.timestamp
+	touch -c $@
+
+thinkhazard/static/fonts/fontawesome-webfont.%: node_modules/font-awesome/fonts/fontawesome-webfont.%
+	mkdir -p $(dir $@)
+	cp $< $@
+
 .PHONY: clean
 clean:
 	rm -f .build/thinkhazard-*.wsgi
@@ -227,6 +236,8 @@ clean:
 	rm -f .build/booltlint.timestamp
 	rm -f .build/wkhtmltopdf.timestamp
 	rm -rf thinkhazard/static/build
+	rm -f thinkhazard/static/fonts/FontAwesome.otf
+	rm -f thinkhazard/static/fonts/fontawesome-webfont.*
 
 .PHONY: cleanall
 cleanall:

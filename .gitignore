@@ -6,3 +6,4 @@ local*.ini
 .build
 node_modules
 thinkhazard/static/build
+thinkhazard/static/fonts
