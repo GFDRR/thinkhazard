@@ -12,7 +12,7 @@
         text-decoration: line-through;
       }
     </style>
-    <table class="table table-condensed">
+    <table class="table table-condensed table-striped">
       <tr>
         <th></th>
         <th>Hazard Type</th>
@@ -29,8 +29,17 @@
         <td>{{set.local}}</td>
         <td>{{set.calculation_method_quality}}</td>
         <td>{{set.scientific_quality}}</td>
-        <td>{{set.complete}}</td>
-        <td>{{set.processed}}</td>
+        <td>
+          <span
+          {% if set.complete_error %}
+          data-toggle="tooltip" title="{{set.complete_error}}"
+          {% endif %}
+          class="fa fa-{{'check' if set.complete else 'times'}}"
+          ></span>
+        </td>
+        <td>
+          <span class="fa fa-{{'check' if set.processed else 'times'}}"></span>
+        </td>
       </tr>
     {% endfor %}
     </table>

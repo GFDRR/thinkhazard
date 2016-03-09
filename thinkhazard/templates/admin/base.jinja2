@@ -25,6 +25,13 @@
     <script src="{{('%s/jquery/dist/jquery.min.js' % node_modules)|static_url}}"></script>
     <script src="{{('%s/bootstrap/dist/js/bootstrap.min.js' % node_modules)|static_url}}"></script>
 {% endif %}
+    <script>
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip({
+        container: 'body'
+      });
+    })
+    </script>
     {% block scripts %}
     {% endblock scripts %}
   </body>
