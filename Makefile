@@ -18,7 +18,7 @@ help:
 	@echo "- build                   Build CSS and JS"
 	@echo "- populatedb              Populates database. Use DATA=turkey if you want to work with a sample data set"
 	@echo "- initdb                  Initialize db using development.ini"
-	@echo "- reinit_all              Completely clear and re-init database. Only for developement purpose.
+	@echo "- reinit_all              Completely clear and re-init database. Only for developement purpose."
 	@echo "- import_admindivs        Import administrative divisions. Use DATA=turkey or DATA=indonesia if you want to work with a sample data set"
 	@echo "- import_recommendations  Import recommendations"
 	@echo "- harvest                 Harvest GeoNode layers metadata"
