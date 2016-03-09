@@ -133,7 +133,7 @@ class TestReportFunction(BaseTestCase):
             return PopenMock()
         mock.side_effect = popen_mock
 
-        pdf_file = '116-1d235e51-44d5-47ac-b6da-a96c46f21639.pdf'
+        pdf_file = '31-1d235e51-44d5-47ac-b6da-a96c46f21639.pdf'
         file_name = os.path.join(self.pdf_archive_path, pdf_file)
         file_name_temp = os.path.join(self.pdf_archive_path, '_' + pdf_file)
         self._touch_file('_' + pdf_file)
@@ -154,37 +154,37 @@ class TestReportFunction(BaseTestCase):
         self.assertIsNotNone(resp.json['report_id'])
 
     def test_get_report_status__finished(self):
-        self._touch_file('116-1d235e51-44d5-47ac-b6da-a96c46f21639.pdf')
+        self._touch_file('31-1d235e51-44d5-47ac-b6da-a96c46f21639.pdf')
         resp = self.testapp.get(
-            '/report/status/116/1d235e51-44d5-47ac-b6da-a96c46f21639.json')
+            '/report/status/31/1d235e51-44d5-47ac-b6da-a96c46f21639.json')
         self.assertEqual(resp.json['status'], 'done')
 
     def test_get_report_status__still_running(self):
-        self._touch_file('_116-1d235e51-44d5-47ac-b6da-a96c46f21639.pdf')
+        self._touch_file('_31-1d235e51-44d5-47ac-b6da-a96c46f21639.pdf')
         resp = self.testapp.get(
-            '/report/status/116/1d235e51-44d5-47ac-b6da-a96c46f21639.json')
+            '/report/status/31/1d235e51-44d5-47ac-b6da-a96c46f21639.json')
         self.assertEqual(resp.json['status'], 'running')
 
     def test_get_pdf_report__not_found(self):
         self.testapp.get(
-            '/report/status/116/1d235e51-44d5-47ac-b6da-a96c46f21639.json',
+            '/report/status/31/1d235e51-44d5-47ac-b6da-a96c46f21639.json',
             status=404)
 
     def test_get_pdf_report__found(self):
-        self._touch_file('116-1d235e51-44d5-47ac-b6da-a96c46f21639.pdf')
+        self._touch_file('31-1d235e51-44d5-47ac-b6da-a96c46f21639.pdf')
         resp = self.testapp.get(
-            '/report/116/1d235e51-44d5-47ac-b6da-a96c46f21639.pdf')
+            '/report/31/1d235e51-44d5-47ac-b6da-a96c46f21639.pdf')
         self.assertEqual(resp.body, 'The pdf file')
         self.assertEqual(resp.content_type, 'application/pdf')
 
     def test_get_pdf_report__still_running(self):
-        self._touch_file('_116-1d235e51-44d5-47ac-b6da-a96c46f21639.pdf')
+        self._touch_file('_31-1d235e51-44d5-47ac-b6da-a96c46f21639.pdf')
         self.testapp.get(
-            '/report/116/1d235e51-44d5-47ac-b6da-a96c46f21639.pdf', status=400)
+            '/report/31/1d235e51-44d5-47ac-b6da-a96c46f21639.pdf', status=400)
 
     def test_get_pdf_report__not_found_bis(self):
         self.testapp.get(
-            '/report/116/1d235e51-44d5-47ac-b6da-a96c46f21639.pdf', status=404)
+            '/report/31/1d235e51-44d5-47ac-b6da-a96c46f21639.pdf', status=404)
 
     def _touch_file(self, file_name):
         with open(os.path.join(self.pdf_archive_path, file_name), 'w') as file:

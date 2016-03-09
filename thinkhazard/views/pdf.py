@@ -240,7 +240,7 @@ def get_pdf_report(request):
         )
         response.headers['Content-Disposition'] = \
             'attachment; filename="ThinkHazard - %s.pdf"' \
-            % str(division_name)
+            % str(division_name.encode('utf-8'))
         return response
     elif path.isfile(file_name_temp):
         return HTTPBadRequest('Not finished yet')
