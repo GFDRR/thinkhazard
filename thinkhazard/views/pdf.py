@@ -53,7 +53,10 @@ from ..models import (
     HazardCategoryAdministrativeDivisionAssociation,
 )
 
+from sqlalchemy import func
 from sqlalchemy.orm import joinedload
+
+from geoalchemy2.functions import ST_Centroid
 
 REPORT_ID_REGEX = re.compile('\w{8}(-\w{4}){3}-\w{12}?')
 
@@ -88,12 +91,19 @@ def pdf_cover(request):
         hazard_categories.append(get_info_for_hazard_type(
             h['hazardtype'].mnemonic, division))
 
+    lon, lat = DBSession.query(
+        func.ST_X(ST_Centroid(AdministrativeDivision.geom)),
+        func.ST_Y(ST_Centroid(AdministrativeDivision.geom))) \
+        .filter(AdministrativeDivision.code == division_code) \
+        .first()
+
     context = {
         'hazards': hazard_types,
         'hazards_sorted': sorted(hazard_types,
                                  key=lambda a: a['hazardlevel'].order),
         'parents': get_parents(division),
         'division': division,
+        'division_lonlat': (lon, lat),
         'hazard_categories': hazard_categories,
         'date': datetime.datetime.now()
     }

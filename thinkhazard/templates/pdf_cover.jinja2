@@ -14,8 +14,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600' rel='stylesheet' type='text/css'>
     <link href="{{'thinkhazard:static/build/report_print.min.css'|static_url}}" rel="stylesheet">
+    <script src="{{('%s/d3/d3.min.js' % node_modules)|static_url}}"></script>
+    <script src="{{('%s/d3-geo-projection/d3.geo.projection.min.js' % node_modules)|static_url}}"></script>
+    <script src="{{('%s/topojson/build/topojson.min.js' % node_modules)|static_url}}"></script>
+    <style>
+
+
+    </style>
   </head>
-  <body>
+  <body class="cover">
     <div class="container">
       <header class="text-center">
           {{ thinkhazard_logo() }}
@@ -25,7 +32,7 @@
         </div>
       </header>
     </div>
-    <div class="container-fluid text-center">
+    <div class="container-fluid text-center division-name">
       <h2>
         {{ division.name }}
         <br>
@@ -36,7 +43,53 @@
         {% endfor %}
         </small>
       </h2>
-      <div class="container-fluid text-center col-sm-8 col-sm-offset-2">
+    </div>
+    <div class="container-fluid text-center" id="world_map">
+<script>
+
+var width = 500,
+    height = 290;
+
+var projection = d3.geo.naturalEarth()
+    .scale(100)
+    .translate([width / 2, height / 2])
+    .precision(.1);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+var graticule = d3.geo.graticule();
+
+var svg = d3.select('#world_map').append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+d3.json("{{'thinkhazard:static/js/map.topojson'|static_url}}", function(error, world) {
+
+  svg.insert("path")
+      .datum(topojson.feature(world, world.objects.countries))
+      .attr("class", "land")
+      .attr("d", path);
+
+  svg.selectAll(".marker")
+      .data([{lon: {{division_lonlat[0]}}, lat:{{division_lonlat[1]}}}])
+      .enter()
+      .append('svg:image')
+      .attr('x', -14)
+      .attr('y', -38)
+      .attr('width', 35)
+      .attr('height', 38)
+      .attr('class', 'mark')
+      .attr('xlink:href', "{{'thinkhazard:static/images/pdf-report-map-marker.svg'|static_url}}")
+      .attr("transform", function(d) {return "translate(" + projection([d.lon, d.lat]) + ")";});
+});
+
+
+</script>
+    </div>
+    <div class="container-fluid text-center">
+      <div class="row">
+        <div class="col-sm-8 col-sm-offset-2">
 
         <!-- Division name -->
 
@@ -47,7 +100,7 @@
         </ul>
       </div>
     </div>
-    <div class="container text-center">
+    <div class="container text-center footer">
       Report generated on {{date.strftime('%Y-%m-%d')}}
       <br>
       from <a href="{{'report_overview'|route_url(divisioncode=division.code)}}">{{'report_overview'|route_url(divisioncode=division.code)}}</a>
