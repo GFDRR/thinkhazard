@@ -36,7 +36,10 @@ help:
 	@echo
 
 .PHONY: install
-install: .build/requirements.timestamp .build/node_modules.timestamp .build/wkhtmltopdf.timestamp
+install: \
+		.build/requirements.timestamp \
+		.build/node_modules.timestamp \
+		.build/wkhtmltox
 
 .PHONY: build
 build: buildcss
@@ -213,10 +216,9 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 		-e 's#{{AUTHUSERFILE}}#$(AUTHUSERFILE)#g' \
 		-e 's#{{WSGISCRIPT}}#$(abspath .build/thinkhazard-$*.wsgi)#' $< > $@
 
-.build/wkhtmltopdf.timestamp:
+.build/wkhtmltox:
 	curl -o- http://download.gna.org/wkhtmltopdf/0.12/0.12.3/wkhtmltox-0.12.3_linux-generic-amd64.tar.xz | tar -xvJ
 	mv wkhtmltox .build
-	touch $@
 
 .PHONY: clean
 clean:
@@ -225,7 +227,6 @@ clean:
 	rm -f .build/flake8.timestamp
 	rm -f .build/jshint.timestamp
 	rm -f .build/booltlint.timestamp
-	rm -f .build/wkhtmltopdf.timestamp
 	rm -rf thinkhazard/static/build
 
 .PHONY: cleanall
