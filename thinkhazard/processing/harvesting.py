@@ -54,7 +54,7 @@ region_admindiv_csv_path = \
 
 
 def warning(object, msg):
-    logger.warning(('{csw_type} - {id} - '+msg).format(**object))
+    logger.warning(('{csw_type} {id}: '+msg).format(**object))
 
 
 def fetch(category, params={}, order_by='title'):
@@ -205,6 +205,7 @@ class Harvester(BaseProcessor):
         for region in regions:
             try:
                 self.harvest_region(region)
+                transaction.commit()
             except Exception as e:
                 transaction.abort()
                 logger.error(u'Region {} raises an exception :\n{}'
@@ -240,6 +241,7 @@ class Harvester(BaseProcessor):
         for doc in documents:
             try:
                 self.harvest_document(doc)
+                transaction.commit()
             except Exception as e:
                 transaction.abort()
                 logger.error(u'Document {} raises an exception :\n{}'
@@ -311,7 +313,7 @@ class Harvester(BaseProcessor):
                 DBSession.query(Output).delete()
                 DBSession.query(Layer).delete()
                 DBSession.query(HazardSet).delete()
-                DBSession.flush()
+                transaction.commit()
             except:
                 transaction.abort()
                 raise
@@ -323,6 +325,7 @@ class Harvester(BaseProcessor):
         for layer in layers:
             try:
                 self.harvest_layer(layer)
+                transaction.commit()
             except Exception as e:
                 transaction.abort()
                 logger.error(u'Layer {} raises an exception :\n{}'
