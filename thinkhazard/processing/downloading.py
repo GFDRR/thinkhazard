@@ -30,15 +30,10 @@ from ..models import (
     Layer,
     )
 
-from . import (
-    settings,
-    layer_path,
-    BaseProcessor,
-    )
+from . import BaseProcessor
 
 
 logger = logging.getLogger(__name__)
-geonode = settings['geonode']
 
 
 class Downloader(BaseProcessor):
@@ -86,7 +81,7 @@ class Downloader(BaseProcessor):
 
         logger.info('Downloading layer {}'.format(layer.name()))
 
-        path = layer_path(layer)
+        path = self.layer_path(layer)
 
         dir_path = os.path.dirname(path)
         if not os.path.exists(dir_path):
@@ -108,6 +103,7 @@ class Downloader(BaseProcessor):
         # If file not in cache, download it
         if not os.path.isfile(path):
             h = Http()
+            geonode = self.settings['geonode']
             url = urlunsplit((geonode['scheme'],
                               geonode['netloc'],
                               layer.download_url,

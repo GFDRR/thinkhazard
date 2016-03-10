@@ -32,8 +32,6 @@ from sqlalchemy.sql.expression import literal_column
 from geoalchemy2.shape import to_shape
 from urlparse import urlunsplit
 
-from ..processing import settings
-
 from ..models import (
     DBSession,
     AdministrativeDivision,
@@ -82,7 +80,8 @@ def report(request):
 
     if selected_hazard is not None:
         try:
-            hazard_category = get_info_for_hazard_type(selected_hazard,
+            hazard_category = get_info_for_hazard_type(request,
+                                                       selected_hazard,
                                                        division)
         except NoResultFound:
             url = request.route_url('report_overview',
@@ -127,8 +126,9 @@ def report(request):
         feedback_params['entry.93444540'] = \
             HazardType.get(selected_hazard).title.encode('utf8')
 
-    feedback_form_url = settings['feedback_form_url'] + '?' + \
-        urllib.urlencode(feedback_params)
+    feedback_form_url = u'{}?{}'.format(
+        request.registry.settings['feedback_form_url'],
+        urllib.urlencode(feedback_params))
 
     context = {
         'hazards': hazard_types,
@@ -243,7 +243,7 @@ def get_hazard_types(code):
     return hazard_types
 
 
-def get_info_for_hazard_type(hazard, division):
+def get_info_for_hazard_type(request, hazard, division):
     technical_recommendations = None
     further_resources = None
     sources = None
@@ -296,13 +296,14 @@ def get_info_for_hazard_type(hazard, division):
     # they appear lower in the page
 
     further_resources = []
+    geonode = request.registry.settings['geonode']
     for frq in further_resources_query:
         fr = frq.furtherresource
         further_resources.append({
             'id': fr.id,
             'text': fr.text,
-            'url': urlunsplit((settings['geonode']['scheme'],
-                               settings['geonode']['netloc'],
+            'url': urlunsplit((geonode['scheme'],
+                               geonode['netloc'],
                                'documents/{}/download'.format(fr.id),
                                '', ''))
         })

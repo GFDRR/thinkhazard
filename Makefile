@@ -4,6 +4,7 @@ PY_FILES = $(shell find thinkhazard -type f -name '*.py' 2> /dev/null)
 INSTANCEID ?= main
 AUTHUSERFILE ?= /var/www/vhosts/wb-thinkhazard/conf/.htpasswd
 DATA ?= world
+INI_FILE ?= development.ini
 
 .PHONY: all
 all: help
@@ -26,7 +27,10 @@ help:
 	@echo "- complete                Mark complete hazardsets as such"
 	@echo "- process                 Compute hazard levels from hazardsets for administrative divisions level 2"
 	@echo "- decisiontree            Run the decision tree and perform upscaling"
-	@echo "- serve                   Run the dev server"
+	@echo "- publish                 Publish validated data on public web site"
+	@echo "- publish                 Publish validated data on public web site"
+	@echo "- serve_public            Run the dev server (public app)"
+	@echo "- serve_admin             Run the dev server (admin app)"
 	@echo "- check                   Check the code with flake8, jshint and bootlint"
 	@echo "- modwsgi                 Create files for Apache mod_wsgi"
 	@echo "- test                    Run the unit tests"
@@ -36,7 +40,10 @@ help:
 	@echo
 
 .PHONY: install
-install: .build/requirements.timestamp .build/node_modules.timestamp .build/wkhtmltopdf.timestamp
+install: \
+		.build/requirements.timestamp \
+		.build/node_modules.timestamp \
+		.build/wkhtmltox
 
 .PHONY: build
 build: buildcss
@@ -62,18 +69,18 @@ reinit_all: initdb_force import_admindivs import_recommendations harvest downloa
 
 .PHONY: initdb
 initdb:
-	.build/venv/bin/initialize_thinkhazard_db development.ini
+	.build/venv/bin/initialize_thinkhazard_db $(INI_FILE)
 
 .PHONY: initdb_force
 initdb_force:
-	.build/venv/bin/initialize_thinkhazard_db development.ini --force=1
+	.build/venv/bin/initialize_thinkhazard_db $(INI_FILE) --force=1
 
 .PHONY: import_admindivs
 import_admindivs: .build/requirements.timestamp \
 		/tmp/thinkhazard/admindiv/$(DATA)/g2015_2014_0.sql \
 		/tmp/thinkhazard/admindiv/$(DATA)/g2015_2014_1.sql \
 		/tmp/thinkhazard/admindiv/$(DATA)/g2015_2014_2.sql
-	.build/venv/bin/import_admindivs development.ini folder=/tmp/thinkhazard/admindiv/$(DATA)
+	.build/venv/bin/import_admindivs $(INI_FILE) folder=/tmp/thinkhazard/admindiv/$(DATA)
 
 /tmp/thinkhazard/admindiv/$(DATA)/%.sql: /tmp/thinkhazard/admindiv/$(DATA)/%.sql.zip
 	unzip -o $< -d /tmp/thinkhazard/admindiv/$(DATA)
@@ -84,7 +91,7 @@ import_admindivs: .build/requirements.timestamp \
 
 .PHONY: import_recommendations
 import_recommendations: .build/requirements.timestamp
-	.build/venv/bin/import_recommendations development.ini
+	.build/venv/bin/import_recommendations $(INI_FILE)
 
 .PHONY: harvest
 harvest: .build/requirements.timestamp
@@ -110,13 +117,21 @@ dt: .build/requirements.timestamp
 decisiontree: .build/requirements.timestamp
 	.build/venv/bin/decision_tree
 
-.PHONY: serve
-serve: build
-	.build/venv/bin/pserve --reload development.ini
+.PHONY: publish
+publish: .build/requirements.timestamp
+	.build/venv/bin/publish $(INI_FILE)
+
+.PHONY: serve_public
+serve_public: build
+	.build/venv/bin/pserve --reload $(INI_FILE) --app-name=public
+
+.PHONY: serve_admin
+serve_admin: build
+	.build/venv/bin/pserve --reload $(INI_FILE) --app-name=admin
 
 .PHONY: routes
 routes:
-	.build/venv/bin/proutes development.ini
+	.build/venv/bin/proutes $(INI_FILE)
 
 .PHONY: check
 check: flake8 jshint bootlint
@@ -131,11 +146,7 @@ jshint: .build/node_modules.timestamp .build/jshint.timestamp
 bootlint: .build/node_modules.timestamp .build/bootlint.timestamp
 
 .PHONY: modwsgi
-modwsgi: install \
-	     .build/thinkhazard-production.wsgi \
-	     .build/thinkhazard-development.wsgi \
-	     .build/apache-production.conf \
-	     .build/apache-development.conf
+modwsgi: .build/apache.timestamp
 
 .PHONY: test
 test: install
@@ -172,11 +183,6 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 	# remove the temporary virtualenv
 	rm -rf venv
 
-.build/thinkhazard-%.wsgi: thinkhazard.wsgi
-	mkdir -p $(dir $@)
-	sed 's#{{APP_INI_FILE}}#$(CURDIR)/$*.ini#' $< > $@
-	chmod 755 $@
-
 .build/node_modules.timestamp: package.json
 	mkdir -p $(dir $@)
 	npm install
@@ -208,16 +214,36 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 	./node_modules/.bin/bootlint $?
 	touch $@
 
+.build/apache.timestamp: \
+		.build/thinkhazard_public-production.wsgi \
+		.build/thinkhazard_public-development.wsgi \
+		.build/thinkhazard_admin-production.wsgi \
+		.build/thinkhazard_admin-development.wsgi \
+		.build/apache-production.conf \
+		.build/apache-development.conf
+	sudo apache2ctl graceful
+	touch $@
+
+.build/thinkhazard_public-%.wsgi: thinkhazard_public.wsgi
+	mkdir -p $(dir $@)
+	sed 's#{{APP_INI_FILE}}#$(CURDIR)/$*.ini#' $< > $@
+	chmod 755 $@
+
+.build/thinkhazard_admin-%.wsgi: thinkhazard_admin.wsgi
+	mkdir -p $(dir $@)
+	sed 's#{{APP_INI_FILE}}#$(CURDIR)/$*.ini#' $< > $@
+	chmod 755 $@
+
 .build/apache-%.conf: apache.conf .build/venv
 	sed -e 's#{{PYTHONPATH}}#$(shell .build/venv/bin/python -c "import sys; print(sys.path[-1])")#' \
 		-e 's#{{INSTANCEID}}#$(INSTANCEID)#g' \
 		-e 's#{{AUTHUSERFILE}}#$(AUTHUSERFILE)#g' \
-		-e 's#{{WSGISCRIPT}}#$(abspath .build/thinkhazard-$*.wsgi)#' $< > $@
+		-e 's#{{WSGISCRIPT}}#$(abspath .build/thinkhazard_public-$*.wsgi)#' \
+		-e 's#{{WSGISCRIPT_ADMIN}}#$(abspath .build/thinkhazard_admin-$*.wsgi)#' $< > $@
 
-.build/wkhtmltopdf.timestamp:
+.build/wkhtmltox:
 	curl -o- http://download.gna.org/wkhtmltopdf/0.12/0.12.3/wkhtmltox-0.12.3_linux-generic-amd64.tar.xz | tar -xvJ
 	mv wkhtmltox .build
-	touch $@
 
 .PRECIOUS: node_modules/font-awesome/fonts/fontawesome-webfont.%
 node_modules/font-awesome/fonts/fontawesome-webfont.%: .build/node_modules.timestamp
@@ -234,7 +260,6 @@ clean:
 	rm -f .build/flake8.timestamp
 	rm -f .build/jshint.timestamp
 	rm -f .build/booltlint.timestamp
-	rm -f .build/wkhtmltopdf.timestamp
 	rm -rf thinkhazard/static/build
 	rm -f thinkhazard/static/fonts/FontAwesome.otf
 	rm -f thinkhazard/static/fonts/fontawesome-webfont.*

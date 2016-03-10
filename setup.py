@@ -45,6 +45,7 @@ requires = [
     'pyquery==1.2.9',
     'markdown==2.6.5',
     'APScheduler==3.0.5',
+    'paste==2.0.2',
     ]
 
 setup(name='thinkhazard',
@@ -81,5 +82,6 @@ setup(name='thinkhazard',
       complete = thinkhazard.processing.completing:Completer.run
       process = thinkhazard.processing.processing:Processor.run
       decision_tree = thinkhazard.processing.decisiontree:DecisionMaker.run
+      publish = thinkhazard.scripts.publish:main
       """,
       )

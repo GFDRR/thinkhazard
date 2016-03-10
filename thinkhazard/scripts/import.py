@@ -24,13 +24,10 @@ import csv
 from subprocess import call
 
 from sqlalchemy import engine_from_config
-
-from pyramid.paster import (
-    get_appsettings,
-    setup_logging,
-    )
-
+from pyramid.paster import setup_logging
 from pyramid.scripts.common import parse_vars
+
+from ..settings import load_full_settings
 
 from ..models import (
     DBSession,
@@ -43,8 +40,6 @@ from ..models import (
     HazardCategoryTechnicalRecommendationAssociation,
     TechnicalRecommendation,
     )
-
-from .. import load_local_settings
 
 
 def usage(argv):
@@ -64,9 +59,7 @@ def import_admindivs(argv=sys.argv):
     config_uri = argv[1]
     options = parse_vars(argv[2:])
     setup_logging(config_uri)
-    settings = get_appsettings(config_uri, options=options)
-
-    load_local_settings(settings)
+    settings = load_full_settings(config_uri, options=options)
 
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
@@ -144,9 +137,7 @@ def import_recommendations(argv=sys.argv):
     config_uri = argv[1]
     options = parse_vars(argv[2:])
     setup_logging(config_uri)
-    settings = get_appsettings(config_uri, options=options)
-
-    load_local_settings(settings)
+    settings = load_full_settings(config_uri, options=options)
 
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)

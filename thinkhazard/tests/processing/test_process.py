@@ -41,7 +41,7 @@ from ...models import (
     Output,
     )
 
-from ...processing import settings
+from .. import settings
 from ...processing.processing import Processor
 from common import new_geonode_id
 
@@ -96,7 +96,7 @@ class TestProcess(unittest.TestCase):
             global_reader(),
             global_reader()
         ]
-        Processor().execute(hazardset_id='notpreprocessed')
+        Processor().execute(settings, hazardset_id='notpreprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output, None)
 
@@ -109,7 +109,7 @@ class TestProcess(unittest.TestCase):
             global_reader(),
             global_reader()
         ]
-        Processor().execute(hazardset_id='notpreprocessed')
+        Processor().execute(settings, hazardset_id='notpreprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, 'VLO')
 
@@ -122,7 +122,7 @@ class TestProcess(unittest.TestCase):
             global_reader(100.0),
             global_reader(),
         ]
-        Processor().execute(hazardset_id='notpreprocessed')
+        Processor().execute(settings, hazardset_id='notpreprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, u'LOW')
 
@@ -135,7 +135,7 @@ class TestProcess(unittest.TestCase):
             global_reader(),
             global_reader(),
         ]
-        Processor().execute(hazardset_id='notpreprocessed')
+        Processor().execute(settings, hazardset_id='notpreprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, u'MED')
 
@@ -148,7 +148,7 @@ class TestProcess(unittest.TestCase):
             global_reader(),
             global_reader()
         ]
-        Processor().execute(hazardset_id='notpreprocessed')
+        Processor().execute(settings, hazardset_id='notpreprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, u'HIG')
 
@@ -161,7 +161,7 @@ class TestProcess(unittest.TestCase):
             global_reader(),
             global_reader(100.0)
         ]
-        Processor().execute(hazardset_id='notpreprocessed')
+        Processor().execute(settings, hazardset_id='notpreprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output, None)
 
@@ -171,7 +171,7 @@ class TestProcess(unittest.TestCase):
         open_mock.side_effect = [
             global_reader(),
         ]
-        Processor().execute(hazardset_id='preprocessed')
+        Processor().execute(settings, hazardset_id='preprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output, None)
 
@@ -183,7 +183,7 @@ class TestProcess(unittest.TestCase):
         open_mock.side_effect = [
             global_reader(hazardtype_settings['values']['VLO'][0]),
         ]
-        Processor().execute(hazardset_id='preprocessed')
+        Processor().execute(settings, hazardset_id='preprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, u'VLO')
 
@@ -195,7 +195,7 @@ class TestProcess(unittest.TestCase):
         open_mock.side_effect = [
             global_reader(hazardtype_settings['values']['VLO'][0]),
         ]
-        Processor().execute(hazardset_id='preprocessed')
+        Processor().execute(settings, hazardset_id='preprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, u'VLO')
 
@@ -207,7 +207,7 @@ class TestProcess(unittest.TestCase):
         open_mock.side_effect = [
             global_reader(hazardtype_settings['values']['MED'][0]),
         ]
-        Processor().execute(hazardset_id='preprocessed')
+        Processor().execute(settings, hazardset_id='preprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, u'MED')
 
@@ -219,7 +219,7 @@ class TestProcess(unittest.TestCase):
         open_mock.side_effect = [
             global_reader(hazardtype_settings['values']['HIG'][0]),
         ]
-        Processor().execute(hazardset_id='preprocessed')
+        Processor().execute(settings, hazardset_id='preprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, u'HIG')
 

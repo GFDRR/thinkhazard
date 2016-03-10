@@ -20,15 +20,11 @@
 import sys
 import argparse
 import os
-import yaml
 import logging
 import colorlog
-from pyramid.paster import (
-    get_appsettings,
-    )
 from sqlalchemy import engine_from_config
 
-from .. import load_local_settings
+from ..settings import load_full_settings
 from ..models import DBSession
 
 
@@ -48,45 +44,33 @@ ch.setFormatter(formatter)
 logger.addHandler(ch)
 
 
-def load_settings():
-    settings = get_appsettings(os.path.join(os.path.dirname(__file__),
-                                            '../../development.ini'))
-
-    root_folder = os.path.join(os.path.dirname(__file__), '..', '..')
-    main_settings_path = os.path.join(root_folder,
-                                      'thinkhazard_processing.yaml')
-    with open(main_settings_path, 'r') as f:
-        settings.update(yaml.load(f.read()))
-
-    load_local_settings(settings)
-
-    return settings
-
-settings = load_settings()
-
-
-def layer_path(layer):
-    return os.path.join(settings['data_path'],
-                        'hazardsets',
-                        layer.filename())
-
-
 class BaseProcessor():
 
     @classmethod
     def run(cls, argv=sys.argv):
         parser = cls.argument_parser()
-        args = parser.parse_args(argv[1:])
+        args = vars(parser.parse_args(argv[1:]))
+
+        config_uri = args.pop('config_uri')
+        name = args.pop('name')
+        settings = load_full_settings(config_uri,
+                                      name=name)
 
         engine = engine_from_config(settings, 'sqlalchemy.')
         DBSession.configure(bind=engine)
 
         processor = cls()
-        processor.execute(**vars(args))
+        processor.execute(settings=settings, **args)
 
     @staticmethod
     def argument_parser():
         parser = argparse.ArgumentParser()
+        parser.add_argument(
+            '--config_uri', dest='config_uri', default='development.ini',
+            help='Configuration uri. Defaults to development.ini')
+        parser.add_argument(
+            '--name', dest='name', default='admin',
+            help='Application name. Default to admin app')
         parser.add_argument(
             '-f', '--force', dest='force',
             action='store_const', const=True, default=False,
@@ -102,9 +86,12 @@ class BaseProcessor():
             help='Increase verbosity')
         return parser
 
-    def execute(self, dry_run=False, force=False, verbose=False, **kwargs):
+    def execute(self, settings, dry_run=False, force=False, verbose=False,
+                **kwargs):
+        self.settings = settings
         self.dry_run = dry_run
         self.force = force
+
         if verbose:
             logger.setLevel(logging.DEBUG)
         else:
@@ -119,3 +106,8 @@ class BaseProcessor():
         if dry_run:
             logger.info(u'Dry run : rolling back transaction')
             trans.rollback()
+
+    def layer_path(self, layer):
+        return os.path.join(self.settings['data_path'],
+                            'hazardsets',
+                            layer.filename())

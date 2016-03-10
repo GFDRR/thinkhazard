@@ -30,24 +30,26 @@ from thinkhazard.models import (
 
 class TestAdminFunction(BaseTestCase):
 
+    app_name = 'admin'
+
     def test_index(self):
-        resp = self.testapp.get('/admin', status=200)
+        resp = self.testapp.get('/', status=200)
         categories = resp.html.select('.hazardcategory-link')
         self.assertEqual(len(categories), 8*4)
 
     def test_hazardcategory(self):
-        resp = self.testapp.get('/admin/EQ/HIG', status=200)
+        resp = self.testapp.get('/EQ/HIG', status=200)
         form = resp.form
         form['general_recommendation'] = 'Bar'
         form.submit(status=302)
 
     def test_technical_rec(self):
-        resp = self.testapp.get('/admin/technical_rec', status=200)
+        resp = self.testapp.get('/technical_rec', status=200)
         records = resp.html.select('.item-technicalrecommendation')
         self.assertEqual(len(records), 2)
 
     def test_technical_rec_new(self):
-        resp = self.testapp.get('/admin/technical_rec/new', status=200)
+        resp = self.testapp.get('/technical_rec/new', status=200)
         form = resp.form
         form['text'] = 'Bar'
         form['associations'] = ['EQ - MED', 'EQ - LOW']
@@ -55,7 +57,7 @@ class TestAdminFunction(BaseTestCase):
 
     def test_technical_rec_edit(self):
         technical_rec = DBSession.query(TechnicalRecommendation).first()
-        resp = self.testapp.get('/admin/technical_rec/{}'
+        resp = self.testapp.get('/technical_rec/{}'
                                 .format(technical_rec.id),
                                 status=200)
         form = resp.form
@@ -64,15 +66,15 @@ class TestAdminFunction(BaseTestCase):
         form.submit(status=302)
 
     def test_climate_rec(self):
-        self.testapp.get('/admin/climate_rec', status=302)
+        self.testapp.get('/climate_rec', status=302)
 
     def test_climate_rec_hazardtype(self):
-        resp = self.testapp.get('/admin/climate_rec/EQ', status=200)
+        resp = self.testapp.get('/climate_rec/EQ', status=200)
         records = resp.html.select('.item-climatechangerecommendation')
         self.assertEqual(len(records), 2)
 
     def test_climate_rec_new(self):
-        resp = self.testapp.get('/admin/climate_rec/FL/new', status=200)
+        resp = self.testapp.get('/climate_rec/FL/new', status=200)
         form = resp.form
         form['text'] = 'Bar'
         admindivs = DBSession.query(AdministrativeDivision) \
@@ -83,7 +85,7 @@ class TestAdminFunction(BaseTestCase):
 
     def test_climate_rec_edit(self):
         climate_rec = DBSession.query(ClimateChangeRecommendation).first()
-        resp = self.testapp.get('/admin/climate_rec/{}'
+        resp = self.testapp.get('/climate_rec/{}'
                                 .format(climate_rec.id),
                                 status=200)
         form = resp.form
