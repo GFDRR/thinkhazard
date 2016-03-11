@@ -50,7 +50,7 @@ class Completer(BaseProcessor):
                 logger.info('Reset all hazardsets to incomplete state')
                 DBSession.query(HazardSet).update({
                     HazardSet.complete: False,
-                    HazardSet.processed: False
+                    HazardSet.processed: None
                 })
                 DBSession.flush()
             except:

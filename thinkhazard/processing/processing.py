@@ -67,7 +67,7 @@ class Processor(BaseProcessor):
         if hazardset_id is not None:
             ids = ids.filter(HazardSet.id == hazardset_id)
         if not self.force:
-            ids = ids.filter(HazardSet.processed.is_(False))
+            ids = ids.filter(HazardSet.processed.is_(None))
         if ids.count() == 0:
             logger.info('No hazardset to process')
             return
@@ -88,9 +88,9 @@ class Processor(BaseProcessor):
 
         chrono = datetime.datetime.now()
 
-        if hazardset.processed:
+        if hazardset.processed is not None:
             if self.force:
-                hazardset.processed = False
+                hazardset.processed = None
             else:
                 raise ProcessException(
                     'Hazardset {} has already been processed.'
@@ -151,7 +151,7 @@ class Processor(BaseProcessor):
                     if reader and not reader.closed:
                         reader.close()
 
-        hazardset.processed = True
+        hazardset.processed = datetime.datetime.now()
         DBSession.flush()
 
         logger.info('  Successfully processed {}, {} outputs generated in {}'

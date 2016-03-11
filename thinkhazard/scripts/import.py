@@ -73,7 +73,7 @@ def import_admindivs(argv=sys.argv):
         print "This may take a while"
         sql_file = os.path.join(folder, "g2015_2014_{}.sql".format(i))
         print sql_file
-        call(["sudo", "-u", "postgres", "psql", "-d", str(engine_url),
+        call(["psql", "-d", str(engine_url),
               "-f", sql_file])
 
     trans = connection.begin()
