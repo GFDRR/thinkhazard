@@ -71,6 +71,7 @@ def main(global_config, **settings):
                          '/{hazard_type:([A-Z]{2})}/{hazard_level:([A-Z]{3})}')
 
         config.add_route('admin_hazardsets', '/hazardsets')
+        config.add_route('admin_hazardset', '/hazardset/{hazardset}')
 
         add_public_routes(config, prefix='/preview')
 

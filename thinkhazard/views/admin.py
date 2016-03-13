@@ -11,7 +11,7 @@ from sqlalchemy import (
     Integer,
     )
 
-from sqlalchemy.orm import contains_eager
+from sqlalchemy.orm import contains_eager, joinedload
 
 import json
 
@@ -27,6 +27,7 @@ from ..models import (
     HazardLevel,
     HazardType,
     HazardSet,
+    Layer,
     TechnicalRecommendation,
     )
 
@@ -184,6 +185,18 @@ def technical_rec_process(request, obj):
 def hazardsets(request):
     return {
         'hazardsets': DBSession.query(HazardSet)
+    }
+
+
+@view_config(route_name='admin_hazardset',
+             renderer='templates/admin/hazardset.jinja2')
+def hazardset(request):
+    id = request.matchdict['hazardset']
+    hazardset = DBSession.query(HazardSet) \
+        .options(joinedload(HazardSet.layers).joinedload(Layer.hazardlevel)) \
+        .get(id)
+    return {
+        'hazardset': hazardset
     }
 
 
