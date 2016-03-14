@@ -430,7 +430,7 @@ class HazardSet(Base):
     # If not complete, reason why
     complete_error = Column(String)
     # finally it is processed:
-    processed = Column(Boolean, nullable=False, default=False)
+    processed = Column(DateTime)
 
     hazardtype = relationship('HazardType', backref="hazardsets")
 

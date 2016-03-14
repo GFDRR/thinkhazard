@@ -39,6 +39,9 @@
         </td>
         <td>
           <span class="fa fa-{{'check' if set.processed else 'times'}}"></span>
+          {% if set.processed %}
+          <small>{{set.processed.strftime('%Y-%m-%d %I:%M%p')}}</small>
+          {% endif %}
         </td>
       </tr>
     {% endfor %}

@@ -433,7 +433,7 @@ class Harvester(BaseProcessor):
                         .format(layer.return_period))
             DBSession.delete(layer)
             hazardset.complete = False
-            hazardset.processed = False
+            hazardset.processed = None
 
         # Create hazardset before layer
         if hazardset is None:
@@ -457,7 +457,7 @@ class Harvester(BaseProcessor):
             layer.geonode_id = object['id']
             DBSession.add(layer)
             hazardset.complete = False
-            hazardset.processed = False
+            hazardset.processed = None
 
         else:
             # If data has changed
@@ -466,7 +466,7 @@ class Harvester(BaseProcessor):
                 logger.info('  Invalidate downloaded')
                 layer.downloaded = False
                 hazardset.completed = False
-                hazardset.processed = False
+                hazardset.processed = None
 
             # Some hazardset fields are calculated during completing
             if (layer.calculation_method_quality !=
@@ -480,7 +480,7 @@ class Harvester(BaseProcessor):
             # Some fields invalidate outputs
             if (layer.hazardunit != hazard_unit):
                 logger.info('  Invalidate processed')
-                hazardset.processed = False
+                hazardset.processed = None
 
         layer.hazardset = hazardset
         layer.hazardlevel = hazardlevel
