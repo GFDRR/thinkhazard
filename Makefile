@@ -28,7 +28,6 @@ help:
 	@echo "- process                 Compute hazard levels from hazardsets for administrative divisions level 2"
 	@echo "- decisiontree            Run the decision tree and perform upscaling"
 	@echo "- publish                 Publish validated data on public web site"
-	@echo "- publish                 Publish validated data on public web site"
 	@echo "- serve_public            Run the dev server (public app)"
 	@echo "- serve_admin             Run the dev server (admin app)"
 	@echo "- check                   Check the code with flake8, jshint and bootlint"
