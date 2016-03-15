@@ -89,14 +89,14 @@ def report(request):
             return HTTPFound(location=url)
 
     # Get the geometry for division and compute its extent
-    cte = select([AdministrativeDivision.geom]) \
+    cte = select([func.box2d(AdministrativeDivision.geom).label('box2d')]) \
         .where(AdministrativeDivision.code == division_code) \
         .cte('bounds')
     bounds = list(DBSession.query(
-        func.ST_XMIN(cte.c.geom),
-        func.ST_YMIN(cte.c.geom),
-        func.ST_XMAX(cte.c.geom),
-        func.ST_YMAX(cte.c.geom))
+        func.ST_XMIN(cte.c.box2d),
+        func.ST_YMIN(cte.c.box2d),
+        func.ST_XMAX(cte.c.box2d),
+        func.ST_YMAX(cte.c.box2d))
         .one())
     division_bounds = bounds
 
