@@ -5,9 +5,9 @@
 {% block name %}admin{% endblock %}
 
 {% block content %}
-  {{ navbar(request) }}
+  {{ navbar('tec_rec') }}
   <div class="admin-technicalrecommendations container">
-    
+
     <h3>Technical Recommendations
       <a class="btn btn-primary pull-right"
         href="{{ 'admin_technical_rec_new' | route_url }}"

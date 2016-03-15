@@ -5,13 +5,8 @@
 {% block name %}admin{% endblock %}
 
 {% block content %}
-  {{ navbar(request) }}
+  {{ navbar('hazardsets') }}
   <div class="container">
-    <style>
-      .invalid {
-        text-decoration: line-through;
-      }
-    </style>
     <table class="table table-condensed table-striped">
       <tr>
         <th></th>
@@ -23,7 +18,7 @@
         <th>Processed</th>
       </tr>
     {% for set in hazardsets %}
-      <tr class="{{ 'invalid' if not set.processed }}" >
+      <tr>
         <td>
           <a href="{{'admin_hazardset'|route_url(hazardset=set.id)}}">
             {{set.id}}
@@ -33,18 +28,18 @@
         <td>{{set.local}}</td>
         <td>{{set.calculation_method_quality}}</td>
         <td>{{set.scientific_quality}}</td>
-        <td>
+        <td class="text-center text-{{'success' if set.complete else 'danger'}}">
           <span
-          {% if set.complete_error %}
-          data-toggle="tooltip" title="{{set.complete_error}}"
-          {% endif %}
           class="fa fa-{{'check' if set.complete else 'times'}}"
-          ></span>
+          ></span><br>
+          {% if set.complete_error %}
+          <small class="text-danger">{{set.complete_error}}</small>
+          {% endif %}
         </td>
-        <td>
-          <span class="fa fa-{{'check' if set.processed else 'times'}}"></span>
+        <td class="text-center text-{{'success' if set.processed else 'danger'}}">
+          <span class="fa fa-{{'check' if set.processed else 'times'}}"></span><br>
           {% if set.processed %}
-          <small>{{set.processed.strftime('%Y-%m-%d %I:%M%p')}}</small>
+          <small class="text-success">{{set.processed.strftime('%Y-%m-%d %I:%M%p')}}</small>
           {% endif %}
         </td>
       </tr>

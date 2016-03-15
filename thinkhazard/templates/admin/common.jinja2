@@ -1,20 +1,25 @@
-{% macro navbar(request) %}
-  <div class="admin-navbar container">
-    <ul class="nav nav-pills">
-      <li role="presentation" class="{{ 'active' if request.matched_route.name == 'admin_hazardsets' else '' }}">
+{% macro navbar(category) %}
+  <div class="navbar navbar-default container-fluid">
+    <ul class="nav navbar-nav">
+      <li role="presentation" class="{{ 'active' if category == 'hazardsets' else '' }}">
         <a href="{{ 'admin_hazardsets' | route_url }}">Hazard sets</a>
       </li>
-      <li role="presentation" class="{{ 'active' if request.matched_route.name == 'admin_admindiv_hazardsets' else '' }}">
+      <li role="presentation" class="{{ 'active' if category == 'admin_div' else '' }}">
         <a href="{{ 'admin_admindiv_hazardsets' | route_url }}">Hazardsets / admin div</a>
       </li>
-      <li role="presentation" class="{{ 'active' if request.matched_route.name == 'admin_index' else '' }}">
+      <li role="presentation" class="{{ 'active' if category == 'categories' else '' }}">
         <a href="{{ 'admin_index' | route_url }}">Hazard categories</a>
       </li>
-      <li role="presentation" class="{{ 'active' if request.matched_route.name == 'admin_technical_rec' else '' }}">
+      <li role="presentation" class="{{ 'active' if category == 'tec_rec' else '' }}">
         <a href="{{ 'admin_technical_rec' | route_url }}">Technical recommendations</a>
       </li>
-      <li role="presentation" class="{{ 'active' if request.matched_route.name == 'admin_climate_rec_hazardtype' else '' }}">
+      <li role="presentation" class="{{ 'active' if category == 'cc_rec' else '' }}">
         <a href="{{ 'admin_climate_rec' | route_url }}">Climate Change Recommendations</a>
+      </li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li>
+      <a href="{{'index'|route_url}}"><span class="fa fa-share"></span> Preview</a>
       </li>
     </ul>
   </div>
