@@ -5,7 +5,7 @@
 {% block name %}admin{% endblock %}
 
 {% block content %}
-  {{ navbar(request) }}
+  {{ navbar('categories') }}
   <div class="admin-hazardcategory container">
     <h3>{{ hazard_category.hazardtype.title }} - {{ hazard_category.hazardlevel.title }}</h3>
     <form
