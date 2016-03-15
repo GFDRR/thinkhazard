@@ -100,24 +100,28 @@ def report(request):
         .one())
     division_bounds = bounds
 
-    # compute a 0-360 version of the extent
-    cte = select([
-        func.ST_Translate(
-            func.ST_Shift_Longitude(
-                func.ST_Translate(AdministrativeDivision.geom, 180, 0)),
-            -180, 0).label('shift')]) \
-        .where(AdministrativeDivision.code == division_code) \
-        .cte('bounds')
-    bounds_shifted = list(DBSession.query(
-        func.ST_XMIN(cte.c.shift),
-        func.ST_YMIN(cte.c.shift),
-        func.ST_XMAX(cte.c.shift),
-        func.ST_YMAX(cte.c.shift))
-        .one())
+    # There are some cases where divisions cross the date line. In this case,
+    # we need to shift the longitude.
+    # But for performance, we don't do it if not required.
+    if division_bounds[2] - division_bounds[0] > 180:
+        # compute a 0-360 version of the extent
+        cte = select([
+            func.ST_Translate(
+                func.ST_Shift_Longitude(
+                    func.ST_Translate(AdministrativeDivision.geom, 180, 0)),
+                -180, 0).label('shift')]) \
+            .where(AdministrativeDivision.code == division_code) \
+            .cte('bounds')
+        bounds_shifted = list(DBSession.query(
+            func.ST_XMIN(cte.c.shift),
+            func.ST_YMIN(cte.c.shift),
+            func.ST_XMAX(cte.c.shift),
+            func.ST_YMAX(cte.c.shift))
+            .one())
 
-    # Use the 0-360 if it's smaller
-    if bounds_shifted[2] - bounds_shifted[0] < bounds[2] - bounds[0]:
-        division_bounds = bounds_shifted
+        # Use the 0-360 if it's smaller
+        if bounds_shifted[2] - bounds_shifted[0] < bounds[2] - bounds[0]:
+            division_bounds = bounds_shifted
 
     feedback_params = {}
     feedback_params['entry.1144401731'] = u'{} - {}'.format(
