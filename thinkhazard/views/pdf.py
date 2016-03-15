@@ -89,7 +89,7 @@ def pdf_cover(request):
         if h['hazardlevel'].mnemonic == _hazardlevel_nodata.mnemonic:
             continue
         hazard_categories.append(get_info_for_hazard_type(
-            h['hazardtype'].mnemonic, division))
+            request, h['hazardtype'].mnemonic, division))
 
     lon, lat = DBSession.query(
         func.ST_X(ST_Centroid(AdministrativeDivision.geom)),
