@@ -23,7 +23,7 @@ import datetime
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest, HTTPFound
 
-from sqlalchemy.orm import aliased
+from sqlalchemy.orm import aliased, joinedload, contains_eager
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy import and_, or_, select
 from sqlalchemy.sql import func
@@ -227,8 +227,8 @@ def get_hazard_types(code):
     hazardcategories_query = DBSession.query(HazardCategory) \
         .join(HazardCategoryAdministrativeDivisionAssociation) \
         .join(AdministrativeDivision) \
-        .join(HazardType) \
-        .join(HazardLevel) \
+        .options(joinedload(HazardCategory.hazardlevel),
+                 joinedload(HazardCategory.hazardtype)) \
         .filter(AdministrativeDivision.code == code)
 
     # Create a dict with the categories. Keys are the hazard type mnemonic.
@@ -256,10 +256,11 @@ def get_info_for_hazard_type(request, hazard, division):
     hazard_category = DBSession.query(HazardCategory) \
         .join(HazardCategoryAdministrativeDivisionAssociation) \
         .join(AdministrativeDivision) \
-        .join(HazardLevel) \
+        .options(joinedload(HazardCategory.hazardlevel)) \
         .join(HazardType) \
         .filter(HazardType.mnemonic == hazard) \
         .filter(AdministrativeDivision.code == division.code) \
+        .options(contains_eager(HazardCategory.hazardtype)) \
         .one()
 
     # get the code for level 0 division
