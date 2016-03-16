@@ -17,6 +17,8 @@ The following packages must be installed on the system:
 * `python-devel`
 * `python-virtualenv`
 * `apache2`
+* `memcached`
+* `libmemcached-dev`
 
 Getting Started
 ===============

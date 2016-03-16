@@ -46,6 +46,8 @@ requires = [
     'markdown==2.6.5',
     'APScheduler==3.0.5',
     'paste==2.0.2',
+    'dogpile.cache==0.5.7',
+    'dogpile.core==0.4.1',
     ]
 
 setup(name='thinkhazard',

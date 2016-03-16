@@ -48,6 +48,14 @@ from ..models import (
     HazardCategoryTechnicalRecommendationAssociation,
 )
 
+from dogpile.cache import make_region
+
+region = make_region().configure(
+    'dogpile.cache.memory'
+)
+
+region.invalidate()
+
 
 # An object for the "no data" category type.
 _hazardlevel_nodata = HazardLevel()
@@ -89,21 +97,12 @@ def report(request):
             return HTTPFound(location=url)
 
     # Get the geometry for division and compute its extent
-    cte = select([func.box2d(AdministrativeDivision.geom).label('box2d')]) \
-        .where(AdministrativeDivision.code == division_code) \
-        .cte('bounds')
-    bounds = list(DBSession.query(
-        func.ST_XMIN(cte.c.box2d),
-        func.ST_YMIN(cte.c.box2d),
-        func.ST_XMAX(cte.c.box2d),
-        func.ST_YMAX(cte.c.box2d))
-        .one())
-    division_bounds = bounds
+    bounds = get_division_bounds(division_code)
 
     # There are some cases where divisions cross the date line. In this case,
     # we need to shift the longitude.
     # But for performance, we don't do it if not required.
-    if division_bounds[2] - division_bounds[0] > 180:
+    if bounds[2] - bounds[0] > 180:
         # compute a 0-360 version of the extent
         cte = select([
             func.ST_Translate(
@@ -121,7 +120,7 @@ def report(request):
 
         # Use the 0-360 if it's smaller
         if bounds_shifted[2] - bounds_shifted[0] < bounds[2] - bounds[0]:
-            division_bounds = bounds_shifted
+            bounds = bounds_shifted
 
     feedback_params = {}
     feedback_params['entry.1144401731'] = u'{} - {}'.format(
@@ -139,7 +138,7 @@ def report(request):
         'hazards_sorted': sorted(
             hazard_types, key=lambda a: a['hazardlevel'].order),
         'division': division,
-        'bounds': division_bounds,
+        'bounds': bounds,
         'parents': get_parents(division),
         'parent_division': division.parent,
         'date': datetime.datetime.now(),
@@ -216,6 +215,18 @@ def get_division(code):
         .outerjoin(_alias, _alias.code == AdministrativeDivision.parent_code) \
         .filter(AdministrativeDivision.code == code).one()
 
+@region.cache_on_arguments()
+def get_division_bounds(division_code):
+    cte = select([func.box2d(AdministrativeDivision.geom).label('box2d')]) \
+        .where(AdministrativeDivision.code == division_code) \
+        .cte('bounds')
+    return list(DBSession.query(
+        func.ST_XMIN(cte.c.box2d),
+        func.ST_YMIN(cte.c.box2d),
+        func.ST_XMAX(cte.c.box2d),
+        func.ST_YMAX(cte.c.box2d))
+        .one())
+
 
 def get_hazard_types(code):
 
@@ -247,6 +258,7 @@ def get_hazard_types(code):
     return hazard_types
 
 
+@region.cache_on_arguments()
 def get_info_for_hazard_type(request, hazard, division):
     technical_recommendations = None
     further_resources = None
