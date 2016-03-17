@@ -36,7 +36,7 @@
   {% else %}
     <aside class="hazard-level">Hazard level</aside>
     {% for hazard in hazards_sorted %}
-    <a href="{{ 'report'|route_url(divisioncode=division.code, hazardtype=hazard.hazardtype.mnemonic) }}" aria-controls="{{ hazard.hazardtype.title }}" class="level-{{ hazard.hazardlevel.mnemonic }} overview">
+    <a href="{{ 'report'|route_url(division=division, hazardtype=hazard.hazardtype.mnemonic) }}" aria-controls="{{ hazard.hazardtype.title }}" class="level-{{ hazard.hazardlevel.mnemonic }} overview">
       <h2 class="page-header">
         {{ hazard.hazardtype.title }}
         <small>
@@ -51,7 +51,7 @@
   <div class="map-block">
     <div id="map" class="map">
       {% if parents.__len__() >= 1 %}
-      <a class="btn btn-xs btn-default drillup" href="{{ 'report' | route_url(divisioncode=parents[0].code, hazardtype=hazard_category.hazardtype.mnemonic if hazard_category else '')}}">
+      <a class="btn btn-xs btn-default drillup" href="{{ 'report' | route_url(division=parents[0], hazardtype=hazard_category.hazardtype.mnemonic if hazard_category else '')}}">
         <i class="btn-xs icon-zoom-out"></i>
         Zoom out to {{ parent_division.name }}
       </a>

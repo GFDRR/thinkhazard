@@ -14,7 +14,7 @@ Think Hazard - {{ division.name}}
 {% endblock %}
 
 {% block content %}
-  {% set overview_url = 'report_overview'|route_url(divisioncode=division.code) %}
+  {% set overview_url = 'report_overview'|route_url(division=division) %}
 
   <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -49,7 +49,7 @@ Think Hazard - {{ division.name}}
         <div class="btn-group btn-group-xs">
           <button class="btn btn-default"><i class="icon-pin"></i></button>
           {% for parent in parents | reverse %}
-          <a href="{{ 'report' | route_url(divisioncode=parent.code, hazardtype=hazard_category.hazardtype.mnemonic if hazard_category else '')}}"
+          <a href="{{ 'report' | route_url(division=parent, hazardtype=hazard_category.hazardtype.mnemonic if hazard_category else '')}}"
              class="btn btn-default">
           {{ parent.name }}
           </a>
@@ -166,7 +166,7 @@ Think Hazard - {{ division.name}}
 <li class="{{ hazard.hazardlevel.mnemonic }} text-center {{ 'active' if hazard_category and hazard.hazardtype.mnemonic == hazard_category.hazardtype.mnemonic else ''}}">
   <a
     {% if hazard.hazardlevel.mnemonic != 'no-data' %}
-    href="{{'report'|route_url(divisioncode=division.code, hazardtype=hazard.hazardtype.mnemonic)}}"
+    href="{{'report'|route_url(division=division, hazardtype=hazard.hazardtype.mnemonic)}}"
     {% endif %}
      >
     <i class="fa hazard-icon icon-{{hazard.hazardtype.mnemonic|lower|replace(' ', '')}}"></i><br>

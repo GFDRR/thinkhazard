@@ -103,7 +103,7 @@ d3.json("{{'thinkhazard:static/js/map.topojson'|static_url}}", function(error, w
     <div class="container text-center footer">
       Report generated on {{date.strftime('%Y-%m-%d')}}
       <br>
-      from <a href="{{'report_overview'|route_url(divisioncode=division.code)}}">{{'report_overview'|route_url(divisioncode=division.code)}}</a>
+      from <a href="{{'report_overview'|route_url(division=division)}}">{{'report_overview'|route_url(division=division)}}</a>
     </div>
   </body>
   <script>

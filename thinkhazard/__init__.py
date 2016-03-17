@@ -92,8 +92,17 @@ def add_public_routes(config):
     config.add_route('about', '/about')
     config.add_route('faq', '/faq')
 
+    def pregenerator(request, elements, kw):
+        if 'division' in kw:
+            division = kw.pop('division')
+            kw['divisioncode'] = division.code
+            kw['slug'] = division.slug()
+        return elements, kw
+
     config.add_route('report',
-                     '/report/{divisioncode:\d+}/{hazardtype:([A-Z]{2})}')
+                     '/report/{divisioncode:\d+}-{slug}'
+                     '/{hazardtype:([A-Z]{2})}',
+                     pregenerator=pregenerator)
     config.add_route('report_print',
                      '/report/print/{divisioncode:\d+}/'
                      '{hazardtype:([A-Z]{2})}')
@@ -106,9 +115,11 @@ def add_public_routes(config):
     config.add_route('get_pdf_report',
                      '/report/{divisioncode:\d+}/{id}.pdf')
 
-    config.add_route('report_overview', '/report/{divisioncode:\d+}')
+    config.add_route('report_overview', '/report/{divisioncode:\d+}-{slug}',
+                     pregenerator=pregenerator)
     config.add_route('report_overview_slash',
-                     '/report/{divisioncode:\d+}/')
+                     '/report/{divisioncode:\d+}-{slug}/',
+                     pregenerator=pregenerator)
     config.add_route('report_overview_json',
                      '/report/{divisioncode:\d+}.json')
 

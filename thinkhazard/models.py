@@ -19,6 +19,7 @@
 
 import threading
 import datetime
+from slugify import slugify
 
 from sqlalchemy import (
     Boolean,
@@ -259,16 +260,28 @@ class AdministrativeDivision(Base):
     def __json__(self, request):
         if self.leveltype_id == 1:
             return {'code': self.code,
-                    'admin0': self.name}
+                    'admin0': self.name,
+                    'url': request.route_url('report_overview', division=self)}
         if self.leveltype_id == 2:
             return {'code': self.code,
                     'admin0': self.parent.name,
-                    'admin1': self.name}
+                    'admin1': self.name,
+                    'url': request.route_url('report_overview', division=self)}
         if self.leveltype_id == 3:
             return {'code': self.code,
                     'admin0': self.parent.parent.name,
                     'admin1': self.parent.name,
-                    'admin2': self.name}
+                    'admin2': self.name,
+                    'url': request.route_url('report_overview', division=self)}
+
+    def slug(self):
+        tokens = [self.name]
+        parent = self.parent
+        while parent:
+            tokens.append(parent.name)
+            parent = parent.parent
+        tokens.reverse()
+        return slugify('-'.join(tokens))
 
 
 class HazardCategory(Base):
