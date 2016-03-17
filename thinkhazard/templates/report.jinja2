@@ -34,6 +34,7 @@ Think Hazard - {{ division.name}}
 
   <div class="jumbotron">
     <div class="container">
+      {% if request.registry['settings'].appname != 'admin' %}
       <div class="pull-right">
         <a class="btn btn-default btn-xs" href id="download">
           <i class="icon-spinner fa-spin hide"></i>
@@ -41,6 +42,7 @@ Think Hazard - {{ division.name}}
           Download PDF
         </a>
       </div>
+      {% endif %}
 
       <!-- breadcrumb -->
       <div class="breadcrumb">
