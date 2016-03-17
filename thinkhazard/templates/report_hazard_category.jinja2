@@ -100,7 +100,7 @@
     <div class="data-source text-center">
       <h5>DATA SOURCE{% if sources|length > 1 %}S{% endif %}</h5>
       {% for source in sources %}
-      <a href="{{ source.distribution_url }}">{{ source.owner_organization}}</a>
+      <a href="{{ 'data_source'|route_url(hazardset=source.id) }}">{{ source.owner_organization}}</a>
       {% if not loop.last %},&nbsp;{% endif %}
       {% endfor %}
     </div>

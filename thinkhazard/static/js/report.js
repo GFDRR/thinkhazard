@@ -267,4 +267,9 @@
     }
   }
 
+  $('.data-source a').on('click', function(e) {
+    e.preventDefault();
+    $('#data-source-modal').modal('show').find('.modal-body').load($(this).attr('href'));
+  });
+
 })();
