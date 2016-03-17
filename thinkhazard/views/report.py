@@ -23,7 +23,7 @@ import datetime
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest, HTTPFound
 
-from sqlalchemy.orm import aliased
+from sqlalchemy.orm import aliased, joinedload, contains_eager
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy import and_, or_, select
 from sqlalchemy.sql import func
@@ -89,35 +89,39 @@ def report(request):
             return HTTPFound(location=url)
 
     # Get the geometry for division and compute its extent
-    cte = select([AdministrativeDivision.geom]) \
+    cte = select([func.box2d(AdministrativeDivision.geom).label('box2d')]) \
         .where(AdministrativeDivision.code == division_code) \
         .cte('bounds')
     bounds = list(DBSession.query(
-        func.ST_XMIN(cte.c.geom),
-        func.ST_YMIN(cte.c.geom),
-        func.ST_XMAX(cte.c.geom),
-        func.ST_YMAX(cte.c.geom))
+        func.ST_XMIN(cte.c.box2d),
+        func.ST_YMIN(cte.c.box2d),
+        func.ST_XMAX(cte.c.box2d),
+        func.ST_YMAX(cte.c.box2d))
         .one())
     division_bounds = bounds
 
-    # compute a 0-360 version of the extent
-    cte = select([
-        func.ST_Translate(
-            func.ST_Shift_Longitude(
-                func.ST_Translate(AdministrativeDivision.geom, 180, 0)),
-            -180, 0).label('shift')]) \
-        .where(AdministrativeDivision.code == division_code) \
-        .cte('bounds')
-    bounds_shifted = list(DBSession.query(
-        func.ST_XMIN(cte.c.shift),
-        func.ST_YMIN(cte.c.shift),
-        func.ST_XMAX(cte.c.shift),
-        func.ST_YMAX(cte.c.shift))
-        .one())
+    # There are some cases where divisions cross the date line. In this case,
+    # we need to shift the longitude.
+    # But for performance, we don't do it if not required.
+    if division_bounds[2] - division_bounds[0] > 180:
+        # compute a 0-360 version of the extent
+        cte = select([
+            func.ST_Translate(
+                func.ST_Shift_Longitude(
+                    func.ST_Translate(AdministrativeDivision.geom, 180, 0)),
+                -180, 0).label('shift')]) \
+            .where(AdministrativeDivision.code == division_code) \
+            .cte('bounds')
+        bounds_shifted = list(DBSession.query(
+            func.ST_XMIN(cte.c.shift),
+            func.ST_YMIN(cte.c.shift),
+            func.ST_XMAX(cte.c.shift),
+            func.ST_YMAX(cte.c.shift))
+            .one())
 
-    # Use the 0-360 if it's smaller
-    if bounds_shifted[2] - bounds_shifted[0] < bounds[2] - bounds[0]:
-        division_bounds = bounds_shifted
+        # Use the 0-360 if it's smaller
+        if bounds_shifted[2] - bounds_shifted[0] < bounds[2] - bounds[0]:
+            division_bounds = bounds_shifted
 
     feedback_params = {}
     feedback_params['entry.1144401731'] = u'{} - {}'.format(
@@ -174,8 +178,8 @@ def report_json(request):
             .add_columns(simplify, HazardLevel.mnemonic, HazardLevel.title) \
             .outerjoin(AdministrativeDivision.hazardcategories) \
             .join(HazardCategory) \
-            .outerjoin(HazardType)\
-            .outerjoin(HazardLevel) \
+            .join(HazardType)\
+            .join(HazardLevel) \
             .filter(and_(_filter, HazardType.mnemonic == hazard_type))
     else:
         divisions = DBSession.query(AdministrativeDivision) \
@@ -223,8 +227,8 @@ def get_hazard_types(code):
     hazardcategories_query = DBSession.query(HazardCategory) \
         .join(HazardCategoryAdministrativeDivisionAssociation) \
         .join(AdministrativeDivision) \
-        .join(HazardType) \
-        .join(HazardLevel) \
+        .options(joinedload(HazardCategory.hazardlevel),
+                 joinedload(HazardCategory.hazardtype)) \
         .filter(AdministrativeDivision.code == code)
 
     # Create a dict with the categories. Keys are the hazard type mnemonic.
@@ -252,10 +256,11 @@ def get_info_for_hazard_type(request, hazard, division):
     hazard_category = DBSession.query(HazardCategory) \
         .join(HazardCategoryAdministrativeDivisionAssociation) \
         .join(AdministrativeDivision) \
-        .join(HazardLevel) \
+        .options(joinedload(HazardCategory.hazardlevel)) \
         .join(HazardType) \
         .filter(HazardType.mnemonic == hazard) \
         .filter(AdministrativeDivision.code == division.code) \
+        .options(contains_eager(HazardCategory.hazardtype)) \
         .one()
 
     # get the code for level 0 division
