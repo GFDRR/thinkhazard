@@ -20,6 +20,7 @@
 import os
 import sys
 from subprocess import call
+from urlparse import urlparse
 
 from pyramid.paster import (
     get_appsettings,
@@ -42,22 +43,7 @@ def database_name(config_uri, name, options={}):
     settings = get_appsettings(config_uri, name=name, options=options)
     load_local_settings(settings)
     url = settings['sqlalchemy.url']
-    params = url_split(url)
-    return params['database']
-
-
-def url_split(url):
-    protocol, empty, connection, database = url.split('/')
-    credential, socket = connection.split('@')
-    user, password = credential.split(':')
-    host, port = socket.split(':')
-    return {
-        'host': host,
-        'port': port,
-        'user': user,
-        'password': password,
-        'database': database
-    }
+    return urlparse(url).path.strip('/')
 
 
 def main(argv=sys.argv):
