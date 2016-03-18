@@ -146,7 +146,7 @@ class TestReportFunction(BaseTestCase):
 
         self.assertTrue(os.path.isfile(file_name))
 
-    @patch('thinkhazard.scheduler.add_job')
+    @patch('thinkhazard.views.pdf.scheduler.add_job')
     def test_create_pdf_report(self, mock):
         def add_job(func, **kwargs):
             pass
