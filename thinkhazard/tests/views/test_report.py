@@ -121,6 +121,9 @@ class TestReportFunction(BaseTestCase):
     def test_create_pdf_cover(self):
         self.testapp.get('/pdf_cover/31', status=200)
 
+    def test_report_print(self):
+        self.testapp.get('/report/print/31/EQ', status=200)
+
     @patch('thinkhazard.views.pdf.Popen')
     def test_create_pdf(self, mock):
         # tests that wkhtmltopdf is called and that the generated pdf file is
