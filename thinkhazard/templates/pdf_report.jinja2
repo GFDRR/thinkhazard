@@ -13,29 +13,16 @@
     {{ hazard_category.general_recommendation|replace("name of location", "(" + division.name + ")")|markdown }}
     </p>
     {% endif %}
-  </div>
-</div>
-<div class="row">
-  <div class="col-sm-7">
+
     {% if climate_change_recommendation %}
     <p>
       {{ climate_change_recommendation.text }}
     </p>
     {% endif %}
-
-    {% if recommendations %}
-    <h3>Recommendations</h3>
-    <ul class="recommendations">
-    {% for recommendation in recommendations %}
-      <li class="list-unstyled">
-        <i class="icon-list-square"></i>
-        {{ recommendation.text }}
-      </li>
-    {% endfor %}
-    </ul>
-    {% endif %}
   </div>
-  <div class="col-sm-5">
+</div>
+<div class="row">
+  <div class="col-sm-5 col-sm-offset-1">
     <div class="map-block">
       <div id="map" class="map" data-hazardtype="{{hazard_category.hazardtype.mnemonic if hazard_category else ''}}">
       </div>
@@ -45,44 +32,60 @@
           © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>
         </small>
       </div>
-      <div class="caption level">
-        {{ hazard_category.hazardtype.title}} hazard level
-      </div>
-      <div class="caption location">
-        {{ division.name }}
-      </div>
-      <div class="legend">
-        <table class="table">
-          <tr>
-            <td class="level-HIG">
-              <i class="square"></i>
-              High
-            </td>
-            <td class="level-MED">
-              <i class="square"></i>
-              Medium
-            </td>
-            <td class="level-LOW">
-              <i class="square"></i>
-              Low
-            </td>
-            <td class="level-VLO">
-              <i class="square"></i>
-              Very low
-            </td>
-          </tr>
-        </table>
-      </div>
-
-      <div class="data-source text-center small">
-        Data source{% if sources|length > 1 %}s{% endif %}:
-        {% for source in sources %}
-        {{ source.owner_organization}}
-        {% if not loop.last %},&nbsp;{% endif %}
-        {% endfor %}
-      </div>
     </div>
-    {% if resources and resources|length > 0 %}
+  </div>
+  <div class="col-sm-5">
+    <div class="legend">
+      <table class="table">
+        <tr>
+          <td class="level-HIG">
+            <i class="square"></i>
+            High
+          </td>
+          <td class="level-MED">
+            <i class="square"></i>
+            Medium
+          </td>
+          <td class="level-LOW">
+            <i class="square"></i>
+            Low
+          </td>
+          <td class="level-VLO">
+            <i class="square"></i>
+            Very low
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="data-source text-center small">
+      Data source{% if sources|length > 1 %}s{% endif %}:
+      {% for source in sources %}
+      {{ source.owner_organization}}
+      {% if not loop.last %},&nbsp;{% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% if recommendations %}
+<div class="row">
+  <div class="col-sm-12">
+    <h3>Recommendations</h3>
+    <ul class="recommendations">
+    {% for recommendation in recommendations %}
+      <li class="list-unstyled">
+        <i class="icon-list-square"></i>
+        {{ recommendation.text }}
+      </li>
+    {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endif %}
+<hr>
+{% if resources and resources|length > 0 %}
+<div class="row">
+  <div class="col-sm-12">
     <div class="further-resources">
       <h4>Further resources</h4>
       <ul>
@@ -95,9 +98,9 @@
       {% endfor %}
       </ul>
     </div>
-    {% endif %}
   </div>
 </div>
+{% endif %}
 {% endmacro %}
 
 <!DOCTYPE html>
