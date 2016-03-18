@@ -126,7 +126,7 @@ def create_pdf(file_name, file_name_temp, cover_url, pages, timeout):
 
     try:
         p = Popen(
-            command+'d', shell=True, stdout=PIPE, stderr=PIPE, close_fds=True)
+            command, shell=True, stdout=PIPE, stderr=PIPE, close_fds=True)
         # Timeout wkhtmltopdf in case of http error with --window-status
         start = time()
         while p.poll() is None:
