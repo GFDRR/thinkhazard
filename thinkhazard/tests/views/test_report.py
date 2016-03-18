@@ -36,39 +36,39 @@ class TestReportFunction(BaseTestCase):
         super(TestReportFunction, self).tearDown()
 
     def test_report(self):
-        self.testapp.get('/report/32', status=200)
+        self.testapp.get('/report/32-slug', status=200)
 
     def test_report__division_desecendants(self):
-        resp = self.testapp.get('/report/32', status=200)
+        resp = self.testapp.get('/report/32-slug', status=200)
         # 3 divisions + pin icon
         self.assertEqual(len(resp.pyquery('.breadcrumb .btn')), 4)
 
-        resp = self.testapp.get('/report/10')
+        resp = self.testapp.get('/report/10-slug')
         # 1 division + pin icon
         self.assertEqual(len(resp.pyquery('.breadcrumb .btn')), 2)
 
     def test_report__hazardcategories(self):
-        resp = self.testapp.get('/report/11', status=200)
+        resp = self.testapp.get('/report/11-slug', status=200)
         # admin div 11 is not linked to any hazard category
         self.assertEqual(len(resp.pyquery('.level-no-data.overview')), 8)
 
-        resp = self.testapp.get('/report/32', status=200)
+        resp = self.testapp.get('/report/32-slug', status=200)
         # admin div 10 is not linked to hazard categories with one with high
         # level and one with medium level
         self.assertEqual(len(resp.pyquery('.level-HIG.overview')), 1)
         self.assertEqual(len(resp.pyquery('.level-MED.overview')), 1)
 
     def test_report__zoom_out(self):
-        resp = self.testapp.get('/report/10')
+        resp = self.testapp.get('/report/10-slug')
         # no zoom out for level 1
         self.assertFalse('drillup' in resp.body)
 
-        resp = self.testapp.get('/report/20')
+        resp = self.testapp.get('/report/20-slug')
         # zoom out for level > 1
         self.assertTrue('drillup' in resp.body)
 
     def test_report__hazard_categories(self):
-        resp = self.testapp.get('/report/32')
+        resp = self.testapp.get('/report/32-slug')
         hazards_list = resp.pyquery('.hazard-types-list')
 
         # only two categories with data
@@ -87,34 +87,34 @@ class TestReportFunction(BaseTestCase):
         self.assertTrue('River flood' in hazards.eq(1).html())
 
     def test_report__hazard(self):
-        resp = self.testapp.get('/report/32/EQ', status=200)
+        resp = self.testapp.get('/report/32-slug/EQ', status=200)
         self.assertTrue('Climate change recommendation' in resp.body)
         self.assertEqual(len(resp.pyquery('.recommendations li')), 2)
 
     def test_report__further_resources_division(self):
         # admin div 12 is not linked with any region => no further resource
-        resp = self.testapp.get('/report/12/EQ', status=200)
+        resp = self.testapp.get('/report/12-slug/EQ', status=200)
         self.assertEqual(len(resp.pyquery('.further-resources ul li')), 0)
 
         # admin div 13 is linked with global region => one single resource
-        resp = self.testapp.get('/report/13/EQ', status=200)
+        resp = self.testapp.get('/report/13-slug/EQ', status=200)
         self.assertEqual(len(resp.pyquery('.further-resources ul li')), 1)
 
         # admin div 10 is linked with global region and one country
         # => gets one resource for each
-        resp = self.testapp.get('/report/10/EQ', status=200)
+        resp = self.testapp.get('/report/10-slug/EQ', status=200)
         self.assertEqual(len(resp.pyquery('.further-resources ul li')), 2)
 
         # admin div 31 is grand child of admin div 10
         # => hence inherits the same number of further resources
-        resp = self.testapp.get('/report/31/EQ', status=200)
+        resp = self.testapp.get('/report/31-slug/EQ', status=200)
         self.assertEqual(len(resp.pyquery('.further-resources ul li')), 2)
 
     def test_report__json(self):
         self.testapp.get('/report/31/EQ.json?resolution=1000', status=200)
 
     def test_report__data_sources(self):
-        resp = self.testapp.get('/report/31/EQ')
+        resp = self.testapp.get('/report/31-slug/EQ')
         print resp.body
         self.assertTrue('data_provider' in resp.body)
 

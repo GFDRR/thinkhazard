@@ -59,8 +59,7 @@
     map.on('click', function(e) {
       var feature = map.forEachFeatureAtPixel(e.pixel, filterFn);
       if (feature) {
-        var code = feature.get('code');
-        window.location = app.reportpageUrl.replace('__divisioncode__', code);
+        window.location = feature.get('url');
       }
     });
   }

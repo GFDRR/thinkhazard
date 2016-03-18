@@ -22,7 +22,7 @@
   engine.initialize();
 
   var $search = $('#search .search-field');
-  var $divisionCode = $('#search .search-division-code');
+  var $divisionUrl = $('#search .search-division-url');
 
   $search.typeahead({
     highlight: true
@@ -43,27 +43,26 @@
   });
 
   $search.on('typeahead:select', function(e, d) {
-    $divisionCode.val(d.code);
+    $divisionUrl.val(d.url);
     $('#search').trigger('submit');
   });
   $search.on('typeahead:autocomplete', function(e, s) {
-    $divisionCode.val(s.code);
+    $divisionUrl.val(s.url);
   });
   $search.on('typeahead:render', function(e, s) {
     if (s) {
-      $divisionCode.val(s.code);
+      $divisionUrl.val(s.url);
     }
   });
   $search.on('typeahead:asyncrequest', function(e) {
     // clear division code once a new request is sent
-    $divisionCode.val('');
+    $divisionUrl.val('');
   });
 
   $('#search').on('submit', function(e) {
-    var code = $divisionCode.val();
-    if (code !== '') {
-      window.location.href = app.reportpageUrl.replace('__divisioncode__',
-          code);
+    var url = $divisionUrl.val();
+    if (url !== '') {
+      window.location.href = url;
     }
     return false;
   });

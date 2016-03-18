@@ -195,6 +195,10 @@ def report_json(request):
         'properties': {
             'name': division.name,
             'code': division.code,
+            'url': request.route_url(
+                'report' if hazard_type else 'report_overview',
+                division=division,
+                hazardtype=hazard_type),
             'hazardLevelMnemonic': hazardlevel_mnemonic,
             'hazardLevelTitle': hazardlevel_title
         }

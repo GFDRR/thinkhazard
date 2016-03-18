@@ -112,7 +112,7 @@
     <div class="container-fluid">
       <div class="pull-right">
         {{date.strftime('%Y-%m-%d')}} |
-        {{request.route_url('report', divisioncode=division.code, hazardtype=hazard_category.hazardtype.mnemonic)}}
+        {{request.route_url('report', division=division, hazardtype=hazard_category.hazardtype.mnemonic)}}
       </div>
       <div class="">
         ThinkHazard!
