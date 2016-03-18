@@ -19,7 +19,7 @@
 import os
 import shutil
 
-from mock.mock import patch
+from mock.mock import Mock, patch
 from . import BaseTestCase
 
 
@@ -132,9 +132,11 @@ class TestReportFunction(BaseTestCase):
             class PopenMock:
                 def __init__(self):
                     self.returncode = 0
+                    self.stderr = Mock(**{
+                        'read.return_value': ''})
 
-                def communicate(self):
-                    return '', ''
+                def poll(self):
+                    return self.returncode
 
             return PopenMock()
         mock.side_effect = popen_mock
@@ -145,7 +147,7 @@ class TestReportFunction(BaseTestCase):
         self._touch_file('_' + pdf_file)
 
         from thinkhazard.views.pdf import create_pdf
-        create_pdf(file_name, file_name_temp, 'cover_url', 'pages')
+        create_pdf(file_name, file_name_temp, 'cover_url', 'pages', 0.1)
 
         self.assertTrue(os.path.isfile(file_name))
 
