@@ -31,6 +31,7 @@ from subprocess import (
     Popen,
     PIPE,
 )
+from time import time, sleep
 
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest, HTTPNotFound
@@ -61,14 +62,6 @@ from geoalchemy2.functions import ST_Centroid
 REPORT_ID_REGEX = re.compile('\w{8}(-\w{4}){3}-\w{12}?')
 
 logger = logging.getLogger(__name__)
-
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(levelname)s - %(message)s')
-ch.setFormatter(formatter)
-logger.addHandler(ch)
-
-logger.setLevel(logging.DEBUG)
 
 
 @view_config(
@@ -117,7 +110,7 @@ def pdf_about(request):
     return {}
 
 
-def create_pdf(file_name, file_name_temp, cover_url, pages):
+def create_pdf(file_name, file_name_temp, cover_url, pages, timeout):
     """Create a PDF file with the given pages using wkhtmltopdf.
     wkhtmltopdf is writing the PDF in `file_name_temp`, once the generation
     has finished, the file is renamed to `file_name`.
@@ -129,26 +122,33 @@ def create_pdf(file_name, file_name_temp, cover_url, pages):
     command += ' --viewport-size 800x600'
     command += ' --window-status "finished"'
     command += ' cover "%s"' % cover_url
-    command += ' %s "%s" >> /tmp/wkhtp.log' % (pages, file_name_temp)
+    command += ' %s "%s"' % (pages, file_name_temp)
 
     try:
         p = Popen(
-            command, shell=True, stdout=PIPE, stderr=PIPE, close_fds=True)
-        stdout, stderr = p.communicate()
+            command+'d', shell=True, stdout=PIPE, stderr=PIPE, close_fds=True)
+        # Timeout wkhtmltopdf in case of http error with --window-status
+        start = time()
+        while p.poll() is None:
+            sleep(0.1)
+            if time() - start > timeout:
+                p.terminate()
         retcode = p.returncode
+        stderr = p.stderr.read()
 
         if retcode == 0:
             # once the generation has succeeded, rename the file so that
             # waiting clients know that it is finished
             os.rename(file_name_temp, file_name)
         elif retcode < 0:
-            raise Exception("Terminated by signal: ", -retcode)
+            logger.error(stderr)
+            logger.error("wkhtmltopdf terminated by signal: %s", -retcode)
         else:
-            raise Exception(stderr)
+            logger.error(stderr)
 
-    except OSError as exc:
+    except:
         logger.error(traceback.format_exc())
-        raise exc
+
     finally:
         try:
             os.remove(file_name_temp)
@@ -190,12 +190,14 @@ def create_pdf_report(request):
     file_name_temp = _get_report_filename(
         base_path, division_code, report_id, temp=True)
 
+    timeout = float(request.registry.settings['pdf_timeout'])
+
     # already create the file, so that the client can poll the status
     _touch(file_name_temp)
 
     scheduler.add_job(
         create_pdf,
-        args=[file_name, file_name_temp, cover_url, pages])
+        args=[file_name, file_name_temp, cover_url, pages, timeout])
 
     return {
         'divisioncode': division_code,
