@@ -227,6 +227,14 @@ files as well as archive to generated PDF reports.
 It defaults to ``/tmp``. For production, we recommend you change this location
 to a dedicated disk partition.
 
+Analytics
+---------
+
+If you want to get some analytics on the website usage (via Google analytics),
+you can add the tracking code using a `analytics` variable::
+
+    analytics = UA-75358940-1
+
 Deploy on server
 ================
 
