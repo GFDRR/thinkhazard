@@ -201,7 +201,7 @@ can set ``AUTHUSERFILE`` on the ``make modwsgi`` command line.
 To create a authentification file ``.htpasswd`` with ``admin`` as the initial
 user ::
 
-    $ htpasswd -c .htpassword username
+    $ htpasswd -c .htpasswd username
 
 It will prompt for the passwd.
 
