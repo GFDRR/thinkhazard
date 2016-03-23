@@ -198,16 +198,16 @@ By default, the admin interface authentification file is
 ``/var/www/vhosts/wb-thinkhazard/conf/.htpasswd``. To change the location you
 can set ``AUTHUSERFILE`` on the ``make modwsgi`` command line.
 
-To create a authentification file ``.htpassword`` with ``admin`` as the initial
+To create a authentification file ``.htpasswd`` with ``admin`` as the initial
 user ::
 
     $ htpasswd -c .htpassword username
 
-It will prompt for the password.
+It will prompt for the passwd.
 
-Add or modify ``username2`` in the password file ``.htpassword``::
+Add or modify ``username2`` in the password file ``.htpasswd``::
 
-   $ htpasswd .htpassword username2
+   $ htpasswd .htpasswd username2
 
 Use ``local.ini``
 =================
