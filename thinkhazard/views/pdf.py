@@ -59,7 +59,7 @@ from sqlalchemy.orm import joinedload
 
 from geoalchemy2.functions import ST_Centroid
 
-REPORT_ID_REGEX = re.compile('\w{8}(-\w{4}){3}-\w{12}?')
+REPORT_ID_REGEX = re.compile('\d{4}_\d{2}_\w{8}(-\w{4}){3}-\w{12}?')
 
 logger = logging.getLogger(__name__)
 
@@ -265,7 +265,10 @@ def _get_report_id(division_code, base_path):
     the generated id.
     """
     while True:
-        report_id = str(uuid4())
+        date = datetime.datetime.now()
+        year = date.strftime('%Y')
+        month = date.strftime('%m')
+        report_id = '_'.join([year, month, str(uuid4())])
         file_name = _get_report_filename(
             base_path, division_code, report_id)
         file_name_temp = _get_report_filename(
@@ -275,13 +278,17 @@ def _get_report_id(division_code, base_path):
 
 
 def _get_report_filename(base_path, division_code, report_id, temp=False):
+    year, month, id = report_id.split('_')
     return path.join(
-        base_path,
+        base_path, year, month,
         ('_' if temp else '') + '{:s}-{:s}.pdf'.format(
-            division_code, report_id))
+            division_code, id))
 
 
 def _touch(file):
+    path = os.path.dirname(file)
+    if not os.path.exists(path):
+        os.makedirs(path)
     with open(file, 'a'):
         os.utime(file, None)
 

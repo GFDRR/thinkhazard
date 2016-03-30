@@ -29,6 +29,14 @@ class TestReportFunction(BaseTestCase):
         super(TestReportFunction, self).setUp()
         self.pdf_archive_path = self.testapp.app.registry.settings.get(
             'pdf_archive_path')
+        self.report_id = '1d235e51-44d5-47ac-b6da-a96c46f21639'
+        filename = '31-' + self.report_id + '.pdf'
+        year = '1970'
+        month = '01'
+        self.pdf_file = os.path.join(
+            self.pdf_archive_path, year, month, filename)
+        self.pdf_temp_file = os.path.join(
+            self.pdf_archive_path, year, month, '_' + filename)
 
     def tearDown(self):  # noqa
         # delete pdf archive directory
@@ -141,15 +149,13 @@ class TestReportFunction(BaseTestCase):
             return PopenMock()
         mock.side_effect = popen_mock
 
-        pdf_file = '31-1d235e51-44d5-47ac-b6da-a96c46f21639.pdf'
-        file_name = os.path.join(self.pdf_archive_path, pdf_file)
-        file_name_temp = os.path.join(self.pdf_archive_path, '_' + pdf_file)
-        self._touch_file('_' + pdf_file)
+        self._touch_file(self.pdf_temp_file)
 
         from thinkhazard.views.pdf import create_pdf
-        create_pdf(file_name, file_name_temp, 'cover_url', 'pages', 0.1)
+        create_pdf(self.pdf_file, self.pdf_temp_file, 'cover_url', 'pages',
+                   0.1)
 
-        self.assertTrue(os.path.isfile(file_name))
+        self.assertTrue(os.path.isfile(self.pdf_file))
 
     @patch('thinkhazard.views.pdf.scheduler.add_job')
     def test_create_pdf_report(self, mock):
@@ -162,38 +168,41 @@ class TestReportFunction(BaseTestCase):
         self.assertIsNotNone(resp.json['report_id'])
 
     def test_get_report_status__finished(self):
-        self._touch_file('31-1d235e51-44d5-47ac-b6da-a96c46f21639.pdf')
+        self._touch_file(self.pdf_file)
         resp = self.testapp.get(
-            '/report/status/31/1d235e51-44d5-47ac-b6da-a96c46f21639.json')
+            '/report/status/31/1970_01_{:s}.json'.format(self.report_id))
         self.assertEqual(resp.json['status'], 'done')
 
     def test_get_report_status__still_running(self):
-        self._touch_file('_31-1d235e51-44d5-47ac-b6da-a96c46f21639.pdf')
+        self._touch_file(self.pdf_temp_file)
         resp = self.testapp.get(
-            '/report/status/31/1d235e51-44d5-47ac-b6da-a96c46f21639.json')
+            '/report/status/31/1970_01_{:s}.json'.format(self.report_id))
         self.assertEqual(resp.json['status'], 'running')
 
     def test_get_pdf_report__not_found(self):
         self.testapp.get(
-            '/report/status/31/1d235e51-44d5-47ac-b6da-a96c46f21639.json',
+            '/report/status/31/1970_01_{:s}.json'.format(self.report_id),
             status=404)
 
     def test_get_pdf_report__found(self):
-        self._touch_file('31-1d235e51-44d5-47ac-b6da-a96c46f21639.pdf')
+        self._touch_file(self.pdf_file)
         resp = self.testapp.get(
-            '/report/31/1d235e51-44d5-47ac-b6da-a96c46f21639.pdf')
+            '/report/31/1970_01_{:s}.pdf'.format(self.report_id))
         self.assertEqual(resp.body, 'The pdf file')
         self.assertEqual(resp.content_type, 'application/pdf')
 
     def test_get_pdf_report__still_running(self):
-        self._touch_file('_31-1d235e51-44d5-47ac-b6da-a96c46f21639.pdf')
+        self._touch_file(self.pdf_temp_file)
         self.testapp.get(
-            '/report/31/1d235e51-44d5-47ac-b6da-a96c46f21639.pdf', status=400)
+            '/report/31/1970_01_{:s}.pdf'.format(self.report_id),
+            status=400)
 
     def test_get_pdf_report__not_found_bis(self):
         self.testapp.get(
-            '/report/31/1d235e51-44d5-47ac-b6da-a96c46f21639.pdf', status=404)
+            '/report/31/1970_01_{:s}.pdf'.format(self.report_id),
+            status=404)
 
     def _touch_file(self, file_name):
-        with open(os.path.join(self.pdf_archive_path, file_name), 'w') as file:
+        os.makedirs(os.path.dirname(file_name))
+        with open(file_name, 'w') as file:
             file.write('The pdf file')
