@@ -563,3 +563,22 @@ class UserFeedback(Base):
                                nullable=False)
 
     feedbackstatus = relationship(FeedbackStatus)
+
+
+class Publication(Base):
+    __tablename__ = 'publication'
+    id = Column(Integer, primary_key=True)
+    date = Column(DateTime)
+
+    @classmethod
+    def last(cls):
+        last = DBSession.query(cls) \
+            .order_by(cls.date.desc()) \
+            .first()
+        return last
+
+    @classmethod
+    def new(cls):
+        new = cls(date=datetime.datetime.now())
+        DBSession.add(new)
+        return new
