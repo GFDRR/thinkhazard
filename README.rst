@@ -63,10 +63,6 @@ For more options, see::
 
     $ make help
 
-Build CSS files (from less files)::
-
-    $ make build
-
 Run the development server::
 
     $ make serve
@@ -176,7 +172,7 @@ To update the demo application use the following::
     cd /var/www/vhosts/wb-thinkhazard/private/thinkhazard
     sudo -u sigdev git fetch origin
     sudo -u sigdev git merge --ff-only origin/master
-    sudo -u sigdev make clean install build modwsgi
+    sudo -u sigdev make clean install modwsgi
     sudo apache2ctl configtest
     sudo apache2ctl graceful
 

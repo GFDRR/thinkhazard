@@ -21,7 +21,7 @@ help:
 	@echo "Possible targets:"
 	@echo
 	@echo "- install                 Install thinkhazard"
-	@echo "- build                   Build CSS and JS"
+	@echo "- buildcss                Build CSS"
 	@echo "- populatedb              Populates database. Use DATA=turkey if you want to work with a sample data set"
 	@echo "- initdb                  Initialize db using development.ini"
 	@echo "- reinit_all              Completely clear and re-init database. Only for developement purpose."
@@ -47,10 +47,8 @@ help:
 install: \
 		.build/requirements.timestamp \
 		.build/node_modules.timestamp \
-		.build/wkhtmltox
-
-.PHONY: build
-build: buildcss
+		.build/wkhtmltox \
+		buildcss
 
 .PHONY: buildcss
 buildcss: thinkhazard/static/build/index.css \
