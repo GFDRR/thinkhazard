@@ -17,9 +17,13 @@ The following packages must be installed on the system:
 * `python-devel`
 * `python-virtualenv`
 * `apache2`
+* `postgis`
 
 Getting Started
 ===============
+
+The following commands assume that the system is Debian/Ubuntu. Commands may
+need to be adapted when working on a different system.
 
 Create a Python virtual environment and install the project into it::
 
@@ -27,8 +31,8 @@ Create a Python virtual environment and install the project into it::
 
 Create a database::
 
-    $ sudo -u postgres createdb -O www-data thinkhazard
-    $ sudo -u postgres psql -d thinkhazard -c 'CREATE EXTENSION postgis;'
+    $ sudo -u postgres createdb -O www-data thinkhazard_processing
+    $ sudo -u postgres psql -d thinkhazard_processing -c 'CREATE EXTENSION postgis;'
 
 If you want to use a different user or different database name, you'll have to
 provide your own configuration file. See "Use local.ini" section
@@ -38,12 +42,13 @@ Create the required schema and tables and populate the enumeration tables::
 
     $ make populatedb
 
-Note: this may take a while.
-
-If you don't want to import all the world administrative divisions, you can
-import only a subset::
+Note: this may take a while. If you don't want to import all the world
+administrative divisions, you can import only a subset::
 
     $ make populatedb DATA=turkey
+
+or::
+
     $ make populatedb DATA=indonesia
 
 You're now ready to harvest, download and process the data::
@@ -68,10 +73,146 @@ Run the development server::
 
 Now point your browser to http://localhost:6543.
 
-Configure using thinkhazard_processing.yaml
-===========================================
+Processing tasks
+================
 
-Keys in processing configuration file:
+Administrator can also launch the different processing tasks with more options.
+
+``.build/venv/bin/harvest [--force] [--dry-run]``
+
+Harvest metadata from GeoNode, create HazardSet and Layer records.
+
+``.build/venv/bin/download [--title] [--force] [--dry-run]``
+
+Download raster files in data folder.
+
+``.build/venv/bin/complete [--force] [--dry-run]``
+
+Identify hazardsets whose layers have been fully downloaded, infer several
+fields and mark these hazardsets complete.
+
+``.build/venv/bin/process [--hazarset_id ...] [--force] [--dry-run]``
+
+Calculate output from hazardsets and administrative divisions.
+
+``.build/venv/bin/decision_tree [--force] [--dry-run]``
+
+Apply the decision tree followed by upscaling on process outputs to get the final
+relations between administrative divisions and hazard categories.
+
+Use Apache ``mod_wsgi``
+=======================
+
+The ``mod_wsgi`` Apache module is used on the demo server. Using ``mod_wsgi``
+requires some Apache configuration and a WSGI application script file.
+
+These files can be created with the ``modwsgi`` target::
+
+    $ make modwsgi
+
+This command creates ``.build/apache.conf``, the Apache configuration file to
+include in the main Apache configuration file, and
+``.build/venv/thinkhazard.wsgi``, the WSGI application script file.
+
+By default, the application location is ``/main/wsgi``. To change the location
+you can set ``INSTANCEID`` on the ``make modwsgi`` command line. For example::
+
+    $ make modwsgi INSTANCEID=elemoine
+
+With this the application location will be ``/elemoine/wsgi``.
+
+Configure admin username/password
+---------------------------------
+
+By default, the admin interface authentification file is
+``/var/www/vhosts/wb-thinkhazard/conf/.htpasswd``. To change the location you
+can set ``AUTHUSERFILE`` on the ``make modwsgi`` command line.
+
+To create a authentification file ``.htpasswd`` with ``admin`` as the initial
+user ::
+
+    $ htpasswd -c .htpasswd username
+
+It will prompt for the passwd.
+
+Add or modify ``username2`` in the password file ``.htpasswd``::
+
+   $ htpasswd .htpasswd username2
+
+Use ``local.ini``
+=================
+
+The settings defined ``development.ini`` can be overriden by creating a
+``local.ini`` file at the root of the project.
+
+The following sections are intended to be overriden: ``[app:public]`` and
+``[app:admin]``.
+
+The following variables can be configured:
+
+- ``sqlalchemy.url``: URL to the database. It defaults to
+  ``postgresql://www-data:www-data@localhost:5432/thinkhazard`` for the public
+  app and to
+  ``postgresql://www-data:www-data@localhost:5432/thinkhazard_processing`` for
+  the admin app.
+
+-  ``data_path``: Path to data folder. It's the location where the raster files will be downloaded. Defaults to ``/tmp``.
+
+- ``feedback_form_url``: URL to the form where the users will be redirected
+  when clicking on the feedback link.
+
+- ``analytics``: Tracking code for the google analytics account. Should be set on the
+  public section only.
+
+Deploy on server
+================
+
+The demo application is available at
+http://wb-thinkhazard.dev.sig.cloud.camptocamp.net/main/wsgi.
+
+To update the demo application use the following::
+
+    ssh <demo>
+    cd /var/www/vhosts/wb-thinkhazard/private/thinkhazard
+    sudo -u sigdev git fetch origin
+    sudo -u sigdev git merge --ff-only origin/master
+    sudo -u sigdev make clean install build modwsgi
+    sudo apache2ctl configtest
+    sudo apache2ctl graceful
+
+Run tests
+=========
+
+In order to run tests, you'll need to create a separate Database::
+
+    sudo -u postgres createdb -O www-data thinkhazard_tests
+    sudo -u postgres psql -d thinkhazard_tests -c 'CREATE EXTENSION postgis;'
+
+You'll also have to define the specific settings. For this purpose, you'll have
+to create a ``local.tests.ini`` with the following content (to be adapted to
+your environnement)::
+
+    [app:public]
+    sqlalchemy.url = postgresql://www-data:www-data@localhost:5432/thinkhazard_tests
+
+    [app:admin]
+    sqlalchemy.url = postgresql://www-data:www-data@localhost:5432/thinkhazard_tests
+
+Then you should be able to run the tests with the following command::
+
+    $ make test
+
+Feedback
+========
+
+The ``feedback_form_url`` can be configured in the ``local.ini`` file.
+
+
+Configuration  of processing parameters
+=======================================
+
+The configuration of the threshold, return periods and units for the different
+hazard types can be done via the `thinkhazard_processing.yaml`.
 
 
 hazard_types
@@ -141,128 +282,3 @@ Possible subkeys include the following:
         MED: [102]
         LOW: [101]
         VLO: [100, 0]
-
-Processing tasks
-================
-
-Thinkhazard_processing provides several consecutive tasks to populate the
-thinkhazard datamart database. These are:
-
-``.build/venv/bin/harvest [--force] [--dry-run]``
-
-Harvest metadata from GeoNode, create HazardSet and Layer records.
-
-``.build/venv/bin/download [--title] [--force] [--dry-run]``
-
-Download raster files in data folder.
-
-``.build/venv/bin/complete [--force] [--dry-run]``
-
-Identify hazardsets whose layers have been fully downloaded, infer several
-fields and mark these hazardsets complete.
-
-``.build/venv/bin/process [--hazarset_id ...] [--force] [--dry-run]``
-
-Calculate output from hazardsets and administrative divisions.
-
-``.build/venv/bin/decision_tree [--force] [--dry-run]``
-
-Apply the decision tree followed by upscaling on process outputs to get the final
-relations between administrative divisions and hazard categories.
-
-Use Apache ``mod_wsgi``
-=======================
-
-The ``mod_wsgi`` Apache module is used on the demo server. Using ``mod_wsgi``
-requires some Apache configuration and a WSGI application script file.
-
-These files can be created with the ``modwsgi`` target::
-
-    $ make modwsgi
-
-This command creates ``.build/apache.conf``, the Apache configuration file to
-include in the main Apache configuration file, and
-``.build/venv/thinkhazard.wsgi``, the WSGI application script file.
-
-By default, the application location is ``/main/wsgi``. To change the location
-you can set ``INSTANCEID`` on the ``make modwsgi`` command line. For example::
-
-    $ make modwsgi INSTANCEID=elemoine
-
-With this the application location will be ``/elemoine/wsgi``.
-
-Configure admin username/password
----------------------------------
-
-By default, the admin interface authentification file is
-``/var/www/vhosts/wb-thinkhazard/conf/.htpasswd``. To change the location you
-can set ``AUTHUSERFILE`` on the ``make modwsgi`` command line.
-
-To create a authentification file ``.htpasswd`` with ``admin`` as the initial
-user ::
-
-    $ htpasswd -c .htpasswd username
-
-It will prompt for the passwd.
-
-Add or modify ``username2`` in the password file ``.htpasswd``::
-
-   $ htpasswd .htpasswd username2
-
-Use ``local.ini``
-=================
-
-The settings defined in the ``[app:main]`` section of ``development.ini`` can
-be overriden by creating a ``local.ini`` file at the root of the project.
-
-For example, you can define a specific database connection with a ``local.ini``
-file that looks like this::
-
-    [app:main]
-    sqlalchemy.url = postgresql://www-data:www-data@localhost:9999/thinkhazard
-    data_path: /path/to/data/folder
-
-``data_path`` is the path to data folder. It will contain the donwloaded raster
-files as well as archive to generated PDF reports.
-It defaults to ``/tmp``. For production, we recommend you change this location
-to a dedicated disk partition.
-
-Deploy on server
-================
-
-The demo application is available at
-http://wb-thinkhazard.dev.sig.cloud.camptocamp.net/main/wsgi.
-
-To update the demo application use the following::
-
-    ssh <demo>
-    cd /var/www/vhosts/wb-thinkhazard/private/thinkhazard
-    sudo -u sigdev git fetch origin
-    sudo -u sigdev git merge --ff-only origin/master
-    sudo -u sigdev make clean install build modwsgi
-    sudo apache2ctl configtest
-    sudo apache2ctl graceful
-
-Run tests
-=========
-
-In order to run tests, you'll need to create a separate Database::
-
-    sudo -u postgres createdb -O www-data thinkhazard_tests
-    sudo -u postgres psql -d thinkhazard_tests -c 'CREATE EXTENSION postgis;'
-
-You'll also have to define the specific settings. For this purpose, you'll have
-to create a ``local.tests.ini`` with the following content (to be adapted to
-your environnement)::
-
-    [app:main]
-    sqlalchemy.url = postgresql://www-data:www-data@localhost/thinkhazard_tests
-
-Then you should be able to run the tests with the following command::
-
-    $ make test
-
-Feedback
-========
-
-The ``feedback_form_url`` can be configured in the ``local.ini`` file.
