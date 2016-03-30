@@ -124,11 +124,11 @@ publish: .build/requirements.timestamp
 	.build/venv/bin/publish $(INI_FILE)
 
 .PHONY: serve_public
-serve_public: build
+serve_public: install
 	.build/venv/bin/pserve --reload $(INI_FILE) --app-name=public
 
 .PHONY: serve_admin
-serve_admin: build
+serve_admin: install
 	.build/venv/bin/pserve --reload $(INI_FILE) --app-name=admin
 
 .PHONY: routes
