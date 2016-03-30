@@ -40,13 +40,13 @@
       var feature = map.forEachFeatureAtPixel(e.pixel, filterFn);
       map.getTargetElement().style.cursor = feature ? 'zoom-in' : '';
 
-      $('#map .tooltip').empty().hide();
+      $('#map .map-tooltip').empty().hide();
       if (feature) {
         var html = 'Zoom in to <b>' + feature.get('name') + '</b>';
         if (feature.get('hazardLevelMnemonic') != 'None') {
           html += '<br/><em>' + feature.get('hazardLevelTitle') + '</em>';
         }
-        $('#map .tooltip').show()
+        $('#map .map-tooltip').show()
           .css({
             top: e.pixel[1] + 10,
             left: e.pixel[0] + 10
