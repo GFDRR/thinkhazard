@@ -164,6 +164,14 @@ The following variables can be configured:
 - ``analytics``: Tracking code for the google analytics account. Should be set on the
   public section only.
 
+Analytics
+---------
+
+If you want to get some analytics on the website usage (via Google analytics),
+you can add the tracking code using a `analytics` variable::
+
+    analytics = UA-75358940-1
+
 Deploy on server
 ================
 
