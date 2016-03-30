@@ -31,8 +31,8 @@ Create a Python virtual environment and install the project into it::
 
 Create a database::
 
-    $ sudo -u postgres createdb -O www-data thinkhazard_processing
-    $ sudo -u postgres psql -d thinkhazard_processing -c 'CREATE EXTENSION postgis;'
+    $ sudo -u postgres createdb -O www-data thinkhazard_admin
+    $ sudo -u postgres psql -d thinkhazard_admin -c 'CREATE EXTENSION postgis;'
 
 If you want to use a different user or different database name, you'll have to
 provide your own configuration file. See "Use local.ini" section
@@ -62,10 +62,6 @@ You're now ready to harvest, download and process the data::
 For more options, see::
 
     $ make help
-
-Build CSS files (from less files)::
-
-    $ make build
 
 Run the development server::
 
@@ -153,7 +149,7 @@ The following variables can be configured:
 - ``sqlalchemy.url``: URL to the database. It defaults to
   ``postgresql://www-data:www-data@localhost:5432/thinkhazard`` for the public
   app and to
-  ``postgresql://www-data:www-data@localhost:5432/thinkhazard_processing`` for
+  ``postgresql://www-data:www-data@localhost:5432/thinkhazard_admin`` for
   the admin app.
 
 -  ``data_path``: Path to data folder. It's the location where the raster files will be downloaded. Defaults to ``/tmp``.
@@ -184,7 +180,7 @@ To update the demo application use the following::
     cd /var/www/vhosts/wb-thinkhazard/private/thinkhazard
     sudo -u sigdev git fetch origin
     sudo -u sigdev git merge --ff-only origin/master
-    sudo -u sigdev make clean install build modwsgi
+    sudo -u sigdev make clean install modwsgi
     sudo apache2ctl configtest
     sudo apache2ctl graceful
 

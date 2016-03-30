@@ -28,7 +28,6 @@ install:
 
 script:
 - make check
-- make build
 - echo [app:public] >> local.tests.ini
 - echo sqlalchemy.url = postgresql://www-data:www-data@localhost/thinkhazard_tests >> local.tests.ini
 - echo [app:admin] >> local.tests.ini
