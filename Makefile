@@ -4,8 +4,10 @@ PY_FILES = $(shell find thinkhazard -type f -name '*.py' 2> /dev/null)
 INSTANCEID ?= main
 ifeq ($(INSTANCEID), main)
 	INSTANCEPATH = /
+	INSTANCEADMINPATH = /admin
 else
 	INSTANCEPATH = /$(INSTANCEID)
+	INSTANCEADMINPATH = /$(INSTANCEID)/admin
 endif
 AUTHUSERFILE ?= /var/www/vhosts/wb-thinkhazard/conf/.htpasswd
 DATA ?= world
@@ -240,6 +242,7 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 	sed -e 's#{{PYTHONPATH}}#$(shell .build/venv/bin/python -c "import sys; print(sys.path[-1])")#' \
 		-e 's#{{INSTANCEID}}#$(INSTANCEID)#g' \
 		-e 's#{{INSTANCEPATH}}#$(INSTANCEPATH)#g' \
+		-e 's#{{INSTANCEADMINPATH}}#$(INSTANCEADMINPATH)#g' \
 		-e 's#{{AUTHUSERFILE}}#$(AUTHUSERFILE)#g' \
 		-e 's#{{WSGISCRIPT}}#$(abspath .build/thinkhazard_public-$*.wsgi)#' \
 		-e 's#{{WSGISCRIPT_ADMIN}}#$(abspath .build/thinkhazard_admin-$*.wsgi)#' $< > $@
