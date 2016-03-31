@@ -85,3 +85,6 @@ def main(argv=sys.argv):
         admin_database,
         public_database)
     call(cmd, shell=True)
+
+    print 'Restarting Apache to clear cached data'
+    call(["sudo", "apache2ctl", "graceful"])
