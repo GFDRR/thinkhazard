@@ -25,7 +25,7 @@ hazard_types:
     return_periods:
       HIG: [100, 250]
       MED: [475, 475]
-      LOW: [2475, 2500]
+      LOW: [1000, 2500]
     thresholds:
       HIG:
         PGA-g-dec: 0.2
