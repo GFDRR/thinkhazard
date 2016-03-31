@@ -21,6 +21,9 @@ from apscheduler.schedulers.background import BackgroundScheduler
 scheduler = None
 
 
+lock_file = os.path.join(os.path.dirname(__file__), 'maintenance.lock')
+
+
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
