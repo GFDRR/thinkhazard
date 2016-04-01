@@ -38,6 +38,7 @@ from sqlalchemy.schema import MetaData
 from sqlalchemy.ext.declarative import declarative_base
 
 from sqlalchemy.orm import (
+    backref,
     scoped_session,
     sessionmaker,
     relationship,
@@ -188,7 +189,7 @@ class HazardCategoryTechnicalRecommendationAssociation(Base):
     hazardcategory_id = Column(Integer, ForeignKey('hazardcategory.id'),
                                nullable=False)
     technicalrecommendation_id = Column(
-        Integer, ForeignKey('technicalrecommendation.id'),
+        Integer, ForeignKey('technicalrecommendation.id', ondelete='CASCADE'),
         nullable=False)
     order = Column(Integer, nullable=False)
 
@@ -375,7 +376,9 @@ class TechnicalRecommendation(Base):
     hazardcategory_associations = relationship(
         'HazardCategoryTechnicalRecommendationAssociation',
         order_by='HazardCategoryTechnicalRecommendationAssociation.order',
-        lazy='joined')
+        lazy='joined',
+        cascade="all, delete-orphan",
+        passive_deletes=True)
 
     def has_association(self, hazardtype, hazardlevel):
         """Test if this technical recommendation is associated with specified

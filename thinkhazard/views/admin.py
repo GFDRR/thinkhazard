@@ -145,6 +145,14 @@ def technical_rec_edit(request):
     return technical_rec_process(request, obj)
 
 
+@view_config(route_name='admin_technical_rec_delete')
+def technical_rec_delete(request):
+    id = request.matchdict['id']
+    obj = DBSession.query(TechnicalRecommendation).get(id)
+    DBSession.delete(obj)
+    return HTTPFound(request.route_url('admin_technical_rec'))
+
+
 def technical_rec_process(request, obj):
     if request.method == 'GET':
         hazard_types = DBSession.query(HazardType).order_by(HazardType.order)

@@ -63,6 +63,8 @@ def main(global_config, **settings):
         config.add_route('admin_technical_rec_new', '/technical_rec/new')
         config.add_route('admin_technical_rec_edit',
                          '/technical_rec/{id:\d+}')
+        config.add_route('admin_technical_rec_delete',
+                         '/technical_rec/{id:\d+}/delete')
 
         config.add_route('admin_admindiv_hazardsets', '/admindiv_hazardsets')
         config.add_route('admin_admindiv_hazardsets_hazardtype',
