@@ -31,11 +31,14 @@ def exclude_data_from_config(name, section=None):
     return [d.strip() for d in _data.split(",")] if _data is not None else []
 
 exclude_tables = exclude_data_from_config('tables')
-
+exclude_indexes = exclude_data_from_config('indexes')
 
 def include_object(object, name, type_, reflected, compare_to):
     if type_ == "table" and name in exclude_tables:
         print '=> ignore table: %s' % name
+        return False
+    if type_ == "index" and name in exclude_indexes:
+        print '=> ignore index: %s' % name
         return False
     return True
 
