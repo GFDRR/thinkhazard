@@ -358,6 +358,7 @@ class TechnicalRecommendation(Base):
     __tablename__ = 'technicalrecommendation'
     id = Column(Integer, primary_key=True)
     text = Column(Unicode, nullable=False)
+    detailed = Column(Unicode)
 
     hazardcategory_associations = relationship(
         'HazardCategoryTechnicalRecommendationAssociation',
