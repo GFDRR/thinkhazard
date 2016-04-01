@@ -31,6 +31,7 @@ from pyramid.scripts.common import parse_vars
 
 from sqlalchemy import engine_from_config
 
+from .. import lock_file
 from .. import load_local_settings
 from ..models import (
     DBSession,
@@ -58,6 +59,8 @@ def main(argv=sys.argv):
     config_uri = argv[1]
     options = parse_vars(argv[2:])
     setup_logging(config_uri)
+
+    os.utime(lock_file, None)
 
     # Create new publication in admin database
     settings = get_appsettings(config_uri, name='admin', options=options)
@@ -88,3 +91,5 @@ def main(argv=sys.argv):
 
     print 'Restarting Apache to clear cached data'
     call(["sudo", "apache2ctl", "graceful"])
+
+    os.unlink(lock_file)
