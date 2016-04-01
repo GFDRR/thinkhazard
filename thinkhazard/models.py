@@ -31,6 +31,7 @@ from sqlalchemy import (
     String,
     Table,
     Unicode,
+    Index,
     )
 from sqlalchemy.schema import MetaData
 
@@ -159,10 +160,10 @@ class HazardCategoryAdministrativeDivisionAssociation(Base):
     id = Column(Integer, primary_key=True)
     administrativedivision_id = Column(Integer,
                                        ForeignKey('administrativedivision.id'),
-                                       nullable=False, index=True)
+                                       nullable=False)
     hazardcategory_id = Column(Integer,
                                ForeignKey('hazardcategory.id'),
-                               nullable=False, index=True)
+                               nullable=False)
     administrativedivision = relationship('AdministrativeDivision',
                                           back_populates='hazardcategories',
                                           lazy='joined')
@@ -174,19 +175,31 @@ class HazardCategoryAdministrativeDivisionAssociation(Base):
         secondary=hazardcategory_administrativedivision_hazardset_table,
         lazy="joined")
 
+    # Explicitely choose index names to avoid truncation
+    __table_args__ = (
+        Index('ix_datamart_rel_hc_ad_ad', 'administrativedivision_id'),
+        Index('ix_datamart_rel_hc_ad_hc', 'hazardcategory_id'),
+        {})
+
 
 class HazardCategoryTechnicalRecommendationAssociation(Base):
     __tablename__ = 'rel_hazardcategory_technicalrecommendation'
     id = Column(Integer, primary_key=True)
     hazardcategory_id = Column(Integer, ForeignKey('hazardcategory.id'),
-                               nullable=False, index=True)
+                               nullable=False)
     technicalrecommendation_id = Column(
         Integer, ForeignKey('technicalrecommendation.id'),
-        nullable=False, index=True)
+        nullable=False)
     order = Column(Integer, nullable=False)
 
     hazardcategory = relationship('HazardCategory')
     technicalrecommendation = relationship('TechnicalRecommendation')
+
+    # Explicitely choose index names to avoid truncation
+    __table_args__ = (
+        Index('ix_datamart_rel_hc_tr_hc', 'hazardcategory_id'),
+        Index('ix_datamart_rel_hc_tr_tc', 'technicalrecommendation_id'),
+        {})
 
 
 region_administrativedivision_table = Table(
