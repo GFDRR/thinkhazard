@@ -22,6 +22,23 @@ target_metadata = models.Base.metadata
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 
+def exclude_data_from_config(name, section=None):
+    section = section or 'alembic:exclude'
+    _sec_data = config.get_section(section)
+    if not _sec_data:
+        return []
+    _data = _sec_data.get(name, None)
+    return [d.strip() for d in _data.split(",")] if _data is not None else []
+
+exclude_tables = exclude_data_from_config('tables')
+
+
+def include_object(object, name, type_, reflected, compare_to):
+    if type_ == "table" and name in exclude_tables:
+        print '=> ignore table: %s' % name
+        return False
+    return True
+
 
 def run_migrations_offline():
     """Run migrations in 'offline' mode.
@@ -62,6 +79,7 @@ def run_migrations_online():
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
+            include_object=include_object,
             include_schemas=True,
         )
 
