@@ -345,8 +345,10 @@ class Processor(BaseProcessor):
                 # return period which should be used as mask for other layers
                 # for example River Flood
                 if ('mask_return_period' in self.type_settings):
+                    mask_reader = self.readers['mask']
+                    mask_window = mask_reader.window(*bbox)
                     mask = self.readers['mask'].read(1,
-                                                     window=window,
+                                                     window=mask_window,
                                                      masked=True)
                     if inverted_comparison:
                         mask = mask < threshold
