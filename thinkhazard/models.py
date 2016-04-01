@@ -568,7 +568,7 @@ class UserFeedback(Base):
 class Publication(Base):
     __tablename__ = 'publication'
     id = Column(Integer, primary_key=True)
-    date = Column(DateTime)
+    date = Column(DateTime(timezone=True))
 
     @classmethod
     def last(cls):
