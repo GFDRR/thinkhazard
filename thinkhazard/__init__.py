@@ -49,6 +49,7 @@ def main(global_config, **settings):
 
     if settings['appname'] == 'public':
         config.include(add_public_routes)
+        config.add_route('sitemap', '/sitemap.xml')
 
     if settings['appname'] == 'admin':
         config.add_route('admin_index', '/')
@@ -82,6 +83,8 @@ def main(global_config, **settings):
     init_pdf_archive_directory(settings.get('pdf_archive_path'))
 
     scan_ignore = ['thinkhazard.tests']
+    if settings['appname'] != 'public':
+        scan_ignore.append('thinkhazard.views.sitemap')
     if settings['appname'] != 'admin':
         scan_ignore.append('thinkhazard.views.admin')
     config.scan(ignore=scan_ignore)
