@@ -164,18 +164,18 @@ class Processor(BaseProcessor):
     def create_outputs(self, hazardset):
         adminlevel_reg = AdminLevelType.get(u'REG')
 
-        bbox = None
+        self.bbox = None
         for reader in self.readers.itervalues():
             polygon = polygon_from_boundingbox(reader.bounds)
-            if bbox is None:
-                bbox = polygon
+            if self.bbox is None:
+                self.bbox = polygon
             else:
-                bbox = bbox.intersection(polygon)
+                self.bbox = self.bbox.intersection(polygon)
 
         admindivs = DBSession.query(AdministrativeDivision) \
             .filter(AdministrativeDivision.leveltype_id == adminlevel_reg.id) \
             .filter(func.ST_Intersects(AdministrativeDivision.geom,
-                    func.ST_GeomFromText(bbox.wkt, 4326))) \
+                    func.ST_GeomFromText(self.bbox.wkt, 4326))) \
             .order_by(AdministrativeDivision.id)  # Needed by windowed querying
 
         current = 0
@@ -243,6 +243,9 @@ class Processor(BaseProcessor):
         reader = self.readers[0]
 
         for polygon in geometry.geoms:
+            if not polygon.intersects(self.bbox):
+                continue
+
             window = reader.window(*polygon.bounds)
             data = reader.read(1, window=window, masked=True)
 
@@ -318,7 +321,11 @@ class Processor(BaseProcessor):
                     polygon = polygons[i]
                     bbox = bboxes[i]
 
+                if not polygon.intersects(self.bbox):
+                    continue
+
                 window = reader.window(*bbox)
+
                 # data: MaskedArray
                 data = reader.read(1, window=window, masked=True)
 
