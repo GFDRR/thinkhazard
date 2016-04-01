@@ -365,7 +365,9 @@ class ClimateChangeRecAdministrativeDivisionAssociation(Base):
         'ClimateChangeRecommendation',
         foreign_keys=('ClimateChangeRecAdministrativeDivisionAssociation.'
                       'climatechangerecommendation_id'),
-        backref="associations")
+        backref=backref("associations",
+                        cascade="all, delete-orphan",
+                        passive_deletes=True))
 
 
 class TechnicalRecommendation(Base):
