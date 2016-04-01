@@ -40,6 +40,7 @@ from ...models import (
     Layer,
     Output,
     TechnicalRecommendation,
+    Publication,
     )
 
 from shapely.geometry import (
@@ -330,6 +331,8 @@ def populate_db():
     association.region = region_1
     further_resource.hazardtype_associations.append(association)
     DBSession.add(further_resource)
+
+    Publication.new()
 
     transaction.commit()
 

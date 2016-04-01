@@ -40,6 +40,8 @@ def main(global_config, **settings):
     config.include('pyramid_jinja2')
     config.include('papyrus')
 
+    config.add_tween('thinkhazard.tweens.notmodified_tween_factory')
+
     config.add_static_view('static', 'static', cache_max_age=3600,
                            cachebust=True)
     config.add_static_view('lib', settings.get('node_modules'),
