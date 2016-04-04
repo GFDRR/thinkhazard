@@ -3,9 +3,12 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 from logging.config import fileConfig
 import ConfigParser
+import logging
 import re
 import os
 from thinkhazard.settings import load_local_settings
+
+USE_TWOPHASE = False
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -14,6 +17,7 @@ config = context.config
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 fileConfig(config.config_file_name)
+logger = logging.getLogger('alembic.env')
 
 # add your model's MetaData object here
 # for 'autogenerate' support
@@ -46,26 +50,6 @@ def include_object(object, name, type_, reflected, compare_to):
     return True
 
 
-def run_migrations_offline():
-    """Run migrations in 'offline' mode.
-
-    This configures the context with just a URL
-    and not an Engine, though an Engine is acceptable
-    here as well.  By skipping the Engine creation
-    we don't even need a DBAPI to be available.
-
-    Calls to context.execute() here emit the given string to the
-    script output.
-
-    """
-    url = config.get_main_option("sqlalchemy.url")
-    context.configure(
-        url=url, target_metadata=target_metadata, literal_binds=True)
-
-    with context.begin_transaction():
-        context.run_migrations()
-
-
 def run_migrations_online():
     """Run migrations in 'online' mode.
 
@@ -74,25 +58,56 @@ def run_migrations_online():
 
     """
 
-    settings = config.get_section(config.config_ini_section)
-    load_local_settings(settings)
-    connectable = engine_from_config(
-        settings,
-        prefix='sqlalchemy.',
-        poolclass=pool.NullPool)
+    # for the direct-to-DB use case, start a transaction on all
+    # engines, then run all migrations, then commit all transactions.
 
-    with connectable.connect() as connection:
-        context.configure(
-            connection=connection,
-            target_metadata=target_metadata,
-            include_object=include_object,
-            include_schemas=True,
-        )
+    names = ['public', 'admin']
+    engines = {}
 
-        with context.begin_transaction():
-            context.run_migrations()
+    for name in names:
+        engines[name] = rec = {}
+        settings = context.config.get_section('app:{}'.format(name))
+        settings.update(config.get_section(config.config_ini_section))
+        load_local_settings(settings, name)
+        rec['engine'] = engine_from_config(
+            settings,
+            prefix='sqlalchemy.',
+            poolclass=pool.NullPool)
 
-if context.is_offline_mode():
-    run_migrations_offline()
-else:
-    run_migrations_online()
+    for name, rec in engines.items():
+        engine = rec['engine']
+        rec['connection'] = conn = engine.connect()
+
+        if USE_TWOPHASE:
+            rec['transaction'] = conn.begin_twophase()
+        else:
+            rec['transaction'] = conn.begin()
+
+    try:
+        for name, rec in engines.items():
+            logger.info("Migrating database %s" % name)
+            context.configure(
+                connection=rec['connection'],
+                upgrade_token="%s_upgrades" % name,
+                downgrade_token="%s_downgrades" % name,
+                target_metadata=target_metadata,
+                include_object=include_object,
+                include_schemas=True,
+            )
+            context.run_migrations(engine_name=name)
+
+        if USE_TWOPHASE:
+            for rec in engines.values():
+                rec['transaction'].prepare()
+
+        for rec in engines.values():
+            rec['transaction'].commit()
+    except:
+        for rec in engines.values():
+            rec['transaction'].rollback()
+        raise
+    finally:
+        for rec in engines.values():
+            rec['connection'].close()
+
+run_migrations_online()
