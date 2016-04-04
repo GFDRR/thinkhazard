@@ -87,7 +87,7 @@ Download raster files in data folder.
 Identify hazardsets whose layers have been fully downloaded, infer several
 fields and mark these hazardsets complete.
 
-``.build/venv/bin/process [--hazarset_id ...] [--force] [--dry-run]``
+``.build/venv/bin/process [--hazardset_id ...] [--force] [--dry-run]``
 
 Calculate output from hazardsets and administrative divisions.
 
