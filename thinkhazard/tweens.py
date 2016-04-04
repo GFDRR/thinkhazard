@@ -55,4 +55,13 @@ def notmodified_tween_factory(handler, registry):
 
         return notmodified_tween
 
+    if registry.settings['appname'] == 'admin':
+
+        def nocache_tween(request):
+            response = handler(request)
+            response.cache_expires(0)
+            return response
+
+        return nocache_tween
+
     return handler
