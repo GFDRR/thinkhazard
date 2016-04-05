@@ -60,7 +60,8 @@ def main(argv=sys.argv):
     options = parse_vars(argv[2:])
     setup_logging(config_uri)
 
-    os.utime(lock_file, None)
+    with open(lock_file, 'w') as f:
+        f.write('This file sets the public application in maintenance mode.')
 
     # Create new publication in admin database
     settings = get_appsettings(config_uri, name='admin', options=options)
