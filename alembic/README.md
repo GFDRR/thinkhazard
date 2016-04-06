@@ -2,17 +2,20 @@ Generic single-database configuration.
 
 # Generation of migration scripts
 
-Migration scripts are created each time modifications are made on database model or data.
+Migration scripts are created each time modifications are made on the database model or data.
 
-Do the adequate modifications in the model (`models.py`).
+For example if you want to add a new field to a table, add the column in the SQLAlchemy
+model (`models.py`).
 
-Then autogenerate the migration script.
+Then autogenerate the migration script with:
 
 ```
-.build/venv/bin/alembic revision --autogenerate
+.build/venv/bin/alembic revision --autogenerate -m 'Add column x'
 ```
 
-Make sure the script looks correct. Adjust if necesary. Run the migration (see below) and make sure the database is updated correctly.
+A new migration script is created in `alembic/versions/`. Make sure the script looks correct, adjust if necessary.
+
+To add the new column to the database(s), run the migration (see below) and make sure the database is updated correctly.
 
 Commit the changes.
 
