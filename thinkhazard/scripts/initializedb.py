@@ -23,6 +23,8 @@ import sys
 from sqlalchemy import engine_from_config
 from pyramid.paster import setup_logging
 from pyramid.scripts.common import parse_vars
+from alembic.config import Config
+from alembic import command
 
 from ..settings import load_full_settings
 from ..models import (
@@ -51,32 +53,37 @@ def main(argv=sys.argv):
     settings = load_full_settings(config_uri, options=options)
 
     engine = engine_from_config(settings, 'sqlalchemy.')
-    with engine.begin() as db:
-        initdb(db, drop_all='--force' in options)
+    with engine.begin() as connection:
+        initdb(connection, drop_all='--force' in options)
+
+    # generate the Alembic version table and stamp it with the latest revision
+    alembic_cfg = Config('alembic.ini')
+    alembic_cfg.set_section_option(
+        'alembic', 'sqlalchemy.url', engine.url.__str__())
+    command.stamp(alembic_cfg, 'head')
 
 
-def initdb(engine, drop_all=False):
+def initdb(connection, drop_all=False):
     if drop_all:
-        if schema_exists(engine, 'processing'):
-            engine.execute("DROP SCHEMA processing CASCADE;")
-        if schema_exists(engine, 'datamart'):
-            engine.execute("DROP SCHEMA datamart CASCADE;")
+        if schema_exists(connection, 'processing'):
+            connection.execute("DROP SCHEMA processing CASCADE;")
+        if schema_exists(connection, 'datamart'):
+            connection.execute("DROP SCHEMA datamart CASCADE;")
 
-    if not schema_exists(engine, 'datamart'):
-        engine.execute("CREATE SCHEMA datamart;")
+    if not schema_exists(connection, 'datamart'):
+        connection.execute("CREATE SCHEMA datamart;")
 
-    if not schema_exists(engine, 'processing'):
-        engine.execute("CREATE SCHEMA processing;")
+    if not schema_exists(connection, 'processing'):
+        connection.execute("CREATE SCHEMA processing;")
 
-    Base.metadata.create_all(engine)
+    Base.metadata.create_all(connection)
 
-    DBSession.configure(bind=engine)
-    populate_datamart(engine)
+    DBSession.configure(bind=connection)
+    populate_datamart()
     DBSession.flush()
 
 
-def schema_exists(engine, schema_name):
-    connection = engine.connect()
+def schema_exists(connection, schema_name):
     sql = '''
 SELECT count(*) AS count
 FROM information_schema.schemata
@@ -87,7 +94,7 @@ WHERE schema_name = '{}';
     return row[0] == 1
 
 
-def populate_datamart(engine):
+def populate_datamart():
     # AdminLevelType
     for i in [
         (u'COU', u'Country', u'Administrative division of level 0'),

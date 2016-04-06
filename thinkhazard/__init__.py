@@ -32,7 +32,7 @@ def main(global_config, **settings):
     scheduler.start()
 
     load_processing_settings(settings)
-    load_local_settings(settings)
+    load_local_settings(settings, settings['appname'])
 
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)

@@ -48,7 +48,7 @@ def usage(argv):
 
 def database_name(config_uri, name, options={}):
     settings = get_appsettings(config_uri, name=name, options=options)
-    load_local_settings(settings)
+    load_local_settings(settings, name)
     url = settings['sqlalchemy.url']
     return urlparse(url).path.strip('/')
 
@@ -65,15 +65,15 @@ def main(argv=sys.argv):
 
     # Create new publication in admin database
     settings = get_appsettings(config_uri, name='admin', options=options)
-    load_local_settings(settings)
+    load_local_settings(settings, 'admin')
     engine = engine_from_config(settings, 'sqlalchemy.')
     with engine.begin() as db:
         DBSession.configure(bind=db)
         Publication.new()
         DBSession.flush()
 
-    admin_database = database_name(config_uri, name='admin', options=options)
-    public_database = database_name(config_uri, name='public', options=options)
+    admin_database = database_name(config_uri, 'admin', options=options)
+    public_database = database_name(config_uri, 'public', options=options)
 
     print 'Restart PostgreSQL'
     call(["sudo", "-u", "postgres", "/etc/init.d/postgresql", 'restart'])

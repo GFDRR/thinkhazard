@@ -13,7 +13,7 @@ def load_full_settings(config_uri, name='admin', options={}):
                                name=name,
                                options=options)
     load_processing_settings(settings)
-    load_local_settings(settings)
+    load_local_settings(settings, name)
     return settings
 
 
@@ -27,7 +27,7 @@ def load_processing_settings(settings):
         settings.update(yaml.load(f.read()))
 
 
-def load_local_settings(settings):
+def load_local_settings(settings, name):
     """ Load local/user-specific settings.
     """
     local_settings_path = os.environ.get(
@@ -35,4 +35,4 @@ def load_local_settings(settings):
     if local_settings_path and os.path.exists(local_settings_path):
         config = ConfigParser.ConfigParser()
         config.read(local_settings_path)
-        settings.update(config.items('app:{}'.format(settings['appname'])))
+        settings.update(config.items('app:{}'.format(name)))
