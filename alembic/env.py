@@ -7,7 +7,6 @@ from sqlalchemy.exc import OperationalError
 from thinkhazard.settings import load_local_settings
 from thinkhazard import models
 
-USE_TWOPHASE = False
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -53,6 +52,14 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
+    # use the 2-phase protocol to make sure that the migration is applied
+    # correctly to all databases or none.
+    twophase_argument = context.get_x_argument(
+        as_dictionary=True).get('twophase', True)
+    use_two_phase = twophase_argument != 'False' and \
+                    twophase_argument != 'false'
+    logger.info("Using two-phase commit: %s" % use_two_phase)
+
     autogenerating = context.config.cmd_opts and \
                      'autogenerate' in context.config.cmd_opts and \
                      context.config.cmd_opts.autogenerate
@@ -89,7 +96,7 @@ def run_migrations_online():
         engines[name] = {
             'engine': engine,
             'connection': connection,
-            'transaction': connection.begin_twophase() if USE_TWOPHASE
+            'transaction': connection.begin_twophase() if use_two_phase
             else connection.begin()
         }
 
@@ -106,7 +113,7 @@ def run_migrations_online():
             )
             context.run_migrations(engine_name=name)
 
-        if USE_TWOPHASE:
+        if use_two_phase:
             for rec in engines.values():
                 rec['transaction'].prepare()
 
