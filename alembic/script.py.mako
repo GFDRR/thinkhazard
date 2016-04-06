@@ -16,9 +16,9 @@ from alembic import op
 import sqlalchemy as sa
 ${imports if imports else ""}
 
-def upgrade():
+def upgrade(engine_name):
     ${upgrades if upgrades else "pass"}
 
 
-def downgrade():
+def downgrade(engine_name):
     ${downgrades if downgrades else "pass"}
