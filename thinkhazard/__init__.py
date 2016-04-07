@@ -103,8 +103,6 @@ def main(global_config, **settings):
 
 def add_public_routes(config):
     config.add_route('index', '/')
-    config.add_route('about', '/about')
-    config.add_route('faq', '/faq')
 
     def pregenerator(request, elements, kw):
         if 'division' in kw:
