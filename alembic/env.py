@@ -73,8 +73,8 @@ def run_migrations_online():
     # engines, then run all migrations, then commit all transactions.
     engines = {}
     for name in names:
-        settings = context.config.get_section('app:{}'.format(name))
-        settings.update(config.get_section(config.config_ini_section))
+        settings = config.get_section(config.config_ini_section)
+        settings.update(config.get_section('app:{}'.format(name)))
         load_local_settings(settings, name)
         engine = engine_from_config(
             settings,
