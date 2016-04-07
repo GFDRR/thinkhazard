@@ -3,6 +3,7 @@
 *.sqlite
 *.log
 local*.ini
+version.ini
 .build
 node_modules
 thinkhazard/static/build

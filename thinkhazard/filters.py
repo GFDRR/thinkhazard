@@ -18,12 +18,7 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 from markdown import markdown
-import subprocess
 
 
 def markdown_filter(text):
     return markdown(text)
-
-
-def subprocess_check_output(args):
-    return subprocess.check_output(args)
