@@ -30,9 +30,23 @@
         <div>
           <a href="{{ 'admin_climate_rec_edit' | route_url(id=climate_rec.id) }}"
             >Edit</a>
+          -
+          <a href="{{ 'admin_climate_rec_delete' | route_url(id=climate_rec.id) }}"
+            class="delete-button">Delete</a>
         </div>
       </li>
       {% endfor %}
     </ul>
   </div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+  $('.delete-button').click(function(e) {
+    e.preventDefault();
+    if (confirm("Delete this climate change recommendation ?")) {
+      location = this.getAttribute('href');
+    }
+  });
+</script>
 {% endblock %}

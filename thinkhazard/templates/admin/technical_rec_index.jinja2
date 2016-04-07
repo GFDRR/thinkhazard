@@ -20,9 +20,24 @@
         <div>
           <a href="{{ 'admin_technical_rec_edit' | route_url(id=technical_rec.id) }}"
             >Edit</a>
+          -
+          <a href="{{ 'admin_technical_rec_delete' | route_url(id=technical_rec.id) }}"
+            class="delete-button"
+            >Delete</a>
         </div>
       </li>
       {% endfor %}
     </ul>
   </div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+  $('.delete-button').click(function(e) {
+    e.preventDefault();
+    if (confirm("Delete this technical recommendation ?")) {
+      location = this.getAttribute('href');
+    }
+  });
+</script>
 {% endblock %}

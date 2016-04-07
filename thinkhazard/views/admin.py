@@ -145,6 +145,14 @@ def technical_rec_edit(request):
     return technical_rec_process(request, obj)
 
 
+@view_config(route_name='admin_technical_rec_delete')
+def technical_rec_delete(request):
+    id = request.matchdict['id']
+    obj = DBSession.query(TechnicalRecommendation).get(id)
+    DBSession.delete(obj)
+    return HTTPFound(request.route_url('admin_technical_rec'))
+
+
 def technical_rec_process(request, obj):
     if request.method == 'GET':
         hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
@@ -310,6 +318,15 @@ def climate_rec_edit(request):
     if obj is None:
         raise HTTPNotFound()
     return climate_rec_process(request, obj)
+
+
+@view_config(route_name='admin_climate_rec_delete')
+def climate_rec_delete(request):
+    id = request.matchdict['id']
+    obj = DBSession.query(ClimateChangeRecommendation).get(id)
+    DBSession.delete(obj)
+    return HTTPFound(request.route_url('admin_climate_rec_hazardtype',
+                                       hazard_type=obj.hazardtype.mnemonic))
 
 
 def climate_rec_process(request, obj):
