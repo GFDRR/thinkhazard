@@ -60,10 +60,8 @@ def run_migrations_online():
                     twophase_argument != 'false'
     logger.info("Using two-phase commit: %s" % use_two_phase)
 
-    autogenerating = context.config.cmd_opts and \
-                     'autogenerate' in context.config.cmd_opts and \
-                     context.config.cmd_opts.autogenerate
-    if autogenerating:
+    opts = config.cmd_opts
+    if opts and 'autogenerate' in opts and opts.autogenerate:
         # when generating migration scripts only check the 'admin' db
         names = ['admin']
     else:
@@ -73,8 +71,8 @@ def run_migrations_online():
     # engines, then run all migrations, then commit all transactions.
     engines = {}
     for name in names:
-        settings = context.config.get_section('app:{}'.format(name))
-        settings.update(config.get_section(config.config_ini_section))
+        settings = config.get_section(config.config_ini_section)
+        settings.update(config.get_section('app:{}'.format(name)))
         load_local_settings(settings, name)
         engine = engine_from_config(
             settings,
