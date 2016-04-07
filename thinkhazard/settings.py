@@ -36,3 +36,12 @@ def load_local_settings(settings, name):
         config = ConfigParser.ConfigParser()
         config.read(local_settings_path)
         settings.update(config.items('app:{}'.format(name)))
+
+
+def get_git_version(settings):
+    """ Get version number from version.ini.
+    """
+    version_path = settings.get('version_path')
+    if version_path and os.path.exists(version_path):
+        with open(version_path, 'r') as f:
+            settings.update({'version': f.read()})

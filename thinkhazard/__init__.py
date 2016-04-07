@@ -7,6 +7,7 @@ from papyrus.renderers import GeoJSON
 from .settings import (
     load_processing_settings,
     load_local_settings,
+    get_git_version,
     )
 from .models import (
     DBSession,
@@ -33,6 +34,7 @@ def main(global_config, **settings):
 
     load_processing_settings(settings)
     load_local_settings(settings, settings['appname'])
+    get_git_version(settings)
 
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
