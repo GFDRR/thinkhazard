@@ -150,6 +150,7 @@ class Completer(BaseProcessor):
         hazardset.calculation_method_quality = stat[3]
         hazardset.scientific_quality = stat[4]
         hazardset.complete = True
+        hazardset.complete_error = None
         DBSession.flush()
 
         logger.info('  Completed')
