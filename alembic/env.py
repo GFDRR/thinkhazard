@@ -60,10 +60,8 @@ def run_migrations_online():
                     twophase_argument != 'false'
     logger.info("Using two-phase commit: %s" % use_two_phase)
 
-    autogenerating = context.config.cmd_opts and \
-                     'autogenerate' in context.config.cmd_opts and \
-                     context.config.cmd_opts.autogenerate
-    if autogenerating:
+    opts = config.cmd_opts
+    if opts and 'autogenerate' in opts and opts.autogenerate:
         # when generating migration scripts only check the 'admin' db
         names = ['admin']
     else:
