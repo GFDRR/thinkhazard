@@ -465,7 +465,7 @@ class Harvester(BaseProcessor):
                     layer.download_url != download_url):
                 logger.info('  Invalidate downloaded')
                 layer.downloaded = False
-                hazardset.completed = False
+                hazardset.complete = False
                 hazardset.processed = None
 
             # Some hazardset fields are calculated during completing
@@ -474,8 +474,8 @@ class Harvester(BaseProcessor):
                     layer.scientific_quality != scientific_quality or
                     layer.data_lastupdated_date != data_update_date or
                     layer.metadata_lastupdated_date != metadata_update_date):
-                logger.info('  Invalidate completed')
-                hazardset.completed = False
+                logger.info('  Invalidate complete')
+                hazardset.complete = False
 
             # Some fields invalidate outputs
             if (layer.hazardunit != hazard_unit):
