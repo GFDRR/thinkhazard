@@ -19,6 +19,7 @@
 
 import os
 import sys
+from datetime import datetime
 from subprocess import call
 from urlparse import urlparse
 
@@ -75,6 +76,19 @@ def main(argv=sys.argv):
     admin_database = database_name(config_uri, 'admin', options=options)
     public_database = database_name(config_uri, 'public', options=options)
 
+    folder_path = settings['backup_path']
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+    backup_path = os.path.join(
+        folder_path,
+        'thinkhazard.{}.backup'.format(datetime.utcnow().isoformat()))
+
+    print 'Backup', admin_database, 'to', backup_path
+    cmd = 'sudo -u postgres pg_dump -Fc {} > {}'.format(
+        admin_database,
+        backup_path)
+    call(cmd, shell=True)
+
     print 'Restart PostgreSQL'
     call(["sudo", "-u", "postgres", "/etc/init.d/postgresql", 'restart'])
 
@@ -84,11 +98,9 @@ def main(argv=sys.argv):
     print 'Create new fresh database', public_database
     call(["sudo", "-u", "postgres", "createdb", public_database])
 
-    print 'Copy data from', admin_database, 'to', public_database
-    cmd = 'sudo -u postgres pg_dump {} | sudo -u postgres psql -d {}'.format(
-        admin_database,
-        public_database)
-    call(cmd, shell=True)
+    print 'Restore backup into', public_database
+    call(["sudo", "-u", "postgres",
+          "pg_restore", "--exit-on-error", "-d", public_database, backup_path])
 
     print 'Restarting Apache to clear cached data'
     call(["sudo", "apache2ctl", "graceful"])
