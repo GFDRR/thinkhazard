@@ -224,8 +224,12 @@ class Harvester(BaseProcessor):
         h = httplib2.Http()
         response, content = h.request(doc_url)
         o = json.loads(content)
+
+        if 'regions' not in o.keys():
+            warning(object, 'Attribute "regions" is missing')
+
         region_ids = []
-        for r in o['regions']:
+        for r in o.get('regions', []):
             # r is like "/api/regions/1/"
             region_ids.append(r.split('/')[3])
 
