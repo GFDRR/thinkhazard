@@ -120,7 +120,7 @@ def populate_datamart():
     for i in [
         (u'FL', u'River flood', 1),
         (u'EQ', u'Earthquake', 2),
-        (u'DG', u'Drought', 3),
+        (u'DG', u'Water scarcity', 3),
         (u'VA', u'Volcano', 7),
         (u'CY', u'Cyclone', 4),
         (u'TS', u'Tsunami', 6),
