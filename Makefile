@@ -114,10 +114,6 @@ complete: .build/requirements.timestamp
 process: .build/requirements.timestamp
 	.build/venv/bin/process -v
 
-.PHONY: dt
-dt: .build/requirements.timestamp
-	.build/venv/bin/decision_tree -v
-
 .PHONY: decisiontree
 decisiontree: .build/requirements.timestamp
 	.build/venv/bin/decision_tree -v
