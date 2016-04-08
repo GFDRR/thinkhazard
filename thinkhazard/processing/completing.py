@@ -27,6 +27,7 @@ from ..models import (
     DBSession,
     HazardSet,
     Layer,
+    Output,
     )
 
 from ..processing import BaseProcessor
@@ -69,11 +70,11 @@ class Completer(BaseProcessor):
                 complete = self.complete_hazardset(id[0])
                 if complete is not True:
                     hazardset = DBSession.query(HazardSet).get(id)
-                    if hazardset.processed:
-                        logger.info('  Deleting {} previous outputs related \
-                                    to this hazardset'.format(
-                                    hazardset.outputs.count()))
-                        hazardset.outputs.delete()
+                    logger.info("  Cleaning previous outputs")
+                    DBSession.query(Output) \
+                        .filter(Output.hazardset_id == hazardset.id) \
+                        .delete()
+                    DBSession.flush()
                     hazardset.complete_error = complete
                     DBSession.add(hazardset)
                     logger.warning('Hazardset {} incomplete: {}'
