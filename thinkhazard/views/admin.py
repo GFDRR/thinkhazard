@@ -51,9 +51,14 @@ from ..models import (
     )
 
 
-@view_config(route_name='admin_index',
-             renderer='templates/admin/index.jinja2')
+@view_config(route_name='admin_index')
 def index(request):
+    return HTTPFound(request.route_url('admin_hazardsets'))
+
+
+@view_config(route_name='admin_hazardcategories',
+             renderer='templates/admin/hazardcategories.jinja2')
+def hazardcategories(request):
     hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
     hazard_levels = []
     for level in [u'HIG', u'MED', u'LOW', u'VLO']:

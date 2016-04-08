@@ -79,8 +79,10 @@ def main(global_config, **settings):
         config.add_route('admin_climate_rec_delete',
                          '/climate_rec/{id:\d+}/delete')
 
+        config.add_route('admin_hazardcategories', '/hazardcategories')
         config.add_route('admin_hazardcategory',
-                         '/{hazard_type:([A-Z]{2})}/{hazard_level:([A-Z]{3})}')
+                         '/hazardcategory/{hazard_type:([A-Z]{2})}'
+                         '/{hazard_level:([A-Z]{3})}')
 
         config.add_route('admin_hazardsets', '/hazardsets')
         config.add_route('admin_hazardset', '/hazardset/{hazardset}')

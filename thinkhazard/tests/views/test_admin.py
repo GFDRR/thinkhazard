@@ -33,12 +33,15 @@ class TestAdminFunction(BaseTestCase):
     app_name = 'admin'
 
     def test_index(self):
-        resp = self.testapp.get('/', status=200)
+        self.testapp.get('/', status=302)
+
+    def test_hazardcategories(self):
+        resp = self.testapp.get('/hazardcategories', status=200)
         categories = resp.html.select('.hazardcategory-link')
         self.assertEqual(len(categories), 8*4)
 
     def test_hazardcategory(self):
-        resp = self.testapp.get('/EQ/HIG', status=200)
+        resp = self.testapp.get('/hazardcategory/EQ/HIG', status=200)
         form = resp.form
         form['general_recommendation'] = 'Bar'
         form.submit(status=302)
