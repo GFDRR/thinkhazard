@@ -257,6 +257,9 @@ Configuration  of processing parameters
 The configuration of the threshold, return periods and units for the different
 hazard types can be done via the `thinkhazard_processing.yaml`.
 
+After any modification to this file, next harvesting will delete all layers,
+hazardsets and processing outputs. This means that next processing task will
+have to treat all hazardsets and may take a while (close to one hour).
 
 hazard_types
 ------------
