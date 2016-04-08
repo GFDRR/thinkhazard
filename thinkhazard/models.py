@@ -45,6 +45,8 @@ from sqlalchemy.orm import (
     deferred,
     )
 
+from sqlalchemy.event import listens_for
+
 from geoalchemy2 import Geometry
 
 from zope.sqlalchemy import ZopeTransactionExtension
@@ -471,6 +473,14 @@ class HazardSet(Base):
             .filter(Layer.hazardset_id == self.id) \
             .filter(Layer.hazardlevel_id == hazardlevel.id) \
             .one_or_none()
+
+
+@listens_for(HazardSet.processed, 'set')
+def on_hazardset_processed_set(target, value, oldvalue, initiator):
+    if value is None:
+        DBSession.query(Output) \
+            .filter(Output.hazardset_id == target.id) \
+            .delete()
 
 
 class Layer(Base):
