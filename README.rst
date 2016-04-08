@@ -65,7 +65,13 @@ For more options, see::
 
 Run the development server::
 
-    $ make serve
+    $ make serve_public
+
+for the public site or::
+
+    $ make serve_admin
+
+for the admin interface.
 
 Now point your browser to http://localhost:6543.
 
