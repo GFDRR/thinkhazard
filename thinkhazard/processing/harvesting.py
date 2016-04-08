@@ -476,7 +476,6 @@ class Harvester(BaseProcessor):
             if (layer.calculation_method_quality !=
                     calculation_method_quality or
                     layer.scientific_quality != scientific_quality or
-                    layer.data_lastupdated_date != data_update_date or
                     layer.metadata_lastupdated_date != metadata_update_date):
                 logger.info('  Invalidate complete')
                 hazardset.complete = False
