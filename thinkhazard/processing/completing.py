@@ -69,13 +69,7 @@ class Completer(BaseProcessor):
                 complete = self.complete_hazardset(id[0])
                 if complete is not True:
                     hazardset = DBSession.query(HazardSet).get(id)
-                    if hazardset.processed:
-                        logger.info('  Deleting {} previous outputs related \
-                                    to this hazardset'.format(
-                                    hazardset.outputs.count()))
-                        hazardset.outputs.delete()
                     hazardset.complete_error = complete
-                    DBSession.add(hazardset)
                     logger.warning('Hazardset {} incomplete: {}'
                                    .format(hazardset.id, complete))
                 transaction.commit()
