@@ -100,27 +100,27 @@ import_recommendations: .build/requirements.timestamp
 
 .PHONY: harvest
 harvest: .build/requirements.timestamp
-	.build/venv/bin/harvest
+	.build/venv/bin/harvest -v
 
 .PHONY: download
 download: .build/requirements.timestamp
-	.build/venv/bin/download
+	.build/venv/bin/download -v
 
 .PHONY: complete
 complete: .build/requirements.timestamp
-	.build/venv/bin/complete
+	.build/venv/bin/complete -v
 
 .PHONY: process
 process: .build/requirements.timestamp
-	.build/venv/bin/process
+	.build/venv/bin/process -v
 
 .PHONY: dt
 dt: .build/requirements.timestamp
-	.build/venv/bin/decision_tree
+	.build/venv/bin/decision_tree -v
 
 .PHONY: decisiontree
 decisiontree: .build/requirements.timestamp
-	.build/venv/bin/decision_tree
+	.build/venv/bin/decision_tree -v
 
 .PHONY: publish
 publish: .build/requirements.timestamp
