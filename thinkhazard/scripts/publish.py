@@ -61,10 +61,15 @@ def main(argv=sys.argv):
     options = parse_vars(argv[2:])
     setup_logging(config_uri)
 
+    admin_database = database_name(config_uri, 'admin', options=options)
+    public_database = database_name(config_uri, 'public', options=options)
+
+    print 'Lock public application in maintenance mode'
     with open(lock_file, 'w') as f:
         f.write('This file sets the public application in maintenance mode.')
 
     # Create new publication in admin database
+    print 'Log event to publication table in', admin_database
     settings = get_appsettings(config_uri, name='admin', options=options)
     load_local_settings(settings, 'admin')
     engine = engine_from_config(settings, 'sqlalchemy.')
@@ -72,9 +77,6 @@ def main(argv=sys.argv):
         DBSession.configure(bind=db)
         Publication.new()
         DBSession.flush()
-
-    admin_database = database_name(config_uri, 'admin', options=options)
-    public_database = database_name(config_uri, 'public', options=options)
 
     folder_path = settings['backup_path']
     if not os.path.exists(folder_path):
@@ -105,4 +107,5 @@ def main(argv=sys.argv):
     print 'Restarting Apache to clear cached data'
     call(["sudo", "apache2ctl", "graceful"])
 
+    print 'Unlock public application from maintenance mode'
     os.unlink(lock_file)
