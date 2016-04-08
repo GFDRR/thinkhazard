@@ -152,13 +152,30 @@ The following variables can be configured:
   ``postgresql://www-data:www-data@localhost:5432/thinkhazard_admin`` for
   the admin app.
 
--  ``data_path``: Path to data folder. It's the location where the raster files will be downloaded. Defaults to ``/tmp``.
+- ``data_path``: Path to data folder. It's the location where the raster files
+  will be downloaded. Defaults to ``/tmp``.
+
+- ``backup_path``: Path to database backup archives path. Only relevant for
+  the admin app. It defaults to ``/srv/archives/backups``.
+
+- ``pdf_archive_path``: Path to PDF report archives path. Only relevant for
+  the public app. It defaults to ``/srv/archives/reports``.
 
 - ``feedback_form_url``: URL to the form where the users will be redirected
   when clicking on the feedback link.
 
 - ``analytics``: Tracking code for the google analytics account. Should be set on the
   public section only.
+
+Example ``local.ini`` file::
+
+    [app:public]
+    sqlalchemy.url = postgresql://www-data:www-data@localhost/developer
+    pdf_archive_path = /home/developer/tmp/reports
+
+    [app:admin]
+    sqlalchemy.url = postgresql://www-data:www-data@localhost/developer_admin
+    backup_path = /home/developer/tmp/backups
 
 Analytics
 ---------
