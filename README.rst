@@ -96,6 +96,22 @@ Calculate output from hazardsets and administrative divisions.
 Apply the decision tree followed by upscaling on process outputs to get the final
 relations between administrative divisions and hazard categories.
 
+Publication of admin database on public site
+============================================
+
+Publication consist in overwriting the public database with the admin one.
+This can be done using :
+
+``make publish``
+
+And this will execute as follow :
+* Lock the public site in maintenance mode.
+* Store a publication date in the admin database.
+* Backup the admin database in archives folder.
+* Create a new fresh public database.
+* Restore the admin backup into public database.
+* Unlock the public site from maintenance mode.
+
 Use Apache ``mod_wsgi``
 =======================
 
