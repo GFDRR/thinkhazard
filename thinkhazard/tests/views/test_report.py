@@ -29,6 +29,8 @@ class TestReportFunction(BaseTestCase):
         super(TestReportFunction, self).setUp()
         self.pdf_archive_path = self.testapp.app.registry.settings.get(
             'pdf_archive_path')
+        if not os.path.exists(self.pdf_archive_path):
+            os.makedirs(self.pdf_archive_path)
         self.report_id = '1d235e51-44d5-47ac-b6da-a96c46f21639'
         filename = '31-' + self.report_id + '.pdf'
         year = '1970'

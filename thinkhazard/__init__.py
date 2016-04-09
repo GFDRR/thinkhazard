@@ -91,8 +91,6 @@ def main(global_config, **settings):
 
     config.add_renderer('geojson', GeoJSON())
 
-    init_pdf_archive_directory(settings.get('pdf_archive_path'))
-
     scan_ignore = ['thinkhazard.tests']
     if settings['appname'] != 'public':
         scan_ignore.append('thinkhazard.views.sitemap')
@@ -143,10 +141,3 @@ def add_public_routes(config):
     config.add_route('pdf_cover', '/pdf_cover/{divisioncode:\d+}')
     config.add_route('pdf_about', '/pdf_about')
     config.add_route('data_source', '/data_source/{hazardset}')
-
-
-def init_pdf_archive_directory(pdf_archive_path):
-    """Make sure that the directory used as report archive exists.
-    """
-    if not os.path.exists(pdf_archive_path):
-        os.makedirs(pdf_archive_path)
