@@ -1,10 +1,10 @@
 {% macro navbar() %}
       <ul class="nav navbar-nav navbar-right">
         <li>
-          <a href data-toggle="modal" data-target="#aboutModal">About</a>
+          <a href="{{'about'|route_url}}" class="modal-remote">About</a>
         </li>
         <li>
-          <a href data-toggle="modal" data-target="#faqModal">FAQ</a>
+          <a href="{{'faq'|route_url}}" class="modal-remote">FAQ</a>
         </li>
       </ul>
 {% endmacro %}

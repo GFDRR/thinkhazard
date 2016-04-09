@@ -18,8 +18,7 @@
   <body class="{{'preview' if request.registry['settings'].appname == 'admin' }}">
     {% block content %}
     {% endblock %}
-    {% include 'faq.jinja2' %}
-    {% include 'about.jinja2' %}
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog"></div>
 {% if debug %}
     <script src="{{('%s/jquery/dist/jquery.js' % node_modules)|static_url}}"></script>
     <script src="{{('%s/bootstrap/dist/js/bootstrap.js' % node_modules)|static_url}}"></script>
@@ -32,6 +31,11 @@
     <script>
       var app = {};
       app.administrativedivisionUrl = '{{'administrativedivision'|route_url}}';
+
+      $('.modal-remote').on('click', function(e) {
+        e.preventDefault();
+        $('#myModal').modal('show').load($(this).attr('href'));
+      });
     </script>
     {% block scripts %}
     {% endblock scripts %}
