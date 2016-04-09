@@ -87,7 +87,7 @@ def report(request):
                                                        division)
         except NoResultFound:
             url = request.route_url('report_overview',
-                                    divisioncode=division.code)
+                                    division=division)
             return HTTPFound(location=url)
 
     # Get the geometry for division and compute its extent
