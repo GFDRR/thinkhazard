@@ -78,6 +78,7 @@ FROM
     JOIN datamart.hazardcategory AS category
         ON category.hazardtype_id = set.hazardtype_id
         AND category.hazardlevel_id = output.hazardlevel_id
+    WHERE set.complete = TRUE
 WINDOW w AS (
     PARTITION BY
         output.admin_id,
