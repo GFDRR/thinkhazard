@@ -1,4 +1,4 @@
-"""empty message
+"""Change Drougth to Water scarcity
 
 Revision ID: c33a251714d6
 Revises: d37717f1163b
