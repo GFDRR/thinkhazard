@@ -10,7 +10,7 @@
   <dt>Return periods</dt>
   <dd>
     {% for layer in hazardset.layers %}
-    {{layer.return_period}}
+    {{layer.return_period if not layer.mask}}
     {% endfor %}
   </dd>
   <dt>Data quality<br><em><small class="text-muted">(model set-up)</small></em></dt>
