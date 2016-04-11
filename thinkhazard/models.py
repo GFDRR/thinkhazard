@@ -19,6 +19,7 @@
 
 import threading
 import datetime
+import pytz
 from slugify import slugify
 
 from sqlalchemy import (
@@ -44,6 +45,8 @@ from sqlalchemy.orm import (
     relationship,
     deferred,
     )
+
+from sqlalchemy.sql.expression import true
 
 from sqlalchemy.event import listens_for
 
@@ -609,5 +612,30 @@ class Publication(Base):
     @classmethod
     def new(cls):
         new = cls(date=datetime.datetime.now())
+        DBSession.add(new)
+        return new
+
+
+class Harvesting(Base):
+    __tablename__ = 'harvesting'
+    __table_args__ = {u'schema': 'processing'}
+    id = Column(Integer, primary_key=True)
+    date = Column(DateTime(timezone=True), nullable=False)
+    complete = Column(Boolean, nullable=False)
+
+    @classmethod
+    def last_complete_date(cls):
+        last_complete = DBSession.query(cls) \
+            .filter(cls.complete == true()) \
+            .order_by(cls.date.desc()) \
+            .first()
+        if last_complete is None:
+            return None
+        return last_complete.date
+
+    @classmethod
+    def new(cls, complete):
+        new = cls(date=datetime.datetime.utcnow().replace(tzinfo=pytz.utc),
+                  complete=complete)
         DBSession.add(new)
         return new

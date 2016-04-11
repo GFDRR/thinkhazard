@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
 import logging
 import traceback
 import httplib2
@@ -26,6 +27,7 @@ import json
 import transaction
 import csv
 from datetime import datetime
+import pytz
 
 from ..models import (
     DBSession,
@@ -38,6 +40,7 @@ from ..models import (
     AdministrativeDivision,
     FurtherResource,
     HazardTypeFurtherResourceAssociation,
+    Harvesting,
     )
 
 from . import BaseProcessor
@@ -73,6 +76,20 @@ class Harvester(BaseProcessor):
         return parser
 
     def do_execute(self, hazard_type=None):
+        setting_path = os.path.join(
+            os.path.dirname(__file__), '..', '..',
+            'thinkhazard_processing.yaml')
+        settings_mtime = datetime.utcfromtimestamp(
+            os.path.getmtime(setting_path)).replace(tzinfo=pytz.utc)
+
+        last_complete_harvesting_date = Harvesting.last_complete_date()
+        if (last_complete_harvesting_date is None or
+                settings_mtime > last_complete_harvesting_date):
+            logger.info('Settings have been modified, '
+                        'passing in force/complete mode.')
+            self.force = True
+            self.hazard_type = None
+
         try:
             self.harvest_regions()
             self.create_region_admindiv_associations()
@@ -90,6 +107,9 @@ class Harvester(BaseProcessor):
             self.harvest_documents()
         except Exception:
             logger.error(traceback.format_exc())
+
+        Harvesting.new(complete=(self.force is True and hazard_type is None))
+        transaction.commit()
 
     def fetch(self, category, params={}, order_by='title'):
         geonode = self.settings['geonode']
