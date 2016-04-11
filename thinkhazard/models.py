@@ -44,6 +44,7 @@ from sqlalchemy.orm import (
     relationship,
     deferred,
     )
+from sqlalchemy.orm.attributes import NO_VALUE
 
 from sqlalchemy.event import listens_for
 
@@ -477,7 +478,7 @@ class HazardSet(Base):
 
 @listens_for(HazardSet.processed, 'set')
 def on_hazardset_processed_set(target, value, oldvalue, initiator):
-    if value is None:
+    if value is None and value != oldvalue and oldvalue is not NO_VALUE:
         DBSession.query(Output) \
             .filter(Output.hazardset_id == target.id) \
             .delete()
