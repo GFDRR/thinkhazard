@@ -459,9 +459,7 @@ class Harvester(BaseProcessor):
             logger.info('  Create new Layer {}'.format(title))
             layer = Layer()
             layer.geonode_id = object['id']
-            DBSession.add(layer)
-            hazardset.complete = False
-            hazardset.processed = None
+            layer.hazardset = hazardset
 
         else:
             # If data has changed
@@ -485,7 +483,6 @@ class Harvester(BaseProcessor):
                 logger.info('  Invalidate processed')
                 hazardset.processed = None
 
-        layer.hazardset = hazardset
         layer.hazardlevel = hazardlevel
         layer.mask = mask
         layer.return_period = hazard_period
