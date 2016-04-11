@@ -477,9 +477,10 @@ class HazardSet(Base):
 
 @listens_for(HazardSet.processed, 'set')
 def on_hazardset_processed_set(target, value, oldvalue, initiator):
-    if value is None:
+    if value is None and target.id is not None:
         DBSession.query(Output) \
             .filter(Output.hazardset_id == target.id) \
+            .autoflush(False) \
             .delete()
 
 
