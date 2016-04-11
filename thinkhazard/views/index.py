@@ -22,6 +22,7 @@ from pyramid.view import view_config
 from ..models import (
     DBSession,
     HazardType,
+    Publication,
     )
 
 
@@ -33,7 +34,10 @@ def index(request):
 
 @view_config(route_name='about', renderer='templates/about.jinja2')
 def about(request):
-    return {}
+    publication_date = Publication.last()
+    return {
+        'publication_date': publication_date.date.strftime('%c')
+    }
 
 
 @view_config(route_name='faq', renderer='templates/faq.jinja2')
