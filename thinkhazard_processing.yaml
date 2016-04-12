@@ -48,9 +48,12 @@ hazard_types:
       LOW: 1000
     inverted_comparison: True
     thresholds:
-      # WCI = m³ ?
-      WCI: 1700
-      #WA: NA
+      HIG:
+        WCI: 500
+      MED:
+        WCI: 1000
+      LOW:
+        WCI: 1700
 
   VA:
     hazard_type: volcanic_ash
