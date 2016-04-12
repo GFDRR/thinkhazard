@@ -99,3 +99,11 @@ hazard_types:
         m: 0.5
         dm: 5
         cm: 50
+
+  LS:
+    hazard_type: landslide
+    values:
+      HIG: [4]
+      MED: [3]
+      LOW: [2]
+      VLO: [1]
