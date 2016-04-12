@@ -29,6 +29,26 @@
       <li class="list-unstyled">
         <i class="icon-list-square"></i>
         {{ recommendation.text }}
+        {% if recommendation.detail %}
+        {% set modal_id = 'recommendation-detail-' ~ recommendation.id %}
+        <a class="small" data-toggle="modal" data-target="#{{ modal_id }}" href>More information</a>
+        <!-- Modal -->
+        <div class="modal fade" id="{{ modal_id }}" tabindex="-1" role="dialog" aria-labelledby="{{ modal_id }}-label">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              </div>
+              <div class="modal-body">
+                {{ recommendation.detail |markdown }}
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
       </li>
     {% endfor %}
     </ul>

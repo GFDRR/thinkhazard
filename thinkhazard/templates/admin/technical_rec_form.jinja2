@@ -17,15 +17,24 @@
     >
       <input type="hidden" name="id" value="{{ obj.id }}">
 
-      <div class="form-group item-text">
+      <div class="form-group">
         <textarea
-            id="general_recommendation"
             class="form-control"
             type="textarea"
             name="text"
             placeholder="Enter text here"
-            rows=8
+            rows=4
             >{{ obj.text or '' }}</textarea>
+      </div>
+
+      <div class="form-group">
+        <textarea
+            class="form-control"
+            type="textarea"
+            name="detail"
+            placeholder="Detailed text"
+            rows=10
+            >{{ obj.detail or '' }}</textarea>
       </div>
 
       <div class="form-group item-associations">

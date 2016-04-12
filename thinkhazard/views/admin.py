@@ -177,6 +177,7 @@ def technical_rec_process(request, obj):
 
     if request.method == 'POST':
         obj.text = request.POST.get('text')
+        obj.detail = request.POST.get('detail')
         if inspect(obj).transient:
             DBSession.add(obj)
 
