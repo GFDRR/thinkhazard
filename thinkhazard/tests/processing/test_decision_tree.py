@@ -277,7 +277,6 @@ def populate_processing():
         .filter(AdministrativeDivision.code == 30).one()
     # => test outcome = hazardset1
     output1 = Output()
-    output1.coverage_ratio = 10
     output1.hazardset = hazardset1
     output1.administrativedivision = admin30
     output1.hazardlevel = HazardLevel.get(u'HIG')
@@ -287,7 +286,6 @@ def populate_processing():
     # but this one is for FL
     # => test outcome = hazardset1b
     output1b = Output()
-    output1b.coverage_ratio = 11
     output1b.hazardset = hazardset1b
     output1b.administrativedivision = admin30
     output1b.hazardlevel = HazardLevel.get(u'NPR')
@@ -299,13 +297,11 @@ def populate_processing():
     admin31 = DBSession.query(AdministrativeDivision)\
         .filter(AdministrativeDivision.code == 31).one()
     output2 = Output()
-    output2.coverage_ratio = 20
     output2.hazardset = hazardset1  # calculation_method_quality = 0
     output2.administrativedivision = admin31
     output2.hazardlevel = HazardLevel.get(u'MED')
     DBSession.add(output2)
     output3 = Output()
-    output3.coverage_ratio = 30
     output3.hazardset = hazardset2  # calculation_method_quality = 1
     output3.administrativedivision = admin31
     output3.hazardlevel = HazardLevel.get(u'LOW')
@@ -318,14 +314,12 @@ def populate_processing():
     admin32 = DBSession.query(AdministrativeDivision)\
         .filter(AdministrativeDivision.code == 32).one()
     output4 = Output()
-    output4.coverage_ratio = 40
     output4.hazardset = hazardset2
     # calculation_method_quality = 1 / scientific_quality = 0
     output4.administrativedivision = admin32
     output4.hazardlevel = HazardLevel.get(u'MED')
     DBSession.add(output4)
     output5 = Output()
-    output5.coverage_ratio = 50
     output5.hazardset = hazardset3
     # calculation_method_quality = 1 / scientific_quality = 2
     output5.administrativedivision = admin32
@@ -338,14 +332,12 @@ def populate_processing():
     admin33 = DBSession.query(AdministrativeDivision)\
         .filter(AdministrativeDivision.code == 33).one()
     output6 = Output()
-    output6.coverage_ratio = 60
     output6.hazardset = hazardset3
     # global / calculation_method_quality = 1 / scientific_quality = 2
     output6.administrativedivision = admin33
     output6.hazardlevel = HazardLevel.get(u'MED')
     DBSession.add(output6)
     output7 = Output()
-    output7.coverage_ratio = 70
     output7.hazardset = hazardset4
     # local / calculation_method_quality = 1 / scientific_quality = 2
     output7.administrativedivision = admin33
@@ -358,7 +350,6 @@ def populate_processing():
     admin34 = DBSession.query(AdministrativeDivision)\
         .filter(AdministrativeDivision.code == 34).one()
     output8 = Output()
-    output8.coverage_ratio = 80
     output8.hazardset = hazardset4
     # date = 2015-01-01 / local /
     # calculation_method_quality = 1 / scientific_quality = 2
@@ -366,7 +357,6 @@ def populate_processing():
     output8.hazardlevel = HazardLevel.get(u'MED')
     DBSession.add(output8)
     output9 = Output()
-    output9.coverage_ratio = 90
     output9.hazardset = hazardset5
     # date = now() / local /
     # calculation_method_quality = 1 / scientific_quality = 2
@@ -380,7 +370,6 @@ def populate_processing():
     admin35 = DBSession.query(AdministrativeDivision)\
         .filter(AdministrativeDivision.code == 35).one()
     output10 = Output()
-    output10.coverage_ratio = 95
     output10.hazardset = hazardset3
     # date = 2015-01-01 / global /
     # calculation_method_quality = 1 / scientific_quality = 2
@@ -388,7 +377,6 @@ def populate_processing():
     output10.hazardlevel = HazardLevel.get(u'MED')
     DBSession.add(output10)
     output11 = Output()
-    output11.coverage_ratio = 99
     output11.hazardset = hazardset6
     # date = now() / global /
     # calculation_method_quality = 1 / scientific_quality = 2

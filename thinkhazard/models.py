@@ -560,11 +560,6 @@ class Output(Base):
     admin_id = Column(Integer,
                       ForeignKey('datamart.administrativedivision.id'),
                       primary_key=True)
-    # the coverage_ratio ranges from 0 to 100
-    # it represents the percentage of the admin division area
-    # covered by the data in the hazardset
-    # (NO-DATA values are not taken into account here)
-    coverage_ratio = Column(Integer, nullable=False)
     # hazard_level_id is the processing result
     hazardlevel_id = Column(Integer,
                             ForeignKey('datamart.enum_hazardlevel.id'),
