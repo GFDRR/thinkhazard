@@ -131,6 +131,7 @@ class Completer(BaseProcessor):
             func.min(Layer.calculation_method_quality),
             func.min(Layer.scientific_quality)) \
             .filter(Layer.hazardset_id == hazardset.id) \
+            .filter(Layer.mask.isnot(True)) \
             .group_by(Layer.local)
 
         if stats.count() > 1:
