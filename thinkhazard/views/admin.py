@@ -217,7 +217,7 @@ def technical_rec_process(request, obj):
              renderer='templates/admin/hazardsets.jinja2')
 def hazardsets(request):
     return {
-        'hazardsets': DBSession.query(HazardSet)
+        'hazardsets': DBSession.query(HazardSet).order_by(HazardSet.id)
     }
 
 
