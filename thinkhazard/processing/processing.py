@@ -224,8 +224,6 @@ class Processor(BaseProcessor):
                     output.hazardset = hazardset
                     output.admin_id = admindiv.id
                     output.hazardlevel = hazardlevel
-                    # TODO: calculate coverage ratio
-                    output.coverage_ratio = 100
                     outputs.append(output)
 
                 # Remove admindiv from memory
