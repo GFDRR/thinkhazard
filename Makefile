@@ -150,7 +150,7 @@ bootlint: .build/node_modules.timestamp .build/bootlint.timestamp
 modwsgi: .build/apache.timestamp
 
 .PHONY: test
-test: install
+test: install .build/dev-requirements.timestamp
 	.build/venv/bin/nosetests
 
 .PHONY: dist
