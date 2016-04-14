@@ -46,6 +46,9 @@ logger.addHandler(ch)
 
 class BaseProcessor():
 
+    def __init__(self):
+        self.force = False
+
     @classmethod
     def run(cls, argv=sys.argv):
         parser = cls.argument_parser()
