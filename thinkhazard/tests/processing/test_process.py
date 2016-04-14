@@ -20,11 +20,6 @@
 import unittest
 import transaction
 from datetime import datetime
-from shapely.geometry import (
-    MultiPolygon,
-    Polygon,
-    )
-from geoalchemy2.shape import from_shape
 import numpy as np
 from mock import Mock, patch
 from rasterio._io import RasterReader
@@ -32,8 +27,6 @@ from affine import Affine
 
 from ...models import (
     DBSession,
-    AdminLevelType,
-    AdministrativeDivision,
     HazardLevel,
     HazardSet,
     HazardType,
@@ -42,6 +35,7 @@ from ...models import (
     )
 
 from .. import settings
+from . import populate_datamart
 from ...processing.processing import Processor
 from common import new_geonode_id
 
@@ -55,7 +49,6 @@ def populate():
     DBSession.query(Output).delete()
     DBSession.query(Layer).delete()
     DBSession.query(HazardSet).delete()
-    DBSession.query(AdministrativeDivision).delete()
     populate_datamart()
     populate_notpreprocessed(notpreprocessed_type, notpreprocessed_unit)
     populate_preprocessed(preprocessed_type)
@@ -222,27 +215,6 @@ class TestProcess(unittest.TestCase):
         Processor().execute(settings, hazardset_id='preprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, u'HIG')
-
-
-def populate_datamart():
-    print 'populate datamart'
-    adminlevel_reg = AdminLevelType.get(u'REG')
-
-    shape = MultiPolygon([
-        Polygon([(0, 0), (0, 1), (1, 1), (1, 0), (0, 0)])
-    ])
-    geometry = from_shape(shape, 4326)
-
-    div = AdministrativeDivision(**{
-        'code': 30,
-        'leveltype_id': adminlevel_reg.id,
-        'name': u'Administrative division level 3'
-    })
-    div.geom = geometry
-    div.hazardcategories = []
-    DBSession.add(div)
-
-    DBSession.flush()
 
 
 def populate_notpreprocessed(type, unit):

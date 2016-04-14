@@ -16,3 +16,38 @@
 #
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
+
+from shapely.geometry import (
+    MultiPolygon,
+    Polygon,
+    )
+from geoalchemy2.shape import from_shape
+
+from ...models import (
+    DBSession,
+    AdminLevelType,
+    AdministrativeDivision,
+    )
+
+
+def populate_datamart():
+    print 'populate datamart'
+    DBSession.query(AdministrativeDivision).delete()
+
+    adminlevel_reg = AdminLevelType.get(u'REG')
+
+    shape = MultiPolygon([
+        Polygon([(0, 0), (0, 1), (1, 1), (1, 0), (0, 0)])
+    ])
+    geometry = from_shape(shape, 4326)
+
+    div = AdministrativeDivision(**{
+        'code': 30,
+        'leveltype_id': adminlevel_reg.id,
+        'name': u'Administrative division level 3'
+    })
+    div.geom = geometry
+    div.hazardcategories = []
+    DBSession.add(div)
+
+    DBSession.flush()
