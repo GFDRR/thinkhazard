@@ -20,11 +20,6 @@
 import unittest
 import transaction
 from datetime import datetime
-from shapely.geometry import (
-    MultiPolygon,
-    Polygon,
-    )
-from geoalchemy2.shape import from_shape
 import numpy as np
 from mock import Mock, patch
 from rasterio._io import RasterReader
@@ -32,8 +27,6 @@ from affine import Affine
 
 from ...models import (
     DBSession,
-    AdminLevelType,
-    AdministrativeDivision,
     HazardLevel,
     HazardSet,
     HazardType,
@@ -42,6 +35,7 @@ from ...models import (
     )
 
 from .. import settings
+from . import populate_datamart
 from ...processing.processing import Processor
 from common import new_geonode_id
 
@@ -55,7 +49,6 @@ def populate():
     DBSession.query(Output).delete()
     DBSession.query(Layer).delete()
     DBSession.query(HazardSet).delete()
-    DBSession.query(AdministrativeDivision).delete()
     populate_datamart()
     populate_notpreprocessed(notpreprocessed_type, notpreprocessed_unit)
     populate_preprocessed(preprocessed_type)
@@ -87,97 +80,95 @@ class TestProcess(unittest.TestCase):
     def setUp(self):  # NOQA
         populate()
 
-    @patch('rasterio.open')
+    @patch('rasterio.open', return_value=global_reader())
+    def test_cli(self, open_mock):
+        '''Test processor cli'''
+        Processor.run(['complete', '--config_uri', 'tests.ini'])
+
+    @patch('rasterio.open', return_value=global_reader())
+    def test_force(self, open_mock):
+        '''Test processor in force mode'''
+        Processor().execute(settings, force=True)
+
+    @patch('rasterio.open', return_value=global_reader())
     def test_process_empty(self, open_mock):
         '''Test nodata everywhere'''
-        open_mock.side_effect = [
-            global_reader(),
-            global_reader(),
-            global_reader(),
-            global_reader()
-        ]
         Processor().execute(settings, hazardset_id='notpreprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output, None)
 
-    @patch('rasterio.open')
+    @patch('rasterio.open', side_effect=[
+        global_reader(0.0),
+        global_reader(),
+        global_reader(),
+        global_reader()
+    ])
     def test_process_vlo(self, open_mock):
         '''Test value < threshold <=> hazardlevel VLO'''
-        open_mock.side_effect = [
-            global_reader(0.0),
-            global_reader(),
-            global_reader(),
-            global_reader()
-        ]
         Processor().execute(settings, hazardset_id='notpreprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, 'VLO')
 
-    @patch('rasterio.open')
+    @patch('rasterio.open', side_effect=[
+        global_reader(),
+        global_reader(),
+        global_reader(100.0),
+        global_reader(),
+    ])
     def test_process_low(self, open_mock):
         '''Test value > threshold in LOW layer'''
-        open_mock.side_effect = [
-            global_reader(),
-            global_reader(),
-            global_reader(100.0),
-            global_reader(),
-        ]
         Processor().execute(settings, hazardset_id='notpreprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, u'LOW')
 
-    @patch('rasterio.open')
+    @patch('rasterio.open', side_effect=[
+        global_reader(),
+        global_reader(100.0),
+        global_reader(),
+        global_reader(),
+    ])
     def test_process_med(self, open_mock):
         '''Test value > threshold in MED layer'''
-        open_mock.side_effect = [
-            global_reader(),
-            global_reader(100.0),
-            global_reader(),
-            global_reader(),
-        ]
         Processor().execute(settings, hazardset_id='notpreprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, u'MED')
 
-    @patch('rasterio.open')
+    @patch('rasterio.open', side_effect=[
+        global_reader(100.0),
+        global_reader(),
+        global_reader(),
+        global_reader()
+    ])
     def test_process_hig(self, open_mock):
         '''Test value > threshold in HIG layer'''
-        open_mock.side_effect = [
-            global_reader(100.0),
-            global_reader(),
-            global_reader(),
-            global_reader()
-        ]
         Processor().execute(settings, hazardset_id='notpreprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, u'HIG')
 
-    @patch('rasterio.open')
+    @patch('rasterio.open', side_effect=[
+        global_reader(100.0),
+        global_reader(),
+        global_reader(),
+        global_reader(100.0)
+    ])
     def test_process_mask(self, open_mock):
         '''Test mask layer'''
-        open_mock.side_effect = [
-            global_reader(100.0),
-            global_reader(),
-            global_reader(),
-            global_reader(100.0)
-        ]
         Processor().execute(settings, hazardset_id='notpreprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output, None)
 
-    @patch('rasterio.open')
+    @patch('rasterio.open', side_effect=[
+        global_reader(),
+    ])
     def test_preprocessed_empty(self, open_mock):
-        '''Test mask layer'''
-        open_mock.side_effect = [
-            global_reader(),
-        ]
+        '''Test preprocessed nodata everywhere'''
         Processor().execute(settings, hazardset_id='preprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output, None)
 
     @patch('rasterio.open')
     def test_preprocessed_vlo(self, open_mock):
-        '''Test mask layer'''
+        '''Test preprocessed VLO'''
         hazardtype = HazardType.get(preprocessed_type)
         hazardtype_settings = settings['hazard_types'][hazardtype.mnemonic]
         open_mock.side_effect = [
@@ -189,7 +180,7 @@ class TestProcess(unittest.TestCase):
 
     @patch('rasterio.open')
     def test_preprocessed_low(self, open_mock):
-        '''Test mask layer'''
+        '''Test preprocessed LOW'''
         hazardtype = HazardType.get(preprocessed_type)
         hazardtype_settings = settings['hazard_types'][hazardtype.mnemonic]
         open_mock.side_effect = [
@@ -201,7 +192,7 @@ class TestProcess(unittest.TestCase):
 
     @patch('rasterio.open')
     def test_preprocessed_med(self, open_mock):
-        '''Test mask layer'''
+        '''Test preprocessed MED'''
         hazardtype = HazardType.get(preprocessed_type)
         hazardtype_settings = settings['hazard_types'][hazardtype.mnemonic]
         open_mock.side_effect = [
@@ -213,7 +204,7 @@ class TestProcess(unittest.TestCase):
 
     @patch('rasterio.open')
     def test_preprocessed_hig(self, open_mock):
-        '''Test mask layer'''
+        '''Test preprocessed HIG'''
         hazardtype = HazardType.get(preprocessed_type)
         hazardtype_settings = settings['hazard_types'][hazardtype.mnemonic]
         open_mock.side_effect = [
@@ -222,27 +213,6 @@ class TestProcess(unittest.TestCase):
         Processor().execute(settings, hazardset_id='preprocessed')
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, u'HIG')
-
-
-def populate_datamart():
-    print 'populate datamart'
-    adminlevel_reg = AdminLevelType.get(u'REG')
-
-    shape = MultiPolygon([
-        Polygon([(0, 0), (0, 1), (1, 1), (1, 0), (0, 0)])
-    ])
-    geometry = from_shape(shape, 4326)
-
-    div = AdministrativeDivision(**{
-        'code': 30,
-        'leveltype_id': adminlevel_reg.id,
-        'name': u'Administrative division level 3'
-    })
-    div.geom = geometry
-    div.hazardcategories = []
-    DBSession.add(div)
-
-    DBSession.flush()
 
 
 def populate_notpreprocessed(type, unit):

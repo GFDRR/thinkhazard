@@ -2,9 +2,12 @@
 *.egg-info
 *.sqlite
 *.log
-local*.ini
-version.ini
+
 .build
 node_modules
 thinkhazard/static/build
 thinkhazard/static/fonts
+
+.coverage
+local*.ini
+version.ini
