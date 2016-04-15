@@ -61,7 +61,7 @@ class Processor(BaseProcessor):
             help='The hazardset id')
         return parser
 
-    def do_execute(self, hazardset_id):
+    def do_execute(self, hazardset_id=None):
         ids = DBSession.query(HazardSet.id) \
             .filter(HazardSet.complete.is_(True))
         if hazardset_id is not None:
