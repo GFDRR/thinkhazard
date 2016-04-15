@@ -53,7 +53,7 @@ class Completer(BaseProcessor):
                     HazardSet.complete: False,
                     HazardSet.processed: None
                 })
-                DBSession.flush()
+                transaction.commit()
             except:
                 transaction.abort()
                 raise
