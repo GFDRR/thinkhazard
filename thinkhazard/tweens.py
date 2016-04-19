@@ -35,21 +35,28 @@ def notmodified_tween_factory(handler, registry):
         publication_date = gmt.localize(Publication.last().date)
 
         def notmodified_tween(request):
-            if os.path.isfile(lock_file):
-                response = Response(render('templates/maintenance.jinja2',
-                                           {},
-                                           request))
-                response.status_code = 503
-                return response
-
-            if (request.if_modified_since is not None and
-                    request.if_modified_since >=
-                    publication_date.replace(microsecond=0)):
-                return HTTPNotModified()
-
+            # if cache_max_age is already set, like for static views, don't do
+            # anyting
             response = handler(request)
+            if not response.cache_control.max_age:
 
-            response.last_modified = publication_date
+                if os.path.isfile(lock_file):
+                    response = Response(render('templates/maintenance.jinja2',
+                                               {},
+                                               request))
+                    response.status_code = 503
+                    return response
+
+                if (request.if_modified_since is not None and
+                        request.if_modified_since >=
+                        publication_date.replace(microsecond=0)):
+                    return HTTPNotModified()
+
+
+                response.last_modified = publication_date
+                # make sure proxies (like Varnish) compare modification dates
+                # before serving responses
+                response.cache_control.proxy_revalidate = True
 
             return response
 
