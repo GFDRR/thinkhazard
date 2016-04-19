@@ -19,20 +19,20 @@
 
 import os
 import pytz
-from datetime import datetime
 from pyramid.response import Response
 from pyramid.renderers import render
 from pyramid.httpexceptions import HTTPNotModified
 
 from . import lock_file
+from .models import Publication
 
 
 def notmodified_tween_factory(handler, registry):
 
     if registry.settings['appname'] == 'public':
 
-        init_time = datetime.utcnow().replace(microsecond=0,
-                                              tzinfo=pytz.utc)
+        gmt = pytz.timezone('GMT')
+        publication_date = gmt.localize(Publication.last().date)
 
         def notmodified_tween(request):
             if os.path.isfile(lock_file):
@@ -43,11 +43,14 @@ def notmodified_tween_factory(handler, registry):
                 return response
 
             if (request.if_modified_since is not None and
-                    request.if_modified_since == init_time):
+                    request.if_modified_since >=
+                    publication_date.replace(microsecond=0)):
                 return HTTPNotModified()
 
             response = handler(request)
-            response.last_modified = init_time
+
+            response.last_modified = publication_date
+
             return response
 
         return notmodified_tween
