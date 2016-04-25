@@ -92,7 +92,7 @@ def main(argv=sys.argv):
     call(cmd, shell=True)
 
     print 'Restart PostgreSQL'
-    call(["sudo", "-u", "postgres", "/etc/init.d/postgresql", 'restart'])
+    call(["sudo", "service", "postgresql", 'restart'])
 
     print 'Drop database', public_database
     call(["sudo", "-u", "postgres", "dropdb", public_database])
