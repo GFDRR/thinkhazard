@@ -50,8 +50,7 @@ install: \
 		.build/requirements.timestamp \
 		.build/node_modules.timestamp \
 		.build/wkhtmltox \
-		buildcss \
-		version.ini
+		buildcss
 
 .PHONY: buildcss
 buildcss: thinkhazard/static/build/index.css \
@@ -271,6 +270,3 @@ clean:
 cleanall:
 	rm -rf .build
 	rm -rf node_modules
-
-version.ini:
-	git describe --always > $@

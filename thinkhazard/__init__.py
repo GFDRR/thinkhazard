@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
@@ -7,7 +8,6 @@ from papyrus.renderers import GeoJSON
 from .settings import (
     load_processing_settings,
     load_local_settings,
-    get_git_version,
     )
 from .models import (
     DBSession,
@@ -25,6 +25,13 @@ scheduler = None
 lock_file = os.path.join(os.path.dirname(__file__), 'maintenance.lock')
 
 
+try:
+    version = subprocess.check_output(['git', 'describe', '--always'],
+                                      cwd=os.path.dirname(__file__))
+except Exception as e:
+    version = ''
+
+
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
@@ -34,7 +41,7 @@ def main(global_config, **settings):
 
     load_processing_settings(settings)
     load_local_settings(settings, settings['appname'])
-    get_git_version(settings)
+    settings.update({'version': version})
 
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
