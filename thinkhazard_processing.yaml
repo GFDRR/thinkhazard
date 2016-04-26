@@ -24,7 +24,7 @@ hazard_types:
     hazard_type: earthquake
     return_periods:
       HIG: [100, 250]
-      MED: [475, 475]
+      MED: [475, 500]
       LOW: [1000, 2500]
     thresholds:
       HIG:
