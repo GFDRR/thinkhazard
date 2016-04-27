@@ -128,6 +128,30 @@
       Hazard level is calculated according the frequency, at which that hazard is expected to occur with a damaging level of intensity. For each hazard we have set an intensity threshold, above which the intensity parameter is considered to be able to cause damage to a development project of undefined type.
       </dd>
     </dl>
+    <dl>
+      <dt>
+      Does ThinkHazard! provide the hazard level at my specific project location, or location of interest?
+      </dt>
+      <dd>
+      ThinkHazard! provides the maximum hazard level within an administrative unit 1 or 2. It does not provide the hazard level at specific locations. This tool is a starting point to increase awareness of the hazards and levels of hazard present in an area; to determine the specific hazard level at a point or specific location, users should refer to a hazard map for the area. This is particularly important for hazards that can be very localized, and affect locations very differently, though they may only be short distances apart, for example, floods and landslides.
+      </dd>
+    </dl>
+    <dl>
+      <dt>
+      Why does ThinkHazard! show water scarcity but not drought hazard?
+      </dt>
+      <dd>
+      Water scarcity is a shortage of river runoff, in relation to the population density, and is available at multiple return periods as a global dataset. Drought data can also be shown in ThinkHazard!, provided they are available at multiple return periods. While there are many datasets providing drought indexes, these cannot be utilized in the present version of ThinkHazard!. 
+      </dd>
+    </dl>
+    <dl>
+      <dt>
+      How do you account for permanent water bodies in river flood hazard?
+      </dt>
+      <dd>
+      ThinkHazard! uses river flood hazard data sets that include a 2-year and/or 5-year return period layer in its calculation of hazard level. One of these layers (2-year if available, otherwise 5-year) are used to exclude areas of permanent water from the calculation. If areas of permanent water were included in the calculation, almost all administrative areas would have High hazard. We use the return period layers in place of a global water body mask, because a global mask layer was found to not effectively exclude small rivers. This also resulted in almost all administrative areas being considered as High hazard.
+      </dd>
+    </dl>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
