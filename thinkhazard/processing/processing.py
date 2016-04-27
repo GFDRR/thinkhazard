@@ -301,13 +301,6 @@ class Processor(BaseProcessor):
                                            layer.local,
                                            layer.hazardlevel.mnemonic,
                                            layer.hazardunit)
-            if threshold is None:
-                raise ProcessException(
-                    'No threshold found for {} {} {} {}'
-                    .format(hazardtype,
-                            'local' if layer.local else 'global',
-                            layer.hazardlevel.mnemonic,
-                            layer.hazardunit))
 
             for i in xrange(0, len(geometry.geoms)):
                 if i not in polygons:
@@ -343,15 +336,23 @@ class Processor(BaseProcessor):
                 # return period which should be used as mask for other layers
                 # for example River Flood
                 if ('mask_return_period' in self.type_settings):
+                    mask_layer = self.layers['mask']
                     mask_reader = self.readers['mask']
+
+                    mask_threshold = self.get_threshold(
+                        hazardtype,
+                        mask_layer.local,
+                        u'MASK',
+                        mask_layer.hazardunit)
+
                     mask_window = mask_reader.window(*bbox)
                     mask = self.readers['mask'].read(1,
                                                      window=mask_window,
                                                      masked=True)
                     if inverted_comparison:
-                        mask = mask < threshold
+                        mask = mask < mask_threshold
                     else:
-                        mask = mask > threshold
+                        mask = mask > mask_threshold
 
                     # apply the specific layer mask
                     data.mask = ma.getmaskarray(data) | mask.filled(False)
@@ -404,7 +405,12 @@ class Processor(BaseProcessor):
             elif unit in mysettings.keys():
                 mysettings = mysettings[unit]
             else:
-                return None
+                raise ProcessException(
+                    'No threshold found for {} {} {} {}'
+                    .format(hazardtype,
+                            'local' if local else 'global',
+                            level,
+                            unit))
         return float(mysettings)
 
 
