@@ -50,7 +50,7 @@ requires = [
     ]
 
 setup(name='thinkhazard',
-      version='0.0',
+      version='1.1.0',
       description='thinkhazard',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
