@@ -9,7 +9,7 @@ hazard_types:
       HIG: [10, 25]
       MED: 50
       LOW: [100, 1000]
-    mask_return_period: 9999
+    mask_return_period: [2, 5]
     thresholds:
       global:
         cm: 100
