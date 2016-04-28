@@ -311,6 +311,9 @@ Possible subkeys include the following:
            LOW:
              unit1: value1
              unit2: value2
+           MASK:
+             unit1: value1
+             unit2: value2
          local:
            unit1: value1
            unit2: value2

@@ -255,10 +255,15 @@ def populate_notpreprocessed(type, unit):
         )
         hazardset.layers.append(layer)
 
+    mask_return_periods = hazardtype_settings['mask_return_period']
+    if isinstance(mask_return_periods, list):
+        mask_return_period = mask_return_periods[0]
+    else:
+        mask_return_period = mask_return_periods
     layer = Layer(
         hazardlevel=None,
         mask=True,
-        return_period=hazardtype_settings['mask_return_period'],
+        return_period=mask_return_period,
         hazardunit=unit,
         data_lastupdated_date=datetime.now(),
         metadata_lastupdated_date=datetime.now(),

@@ -65,6 +65,15 @@ def parse_date(str):
         return datetime.strptime(str, '%Y-%m-%dT%H:%M:%S')
 
 
+def between(value, range):
+    '''Test hazard_period against value or interval in settings'''
+    if not isinstance(range, list):
+        range = [range, range]
+    if range[0] <= value <= range[1]:
+        return True
+    return False
+
+
 class Harvester(BaseProcessor):
 
     @staticmethod
@@ -377,22 +386,19 @@ class Harvester(BaseProcessor):
                 logger.info(u'  return period found in preprocessed hazardset')
                 return False
             hazard_period = None
+
         else:
             hazard_period = int(object['hazard_period'])
             hazardlevel = None
             for level in (u'LOW', u'MED', u'HIG'):
-                return_periods = type_settings['return_periods'][level]
-                if isinstance(return_periods, list):
-                    if (hazard_period >= return_periods[0] and
-                            hazard_period <= return_periods[1]):
-                        hazardlevel = HazardLevel.get(level)
-                        break
-                else:
-                    if hazard_period == return_periods:
-                        hazardlevel = HazardLevel.get(level)
+                if between(hazard_period,
+                           type_settings['return_periods'][level]):
+                    hazardlevel = HazardLevel.get(level)
+                    break
 
             if ('mask_return_period' in type_settings and
-                    hazard_period == type_settings['mask_return_period']):
+                    between(hazard_period,
+                            type_settings['mask_return_period'])):
                 mask = True
 
             if hazardlevel is None and not mask:
