@@ -1,13 +1,24 @@
-- [ ] Create a branch
+- [ ] Create a branch (Use major version for the name of the branch)
 ```
-git co -b A.B.C
+git co -b A.B
 ```
-- [ ] Update version number in setup.py
-- [ ] git ci -m "Bumping version A.B.C"
-- [ ] git tag A.B.C (for example 2.3.0)
+- [ ] Update version number in setup.py (Use minor version A.B.C),commit the changes and push branch to github
 ```
-git tag -a A.B.C
+vim setup.py
+git add setup.py
+git ci -m "Bumping version A.B.C"
+git push origin A.B
 ```
-- [ ] git push upstream --tags
-- [ ] checkout master branch
-- [ ] change version number in setup.py to next dev version
+- [ ] Add a tag for minor version
+```
+git tag -s -a A.B.C
+git push origin --tags
+```
+- [ ] checkout master branch, change version number in setup.py (A.D-dev) and push to github
+```
+git co master
+vim setup.py
+git add setup.py
+git ci -m "Bumping version A-D-dev"
+git push origin master
+```
