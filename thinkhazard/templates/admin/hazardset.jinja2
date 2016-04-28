@@ -23,7 +23,7 @@
       <tr>
         <td>{{layer.return_period}}</td>
         <td>{{layer.hazardlevel.mnemonic}}</td>
-        <td>
+        <td class="text-{{'success' if layer.downloaded else 'danger'}}">
           <span class="fa fa-{{'check' if layer.downloaded else 'times'}}"></span>
         </td>
       </tr>
