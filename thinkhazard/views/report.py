@@ -315,7 +315,7 @@ def get_info_for_hazard_type(request, hazard, division):
             'text': fr.text,
             'url': urlunsplit((geonode['scheme'],
                                geonode['netloc'],
-                               'documents/{}/download'.format(fr.id),
+                               'documents/{}'.format(fr.id),
                                '', ''))
         })
 
