@@ -18,6 +18,14 @@
     </dl>
     <dl>
       <dt>
+      How does <em>ThinkHazard!</em> achieve those aims?
+      </dt>
+      <dd>
+      <em>ThinkHazard!</em> communicates hazard level on the basis of ‘how frequently an area is likely to experience a hazard with damaging intensity’. To do this with probabilistic data, we process the frequency and intensity information contained in each original hazard data set. First, we set intensity thresholds (using original intensity units), above which the intensity would considered to be damaging (generally, not specific to any particular infrastructure or environment). In some cases, we set a higher threshold for High hazard level, than for lower levels, to differentiate the level of damage. We then consider whether the threshold is exceeded at three return periods, which differs for each hazard, reflecting the different frequency of events. If the intensity threshold is exceeded at the most frequent return period, the hazard is determined to be High. If the threshold is exceeded at the intermediate return period but not the most frequent, it is determined to be Medium hazard. If the threshold is exceeded at the least frequent return period only, the hazard is determined to be Low, and if there is hazard data present but the threshold is not exceeded at any return period, hazard is determined to be Very Low. For non-probabilistic data, such as landslide susceptibility index, we categorise the index into hazard levels using the original data values. The maximum hazard level in each administrative unit 2 (based on the FAO Global Administrative Unit Layers dataset) is deemed to be the hazard level of that unit. The hazard level of an administrative unit 1, is the maximum hazard level of all administrative unit 2 that it contains. For a full explanation of the methodology, please see the Methodology report.
+      </dd>
+    </dl>
+    <dl>
+      <dt>
       What is the long term vision for the tool?
       </dt>
       <dd>
@@ -93,7 +101,7 @@
       Is <em>ThinkHazard!</em> open-source?
       </dt>
       <dd>
-      <em>ThinkHazard!</em> has been designed as open-source from the start, with the code for <em>ThinkHazard!</em> available on GitHub at <a href="https://github.com/GFDRR/thinkhazard" target="_blank">https://github.com/GFDRR/thinkhazard</a>. Open-source technology means that partners can easily adapt <em>ThinkHazard!</em>  for their own use and to jointly contribute to the ongoing development of <em>ThinkHazard!</em> into the future.
+      <em>ThinkHazard!</em> has been designed as open-source from the start, with the code for <em>ThinkHazard!</em> available on <a href="GitHub" target="_blank">https://github.com/GFDRR/thinkhazard</a>. Open-source technology means that partners can easily adapt <em>ThinkHazard!</em>  for their own use and to jointly contribute to the ongoing development of <em>ThinkHazard!</em> into the future.
       </dd>
     </dl>
     <dl>
@@ -117,7 +125,7 @@
       What hazard data are used in <em>ThinkHazard!</em>, and can I download it for use elsewhere?
       </dt>
       <dd>
-      The data source used to produce the hazard levels is listed beneath the map, on the hazard specific recommendations page. By clicking on the data source name, you can download any data that are openly available. All data are stored on the Innovation Labs Geonode, at <a href="https://github.com/GFDRR/thinkhazard" target="_blank">https://github.com/GFDRR/thinkhazard</a>.Data with commercial limitations on sharing are not available to download.
+      The data sources used to produce the hazard levels are listed on the hazard specific recommendations page, beneath the map. The data source reflects the original data source, which has been re-processed in the ThinkHazard! tool to produce aggregate hazard levels. By clicking on the data source name, you can download any data that are openly available. All data are stored on the <a href="Innovation Labs Geonode" target="_blank">http://45.55.174.20/</a>. Data with commercial limitations on sharing are not available to download.
       </dd>
     </dl>
     <dl>
@@ -130,18 +138,18 @@
     </dl>
     <dl>
       <dt>
-      Does ThinkHazard! provide the hazard level at my specific project location, or location of interest?
+      Does <em>ThinkHazard!</em> provide the hazard level at my specific project location, or location of interest?
       </dt>
       <dd>
-      ThinkHazard! provides the maximum hazard level within an administrative unit 1 or 2. It does not provide the hazard level at specific locations. This tool is a starting point to increase awareness of the hazards and levels of hazard present in an area; to determine the specific hazard level at a point or specific location, users should refer to a hazard map for the area. This is particularly important for hazards that can be very localized, and affect locations very differently, though they may only be short distances apart, for example, floods and landslides.
+      <em>ThinkHazard!</em> provides the maximum hazard level within an administrative unit 1 or 2. It does not provide the hazard level at specific locations. This tool is a starting point to increase awareness of the hazards and levels of hazard present in an area; to determine the specific hazard level at a point or specific location, users should refer to a hazard map for the area. This is particularly important for hazards that can be very localized, and affect locations very differently, though they may only be short distances apart, for example, floods and landslides.
       </dd>
     </dl>
     <dl>
       <dt>
-      Why does ThinkHazard! show water scarcity but not drought hazard?
+      Why does <em>ThinkHazard!</em> show water scarcity but not drought hazard?
       </dt>
       <dd>
-      Water scarcity is a shortage of river runoff, in relation to the population density, and is available at multiple return periods as a global dataset. Drought data can also be shown in ThinkHazard!, provided they are available at multiple return periods. While there are many datasets providing drought indexes, these cannot be utilized in the present version of ThinkHazard!. 
+      Water scarcity is a shortage of river runoff, in relation to the population density, and is available at multiple return periods as a global dataset. Drought data can also be shown in <em>ThinkHazard!</em>, provided they are available at multiple return periods. While there are many datasets providing drought indexes, these cannot be utilized in the present version of <em>ThinkHazard!</em>. 
       </dd>
     </dl>
     <dl>
@@ -149,7 +157,7 @@
       How do you account for permanent water bodies in river flood hazard?
       </dt>
       <dd>
-      ThinkHazard! uses river flood hazard data sets that include a 2-year and/or 5-year return period layer in its calculation of hazard level. One of these layers (2-year if available, otherwise 5-year) are used to exclude areas of permanent water from the calculation. If areas of permanent water were included in the calculation, almost all administrative areas would have High hazard. We use the return period layers in place of a global water body mask, because a global mask layer was found to not effectively exclude small rivers. This also resulted in almost all administrative areas being considered as High hazard.
+      <em>ThinkHazard!</em> uses river flood hazard data sets that include a 2-year and/or 5-year return period layer in its calculation of hazard level. One of these layers (2-year if available, otherwise 5-year) are used to exclude areas of permanent water from the calculation. If areas of permanent water were included in the calculation, almost all administrative areas would have High hazard. We use the return period layers in place of a global water body mask, because a global mask layer was found to not effectively exclude small rivers. This also resulted in almost all administrative areas being considered as High hazard. Data sets without a 2-year and/or 5-year return period layers cannot currently be used in the tool.
       </dd>
     </dl>
   </div>
