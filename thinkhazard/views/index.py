@@ -36,7 +36,8 @@ def index(request):
 def about(request):
     publication_date = Publication.last()
     return {
-        'publication_date': publication_date.date.strftime('%c')
+        'publication_date': (publication_date.date.strftime('%c')
+                             if publication_date else '')
     }
 
 
