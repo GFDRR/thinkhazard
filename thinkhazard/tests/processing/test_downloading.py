@@ -20,8 +20,8 @@
 import unittest
 import transaction
 
-from .. import settings
-from . import populate_datamart
+from ...tests import settings
+from ..processing import populate_datamart
 from ...processing.downloading import Downloader
 
 

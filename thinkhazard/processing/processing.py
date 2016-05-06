@@ -40,7 +40,7 @@ from ..models import (
     Output,
     )
 
-from . import BaseProcessor
+from ..processing import BaseProcessor
 
 
 logger = logging.getLogger(__name__)

@@ -34,8 +34,8 @@ from ...models import (
     Output,
     )
 
-from .. import settings
-from . import populate_datamart
+from ...tests import settings
+from ..processing import populate_datamart
 from ...processing.processing import Processor
 from common import new_geonode_id
 

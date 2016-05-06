@@ -32,8 +32,8 @@ from ...models import (
     Region,
     )
 
-from .. import settings
-from . import populate_datamart
+from ...tests import settings
+from ..processing import populate_datamart
 from ...processing.harvesting import Harvester
 
 
