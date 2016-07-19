@@ -70,21 +70,18 @@
 <div class="col-sm-5">
   <div class="map-block">
     <div id="map" class="map">
-      {% if parents.__len__() >= 1 %}
-      <a class="btn btn-xs btn-default drillup" href="{{ 'report' | route_url(division=parents[0], hazardtype=hazard_category.hazardtype.mnemonic if hazard_category else '')}}">
-        <i class="btn-xs icon-zoom-out"></i>
-        Zoom out to {{ parent_division.name }}
-      </a>
-      {% endif %}
-      <div class="alert alert-dismissible zoomin-help control btn-xs">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        Zoom in by clicking on<br> an administrative area.</div>
       <div class="map-tooltip"></div>
       <div class="attribution">
         © <a href='https://www.mapbox.com/about/maps/'>Mapbox</a>
         © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>
       </div>
     </div>
+    {% if parents.__len__() >= 1 %}
+    <a class="btn btn-xs btn-default drillup" href="{{ 'report' | route_url(division=parents[0], hazardtype=hazard_category.hazardtype.mnemonic if hazard_category else '')}}">
+      <i class="btn-xs icon-zoom-out"></i>
+      Zoom out to {{ parent_division.name }}
+    </a>
+    {% endif %}
     {% if hazard_category %}
     <div class="caption level">
       {{ hazard_category.hazardtype.title}} hazard level
