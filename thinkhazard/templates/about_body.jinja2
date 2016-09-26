@@ -112,14 +112,14 @@
 </div>
 
 <br>
-<div class="row">
+<div class="row hidden-print">
   <div class="col-md-12 text-center">
     <p>
     {{gettext('*ThinkHazard!* holds local data for the countries displayed in this map. Global data is available for river flood, earthquake, cyclone, water scarcity, and landslide.') | markdown}}
     </p>
   </div>
-  <div class="col-md-12 text-center">
-    <img class="img-responsive" src="{{'thinkhazard:static/images/data-holdings-map.png'|static_url}}">
+  <div class="col-md-12">
+    <div id="about-map"></div>
   </div>
 </div>
 <div class="row">
@@ -149,3 +149,6 @@
     </p>
   </div>
 </div>
+<script>
+  initAboutMap("{{'thinkhazard:static/js/World_Data_Holdings.geojson'|static_url}}");
+</script>

@@ -10,9 +10,11 @@
 {% if debug %}
     <link href="{{'thinkhazard:static/build/common.css'|static_url}}" rel="stylesheet">
     <link href="{{('thinkhazard:static/build/%s.css' % self.name())|static_url}}" rel="stylesheet">
+    <link href="{{('%s/leaflet/dist/leaflet.css' % node_modules)|static_url}}" rel="stylesheet">
 {% else %}
     <link href="{{'thinkhazard:static/build/common.min.css'|static_url}}" rel="stylesheet">
     <link href="{{('thinkhazard:static/build/%s.min.css' % self.name())|static_url}}" rel="stylesheet">
+    <link href="{{('%s/leaflet/dist/leaflet.css' % node_modules)|static_url}}" rel="stylesheet">
 {% endif %}
   </head>
   <body class="{{'preview' if request.registry['settings'].appname == 'admin' }}">
