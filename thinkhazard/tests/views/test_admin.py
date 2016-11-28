@@ -38,7 +38,7 @@ class TestAdminFunction(BaseTestCase):
     def test_hazardcategories(self):
         resp = self.testapp.get('/hazardcategories', status=200)
         categories = resp.html.select('.hazardcategory-link')
-        self.assertEqual(len(categories), 8*4)
+        self.assertEqual(len(categories), 12*4)
 
     def test_hazardcategory(self):
         resp = self.testapp.get('/hazardcategory/EQ/HIG', status=200)
