@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'thinkhazard';
-  src:  url('fonts/thinkhazard.eot?hdao4f');
-  src:  url('fonts/thinkhazard.eot?hdao4f#iefix') format('embedded-opentype'),
-    url('fonts/thinkhazard.ttf?hdao4f') format('truetype'),
-    url('fonts/thinkhazard.woff?hdao4f') format('woff'),
-    url('fonts/thinkhazard.svg?hdao4f#thinkhazard') format('svg');
+  src:  url('fonts/thinkhazard.eot?p4sbt7');
+  src:  url('fonts/thinkhazard.eot?p4sbt7#iefix') format('embedded-opentype'),
+    url('fonts/thinkhazard.ttf?p4sbt7') format('truetype'),
+    url('fonts/thinkhazard.woff?p4sbt7') format('woff'),
+    url('fonts/thinkhazard.svg?p4sbt7#thinkhazard') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -24,7 +24,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-extreme_heat:before {
+.icon-Pollution2c:before {
   content: "\e900";
 }
 .icon-Earthquake:before {
@@ -78,10 +78,10 @@
 .icon-zoom-out:before {
   content: "\e613";
 }
-.icon-urban_flood:before {
+.icon-extreme_heat:before {
   content: "\e901";
 }
-.icon-air_pollution:before {
+.icon-urban_flood:before {
   content: "\e902";
 }
 .icon-wildfire:before {

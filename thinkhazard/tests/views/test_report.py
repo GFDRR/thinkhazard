@@ -60,7 +60,7 @@ class TestReportFunction(BaseTestCase):
     def test_report__hazardcategories(self):
         resp = self.testapp.get('/report/11-slug', status=200)
         # admin div 11 is not linked to any hazard category
-        self.assertEqual(len(resp.pyquery('.level-no-data.overview')), 8)
+        self.assertEqual(len(resp.pyquery('.level-no-data.overview')), 12)
 
         resp = self.testapp.get('/report/32-slug', status=200)
         # admin div 10 is not linked to hazard categories with one with high
