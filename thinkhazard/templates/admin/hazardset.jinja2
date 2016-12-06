@@ -15,14 +15,14 @@
     </h4>
     <table class="table">
       <tr>
-        <td>Return period</td>
         <td>Level</td>
+        <td>Return period</td>
         <td>Downloaded</td>
       </tr>
       {% for layer in hazardset.layers %}
       <tr>
-        <td>{{layer.return_period}}</td>
         <td>{{layer.hazardlevel.mnemonic}}</td>
+        <td>{{layer.return_period}}</td>
         <td class="text-{{'success' if layer.downloaded else 'danger'}}">
           <span class="fa fa-{{'check' if layer.downloaded else 'times'}}"></span>
         </td>

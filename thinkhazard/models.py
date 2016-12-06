@@ -33,6 +33,7 @@ from sqlalchemy import (
     Table,
     Unicode,
     Index,
+    select,
     )
 from sqlalchemy.schema import MetaData
 
@@ -533,7 +534,11 @@ class Layer(Base):
     # when the geotiff file has been downloaded
     downloaded = Column(Boolean, nullable=False, default=False)
 
-    hazardset = relationship('HazardSet', backref='layers')
+    hazardlevel_order = deferred(
+        select([HazardLevel.order]).where(HazardLevel.id == hazardlevel_id))
+    hazardset = relationship(
+        'HazardSet',
+        backref=backref('layers', order_by='Layer.hazardlevel_order.desc()'))
     hazardlevel = relationship('HazardLevel')
 
     def name(self):
