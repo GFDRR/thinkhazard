@@ -22,6 +22,7 @@ install:
 - createuser www-data --no-superuser --no-createdb --no-createrole -U postgres
 - createdb -O www-data thinkhazard_tests -U postgres
 - psql -d thinkhazard_tests -c 'CREATE EXTENSION postgis;' -U postgres
+- psql -d thinkhazard_tests -c 'CREATE EXTENSION unaccent;' -U postgres
 
 script:
 - make check
