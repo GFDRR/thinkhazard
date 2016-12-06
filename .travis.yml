@@ -10,12 +10,12 @@ python:
 - 2.7
 
 addons:
-  postgresql: "9.1"
+  postgresql: "9.3"
 
 before_install:
 - sudo apt-get install --no-install-recommends
     libgdal-dev
-    postgresql-9.1-postgis-2.1
+    postgresql-9.3-postgis-2.3
 
 install:
 - make install
