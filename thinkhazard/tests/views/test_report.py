@@ -134,6 +134,23 @@ class TestReportFunction(BaseTestCase):
     def test_report_print(self):
         self.testapp.get('/report/print/31/EQ', status=200)
 
+    def test_report__contacts(self):
+        # There are two contacts for the country 10 which is parent of 32
+        resp = self.testapp.get('/report/10-slug/EQ')
+        self.assertEqual(len(resp.pyquery('.contacts ul li')), 2)
+
+        # Division 32 is child of 10, same number of contacts
+        resp = self.testapp.get('/report/31-slug/EQ')
+        self.assertEqual(len(resp.pyquery('.contacts ul li')), 2)
+
+        # But no contacts for River Flood
+        resp = self.testapp.get('/report/31-slug/FL')
+        self.assertEqual(len(resp.pyquery('.contacts ul li')), 0)
+
+        # There's no contact for the country 11
+        resp = self.testapp.get('/report/12-slug/EQ')
+        self.assertEqual(len(resp.pyquery('.contacts ul li')), 0)
+
     @patch('thinkhazard.views.pdf.Popen')
     def test_create_pdf(self, mock):
         # tests that wkhtmltopdf is called and that the generated pdf file is

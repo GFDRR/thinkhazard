@@ -41,6 +41,8 @@ from ...models import (
     Output,
     TechnicalRecommendation,
     Publication,
+    Contact,
+    ContactAdministrativeDivisionHazardTypeAssociation as CAdHt,
     )
 
 from shapely.geometry import (
@@ -61,6 +63,8 @@ def populate_db():
     DBSession.query(TechnicalRecommendation).delete()
     DBSession.query(ClimateChangeRecommendation).delete()
     DBSession.query(HazardCategoryAdministrativeDivisionAssociation).delete()
+    DBSession.query(CAdHt).delete()
+    DBSession.query(Contact).delete()
     DBSession.query(Region).delete()
     DBSession.query(AdministrativeDivision).delete()
 
@@ -219,12 +223,21 @@ def populate_db():
     category_eq_hig.general_recommendation = \
         u'General recommendation for EQ HIG'
 
+    category_fl_hig = HazardCategory.get('FL', 'HIG')
+
     # admin_div_31 has (EQ, HIGH)
     association = HazardCategoryAdministrativeDivisionAssociation(**{
         'hazardcategory': category_eq_hig
     })
     association.hazardsets.append(hazardset1)
     admin_div_31.hazardcategories.append(association)
+
+    # admin_div_31 has (RF, HIGH)
+    admin_div_32.hazardcategories.append(
+        HazardCategoryAdministrativeDivisionAssociation(**{
+            'hazardcategory': category_fl_hig
+        })
+    )
 
     # admin_div_32 has (EQ, HIGH)
     admin_div_32.hazardcategories.append(
@@ -331,6 +344,34 @@ def populate_db():
     association.region = region_1
     further_resource.hazardtype_associations.append(association)
     DBSession.add(further_resource)
+
+    # contact for EQ & admin_div_11:
+    contact1 = Contact(**{
+        'name': u'Contact name',
+        'url': u'http://domain.com',
+        'phone': u'0123456789',
+        'email': u'mail@domain.com'
+    })
+    DBSession.add(contact1)
+    association = CAdHt()
+    association.hazardtype = hazardtype_eq
+    association.administrativedivision = admin_div_10
+    association.contact = contact1
+    DBSession.add(association)
+
+    # contact for EQ & admin_div_11:
+    contact2 = Contact(**{
+        'name': u'Contact name 2',
+        'url': u'http://domain.com',
+        'phone': u'0123456789',
+        'email': u'mail@domain.com'
+    })
+    DBSession.add(contact1)
+    association = CAdHt()
+    association.hazardtype = hazardtype_eq
+    association.administrativedivision = admin_div_10
+    association.contact = contact2
+    DBSession.add(association)
 
     Publication.new()
 

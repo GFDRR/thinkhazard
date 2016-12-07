@@ -94,6 +94,15 @@ def main(global_config, **settings):
         config.add_route('admin_hazardsets', '/hazardsets')
         config.add_route('admin_hazardset', '/hazardset/{hazardset}')
 
+        config.add_route('admin_contacts', '/contacts')
+        config.add_route('admin_contact_new', '/contact/new')
+        config.add_route('admin_contact_edit',
+                         '/contact/{id:\d+}')
+        config.add_route('admin_contact_delete',
+                         '/contact/{id:\d+}/delete')
+        config.add_route('admin_contact_admindiv_hazardtype_association',
+                         '/contact/CAdHt_form')
+
         config.include(add_public_routes, route_prefix='/preview')
 
     config.add_renderer('geojson', GeoJSON())

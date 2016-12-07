@@ -78,6 +78,7 @@ setup(name='thinkhazard',
           thinkhazard.scripts.import:import_recommendations
       import_further_resources = \
           thinkhazard.scripts.import_further_resources:main
+      import_contacts = thinkhazard.scripts.import:import_contacts
       harvest = thinkhazard.processing.harvesting:Harvester.run
       download = thinkhazard.processing.downloading:Downloader.run
       complete = thinkhazard.processing.completing:Completer.run

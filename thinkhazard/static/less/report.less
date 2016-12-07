@@ -209,6 +209,7 @@ body {
 }
 
 .map-block {
+  margin-bottom: 20px;
   .caption {
     text-align: center;
     &.location {
@@ -251,6 +252,7 @@ body {
   }
 }
 
+.contacts,
 .further-resources {
   p {
     margin-top: 15px;
@@ -261,16 +263,38 @@ body {
     list-style-type: none;
     padding-left: 0;
     margin-left: 0;
+    margin-bottom: 0;
     li {
       margin-top: 15px;
     }
   }
+
+  h1, h2, h3, h4, h5 {
+    margin-top: 0;
+  }
 }
 
+.contacts {
+  .dl-horizontal {
+    dt {
+      width: 100px;
+    }
+    dd {
+      margin-left: 120px;
+    }
+  }
+
+  dl {
+    margin-bottom: 0;
+  }
+}
+
+.contacts,
 .disclaimer,
 .further-resources {
   background-color: #f5f5f5;
-  margin: 50px 0px;
+  margin: 0;
+  margin-bottom: 20px;
   padding: 27px 30px;
 }
 

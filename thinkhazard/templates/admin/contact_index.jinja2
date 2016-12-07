@@ -1,0 +1,42 @@
+{% extends "base.jinja2" %}
+
+{% from 'common.jinja2' import navbar %}
+
+{% block name %}admin{% endblock %}
+
+{% block content %}
+  {{ navbar('contact') }}
+  <div class="container">
+
+    <h3>Contacts
+      <a class="btn btn-primary pull-right"
+        href="{{ 'admin_contact_new' | route_url }}"
+        >New Contact</a></h3>
+    <ul>
+      {% for contact in contacts %}
+      <li class="item-contact">
+        <div>{{ contact.name }}</div>
+        <div>
+          <a href="{{ 'admin_contact_edit' | route_url(id=contact.id) }}"
+            >Edit</a>
+          -
+          <a href="{{ 'admin_contact_delete' | route_url(id=contact.id) }}"
+            class="delete-button"
+            >Delete</a>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+  $('.delete-button').click(function(e) {
+    e.preventDefault();
+    if (confirm("Delete this contact?")) {
+      location = this.getAttribute('href');
+    }
+  });
+</script>
+{% endblock %}
