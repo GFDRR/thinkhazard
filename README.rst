@@ -33,6 +33,7 @@ Create a database::
 
     $ sudo -u postgres createdb -O www-data thinkhazard_admin
     $ sudo -u postgres psql -d thinkhazard_admin -c 'CREATE EXTENSION postgis;'
+    $ sudo -u postgres psql -d thinkhazard_admin -c 'CREATE EXTENSION unaccent;'
 
 If you want to use a different user or different database name, you'll have to
 provide your own configuration file. See "Use local.ini" section
@@ -230,6 +231,7 @@ In order to run tests, you'll need to create a separate Database::
 
     sudo -u postgres createdb -O www-data thinkhazard_tests
     sudo -u postgres psql -d thinkhazard_tests -c 'CREATE EXTENSION postgis;'
+    sudo -u postgres psql -d thinkhazard_tests -c 'CREATE EXTENSION unaccent;'
 
 You'll also have to define the specific settings. For this purpose, you'll have
 to create a ``local.tests.ini`` with the following content (to be adapted to

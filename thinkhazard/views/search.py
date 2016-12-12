@@ -25,6 +25,10 @@ from ..models import (
     AdministrativeDivision,
     )
 
+from sqlalchemy import (
+    func,
+    )
+
 
 @view_config(route_name='administrativedivision', renderer='json')
 def administrativedivision(request):
@@ -35,7 +39,9 @@ def administrativedivision(request):
     term = request.params['q']
 
     query = DBSession.query(AdministrativeDivision) \
-        .filter(AdministrativeDivision.name.ilike(u'%{}%'.format(term))) \
+        .filter(
+            func.unaccent(AdministrativeDivision.name)
+                .ilike(func.unaccent(u'%{}%'.format(term)))) \
         .order_by(
             AdministrativeDivision.name.ilike(term).desc(),
             AdministrativeDivision.name.ilike(u'{}%'.format(term)).desc(),
