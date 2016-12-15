@@ -23,19 +23,44 @@ def upgrade(engine_name):
     op.execute(
         hazardtype.insert() \
             .values({'mnemonic': op.inline_literal('UF'),
-                     'title': op.inline_literal('Urban flood')}))
+                     'title': op.inline_literal('Urban flood'),
+                     'order': 2}))
     op.execute(
         hazardtype.insert() \
             .values({'mnemonic': op.inline_literal('EH'),
-                     'title': op.inline_literal('Extreme heat')}))
+                     'title': op.inline_literal('Extreme heat'),
+                     'order': 10}))
     op.execute(
         hazardtype.insert() \
             .values({'mnemonic': op.inline_literal('WF'),
-                     'title': op.inline_literal('Wildfire')}))
+                     'title': op.inline_literal('Wildfire'),
+                     'order': 11}))
     op.execute(
         hazardtype.insert() \
             .values({'mnemonic': op.inline_literal('AP'),
-                     'title': op.inline_literal('Air pollution')}))
+                     'title': op.inline_literal('Air pollution'),
+                     'order': 12}))
+    op.execute(
+        hazardtype.update().values({'order': 3}) \
+            .where(hazardtype.c.mnemonic==op.inline_literal('CF')))
+    op.execute(
+        hazardtype.update().values({'order': 4}) \
+            .where(hazardtype.c.mnemonic==op.inline_literal('EQ')))
+    op.execute(
+        hazardtype.update().values({'order': 5}) \
+            .where(hazardtype.c.mnemonic==op.inline_literal('LS')))
+    op.execute(
+        hazardtype.update().values({'order': 6}) \
+            .where(hazardtype.c.mnemonic==op.inline_literal('TS')))
+    op.execute(
+        hazardtype.update().values({'order': 7}) \
+            .where(hazardtype.c.mnemonic==op.inline_literal('VO')))
+    op.execute(
+        hazardtype.update().values({'order': 8}) \
+            .where(hazardtype.c.mnemonic==op.inline_literal('CY')))
+    op.execute(
+        hazardtype.update().values({'order': 9}) \
+            .where(hazardtype.c.mnemonic==op.inline_literal('DG')))
     pass
 
 

@@ -87,9 +87,9 @@ class TestReportFunction(BaseTestCase):
 
         hazards = hazards_list.find('li')
 
-        # order should be 'FL', 'EQ' in icons list
+        # order should be 'FL', 'CF' in icons list
         self.assertTrue('fl' in hazards.eq(1).html())
-        self.assertTrue('eq' in hazards.eq(2).html())
+        self.assertTrue('cf' in hazards.eq(3).html())
 
         # whereas order should be 'EQ', 'FL' in overview list
         hazards = resp.pyquery('a.overview')
