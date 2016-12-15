@@ -184,10 +184,10 @@
    */
   function getFillColors(opacity) {
     return {
-      'HIG': [217, 31, 45, opacity],
-      'MED': [223, 113, 32, opacity],
-      'LOW': [223, 156, 32, opacity],
-      'VLO': [223, 187, 32, opacity]
+      'HIG': [189, 0, 38, opacity],
+      'MED': [240, 59, 32, opacity],
+      'LOW': [253, 141, 60, opacity],
+      'VLO': [254, 204, 92, opacity]
     };
   }
 
