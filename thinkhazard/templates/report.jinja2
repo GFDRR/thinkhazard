@@ -70,9 +70,10 @@ Think Hazard - {{ division.name}}
 
       <ul class="hazard-types-list horizontal list-unstyled" role="tablist">
         <li class="overview text-center {{ 'active' if not hazard_category}}">
-          <a href="{{ overview_url }}" title="Go back to overview page">
+          <a href="{{ overview_url }}" title="Go back to overview page"
+             data-toggle="tooltip"
+             data-placement="bottom">
             <i class="fa hazard-icon icon-overview"></i><br>
-            Overview
             {% if not hazard_category %}
             <div class="arrow"></div>
             {% endif %}
@@ -171,9 +172,11 @@ Think Hazard - {{ division.name}}
     {% if hazard.hazardlevel.mnemonic != 'no-data' %}
     href="{{'report'|route_url(division=division, hazardtype=hazard.hazardtype.mnemonic)}}"
     {% endif %}
+    data-toggle="tooltip"
+    data-placement="bottom"
+    title="{{ hazard.hazardtype.title }}"
      >
     <i class="fa hazard-icon icon-{{hazard.hazardtype.mnemonic|lower|replace(' ', '')}}"></i><br>
-    {{ hazard.hazardtype.title }}
     {% if hazard_category and hazard.hazardtype.mnemonic == hazard_category.hazardtype.mnemonic %}
     <div class="arrow"></div>
     {% endif %}
