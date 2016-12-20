@@ -29,7 +29,11 @@ from ..models import (
 @view_config(route_name='index', renderer='templates/index.jinja2')
 def index(request):
     hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
-    return {'hazards': hazard_types}
+
+    return {
+        'hazards': hazard_types,
+        'feedback_form_url': request.registry.settings['feedback_form_url']
+    }
 
 
 @view_config(route_name='about', renderer='templates/about.jinja2')
