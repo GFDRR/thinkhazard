@@ -1,3 +1,128 @@
+{%
+  set sections = [
+    (
+      'General', [
+        ('What is the purpose of this tool?', '<i>ThinkHazard!</i> was designed to increase awareness of natural hazards anywhere in the world. It does so by providing a simple overview of different hazards and their ‘hazard levels’ for any given area, delivering recommendations and information to aid users in managing their risk to those hazards. The tool is designed to become increasingly comprehensive over time as users contribute new data and information. If you have data or information to contribute, please click <a href="https://goo.gl/forms/FX8uxUgLwDKErdFG2" target="_blank">here</a>.'),
+        (
+          'What do the hazard levels mean?',
+          'The classification of hazard is based on the likelihood of the hazard exceeding predefined thresholds. The thresholds are based on hazard frequency and intensity and set using expert judgement. A higher hazard classification in <i>ThinkHazard!</i> indicates that there is greater potential for damage or disruption to activities or a project in that region, according to the underlying hazard data.'
+        ),
+        (
+          'Does <i>ThinkHazard!</i> provide the hazard level at my specific location of interest?',
+          'No. <i>ThinkHazard!</i> provides the maximum hazard level within each district, province, or national administrative unit (administrative level 2, 1, and 0, respectively). It does not provide the hazard level at specific locations. This tool is a starting point to increase awareness of the hazards present in an area. To determine the hazard level at a specific location, users should refer to more detailed hazard maps for the area, for example the underlying hazard data provided in the <a href="url_to_geonode" target="_blank">GFDRR Innovation Lab GeoNode</a> or through contacting the relevant local authorities.'
+        ),
+        (
+          'How does <i>ThinkHazard!</i> work?',
+          '<i>ThinkHazard!</i> uses the best available hazard data as the basis of its classification of hazard level. One method uses probabilistic data, which specifies the intensity and frequency of events in each region – e.g., earthquake data show the likelihood of a particular amount of ground shaking occurring at different locations. <i>ThinkHazard!</i> also uses data that says, for example, ‘the climate and ground conditions in this region suggest the region has a certain susceptibility to landslides’.<br><br>
+    The classification of hazard level in <i>ThinkHazard!</i> is based on the likelihood of each region experiencing a hazard with enough intensity (e.g., intensity of ground shaking) to cause damage. A higher hazard classification in <i>ThinkHazard!</i> indicates that there is greater potential for damage or disruption to activities or a project in that region, according to the underlying hazard data.<br><br>
+    For any region selected by a user, <i>ThinkHazard!</i> shows the maximum hazard level within that region. In the example below, earthquake hazard in the district ‘Ladislao Cabrera’ is rated ‘Medium’ based on underlying hazard data, but some of its neighboring districts are rated ‘Low’ (left image). The parent region, ‘Oruro’ Departmento (right image), is assigned the maximum hazard level of all districts it contains, so it is also assigned ‘Medium’. Bolivia contains nine Departmentos, which have different hazard levels, but as maximum hazard in ‘Medium’, Bolivia is assigned ‘Medium’. This example demonstrates the need to drill down to the region(s) relevant to your project, to find out more about the distribution of hazard there.<br><br>
+    <div class="text-center"><img src="https://dummyimage.com/600x400/000/fff"></div>'
+        ),
+        (
+          'Has the information in <i>ThinkHazard!</i> been peer-reviewed?',
+          'We commissioned an independent analysis of how well <i>ThinkHazard!</i> estimated hazard levels for up to 77 developing countries around the world and the results can be seen here. We recognize the importance of producing accurate results for our users so we are continuously looking for more accurate national and local datasets to supplement the tool. If you are aware of additional hazard datasets please contact us via the <a href="https://goo.gl/forms/FX8uxUgLwDKErdFG2" target="_blank">feedback form</a>, available on every page.'
+        ),
+        (
+          'Disasters don’t stop at borders or administrative boundaries. Why is <i>ThinkHazard!</i> based on (national, provincial, district) boundaries?',
+          'While we understand that presenting hazard data by administrative boundaries might not provide a full view of hazard data, it is the simplest way to visualize complex hazard data. The underlying hazard data have different levels of resolution, and presentation by boundary provides the most consistent output. The underlying grid data, which is not shown at administration boundary level, can be accessed at the <a href="url_to_geonode" target="_blank">GFDRR Innovation Lab GeoNode</a>.'
+        ),
+        (
+          'Are there more hazards in my area than are shown?',
+          'There may be hazards that affect your area that are not shown in <i>ThinkHazard!</i>. The tool focuses on natural hazards only, so hazards such as road traffic hazards and chemical spill hazards are not considered. Localized natural hazards such as avalanche and tornado, or those hazards that are specific to very few countries, are not presented. If there are hazards that you feel should be presented, please record this using the <a href="https://goo.gl/forms/FX8uxUgLwDKErdFG2" target="_blank">feedback form</a>, available on every page.'
+        ),
+        (
+          'A disaster recently occurred in a region with low or medium hazard. Does this mean the hazard level is wrong?',
+          'Not necessarily. The hazard level shown in <i>ThinkHazard!</i> is based on the expected frequency of the hazard exceeding intensity thresholds over the long-term (decades to centuries). If the hazard level is low, it means that the hazard is unlikely to exceed the threshold in that region, in that timeframe. The fact that an event occurred recently does not necessarily change the average frequency in the long-term.<br><br>
+Similarly, the hazard level may be considered high, even if there has not been an event in living memory. Some hazards may only occur years or decades apart in some regions, but are classified as high hazard when looking at longer timescales. These are known as ‘low frequency hazards’, and include earthquakes, volcanic eruptions, and tsunamis.'
+        ),
+        (
+          'What does return period mean?',
+          'A return period expresses the likelihood that an event could happen in a given year. The larger the return period for an event, the less likely its occurrence, and the greater its intensity. Return period, expresses the average time between hazard events of a particular severity, or intensity.
+<br><br>
+It is important to recognize that these numbers are <b>averages</b>. When an event is referred to as having a ‘1 in 100-year return period’, it means that <b>on average</b>, an event that size or bigger would be expected to occur once in a 100-year period. <b>However</b>, another event of that size or bigger could practically occur in the next day, or year, or in another 50 years. Or, one that size may not occur again for more than 100 years. Remember, these are statistical averages.
+<br><br>
+An equivalent way of expressing return period is as the chance of occurring each year. A ‘1 in 100-year return period’ also means a 1% chance of occurring in any single year. A more frequent event, say one with ‘1 in 20-year return period’ has a 5% chance of occurring in any single year (1/20 = 0.05, or 5%).'
+        ),
+        (
+          'What is ‘water scarcity’?',
+          'Water scarcity is a combination of water availability and water demand. <i>ThinkHazard!</i> incorporates drought through a measure of water scarcity.'
+        ),
+      ],
+    ),
+    (
+      'About', [
+        (
+          'Is <i>ThinkHazard!</i> open source?',
+          'Yes! The code for <i>ThinkHazard!</i> is available on <a href="https://github.com/GFDRR/thinkhazard" target="_blank">GitHub</a>. Open source technology means that anyone can adapt the tool for their own use and jointly contribute to the ongoing development of <i>ThinkHazard!</i>.'
+        ),
+        (
+          'Is <i>ThinkHazard!</i> available in multiple languages?',
+          'The tool is now available in English, French, and Spanish. We will consider additional language functionality in future development. Please let us know what language you would like to see using the <a href="https://goo.gl/forms/FX8uxUgLwDKErdFG2" target="_blank">feedback form</a>.'
+        ),
+        (
+          'I can see a use for this kind of tool in my institution and/or sector. How do I develop a customized version?',
+          'We’re glad you asked! Other organizations have already seen a use for this type of tool, from the occupational health and safety sector to disaster risk management professionals working on school safety. The code is open source and is designed to be tailored to different sectors and organizations. Please use the <a href="https://goo.gl/forms/FX8uxUgLwDKErdFG2" target="_blank">feedback form</a> to let us know how <i>ThinkHazard!</i> could be useful to you so that we can get in touch to discuss development.'
+        ),
+        (
+          'What is the long-term vision for the tool?',
+          'We want <i>ThinkHazard!</i> to be the go-to source of information for everyone to understand their exposure to natural hazards around the world; to be a reliable source for guidance on how to reduce risk when planning projects; to be a repository of useful reports, websites, and information; and, ultimately, to be a gateway to higher resolution datasets. In order to be a useful source, the data and information that are used in the tool must continually be updated and improved. If you have relevant data or information, please use the <a href="https://goo.gl/forms/FX8uxUgLwDKErdFG2" target="_blank">feedback form</a> so that we can contact you to discuss.'
+        ),
+      ],
+    ),
+    (
+      'Improvements and suggestions', [
+        (
+          'Can I provide suggestions to the tool or to the recommendations?',
+          'Yes! We continue to improve the tool and want to know what you think. Tell us <a href="https://goo.gl/forms/FX8uxUgLwDKErdFG2" target="_blank">here</a>.'
+        ),
+        (
+          'I have relevant information. Can I contribute this to the tool?',
+          'Yes! We are always looking for information and hazard data that is relevant to <i>ThinkHazard!</i> users and encourage you to tell us what you could provide using the <a href="https://goo.gl/forms/FX8uxUgLwDKErdFG2" target="_blank">feedback form</a>, and we will follow up directly with you. Your institution will be credited as the source of data.'
+        ),
+        (
+          'How can I report an error in data or recommendations?',
+          'Please let us know about it using the <a href="https://goo.gl/forms/FX8uxUgLwDKErdFG2" target="_blank">feedback form</a> so that we can try to fix it. Thanks for letting us know; we need your help to constantly improve <i>ThinkHazard!</i>.'
+        ),
+        (
+          'Can I get more specific recommendations relevant to my type of project?',
+          'This version of <i>ThinkHazard!</i> is designed to be generic, and recommendations are not tailored to any particular sector or project type. If you would like to design a sector- or organization-specific tool (e.g., an education sector tool could provide recommendations on school construction), please contact us using the <a href="https://goo.gl/forms/FX8uxUgLwDKErdFG2" target="_blank">feedback form</a> to discuss development. The code is open source, available on <a href="https://github.com/GFDRR/thinkhazard" target="_blank">GitHub</a>, and is designed to be tailored to sector or organization.'
+        ),
+      ],
+    ),
+    (
+      'Information for technical users', [
+        (
+          'How does <i>ThinkHazard!</i> work?',
+          'To determine the hazard level with probabilistic data, we process the frequency and intensity information contained in each original hazard dataset. First, we set intensity thresholds (using original intensity units), above which the intensity is damaging (not specific to any particular infrastructure or environment).
+<br><br>
+In some cases, we set a higher threshold for ‘High’ hazard level, than for lower levels, to differentiate the level of damage. We then consider whether the threshold is exceeded at three return periods, which differs for each hazard, reflecting the different frequency of events. If the intensity threshold is exceeded at the most frequent return period, the hazard is determined to be ‘High’. If the threshold is exceeded at the intermediate return period but not the most frequent, it is determined to be ‘Medium’. If the threshold is exceeded at the least frequent return period only, the hazard is determined to be ‘Low’. If there is hazard data present but the threshold is not exceeded at any return period, hazard is determined to be ‘Very Low’.
+<br><br>
+For non-probabilistic data, such as landslide susceptibility index, we categorize the index into hazard levels using the original data values. The maximum hazard level in each administrative unit 2 (based on the FAO Global Administrative Unit Layers dataset) is deemed to be the hazard level of that unit. The hazard level of a state or province boundary is the maximum hazard level of all districts that it contains. For a full explanation of the methodology, please see the <a href="%s">Methodology report</a>.' % 'thinkhazard:static/documents/thinkhazard-methodology-report_v1_8final.pdf' | static_url
+        ),
+        (
+          'Where can I find more information about the methods used in <i>ThinkHazard!</i>?',
+          'Please see the <a href="%s">Methodology report</a>.' % 'thinkhazard:static/documents/thinkhazard-methodology-report_v1_8final.pdf' | static_url
+        ),
+        (
+          'What hazard data are used in <i>ThinkHazard!</i>, and can I download the data for use elsewhere?',
+          'The data sources for each region are listed on the hazard-specific recommendations page, beneath the map. The original data has been processed for use in <i>ThinkHazard!</i> to produce aggregate hazard levels. By clicking on the data source name, you can download any data that are openly available. All data are stored on the <a href="url_to_geonode" target="_blank">GFDRR Innovation Lab GeoNode</a>. Data with commercial limitations on sharing are not available to download.'
+        ),
+        (
+          'How do you decide which dataset to use if there are multiple datasets for a region?',
+          'Where multiple hazard datasets are available for a single region and hazard, <i>ThinkHazard!</i> uses a decision tree to decide which dataset should be used. Submitted hazard data is reviewed by GFDRR hazard and risk specialists. A rating is assigned on the basis of age, methodology used, assumptions, and resolution of the data. Data with a higher rating will be the dataset underlying the results that users see.'
+        ),
+        (
+          'The hazard data seem to contradict other data I have seen or used. Why is this?',
+          'It is difficult for us to know the cause of the discrepancy without further information. <i>ThinkHazard!</i> uses a variety of hazard data sources. If you have any data that is relevant to hazard levels, <a href="https://goo.gl/forms/FX8uxUgLwDKErdFG2" target="_blank">please let us know</a> so that we can use it to improve the information on <i>ThinkHazard!</i>.'
+        ),
+        (
+          'How does <i>ThinkHazard!</i> account for permanent water bodies in river flood hazard?',
+          '<i>ThinkHazard!</i> uses river flood hazard datasets that include a 2-year and/or 5-year return period layer in its calculation of hazard level. One of these layers (2-year if available, otherwise 5-year) are used to exclude areas of permanent water from the calculation. If areas of permanent water were included in the calculation, almost all administrative areas would have ‘High’ hazard. We use the return period layers in place of a global water body mask, because a global mask layer was found to not effectively exclude small rivers. This also resulted in almost all administrative areas being considered as ‘High’ hazard. Datasets without a 2-year and/or 5-year return period layers cannot currently be used in the tool.'
+        ),
+      ]
+    )
+  ]
+%}
 <!-- Modal -->
 <div class="modal-dialog modal-lg" role="document">
 <div class="modal-content">
@@ -8,158 +133,22 @@
     </h4>
   </div>
   <div class="modal-body">
-    <dl>
-      <dt>
-      What are the aims of this tool?
-      </dt>
-      <dd>
-      <em>ThinkHazard!</em> is a simple tool that enables people to discover the level of hazard, for multiple hazards, in any location around the world. It aims to provide recommendations for actions that users can take to manage that hazard, and provide additional information relevant to the hazard and location. The tool draws on multiple data sources to provide the level of hazard, and is set-up to become increasingly comprehensive over time as users contribute new data and information
-      </dd>
-    </dl>
-    <dl>
-      <dt>
-      How does <em>ThinkHazard!</em> achieve those aims?
-      </dt>
-      <dd>
-      <em>ThinkHazard!</em> communicates hazard level on the basis of ‘how frequently an area is likely to experience a hazard with damaging intensity’. To do this with probabilistic data, we process the frequency and intensity information contained in each original hazard data set. First, we set intensity thresholds (using original intensity units), above which the intensity would considered to be damaging (generally, not specific to any particular infrastructure or environment). In some cases, we set a higher threshold for High hazard level, than for lower levels, to differentiate the level of damage. We then consider whether the threshold is exceeded at three return periods, which differs for each hazard, reflecting the different frequency of events. If the intensity threshold is exceeded at the most frequent return period, the hazard is determined to be High. If the threshold is exceeded at the intermediate return period but not the most frequent, it is determined to be Medium hazard. If the threshold is exceeded at the least frequent return period only, the hazard is determined to be Low, and if there is hazard data present but the threshold is not exceeded at any return period, hazard is determined to be Very Low. For non-probabilistic data, such as landslide susceptibility index, we categorise the index into hazard levels using the original data values. The maximum hazard level in each administrative unit 2 (based on the FAO Global Administrative Unit Layers dataset) is deemed to be the hazard level of that unit. The hazard level of an administrative unit 1, is the maximum hazard level of all administrative unit 2 that it contains. For a full explanation of the methodology, please see the <a href="{{'thinkhazard:static/documents/thinkhazard-methodology-report_v1_8final.pdf'|static_url}}" target="_blank">Methodology report</a>.
-      </dd>
-    </dl>
-    <dl>
-      <dt>
-      What is the long term vision for the tool?
-      </dt>
-      <dd>
-      The long-term vision for <em>ThinkHazard!</em> is that it becomes a place for users to explore and understand natural hazard levels around the world, and obtain guidance on how to consider natural hazards in their projects. <em>ThinkHazard!</em> will continue to be updated, and we encourage users of <em>ThinkHazard!</em> to provide feedback, hazard datasets that could improve it (especially at national, provincial and district levels), and additional resources (websites and publications) that can contribute to a growing repository of knowledge on this <em>ThinkHazard!</em> website. Our intention to continuously update the hazard data to reflect the latest knowledge in each hazard.
-      </dd>
-    </dl>
-    <dl>
-      <dt>
-      Where can I get a more specific version for my type of projects?
-      </dt>
-      <dd>
-      This initial version of <em>ThinkHazard!</em> is designed to be generic and not to provide specific recommendations for different sectors. Instead, we encourage partners who work in sectoral areas to work with us to produce sector (or project) specific versions of this tool, which would provide recommendations tailored to a specific type of project (for example, recommendations on school construction on a version of <em>ThinkHazard!</em> that is dedicated to the education sector). THe code is open-source, so the tool structure can be reproduced for different projects or purposes. If you see a need for a specific type of project, please get in touch using the feedback button, available on every page, to discuss development.
-      </dd>
-    </dl>
-    <dl>
-      <dt>
-      How well do the results in <em>ThinkHazard!</em> align with expert opinion on the hazards in each country?
-      </dt>
-      <dd>
-      The <em>ThinkHazard!</em> team commissioned independent analysis of how well <em>ThinkHazard!</em> estimated the hazard for up to 77 developing countries around the world and the results can be seen <a href="{{'thinkhazard:static/documents/SanityCheck.All.hazard.summary.-.20160428.pdf'|static_url}}" target="_blank">here</a>. We recognise the importance of producing accurate results for our users so we are constantly looking for more accurate national and local datasets to supplement the global datasets that are predominantly used in the tool. If you are aware of additional hazard datasets please contact us via the feedback button, available on every page.
-      </dd>
-    </dl>
-    <dl>
-      <dt>
-      In which languages is the tool available?
-      </dt>
-      <dd>
-      <em>ThinkHazard!</em> is currently only available in English; however, in future development we would like to add additional language functionality to <em>ThinkHazard!</em>. Please use the feedback button, available on every page, to tell us which other languages would be helpful for users of <em>ThinkHazard!</em>.
-      </dd>
-    </dl>
-    <dl>
-      <dt>
-      I have useful hazard data - how can I contribute data to the tool?
-      </dt>
-      <dd>
-      We encourage all owners and developers of hazard data to share those data for use in <em>ThinkHazard!</em>. If the dataset that you provide is used in the analysis of hazard in a project area, your institution will be credited as the data source with a weblink provided directly to your institution. Please use the user feedback form to let us know what datasets you would be able to contribute, and we’ll get in touch directly to discuss further.
-      </dd>
-    </dl>
-    <dl>
-      <dt>
-      I have useful additional information - how can I contribute data to the tool?
-      </dt>
-      <dd>
-      We encourage all owners and developers of hazard data to share those data for use in <em>ThinkHazard!</em>. If the dataset that you provide is used in the analysis of hazard in a project area, your institution will be credited as the data source with a weblink provided directly to your institution. Please use the user feedback form to let us know what datasets you might be willing to contribute, and we’ll get in touch with you directly to discuss further.
-      </dd>
-    </dl>
-    <dl>
-      <dt>
-      Can I suggest additional recommendations or changes to some recommendations?
-      </dt>
-      <dd>
-      We encourage all users to provide their feedback on the recommendations given in <em>ThinkHazard!</em>. Please use the feedback button, available on every page, to let us know, and we’ll get in touch to discuss your suggestions further.
-      </dd>
-    </dl>
-    <dl>
-      <dt>
-      The hazard data seems to contradict other data I have seen or used. Why is this?
-      </dt>
-      <dd>
-      <em>ThinkHazard!</em> uses a variety of sources of hazard data and the data source is provided on the map interface for each hazard. Some datasets are global and therefore are developed at a coarser resolution with a variety of assumptions. This may not be consistent with higher resolution or more detailed data available at the national or local level. Where local data has been provided for use within <em>ThinkHazard!</em>, it will be shown. We encourage all users to provide their feedback on hazard data and to highlight where higher resolution or more detailed hazard data is available. Please use the feedback button, available on every page, to let us know, and we’ll get in touch to discuss further.
-      </dd>
-    </dl>
-    <dl>
-      <dt>
-      How do you decide which hazard data to use for hazard levels?
-      </dt>
-      <dd>
-      Where multiple hazard datasets are available for a single location and hazard, <em>ThinkHazard!</em> uses a decision tree to decide which dataset should be used. Submitted hazard data is reviewed by GFDRR hazard and risk specialists. A rating is assigned on the basis of age, methodology used, assumptions, and resolution of the data. Data with a higher rating is shown as a preference to users of <em>ThinkHazard!</em>.
-      </dd>
-    </dl>
-    <dl>
-      <dt>
-      Is <em>ThinkHazard!</em> open-source?
-      </dt>
-      <dd>
-      <em>ThinkHazard!</em> has been designed as open-source from the start, with the code for <em>ThinkHazard!</em> available on <a href="https://github.com/GFDRR/thinkhazard" target="_blank">GitHub</a>. Open-source technology means that partners can easily adapt <em>ThinkHazard!</em>  for their own use and to jointly contribute to the ongoing development of <em>ThinkHazard!</em> into the future.
-      </dd>
-    </dl>
-    <dl>
-      <dt>
-      How can I report a bug or an error in data or recommendations?
-      </dt>
-      <dd>
-      A user feedback form is available on each page after you have searched a location. Please complete a feedback form on the page that you spot the issue. We will then endeavour to fix the problem.
-      </dd>
-    </dl>
-    <dl>
-      <dt>
-      Where can I find more information about the methods used in <em>ThinkHazard!</em>?
-      </dt>
-      <dd>
-      Please see the the <a href="{{'thinkhazard:static/documents/thinkhazard-methodology-report_v1_8final.pdf'|static_url}}" target="_blank">Methodology report</a>.
-      </dd>
-    </dl>
-    <dl>
-      <dt>
-      What hazard data are used in <em>ThinkHazard!</em>, and can I download it for use elsewhere?
-      </dt>
-      <dd>
-      The data sources used to produce the hazard levels are listed on the hazard specific recommendations page, beneath the map. The data source reflects the original data source, which has been re-processed in the ThinkHazard! tool to produce aggregate hazard levels. By clicking on the data source name, you can download any data that are openly available. All data are stored on the <a href="http://45.55.174.20/" target="_blank">Innovation Labs Geonode</a>. Data with commercial limitations on sharing are not available to download.
-      </dd>
-    </dl>
-    <dl>
-      <dt>
-      What do the hazard levels mean?
-      </dt>
-      <dd>
-      Hazard level is calculated according the frequency, at which that hazard is expected to occur with a damaging level of intensity. For each hazard we have set an intensity threshold, above which the intensity parameter is considered to be able to cause damage to a development project of undefined type.
-      </dd>
-    </dl>
-    <dl>
-      <dt>
-      Does <em>ThinkHazard!</em> provide the hazard level at my specific project location, or location of interest?
-      </dt>
-      <dd>
-      <em>ThinkHazard!</em> provides the maximum hazard level within an administrative unit 1 or 2. It does not provide the hazard level at specific locations. This tool is a starting point to increase awareness of the hazards and levels of hazard present in an area; to determine the specific hazard level at a point or specific location, users should refer to a hazard map for the area. This is particularly important for hazards that can be very localized, and affect locations very differently, though they may only be short distances apart, for example, floods and landslides.
-      </dd>
-    </dl>
-    <dl>
-      <dt>
-      Why does <em>ThinkHazard!</em> show water scarcity but not drought hazard?
-      </dt>
-      <dd>
-      Water scarcity is a shortage of river runoff, in relation to the population density, and is available at multiple return periods as a global dataset. Drought data can also be shown in <em>ThinkHazard!</em>, provided they are available at multiple return periods. While there are many datasets providing drought indexes, these cannot be utilized in the present version of <em>ThinkHazard!</em>. 
-      </dd>
-    </dl>
-    <dl>
-      <dt>
-      How do you account for permanent water bodies in river flood hazard?
-      </dt>
-      <dd>
-      <em>ThinkHazard!</em> uses river flood hazard data sets that include a 2-year and/or 5-year return period layer in its calculation of hazard level. One of these layers (2-year if available, otherwise 5-year) are used to exclude areas of permanent water from the calculation. If areas of permanent water were included in the calculation, almost all administrative areas would have High hazard. We use the return period layers in place of a global water body mask, because a global mask layer was found to not effectively exclude small rivers. This also resulted in almost all administrative areas being considered as High hazard. Data sets without a 2-year and/or 5-year return period layers cannot currently be used in the tool.
-      </dd>
-    </dl>
+    {% for section, questions in sections %}
+    {% set sectionsloop = loop %}
+    <h1>
+      {{section}}
+    </h1>
+    {% for question in questions %}
+    <h4>
+      <a class="" role="button" data-toggle="collapse" href="#question-{{sectionsloop.index}}{{loop.index}}" aria-expanded="false" aria-controls="collapseExample">
+        {{question[0]}}
+      </a>
+    </h4>
+    <div class="collapse" id="question-{{sectionsloop.index}}{{loop.index}}">
+      {{question[1]}}
+    </div>
+    {% endfor %}
+    {% endfor %}
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
