@@ -1,3 +1,4 @@
+{% from 'common.jinja2' import disclaimer %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -17,20 +18,10 @@
     </div>
     <div class="container">
       <div class="disclaimer">
-        <p>
-          This report is a product of the staff of the World Bank. The findings, interpretations, and conclusions expressed in this report do not necessarily reflect the views of the Executive Directors of the World Bank or the governments they represent.
-        </p>
-        <p>
-          The World Bank does not guarantee the accuracy of the data included in this work. The boundaries, colors, denominations and other information shown on any map in this work do not imply any judgment on the part of the World Bank concerning the legal status  of any territory or the endorsement or acceptance of such boundaries.
-        </p>
-        <p>
-          © 2015 The World Bank
-          1818 H Street, N.W.
-          Washington, D.C. 20433
-        </p>
-        <p>
-          All rights reserved
-        </p>
+        <h4>
+          Disclaimer
+        </h4>
+        {{disclaimer()}}
       </div>
     </div>
   </body>

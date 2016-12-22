@@ -1,3 +1,4 @@
+{% from 'common.jinja2' import licence %}
 <p>
 <em>ThinkHazard!</em> is a new web-based tool enabling non-specialists to consider the impacts of disasters on new development projects. Users of <em>ThinkHazard!</em> can quickly and robustly assess the level of river flood, earthquake, drought, cyclone, coastal flood, tsunami, volcano, and landslide hazard within their project area to assist with project planning and design.
 </p>
@@ -124,9 +125,6 @@
 <div class="row">
   <div class="col-md-12">
     <p>
-    The World Bank does not guarantee the accuracy of the data included in this work. The boundaries, colors, denominations, and other information shown on any map in this work do not imply any judgment on the part of The World Bank concerning the legal status of any territory or the endorsement or acceptance of such boundaries.
-    </p>
-    <p>
     Source of Administrative boundaries: The Global Administrative Unit Layers (GAUL) dataset, implemented by FAO within the CountrySTAT and Agricultural Market Information System (AMIS) projects.
     </p>
   </div>
@@ -138,8 +136,12 @@
     The tool code is open source, to encourage other users to adapt the tool to their needs. The code can be found on <a href="https://github.com/GFDRR/thinkhazard" target="_blank">Github</a>.
     Current instance version is {{request.registry.settings['version']}}.
     </p>
+    <p>
+      {{licence()}}
+    </p>
   </div>
 </div>
+<hr>
 <div class="row">
   <div class="col-md-12">
     <p>
