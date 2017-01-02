@@ -270,7 +270,8 @@ def admindiv_hazardsets_hazardtype(request):
         'name': row.name,
         'level_2': row.parent.name,
         'level_1': row.parent.parent.name,
-        'hazardset': row.hazardcategories[0].hazardsets[0].id
+        'hazardset': row.hazardcategories[0].hazardsets[0].id,
+        'hazard_level': row.hazardcategories[0].hazardcategory.hazardlevel.mnemonic
     } for row in query]
 
     hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
