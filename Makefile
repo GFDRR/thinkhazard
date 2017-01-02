@@ -164,7 +164,7 @@ dbtunnel:
 .PHONY: watch
 watch: .build/dev-requirements.timestamp
 	@echo "Watching static files..."
-	.build/venv/bin/nosier -p thinkhazard/static "make build"
+	.build/venv/bin/nosier -p thinkhazard/static "make buildcss"
 
 thinkhazard/static/build/%.min.css: $(LESS_FILES) .build/node_modules.timestamp
 	mkdir -p $(dir $@)
