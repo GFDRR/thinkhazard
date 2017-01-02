@@ -244,6 +244,15 @@ def admindiv_hazardsets(request):
 
 @view_config(route_name='admin_admindiv_hazardsets_hazardtype',
              renderer='templates/admin/admindiv_hazardsets.jinja2')
+def admin_admindiv_hazardsets_hazardtype(request):
+    data = admindiv_hazardsets_hazardtype(request)
+    hazard_types = DBSession.query(HazardType).order_by(HazardType.order).all()
+    return {
+        'hazard_types': hazard_types,
+        'data': json.dumps(data)
+    }
+
+
 def admindiv_hazardsets_hazardtype(request):
 
     try:
@@ -271,14 +280,11 @@ def admindiv_hazardsets_hazardtype(request):
         'level_2': row.parent.name,
         'level_1': row.parent.parent.name,
         'hazardset': row.hazardcategories[0].hazardsets[0].id,
-        'hazard_level': row.hazardcategories[0].hazardcategory.hazardlevel.mnemonic
+        'hazard_level':
+            row.hazardcategories[0].hazardcategory.hazardlevel.mnemonic
     } for row in query]
 
-    hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
-    return {
-        'hazard_types': hazard_types,
-        'data': json.dumps(data)
-    }
+    return data
 
 
 @view_config(route_name='admin_climate_rec')

@@ -21,7 +21,7 @@ import urllib
 import datetime
 
 from pyramid.view import view_config
-from pyramid.httpexceptions import HTTPBadRequest, HTTPFound
+from pyramid.httpexceptions import HTTPBadRequest, HTTPFound, HTTPNotFound
 
 from sqlalchemy.orm import aliased, joinedload, contains_eager
 from sqlalchemy.orm.exc import NoResultFound
@@ -46,9 +46,7 @@ from ..models import (
     ClimateChangeRecommendation,
     HazardTypeFurtherResourceAssociation,
     ClimateChangeRecAdministrativeDivisionAssociation as CcrAd,
-    TechnicalRecommendation,
     HazardCategoryAdministrativeDivisionAssociation,
-    HazardCategoryTechnicalRecommendationAssociation,
     Contact,
     ContactAdministrativeDivisionHazardTypeAssociation as CAdHt,
 )
@@ -155,15 +153,11 @@ def report(request):
     return context
 
 
-@view_config(route_name='report_json', renderer='geojson')
-@view_config(route_name='report_overview_json', renderer='geojson')
-def report_json(request):
+@view_config(route_name='report_geojson', renderer='geojson')
+@view_config(route_name='report_overview_geojson', renderer='geojson')
+def report_geojson(request):
 
-    try:
-        division_code = request.matchdict.get('divisioncode')
-    except:
-        raise HTTPBadRequest(detail='incorrect value for parameter '
-                                    '"divisioncode"')
+    division_code = request.matchdict.get('divisioncode')
 
     try:
         resolution = float(request.params.get('resolution'))
@@ -204,6 +198,30 @@ def report_json(request):
         }
     } for division, geom_simplified, hazardlevel_mnemonic,
           hazardlevel_title in divisions]
+
+
+@view_config(route_name='report_overview_json', renderer='json')
+def report_overview_json(request):
+    division_code = request.matchdict.get('divisioncode')
+    hazard_types = get_hazard_types(division_code)
+    return hazard_types
+
+
+@view_config(route_name='report_json', renderer='json')
+def report_json(request):
+    division_code = request.matchdict.get('divisioncode')
+    selected_hazard = request.matchdict.get('hazardtype')
+    hazard_category = None
+    division = get_division(division_code)
+
+    try:
+        hazard_category = get_info_for_hazard_type(request,
+                                                   selected_hazard,
+                                                   division)
+    except NoResultFound:
+        raise HTTPNotFound(detail='No data available for this division and '
+                                  'hazardtype')
+    return hazard_category
 
 
 def get_parents(division):
@@ -254,7 +272,6 @@ def get_hazard_types(code):
 
 
 def get_info_for_hazard_type(request, hazard, division):
-    technical_recommendations = None
     further_resources = None
     sources = None
     climate_change_recommendation = None
@@ -292,13 +309,6 @@ def get_info_for_hazard_type(request, hazard, division):
         .filter(HazardType.mnemonic == hazard) \
         .all()
 
-    technical_recommendations = DBSession.query(TechnicalRecommendation) \
-        .join(TechnicalRecommendation.hazardcategory_associations) \
-        .join(HazardCategory) \
-        .filter(HazardCategory.id == hazard_category.id) \
-        .order_by(HazardCategoryTechnicalRecommendationAssociation.order) \
-        .all()
-
     regions_subq = DBSession.query(Region.id) \
         .join(Region.administrativedivisions) \
         .filter(AdministrativeDivision.code == code).subquery()
@@ -319,7 +329,6 @@ def get_info_for_hazard_type(request, hazard, division):
     for frq in further_resources_query:
         fr = frq.furtherresource
         further_resources.append({
-            'id': fr.id,
             'text': fr.text,
             'url': urlunsplit((geonode['scheme'],
                                geonode['netloc'],
@@ -339,7 +348,6 @@ def get_info_for_hazard_type(request, hazard, division):
     return {
         'hazard_category': hazard_category,
         'climate_change_recommendation': climate_change_recommendation,
-        'recommendations': technical_recommendations,
         'resources': further_resources,
         'sources': sources,
         'contacts': contacts
@@ -363,8 +371,8 @@ def data_source(request):
     return {'hazardset': hazardset}
 
 
-@view_config(route_name='report_neighbours_json', renderer='geojson')
-def report_neighbours_json(request):
+@view_config(route_name='report_neighbours_geojson', renderer='geojson')
+def report_neighbours_geojson(request):
 
     try:
         division_code = request.matchdict.get('divisioncode')

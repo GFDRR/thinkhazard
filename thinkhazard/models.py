@@ -126,6 +126,12 @@ class HazardLevel(Base):
                 hazardlevels[mnemonic] = hazardlevel
             return hazardlevel
 
+    def __json__(self, request):
+        return {
+            'mnemonic': self.mnemonic,
+            'title': self.title,
+        }
+
 
 class HazardType(Base):
     __tablename__ = 'enum_hazardtype'
@@ -149,6 +155,12 @@ class HazardType(Base):
             if hazardtype is not None:
                 hazardtypes[mnemonic] = hazardtype
             return hazardtype
+
+    def __json__(self, request):
+        return {
+            'mnemonic': self.mnemonic,
+            'hazardtype': self.title
+        }
 
 
 hazardcategory_administrativedivision_hazardset_table = Table(
@@ -201,7 +213,13 @@ class HazardCategoryTechnicalRecommendationAssociation(Base):
         nullable=False)
     order = Column(Integer, nullable=False)
 
-    hazardcategory = relationship('HazardCategory')
+    hazardcategory = relationship(
+        'HazardCategory',
+        backref=backref(
+            "tec_rec_associations",
+            order_by='HazardCategoryTechnicalRecommendationAssociation.order',
+        )
+    )
     technicalrecommendation = relationship('TechnicalRecommendation')
 
     # Explicitely choose index names to avoid truncation
@@ -340,6 +358,16 @@ class HazardCategory(Base):
             .filter(cls.hazardlevel == hazardlevel) \
             .one()
 
+    def __json__(self, request):
+        return {
+            'hazard_type': self.hazardtype.title,
+            'hazard_level': self.hazardlevel.title,
+            'general_recommendation': self.general_recommendation,
+            'technical_recommendations': [
+                a.technicalrecommendation for a in self.tec_rec_associations
+            ],
+        }
+
 
 class ClimateChangeRecommendation(Base):
     __tablename__ = 'climatechangerecommendation'
@@ -349,6 +377,9 @@ class ClimateChangeRecommendation(Base):
                            ForeignKey('enum_hazardtype.id'),
                            nullable=False)
     hazardtype = relationship('HazardType')
+
+    def __json__(self, request):
+        return self.text
 
 
 class ClimateChangeRecAdministrativeDivisionAssociation(Base):
@@ -414,6 +445,12 @@ class TechnicalRecommendation(Base):
                     return False
                 return True
         return False
+
+    def __json__(self, request):
+        return {
+            'text': self.text,
+            'detail': self.detail
+        }
 
 
 class FurtherResource(Base):
@@ -482,6 +519,13 @@ class HazardSet(Base):
             .filter(Layer.hazardset_id == self.id) \
             .filter(Layer.hazardlevel_id == hazardlevel.id) \
             .one_or_none()
+
+    def __json__(self, request):
+        return {
+            'id': self.id,
+            'owner_organization': self.owner_organization,
+            'distribution_url': self.distribution_url
+        }
 
 
 @listens_for(HazardSet.processed, 'set')
@@ -655,6 +699,14 @@ class Contact(Base):
     url = Column(Unicode)
     phone = Column(Unicode)
     email = Column(Unicode)
+
+    def __json__(self, request):
+        return {
+            'name': self.name,
+            'url': self.url,
+            'phone': self.phone,
+            'email': self.email,
+        }
 
 
 class ContactAdministrativeDivisionHazardTypeAssociation(Base):

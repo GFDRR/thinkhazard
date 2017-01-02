@@ -1,4 +1,4 @@
-{% macro report_for_hazard(division, hazard_category, recommendations,
+{% macro report_for_hazard(division, hazard_category,
    climate_change_recommendation, sources, resources,
    contacts,
    hazards_sorted=None,
@@ -24,10 +24,13 @@
     </p>
     {% endif %}
 
-    {% if recommendations %}
+    {% if hazard_category.tec_rec_associations %}
     <h3>Recommendations</h3>
     <ul class="recommendations">
-    {% for recommendation in recommendations %}
+    {% for association in hazard_category.tec_rec_associations %}
+      {%
+      set recommendation = association.technicalrecommendation
+      %}
       <li class="list-unstyled">
         <i class="icon-list-square"></i>
         {{ recommendation.text }}
