@@ -30,14 +30,18 @@
     </div>
   </div>
   <div class="container text-center">
-    <ul class="hazard-types-list horizontal list-unstyled">
-      {% for hazard in hazards %}
-      <li class="no-data text-center ">
-        <i class="fa hazard-icon icon-{{ hazard.mnemonic|lower|replace(' ', '') }}"></i><br>
-          {{ hazard.title }}
-      </li>
-      {% endfor %}
-    </ul>
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <ul class="hazard-types-list horizontal list-unstyled">
+          {% for hazard in hazards %}
+          <li class="no-data text-center ">
+            <i class="fa hazard-icon icon-{{ hazard.mnemonic|lower|replace(' ', '') }}"></i><br>
+              {{ hazard.title }}
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
   </div>
   <footer class="text-center">
     <a href="//www.gfdrr.org/" class="logo-gfdrr logo-md" title="Logo GFDRR" alt="Logo GFDRR"><img src="{{'thinkhazard:static/images/logo-gfdrr.svg'|static_url}}"></a>
