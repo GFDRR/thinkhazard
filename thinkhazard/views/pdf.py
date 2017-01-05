@@ -104,10 +104,7 @@ def pdf_cover(request):
     return context
 
 
-@view_config(
-    route_name='pdf_about', renderer='templates/pdf_about.jinja2')
-def pdf_about(request):
-    return {}
+'''pdf_about: see index.py'''
 
 
 def create_pdf(file_name, file_name_temp, cover_url, pages, timeout):
