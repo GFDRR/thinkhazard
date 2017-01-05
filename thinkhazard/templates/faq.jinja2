@@ -15,8 +15,14 @@
           'How does <i>ThinkHazard!</i> work?',
           '<i>ThinkHazard!</i> uses the best available hazard data as the basis of its classification of hazard level. One method uses probabilistic data, which specifies the intensity and frequency of events in each region – e.g., earthquake data show the likelihood of a particular amount of ground shaking occurring at different locations. <i>ThinkHazard!</i> also uses data that says, for example, ‘the climate and ground conditions in this region suggest the region has a certain susceptibility to landslides’.<br><br>
     The classification of hazard level in <i>ThinkHazard!</i> is based on the likelihood of each region experiencing a hazard with enough intensity (e.g., intensity of ground shaking) to cause damage. A higher hazard classification in <i>ThinkHazard!</i> indicates that there is greater potential for damage or disruption to activities or a project in that region, according to the underlying hazard data.<br><br>
-    For any region selected by a user, <i>ThinkHazard!</i> shows the maximum hazard level within that region. In the example below, earthquake hazard in the district ‘Ladislao Cabrera’ is rated ‘Medium’ based on underlying hazard data, but some of its neighboring districts are rated ‘Low’ (left image). The parent region, ‘Oruro’ Departmento (right image), is assigned the maximum hazard level of all districts it contains, so it is also assigned ‘Medium’. Bolivia contains nine Departmentos, which have different hazard levels, but as maximum hazard in ‘Medium’, Bolivia is assigned ‘Medium’. This example demonstrates the need to drill down to the region(s) relevant to your project, to find out more about the distribution of hazard there.<br><br>
-    <div class="text-center"><img src="https://dummyimage.com/600x400/000/fff"></div>'
+    For any region selected by a user, <i>ThinkHazard!</i> shows the maximum hazard level within that region. In the example below, earthquake hazard in the district ‘Ladislao Cabrera’ is rated ‘Medium’ based on underlying hazard data, but some of its neighboring districts are rated ‘Low’ (left image). The parent region, ‘Oruro’ Departmento (right image), is assigned the maximum hazard level of all districts it contains, so it is also assigned ‘Medium’. Bolivia contains nine Departmentos, which have different hazard levels, but as maximum hazard in ‘Medium’, Bolivia is assigned ‘Medium’. This example demonstrates the need to drill down to the region(s) relevant to your project, to find out more about the distribution of hazard there.<br><br>'
+          '<div class="row">'
+          '<div class="col-md-6 text-center"><h4>Oruro</h4><img src="%s" class="img-responsive"></div>'
+          '<div class="col-md-6 text-center"><h4>Bolivia</h4><img src="%s" class="img-responsive"></div>'
+          '</div>'
+          '<div class="row"><div class="col-md-12 text-center"><img src="%s"></div></div>'
+          '<div class="row"><div class="col-md-12 text-center"><img src="%s" class="img-responsive"></div></div>'
+          % ('thinkhazard:static/images/faq_oruro.png' | static_url, 'thinkhazard:static/images/faq_bolivia.png' | static_url, 'thinkhazard:static/images/faq_legend.png' | static_url, 'thinkhazard:static/images/faq_hazards_list.png' | static_url)
         ),
         (
           'Has the information in <i>ThinkHazard!</i> been peer-reviewed?',
@@ -135,17 +141,19 @@ For non-probabilistic data, such as landslide susceptibility index, we categoriz
   <div class="modal-body">
     {% for section, questions in sections %}
     {% set sectionsloop = loop %}
-    <h1>
-      {{section}}
-    </h1>
-    {% for question in questions %}
     <h4>
+      {{section}}
+    </h4>
+    {% for question in questions %}
+    <div>
       <a class="" role="button" data-toggle="collapse" href="#question-{{sectionsloop.index}}{{loop.index}}" aria-expanded="false" aria-controls="collapseExample">
         {{question[0]}}
       </a>
-    </h4>
+    </div>
     <div class="collapse" id="question-{{sectionsloop.index}}{{loop.index}}">
       {{question[1]}}
+      <br>
+      <br>
     </div>
     {% endfor %}
     {% endfor %}
