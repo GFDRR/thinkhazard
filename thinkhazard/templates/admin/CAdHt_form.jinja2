@@ -1,0 +1,23 @@
+<div class="form-inline well">
+  <div class="form-group">
+    <select name="country" class="form-control input-sm">
+      {% for country in countries %}
+      <option value="{{country.id}}"
+        {{ 'selected' if association and country.id == association.administrative_id else ''}}>
+        {{country.name}}
+      </option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="form-group">
+    <select name="hazard_type" class="form-control input-sm">
+      {% for type in hazard_types %}
+      <option value="{{type.id}}"
+        {{ 'selected' if association and type.id == association.hazardtype_id else ''}}>
+        {{type.title}}
+      </option>
+      {% endfor %}
+    </select>
+  </div>
+  <a class="btn btn-danger btn-sm" onclick="deleteAssocation(this)">Delete</a>
+</div>

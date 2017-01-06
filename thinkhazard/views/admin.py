@@ -38,6 +38,8 @@ from ..models import (
     DBSession,
     AdminLevelType,
     AdministrativeDivision,
+    Contact,
+    ContactAdministrativeDivisionHazardTypeAssociation as CAdHt,
     ClimateChangeRecommendation,
     ClimateChangeRecAdministrativeDivisionAssociation as CcrAd,
     HazardCategory,
@@ -398,3 +400,103 @@ def climate_rec_process(request, obj):
         DBSession.flush()
         return HTTPFound(request.route_url('admin_climate_rec_edit',
                          id=obj.hazardtype.mnemonic))
+
+
+@view_config(route_name='admin_contacts',
+             renderer='templates/admin/contact_index.jinja2')
+def contacts(request):
+    return {
+        'contacts': DBSession.query(Contact).order_by(Contact.name)
+    }
+
+
+@view_config(route_name='admin_contact_new',
+             renderer='templates/admin/contact_form.jinja2')
+def contact_new(request):
+    obj = Contact()
+    return contact_process(request, obj)
+
+
+@view_config(route_name='admin_contact_edit',
+             renderer='templates/admin/contact_form.jinja2')
+def contact_edit(request):
+    id = request.matchdict['id']
+    obj = DBSession.query(Contact).get(id)
+    if obj is None:
+        raise HTTPNotFound()
+    return contact_process(request, obj)
+
+
+@view_config(route_name='admin_contact_delete')
+def contact_delete(request):
+    id = request.matchdict['id']
+    obj = DBSession.query(Contact).get(id)
+    DBSession.delete(obj)
+    return HTTPFound(request.route_url('admin_contacts',
+                                       hazard_type=obj.hazardtype.mnemonic))
+
+
+def contact_process(request, obj):
+    if request.method == 'GET':
+        if obj.id is None:
+            action = request.route_url('admin_contact_new')
+        else:
+            action = request.route_url('admin_contact_edit', id=obj.id)
+
+        countries = DBSession.query(AdministrativeDivision) \
+            .join(AdminLevelType) \
+            .filter(AdminLevelType.mnemonic == u'COU') \
+            .order_by(AdministrativeDivision.name)
+
+        hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
+
+        associations = DBSession.query(CAdHt) \
+            .filter(CAdHt.contact_id == obj.id)
+
+        return {
+            'obj': obj,
+            'action': action,
+            'countries': countries,
+            'hazard_types': hazard_types,
+            'associations': associations
+        }
+
+    if request.method == 'POST':
+        obj.name = request.POST.get('name')
+        obj.phone = request.POST.get('phone')
+        obj.url = request.POST.get('url')
+        obj.email = request.POST.get('email')
+
+        DBSession.query(CAdHt).filter(CAdHt.contact_id == obj.id).delete()
+        countries = request.POST.getall('country')
+        hazard_types = request.POST.getall('hazard_type')
+        for i in range(0, len(countries)):
+            association = CAdHt(
+                contact=obj,
+                administrativedivision_id=int(countries[i]),
+                hazardtype_id=int(hazard_types[i])
+                )
+            DBSession.add(association)
+
+        if inspect(obj).transient:
+            DBSession.add(obj)
+
+        DBSession.flush()
+        return HTTPFound(request.route_url('admin_contacts'))
+
+
+@view_config(route_name='admin_contact_admindiv_hazardtype_association',
+             renderer='templates/admin/CAdHt_form.jinja2')
+def contact_admindiv_hazardtype_association(request):
+
+    countries = DBSession.query(AdministrativeDivision) \
+        .join(AdminLevelType) \
+        .filter(AdminLevelType.mnemonic == u'COU') \
+        .order_by(AdministrativeDivision.name)
+
+    hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
+
+    return {
+        'countries': countries,
+        'hazard_types': hazard_types,
+    }

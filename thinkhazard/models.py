@@ -640,3 +640,31 @@ class Harvesting(Base):
                   complete=complete)
         DBSession.add(new)
         return new
+
+
+class Contact(Base):
+    __tablename__ = 'contact'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(Unicode)
+    url = Column(Unicode)
+    phone = Column(Unicode)
+    email = Column(Unicode)
+
+
+class ContactAdministrativeDivisionHazardTypeAssociation(Base):
+    __tablename__ = 'rel_contact_administrativedivision_hazardtype'
+    id = Column(Integer, primary_key=True)
+    contact_id = Column(Integer,
+                        ForeignKey('contact.id'),
+                        nullable=False, index=True)
+    administrativedivision_id = Column(Integer,
+                                       ForeignKey('administrativedivision.id'),
+                                       nullable=False)
+    hazardtype_id = Column(Integer,
+                           ForeignKey('datamart.enum_hazardtype.id'),
+                           nullable=False, index=True)
+
+    contact = relationship(Contact)
+    administrativedivision = relationship(AdministrativeDivision)
+    hazardtype = relationship(HazardType)

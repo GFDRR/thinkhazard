@@ -1,0 +1,92 @@
+{% extends "base.jinja2" %}
+
+{% from 'common.jinja2' import navbar %}
+
+{% block name %}admin{% endblock %}
+
+{% block content %}
+  {{ navbar('contact') }}
+  <div class="admin-contact container">
+    <h3>Contact</h3>
+    <form
+      id="contact-form"
+      action="{{ action }}"
+      accept-charset="utf-8"
+      enctype="multipart/form-data"
+      method="POST"
+    >
+      <input type="hidden" name="id" value="{{ obj.id }}">
+
+      <div class="form-group">
+        <input
+            class="form-control"
+            type="text"
+            name="name"
+            placeholder="Enter name here"
+            value="{{ obj.name or '' }}"
+            >
+      </div>
+      <div class="form-group">
+        <input
+            class="form-control"
+            type="text"
+            name="phone"
+            placeholder="Phone number"
+            value="{{ obj.phone or '' }}"
+            >
+      </div>
+      <div class="form-group">
+        <input
+            class="form-control"
+            type="text"
+            name="url"
+            placeholder="Website URL"
+            value="{{ obj.url or '' }}"
+            >
+      </div>
+      <div class="form-group">
+        <input
+            class="form-control"
+            type="text"
+            name="email"
+            placeholder="Email address"
+            value="{{ obj.email or '' }}"
+            >
+      </div>
+
+      <h4>Association with country / hazard type</h4>
+
+      {% for association in associations %}
+        {% include 'CAdHt_form.jinja2' %}
+      {% endfor %}
+
+      <div class="form-inline well" id="new-association">
+        <a class="btn btn-primary btn-sm" onclick="addAssociation()">+ New association</a>
+      </div>
+
+      <br>
+
+      <div class="form-group">
+        <button class="btn btn-primary" type="submit">Save changes</button>
+        <a class="btn btn-default" href="{{'admin_contacts'|route_url}}">Cancel</a>
+      </div>
+
+    </form>
+
+  </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  function addAssociation() {
+    var url = '{{'admin_contact_admindiv_hazardtype_association'|route_url}}';
+    $.get(url).done(function(data) {
+      $(data).insertBefore('#new-association');
+    });
+  };
+
+  function deleteAssocation(el) {
+    $(el).parent('.well').remove();
+  };
+</script>
+{% endblock %}

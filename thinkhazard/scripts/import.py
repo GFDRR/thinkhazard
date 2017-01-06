@@ -34,6 +34,8 @@ from ..models import (
     AdministrativeDivision,
     ClimateChangeRecommendation,
     ClimateChangeRecAdministrativeDivisionAssociation as CcrAd,
+    Contact,
+    ContactAdministrativeDivisionHazardTypeAssociation as CAdHt,
     HazardType,
     HazardLevel,
     HazardCategory,
@@ -245,3 +247,96 @@ def import_recommendations(argv=sys.argv):
                         hazardtype=hazardtype)
 
                     climate_rec.associations.append(association)
+
+
+def import_contacts(argv=sys.argv):
+    if len(argv) < 2:
+        usage(argv)
+    config_uri = argv[1]
+    options = parse_vars(argv[2:])
+    setup_logging(config_uri)
+    settings = load_full_settings(config_uri, options=options)
+
+    engine = engine_from_config(settings, 'sqlalchemy.')
+    DBSession.configure(bind=engine)
+
+    with transaction.manager:
+
+        DBSession.query(CAdHt).delete()
+        DBSession.query(Contact).delete()
+
+        ''' Columns are:
+         -  0
+         -  1
+         -  2 divivions code
+         -  3 GAUL_CountryID
+         -  4 WB country name
+         -  5 Country Name
+         -  6 is_IDA
+         -  7 hazard type
+         -  8 hazard mnemonic
+         -  9 name 1
+         - 10 url 1
+         - 11 phone 1
+         - 12 email 1
+         - 13 name 2
+         - 14 url 2
+         - 15 phone 2
+         - 16 email 2
+         - 17 name 3
+         - 18 url 3
+         - 19 phone 3
+         - 20 email 3
+        '''
+
+        filename = 'data/hazardCountryList_Organizations_20170106.csv'
+        with open(filename, 'rb') as csvfile:
+            contacts = csv.reader(csvfile, delimiter=',')
+            next(contacts, None)  # skip the headers
+            for row in contacts:
+
+                if not row[2]:
+                    continue
+                division = DBSession.query(AdministrativeDivision) \
+                    .filter(AdministrativeDivision.code == int(row[2])) \
+                    .one_or_none()
+                if division is None:
+                    continue
+
+                hazardtype = DBSession.query(HazardType) \
+                    .filter(HazardType.mnemonic == unicode(row[8])) \
+                    .one_or_none()
+                if hazardtype is None:
+                    continue
+
+                for i in range(0, 2):
+                    offset = i * 4
+                    name = unicode(row[9 + offset].decode('latin1'))
+                    url = unicode(row[10 + offset].decode('latin1'))
+                    phone = unicode(row[11 + offset].decode('latin1'))
+                    email = unicode(row[14 + offset].decode('latin1'))
+                    if name is '' and url is '' and \
+                       phone is '' and email is '':
+                        continue
+
+                    contact = DBSession.query(Contact) \
+                        .filter(Contact.name == name) \
+                        .filter(Contact.url == url) \
+                        .filter(Contact.phone == phone) \
+                        .filter(Contact.email == email) \
+                        .one_or_none()
+
+                    if contact is None:
+                        contact = Contact()
+                        contact.name = name
+                        contact.url = url
+                        contact.phone = phone
+                        contact.email = email
+                        DBSession.add(contact)
+
+                    association = CAdHt(
+                        contact=contact,
+                        administrativedivision=division,
+                        hazardtype=hazardtype
+                        )
+                    DBSession.add(association)

@@ -1,5 +1,7 @@
 {% macro report_for_hazard(division, hazard_category, recommendations,
-   climate_change_recommendation, sources, resources, hazards_sorted=None,
+   climate_change_recommendation, sources, resources,
+   contacts,
+   hazards_sorted=None,
    parents=[],
    parent_division=None) %}
 <div class="col-sm-7">
@@ -123,9 +125,42 @@
     </div>
     {% endif %}
   </div>
+  {% if contacts and contacts|length > 0 %}
+  <div class="contacts">
+    <h4>Contacts</h4>
+    <ul>
+    {% for contact in contacts %}
+    <li><i class="icon-list-arrow"></i>
+      <a role="button" data-toggle="collapse"
+         href="#contact{{loop.index0}}"
+         aria-expanded="false"
+         aria-controls="#contact{{loop.index0}}">
+        {{ contact.name }}
+      </a>
+      <div id="contact{{loop.index0}}" class="collapse">
+        <dl class="dl-horizontal">
+          <dt>Website</dt>
+          <dd>
+            <a href="{{contact.url}}" target="_blank">{{contact.url}}</a>
+          </dd>
+          <dt>Phone</dt>
+          <dd>
+            {{contact.phone}}
+          </dd>
+          <dt>E-mail</dt>
+          <dd>
+            <a href="mailto:{{contact.email}}">{{contact.email}}</a>
+          </dd>
+        </dl>
+      </div>
+    </li>
+    {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
   {% if resources and resources|length > 0 %}
   <div class="further-resources">
-    <h3>Further resources</h3>
+    <h4>Further resources</h4>
     <p>For further information the following resources could be consulted:</p>
     <ul>
     {% for resource in resources %}

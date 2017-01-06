@@ -66,10 +66,10 @@ buildcss: thinkhazard/static/build/index.css \
 	      $(addprefix thinkhazard/static/fonts/fontawesome-webfont., eot ttf woff woff2)
 
 .PHONY: populatedb
-populatedb: initdb import_admindivs import_recommendations
+populatedb: initdb import_admindivs import_recommendations import_contacts
 
 .PHONY: reinit_all
-reinit_all: initdb_force import_admindivs import_recommendations harvest download complete process decisiontree
+reinit_all: initdb_force import_admindivs import_recommendations import_contacts harvest download complete process decisiontree
 
 .PHONY: initdb
 initdb:
@@ -96,6 +96,10 @@ import_admindivs: .build/requirements.timestamp \
 .PHONY: import_recommendations
 import_recommendations: .build/requirements.timestamp
 	.build/venv/bin/import_recommendations $(INI_FILE)
+
+.PHONY: import_contacts
+import_contacts: .build/requirements.timestamp
+	.build/venv/bin/import_contacts $(INI_FILE)
 
 .PHONY: harvest
 harvest: .build/requirements.timestamp

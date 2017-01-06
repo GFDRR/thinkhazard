@@ -48,6 +48,8 @@ from ..models import (
     TechnicalRecommendation,
     HazardCategoryAdministrativeDivisionAssociation,
     HazardCategoryTechnicalRecommendationAssociation,
+    Contact,
+    ContactAdministrativeDivisionHazardTypeAssociation as CAdHt,
 )
 
 
@@ -284,6 +286,14 @@ def get_info_for_hazard_type(request, hazard, division):
         .filter(HazardType.mnemonic == hazard) \
         .one_or_none()
 
+    contacts = DBSession.query(Contact) \
+        .join(CAdHt) \
+        .join(HazardType) \
+        .join(AdministrativeDivision) \
+        .filter(AdministrativeDivision.code == code) \
+        .filter(HazardType.mnemonic == hazard) \
+        .all()
+
     technical_recommendations = DBSession.query(TechnicalRecommendation) \
         .join(TechnicalRecommendation.hazardcategory_associations) \
         .join(HazardCategory) \
@@ -334,6 +344,7 @@ def get_info_for_hazard_type(request, hazard, division):
         'recommendations': technical_recommendations,
         'resources': further_resources,
         'sources': sources,
+        'contacts': contacts
     }
 
 
