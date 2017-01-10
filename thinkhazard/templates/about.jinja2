@@ -10,6 +10,14 @@
     </div>
     <div class="modal-body">
       {% include 'about_body.jinja2' %}
+      <hr>
+      <div class="row">
+        <div class="col-md-12">
+          <p>
+          For more information, please read the <a href="{{'disclaimer'|route_url}}" class="modal-remote">full disclaimer</a>.
+          </p>
+        </div>
+      </div>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
