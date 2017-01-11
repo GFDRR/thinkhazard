@@ -59,6 +59,9 @@ def main(global_config, **settings):
     config.add_static_view('lib', settings.get('node_modules'),
                            cache_max_age=86000, cachebust=True)
 
+    config.add_translation_dirs('thinkhazard:locale')
+    config.set_locale_negotiator('thinkhazard.i18n.custom_locale_negotiator')
+
     if settings['appname'] == 'public':
         config.include(add_public_routes)
         config.add_route('sitemap', '/sitemap.xml')
@@ -162,3 +165,5 @@ def add_public_routes(config):
     config.add_route('pdf_cover', '/pdf_cover/{divisioncode:\d+}')
     config.add_route('pdf_about', '/pdf_about')
     config.add_route('data_source', '/data_source/{hazardset}')
+
+    config.add_route('set_language', '/language/{language}')

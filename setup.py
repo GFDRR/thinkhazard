@@ -68,22 +68,25 @@ setup(name='thinkhazard',
       zip_safe=False,
       test_suite='thinkhazard',
       install_requires=requires,
-      entry_points="""\
-      [paste.app_factory]
-      main = thinkhazard:main
-      [console_scripts]
-      initialize_thinkhazard_db = thinkhazard.scripts.initializedb:main
-      import_admindivs = thinkhazard.scripts.import:import_admindivs
-      import_recommendations = \
-          thinkhazard.scripts.import:import_recommendations
-      import_further_resources = \
-          thinkhazard.scripts.import_further_resources:main
-      import_contacts = thinkhazard.scripts.import:import_contacts
-      harvest = thinkhazard.processing.harvesting:Harvester.run
-      download = thinkhazard.processing.downloading:Downloader.run
-      complete = thinkhazard.processing.completing:Completer.run
-      process = thinkhazard.processing.processing:Processor.run
-      decision_tree = thinkhazard.processing.decisiontree:DecisionMaker.run
-      publish = thinkhazard.scripts.publish:main
-      """,
-      )
+      entry_points={
+          "paste.app_factory": [
+              "main = thinkhazard:main"
+          ],
+          "console_scripts": [
+              "initialize_thinkhazard_db = thinkhazard.scripts.initializedb:main",
+              "import_admindivs = thinkhazard.scripts.import:import_admindivs",
+              "import_recommendations = thinkhazard.scripts.import:import_recommendations",
+              "import_further_resources = thinkhazard.scripts.import_further_resources:main",
+              "import_contacts = thinkhazard.scripts.import:import_contacts",
+              "harvest = thinkhazard.processing.harvesting:Harvester.run",
+              "download = thinkhazard.processing.downloading:Downloader.run",
+              "complete = thinkhazard.processing.completing:Completer.run",
+              "process = thinkhazard.processing.processing:Processor.run",
+              "decision_tree = thinkhazard.processing.decisiontree:DecisionMaker.run",
+              "publish = thinkhazard.scripts.publish:main",
+          ],
+          "lingua.extractors": [
+              "database = thinkhazard.lib.lingua_extractor:DatabaseExtractor"
+          ],
+      }
+)

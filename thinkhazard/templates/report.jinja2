@@ -9,7 +9,7 @@
 {% block title %}
 Think Hazard - {{ division.name}}
 {% if hazard_category %}
- - {{ hazard_category.hazardtype.title }}
+ - {{ hazard_category.hazardtype.title | translate }}
 {% endif %}
 {% endblock %}
 
@@ -28,7 +28,7 @@ Think Hazard - {{ division.name}}
           {% include 'search.jinja2' %}
         </div>
       </form>
-      {{ navbar(feedback_form_url) }}
+      {{ navbar(feedback_form_url, request.locale_name) }}
     </div>
   </nav>
 
@@ -72,7 +72,7 @@ Think Hazard - {{ division.name}}
         <li class="overview text-center {{ 'active' if not hazard_category}}">
           <a href="{{ overview_url }}" title="Go back to overview page">
             <i class="fa hazard-icon icon-overview"></i><br>
-            Overview
+            {{gettext('Overview')}}
             {% if not hazard_category %}
             <div class="arrow"></div>
             {% endif %}
@@ -103,9 +103,9 @@ Think Hazard - {{ division.name}}
       <div class="col-md-6 col-md-offset-3">
         <div class="panel panel-default">
           <div class="panel-body text-muted">
-            We welcome any suggestions for improvements to the tool, including suggestions of data, recommendations, or resources to include.
+            {{gettext('We welcome any suggestions for improvements to the tool, including suggestions of data, recommendations, or resources to include.')}}
             <br>
-            If you have any, please <a href="{{ feedback_form_url }}" target="_blank">provide feedback</a>.
+            {{gettext('If you have any, please %(link_prefix)sprovide feedback%(link_suffix)s.', link_prefix='<a href="%s" target="_blank">' % feedback_form_url, link_suffix='</a>')}}
           </div>
         </div>
       </div>
@@ -162,6 +162,15 @@ Think Hazard - {{ division.name}}
       app.createPdfReportUrl = '{{ 'create_pdf_report'|route_url(divisioncode=division.code)}}'
       app.getReportStatusUrl = '{{ 'get_report_status'|route_url(divisioncode=division.code, id=999)}}'
       app.getPdfReportUrl = '{{ 'get_pdf_report'|route_url(divisioncode=division.code, id=999)}}'
+
+      app.zoomInString = '{{ gettext("Zoom in to name_of_location") }}';
+      app.zoomOutString = '{{ gettext("Zoom out to name_of_location") }}';
+      app.levelString = {
+        'High': '{{gettext("High")}}',
+        'Medium': '{{gettext("Medium")}}',
+        'Low': '{{gettext("Low")}}',
+        'Very low': '{{gettext("Very low")}}'
+      };
     </script>
 {% endblock %}
 
@@ -173,7 +182,7 @@ Think Hazard - {{ division.name}}
     {% endif %}
      >
     <i class="fa hazard-icon icon-{{hazard.hazardtype.mnemonic|lower|replace(' ', '')}}"></i><br>
-    {{ hazard.hazardtype.title }}
+    {{ hazard.hazardtype.title | translate }}
     {% if hazard_category and hazard.hazardtype.mnemonic == hazard_category.hazardtype.mnemonic %}
     <div class="arrow"></div>
     {% endif %}

@@ -43,6 +43,10 @@ help:
 	@echo "- dist                    Build a source distribution"
 	@echo "- routes                  Show the application routes"
 	@echo "- watch                   Run the build target when files in static dir change"
+	@echo "- extract_messages        Extract translation string and update the .pot file"
+	@echo "- transifex-push          Push translations to transifex"
+	@echo "- transifex-pull          Pull translations from transifex"
+	@echo "- compile_catalog         Compile language files"
 	@echo
 
 .PHONY: install
@@ -50,7 +54,8 @@ install: \
 		.build/requirements.timestamp \
 		.build/node_modules.timestamp \
 		.build/wkhtmltox \
-		buildcss
+		buildcss \
+		compile_catalog
 
 .PHONY: buildcss
 buildcss: thinkhazard/static/build/index.css \
@@ -278,3 +283,25 @@ clean:
 cleanall:
 	rm -rf .build
 	rm -rf node_modules
+
+.PHONY: extract_messages
+extract_messages:
+	pot-create -c lingua.cfg -o thinkhazard/locale/thinkhazard.pot thinkhazard/templates
+	pot-create -c lingua.cfg -o thinkhazard/locale/thinkhazard-database.pot thinkhazard/dont_remove_me.i18n
+	# removes the creation date to avoid unnecessary git changes
+	sed -i '/^"POT-Creation-Date: /d' thinkhazard/locale/thinkhazard.pot
+
+.PHONY: transifex-push
+transifex-push:
+	tx push -s
+
+.PHONY: transifex-pull
+transifex-pull:
+	tx pull
+
+.PHONY: compile_catalog
+compile_catalog:
+	msgfmt -o thinkhazard/locale/fr/LC_MESSAGES/thinkhazard.mo thinkhazard/locale/fr/LC_MESSAGES/thinkhazard.po
+	msgfmt -o thinkhazard/locale/es/LC_MESSAGES/thinkhazard.mo thinkhazard/locale/es/LC_MESSAGES/thinkhazard.po
+	msgfmt -o thinkhazard/locale/fr/LC_MESSAGES/thinkhazard-database.mo thinkhazard/locale/fr/LC_MESSAGES/thinkhazard-database.po
+	msgfmt -o thinkhazard/locale/es/LC_MESSAGES/thinkhazard-database.mo thinkhazard/locale/es/LC_MESSAGES/thinkhazard-database.po

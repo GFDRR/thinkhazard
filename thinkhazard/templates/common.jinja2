@@ -1,13 +1,30 @@
-{% macro navbar(feedback_form_url) %}
+{% macro navbar(feedback_form_url, locale_name) %}
       <ul class="nav navbar-nav navbar-right">
         <li>
-          <a href="{{feedback_form_url}}">User feedback</a>
+          <a href="{{feedback_form_url}}">{{gettext('User feedback')}}</a>
         </li>
         <li>
-          <a href="{{'about'|route_url}}" class="modal-remote">About</a>
+          <a href="{{'about'|route_url}}" class="modal-remote">{{gettext('About')}}</a>
         </li>
         <li>
-          <a href="{{'faq'|route_url}}" class="modal-remote">FAQ</a>
+          <a href="{{'faq'|route_url}}" class="modal-remote">{{gettext('FAQ')}}</a>
+        </li>
+        <li class="disabled divider-vertical"><br></li>
+        <li class="dropdown languages">
+          <a href="" data-toggle="dropdown" class="dropdown-toggle">
+          {% if locale_name == 'en' %}
+          English
+          {% elif locale_name == 'fr' %}
+          Français
+          {% elif locale_name == 'es' %}
+          Español
+          {% endif %}
+          &nbsp;<i class="icon-selector-arrow small"></i></a>
+          <ul class="dropdown-menu">
+            <li><a href="{{ 'set_language' | route_url(language='en') }}">English</a></li>
+            <li><a href="{{ 'set_language' | route_url(language='fr') }}">Français</a></li>
+            <li><a href="{{ 'set_language' | route_url(language='es') }}">Español</a></li>
+          </ul>
         </li>
       </ul>
 {% endmacro %}
@@ -24,24 +41,24 @@
 
 {% macro licence() %}
 <p>
-<em>ThinkHazard!</em> is available under the <a href="https://www.gnu.org/licenses/gpl-3.0.en.html" target="_blank">GNU General Public Licence, Version 3, 29 June 2007</a>. Text content is licenced under CC-BY-SA. Classified hazard levels are licenced under CC-BY. Original hazard data are licenced under their original terms, which are contained in the associated layer metadata.
+{{gettext('*ThinkHazard!* is available under the %(link_prefix)sGNU General Public Licence, Version 3, 29 June 2007%(link_suffix)s. Text content is licenced under CC-BY-SA. Classified hazard levels are licenced under CC-BY. Original hazard data are licenced under their original terms, which are contained in the associated layer metadata.', link_prefix='<a href="https://www.gnu.org/licenses/gpl-3.0.en.html" target="_blank">', link_suffix='</a>') | markdown}}
 </p>
 {% endmacro %}
 
 {% macro disclaimer() %}
 <p>
-<b>The hazard levels and guidance given in <em>ThinkHazard!</em> do not replace the need for detailed natural hazard risk analysis and/or expert advice.</b> While <em>ThinkHazard!</em> does its best to scientifically determine the hazard level, there are still uncertainties in the data and analysis. Users of the tool should access more information by contacting relevant national authorities, reviewing the recommended resources, and through accessing detailed hazard data.
+{{gettext('**The hazard levels and guidance given in *ThinkHazard!* do not replace the need for detailed natural hazard risk analysis and/or expert advice.** While *ThinkHazard!* does its best to scientifically determine the hazard level, there are still uncertainties in the data and analysis. Users of the tool should access more information by contacting relevant national authorities, reviewing the recommended resources, and through accessing detailed hazard data.') | markdown}}
 </p>
 <p>
-Information in this screening tool is provided for informational purposes only and does not constitute legal or scientific advice or service. The World Bank makes no warranties or representations, express or implied as to the accuracy or reliability of this tool or the data contained therein. A user of this tool should seek qualified experts for specific diagnosis and analysis of a particular project. Any use thereof or reliance thereon is at the sole and independent discretion and responsibility of the user. No conclusions or inferences drawn from the tool or relating to any aspect of any of the maps shown on the tool, should be attributed to the World Bank, its Board of Executive Directors, its Management, or any of its member countries.
+{{gettext('Information in this screening tool is provided for informational purposes only and does not constitute legal or scientific advice or service. The World Bank makes no warranties or representations, express or implied as to the accuracy or reliability of this tool or the data contained therein. A user of this tool should seek qualified experts for specific diagnosis and analysis of a particular project. Any use thereof or reliance thereon is at the sole and independent discretion and responsibility of the user. No conclusions or inferences drawn from the tool or relating to any aspect of any of the maps shown on the tool, should be attributed to the World Bank, its Board of Executive Directors, its Management, or any of its member countries.') | markdown}}
 </p>
 <p>
-The <em>ThinkHazard!</em> administration team periodically adds, changes, improves, or updates the Materials on this Site without notice. This Site also contains links to third-party websites. The linked sites are not under the control of the World Bank and it is not responsible for the contents of any linked site or any link contained in a linked site. These links are provided only as a convenience, and the inclusion of a link does not imply endorsement of the linked site by The World Bank.
+{{gettext('The *ThinkHazard!* administration team periodically adds, changes, improves, or updates the Materials on this Site without notice. This Site also contains links to third-party websites. The linked sites are not under the control of the World Bank and it is not responsible for the contents of any linked site or any link contained in a linked site. These links are provided only as a convenience, and the inclusion of a link does not imply endorsement of the linked site by The World Bank.') | markdown}}
 </p>
 <p>
-The boundaries, colors, denominations, and other information shown on any map in the tool do not imply any judgment or endorsement on the part of the World Bank concerning the delimitation or the legal status of any territory or boundaries. In no event will the World Bank be liable for any form of damage arising from the application or misapplication of the tool, any maps, or any associated materials.
+{{gettext('The boundaries, colors, denominations, and other information shown on any map in the tool do not imply any judgment or endorsement on the part of the World Bank concerning the delimitation or the legal status of any territory or boundaries. In no event will the World Bank be liable for any form of damage arising from the application or misapplication of the tool, any maps, or any associated materials.') | markdown}}
 </p>
 <p>
-Administrative boundaries are sourced from The Global Administrative Unit Layers (GAUL) dataset, implemented by FAO within the CountrySTAT and Agricultural Market Information System (AMIS) projects, with some amendment to administrative unit names.
+{{gettext('Administrative boundaries are sourced from The Global Administrative Unit Layers (GAUL) dataset, implemented by FAO within the CountrySTAT and Agricultural Market Information System (AMIS) projects, with some amendment to administrative unit names.') | markdown}}
 </p>
 {% endmacro %}

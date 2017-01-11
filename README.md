@@ -264,3 +264,30 @@ Possible subkeys include the following:
       LOW: [101]
       VLO: [100, 0]
     ```
+
+## Translations
+
+ThinkHazard! is translated using `Transifex`.
+
+### Workflow ###
+
+We use lingua to extract translation string from `jinja2` templates.
+
+Use the following command to update the gettext template (`.pot`):
+
+    make extract_messages
+
+Note: this should be done from the production instance ONLY in order to have
+the up-to-date database strings extracted!
+
+Then you can push the translation sources to transifex.
+
+    make transifex-push
+
+Once the translations are OK on Transifex it's possible to pull the translations:
+
+    make transifex-pull
+
+Don't forget to compile the catalog (ie. convert .po to .mo):
+
+    make compile_catalog
