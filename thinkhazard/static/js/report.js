@@ -51,7 +51,8 @@
         html = 'Go to <b>' + feature.get('name') + '</b>';
       } else {
         cursor = 'zoom-in';
-        html = 'Zoom in to <b>' + feature.get('name') + '</b>';
+        html = app.zoomInString.replace('name_of_location',
+            '<b>' + feature.get('name') + '</b>');
       }
       if (feature.get('hazardLevelMnemonic') &&
           feature.get('hazardLevelMnemonic') != 'None') {
@@ -71,7 +72,6 @@
   map.getViewport().addEventListener('mouseout', function(evt) {
     tooltipEl.hide();
   });
-
 
   // drill down
   map.on('click', function(e) {

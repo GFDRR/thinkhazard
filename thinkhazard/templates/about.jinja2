@@ -5,7 +5,7 @@
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       <h4 class="modal-title" id="aboutModalLabel">
-        About ThinkHazard!
+        {{gettext('About ThinkHazard!')}}
       </h4>
     </div>
     <div class="modal-body">
@@ -14,13 +14,15 @@
       <div class="row">
         <div class="col-md-12">
           <p>
-          For more information, please read the <a href="{{'disclaimer'|route_url}}" class="modal-remote">full disclaimer</a>.
+          {{gettext('For more information, please read the %(link_prefix)sfull disclaimer%(link_suffix)s.', link_prefix='<a href="%s" class="modal-remote">' % 'disclaimer'|route_url, link_suffix='</a>')}}
           </p>
         </div>
       </div>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      <button type="button" class="btn btn-default" data-dismiss="modal">
+        {{gettext('Close')}}
+      </button>
     </div>
   </div>
 </div>

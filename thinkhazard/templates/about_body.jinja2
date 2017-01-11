@@ -1,17 +1,17 @@
 {% from 'common.jinja2' import licence %}
 <p>
-<em>ThinkHazard!</em> is a new web-based tool enabling non-specialists to consider the impacts of disasters on new development projects. Users of <em>ThinkHazard!</em> can quickly and robustly assess the level of river flood, earthquake, drought, cyclone, coastal flood, tsunami, volcano, and landslide hazard within their project area to assist with project planning and design.
+{{gettext('*ThinkHazard!* is a new web-based tool enabling non-specialists to consider the impacts of disasters on new development projects. Users of *ThinkHazard!* can quickly and robustly assess the level of river flood, earthquake, drought, cyclone, coastal flood, tsunami, volcano, and landslide hazard within their project area to assist with project planning and design.') | markdown}}
 </p>
 <p>
-<em>ThinkHazard!</em> is a simple flagging system to highlight the hazards present in a project area. As such, a user is only required to enter their project location – national, provincial or district name. The results interface shows a user whether they require high, medium or low awareness of each hazard when planning their project.
+{{gettext('*ThinkHazard!* is a simple flagging system to highlight the hazards present in a project area. As such, a user is only required to enter their project location – national, provincial or district name. The results interface shows a user whether they require high, medium or low awareness of each hazard when planning their project.') | markdown}}
 </p>
 <p>
-<em>ThinkHazard!</em> also provides recommendations and guidance on how to reduce the risk from each hazard within the project area, and provides links to additional resources such as country risk assessments, best practice guidance, additional websites. <em>ThinkHazard!</em> also highlights how each hazard may change in the future as a result of climate change.
+{{gettext('*ThinkHazard!* also provides recommendations and guidance on how to reduce the risk from each hazard within the project area, and provides links to additional resources such as country risk assessments, best practice guidance, additional websites. *ThinkHazard!* also highlights how each hazard may change in the future as a result of climate change.') | markdown}}
 </p>
 <div class="row">
   <div class="col-md-12 text-center">
     <p>
-    Developed by
+    {{gettext('Developed by') | markdown}}
     </p>
   </div>
 </div>
@@ -24,7 +24,7 @@
 <div class="row">
   <div class="col-md-12 text-center">
     <p>
-    In partnership with
+    {{gettext('In partnership with') | markdown}}
     </p>
   </div>
 </div>
@@ -53,7 +53,7 @@
 <div class="row">
   <div class="col-md-12 text-center">
     <p>
-    The following organizations have contributed data and / or expert input to the development of this tool:
+    {{gettext('The following organizations have contributed data and / or expert input to the development of this tool:') | markdown}}
     </p>
   </div>
 </div>
@@ -115,7 +115,7 @@
 <div class="row">
   <div class="col-md-12 text-center">
     <p>
-    <em>ThinkHazard!</em> holds local data for the countries displayed in this map. Global data is available for river flood, earthquake, cyclone, water scarcity, and landslide.
+    {{gettext('*ThinkHazard!* holds local data for the countries displayed in this map. Global data is available for river flood, earthquake, cyclone, water scarcity, and landslide.') | markdown}}
     </p>
   </div>
   <div class="col-md-12 text-center">
@@ -125,7 +125,7 @@
 <div class="row">
   <div class="col-md-12">
     <p>
-    Source of Administrative boundaries: The Global Administrative Unit Layers (GAUL) dataset, implemented by FAO within the CountrySTAT and Agricultural Market Information System (AMIS) projects.
+    {{gettext('Source of Administrative boundaries: The Global Administrative Unit Layers (GAUL) dataset, implemented by FAO within the CountrySTAT and Agricultural Market Information System (AMIS) projects.') | markdown}}
     </p>
   </div>
 </div>
@@ -133,8 +133,8 @@
 <div class="row">
   <div class="col-md-12">
     <p>
-    The tool code is open source, to encourage other users to adapt the tool to their needs. The code can be found on <a href="https://github.com/GFDRR/thinkhazard" target="_blank">Github</a>.
-    Current instance version is {{request.registry.settings['version']}}.
+    {{gettext('The tool code is open source, to encourage other users to adapt the tool to their needs. The code can be found on <a href="https://github.com/GFDRR/thinkhazard" target="_blank">Github</a>.') | markdown}}
+    {{gettext('Current instance version is %(version)s', version=request.registry.settings['version'])}}.
     </p>
     <p>
       {{licence()}}
@@ -145,7 +145,7 @@
 <div class="row">
   <div class="col-md-12">
     <p>
-    The data was published for the last time on <em>{{publication_date}}</em>.
+    {{gettext('The data was published for the last time on *%(date)s*.', date=publication_date)}}
     </p>
   </div>
 </div>

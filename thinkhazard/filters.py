@@ -18,7 +18,18 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 from markdown import markdown
+from pyramid.threadlocal import get_current_request
+from jinja2 import contextfilter
+from pyramid.i18n import get_localizer, TranslationStringFactory
 
 
 def markdown_filter(text):
     return markdown(text)
+
+
+@contextfilter
+def translate(ctx, text, *elements, **kw):
+    request = ctx.get('request') or get_current_request()
+    tsf = TranslationStringFactory('thinkhazard-database')
+    localizer = get_localizer(request)
+    return localizer.translate(tsf(text))
