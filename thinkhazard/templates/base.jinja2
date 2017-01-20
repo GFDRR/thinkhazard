@@ -20,23 +20,6 @@
     {% endblock %}
     <div id="myModal" class="modal fade" tabindex="-1" role="dialog"></div>
 
-    <div id="disclaimerModal" class="modal fade">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Disclaimer</h4>
-          </div>
-          <div class="modal-body">
-            The World Bank does not guarantee the accuracy of the data included in this work. The boundaries, colors, denominations, and other information shown on any map in this work do not imply any judgment on the part of The World Bank concerning the legal status of any territory or the endorsement or acceptance of such boundaries.
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
 {% if debug %}
     <script src="{{('%s/jquery/dist/jquery.js' % node_modules)|static_url}}"></script>
     <script src="{{('%s/bootstrap/dist/js/bootstrap.js' % node_modules)|static_url}}"></script>
@@ -68,7 +51,10 @@
 
       if (document.referrer.indexOf('{{'index'|route_url}}') == -1) {
         var disclaimerUrl = '{{'disclaimer'|route_url}}';
-        $('#myModal').modal('show').load(disclaimerUrl);
+        $('#myModal').modal({
+          backdrop: 'static',
+          keyboard: false
+        }).modal('show').load(disclaimerUrl);
       }
     </script>
     {% block scripts %}
