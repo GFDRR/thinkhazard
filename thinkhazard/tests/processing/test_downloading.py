@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2015-2016 by the GFDRR / World Bank
+# Copyright (C) 2015-2017 by the GFDRR / World Bank
 #
 # This file is part of ThinkHazard.
 #
