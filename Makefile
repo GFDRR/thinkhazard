@@ -293,14 +293,14 @@ extract_messages:
 
 .PHONY: transifex-push
 transifex-push:
-	tx push -s
+	.build/venv/bin/tx push -s
 
 .PHONY: transifex-pull
 transifex-pull:
-	tx pull
+	.build/venv/bin/tx pull
 
 .PHONY: compile_catalog
-compile_catalog:
+compile_catalog: transifex-pull
 	msgfmt -o thinkhazard/locale/fr/LC_MESSAGES/thinkhazard.mo thinkhazard/locale/fr/LC_MESSAGES/thinkhazard.po
 	msgfmt -o thinkhazard/locale/es/LC_MESSAGES/thinkhazard.mo thinkhazard/locale/es/LC_MESSAGES/thinkhazard.po
 	msgfmt -o thinkhazard/locale/fr/LC_MESSAGES/thinkhazard-database.mo thinkhazard/locale/fr/LC_MESSAGES/thinkhazard-database.po
