@@ -46,7 +46,7 @@ requires = [
     'markdown==2.6.5',
     'APScheduler==3.0.5',
     'paste==2.0.2',
-    'alembic==0.8.5',
+    'alembic==0.8.10',
     ]
 
 setup(name='thinkhazard',

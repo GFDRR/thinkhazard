@@ -154,7 +154,8 @@ class HazardType(Base):
 hazardcategory_administrativedivision_hazardset_table = Table(
     'rel_hazardcategory_administrativedivision_hazardset', Base.metadata,
     Column('rel_hazardcategory_administrativedivision_id', Integer,
-           ForeignKey('rel_hazardcategory_administrativedivision.id'),
+           ForeignKey('rel_hazardcategory_administrativedivision.id',
+                      ondelete="CASCADE"),
            primary_key=True),
     Column('hazardset_id', String,
            ForeignKey('processing.hazardset.id', ondelete="CASCADE"),
@@ -166,7 +167,8 @@ class HazardCategoryAdministrativeDivisionAssociation(Base):
 
     id = Column(Integer, primary_key=True)
     administrativedivision_id = Column(Integer,
-                                       ForeignKey('administrativedivision.id'),
+                                       ForeignKey('administrativedivision.id',
+                                                  ondelete="CASCADE"),
                                        nullable=False)
     hazardcategory_id = Column(Integer,
                                ForeignKey('hazardcategory.id'),
@@ -264,6 +266,8 @@ class AdministrativeDivision(Base):
     leveltype_id = Column(Integer, ForeignKey(AdminLevelType.id),
                           nullable=False, index=True)
     name = Column(Unicode, nullable=False)
+    name_fr = Column(Unicode)
+    name_es = Column(Unicode)
     parent_code = Column(Integer, ForeignKey(
         'administrativedivision.code', use_alter=True,
         name='administrativedivision_parent_code_fkey'))
@@ -351,7 +355,7 @@ class ClimateChangeRecAdministrativeDivisionAssociation(Base):
     __tablename__ = 'rel_climatechangerecommendation_administrativedivision'
     administrativedivision_id = Column(
         Integer,
-        ForeignKey('administrativedivision.id'),
+        ForeignKey('administrativedivision.id', ondelete="CASCADE"),
         primary_key=True
         )
     # hazardtype_id is duplicate with climatechangerecommendation.hazardtype_id
@@ -563,7 +567,8 @@ class Output(Base):
                           ForeignKey('processing.hazardset.id'),
                           primary_key=True)
     admin_id = Column(Integer,
-                      ForeignKey('datamart.administrativedivision.id'),
+                      ForeignKey('datamart.administrativedivision.id',
+                                 ondelete="CASCADE"),
                       primary_key=True)
     # hazard_level_id is the processing result
     hazardlevel_id = Column(Integer,
