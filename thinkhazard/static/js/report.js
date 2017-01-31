@@ -30,44 +30,112 @@
 
   map.addControl(new ol.control.ScaleLine());
 
+  var neighboursLayer = addNeighboursVectorLayer(map, app.neighboursUrl);
   var vectorLayer = addVectorLayer(map, app.mapUrl);
 
-  if (app.leveltype < 3) {
-    addSelectInteraction(map, vectorLayer);
+  addSelectInteraction(map, [vectorLayer, neighboursLayer]);
 
-    // change mouse cursor when over division
-    map.on('pointermove', function(e) {
-      var feature = map.forEachFeatureAtPixel(e.pixel, filterFn);
-      map.getTargetElement().style.cursor = feature ? 'zoom-in' : '';
+  var tooltipEl = $('#map .map-tooltip');
 
-      $('#map .map-tooltip').empty().hide();
-      if (feature) {
-        var html = 'Zoom in to <b>' + feature.get('name') + '</b>';
-        if (feature.get('hazardLevelMnemonic') != 'None') {
-          html += '<br/><em>' + feature.get('hazardLevelTitle') + '</em>';
-        }
-        $('#map .map-tooltip').show()
-          .css({
-            top: e.pixel[1] + 10,
-            left: e.pixel[0] + 10
-          })
-          .html(html);
+  // change mouse cursor when over division
+  map.on('pointermove', function(e) {
+    var feature = map.forEachFeatureAtPixel(e.pixel, filterFn);
+    var cursor = '';
+
+    tooltipEl.empty().removeClass('neighbour').hide();
+    if (feature) {
+      var html;
+      if (feature.get('neighbour')) {
+        cursor = 'pointer';
+        tooltipEl.addClass('neighbour');
+        html = 'Go to <b>' + feature.get('name') + '</b>';
+      } else {
+        cursor = 'zoom-in';
+        html = 'Zoom in to <b>' + feature.get('name') + '</b>';
       }
-    });
-
-    // drill down
-    map.on('click', function(e) {
-      var feature = map.forEachFeatureAtPixel(e.pixel, filterFn);
-      if (feature) {
-        window.location = feature.get('url');
+      if (feature.get('hazardLevelMnemonic') &&
+          feature.get('hazardLevelMnemonic') != 'None') {
+        html += '<br/><em>' + feature.get('hazardLevelTitle') + '</em>';
       }
-    });
-  }
+      tooltipEl.show()
+        .css({
+          top: e.pixel[1] + 10,
+          left: e.pixel[0] + 10
+        })
+        .html(html);
+    }
+    map.getTargetElement().style.cursor = cursor;
+
+  });
+
+  map.getViewport().addEventListener('mouseout', function(evt) {
+    tooltipEl.hide();
+  });
+
+
+  // drill down
+  map.on('click', function(e) {
+    var feature = map.forEachFeatureAtPixel(e.pixel, filterFn);
+    if (feature) {
+      var url = feature.get('url');
+      if (app.hazardType) {
+        url += '/' + app.hazardType;
+      }
+      window.location = url;
+    }
+  });
 
 
   //
   // Functions
   //
+
+
+  /**
+   * @param {ol.Map} map
+   * @param {string} url
+   * @return {ol.layer.Vector}
+   */
+  function addNeighboursVectorLayer(map, url) {
+    var styleFn = function(feature) {
+      var styles = [
+        new ol.style.Style({
+          fill: new ol.style.Fill({
+            color: 'rgba(1, 1, 1, 0)'
+          }),
+          stroke: new ol.style.Stroke({
+            color: '#337ab7',
+            width: 0.2
+          })
+        })
+      ];
+      return styles;
+    };
+
+    var extent = ol.proj.transformExtent(
+      map.getView().calculateExtent(map.getSize()), 'EPSG:3857', 'EPSG:4326');
+    url = [
+      url,
+      '?resolution=' + map.getView().getResolution(),
+      '&bbox=' + extent
+    ].join('');
+    var source = new ol.source.Vector({
+      url: url,
+      format: new ol.format.GeoJSON({
+        defaultDataProjection: 'EPSG:3857'
+      })
+    });
+    var layer = new ol.layer.Vector({
+      style: styleFn,
+      source: source
+    });
+    map.addLayer(layer);
+    source.on('addfeature', function(event) {
+      var f = event.feature;
+      f.set('neighbour', true);
+    });
+    return layer;
+  }
 
 
   /**
@@ -143,21 +211,23 @@
 
   /**
    * @param {ol.Map} map
-   * @param {ol.layer.Vector} layer
+   * @param {Array.<ol.layer.Vector>} layers
    * @return {ol.interaction.Select}
    */
-  function addSelectInteraction(map, layer) {
+  function addSelectInteraction(map, layers) {
     var fillColors = getFillColors(1);
     var fillStyle = new ol.style.Fill({
       color: ''
     });
+    var strokeStyle = new ol.style.Stroke({
+      color: '',
+      width: 2
+    });
+
     var styles = [
       new ol.style.Style({
         fill: fillStyle,
-        stroke: new ol.style.Stroke({
-          color: '#000000',
-          width: 2
-        })
+        stroke: strokeStyle
       })
     ];
     var styleFn = function(feature) {
@@ -165,10 +235,12 @@
       var fillColor = hazardLevel in fillColors ?
           fillColors[hazardLevel] : 'rgba(255, 255, 255, 0.5)';
       fillStyle.setColor(fillColor);
+      var strokeColor = feature.get('neighbour') ? '#337ab7' : '#000000';
+      strokeStyle.setColor(strokeColor);
       return styles;
     };
     var interaction = new ol.interaction.Select({
-      layers: [layer],
+      layers: layers,
       condition: ol.events.condition.pointerMove,
       style: styleFn,
       filter: isSubDivision

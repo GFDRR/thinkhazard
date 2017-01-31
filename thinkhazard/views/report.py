@@ -28,8 +28,9 @@ from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy import and_, or_, select
 from sqlalchemy.sql import func
 from sqlalchemy.sql.expression import literal_column
+from shapely.geometry.polygon import Polygon
 
-from geoalchemy2.shape import to_shape
+from geoalchemy2.shape import to_shape, from_shape
 from urlparse import urlunsplit
 
 from ..models import (
@@ -197,10 +198,7 @@ def report_json(request):
         'properties': {
             'name': division.name,
             'code': division.code,
-            'url': request.route_url(
-                'report' if hazard_type else 'report_overview',
-                division=division,
-                hazardtype=hazard_type),
+            'url': request.route_url('report_overview', division=division),
             'hazardLevelMnemonic': hazardlevel_mnemonic,
             'hazardLevelTitle': hazardlevel_title
         }
@@ -363,3 +361,49 @@ def data_source(request):
                                     '"hazardset"')
 
     return {'hazardset': hazardset}
+
+
+@view_config(route_name='report_neighbours_json', renderer='geojson')
+def report_neighbours_json(request):
+
+    try:
+        division_code = request.matchdict.get('divisioncode')
+    except:
+        raise HTTPBadRequest(detail='incorrect value for parameter '
+                                    '"divisioncode"')
+
+    try:
+        resolution = float(request.params.get('resolution'))
+    except:
+        raise HTTPBadRequest(detail='invalid value for parameter "resolution"')
+
+    try:
+
+        bbox = request.params.get('bbox')
+        box = [float(x) for x in bbox.split(',')]
+        bbox = Polygon(((box[0], box[1]), (box[0], box[3]),
+                        (box[2], box[3]), (box[2], box[1]),
+                        (box[0], box[1])))
+        bbox = from_shape(bbox, srid=4326)
+    except:
+        raise HTTPBadRequest(detail='invalid value for parameter "bbox"')
+
+    simplify = func.ST_Simplify(
+        func.ST_Transform(AdministrativeDivision.geom, 3857), resolution)
+
+    division = get_division(division_code)
+
+    divisions = DBSession.query(AdministrativeDivision) \
+        .add_columns(simplify) \
+        .filter(func.ST_DWITHIN(AdministrativeDivision.geom, bbox, 0)) \
+        .filter(AdministrativeDivision.leveltype_id == division.leveltype_id)
+
+    return [{
+        'type': 'Feature',
+        'geometry': to_shape(geom_simplified),
+        'properties': {
+            'name': div.name,
+            'code': div.code,
+            'url': request.route_url('report_overview', division=div)
+        }
+    } for div, geom_simplified in divisions]

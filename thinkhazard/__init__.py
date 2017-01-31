@@ -139,6 +139,8 @@ def add_public_routes(config):
                      '{hazardtype:([A-Z]{2})}')
     config.add_route('report_json',
                      '/report/{divisioncode:\d+}/{hazardtype:([A-Z]{2})}.json')
+    config.add_route('report_neighbours_json',
+                     '/report/{divisioncode:\d+}/neighbours.json')
     config.add_route('create_pdf_report',
                      '/report/create/{divisioncode:\d+}')
     config.add_route('get_report_status',
