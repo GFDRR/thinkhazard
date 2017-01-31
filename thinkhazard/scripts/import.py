@@ -21,7 +21,7 @@ import sys
 import os
 import transaction
 import csv
-from subprocess import call
+import subprocess
 
 from sqlalchemy import engine_from_config
 from pyramid.paster import setup_logging
@@ -71,59 +71,129 @@ def import_admindivs(argv=sys.argv):
     for i in [0, 1, 2]:
         print "Importing GAUL data for level {}".format(i)
         print "This may take a while"
-        sql_file = os.path.join(folder, "g2015_2014_{}.sql".format(i))
-        print sql_file
-        call(["psql", "-d", str(engine_url),
-              "-f", sql_file])
+        trans = connection.begin()
+        table_name = "g2015_2014_{}".format(i)
+        shapefile = os.path.join(folder, table_name + '_upd270117.shp')
+        p1 = subprocess.Popen(
+            ["shp2pgsql", "-d", "-s", "4326", shapefile, table_name],
+            stdout=subprocess.PIPE)
+        p2 = subprocess.Popen(
+            ["psql", "-d", str(engine_url)],
+            stdin=p1.stdout)
+        p2.communicate()
+        trans.commit()
 
     trans = connection.begin()
-    print "Removing duplicates"
-    connection.execute('''
-DELETE FROM g2015_2014_0 WHERE gid = 177;
-DELETE FROM g2015_2014_2 WHERE gid = 5340;
-DELETE FROM g2015_2014_2 WHERE gid = 5382;
-DELETE FROM g2015_2014_2 WHERE gid = 5719;
-DELETE FROM g2015_2014_2 WHERE gid = 20775;
-DELETE FROM g2015_2014_2 WHERE gid = 1059;
-''')
-    trans.commit()
 
     print "Creating administrative divs"
-    trans = connection.begin()
     connection.execute('''
+WITH new_values (code, leveltype_id, name, parent_code, name_fr, name_es,
+                 geom) AS (
+    SELECT adm0_code, 1, adm0_name, NULL, fre, esp, geom
+    FROM g2015_2014_0
+),
+upsert AS (
+    UPDATE datamart.administrativedivision ad
+    SET name = nv.name,
+        name_fr = nv.name_fr,
+        name_es = nv.name_es,
+        geom = nv.geom
+    FROM new_values nv
+    WHERE ad.code = nv.code
+    RETURNING ad.*
+)
+INSERT INTO datamart.administrativedivision (
+    code, leveltype_id, name, name_fr, name_es, geom)
+SELECT code, leveltype_id, name, name_fr, name_es, geom
+FROM new_values
+WHERE NOT EXISTS (SELECT 1
+                  FROM upsert up
+                  WHERE up.code = new_values.code);
+''')
+
+    connection.execute('''
+WITH new_values (code, leveltype_id, name, parent_code, geom) AS (
+    SELECT adm1_code, 2, adm1_name, adm0_code, geom
+    FROM g2015_2014_1
+),
+upsert AS (
+    UPDATE datamart.administrativedivision ad
+    SET name = nv.name,
+        parent_code = nv.parent_code,
+        geom = nv.geom
+    FROM new_values nv
+    WHERE ad.code = nv.code
+    RETURNING ad.*
+)
 INSERT INTO datamart.administrativedivision (code, leveltype_id, name,
-parent_code, geom)
-SELECT adm0_code, 1, adm0_name, NULL, geom
-FROM g2015_2014_0;
+                                             parent_code, geom)
+SELECT code, leveltype_id, name, parent_code, geom
+FROM new_values
+WHERE NOT EXISTS (SELECT 1
+                  FROM upsert up
+                  WHERE up.code = new_values.code);
+''')
+
+    connection.execute('''
+WITH new_values (code, leveltype_id, name, parent_code, geom) AS (
+    SELECT adm2_code, 3, adm2_name, adm1_code, geom
+    FROM g2015_2014_2
+),
+upsert AS (
+    UPDATE datamart.administrativedivision ad
+    SET name = nv.name,
+        parent_code = nv.parent_code,
+        geom = nv.geom
+    FROM new_values nv
+    WHERE ad.code = nv.code
+    RETURNING ad.*
+)
+INSERT INTO datamart.administrativedivision (code, leveltype_id, name,
+                                             parent_code, geom)
+SELECT code, leveltype_id, name, parent_code, geom
+FROM new_values
+WHERE NOT EXISTS (SELECT 1
+                  FROM upsert up
+                  WHERE up.code = new_values.code);
+''')
+
+    # Remove divisions that are in the db but not in the original shapefile
+    # anymore
+    connection.execute('''
+DELETE FROM datamart.administrativedivision ad
+WHERE ad.leveltype_id = 3 AND ad.code NOT IN (
+    SELECT adm2_code
+    FROM g2015_2014_2);
+DELETE FROM datamart.administrativedivision ad
+WHERE ad.leveltype_id = 2 AND ad.code NOT IN (
+    SELECT adm1_code
+    FROM g2015_2014_1);
+DELETE FROM datamart.administrativedivision ad
+WHERE ad.leveltype_id = 1 AND ad.code NOT IN (
+    SELECT adm0_code
+    FROM g2015_2014_0);
+''')
+
+    # Remove climate change recommendations that are not linked to divisions
+    # that don't exist anymore
+    connection.execute('''
+DELETE from datamart.rel_climatechangerecommendation_administrativedivision
+WHERE administrativedivision_id NOT IN (
+  SELECT id
+  FROM datamart.administrativedivision
+);
+''')
+
+    # Finaly drop the temp table
+    connection.execute('''
 SELECT DropGeometryColumn('public', 'g2015_2014_0', 'geom');
-DROP TABLE g2015_2014_0;''')
-    trans.commit()
-
-    trans = connection.begin()
-    connection.execute('''
-INSERT INTO datamart.administrativedivision (code, leveltype_id, name,
-parent_code, geom)
-SELECT adm1_code, 2, adm1_name, adm0_code, geom
-FROM g2015_2014_1;
+DROP TABLE g2015_2014_0;
 SELECT DropGeometryColumn('public', 'g2015_2014_1', 'geom');
-DROP TABLE g2015_2014_1;''')
-    trans.commit()
-
-    trans = connection.begin()
-    connection.execute('''
-INSERT INTO datamart.administrativedivision (code, leveltype_id, name,
-parent_code, geom)
-SELECT adm2_code, 3, adm2_name, adm1_code, geom
-FROM g2015_2014_2;
+DROP TABLE g2015_2014_1;
 SELECT DropGeometryColumn('public', 'g2015_2014_2', 'geom');
 DROP TABLE g2015_2014_2;
 ''')
-    trans.commit()
 
-    trans = connection.begin()
-    connection.execute('''
-DELETE from datamart.administrativedivision WHERE code in (4375, 426, 10);
-''')
     trans.commit()
 
     print "{} administrative divisions created".format(
