@@ -84,6 +84,7 @@ setup(name='thinkhazard',
               "process = thinkhazard.processing.processing:Processor.run",
               "decision_tree = thinkhazard.processing.decisiontree:DecisionMaker.run",
               "publish = thinkhazard.scripts.publish:main",
+              "importpo = thinkhazard.scripts.importpo:main",
           ],
           "lingua.extractors": [
               "database = thinkhazard.lib.lingua_extractor:DatabaseExtractor"

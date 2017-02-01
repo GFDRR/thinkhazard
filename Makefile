@@ -46,6 +46,7 @@ help:
 	@echo "- extract_messages        Extract translation string and update the .pot file"
 	@echo "- transifex-push          Push translations to transifex"
 	@echo "- transifex-pull          Pull translations from transifex"
+	@echo "- transifex-import        Import po files into database"
 	@echo "- compile_catalog         Compile language files"
 	@echo
 
@@ -133,6 +134,10 @@ decisiontree: .build/requirements.timestamp
 .PHONY: publish
 publish: .build/requirements.timestamp
 	.build/venv/bin/publish $(INI_FILE)
+
+.PHONY: transifex-import
+transifex-import: .build/requirements.timestamp
+	.build/venv/bin/importpo $(INI_FILE)
 
 .PHONY: serve_public
 serve_public: install
