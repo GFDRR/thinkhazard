@@ -81,15 +81,19 @@ initdb_force:
 
 .PHONY: import_admindivs
 import_admindivs: .build/requirements.timestamp \
-		/tmp/thinkhazard/admindiv/$(DATA)/g2015_2014_0.sql \
-		/tmp/thinkhazard/admindiv/$(DATA)/g2015_2014_1.sql \
-		/tmp/thinkhazard/admindiv/$(DATA)/g2015_2014_2.sql
+		/tmp/thinkhazard/admindiv/$(DATA)/g2015_2014_0_upd270117.shp \
+		/tmp/thinkhazard/admindiv/$(DATA)/g2015_2014_1_upd270117.shp \
+		/tmp/thinkhazard/admindiv/$(DATA)/g2015_2014_2_upd270117.shp
+	@while [ -z "$$CONTINUE" ]; do \
+		read -r -p "This will remove all the existing data in the administrative divisions table. Continue? [y] " CONTINUE;  \
+	done ; \
+	[ $$CONTINUE = "y" ] || [ $$CONTINUE = "Y" ] || (echo "Exiting."; exit 1;)
 	.build/venv/bin/import_admindivs $(INI_FILE) folder=/tmp/thinkhazard/admindiv/$(DATA)
 
-/tmp/thinkhazard/admindiv/$(DATA)/%.sql: /tmp/thinkhazard/admindiv/$(DATA)/%.sql.zip
+/tmp/thinkhazard/admindiv/$(DATA)/%.shp: /tmp/thinkhazard/admindiv/$(DATA)/%.zip
 	unzip -o $< -d /tmp/thinkhazard/admindiv/$(DATA)
 
-/tmp/thinkhazard/admindiv/$(DATA)/%.sql.zip:
+/tmp/thinkhazard/admindiv/$(DATA)/%_upd270117.zip:
 	mkdir -p $(dir $@)
 	wget -nc "http://dev.camptocamp.com/files/thinkhazard/$(DATA)/$(notdir $@)" -O $@
 
