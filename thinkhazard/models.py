@@ -325,6 +325,11 @@ class AdministrativeDivision(Base):
         tokens.reverse()
         return slugify('-'.join(tokens))
 
+    def translated_name(self, lang):
+        attr = 'name' if lang == 'en' or self.leveltype.mnemonic != 'COU' \
+            else 'name_' + lang
+        return getattr(self, attr)
+
 
 class HazardCategory(Base):
     __tablename__ = 'hazardcategory'

@@ -1,6 +1,7 @@
 {% macro report_for_hazard(division, hazard_category,
    climate_change_recommendation, sources, resources,
    contacts,
+   locale_name,
    hazards_sorted=None,
    parents=[],
    parent_division=None) %}
@@ -15,7 +16,7 @@
     </h2>
     {% if hazard_category.general_recommendation %}
     <p>
-    {{ hazard_category.general_recommendation|translate|replace("name of location", "(" + division.name + ")")|markdown }}
+    {{ hazard_category.general_recommendation|translate|replace("name of location", "(" + division.translated_name(locale_name) + ")")|markdown }}
     </p>
     {% endif %}
 
@@ -87,7 +88,7 @@
     {% if parents.__len__() >= 1 %}
     <a class="btn btn-xs btn-default drillup" href="{{ 'report' | route_url(division=parents[0], hazardtype=hazard_category.hazardtype.mnemonic if hazard_category else '')}}">
       <i class="btn-xs icon-zoom-out"></i>
-      {{ gettext('Zoom out to <b>%(location)s</b>', location=parent_division.name)}}
+      {{ gettext('Zoom out to <b>%(location)s</b>', location=parent_division.translated_name(locale_name))}}
     </a>
     {% endif %}
     {% if hazard_category %}
