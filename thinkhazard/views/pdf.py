@@ -171,17 +171,23 @@ def create_pdf_report(request):
         .filter(AdministrativeDivision.code == division_code) \
         .order_by(HazardLevel.order)
 
-    pages = ' page "%s"' % request.route_url('pdf_about')
+    query_args = {
+        '_query': {'_LOCALE_': request.locale_name}
+    }
+
+    pages = ' page "%s"' % request.route_url('pdf_about', **query_args)
     for cat in categories:
         pages += ' page "{}"'.format(
             request.route_url(
                 'report_print',
                 divisioncode=division_code,
-                hazardtype=cat.hazardtype.mnemonic
+                hazardtype=cat.hazardtype.mnemonic,
+                **query_args
             )
         )
 
-    cover_url = request.route_url('pdf_cover', divisioncode=division_code)
+    cover_url = request.route_url('pdf_cover', divisioncode=division_code,
+                                  **query_args)
 
     file_name = _get_report_filename(base_path, division_code, report_id)
     file_name_temp = _get_report_filename(
