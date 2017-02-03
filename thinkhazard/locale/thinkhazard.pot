@@ -15,6 +15,46 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Lingua 4.12\n"
 
+#: ./thinkhazard/templates/pdf_report.jinja2:43
+#: ./thinkhazard/templates/report.jinja2:167
+#: ./thinkhazard/templates/report_hazard_category.jinja2:103
+msgid "High"
+msgstr ""
+
+#: ./thinkhazard/templates/pdf_report.jinja2:47
+#: ./thinkhazard/templates/report.jinja2:168
+#: ./thinkhazard/templates/report_hazard_category.jinja2:113
+msgid "Medium"
+msgstr ""
+
+#: ./thinkhazard/templates/pdf_report.jinja2:51
+#: ./thinkhazard/templates/report.jinja2:169
+#: ./thinkhazard/templates/report_hazard_category.jinja2:107
+msgid "Low"
+msgstr ""
+
+#: ./thinkhazard/templates/pdf_report.jinja2:55
+#: ./thinkhazard/templates/report.jinja2:170
+#: ./thinkhazard/templates/report_hazard_category.jinja2:117
+msgid "Very low"
+msgstr ""
+
+#: ./thinkhazard/templates/pdf_report.jinja2:62
+msgid "Data source:"
+msgid_plural "Data sources:"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ./thinkhazard/templates/pdf_report.jinja2:73
+#: ./thinkhazard/templates/report_hazard_category.jinja2:30
+msgid "Recommendations"
+msgstr ""
+
+#: ./thinkhazard/templates/pdf_report.jinja2:90
+#: ./thinkhazard/templates/report_hazard_category.jinja2:171
+msgid "Further resources"
+msgstr ""
+
 #: ./thinkhazard/templates/faq.jinja2:4
 msgid "General"
 msgstr ""
@@ -508,87 +548,55 @@ msgstr ""
 msgid "Overview"
 msgstr ""
 
-#: ./thinkhazard/templates/report.jinja2:106
+#: ./thinkhazard/templates/report.jinja2:107
 msgid ""
 "We welcome any suggestions for improvements to the tool, including "
 "suggestions of data, recommendations, or resources to include."
 msgstr ""
 
-#: ./thinkhazard/templates/report.jinja2:108
+#: ./thinkhazard/templates/report.jinja2:109
 msgid "If you have any, please %(link_prefix)sprovide feedback%(link_suffix)s."
 msgstr ""
 
-#: ./thinkhazard/templates/report.jinja2:164
+#: ./thinkhazard/templates/report.jinja2:165
 msgid "Zoom in to name_of_location"
 msgstr ""
 
-#: ./thinkhazard/templates/report.jinja2:165
-msgid "Zoom out to name_of_location"
-msgstr ""
-
-#: ./thinkhazard/templates/report.jinja2:167
-#: ./thinkhazard/templates/report_hazard_category.jinja2:102
-msgid "High"
-msgstr ""
-
-#: ./thinkhazard/templates/report.jinja2:168
-#: ./thinkhazard/templates/report_hazard_category.jinja2:112
-msgid "Medium"
-msgstr ""
-
-#: ./thinkhazard/templates/report.jinja2:169
-#: ./thinkhazard/templates/report_hazard_category.jinja2:106
-msgid "Low"
-msgstr ""
-
-#: ./thinkhazard/templates/report.jinja2:170
-#: ./thinkhazard/templates/report_hazard_category.jinja2:116
-msgid "Very low"
-msgstr ""
-
-#: ./thinkhazard/templates/report_hazard_category.jinja2:12
+#: ./thinkhazard/templates/report_hazard_category.jinja2:13
 msgid "Hazard level:"
 msgstr ""
 
-#: ./thinkhazard/templates/report_hazard_category.jinja2:29
-msgid "Recommendations"
-msgstr ""
-
-#: ./thinkhazard/templates/report_hazard_category.jinja2:61
+#: ./thinkhazard/templates/report_hazard_category.jinja2:62
 msgid "Hazard level"
 msgstr ""
 
-#: ./thinkhazard/templates/report_hazard_category.jinja2:87
+#: ./thinkhazard/templates/report_hazard_category.jinja2:88
 msgid "Zoom out to <b>%(location)s</b>"
 msgstr ""
 
-#: ./thinkhazard/templates/report_hazard_category.jinja2:124
+#: ./thinkhazard/templates/report_hazard_category.jinja2:125
 msgid "DATA SOURCE"
 msgid_plural "DATA SOURCES"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ./thinkhazard/templates/report_hazard_category.jinja2:136
+#: ./thinkhazard/templates/report_hazard_category.jinja2:137
 msgid "Contacts"
 msgstr ""
 
-#: ./thinkhazard/templates/report_hazard_category.jinja2:149
+#: ./thinkhazard/templates/report_hazard_category.jinja2:150
 msgid "Website"
 msgstr ""
 
-#: ./thinkhazard/templates/report_hazard_category.jinja2:153
+#: ./thinkhazard/templates/report_hazard_category.jinja2:154
 msgid "Phone"
 msgstr ""
 
-#: ./thinkhazard/templates/report_hazard_category.jinja2:157
+#: ./thinkhazard/templates/report_hazard_category.jinja2:158
 msgid "E-mail"
 msgstr ""
 
-#: ./thinkhazard/templates/report_hazard_category.jinja2:170
-msgid "Further resources"
-msgstr ""
-
-#: ./thinkhazard/templates/report_hazard_category.jinja2:171
+#: ./thinkhazard/templates/report_hazard_category.jinja2:172
 msgid "For further information the following resources could be consulted:"
 msgstr ""
 
