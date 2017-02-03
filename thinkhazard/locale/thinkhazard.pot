@@ -409,6 +409,12 @@ msgstr ""
 msgid "I agree"
 msgstr ""
 
+#: ./thinkhazard/templates/index.jinja2:20
+msgid ""
+"Identify natural hazards in your project area<br>and understand how to reduce"
+" their impact"
+msgstr ""
+
 #: ./thinkhazard/templates/search.jinja2:5
 msgid "Enter location (e.g. Indonesia or Bali)"
 msgstr ""
