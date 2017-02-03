@@ -307,6 +307,9 @@ class AdministrativeDivision(Base):
         tokens.reverse()
         return slugify('-'.join(tokens))
 
+    def translated_name(self, language):
+        return self.__getattribute__('name_' + language) if language != 'en' \
+                else self.name
 
 class HazardCategory(Base):
     __tablename__ = 'hazardcategory'
