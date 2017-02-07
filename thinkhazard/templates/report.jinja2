@@ -144,6 +144,8 @@ Think Hazard - {{ division.name}}
       app.mapUrl = '{{ 'report_overview_json'|route_url(divisioncode=division.code)}}';
       {% endif %}
 
+      app.neighboursUrl = '{{ 'report_neighbours_json'|route_url(divisioncode=division.code)}}';
+
       {%- if division %}
       app.divisionCode = {{division.code}};
       {%- else %}
