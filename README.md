@@ -279,6 +279,8 @@ Use the following command to update the gettext template (`.pot`):
 
 Note: this should be done from the production instance ONLY in order to have
 the up-to-date database strings extracted!
+You will have to make sure that the `~/.transifexrc` is valid and the
+credentials correspond to the correct rights.
 
 Then you can push the translation sources to transifex.
 

@@ -296,16 +296,23 @@ extract_messages:
 	# removes the creation date to avoid unnecessary git changes
 	sed -i '/^"POT-Creation-Date: /d' thinkhazard/locale/thinkhazard.pot
 
+$(HOME)/.transifexrc:
+	echo "[https://www.transifex.com]" > $@
+	echo "hostname = https://www.transifex.com" >> $@
+	echo "username = c2c" >> $@
+	echo "password = c2cc2c" >> $@
+	echo "token =" >> $@
+
 .PHONY: transifex-push
-transifex-push:
+transifex-push: $(HOME)/.transifexrc
 	.build/venv/bin/tx push -s
 
 .PHONY: transifex-pull
-transifex-pull:
+transifex-pull: $(HOME)/.transifexrc
 	.build/venv/bin/tx pull
 
 .PHONY: compile_catalog
-compile_catalog: transifex-pull
+compile_catalog: $(HOME)/.transifexrc transifex-pull
 	msgfmt -o thinkhazard/locale/fr/LC_MESSAGES/thinkhazard.mo thinkhazard/locale/fr/LC_MESSAGES/thinkhazard.po
 	msgfmt -o thinkhazard/locale/es/LC_MESSAGES/thinkhazard.mo thinkhazard/locale/es/LC_MESSAGES/thinkhazard.po
 	msgfmt -o thinkhazard/locale/fr/LC_MESSAGES/thinkhazard-database.mo thinkhazard/locale/fr/LC_MESSAGES/thinkhazard-database.po
