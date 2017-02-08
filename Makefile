@@ -43,6 +43,11 @@ help:
 	@echo "- dist                    Build a source distribution"
 	@echo "- routes                  Show the application routes"
 	@echo "- watch                   Run the build target when files in static dir change"
+	@echo "- extract_messages        Extract translation string and update the .pot file"
+	@echo "- transifex-push          Push translations to transifex"
+	@echo "- transifex-pull          Pull translations from transifex"
+	@echo "- transifex-import        Import po files into database"
+	@echo "- compile_catalog         Compile language files"
 	@echo
 
 .PHONY: install
@@ -50,7 +55,8 @@ install: \
 		.build/requirements.timestamp \
 		.build/node_modules.timestamp \
 		.build/wkhtmltox \
-		buildcss
+		buildcss \
+		compile_catalog
 
 .PHONY: buildcss
 buildcss: thinkhazard/static/build/index.css \
@@ -128,6 +134,10 @@ decisiontree: .build/requirements.timestamp
 .PHONY: publish
 publish: .build/requirements.timestamp
 	.build/venv/bin/publish $(INI_FILE)
+
+.PHONY: transifex-import
+transifex-import: .build/requirements.timestamp
+	.build/venv/bin/importpo $(INI_FILE)
 
 .PHONY: serve_public
 serve_public: install
@@ -278,3 +288,25 @@ clean:
 cleanall:
 	rm -rf .build
 	rm -rf node_modules
+
+.PHONY: extract_messages
+extract_messages:
+	pot-create -c lingua.cfg -o thinkhazard/locale/thinkhazard.pot thinkhazard/templates
+	pot-create -c lingua.cfg -o thinkhazard/locale/thinkhazard-database.pot thinkhazard/dont_remove_me.i18n
+	# removes the creation date to avoid unnecessary git changes
+	sed -i '/^"POT-Creation-Date: /d' thinkhazard/locale/thinkhazard.pot
+
+.PHONY: transifex-push
+transifex-push:
+	.build/venv/bin/tx push -s
+
+.PHONY: transifex-pull
+transifex-pull:
+	.build/venv/bin/tx pull
+
+.PHONY: compile_catalog
+compile_catalog: transifex-pull
+	msgfmt -o thinkhazard/locale/fr/LC_MESSAGES/thinkhazard.mo thinkhazard/locale/fr/LC_MESSAGES/thinkhazard.po
+	msgfmt -o thinkhazard/locale/es/LC_MESSAGES/thinkhazard.mo thinkhazard/locale/es/LC_MESSAGES/thinkhazard.po
+	msgfmt -o thinkhazard/locale/fr/LC_MESSAGES/thinkhazard-database.mo thinkhazard/locale/fr/LC_MESSAGES/thinkhazard-database.po
+	msgfmt -o thinkhazard/locale/es/LC_MESSAGES/thinkhazard-database.mo thinkhazard/locale/es/LC_MESSAGES/thinkhazard-database.po

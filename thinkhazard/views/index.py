@@ -56,3 +56,11 @@ def disclaimer(request):
     return {
         'feedback_form_url': request.registry.settings['feedback_form_url']
     }
+
+
+@view_config(route_name='set_language', renderer='json')
+def set_language(request):
+    language = request.matchdict['language']
+    request.response.set_cookie('_LOCALE_', value=language,
+                                max_age=20 * 7 * 24 * 60 * 60)
+    return dict()

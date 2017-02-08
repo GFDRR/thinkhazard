@@ -1,33 +1,35 @@
 language: python
-
 dist: trusty
-
 cache:
   directories:
-    - $HOME/.cache/pip
-
+  - "$HOME/.cache/pip"
 python:
 - 2.7
-
 addons:
-  postgresql: "9.3"
-
+  postgresql: '9.3'
+env:
+  global:
+  - TRANSIFEX_USER='pgiraud'
+  - secure: WevsQM3dkldIXEbtFNZESPNTK+PyLAyELT2CCSejBhUhx4t0VPCtKIuG39U7BVV+TqRiswh9+rUo44EXPeAjWSkQl3VRe0oiVIxgGAYlW70j/MzqYu++bDADWyQMa5lMt1OCB73Uvu3zLeEBBCZb4cLyS9009aXCYF6zG8aL9OM=
 before_install:
-- sudo apt-get install --no-install-recommends
-    libgdal-dev
-    postgresql-9.3-postgis-2.3
-
+- echo "[https://www.transifex.com]" >> ~/.transifexrc
+- echo "hostname = https://www.transifex.com" >> ~/.transifexrc
+- echo "username = ${TRANSIFEX_USER}" >> ~/.transifexrc
+- echo "password = ${TRANSIFEX_PASSWORD}" >> ~/.transifexrc
+- echo "token =" >> ~/.transifexrc
+- sudo apt-get install --no-install-recommends libgdal-dev postgresql-9.3-postgis-2.3
 install:
 - make install
 - createuser www-data --no-superuser --no-createdb --no-createrole -U postgres
 - createdb -O www-data thinkhazard_tests -U postgres
 - psql -d thinkhazard_tests -c 'CREATE EXTENSION postgis;' -U postgres
 - psql -d thinkhazard_tests -c 'CREATE EXTENSION unaccent;' -U postgres
-
 script:
 - make check
 - echo [app:public] >> local.tests.ini
-- echo sqlalchemy.url = postgresql://www-data:www-data@localhost/thinkhazard_tests >> local.tests.ini
+- echo sqlalchemy.url = postgresql://www-data:www-data@localhost/thinkhazard_tests
+  >> local.tests.ini
 - echo [app:admin] >> local.tests.ini
-- echo sqlalchemy.url = postgresql://www-data:www-data@localhost/thinkhazard_tests >> local.tests.ini
+- echo sqlalchemy.url = postgresql://www-data:www-data@localhost/thinkhazard_tests
+  >> local.tests.ini
 - make test

@@ -307,6 +307,9 @@ class AdministrativeDivision(Base):
         tokens.reverse()
         return slugify('-'.join(tokens))
 
+    def translated_name(self, language):
+        return self.__getattribute__('name_' + language) if language != 'en' \
+                else self.name
 
 class HazardCategory(Base):
     __tablename__ = 'hazardcategory'
@@ -316,6 +319,8 @@ class HazardCategory(Base):
     hazardlevel_id = Column(Integer, ForeignKey(HazardLevel.id),
                             nullable=False)
     general_recommendation = Column(Unicode, nullable=False)
+    general_recommendation_fr = Column(Unicode)
+    general_recommendation_es = Column(Unicode)
 
     hazardtype = relationship(HazardType, lazy="joined")
     hazardlevel = relationship(HazardLevel)
@@ -345,6 +350,8 @@ class ClimateChangeRecommendation(Base):
     __tablename__ = 'climatechangerecommendation'
     id = Column(Integer, primary_key=True)
     text = Column(Unicode, nullable=False)
+    text_fr = Column(Unicode)
+    text_es = Column(Unicode)
     hazardtype_id = Column(Integer,
                            ForeignKey('enum_hazardtype.id'),
                            nullable=False)
@@ -384,7 +391,11 @@ class TechnicalRecommendation(Base):
     __tablename__ = 'technicalrecommendation'
     id = Column(Integer, primary_key=True)
     text = Column(Unicode, nullable=False)
+    text_fr = Column(Unicode)
+    text_es = Column(Unicode)
     detail = Column(Unicode)
+    detail_fr = Column(Unicode)
+    detail_es = Column(Unicode)
 
     hazardcategory_associations = relationship(
         'HazardCategoryTechnicalRecommendationAssociation',

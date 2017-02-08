@@ -1,22 +1,22 @@
 {% macro report_for_hazard(division, hazard_category, recommendations,
-   climate_change_recommendation, sources, resources) %}
+   climate_change_recommendation, sources, resources, locale_name) %}
 <div class="row">
   <div class="col-sm-12">
     <h2 class="page-header detail">
-      {{ hazard_category.hazardtype.title }}
+      {{ hazard_category.hazardtype.title | translate }}
       <small>
-        Hazard level: <span class="level">{{ hazard_category.hazardlevel.title }}</span>
+        Hazard level: <span class="level">{{ hazard_category.hazardlevel.title | translate }}</span>
       </small>
     </h2>
     {% if hazard_category.general_recommendation %}
     <p>
-    {{ hazard_category.general_recommendation|replace("name of location", "(" + division.name + ")")|markdown }}
+    {{ hazard_category.general_recommendation|translate|replace("name of location", "(" + division.translated_name(locale_name) + ")")|markdown }}
     </p>
     {% endif %}
 
     {% if climate_change_recommendation %}
     <p>
-      {{ climate_change_recommendation.text }}
+      {{ climate_change_recommendation.text | translate }}
     </p>
     {% endif %}
   </div>
@@ -40,26 +40,26 @@
         <tr>
           <td class="level-HIG">
             <i class="square"></i>
-            High
+            {{gettext('High')}}
           </td>
           <td class="level-MED">
             <i class="square"></i>
-            Medium
+            {{gettext('Medium')}}
           </td>
           <td class="level-LOW">
             <i class="square"></i>
-            Low
+            {{gettext('Low')}}
           </td>
           <td class="level-VLO">
             <i class="square"></i>
-            Very low
+            {{gettext('Very low')}}
           </td>
         </tr>
       </table>
     </div>
 
     <div class="data-source text-center small">
-      Data source{% if sources|length > 1 %}s{% endif %}:
+      {{ngettext('Data source:', 'Data sources:', sources.__len__())}}
       {% for source in sources %}
       {{ source.owner_organization}}
       {% if not loop.last %},&nbsp;{% endif %}
@@ -70,12 +70,12 @@
 {% if recommendations %}
 <div class="row">
   <div class="col-sm-12">
-    <h3>Recommendations</h3>
+    <h3>{{gettext('Recommendations')}}</h3>
     <ul class="recommendations">
     {% for recommendation in recommendations %}
       <li class="list-unstyled">
         <i class="icon-list-square"></i>
-        {{ recommendation.text }}
+        {{ recommendation.text | translate }}
       </li>
     {% endfor %}
     </ul>
@@ -87,7 +87,7 @@
 <div class="row">
   <div class="col-sm-12">
     <div class="further-resources">
-      <h4>Further resources</h4>
+      <h4>{{gettext('Further resources')}}</h4>
       <ul>
       {% for resource in resources %}
       <li class="small"><i class="icon-list-arrow"></i>
@@ -129,11 +129,11 @@
           </td>
           <td>
             <h2>
-            {{ division.name }}
+            {{ division.translated_name(request.locale_name) }}
             <br>
             <small>
             {% for parent in parents | reverse %}
-              {{ parent.name }}
+              {{ parent.translated_name(request.locale_name) }}
               {% if not loop.last %},&nbsp;{% endif %}
             {% endfor %}
             </small>
@@ -149,7 +149,8 @@
           recommendations,
           climate_change_recommendation,
           sources,
-          resources) }}
+          resources,
+          request.locale_name) }}
     </div>
     <script src="{{('%s/jquery/dist/jquery.min.js' % node_modules)|static_url}}"></script>
     <script>
