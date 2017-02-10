@@ -1,7 +1,6 @@
 @import "bootstrap.less";
 @import "web-fonts.less";
 @import "icons.less";
-@import "variables.less";
 
 @fa-font-path: "fonts";
 
@@ -21,6 +20,8 @@
 @btn-default-border: #d9d9d9;
 
 @border-radius-small: 5px;
+
+@text-inactive: #a8a8a8;
 
 h1, h2 {
   font-family: 'variablebold', Arial, sans-serif;
@@ -101,15 +102,10 @@ ul.horizontal li {
  ***************/
 
 .hazard-types-list {
-  @circle-border: 5px;
-  @border-bottom: 5px;
-  margin-bottom: -(@border-bottom);
   // remove space between items in the list
   font-size: 0;
   li {
     font-size: 16px;
-    width: @hazard-width;
-    border-bottom: @border-bottom solid white;
     position: relative;
     margin-top: 50px;
     padding-top: 20px;
@@ -124,36 +120,19 @@ ul.horizontal li {
         background-color: #f5f5f5;
       }
     }
-    &.active {
-      a,
-      a:hover {
-        color: white;
-      }
-      .hazard-icon {
-        border: @circle-border solid transparent;
-        top: -@icon-size / 2 - @circle-border;
-        left: (@hazard-width - @icon-size) / 2 - @circle-border;
-      }
-    }
-    a,
-    &.active {
-      color: #58595b;
-      &:hover {
-        color: #333;
-      }
-    }
     .hazard-icon {
       position: absolute;
-      top: -@icon-size / 2;
-      left: (@hazard-width - @icon-size) / 2;
     }
   }
 }
 
 .hazard-icon {
-  font-size: @icon-size;
   border-radius: 50px;
   background-color: white;
+}
+
+.hazard-level {
+  color: @text-inactive;
 }
 
 /*************

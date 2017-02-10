@@ -343,4 +343,11 @@
     $('#data-source-modal').modal('show').find('.modal-body').load($(this).attr('href'));
   });
 
+  // initialize tooltips
+  $('body').tooltip({
+    container: 'body',
+    trigger: 'hover',
+    selector: '[data-toggle="tooltip"]'
+  });
+
 })();

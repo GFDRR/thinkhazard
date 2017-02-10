@@ -119,13 +119,17 @@ def populate_datamart():
     # HazardType
     for i in [
         (u'FL', u'River flood', 1),
-        (u'EQ', u'Earthquake', 2),
-        (u'DG', u'Water scarcity', 3),
-        (u'VA', u'Volcano', 7),
-        (u'CY', u'Cyclone', 4),
+        (u'UF', u'Urban flood', 2),
+        (u'CF', u'Coastal flood', 3),
+        (u'EQ', u'Earthquake', 4),
+        (u'LS', u'Landslide', 5),
         (u'TS', u'Tsunami', 6),
-        (u'CF', u'Coastal flood', 5),
-        (u'LS', u'Landslide', 8),
+        (u'VA', u'Volcano', 7),
+        (u'CY', u'Cyclone', 8),
+        (u'DG', u'Water scarcity', 9),
+        (u'EH', u'Extreme heat', 10),
+        (u'WF', u'Wildfire', 11),
+        (u'AP', u'Air pollution', 12),
     ]:
         r = HazardType()
         r.mnemonic, r.title, r.order = i
