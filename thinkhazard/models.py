@@ -300,18 +300,20 @@ class AdministrativeDivision(Base):
         back_populates='administrativedivision')
 
     def __json__(self, request):
+        lang = request.locale_name
+        attr = 'name' if lang == 'en' else 'name_' + lang
         if self.leveltype_id == 1:
             return {'code': self.code,
-                    'admin0': self.name,
+                    'admin0': getattr(self, attr),
                     'url': request.route_url('report_overview', division=self)}
         if self.leveltype_id == 2:
             return {'code': self.code,
-                    'admin0': self.parent.name,
+                    'admin0': getattr(self.parent, attr),
                     'admin1': self.name,
                     'url': request.route_url('report_overview', division=self)}
         if self.leveltype_id == 3:
             return {'code': self.code,
-                    'admin0': self.parent.parent.name,
+                    'admin0': getattr(self.parent.parent, attr),
                     'admin1': self.parent.name,
                     'admin2': self.name,
                     'url': request.route_url('report_overview', division=self)}
