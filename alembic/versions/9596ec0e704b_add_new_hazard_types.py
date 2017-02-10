@@ -1,14 +1,14 @@
 """Add new hazard types
 
 Revision ID: 9596ec0e704b
-Revises: d49029073f8f
+Revises: ed4edfca2147
 Create Date: 2016-11-28 15:14:40.766412
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '9596ec0e704b'
-down_revision = 'd49029073f8f'
+down_revision = 'ed4edfca2147'
 branch_labels = None
 depends_on = None
 
