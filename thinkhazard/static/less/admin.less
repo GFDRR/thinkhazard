@@ -1,6 +1,7 @@
 @import "bootstrap.less";
 @import "../../../node_modules/font-awesome/less/font-awesome.less";
 @fa-font-path: "../fonts";
+@import "variables.less";
 
 .table>tbody>tr>td {
   vertical-align: middle;
@@ -60,3 +61,15 @@
     margin-bottom: 5px;
   }
 }
+
+.set-level-color(@level) {
+  @color: "level-@{level}-color";
+  .label.label-@{level} {
+    background-color: fade(@@color, 75%);
+  }
+}
+
+.set-level-color(HIG);
+.set-level-color(MED);
+.set-level-color(LOW);
+.set-level-color(VLO);

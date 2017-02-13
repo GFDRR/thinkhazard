@@ -127,20 +127,21 @@ def add_public_routes(config):
         if 'division' in kw:
             division = kw.pop('division')
             kw['divisioncode'] = division.code
-            kw['slug'] = division.slug()
+            kw['slug'] = '-' + division.slug()
         return elements, kw
 
     config.add_route('report',
-                     '/report/{divisioncode:\d+}-{slug}'
+                     '/report/{divisioncode:\d+}{slug:.*}'
                      '/{hazardtype:([A-Z]{2})}',
                      pregenerator=pregenerator)
     config.add_route('report_print',
                      '/report/print/{divisioncode:\d+}/'
                      '{hazardtype:([A-Z]{2})}')
-    config.add_route('report_json',
-                     '/report/{divisioncode:\d+}/{hazardtype:([A-Z]{2})}.json')
-    config.add_route('report_neighbours_json',
-                     '/report/{divisioncode:\d+}/neighbours.json')
+    config.add_route(
+        'report_geojson',
+        '/report/{divisioncode:\d+}/{hazardtype:([A-Z]{2})}.geojson')
+    config.add_route('report_neighbours_geojson',
+                     '/report/{divisioncode:\d+}/neighbours.geojson')
     config.add_route('create_pdf_report',
                      '/report/create/{divisioncode:\d+}')
     config.add_route('get_report_status',
@@ -148,13 +149,18 @@ def add_public_routes(config):
     config.add_route('get_pdf_report',
                      '/report/{divisioncode:\d+}/{id}.pdf')
 
-    config.add_route('report_overview', '/report/{divisioncode:\d+}-{slug}',
+    config.add_route(
+        'report_json',
+        '/report/{divisioncode:\d+}{slug:.*}/{hazardtype:([A-Z]{2})}.json')
+    config.add_route('report_overview_json',
+                     '/report/{divisioncode:\d+}{slug:[^.]*}.json')
+    config.add_route('report_overview_geojson',
+                     '/report/{divisioncode:\d+}.geojson')
+    config.add_route('report_overview', '/report/{divisioncode:\d+}{slug:.*}',
                      pregenerator=pregenerator)
     config.add_route('report_overview_slash',
-                     '/report/{divisioncode:\d+}-{slug}/',
+                     '/report/{divisioncode:\d+}{slug:.*}/',
                      pregenerator=pregenerator)
-    config.add_route('report_overview_json',
-                     '/report/{divisioncode:\d+}.json')
 
     config.add_route('administrativedivision',
                      '/administrativedivision')
@@ -162,3 +168,9 @@ def add_public_routes(config):
     config.add_route('pdf_cover', '/pdf_cover/{divisioncode:\d+}')
     config.add_route('pdf_about', '/pdf_about')
     config.add_route('data_source', '/data_source/{hazardset}')
+
+    config.add_route('api_admindiv_hazardsets_hazardtype',
+                     '/admindiv_hazardsets/{hazardtype:([A-Z]{2})}.json')
+    config.add_route('api_hazardcategory',
+                     '/hazardcategory/{hazard_type:([A-Z]{2})}'
+                     '/{hazard_level:([A-Z]{3})}.json')
