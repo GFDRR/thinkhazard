@@ -354,6 +354,10 @@ class HazardCategory(Base):
         return '{} - {}'.format(self.hazardtype.mnemonic,
                                 self.hazardlevel.mnemonic)
 
+    def translated_general_recommendation(self, lang):
+        attr = 'general_recommendation'
+        return getattr(self, attr if lang == 'en' else '%s_%s' % (attr, lang))
+
     @classmethod
     def get(cls, hazardtype, hazardlevel):
         if not isinstance(hazardtype, HazardType):
@@ -391,6 +395,10 @@ class ClimateChangeRecommendation(Base):
 
     def __json__(self, request):
         return self.text
+
+    def translated_text(self, lang):
+        attr = 'text'
+        return getattr(self, attr if lang == 'en' else '%s_%s' % (attr, lang))
 
 
 class ClimateChangeRecAdministrativeDivisionAssociation(Base):
@@ -438,6 +446,14 @@ class TechnicalRecommendation(Base):
         lazy='joined',
         cascade="all, delete-orphan",
         passive_deletes=True)
+
+    def translated_text(self, lang):
+        attr = 'text'
+        return getattr(self, attr if lang == 'en' else '%s_%s' % (attr, lang))
+
+    def translated_detail(self, lang):
+        attr = 'detail'
+        return getattr(self, attr if lang == 'en' else '%s_%s' % (attr, lang))
 
     def has_association(self, hazardtype, hazardlevel):
         """Test if this technical recommendation is associated with specified

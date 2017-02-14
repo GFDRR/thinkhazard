@@ -14,15 +14,15 @@
         <span class="level">{{ hazard_category.hazardlevel.title | translate }}</span>
       </small>
     </h2>
-    {% if hazard_category.general_recommendation %}
+    {% if hazard_category.translated_general_recommendation(locale_name) %}
     <p>
-    {{ hazard_category.general_recommendation|translate|replace("name of location", "(" + division.translated_name(locale_name) + ")")|markdown }}
+    {{ hazard_category.translated_general_recommendation(locale_name)|replace("name of location", "(" + division.translated_name(locale_name) + ")")|markdown }}
     </p>
     {% endif %}
 
     {% if climate_change_recommendation %}
     <p>
-      {{ climate_change_recommendation.text | translate }}
+      {{ climate_change_recommendation.translated_text(locale_name) }}
     </p>
     {% endif %}
 
@@ -35,8 +35,8 @@
       %}
       <li class="list-unstyled">
         <i class="icon-list-square"></i>
-        {{ recommendation.text | translate }}
-        {% if recommendation.detail %}
+        {{ recommendation.translated_text(locale_name) }}
+        {% if recommendation.translated_detail(locale_name) %}
         {% set modal_id = 'recommendation-detail-' ~ recommendation.id %}
         <a class="small" data-toggle="modal" data-target="#{{ modal_id }}" href>More information</a>
         <!-- Modal -->
@@ -47,7 +47,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
               </div>
               <div class="modal-body">
-                {{ recommendation.detail |markdown }}
+                {{ recommendation.translated_detail(locale_name) |markdown }}
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

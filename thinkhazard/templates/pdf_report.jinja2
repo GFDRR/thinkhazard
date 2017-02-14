@@ -8,15 +8,15 @@
         Hazard level: <span class="level">{{ hazard_category.hazardlevel.title | translate }}</span>
       </small>
     </h2>
-    {% if hazard_category.general_recommendation %}
+    {% if hazard_category.translated_general_recommendation(locale_name) %}
     <p>
-    {{ hazard_category.general_recommendation|translate|replace("name of location", "(" + division.translated_name(locale_name) + ")")|markdown }}
+    {{ hazard_category.translated_general_recommendation(locale_name)|replace("name of location", "(" + division.translated_name(locale_name) + ")")|markdown }}
     </p>
     {% endif %}
 
     {% if climate_change_recommendation %}
     <p>
-      {{ climate_change_recommendation.text | translate }}
+      {{ climate_change_recommendation.translated_text(locale_name) }}
     </p>
     {% endif %}
   </div>
@@ -75,7 +75,7 @@
     {% for recommendation in recommendations %}
       <li class="list-unstyled">
         <i class="icon-list-square"></i>
-        {{ recommendation.text | translate }}
+        {{ recommendation.translated_text(locale_name) }}
       </li>
     {% endfor %}
     </ul>
