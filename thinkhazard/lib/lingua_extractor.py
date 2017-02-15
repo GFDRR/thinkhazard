@@ -33,10 +33,39 @@ from thinkhazard.models import (
 )
 
 
+class EnumExtractor(Extractor):
+
+    # fake extension but working for at least one file
+    extensions = ['.enum-i18n']
+
+    def __call__(self, filename, options):
+
+        # FIXME find a better way to load settings
+        settings = load_full_settings('development.ini')
+
+        engine = engine_from_config(settings, 'sqlalchemy.')
+        DBSession.configure(bind=engine)
+
+        messages = []
+
+        for rec in DBSession.query(HazardLevel):
+            messages.append((rec.title, type(rec).__name__))
+
+        for rec in DBSession.query(HazardType):
+            messages.append((rec.title, type(rec).__name__))
+
+        return [
+            Message(None, text, None, [],
+                    class_name,
+                    u'', (filename, 1))
+            for text, class_name in messages if text != '' and text is not None
+        ]
+
+
 class DatabaseExtractor(Extractor):
 
     # fake extension but working for at least one file
-    extensions = ['.i18n']
+    extensions = ['.db-i18n']
 
     def __call__(self, filename, options):
 
@@ -50,12 +79,6 @@ class DatabaseExtractor(Extractor):
 
         for rec in DBSession.query(ClimateChangeRecommendation):
             messages.append((rec.text, type(rec).__name__))
-
-        for rec in DBSession.query(HazardLevel):
-            messages.append((rec.title, type(rec).__name__))
-
-        for rec in DBSession.query(HazardType):
-            messages.append((rec.title, type(rec).__name__))
 
         for rec in DBSession.query(HazardCategory):
             messages.append((rec.general_recommendation, type(rec).__name__))

@@ -41,7 +41,7 @@
 
 {% macro licence() %}
 <p>
-{{gettext('*ThinkHazard!* is available under the %(link_prefix)sGNU General Public Licence, Version 3, 29 June 2007%(link_suffix)s. Text content is licenced under CC-BY-SA. Classified hazard levels are licenced under CC-BY. Original hazard data are licenced under their original terms, which are contained in the associated layer metadata.', link_prefix='<a href="https://www.gnu.org/licenses/gpl-3.0.en.html" target="_blank">', link_suffix='</a>') | markdown}}
+{{gettext('*ThinkHazard!* is available under the [GNU General Public Licence, Version 3, 29 June 2007](%(link)s). Text content is licenced under CC-BY-SA. Classified hazard levels are licenced under CC-BY. Original hazard data are licenced under their original terms, which are contained in the associated layer metadata.', link='https://www.gnu.org/licenses/gpl-3.0.en.html') | markdown}}
 </p>
 {% endmacro %}
 

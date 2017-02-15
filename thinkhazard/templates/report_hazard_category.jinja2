@@ -38,7 +38,7 @@
         {{ recommendation.translated_text(locale_name) }}
         {% if recommendation.translated_detail(locale_name) %}
         {% set modal_id = 'recommendation-detail-' ~ recommendation.id %}
-        <a class="small" data-toggle="modal" data-target="#{{ modal_id }}" href>More information</a>
+        <a class="small" data-toggle="modal" data-target="#{{ modal_id }}" href>{{ gettext('More information') }}</a>
         <!-- Modal -->
         <div class="modal fade" id="{{ modal_id }}" tabindex="-1" role="dialog" aria-labelledby="{{ modal_id }}-label">
           <div class="modal-dialog" role="document">
@@ -96,7 +96,7 @@
       {{ hazard_category.hazardtype.title | translate}}
     </div>
     <div class="caption location">
-      {{ division.name }}
+      {{ division.translated_name(locale_name) }}
     </div>
     <div class="legend">
       <table class="table">

@@ -291,8 +291,8 @@ cleanall:
 
 .PHONY: extract_messages
 extract_messages:
-	pot-create -c lingua.cfg -o thinkhazard/locale/thinkhazard.pot thinkhazard/templates
-	pot-create -c lingua.cfg -o thinkhazard/locale/thinkhazard-database.pot thinkhazard/dont_remove_me.i18n
+	.build/venv/bin/pot-create -c lingua.cfg -o thinkhazard/locale/thinkhazard.pot thinkhazard/templates thinkhazard/dont_remove_me.enum-i18n
+	.build/venv/bin/pot-create -c lingua.cfg -o thinkhazard/locale/thinkhazard-database.pot thinkhazard/dont_remove_me.db-i18n
 	# removes the creation date to avoid unnecessary git changes
 	sed -i '/^"POT-Creation-Date: /d' thinkhazard/locale/thinkhazard.pot
 
@@ -315,5 +315,3 @@ transifex-pull: $(HOME)/.transifexrc
 compile_catalog: $(HOME)/.transifexrc transifex-pull
 	msgfmt -o thinkhazard/locale/fr/LC_MESSAGES/thinkhazard.mo thinkhazard/locale/fr/LC_MESSAGES/thinkhazard.po
 	msgfmt -o thinkhazard/locale/es/LC_MESSAGES/thinkhazard.mo thinkhazard/locale/es/LC_MESSAGES/thinkhazard.po
-	msgfmt -o thinkhazard/locale/fr/LC_MESSAGES/thinkhazard-database.mo thinkhazard/locale/fr/LC_MESSAGES/thinkhazard-database.po
-	msgfmt -o thinkhazard/locale/es/LC_MESSAGES/thinkhazard-database.mo thinkhazard/locale/es/LC_MESSAGES/thinkhazard-database.po
