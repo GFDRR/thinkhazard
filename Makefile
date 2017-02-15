@@ -291,8 +291,8 @@ cleanall:
 
 .PHONY: extract_messages
 extract_messages:
-	pot-create -c lingua.cfg -o thinkhazard/locale/thinkhazard.pot thinkhazard/templates
-	pot-create -c lingua.cfg -o thinkhazard/locale/thinkhazard-database.pot thinkhazard/dont_remove_me.i18n
+	.build/venv/bin/pot-create -c lingua.cfg -o thinkhazard/locale/thinkhazard.pot thinkhazard/templates
+	.build/venv/bin/pot-create -c lingua.cfg -o thinkhazard/locale/thinkhazard-database.pot thinkhazard/dont_remove_me.i18n
 	# removes the creation date to avoid unnecessary git changes
 	sed -i '/^"POT-Creation-Date: /d' thinkhazard/locale/thinkhazard.pot
 
