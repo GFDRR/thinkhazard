@@ -661,6 +661,10 @@ msgstr ""
 msgid "About ThinkHazard!"
 msgstr ""
 
+#: ./thinkhazard/templates/report.jinja2:42
+msgid "Download PDF"
+msgstr ""
+
 #: ./thinkhazard/templates/report.jinja2:73
 msgid "Go back to overview page"
 msgstr ""
