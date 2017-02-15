@@ -87,7 +87,8 @@ setup(name='thinkhazard',
               "importpo = thinkhazard.scripts.importpo:main",
           ],
           "lingua.extractors": [
-              "database = thinkhazard.lib.lingua_extractor:DatabaseExtractor"
+              "database = thinkhazard.lib.lingua_extractor:DatabaseExtractor",
+              "enum = thinkhazard.lib.lingua_extractor:EnumExtractor"
           ],
       }
 )
