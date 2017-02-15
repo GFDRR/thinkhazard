@@ -22,11 +22,14 @@ from pyramid.httpexceptions import HTTPBadRequest
 
 from ..models import (
     DBSession,
-    AdministrativeDivision,
+    AdministrativeDivision as AdDiv,
+    AdminLevelType,
     )
 
 from sqlalchemy import (
     func,
+    or_,
+    and_,
     )
 
 
@@ -38,15 +41,30 @@ def administrativedivision(request):
 
     term = request.params['q']
 
-    query = DBSession.query(AdministrativeDivision) \
-        .filter(
-            func.unaccent(AdministrativeDivision.name)
-                .ilike(func.unaccent(u'%{}%'.format(term)))) \
+    filter_lang = None
+
+    if request.locale_name != 'en':
+        attribute = getattr(AdDiv, 'name_' + request.locale_name)
+        filter_lang = func.unaccent(attribute) \
+            .ilike(func.unaccent(u'%{}%'.format(term)))
+        filter_lang = and_(
+            filter_lang,
+            AdminLevelType.mnemonic == 'COU')
+
+    filter = func.unaccent(AdDiv.name) \
+        .ilike(func.unaccent(u'%{}%'.format(term)))
+
+    if filter_lang is not None:
+        filter = or_(filter_lang, filter)
+
+    query = DBSession.query(AdDiv) \
+        .filter(filter) \
+        .join(AdminLevelType) \
         .order_by(
-            AdministrativeDivision.name.ilike(term).desc(),
-            AdministrativeDivision.name.ilike(u'{}%'.format(term)).desc(),
-            AdministrativeDivision.leveltype_id,
-            AdministrativeDivision.name) \
+            AdDiv.name.ilike(term).desc(),
+            AdDiv.name.ilike(u'{}%'.format(term)).desc(),
+            AdDiv.leveltype_id,
+            AdDiv.name) \
         .limit(10)
     data = query.all()
 

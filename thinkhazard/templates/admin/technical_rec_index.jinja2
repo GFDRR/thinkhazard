@@ -15,7 +15,7 @@
     <ul>
       {% for technical_rec in technical_recs %}
       <li class="item-technicalrecommendation">
-        <div>{{ technical_rec.text }}</div>
+        <div>{{ technical_rec.translated_text(request.locale_name) }}</div>
         <div>{{ technical_rec.hazardcategories }}</div>
         <div>
           <a href="{{ 'admin_technical_rec_edit' | route_url(id=technical_rec.id) }}"

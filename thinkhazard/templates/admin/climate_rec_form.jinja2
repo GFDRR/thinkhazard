@@ -40,7 +40,7 @@
             name="text"
             placeholder="Enter text here"
             rows=8
-            >{{ obj.text or '' }}</textarea>
+            >{{ obj.translated_text(request.locale_name) or '' }}</textarea>
       </div>
 
       <div class="form-group item-associations">
@@ -59,8 +59,8 @@
           &nbsp;
           <a
             href="{{ 'admin_climate_rec_edit' | route_url(id=current_rec.id) }}"
-            title="{{ current_rec.text }}"
-            ><span class="current_rec text-muted"><i>{{ current_rec.text }}</i></span></a>
+            title="{{ current_rec.translated_text(request.locale_name) }}"
+            ><span class="current_rec text-muted"><i>{{ current_rec.translated_text(request.locale_name) }}</i></span></a>
           {% endif %}
         </div>
         {% endfor %}

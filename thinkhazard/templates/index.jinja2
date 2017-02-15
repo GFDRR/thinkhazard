@@ -9,7 +9,7 @@
   <nav class="navbar navbar-default">
     <div class="container">
       <div id="navbar" class="navbar-collapse collapse">
-      {{ navbar(feedback_form_url) }}
+      {{ navbar(feedback_form_url, request.locale_name) }}
       </div>
     </div>
   </nav>
@@ -17,8 +17,8 @@
     <header class="text-center">
         {{ thinkhazard_logo() }}
       <div class="text-muted">
-      Identify natural hazards in your project area<br>
-      and understand how to reduce their impact
+      {{gettext('Identify natural hazards in your project area<br>and understand how to reduce their impact')}}
+
       </div>
     </header>
   </div>
@@ -36,7 +36,7 @@
           {% for hazard in hazards %}
           <li class="no-data text-center ">
             <i class="fa hazard-icon icon-{{ hazard.mnemonic|lower|replace(' ', '') }}"></i><br>
-              {{ hazard.title }}
+              {{ hazard.title | translate }}
           </li>
           {% endfor %}
         </ul>

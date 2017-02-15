@@ -17,24 +17,29 @@
           <a href="//www.worldbank.org/" class="logo-md" title="Logo World Bank" alt="Logo World Bank"><img src="{{'thinkhazard:static/images/logo-wbg.svg'|static_url}}"></a>
         </div>
       </div>
-      <h4>Welcome to <em>ThinkHazard!</em></h4>
+      <h4>
+         {{gettext('Welcome to *ThinkHazard!*') | markdown}}
+      </h4>
+      <hr>
       <p>
-      <em>ThinkHazard!</em> provides a general view of the hazards, for a given location, that should be considered in project design and implementation to promote disaster and climate resilience. The tool highlights the likelihood of different natural hazards affecting project areas (very low, low, medium and high), provides guidance on how to reduce the impact of these hazards, and where to find more information. The hazard levels provided are based on published hazard data, provided by a range of private, academic and public organizations.
+      {{gettext('*ThinkHazard!* provides a general view of the hazards, for a given location, that should be considered in project design and implementation to promote disaster and climate resilience. The tool highlights the likelihood of different natural hazards affecting project areas (very low, low, medium and high), provides guidance on how to reduce the impact of these hazards, and where to find more information. The hazard levels provided are based on published hazard data, provided by a range of private, academic and public organizations.') | markdown}}
       </p>
       <p>
-      Users and potential partners can contact <em>ThinkHazard!</em> administrators with queries or information to add to the tool, at the <a href="{{feedback_form_url}}" target="_blank"><em>ThinkHazard!</em> feedback form</a>. This form is available on every page of the website.
+      {{gettext('Users and potential partners can contact *ThinkHazard!* administrators with queries or information to add to the tool, at the %(link_prefix)s*ThinkHazard!* feedback form%(link_suffix)s. This form is available on every page of the website.', link_prefix='<a href="{{feedback_form_url}}" target="_blank">', link_suffix='</a>') | markdown}}
       </p>
       <h4>
-        Licence
+        {{gettext('Licence')}}
       </h4>
       {{licence()}}
       <h4>
-        Disclaimer
+        {{gettext('Disclaimer')}}
       </h4>
       {{disclaimer()}}
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-default" data-dismiss="modal">I agree</button>
+      <button type="button" class="btn btn-default" data-dismiss="modal">
+        {{gettext('I agree')}}
+      </button>
     </div>
   </div>
 </div>

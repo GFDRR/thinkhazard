@@ -300,18 +300,20 @@ class AdministrativeDivision(Base):
         back_populates='administrativedivision')
 
     def __json__(self, request):
+        lang = request.locale_name
+        attr = 'name' if lang == 'en' else 'name_' + lang
         if self.leveltype_id == 1:
             return {'code': self.code,
-                    'admin0': self.name,
+                    'admin0': getattr(self, attr),
                     'url': request.route_url('report_overview', division=self)}
         if self.leveltype_id == 2:
             return {'code': self.code,
-                    'admin0': self.parent.name,
+                    'admin0': getattr(self.parent, attr),
                     'admin1': self.name,
                     'url': request.route_url('report_overview', division=self)}
         if self.leveltype_id == 3:
             return {'code': self.code,
-                    'admin0': self.parent.parent.name,
+                    'admin0': getattr(self.parent.parent, attr),
                     'admin1': self.parent.name,
                     'admin2': self.name,
                     'url': request.route_url('report_overview', division=self)}
@@ -325,6 +327,11 @@ class AdministrativeDivision(Base):
         tokens.reverse()
         return slugify('-'.join(tokens))
 
+    def translated_name(self, lang):
+        attr = 'name' if lang == 'en' or self.leveltype.mnemonic != 'COU' \
+            else 'name_' + lang
+        return getattr(self, attr)
+
 
 class HazardCategory(Base):
     __tablename__ = 'hazardcategory'
@@ -334,6 +341,8 @@ class HazardCategory(Base):
     hazardlevel_id = Column(Integer, ForeignKey(HazardLevel.id),
                             nullable=False)
     general_recommendation = Column(Unicode, nullable=False)
+    general_recommendation_fr = Column(Unicode)
+    general_recommendation_es = Column(Unicode)
 
     hazardtype = relationship(HazardType, lazy="joined")
     hazardlevel = relationship(HazardLevel)
@@ -344,6 +353,10 @@ class HazardCategory(Base):
     def name(self):
         return '{} - {}'.format(self.hazardtype.mnemonic,
                                 self.hazardlevel.mnemonic)
+
+    def translated_general_recommendation(self, lang):
+        attr = 'general_recommendation'
+        return getattr(self, attr if lang == 'en' else '%s_%s' % (attr, lang))
 
     @classmethod
     def get(cls, hazardtype, hazardlevel):
@@ -373,6 +386,8 @@ class ClimateChangeRecommendation(Base):
     __tablename__ = 'climatechangerecommendation'
     id = Column(Integer, primary_key=True)
     text = Column(Unicode, nullable=False)
+    text_fr = Column(Unicode)
+    text_es = Column(Unicode)
     hazardtype_id = Column(Integer,
                            ForeignKey('enum_hazardtype.id'),
                            nullable=False)
@@ -380,6 +395,10 @@ class ClimateChangeRecommendation(Base):
 
     def __json__(self, request):
         return self.text
+
+    def translated_text(self, lang):
+        attr = 'text'
+        return getattr(self, attr if lang == 'en' else '%s_%s' % (attr, lang))
 
 
 class ClimateChangeRecAdministrativeDivisionAssociation(Base):
@@ -415,7 +434,11 @@ class TechnicalRecommendation(Base):
     __tablename__ = 'technicalrecommendation'
     id = Column(Integer, primary_key=True)
     text = Column(Unicode, nullable=False)
+    text_fr = Column(Unicode)
+    text_es = Column(Unicode)
     detail = Column(Unicode)
+    detail_fr = Column(Unicode)
+    detail_es = Column(Unicode)
 
     hazardcategory_associations = relationship(
         'HazardCategoryTechnicalRecommendationAssociation',
@@ -423,6 +446,14 @@ class TechnicalRecommendation(Base):
         lazy='joined',
         cascade="all, delete-orphan",
         passive_deletes=True)
+
+    def translated_text(self, lang):
+        attr = 'text'
+        return getattr(self, attr if lang == 'en' else '%s_%s' % (attr, lang))
+
+    def translated_detail(self, lang):
+        attr = 'detail'
+        return getattr(self, attr if lang == 'en' else '%s_%s' % (attr, lang))
 
     def has_association(self, hazardtype, hazardlevel):
         """Test if this technical recommendation is associated with specified
