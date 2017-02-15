@@ -39,7 +39,7 @@ Think Hazard - {{ division.translated_name(request.locale_name)}}
         <a class="btn btn-default btn-xs" href id="download">
           <i class="icon-spinner fa-spin hide"></i>
           <i class="icon-download-arrow"></i>
-          Download PDF
+          {{ gettext('Download PDF') }}
         </a>
       </div>
       {% endif %}
@@ -164,6 +164,7 @@ Think Hazard - {{ division.translated_name(request.locale_name)}}
       app.getReportStatusUrl = '{{ 'get_report_status'|route_url(divisioncode=division.code, id=999)}}'
       app.getPdfReportUrl = '{{ 'get_pdf_report'|route_url(divisioncode=division.code, id=999)}}'
 
+      app.goToString = '{{ gettext("Go to name_of_location") }}';
       app.zoomInString = '{{ gettext("Zoom in to name_of_location") }}';
       app.levelString = {
         'High': '{{gettext("High")}}',
