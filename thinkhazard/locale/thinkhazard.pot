@@ -113,7 +113,7 @@ msgstr ""
 #. HazardLevel
 #: ./thinkhazard/templates/report_hazard_category.jinja2:106
 #: ./thinkhazard/templates/pdf_report.jinja2:43
-#: ./thinkhazard/templates/report.jinja2:169
+#: ./thinkhazard/templates/report.jinja2:170
 #: ./thinkhazard/dont_remove_me.enum-i18n:1
 msgid "High"
 msgstr ""
@@ -122,7 +122,7 @@ msgstr ""
 #. HazardLevel
 #: ./thinkhazard/templates/report_hazard_category.jinja2:110
 #: ./thinkhazard/templates/pdf_report.jinja2:51
-#: ./thinkhazard/templates/report.jinja2:171
+#: ./thinkhazard/templates/report.jinja2:172
 #: ./thinkhazard/dont_remove_me.enum-i18n:1
 msgid "Low"
 msgstr ""
@@ -131,7 +131,7 @@ msgstr ""
 #. HazardLevel
 #: ./thinkhazard/templates/report_hazard_category.jinja2:116
 #: ./thinkhazard/templates/pdf_report.jinja2:47
-#: ./thinkhazard/templates/report.jinja2:170
+#: ./thinkhazard/templates/report.jinja2:171
 #: ./thinkhazard/dont_remove_me.enum-i18n:1
 msgid "Medium"
 msgstr ""
@@ -140,7 +140,7 @@ msgstr ""
 #. HazardLevel
 #: ./thinkhazard/templates/report_hazard_category.jinja2:120
 #: ./thinkhazard/templates/pdf_report.jinja2:55
-#: ./thinkhazard/templates/report.jinja2:172
+#: ./thinkhazard/templates/report.jinja2:173
 #: ./thinkhazard/dont_remove_me.enum-i18n:1
 msgid "Very low"
 msgstr ""
@@ -661,6 +661,10 @@ msgstr ""
 msgid "About ThinkHazard!"
 msgstr ""
 
+#: ./thinkhazard/templates/report.jinja2:42
+msgid "Download PDF"
+msgstr ""
+
 #: ./thinkhazard/templates/report.jinja2:73
 msgid "Go back to overview page"
 msgstr ""
@@ -676,6 +680,10 @@ msgid "If you have any, please [provide feedback](%(link)s)."
 msgstr ""
 
 #: ./thinkhazard/templates/report.jinja2:167
+msgid "Go to name_of_location"
+msgstr ""
+
+#: ./thinkhazard/templates/report.jinja2:168
 msgid "Zoom in to name_of_location"
 msgstr ""
 

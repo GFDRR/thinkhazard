@@ -48,7 +48,8 @@
       if (feature.get('neighbour')) {
         cursor = 'pointer';
         tooltipEl.addClass('neighbour');
-        html = 'Go to <b>' + feature.get('name') + '</b>';
+        html = app.goToString.replace('name_of_location',
+            '<b>' + feature.get('name') + '</b>');
       } else {
         cursor = 'zoom-in';
         html = app.zoomInString.replace('name_of_location',
@@ -56,7 +57,7 @@
       }
       if (feature.get('hazardLevelMnemonic') &&
           feature.get('hazardLevelMnemonic') != 'None') {
-        html += '<br/><em>' + feature.get('hazardLevelTitle') + '</em>';
+        html += '<br/><em>' + app.levelString[feature.get('hazardLevelTitle')] + '</em>';
       }
       tooltipEl.show()
         .css({
