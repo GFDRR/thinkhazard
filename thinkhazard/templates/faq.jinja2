@@ -4,7 +4,7 @@
       gettext('General'), [
         (
           gettext('What is the purpose of this tool?'),
-          gettext('*ThinkHazard!* was designed to increase awareness of natural hazards anywhere in the world. It does so by providing a simple overview of different hazards and their ‘hazard levels’ for any given area, delivering recommendations and information to aid users in managing their risk to those hazards. The tool is designed to become increasingly comprehensive over time as users contribute new data and information. If you have data or information to contribute, please %(link_prefix)sclick here%(link_suffix)s.', link_prefix='<a href="https://goo.gl/forms/FX8uxUgLwDKErdFG2" target="_blank">', link_suffix='</a>')
+          gettext('*ThinkHazard!* was designed to increase awareness of natural hazards anywhere in the world. It does so by providing a simple overview of different hazards and their ‘hazard levels’ for any given area, delivering recommendations and information to aid users in managing their risk to those hazards. The tool is designed to become increasingly comprehensive over time as users contribute new data and information. If you have data or information to contribute, please [click here](%(link)s).', link='https://goo.gl/forms/FX8uxUgLwDKErdFG2')
         ),
         (
           gettext('What do the hazard levels mean?'),
@@ -12,7 +12,7 @@
         ),
         (
           gettext('Does *ThinkHazard!* provide the hazard level at my specific location of interest?'),
-          gettext('No. *ThinkHazard!* provides the maximum hazard level within each district, province, or national administrative unit (administrative level 2, 1, and 0, respectively). It does not provide the hazard level at specific locations. This tool is a starting point to increase awareness of the hazards present in an area. To determine the hazard level at a specific location, users should refer to more detailed hazard maps for the area, for example the underlying hazard data provided in the %(link_prefix)sGFDRR Innovation Lab GeoNode%(link_suffix)s or through contacting the relevant local authorities.', link_prefix='<a href="url_to_geonode" target="_blank">', link_suffix='</a>')
+          gettext('No. *ThinkHazard!* provides the maximum hazard level within each district, province, or national administrative unit (administrative level 2, 1, and 0, respectively). It does not provide the hazard level at specific locations. This tool is a starting point to increase awareness of the hazards present in an area. To determine the hazard level at a specific location, users should refer to more detailed hazard maps for the area, for example the underlying hazard data provided in the [GFDRR Innovation Lab GeoNode](%(link)s) or through contacting the relevant local authorities.', link='url_to_geonode')
         ),
         (
           gettext('How does *ThinkHazard!* work?'),
@@ -31,15 +31,15 @@ For any region selected by a user, *ThinkHazard!* shows the maximum hazard level
         ),
         (
           gettext('Has the information in *ThinkHazard!* been peer-reviewed?'),
-          gettext('We commissioned an independent analysis of how well *ThinkHazard!* estimated hazard levels for up to 77 developing countries around the world and the results can be seen here. We recognize the importance of producing accurate results for our users so we are continuously looking for more accurate national and local datasets to supplement the tool. If you are aware of additional hazard datasets please contact us via the %(link_prefix)sfeedback form%(link_suffix)s, available on every page.', link_prefix='<a href="https://goo.gl/forms/FX8uxUgLwDKErdFG2" target="_blank">', link_suffix='</a>')
+          gettext('We commissioned an independent analysis of how well *ThinkHazard!* estimated hazard levels for up to 77 developing countries around the world and the results can be seen here. We recognize the importance of producing accurate results for our users so we are continuously looking for more accurate national and local datasets to supplement the tool. If you are aware of additional hazard datasets please contact us via the [feedback form](%(link)s), available on every page.', link='https://goo.gl/forms/FX8uxUgLwDKErdFG2')
         ),
         (
           gettext('Disasters don’t stop at borders or administrative boundaries. Why is *ThinkHazard!* based on (national, provincial, district) boundaries?'),
-          gettext('While we understand that presenting hazard data by administrative boundaries might not provide a full view of hazard data, it is the simplest way to visualize complex hazard data. The underlying hazard data have different levels of resolution, and presentation by boundary provides the most consistent output. The underlying grid data, which is not shown at administration boundary level, can be accessed at the %(link_prefix)sGFDRR Innovation Lab GeoNode%(link_suffix)s.', link_prefix='<a href="url_to_geonode" target="_blank">', link_suffix='</a>')
+          gettext('While we understand that presenting hazard data by administrative boundaries might not provide a full view of hazard data, it is the simplest way to visualize complex hazard data. The underlying hazard data have different levels of resolution, and presentation by boundary provides the most consistent output. The underlying grid data, which is not shown at administration boundary level, can be accessed at the [GFDRR Innovation Lab GeoNode](%(link)s).', link='url_to_geonode')
         ),
         (
           gettext('Are there more hazards in my area than are shown?'),
-          gettext('There may be hazards that affect your area that are not shown in *ThinkHazard!*. The tool focuses on natural hazards only, so hazards such as road traffic hazards and chemical spill hazards are not considered. Localized natural hazards such as avalanche and tornado, or those hazards that are specific to very few countries, are not presented. If there are hazards that you feel should be presented, please record this using the %(link_prefix)sfeedback form%(link_suffix)s, available on every page.', link_prefix='<a href="https://goo.gl/forms/FX8uxUgLwDKErdFG2" target="_blank">', link_suffix='</a>')
+          gettext('There may be hazards that affect your area that are not shown in *ThinkHazard!*. The tool focuses on natural hazards only, so hazards such as road traffic hazards and chemical spill hazards are not considered. Localized natural hazards such as avalanche and tornado, or those hazards that are specific to very few countries, are not presented. If there are hazards that you feel should be presented, please record this using the [feedback form](%(link)s), available on every page.', link='https://goo.gl/forms/FX8uxUgLwDKErdFG2')
         ),
         (
           gettext('A disaster recently occurred in a region with low or medium hazard. Does this mean the hazard level is wrong?'),
@@ -65,19 +65,19 @@ An equivalent way of expressing return period is as the chance of occurring each
       gettext('About'), [
         (
           gettext('Is *ThinkHazard!* open source?'),
-          gettext('Yes! The code for *ThinkHazard!* is available on %(github_link)s. Open source technology means that anyone can adapt the tool for their own use and jointly contribute to the ongoing development of *ThinkHazard!*.', github_link='<a href="https://github.com/GFDRR/thinkhazard" target="_blank">Github</a>')
+          gettext('Yes! The code for *ThinkHazard!* is available on %(github_link)s. Open source technology means that anyone can adapt the tool for their own use and jointly contribute to the ongoing development of *ThinkHazard!*.', github_link='[Github](https://github.com/GFDRR/thinkhazard)')
         ),
         (
           gettext('Is *ThinkHazard!* available in multiple languages?'),
-          gettext('The tool is now available in English, French, and Spanish. We will consider additional language functionality in future development. Please let us know what language you would like to see using the %(link_prefix)sfeedback form%(link_suffix)s.', link_prefix='<a href="https://goo.gl/forms/FX8uxUgLwDKErdFG2" target="_blank">', link_suffix='</a>')
+          gettext('The tool is now available in English, French, and Spanish. We will consider additional language functionality in future development. Please let us know what language you would like to see using the [feedback form](%(link)s).', link='https://goo.gl/forms/FX8uxUgLwDKErdFG2')
         ),
         (
           gettext('I can see a use for this kind of tool in my institution and/or sector. How do I develop a customized version?'),
-          gettext('We’re glad you asked! Other organizations have already seen a use for this type of tool, from the occupational health and safety sector to disaster risk management professionals working on school safety. The code is open source and is designed to be tailored to different sectors and organizations. Please use the %(link_prefix)sfeedback form%(link_suffix)s to let us know how *ThinkHazard!* could be useful to you so that we can get in touch to discuss development.', link_prefix='<a href="https://goo.gl/forms/FX8uxUgLwDKErdFG2" target="_blank">', link_suffix='</a>')
+          gettext('We’re glad you asked! Other organizations have already seen a use for this type of tool, from the occupational health and safety sector to disaster risk management professionals working on school safety. The code is open source and is designed to be tailored to different sectors and organizations. Please use the [feedback form](%(link)s) to let us know how *ThinkHazard!* could be useful to you so that we can get in touch to discuss development.', link='https://goo.gl/forms/FX8uxUgLwDKErdFG2')
         ),
         (
           gettext('What is the long-term vision for the tool?'),
-          gettext('We want *ThinkHazard!* to be the go-to source of information for everyone to understand their exposure to natural hazards around the world; to be a reliable source for guidance on how to reduce risk when planning projects; to be a repository of useful reports, websites, and information; and, ultimately, to be a gateway to higher resolution datasets. In order to be a useful source, the data and information that are used in the tool must continually be updated and improved. If you have relevant data or information, please use the %(link_prefix)sfeedback form%(link_suffix)s so that we can contact you to discuss.', link_prefix='<a href="https://goo.gl/forms/FX8uxUgLwDKErdFG2" target="_blank">', link_suffix='</a>')
+          gettext('We want *ThinkHazard!* to be the go-to source of information for everyone to understand their exposure to natural hazards around the world; to be a reliable source for guidance on how to reduce risk when planning projects; to be a repository of useful reports, websites, and information; and, ultimately, to be a gateway to higher resolution datasets. In order to be a useful source, the data and information that are used in the tool must continually be updated and improved. If you have relevant data or information, please use the [feedback form](%(link)s) so that we can contact you to discuss.', link='https://goo.gl/forms/FX8uxUgLwDKErdFG2')
         ),
       ],
     ),
@@ -85,19 +85,19 @@ An equivalent way of expressing return period is as the chance of occurring each
       gettext('Improvements and suggestions'), [
         (
           gettext('Can I provide suggestions to the tool or to the recommendations?'),
-          gettext('Yes! We continue to improve the tool and want to know what you think. Tell us %(link_prefix)shere%(link_suffix)s.', link_prefix='<a href="https://goo.gl/forms/FX8uxUgLwDKErdFG2" target="_blank">', link_suffix='</a>')
+          gettext('Yes! We continue to improve the tool and want to know what you think. Tell us [here](%(link)s).', link='https://goo.gl/forms/FX8uxUgLwDKErdFG2')
         ),
         (
           gettext('I have relevant information. Can I contribute this to the tool?'),
-          gettext('Yes! We are always looking for information and hazard data that is relevant to *ThinkHazard!* users and encourage you to tell us what you could provide using the %(link_prefix)sfeedback form%(link_suffix)s, and we will follow up directly with you. Your institution will be credited as the source of data.', link_prefix='<a href="https://goo.gl/forms/FX8uxUgLwDKErdFG2" target="_blank">', link_suffix='</a>')
+          gettext('Yes! We are always looking for information and hazard data that is relevant to *ThinkHazard!* users and encourage you to tell us what you could provide using the [feedback form](%(link)s), and we will follow up directly with you. Your institution will be credited as the source of data.', link='https://goo.gl/forms/FX8uxUgLwDKErdFG2')
         ),
         (
           gettext('How can I report an error in data or recommendations?'),
-          gettext('Please let us know about it using the %(link_prefix)sfeedback form%(link_suffix)s so that we can try to fix it. Thanks for letting us know; we need your help to constantly improve *ThinkHazard!*.', link_prefix='<a href="https://goo.gl/forms/FX8uxUgLwDKErdFG2" target="_blank">', link_suffix='</a>')
+          gettext('Please let us know about it using the [feedback form](%(link)s) so that we can try to fix it. Thanks for letting us know; we need your help to constantly improve *ThinkHazard!*.', link='https://goo.gl/forms/FX8uxUgLwDKErdFG2')
         ),
         (
           gettext('Can I get more specific recommendations relevant to my type of project?'),
-          gettext('This version of *ThinkHazard!* is designed to be generic, and recommendations are not tailored to any particular sector or project type. If you would like to design a sector- or organization-specific tool (e.g., an education sector tool could provide recommendations on school construction), please contact us using the %(link_prefix)sfeedback form%(link_suffix)s to discuss development. The code is open source, available on %(github_link)s, and is designed to be tailored to sector or organization.', github_link='<a href="https://github.com/GFDRR/thinkhazard" target="_blank">Github</a>')
+          gettext('This version of *ThinkHazard!* is designed to be generic, and recommendations are not tailored to any particular sector or project type. If you would like to design a sector- or organization-specific tool (e.g., an education sector tool could provide recommendations on school construction), please contact us using the [feedback form](%(link)s) to discuss development. The code is open source, available on %(github_link)s, and is designed to be tailored to sector or organization.', link='https://goo.gl/forms/FX8uxUgLwDKErdFG2', github_link='[Github](https://github.com/GFDRR/thinkhazard)')
         ),
       ],
     ),
@@ -109,15 +109,15 @@ An equivalent way of expressing return period is as the chance of occurring each
 
 In some cases, we set a higher threshold for ‘High’ hazard level, than for lower levels, to differentiate the level of damage. We then consider whether the threshold is exceeded at three return periods, which differs for each hazard, reflecting the different frequency of events. If the intensity threshold is exceeded at the most frequent return period, the hazard is determined to be ‘High’. If the threshold is exceeded at the intermediate return period but not the most frequent, it is determined to be ‘Medium’. If the threshold is exceeded at the least frequent return period only, the hazard is determined to be ‘Low’. If there is hazard data present but the threshold is not exceeded at any return period, hazard is determined to be ‘Very Low’.
 
-For non-probabilistic data, such as landslide susceptibility index, we categorize the index into hazard levels using the original data values. The maximum hazard level in each administrative unit 2 (based on the FAO Global Administrative Unit Layers dataset) is deemed to be the hazard level of that unit. The hazard level of a state or province boundary is the maximum hazard level of all districts that it contains. For a full explanation of the methodology, please see the %(link_prefix)sMethodology report%(link_suffix)s.', link_prefix='<a href="%s">' % 'thinkhazard:static/documents/thinkhazard-methodology-report_v1_8final.pdf' | static_url, link_suffix='</a>')
+For non-probabilistic data, such as landslide susceptibility index, we categorize the index into hazard levels using the original data values. The maximum hazard level in each administrative unit 2 (based on the FAO Global Administrative Unit Layers dataset) is deemed to be the hazard level of that unit. The hazard level of a state or province boundary is the maximum hazard level of all districts that it contains. For a full explanation of the methodology, please see the [Methodology report](%(link)s).', link='thinkhazard:static/documents/thinkhazard-methodology-report_v1_8final.pdf' | static_url)
         ),
         (
           gettext('Where can I find more information about the methods used in *ThinkHazard!*?'),
-          gettext('Please see the %(link_prefix)sMethodology report%(link_suffix)s.', link_prefix='<a href="%s">' % 'thinkhazard:static/documents/thinkhazard-methodology-report_v1_8final.pdf' | static_url, link_suffix='</a>')
+          gettext('Please see the [Methodology report](%(link)s).', link='thinkhazard:static/documents/thinkhazard-methodology-report_v1_8final.pdf' | static_url)
         ),
         (
           gettext('What hazard data are used in *ThinkHazard!*, and can I download the data for use elsewhere?'),
-          gettext('The data sources for each region are listed on the hazard-specific recommendations page, beneath the map. The original data has been processed for use in *ThinkHazard!* to produce aggregate hazard levels. By clicking on the data source name, you can download any data that are openly available. All data are stored on the %(link_prefix)sGFDRR Innovation Lab GeoNode%(link_suffix)s. Data with commercial limitations on sharing are not available to download.', link_prefix='<a href="url_to_geonode" target="_blank">', link_suffix='</a>')
+          gettext('The data sources for each region are listed on the hazard-specific recommendations page, beneath the map. The original data has been processed for use in *ThinkHazard!* to produce aggregate hazard levels. By clicking on the data source name, you can download any data that are openly available. All data are stored on the [GFDRR Innovation Lab GeoNode](%(link)s). Data with commercial limitations on sharing are not available to download.', link='url_to_geonode')
         ),
         (
           gettext('How do you decide which dataset to use if there are multiple datasets for a region?'),
@@ -125,7 +125,7 @@ For non-probabilistic data, such as landslide susceptibility index, we categoriz
         ),
         (
           gettext('The hazard data seem to contradict other data I have seen or used. Why is this?'),
-          gettext('It is difficult for us to know the cause of the discrepancy without further information. *ThinkHazard!* uses a variety of hazard data sources. If you have any data that is relevant to hazard levels, %(link_prefix)splease let us know%(link_suffix)s so that we can use it to improve the information on *ThinkHazard!*.', link_prefix='<a href="https://goo.gl/forms/FX8uxUgLwDKErdFG2" target="_blank">', link_suffix='</a>')
+          gettext('It is difficult for us to know the cause of the discrepancy without further information. *ThinkHazard!* uses a variety of hazard data sources. If you have any data that is relevant to hazard levels, [please let us know](%(link)s) so that we can use it to improve the information on *ThinkHazard!*.', link='https://goo.gl/forms/FX8uxUgLwDKErdFG2" target="_blank">')
         ),
         (
           gettext('How does *ThinkHazard!* account for permanent water bodies in river flood hazard?'),

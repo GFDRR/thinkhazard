@@ -14,7 +14,7 @@
       <div class="row">
         <div class="col-md-12">
           <p>
-          {{gettext('For more information, please read the %(link_prefix)sfull disclaimer%(link_suffix)s.', link_prefix='<a href="%s" class="modal-remote">' % 'disclaimer'|route_url, link_suffix='</a>')}}
+          {{gettext('For more information, please read the [full disclaimer](%(link)s).', link='disclaimer'|route_url)}}
           </p>
         </div>
       </div>
