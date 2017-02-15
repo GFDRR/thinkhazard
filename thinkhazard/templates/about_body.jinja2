@@ -133,7 +133,7 @@
 <div class="row">
   <div class="col-md-12">
     <p>
-    {{gettext('The tool code is open source, to encourage other users to adapt the tool to their needs. The code can be found on <a href="https://github.com/GFDRR/thinkhazard" target="_blank">Github</a>.') | markdown}}
+    {{gettext('The tool code is open source, to encourage other users to adapt the tool to their needs. The code can be found on %(github_link)s.', github_link='<a href="https://github.com/GFDRR/thinkhazard" target="_blank">Github</a>') | markdown}}
     {{gettext('Current instance version is %(version)s', version=request.registry.settings['version'])}}.
     </p>
     <p>
