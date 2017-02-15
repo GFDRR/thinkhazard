@@ -1,14 +1,14 @@
 """Add translations
 
 Revision ID: d47e9112f635
-Revises: ed4edfca2147
+Revises: 9596ec0e704b
 Create Date: 2017-01-27 12:10:08.522696
 
 """
 
 # revision identifiers, used by Alembic.
 revision = 'd47e9112f635'
-down_revision = 'ed4edfca2147'
+down_revision = '9596ec0e704b'
 branch_labels = None
 depends_on = None
 
