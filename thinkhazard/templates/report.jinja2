@@ -106,7 +106,7 @@ Think Hazard - {{ division.translated_name(request.locale_name)}}
           <div class="panel-body text-muted">
             {{gettext('We welcome any suggestions for improvements to the tool, including suggestions of data, recommendations, or resources to include.')}}
             <br>
-            {{gettext('If you have any, please [provide feedback](%(link)s).', link=feedback_form_url)}}
+            {{gettext('If you have any, please [provide feedback](%(link)s).', link=feedback_form_url)|markdown}}
           </div>
         </div>
       </div>
