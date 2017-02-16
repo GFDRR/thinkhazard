@@ -1,7 +1,12 @@
 import os
 import subprocess
+from urlparse import (
+    urlparse,
+    urlunparse,
+)
 
 from pyramid.config import Configurator
+from pyramid.httpexceptions import HTTPFound
 from sqlalchemy import engine_from_config
 from papyrus.renderers import GeoJSON
 
@@ -67,6 +72,8 @@ def main(global_config, **settings):
         config.add_route('sitemap', '/sitemap.xml')
 
     if settings['appname'] == 'admin':
+        config.include(add_public_routes, route_prefix='preview')
+
         config.add_route('admin_index', '/')
 
         config.add_route('admin_technical_rec', '/technical_rec')
@@ -106,8 +113,6 @@ def main(global_config, **settings):
         config.add_route('admin_contact_admindiv_hazardtype_association',
                          '/contact/CAdHt_form')
 
-        config.include(add_public_routes, route_prefix='/preview')
-
     config.add_renderer('geojson', GeoJSON())
 
     scan_ignore = ['thinkhazard.tests']
@@ -121,10 +126,10 @@ def main(global_config, **settings):
 
 
 def add_public_routes(config):
-    config.add_route('index', '/')
-    config.add_route('about', '/about')
-    config.add_route('faq', '/faq')
-    config.add_route('disclaimer', '/disclaimer')
+    add_localized_route(config, 'index', '/')
+    add_localized_route(config, 'about', '/about')
+    add_localized_route(config, 'faq', '/faq')
+    add_localized_route(config, 'disclaimer', '/disclaimer')
 
     def pregenerator(request, elements, kw):
         if 'division' in kw:
@@ -133,49 +138,138 @@ def add_public_routes(config):
             kw['slug'] = '-' + division.slug()
         return elements, kw
 
-    config.add_route('report',
-                     '/report/{divisioncode:\d+}{slug:.*}'
-                     '/{hazardtype:([A-Z]{2})}',
-                     pregenerator=pregenerator)
-    config.add_route('report_print',
-                     '/report/print/{divisioncode:\d+}/'
-                     '{hazardtype:([A-Z]{2})}')
-    config.add_route(
+    add_localized_route(config, 'report',
+                        '/report/{divisioncode:\d+}{slug:.*}'
+                        '/{hazardtype:([A-Z]{2})}',
+                        pregenerator=pregenerator)
+    add_localized_route(config, 'report_print',
+                        '/report/print/{divisioncode:\d+}/'
+                        '{hazardtype:([A-Z]{2})}')
+    add_localized_route(
+        config,
         'report_geojson',
         '/report/{divisioncode:\d+}/{hazardtype:([A-Z]{2})}.geojson')
-    config.add_route('report_neighbours_geojson',
-                     '/report/{divisioncode:\d+}/neighbours.geojson')
-    config.add_route('create_pdf_report',
-                     '/report/create/{divisioncode:\d+}')
-    config.add_route('get_report_status',
-                     '/report/status/{divisioncode:\d+}/{id}.json')
-    config.add_route('get_pdf_report',
-                     '/report/{divisioncode:\d+}/{id}.pdf')
+    add_localized_route(config, 'report_neighbours_geojson',
+                        '/report/{divisioncode:\d+}/neighbours.geojson')
+    add_localized_route(config, 'create_pdf_report',
+                        '/report/create/{divisioncode:\d+}')
+    add_localized_route(config, 'get_report_status',
+                        '/report/status/{divisioncode:\d+}/{id}.json')
+    add_localized_route(config, 'get_pdf_report',
+                        '/report/{divisioncode:\d+}/{id}.pdf')
 
-    config.add_route(
+    add_localized_route(
+        config,
         'report_json',
         '/report/{divisioncode:\d+}{slug:.*}/{hazardtype:([A-Z]{2})}.json')
-    config.add_route('report_overview_json',
-                     '/report/{divisioncode:\d+}{slug:[^.]*}.json')
-    config.add_route('report_overview_geojson',
-                     '/report/{divisioncode:\d+}.geojson')
-    config.add_route('report_overview', '/report/{divisioncode:\d+}{slug:.*}',
-                     pregenerator=pregenerator)
-    config.add_route('report_overview_slash',
-                     '/report/{divisioncode:\d+}{slug:.*}/',
-                     pregenerator=pregenerator)
+    add_localized_route(config, 'report_overview_json',
+                        '/report/{divisioncode:\d+}{slug:[^.]*}.json')
+    add_localized_route(config, 'report_overview_geojson',
+                        '/report/{divisioncode:\d+}.geojson')
+    add_localized_route(config, 'report_overview',
+                        '/report/{divisioncode:\d+}{slug:.*}',
+                        pregenerator=pregenerator)
+    add_localized_route(config, 'report_overview_slash',
+                        '/report/{divisioncode:\d+}{slug:.*}/',
+                        pregenerator=pregenerator)
 
-    config.add_route('administrativedivision',
-                     '/administrativedivision')
+    add_localized_route(config, 'administrativedivision',
+                        '/administrativedivision')
 
-    config.add_route('pdf_cover', '/pdf_cover/{divisioncode:\d+}')
-    config.add_route('pdf_about', '/pdf_about')
-    config.add_route('data_source', '/data_source/{hazardset}')
+    add_localized_route(config, 'pdf_cover', '/pdf_cover/{divisioncode:\d+}')
+    add_localized_route(config, 'pdf_about', '/pdf_about')
+    add_localized_route(config, 'data_source', '/data_source/{hazardset}')
 
-    config.add_route('api_admindiv_hazardsets_hazardtype',
-                     '/admindiv_hazardsets/{hazardtype:([A-Z]{2})}.json')
-    config.add_route('api_hazardcategory',
-                     '/hazardcategory/{hazard_type:([A-Z]{2})}'
-                     '/{hazard_level:([A-Z]{3})}.json')
+    add_localized_route(config, 'api_admindiv_hazardsets_hazardtype',
+                        '/admindiv_hazardsets/{hazardtype:([A-Z]{2})}.json')
+    add_localized_route(config, 'api_hazardcategory',
+                        '/hazardcategory/{hazard_type:([A-Z]{2})}'
+                        '/{hazard_level:([A-Z]{3})}.json')
 
-    config.add_route('set_language', '/language/{language}')
+
+def redirect_to_default_language_factory(route_prefix=None):
+
+    def redirect_to_default_language(request):
+        """
+        A view that redirects path language-free URLs to the browser prefered
+        language or default language URLs.
+
+        E.g. /greeter/foobar -> /en/greeter/foobar
+        """
+
+        prefix = None
+        prefix = route_prefix or ''
+
+        language = request.locale_name
+
+        parts = urlparse(request.url)
+
+        # remove prefix (and first and last slash) from current path
+        path = parts.path.strip('/')[len(prefix):].strip('/')
+
+        new_path = '/'.join([prefix, language, path]).lstrip('/')
+        new_parts = [parts[0], parts[1], new_path, parts[3], parts[4],
+                     parts[5]]
+        language_redirected_url = urlunparse(new_parts)
+        return HTTPFound(language_redirected_url)
+
+    return redirect_to_default_language
+
+
+def add_localized_route(config, name, pattern, factory=None, pregenerator=None,
+                        **kw):
+    """
+    Create path language aware routing paths.
+
+    Each route will have /{lang}/ prefix added to them.
+
+    Optionally, if default language is set, we'll create redirect from an URL
+    without language path component to the URL with the language path
+    component.
+    """
+    orig_factory = factory
+
+    def wrapper_factory(request):
+        lang = request.matchdict['lang']
+        # determine if this is a supported lang and convert it to a locale,
+        # likely defaulting to your default language if the requested one is
+        # not supported by your app
+        if lang not in request.registry.settings.available_languages.split():
+            raise HTTPFound(request.current_route_url(
+                lang=request.registry.settings.default_locale_name
+            ))
+
+        request.response.set_cookie('_LOCALE_', value=lang,
+                                    max_age=20 * 7 * 24 * 60 * 60)
+        request.locale_name = lang
+
+        if orig_factory:
+            return orig_factory(request)
+
+    orig_pregenerator = pregenerator
+
+    def wrapper_pregenerator(request, elements, kw):
+        if 'lang' not in kw:
+            kw['lang'] = request.locale_name or \
+                config.registry.settings.default_locale_name
+        if orig_pregenerator:
+            return orig_pregenerator(request, elements, kw)
+        return elements, kw
+
+    if pattern.startswith('/'):
+        new_pattern = pattern[1:]
+    else:
+        new_pattern = pattern
+
+    new_pattern = '/{lang}/' + new_pattern
+
+    # Language-aware URL routed
+    config.add_route(name, new_pattern, factory=wrapper_factory,
+                     pregenerator=wrapper_pregenerator, **kw)
+
+    # Add redirect to the default language routes
+    fallback_route_name = name + "_language_redirect_fallback"
+    config.add_route(fallback_route_name, pattern)
+    config.add_view(
+        redirect_to_default_language_factory(config.route_prefix),
+        route_name=fallback_route_name)

@@ -28,7 +28,7 @@ Think Hazard - {{ division.translated_name(request.locale_name)}}
           {% include 'search.jinja2' %}
         </div>
       </form>
-      {{ navbar(feedback_form_url, request.locale_name) }}
+      {{ navbar(request, feedback_form_url) }}
     </div>
   </nav>
 
