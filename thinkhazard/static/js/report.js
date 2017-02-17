@@ -24,9 +24,12 @@
       })
     ]
   });
+
   var bounds = ol.proj.transformExtent(app.divisionBounds, 'EPSG:4326',
       'EPSG:3857');
-  map.getView().fit(bounds, map.getSize());
+      map.getView().fit(bounds, map.getSize(), {
+        padding: [30, 0, 0, 0]
+      });
 
   map.addControl(new ol.control.ScaleLine());
 
