@@ -84,6 +84,14 @@
         © <a href='https://www.mapbox.com/about/maps/'>Mapbox</a>
         © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>
       </div>
+      {% if hazard_category %}
+      <a id="level-map-btn" class="btn btn-xs btn-default toggle-map-btn hidden" href="">
+        {{ gettext('Hazard Level') }}
+      </a>
+      <a id="data-source-map-btn" class="btn btn-xs btn-default toggle-map-btn" href="">
+        {{ gettext('Data Source') }}
+      </a>
+      {% endif %}
     </div>
     {% if parents.__len__() >= 1 %}
     <a class="btn btn-xs btn-default drillup" href="{{ 'report' | route_url(division=parents[0], hazardtype=hazard_category.hazardtype.mnemonic if hazard_category else '')}}">
@@ -92,13 +100,7 @@
     </a>
     {% endif %}
     {% if hazard_category %}
-    <div class="caption level">
-      {{ hazard_category.hazardtype.title | translate}}
-    </div>
-    <div class="caption location">
-      {{ division.translated_name(locale_name) }}
-    </div>
-    <div class="legend">
+    <div id="level-legend" class="legend">
       <table class="table">
         <tr>
           <td class="level-HIG">
@@ -122,8 +124,12 @@
         </tr>
       </table>
     </div>
+    <div id="data-source-legend" class="legend hidden">
+      <img src="http://45.55.174.20/geoserver/wms?request=GetLegendGraphic&format=image/png&WIDTH=20&HEIGHT=20&LAYER=hazard:riv0500&legend_options=fontAntiAliasing:true;fontSize:12;forceLabels:on">
+    </div>
 
-    <div class="data-source text-center">
+
+    <div id="data-source" class="data-source text-center hidden">
       <h5>
         {{ngettext('DATA SOURCE', 'DATA SOURCES', sources.__len__())}}
       </h5>

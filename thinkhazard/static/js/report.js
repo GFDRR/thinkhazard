@@ -34,9 +34,13 @@
   map.addControl(new ol.control.ScaleLine());
 
   var neighboursLayer = addNeighboursVectorLayer(map, app.neighboursUrl);
-  var vectorLayer = addVectorLayer(map, app.mapUrl);
+  var levelLayer;
+  if (app.hazardType) {
+    levelLayer = addLevelLayer(map, app.mapUrl);
+  }
+  var adminLayer = addAdminLayer(map, app.mapUrl);
 
-  addSelectInteraction(map, [vectorLayer, neighboursLayer]);
+  addSelectInteraction(map, [adminLayer, neighboursLayer]);
 
   var tooltipEl = $('#map .map-tooltip');
 
@@ -153,22 +157,58 @@
    * @param {string} url
    * @return {ol.layer.Vector}
    */
-  function addVectorLayer(map, url) {
+  function addAdminLayer(map, url) {
     var styleFn = function(feature) {
-      var fillColors = getFillColors(0.75);
-      var transparent = 'rgba(1, 1, 1, 0)';
-      var fillStyle = new ol.style.Fill({
-        color: fillColors[feature.get('hazardLevelMnemonic')] || transparent
-      });
       var styles = [
         new ol.style.Style({
-          fill: fillStyle,
           stroke: new ol.style.Stroke({
             color: '#333',
             width: isSubDivision(feature) ? 0.5 : 1.5
           })
         })
       ];
+      return styles;
+    };
+
+    var source = new ol.source.Vector({
+      url: url + '?resolution=' + map.getView().getResolution(),
+      format: new ol.format.GeoJSON({
+        defaultDataProjection: 'EPSG:3857'
+      })
+    });
+    var layer = new ol.layer.Vector({
+      style: styleFn,
+      source: source
+    });
+    map.addLayer(layer);
+    source.on('addfeature', function() {
+      map.on('postcompose', function(event) {
+        vectorLoaded = true;
+        checkFinished();
+      });
+    });
+    return layer;
+  }
+
+
+  /**
+   * @param {ol.Map} map
+   * @param {string} url
+   * @return {ol.layer.Vector}
+   */
+  function addLevelLayer(map, url) {
+    var styleFn = function(feature) {
+      var fillColors = getFillColors(0.75);
+      var transparent = 'rgba(1, 1, 1, 0)';
+      var fillStyle = new ol.style.Fill({
+        color: fillColors[feature.get('hazardLevelMnemonic')]
+      });
+      var styles = [
+        new ol.style.Style({
+          fill: fillStyle
+        })
+      ];
+
       // More than one feature indicates that there are subdivision. We still
       // want to show the parent division but with no fill.
       if (layer.getSource().getFeatures().length > 1 &&
@@ -225,10 +265,6 @@
    * @return {ol.interaction.Select}
    */
   function addSelectInteraction(map, layers) {
-    var fillColors = getFillColors(1);
-    var fillStyle = new ol.style.Fill({
-      color: ''
-    });
     var strokeStyle = new ol.style.Stroke({
       color: '',
       width: 2
@@ -236,15 +272,10 @@
 
     var styles = [
       new ol.style.Style({
-        fill: fillStyle,
         stroke: strokeStyle
       })
     ];
     var styleFn = function(feature) {
-      var hazardLevel = feature.get('hazardLevelMnemonic');
-      var fillColor = hazardLevel in fillColors ?
-          fillColors[hazardLevel] : 'rgba(255, 255, 255, 0.5)';
-      fillStyle.setColor(fillColor);
       var strokeColor = feature.get('neighbour') ? '#337ab7' : '#000000';
       strokeStyle.setColor(strokeColor);
       return styles;
@@ -359,6 +390,45 @@
     container: 'body',
     trigger: 'hover',
     selector: '[data-toggle="tooltip"]'
+  });
+
+  var blkImgSrc = new ol.source.ImageStatic({
+    imageExtent: map.getView().calculateExtent(map.getSize()),
+    url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+  });
+  var dataSourceLayer = new ol.layer.Image({
+    source: blkImgSrc
+  });
+  map.addLayer(dataSourceLayer);
+  $('#level-map-btn').on('click', function(e) {
+    e.preventDefault();
+
+    var el = $(this);
+    dataSourceLayer.setVisible(false);
+    levelLayer.setVisible(true);
+    $('#data-source-map-btn').removeClass('hidden');
+    el.addClass('hidden');
+    $('#level-legend').removeClass('hidden');
+    $('#data-source-legend').addClass('hidden');
+    $('#data-source').addClass('hidden');
+  });
+  $('#data-source-map-btn').on('click', function(e) {
+    e.preventDefault();
+
+    var el = $(this);
+    dataSourceLayer.setSource(new ol.source.ImageWMS({
+      // FIXME should be replaced by appropriate URL
+      url: 'http://45.55.174.20/geoserver/wms',
+      params: {'LAYERS': 'hazard:riv0500'},
+      serverType: 'geoserver'
+    }));
+    dataSourceLayer.setVisible(true);
+    levelLayer.setVisible(false);
+    $('#level-map-btn').removeClass('hidden');
+    el.addClass('hidden');
+    $('#level-legend').addClass('hidden');
+    $('#data-source-legend').removeClass('hidden');
+    $('#data-source').removeClass('hidden');
   });
 
 })();
