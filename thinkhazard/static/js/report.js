@@ -412,10 +412,9 @@
     $('#data-source-legend').addClass('hidden');
     $('#data-source').addClass('hidden');
   });
-  $('#data-source-map-btn').on('click', function(e) {
+  $('#data-source-map-btn a').on('click', function(e) {
     e.preventDefault();
 
-    var el = $(this);
     dataSourceLayer.setSource(new ol.source.ImageWMS({
       // FIXME should be replaced by appropriate URL
       url: 'http://45.55.174.20/geoserver/wms',
@@ -425,7 +424,7 @@
     dataSourceLayer.setVisible(true);
     levelLayer.setVisible(false);
     $('#level-map-btn').removeClass('hidden');
-    el.addClass('hidden');
+    $('#data-source-map-btn').addClass('hidden');
     $('#level-legend').addClass('hidden');
     $('#data-source-legend').removeClass('hidden');
     $('#data-source').removeClass('hidden');

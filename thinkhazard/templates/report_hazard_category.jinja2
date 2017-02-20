@@ -85,12 +85,30 @@
         © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>
       </div>
       {% if hazard_category %}
-      <a id="level-map-btn" class="btn btn-xs btn-default toggle-map-btn hidden" href="">
-        {{ gettext('Hazard Level') }}
-      </a>
-      <a id="data-source-map-btn" class="btn btn-xs btn-default toggle-map-btn" href="">
-        {{ gettext('Data Source') }}
-      </a>
+      <div id="level-map-btn" class="dropdown btn-group toggle-map-btn hidden">
+        <a class="btn btn-xs btn-default" href="">
+          {{ gettext('Show hazard Level') }}
+        </a>
+      </div>
+      <div id="data-source-map-btn" class="dropdown btn-group toggle-map-btn">
+        {% if sources.__len__() > 1 %}
+        <button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="data-source-map-btn" class="btn btn-default dropdown-toggle btn-xs">
+          {{ gettext('Show Data Source') }}
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu  dropdown-menu-right small" aria-labelledby="dLabel">
+          {% for source in sources %}
+          <li class="small">
+            <a href="{{ 'data_source'|route_url(hazardset=source.id) }}">{{ source.id }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <a class="btn btn-xs btn-default" href="">
+          {{ gettext('Show data source') }}
+        </a>
+        {% endif %}
+      </div>
       {% endif %}
     </div>
     {% if parents.__len__() >= 1 %}
