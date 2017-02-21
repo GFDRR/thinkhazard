@@ -8,4 +8,5 @@ slugify==0.0.1
 Babel==2.3.4
 lingua==4.12
 transifex-client==0.12.2
+jinja2==2.9.5
 -e .

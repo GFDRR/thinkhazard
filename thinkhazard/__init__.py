@@ -171,6 +171,7 @@ def add_public_routes(config):
     config.add_route('pdf_cover', '/pdf_cover/{divisioncode:\d+}')
     config.add_route('pdf_about', '/pdf_about')
     config.add_route('data_source', '/data_source/{hazardset}')
+    config.add_route('data_map', '/data_map')
 
     config.add_route('api_admindiv_hazardsets_hazardtype',
                      '/admindiv_hazardsets/{hazardtype:([A-Z]{2})}.json')

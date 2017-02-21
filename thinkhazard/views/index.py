@@ -18,6 +18,7 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 from pyramid.view import view_config
+from pyramid.i18n import get_localizer, TranslationStringFactory
 
 from ..models import (
     DBSession,
@@ -56,6 +57,17 @@ def disclaimer(request):
     return {
         'feedback_form_url': request.registry.settings['feedback_form_url']
     }
+
+
+@view_config(route_name='data_map', renderer='templates/data_map.jinja2')
+def data_map(request):
+    tsf = TranslationStringFactory('thinkhazard')
+    localizer = get_localizer(request)
+
+    hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
+    types = [(h.mnemonic, localizer.translate(tsf(h.title)))
+             for h in hazard_types]
+    return {'hazard_types': types}
 
 
 @view_config(route_name='set_language', renderer='json')
