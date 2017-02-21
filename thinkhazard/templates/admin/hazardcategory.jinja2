@@ -45,7 +45,7 @@
           {% for association in associations %}
           <li class="item-association">
             <input type="hidden" name="associations" value="{{ association.id }}"></input>
-            {{ association.technicalrecommendation.translated_text(request.locale_name) }}
+            {{ association.technicalrecommendation.text }}
           </li>
           {% endfor %}
         </ul>
