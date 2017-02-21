@@ -37,9 +37,13 @@
 
   var tooltipEl = $('#map .map-tooltip');
 
+  var hitTolerance = 3;
+
   // change mouse cursor when over division
   map.on('pointermove', function(e) {
-    var feature = map.forEachFeatureAtPixel(e.pixel, filterFn);
+    var feature = map.forEachFeatureAtPixel(e.pixel, filterFn, {
+      hitTolerance: hitTolerance
+    });
     var cursor = '';
 
     tooltipEl.empty().removeClass('neighbour').hide();
@@ -76,7 +80,9 @@
 
   // drill down
   map.on('click', function(e) {
-    var feature = map.forEachFeatureAtPixel(e.pixel, filterFn);
+    var feature = map.forEachFeatureAtPixel(e.pixel, filterFn, {
+      hitTolerance: hitTolerance
+    });
     if (feature) {
       var url = feature.get('url');
       if (app.hazardType) {
@@ -244,7 +250,8 @@
       layers: layers,
       condition: ol.events.condition.pointerMove,
       style: styleFn,
-      filter: isSubDivision
+      filter: isSubDivision,
+      hitTolerance: hitTolerance
     });
     map.addInteraction(interaction);
     return interaction;

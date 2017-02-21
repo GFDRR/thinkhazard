@@ -19,6 +19,7 @@
 
 import urllib
 import datetime
+import math
 
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest, HTTPFound, HTTPNotFound
@@ -166,11 +167,31 @@ def report_geojson(request):
 
     hazard_type = request.matchdict.get('hazardtype', None)
 
+    '''
+    Here we want to address the "small islands" issue.
+    We first check how big the polygons are compared to map resolution.
+    '''
+    area = DBSession.query(func.ST_Area(
+                func.ST_Transform(AdministrativeDivision.geom, 3857))) \
+        .filter(AdministrativeDivision.code == division_code) \
+        .scalar()
+
+    if area < math.pow(resolution, 2) * 1000:
+        # Simplify a bit first to prevent buffer to be too expensive
+        # Here '1000000' is an empiric value. It works for Maldives without
+        # generating empty geometries
+        first_simplify = func.ST_Simplify(
+            func.ST_Transform(AdministrativeDivision.geom, 3857),
+            area / 1000000)
+
+        # make the polygons a bit bigger
+        geom = func.ST_Buffer(first_simplify, resolution * 2)
+    else:
+        geom = func.ST_Transform(AdministrativeDivision.geom, 3857)
+    simplify = func.ST_Simplify(geom, resolution / 2)
+
     _filter = or_(AdministrativeDivision.code == division_code,
                   AdministrativeDivision.parent_code == division_code)
-
-    simplify = func.ST_Simplify(
-        func.ST_Transform(AdministrativeDivision.geom, 3857), resolution / 2)
 
     if hazard_type is not None:
         divisions = DBSession.query(AdministrativeDivision) \
