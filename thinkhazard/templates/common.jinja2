@@ -1,4 +1,4 @@
-{% macro navbar(feedback_form_url, locale_name) %}
+{% macro navbar(request, feedback_form_url) %}
       <ul class="nav navbar-nav navbar-right">
         <li>
           <a href="{{feedback_form_url}}">{{gettext('User feedback')}}</a>
@@ -12,18 +12,19 @@
         <li class="disabled divider-vertical"><br></li>
         <li class="dropdown languages">
           <a href="" data-toggle="dropdown" class="dropdown-toggle">
-          {% if locale_name == 'en' %}
+          {% set lang = request.matchdict.get('lang') %}
+          {% if lang == 'en' %}
           English
-          {% elif locale_name == 'fr' %}
+          {% elif lang == 'fr' %}
           Français
-          {% elif locale_name == 'es' %}
+          {% elif lang == 'es' %}
           Español
           {% endif %}
           &nbsp;<i class="icon-selector-arrow small"></i></a>
           <ul class="dropdown-menu">
-            <li><a href="{{ 'set_language' | route_url(language='en') }}">English</a></li>
-            <li><a href="{{ 'set_language' | route_url(language='fr') }}">Français</a></li>
-            <li><a href="{{ 'set_language' | route_url(language='es') }}">Español</a></li>
+            <li><a href="{{ request.current_route_url(lang='en') }}">English</a></li>
+            <li><a href="{{ request.current_route_url(lang='fr') }}">Français</a></li>
+            <li><a href="{{ request.current_route_url(lang='es') }}">Español</a></li>
           </ul>
         </li>
       </ul>

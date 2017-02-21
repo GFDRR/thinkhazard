@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{request.locale_name}}">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -61,7 +61,6 @@
     {% endblock scripts %}
     <script src="{{('thinkhazard:static/js/%s.js' % self.name())|static_url}}"></script>
     <script src="{{'thinkhazard:static/js/search.js'|static_url}}"></script>
-    <script src="{{'thinkhazard:static/js/common.js'|static_url}}"></script>
     {% if request.registry['settings'].appname == 'admin' %}
     <div class="ribbon"><span>PREVIEW</span></div>
     {% endif %}

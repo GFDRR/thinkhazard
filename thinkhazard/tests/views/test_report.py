@@ -46,39 +46,39 @@ class TestReportFunction(BaseTestCase):
         super(TestReportFunction, self).tearDown()
 
     def test_report(self):
-        self.testapp.get('/report/32-slug', status=200)
+        self.testapp.get('/en/report/32-slug', status=200)
 
     def test_report__division_desecendants(self):
-        resp = self.testapp.get('/report/32-slug', status=200)
+        resp = self.testapp.get('/en/report/32-slug', status=200)
         # 3 divisions + pin icon
         self.assertEqual(len(resp.pyquery('.breadcrumb .btn')), 4)
 
-        resp = self.testapp.get('/report/10-slug')
+        resp = self.testapp.get('/en/report/10-slug')
         # 1 division + pin icon
         self.assertEqual(len(resp.pyquery('.breadcrumb .btn')), 2)
 
     def test_report__hazardcategories(self):
-        resp = self.testapp.get('/report/11-slug', status=200)
+        resp = self.testapp.get('/en/report/11-slug', status=200)
         # admin div 11 is not linked to any hazard category
         self.assertEqual(len(resp.pyquery('.level-no-data.overview')), 12)
 
-        resp = self.testapp.get('/report/32-slug', status=200)
+        resp = self.testapp.get('/en/report/32-slug', status=200)
         # admin div 10 is not linked to hazard categories with one with high
         # level and one with medium level
         self.assertEqual(len(resp.pyquery('.level-HIG.overview')), 1)
         self.assertEqual(len(resp.pyquery('.level-MED.overview')), 1)
 
     def test_report__zoom_out(self):
-        resp = self.testapp.get('/report/10-slug')
+        resp = self.testapp.get('/en/report/10-slug')
         # no zoom out for level 1
         self.assertFalse('drillup' in resp.body)
 
-        resp = self.testapp.get('/report/20-slug')
+        resp = self.testapp.get('/en/report/20-slug')
         # zoom out for level > 1
         self.assertTrue('drillup' in resp.body)
 
     def test_report__hazard_categories(self):
-        resp = self.testapp.get('/report/32-slug')
+        resp = self.testapp.get('/en/report/32-slug')
         hazards_list = resp.pyquery('.hazard-types-list')
 
         # only two categories with data
@@ -97,58 +97,58 @@ class TestReportFunction(BaseTestCase):
         self.assertTrue('River flood' in hazards.eq(1).html())
 
     def test_report__hazard(self):
-        resp = self.testapp.get('/report/32-slug/EQ', status=200)
+        resp = self.testapp.get('/en/report/32-slug/EQ', status=200)
         self.assertTrue('Climate change recommendation' in resp.body)
         self.assertEqual(len(resp.pyquery('.recommendations li')), 2)
 
     def test_report__further_resources_division(self):
         # admin div 12 is not linked with any region => no further resource
-        resp = self.testapp.get('/report/12-slug/EQ', status=200)
+        resp = self.testapp.get('/en/report/12-slug/EQ', status=200)
         self.assertEqual(len(resp.pyquery('.further-resources ul li')), 0)
 
         # admin div 13 is linked with global region => one single resource
-        resp = self.testapp.get('/report/13-slug/EQ', status=200)
+        resp = self.testapp.get('/en/report/13-slug/EQ', status=200)
         self.assertEqual(len(resp.pyquery('.further-resources ul li')), 1)
 
         # admin div 10 is linked with global region and one country
         # => gets one resource for each
-        resp = self.testapp.get('/report/10-slug/EQ', status=200)
+        resp = self.testapp.get('/en/report/10-slug/EQ', status=200)
         self.assertEqual(len(resp.pyquery('.further-resources ul li')), 2)
 
         # admin div 31 is grand child of admin div 10
         # => hence inherits the same number of further resources
-        resp = self.testapp.get('/report/31-slug/EQ', status=200)
+        resp = self.testapp.get('/en/report/31-slug/EQ', status=200)
         self.assertEqual(len(resp.pyquery('.further-resources ul li')), 2)
 
     def test_report__json(self):
-        self.testapp.get('/report/31/EQ.json?resolution=1000', status=200)
+        self.testapp.get('/en/report/31/EQ.json?resolution=1000', status=200)
 
     def test_report__data_sources(self):
-        resp = self.testapp.get('/report/31-slug/EQ')
+        resp = self.testapp.get('/en/report/31-slug/EQ')
         print resp.body
         self.assertTrue('data_provider' in resp.body)
 
     def test_create_pdf_cover(self):
-        self.testapp.get('/pdf_cover/31', status=200)
+        self.testapp.get('/en/pdf_cover/31', status=200)
 
     def test_report_print(self):
-        self.testapp.get('/report/print/31/EQ', status=200)
+        self.testapp.get('/en/report/print/31/EQ', status=200)
 
     def test_report__contacts(self):
         # There are two contacts for the country 10 which is parent of 32
-        resp = self.testapp.get('/report/10-slug/EQ')
+        resp = self.testapp.get('/en/report/10-slug/EQ')
         self.assertEqual(len(resp.pyquery('.contacts ul li')), 2)
 
         # Division 32 is child of 10, same number of contacts
-        resp = self.testapp.get('/report/31-slug/EQ')
+        resp = self.testapp.get('/en/report/31-slug/EQ')
         self.assertEqual(len(resp.pyquery('.contacts ul li')), 2)
 
         # But no contacts for River Flood
-        resp = self.testapp.get('/report/31-slug/FL')
+        resp = self.testapp.get('/en/report/31-slug/FL')
         self.assertEqual(len(resp.pyquery('.contacts ul li')), 0)
 
         # There's no contact for the country 11
-        resp = self.testapp.get('/report/12-slug/EQ')
+        resp = self.testapp.get('/en/report/12-slug/EQ')
         self.assertEqual(len(resp.pyquery('.contacts ul li')), 0)
 
     @patch('thinkhazard.views.pdf.Popen')
@@ -182,43 +182,43 @@ class TestReportFunction(BaseTestCase):
             pass
         mock.side_effect = add_job
 
-        resp = self.testapp.post('/report/create/32', status=200)
+        resp = self.testapp.post('/en/report/create/32', status=200)
         self.assertEqual(resp.json['divisioncode'], '32')
         self.assertIsNotNone(resp.json['report_id'])
 
     def test_get_report_status__finished(self):
         self._touch_file(self.pdf_file)
         resp = self.testapp.get(
-            '/report/status/31/1970_01_{:s}.json'.format(self.report_id))
+            '/en/report/status/31/1970_01_{:s}.json'.format(self.report_id))
         self.assertEqual(resp.json['status'], 'done')
 
     def test_get_report_status__still_running(self):
         self._touch_file(self.pdf_temp_file)
         resp = self.testapp.get(
-            '/report/status/31/1970_01_{:s}.json'.format(self.report_id))
+            '/en/report/status/31/1970_01_{:s}.json'.format(self.report_id))
         self.assertEqual(resp.json['status'], 'running')
 
     def test_get_pdf_report__not_found(self):
         self.testapp.get(
-            '/report/status/31/1970_01_{:s}.json'.format(self.report_id),
+            '/en/report/status/31/1970_01_{:s}.json'.format(self.report_id),
             status=404)
 
     def test_get_pdf_report__found(self):
         self._touch_file(self.pdf_file)
         resp = self.testapp.get(
-            '/report/31/1970_01_{:s}.pdf'.format(self.report_id))
+            '/en/report/31/1970_01_{:s}.pdf'.format(self.report_id))
         self.assertEqual(resp.body, 'The pdf file')
         self.assertEqual(resp.content_type, 'application/pdf')
 
     def test_get_pdf_report__still_running(self):
         self._touch_file(self.pdf_temp_file)
         self.testapp.get(
-            '/report/31/1970_01_{:s}.pdf'.format(self.report_id),
+            '/en/report/31/1970_01_{:s}.pdf'.format(self.report_id),
             status=400)
 
     def test_get_pdf_report__not_found_bis(self):
         self.testapp.get(
-            '/report/31/1970_01_{:s}.pdf'.format(self.report_id),
+            '/en/report/31/1970_01_{:s}.pdf'.format(self.report_id),
             status=404)
 
     def _touch_file(self, file_name):
