@@ -140,6 +140,8 @@ class HazardType(Base):
     mnemonic = Column(Unicode, unique=True)
     title = Column(Unicode, nullable=False)
     order = Column(Integer)
+    # whether the hazard type should be listed in the UI or not
+    ready = Column(Boolean)
 
     @classmethod
     def get(cls, mnemonic):

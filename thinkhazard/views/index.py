@@ -28,7 +28,8 @@ from ..models import (
 
 @view_config(route_name='index', renderer='templates/index.jinja2')
 def index(request):
-    hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
+    hazard_types = DBSession.query(HazardType).order_by(HazardType.order) \
+        .filter(HazardType.ready.isnot(False))
 
     return {
         'hazards': hazard_types,

@@ -265,7 +265,8 @@ def get_division(code):
 def get_hazard_types(code):
 
     # Get all the hazard types.
-    hazardtype_query = DBSession.query(HazardType).order_by(HazardType.order)
+    hazardtype_query = DBSession.query(HazardType).order_by(HazardType.order) \
+        .filter(HazardType.ready.isnot(False))
 
     # Get the hazard categories corresponding to the administrative
     # division whose code is division_code.
