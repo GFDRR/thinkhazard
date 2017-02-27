@@ -1,0 +1,41 @@
+<script src="{{('%s/leaflet/dist/leaflet.js' % node_modules)|static_url}}"></script>
+<script src="{{'thinkhazard:static/js/data_map.js'|static_url}}"></script>
+<div class="modal-dialog modal-lg" role="document">
+<div class="modal-content">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title" id="faqModalLabel">
+      {{gettext('Data Map')}}
+    </h4>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <div id="data-map"></div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer clearfix">
+    <button type="button" class="btn btn-default" data-dismiss="modal">{{gettext('Close')}}</button>
+  </div>
+</div>
+</div>
+<script>
+  var app = app || {};
+  app.hazardTypes = {{hazard_types | tojson}};
+  app.dataMap = {
+    i18n: {
+      'Global': '{{gettext('Global')}}',
+      'Regional': '{{gettext('Regional')}}',
+      'National': '{{gettext('National')}}',
+      'No Data': '{{gettext('No Data')}}',
+      'Country:': '{{gettext('Country:')}}',
+      'Global:': '{{gettext('Global:')}}',
+      'Regional:': '{{gettext('Regional:')}}',
+      'National:': '{{gettext('National:')}}'
+    }
+  };
+  window.setTimeout(function() {
+    initDataMap("{{'thinkhazard:static/js/World_Data_Holdings.geojson'|static_url}}");
+  }, 500);
+</script>
