@@ -177,7 +177,7 @@ dist: .build/venv
 .PHONY: dbtunnel
 dbtunnel:
 	@echo "Opening tunnel…"
-	ssh -N -L 9999:localhost:5432 wb-thinkhazard-dev-1.sig.cloud.camptocamp.net
+	ssh -N -L 9999:localhost:5432 ec2-54-171-218-87.eu-west-1.compute.amazonaws.com
 
 .PHONY: watch
 watch: .build/dev-requirements.timestamp
