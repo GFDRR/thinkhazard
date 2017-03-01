@@ -142,19 +142,41 @@
         </tr>
       </table>
     </div>
-    <div id="data-source-legend" class="legend hidden">
-      <img src="http://45.55.174.20/geoserver/wms?request=GetLegendGraphic&format=image/png&WIDTH=20&HEIGHT=20&LAYER=hazard:riv0500&legend_options=fontAntiAliasing:true;fontSize:12;forceLabels:on">
+    <div id="data-source-legend" class="legend hidden row">
+      <div class="col-md-3">
+        <img src="http://45.55.174.20/geoserver/wms?request=GetLegendGraphic&format=image/png&WIDTH=20&HEIGHT=20&LAYER=hazard:riv0500&legend_options=fontAntiAliasing:true;fontSize:12;forceLabels:on">
+      </div>
+      <div class="col-md-9">
+        {% for hazardset in sources %}
+        <dl class="dl-horizontal">
+          <dt>Hazard set</dt>
+          <dd>{{hazardset.id}}</dd>
+          <dt>Data owner</dt>
+          <dd>{{hazardset.owner_organization}}</dd>
+          <dt>Intensity unit</dt>
+          <dd>
+            {{hazardset.layers[0].hazardunit}}
+          </dd>
+          <dt>Return periods</dt>
+          <dd>
+            {% for layer in hazardset.layers %}
+            {{layer.return_period if not layer.mask}}
+            {% endfor %}
+          </dd>
+          <dt>Data quality<br><em><small class="text-muted">(model set-up)</small></em></dt>
+          <dd>{{hazardset.calculation_method_quality}}</dd>
+          <dt>Data quality<br><em><small class="text-muted">(research peer review)</small></em></dt>
+          <dd>{{hazardset.scientific_quality}}</dd>
+        </dl>
+        <div class="text-right">
+          <a type="button" class="btn btn-default btn-primary" href="{{hazardset.distribution_url}}" target="_blank">More details</a>
+        </div>
+        {% endfor %}
+      </div>
     </div>
 
 
     <div id="data-source" class="data-source text-center hidden">
-      <h5>
-        {{ngettext('DATA SOURCE', 'DATA SOURCES', sources.__len__())}}
-      </h5>
-      {% for source in sources %}
-      <a href="{{ 'data_source'|route_url(hazardset=source.id) }}">{{ source.owner_organization}}</a>
-      {% if not loop.last %},&nbsp;{% endif %}
-      {% endfor %}
     </div>
     {% endif %}
   </div>
