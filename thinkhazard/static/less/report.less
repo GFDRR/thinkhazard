@@ -71,9 +71,11 @@ body {
         color: white;
       }
       .hazard-icon {
+        @icon-padding: 2px;
         border: @circle-border solid transparent;
         top: -@icon-size / 2 - @circle-border;
-        left: (@hazard-width - @icon-size) / 2 - @circle-border;
+        left: (@hazard-width - @icon-size) / 2 - @circle-border - @icon-padding;
+        padding: @icon-padding;
       }
     }
     a,
