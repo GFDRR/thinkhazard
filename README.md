@@ -293,3 +293,33 @@ Once the translations are OK on Transifex it's possible to pull the translations
 Don't forget to compile the catalog (ie. convert .po to .mo):
 
     make compile_catalog
+
+### Development
+
+There are 3 different ways to translate strings in the templates:
+
+ - `translate` filter
+
+   This should be used for strings corresponding to enumeration tables in
+   database.
+
+```
+{{ hazard.title | translate }}
+```
+
+ - `gettext` method
+
+   To be used for any UI string.
+
+```
+{{gettext('Download PDF')}}
+```
+
+ - model class method
+
+   Some model classes have specific method to retrive the value from a field
+   specific to chosen language.
+
+```
+{{ division.translated_name(request.locale_name)}}
+```
