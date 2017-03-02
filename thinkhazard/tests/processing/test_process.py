@@ -32,6 +32,7 @@ from ...models import (
     HazardType,
     Layer,
     Output,
+    Region,
     )
 
 from .. import settings
@@ -220,13 +221,16 @@ def populate_notpreprocessed(type, unit):
     hazardtype = HazardType.get(type)
     hazardtype_settings = settings['hazard_types'][hazardtype.mnemonic]
 
+    regions = DBSession.query(Region).all()
+
     print 'Populating hazardset {}'.format(hazardset_id)
     hazardset = HazardSet(
         id=hazardset_id,
         hazardtype=hazardtype,
         local=False,
         data_lastupdated_date=datetime.now(),
-        metadata_lastupdated_date=datetime.now())
+        metadata_lastupdated_date=datetime.now(),
+        regions=regions)
     DBSession.add(hazardset)
 
     return_periods = hazardtype_settings['return_periods']
@@ -284,13 +288,16 @@ def populate_preprocessed(type):
     hazardset_id = u'preprocessed'
     hazardtype = HazardType.get(type)
 
+    regions = DBSession.query(Region).all()
+
     print 'Populating hazardset {}'.format(hazardset_id)
     hazardset = HazardSet(
         id=hazardset_id,
         hazardtype=hazardtype,
         local=False,
         data_lastupdated_date=datetime.now(),
-        metadata_lastupdated_date=datetime.now())
+        metadata_lastupdated_date=datetime.now(),
+        regions=regions)
     DBSession.add(hazardset)
 
     layer = Layer(

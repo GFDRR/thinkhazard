@@ -364,6 +364,30 @@ class Harvester(BaseProcessor):
         logger.info(u'Harvesting layer {id} - {title}'.format(**object))
         title = object['title']
 
+        # we need to retrieve more information on this layer
+        # since the regions array is not advertised by the main
+        # regions listing from GeoNode
+        geonode = self.settings['geonode']
+        layer_url = urlunsplit((geonode['scheme'],
+                                geonode['netloc'],
+                                'api/layers/{id}/'.format(**object), '', ''))
+        logger.info(u'  Retrieving {}'.format(layer_url))
+        h = httplib2.Http()
+        response, content = h.request(layer_url)
+        o = json.loads(content)
+
+        if 'regions' not in o.keys():
+            warning(object, 'Attribute "regions" is missing')
+
+        region_ids = []
+        for r in o.get('regions', []):
+            # r is like "/api/regions/1/"
+            region_ids.append(r.split('/')[3])
+
+        regions = DBSession.query(Region) \
+            .filter(Region.id.in_(region_ids)) \
+            .all()
+
         hazardset_id = object['hazard_set']
         if not hazardset_id:
             logger.info(u'  hazard_set is empty')
@@ -479,6 +503,9 @@ class Harvester(BaseProcessor):
             hazardset.distribution_url = object['distribution_url']
         if object['owner__organization'] and not mask:
             hazardset.owner_organization = object['owner__organization']
+        if not mask:
+            hazardset.regions = regions
+            DBSession.add(hazardset)
 
         layer = DBSession.query(Layer).get(object['id'])
         if layer is None:

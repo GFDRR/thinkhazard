@@ -40,6 +40,7 @@ from ...processing.harvesting import Harvester
 def populate():
     DBSession.query(Layer).delete()
     DBSession.query(HazardSet).delete()
+    DBSession.query(Region).delete()
     populate_datamart()
     transaction.commit()
 
@@ -98,13 +99,16 @@ class TestHarvesting(unittest.TestCase):
         harvester.settings = settings
         harvester.harvest_regions()
 
-        self.assertEqual(DBSession.query(Region).count(), 1)
+        self.assertEqual(DBSession.query(Region).count(), 2)
 
     @patch.object(Harvester, 'fetch', return_value=[geonode_layer({
         "hazard_type": 'river_flood',
         "hazard_period": 10,
         "hazard_unit": 'm'})])
-    def test_valid_layer(self, fetch_mock):
+    @patch.object(httplib2.Http, 'request', return_value=(
+        None,
+        json.dumps({})))
+    def test_valid_layer(self, request_mock, fetch_mock):
         '''Valid layer must be added to database'''
         harvester = Harvester()
         harvester.settings = settings
@@ -149,7 +153,10 @@ class TestHarvesting(unittest.TestCase):
             })
         ]
     ])
-    def test_data_update_date_change(self, fetch_mock):
+    @patch.object(httplib2.Http, 'request', return_value=(
+        None,
+        json.dumps({})))
+    def test_data_update_date_change(self, request_mock, fetch_mock):
         '''New data_update_date must reset hazarset.complete and processed'''
         harvester = Harvester()
         harvester.settings = settings
@@ -182,7 +189,10 @@ class TestHarvesting(unittest.TestCase):
             })
         ]
     ])
-    def test_metadata_update_date_change(self, fetch_mock):
+    @patch.object(httplib2.Http, 'request', return_value=(
+        None,
+        json.dumps({})))
+    def test_metadata_update_date_change(self, request_mock, fetch_mock):
         '''New metadata_update_date must reset hazarset.complete'''
         harvester = Harvester()
         harvester.settings = settings
@@ -213,7 +223,10 @@ class TestHarvesting(unittest.TestCase):
             })
         ]
     ])
-    def test_calculation_method_quality_change(self, fetch_mock):
+    @patch.object(httplib2.Http, 'request', return_value=(
+        None,
+        json.dumps({})))
+    def test_calculation_method_quality_change(self, request_mock, fetch_mock):
         '''New calculation_method_quality must reset hazarset.complete'''
         harvester = Harvester()
         harvester.settings = settings
@@ -244,7 +257,10 @@ class TestHarvesting(unittest.TestCase):
             })
         ]
     ])
-    def test_scientific_quality_change(self, fetch_mock):
+    @patch.object(httplib2.Http, 'request', return_value=(
+        None,
+        json.dumps({})))
+    def test_scientific_quality_change(self, request_mock, fetch_mock):
         '''New scientific_quality must reset hazarset.complete'''
         harvester = Harvester()
         harvester.settings = settings
