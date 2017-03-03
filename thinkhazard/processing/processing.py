@@ -38,6 +38,7 @@ from ..models import (
     HazardSet,
     Layer,
     Output,
+    Region,
     )
 
 from . import BaseProcessor
@@ -172,10 +173,21 @@ class Processor(BaseProcessor):
             else:
                 self.bbox = self.bbox.intersection(polygon)
 
+        regions_ids = [r.id for r in hazardset.regions]
+
+        # get the divisions which parents (country) are in the regions set in
+        # the hazardset
+        regions_filter = AdministrativeDivision.parent.has(
+            AdministrativeDivision.parent.has(
+                AdministrativeDivision.regions.any(Region.id.in_(regions_ids))
+            )
+        )
+
         admindivs = DBSession.query(AdministrativeDivision) \
             .filter(AdministrativeDivision.leveltype_id == adminlevel_reg.id) \
             .filter(func.ST_Intersects(AdministrativeDivision.geom,
                     func.ST_GeomFromText(self.bbox.wkt, 4326))) \
+            .filter(regions_filter) \
             .order_by(AdministrativeDivision.id)  # Needed by windowed querying
 
         current = 0

@@ -498,6 +498,17 @@ class FurtherResource(Base):
         lazy='joined')
 
 
+hazardset_region_table = Table(
+    'rel_hazardset_region',
+    Base.metadata,
+    Column('hazardset_id', String,
+           ForeignKey('processing.hazardset.id', ondelete="CASCADE")),
+    Column('region_id', Integer,
+           ForeignKey('datamart.enum_region.id', ondelete="CASCADE")),
+    schema='processing',
+)
+
+
 class HazardSet(Base):
     __tablename__ = 'hazardset'
     __table_args__ = {u'schema': 'processing'}
@@ -545,6 +556,10 @@ class HazardSet(Base):
     processed = Column(DateTime)
 
     hazardtype = relationship('HazardType', backref="hazardsets")
+
+    regions = relationship(
+        'Region',
+        secondary=hazardset_region_table)
 
     def layer_by_level(self, level):
         hazardlevel = HazardLevel.get(level)

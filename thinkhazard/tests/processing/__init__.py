@@ -17,6 +17,9 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
+import random
+import uuid
+
 from shapely.geometry import (
     MultiPolygon,
     Polygon,
@@ -27,6 +30,7 @@ from ...models import (
     DBSession,
     AdminLevelType,
     AdministrativeDivision,
+    Region,
     )
 
 
@@ -34,12 +38,33 @@ def populate_datamart():
     print 'populate datamart'
     DBSession.query(AdministrativeDivision).delete()
 
+    adminlevel_cou = AdminLevelType.get(u'COU')
+    adminlevel_pro = AdminLevelType.get(u'PRO')
     adminlevel_reg = AdminLevelType.get(u'REG')
 
     shape = MultiPolygon([
         Polygon([(0, 0), (0, 1), (1, 1), (1, 0), (0, 0)])
     ])
     geometry = from_shape(shape, 4326)
+
+    country = AdministrativeDivision(**{
+        'code': 10,
+        'leveltype_id': adminlevel_cou.id,
+        'name': u'Administrative division level 1'
+    })
+    region = Region(id=random.randint(0, 0xffffff),
+                    name=uuid.uuid4(), level=3)
+    DBSession.add(region)
+    country.regions = [region]
+    DBSession.add(country)
+
+    province = AdministrativeDivision(**{
+        'code': 20,
+        'leveltype_id': adminlevel_pro.id,
+        'name': u'Administrative division level 2'
+    })
+    province.parent = country
+    DBSession.add(province)
 
     div = AdministrativeDivision(**{
         'code': 30,
@@ -48,6 +73,8 @@ def populate_datamart():
     })
     div.geom = geometry
     div.hazardcategories = []
+    div.parent = province
+
     DBSession.add(div)
 
     DBSession.flush()
