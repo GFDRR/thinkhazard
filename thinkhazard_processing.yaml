@@ -107,3 +107,17 @@ hazard_types:
       MED: [3]
       LOW: [2]
       VLO: [1]
+
+  EH:
+    hazard_type: extreme_heat
+    return_periods:
+      HIG: 5
+      MED: 20
+      LOW: 100
+    thresholds:
+      HIG:
+        WBGT_C: 32.0
+      MED:
+        WBGT_C: 28.0
+      LOW:
+        WBGT_C: 25.0
