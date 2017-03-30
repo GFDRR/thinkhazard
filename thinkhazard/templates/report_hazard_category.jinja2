@@ -155,7 +155,9 @@
           <dd>{{hazardset.owner_organization}}</dd>
           <dt>Intensity unit</dt>
           <dd>
+            {% if hazardset.layers[0] %}
             {{hazardset.layers[0].hazardunit}}
+            {% endif %}
           </dd>
           <dt>Return periods</dt>
           <dd>
