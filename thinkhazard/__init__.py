@@ -1,9 +1,5 @@
 import os
 import subprocess
-from urlparse import (
-    urlparse,
-    urlunparse,
-)
 
 from pyramid.config import Configurator
 from pyramid.httpexceptions import HTTPFound
@@ -197,7 +193,7 @@ def redirect_to_default_language_factory(route_prefix=None):
 
         E.g. /greeter/foobar -> /en/greeter/foobar
         """
-        route = request.matched_route.name.replace(\
+        route = request.matched_route.name.replace(
                 "_language_redirect_fallback", "")
         return HTTPFound(request.route_path(route, **request.matchdict))
 
