@@ -21,6 +21,7 @@ from markdown import markdown
 from pyramid.threadlocal import get_current_request
 from jinja2 import contextfilter
 from pyramid.i18n import get_localizer, TranslationStringFactory
+from tidylib import tidy_fragment
 
 
 def markdown_filter(text):
@@ -33,3 +34,8 @@ def translate(ctx, text, *elements, **kw):
     tsf = TranslationStringFactory('thinkhazard')
     localizer = get_localizer(request)
     return localizer.translate(tsf(text))
+
+
+def tidy(fragment):
+    html, errors = tidy_fragment(fragment)
+    return html

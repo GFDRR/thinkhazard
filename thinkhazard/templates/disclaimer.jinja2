@@ -34,12 +34,23 @@
       <h4>
         {{gettext('Disclaimer')}}
       </h4>
-      {{disclaimer()}}
+      <div class="disclaimer-content closed">
+        {{disclaimer() | tidy}}
+      </div>
     </div>
     <div class="modal-footer">
+      <button type="button" class="btn btn-default disclaimer-more pull-left">
+        {{gettext('More')}}
+      </button>
       <button type="button" class="btn btn-default" data-dismiss="modal">
         {{gettext('I agree')}}
       </button>
     </div>
   </div>
+  <script>
+    $('.disclaimer-more').on('click', function() {
+      $(this).hide();
+      $('.disclaimer-content').removeClass('closed');
+    });
+  </script>
 </div>
