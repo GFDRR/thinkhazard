@@ -47,6 +47,7 @@ requires = [
     'APScheduler==3.0.5',
     'paste==2.0.2',
     'alembic==0.8.10',
+    'pytidylib',
     ]
 
 setup(name='thinkhazard',
