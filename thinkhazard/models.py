@@ -21,6 +21,7 @@ import threading
 import datetime
 import pytz
 from slugify import slugify
+from os.path import splitext
 
 from sqlalchemy import (
     Boolean,
@@ -648,6 +649,10 @@ class Layer(Base):
 
     def filename(self):
         return self.download_url.split('/').pop()
+
+    def extract_name(self):
+        return splitext(self.filename())[0]
+
 
 
 class Output(Base):

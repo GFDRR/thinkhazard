@@ -144,7 +144,7 @@
     </div>
     <div id="data-source-legend" class="legend hidden row">
       <div class="col-md-3">
-        <img src="http://45.55.174.20/geoserver/wms?request=GetLegendGraphic&format=image/png&WIDTH=20&HEIGHT=20&LAYER=hazard:riv0500&legend_options=fontAntiAliasing:true;fontSize:12;forceLabels:on">
+        <img src=""/>
       </div>
       <div class="col-md-9">
         {% for hazardset in sources %}
@@ -155,9 +155,9 @@
           <dd>
             {% for layer in hazardset.layers %}
             {% if hazardset.layers[0] == layer : %}
-              <span class="current-rp">{{layer.return_period if not layer.mask}}</span>
+              <a href="#" class="rp-chooser current-rp" data-name="{{layer.extract_name()}}">{{layer.return_period if not layer.mask}}</a>
             {% else : %}
-              <a href="#" class="rp-chooser">{{layer.return_period if not layer.mask}}</a>
+              <a href="#" class="rp-chooser" data-name="{{layer.extract_name()}}">{{layer.return_period if not layer.mask}}</a>
             {% endif %}
             {% endfor %}
           </dd>

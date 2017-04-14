@@ -412,15 +412,25 @@
     $('#data-source-legend').addClass('hidden');
     $('#data-source').addClass('hidden');
   });
+
+  var dataSourceSource;
+  var updateLegend = function(layerName) {
+    $('#data-source-legend img').attr('src',
+      'http://www.geonode-gfdrrlab.org/geoserver/hazard/ows' +
+      '?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetLegendGraphic&FORMAT=image%2Fpng' +
+      '&LAYER=' + layerName
+    );
+  }
   $('#data-source-map-btn a').on('click', function(e) {
     e.preventDefault();
-
-    dataSourceLayer.setSource(new ol.source.ImageWMS({
+    dataSourceSource = new ol.source.ImageWMS({
       // FIXME should be replaced by appropriate URL
-      url: 'http://45.55.174.20/geoserver/wms',
-      params: {'LAYERS': 'hazard:riv0500'},
+      url: 'http://www.geonode-gfdrrlab.org/geoserver/hazard/ows',
+      params: {'LAYERS': $('.current-rp').attr('data-name')},
       serverType: 'geoserver'
-    }));
+    })
+    updateLegend($('.current-rp').attr('data-name'))
+    dataSourceLayer.setSource(dataSourceSource);
     dataSourceLayer.setVisible(true);
     levelLayer.setVisible(false);
     $('#level-map-btn').removeClass('hidden');
@@ -428,6 +438,16 @@
     $('#level-legend').addClass('hidden');
     $('#data-source-legend').removeClass('hidden');
     $('#data-source').removeClass('hidden');
+  });
+
+  $('.rp-chooser').on('click', function(e) {
+    e.preventDefault();
+    $('.rp-chooser').removeClass('current-rp')
+    $(this).addClass('current-rp')
+    updateLegend($('.current-rp').attr('data-name'))
+    dataSourceSource.updateParams({
+      LAYERS: $(this).attr('data-name')
+    })
   });
 
 })();
