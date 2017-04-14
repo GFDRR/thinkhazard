@@ -424,7 +424,6 @@
   $('#data-source-map-btn a').on('click', function(e) {
     e.preventDefault();
     dataSourceSource = new ol.source.ImageWMS({
-      // FIXME should be replaced by appropriate URL
       url: 'http://www.geonode-gfdrrlab.org/geoserver/hazard/ows',
       params: {'LAYERS': $('.current-rp').attr('data-name')},
       serverType: 'geoserver'
