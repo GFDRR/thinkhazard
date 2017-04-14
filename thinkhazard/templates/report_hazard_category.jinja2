@@ -151,6 +151,16 @@
         <dl class="dl-horizontal">
           <dt>Hazard set</dt>
           <dd>{{hazardset.id}}</dd>
+          <dt>Return periods</dt>
+          <dd>
+            {% for layer in hazardset.layers %}
+            {% if hazardset.layers[0] == layer : %}
+              <span class="current-rp">{{layer.return_period if not layer.mask}}</span>
+            {% else : %}
+              <a href="#" class="rp-chooser">{{layer.return_period if not layer.mask}}</a>
+            {% endif %}
+            {% endfor %}
+          </dd>
           <dt>Data owner</dt>
           <dd>{{hazardset.owner_organization}}</dd>
           <dt>Intensity unit</dt>
@@ -159,16 +169,6 @@
             {{hazardset.layers[0].hazardunit}}
             {% endif %}
           </dd>
-          <dt>Return periods</dt>
-          <dd>
-            {% for layer in hazardset.layers %}
-            {{layer.return_period if not layer.mask}}
-            {% endfor %}
-          </dd>
-          <dt>Data quality<br><em><small class="text-muted">(model set-up)</small></em></dt>
-          <dd>{{hazardset.calculation_method_quality}}</dd>
-          <dt>Data quality<br><em><small class="text-muted">(research peer review)</small></em></dt>
-          <dd>{{hazardset.scientific_quality}}</dd>
         </dl>
         <div class="text-right">
           <a type="button" class="btn btn-default btn-primary" href="{{hazardset.distribution_url}}" target="_blank">More details</a>
