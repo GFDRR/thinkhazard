@@ -154,11 +154,9 @@
           <dt>Return periods</dt>
           <dd>
             {% for layer in hazardset.layers %}
-            {% if hazardset.layers[0] == layer : %}
-              <a href="#" class="rp-chooser current-rp" data-name="{{layer.extract_name()}}">{{layer.return_period if not layer.mask}}</a>
-            {% else : %}
-              <a href="#" class="rp-chooser" data-name="{{layer.extract_name()}}">{{layer.return_period if not layer.mask}}</a>
-            {% endif %}
+            {{ '·' if loop.index > 1 }}
+            <a href="#" class="rp-chooser {{ 'current-rp' if (hazardset.layers[0] == layer) }}" data-name="{{layer.extract_name()}}">
+              {{layer.return_period if not layer.mask}}</a>
             {% endfor %}
           </dd>
           <dt>Data owner</dt>
