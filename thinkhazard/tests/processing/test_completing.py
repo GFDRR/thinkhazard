@@ -32,9 +32,9 @@ from ...models import (
     Layer,
     )
 
-from .. import settings
-from . import populate_datamart
-from .common import new_geonode_id
+from ...tests import settings
+from ..processing import populate_datamart
+from ..common import new_geonode_id
 from ...processing.completing import Completer
 
 

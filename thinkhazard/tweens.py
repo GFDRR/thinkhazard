@@ -23,7 +23,7 @@ from pyramid.response import Response
 from pyramid.renderers import render
 from pyramid.httpexceptions import HTTPNotModified
 
-from . import lock_file
+from ..thinkhazard import lock_file
 from .models import Publication
 
 

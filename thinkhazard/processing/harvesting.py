@@ -43,7 +43,7 @@ from ..models import (
     Harvesting,
     )
 
-from . import BaseProcessor
+from ..processing import BaseProcessor
 
 
 logger = logging.getLogger(__name__)

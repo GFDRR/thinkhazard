@@ -20,7 +20,7 @@ import os
 import shutil
 
 from mock.mock import Mock, patch
-from . import BaseTestCase
+from ..views import BaseTestCase
 
 
 class TestReportFunction(BaseTestCase):

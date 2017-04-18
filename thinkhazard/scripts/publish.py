@@ -32,8 +32,8 @@ from pyramid.scripts.common import parse_vars
 
 from sqlalchemy import engine_from_config
 
-from .. import lock_file
-from .. import load_local_settings
+from ...scripts import lock_file
+from ...scripts import load_local_settings
 from ..models import (
     DBSession,
     Publication,
