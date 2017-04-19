@@ -536,6 +536,11 @@ class Harvester(BaseProcessor):
                 logger.info('  Invalidate processed')
                 hazardset.processed = None
 
+        typename = o.get('typename', None)
+        if typename is None:
+            warning(object, 'Attribute "typename" is missing')
+        layer.typename = typename
+
         layer.hazardlevel = hazardlevel
         layer.mask = mask
         layer.return_period = hazard_period

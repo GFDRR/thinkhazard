@@ -591,6 +591,7 @@ class Layer(Base):
 
     # the layer is referenced in geonode with an id:
     geonode_id = Column(Integer, primary_key=True)
+    typename = Column(String, unique=True)
 
     # a layer is identified by it's return_period and hazard_set:
     hazardset_id = Column(String, ForeignKey('processing.hazardset.id'),
