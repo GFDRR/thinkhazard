@@ -18,6 +18,7 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import re
 import logging
 import traceback
 import httplib2
@@ -318,7 +319,7 @@ class Harvester(BaseProcessor):
                 # we assume the form:
                 # "drought, river_flood, tsunami, coastal_flood, strong_wind"
                 logger.info(u'  Supplemental_information is {}'.format(more))
-                types = more.split(', ')
+                types = re.split(r'\s*,\s*', more)
                 for type in types:
                     if type != '':
                         tmp_object = {
