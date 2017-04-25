@@ -650,10 +650,6 @@ class Layer(Base):
     def filename(self):
         return self.download_url.split('/').pop()
 
-    def extract_name(self):
-        return splitext(self.filename())[0]
-
-
 
 class Output(Base):
     __tablename__ = 'output'

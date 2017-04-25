@@ -155,7 +155,7 @@
           <dd>
             {% for layer in hazardset.layers %}
             {{ '·' if loop.index > 1 }}
-            <a href="#" class="rp-chooser {{ 'current-rp' if (hazardset.layers[0] == layer) }}" data-name="{{layer.extract_name()}}">
+            <a href="#" class="rp-chooser {{ 'current-rp' if (hazardset.layers[0] == layer) }}" data-name="{{layer.typename}}">
               {{layer.return_period if not layer.mask}}</a>
             {% endfor %}
           </dd>
