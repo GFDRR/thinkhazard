@@ -21,7 +21,6 @@ import threading
 import datetime
 import pytz
 from slugify import slugify
-from os.path import splitext
 
 from sqlalchemy import (
     Boolean,
