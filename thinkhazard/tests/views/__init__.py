@@ -75,7 +75,7 @@ def populate_db():
     hazardset1.hazardtype = hazardtype_eq
     hazardset1.data_lastupdated_date = datetime.now()
     hazardset1.metadata_lastupdated_date = datetime.now()
-    hazardset1.distribution_url = u'http://domain.com/path/'
+    hazardset1.detail_url = u'http://domain.com/path/'
     hazardset1.owner_organization = u'data_provider'
     DBSession.add(hazardset1)
 

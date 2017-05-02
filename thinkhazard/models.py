@@ -540,7 +540,7 @@ class HazardSet(Base):
     # this value comes from the linked layers
     scientific_quality = Column(Integer)
     # url to website where the data or information about them can be found
-    distribution_url = Column(String)
+    detail_url = Column(String)
     # name or the organization from which the data comes
     owner_organization = Column(String)
 
@@ -572,7 +572,7 @@ class HazardSet(Base):
         return {
             'id': self.id,
             'owner_organization': self.owner_organization,
-            'distribution_url': self.distribution_url
+            'detail_url': self.detail_url
         }
 
 

@@ -56,7 +56,7 @@ layer_defaults = {
     "hazard_period": '',
     "data_update_date": date_str,
     "metadata_update_date": date_str,
-    "distribution_url": 'www.test.com',
+    "detail_url": 'www.test.com',
     "download_url": 'test.tif',
     "owner__organization": '',
     "calculation_method_quality": 5,
