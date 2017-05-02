@@ -499,9 +499,9 @@ class Harvester(BaseProcessor):
             hazardset.hazardtype = hazardtype
             DBSession.add(hazardset)
 
-        # get distribution_url and owner_organization from last updated layer
-        if object['distribution_url'] and not mask:
-            hazardset.distribution_url = object['distribution_url']
+        # get detail_url and owner_organization from last updated layer
+        if object['detail_url'] and not mask:
+            hazardset.detail_url = object['detail_url']
         if object['owner__organization'] and not mask:
             hazardset.owner_organization = object['owner__organization']
         if not mask:

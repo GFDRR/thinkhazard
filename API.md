@@ -35,7 +35,7 @@ Response: Status code: 200
 {
   "sources": [
     {
-      "distribution_url": "http://45.55.174.20/layers/hazard%3Ainunmask_world_stream_6tthres_2_t_50",
+      "detail_url": "http://45.55.174.20/layers/hazard%3Ainunmask_world_stream_6tthres_2_t_50",
       "id": "FL-GLOBAL-GLOFRIS",
       "owner_organization": "GLOFRIS"
     },
