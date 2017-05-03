@@ -7,7 +7,8 @@
 The following packages must be installed on the system:
 
 -   libpq-dev
--   node/npm
+-   libgdal-dev
+-   a **recent** node/npm
 -   gcc
 -   python-devel
 -   python-virtualenv
