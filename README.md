@@ -97,7 +97,13 @@ Publication consist in overwriting the public database with the admin one. This 
 
 `make publish`
 
-And this will execute as follow : \* Lock the public site in maintenance mode. \* Store a publication date in the admin database. \* Backup the admin database in archives folder. \* Create a new fresh public database. \* Restore the admin backup into public database. \* Unlock the public site from maintenance mode.
+And this will execute as follow :
+ * Lock the public site in maintenance mode.
+ * Store a publication date in the admin database. 
+ * Backup the admin database in archives folder. 
+ * Create a new fresh public database. 
+ * Restore the admin backup into public database. 
+ * Unlock the public site from maintenance mode.
 
 ## Use Apache `mod_wsgi`
 
