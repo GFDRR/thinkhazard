@@ -500,8 +500,11 @@ class Harvester(BaseProcessor):
             DBSession.add(hazardset)
 
         # get detail_url and owner_organization from last updated layer
+        geonode = self.settings['geonode']
+        geonode_base_url = "%s://%s" % (geonode['scheme'], geonode['netloc'])
+
         if object['detail_url'] and not mask:
-            hazardset.detail_url = object['detail_url']
+            hazardset.detail_url = geonode_base_url + object['detail_url']
         if object['owner__organization'] and not mask:
             hazardset.owner_organization = object['owner__organization']
         if not mask:
