@@ -410,7 +410,6 @@
     el.addClass('hidden');
     $('#level-legend').removeClass('hidden');
     $('#data-source-legend').addClass('hidden');
-    $('#data-source').addClass('hidden');
   });
 
   var dataSourceSource;
@@ -436,7 +435,6 @@
     $('#data-source-map-btn').addClass('hidden');
     $('#level-legend').addClass('hidden');
     $('#data-source-legend').removeClass('hidden');
-    $('#data-source').removeClass('hidden');
   });
 
   $('.rp-chooser').on('click', function(e) {
