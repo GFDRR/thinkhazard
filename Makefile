@@ -299,8 +299,8 @@ extract_messages:
 $(HOME)/.transifexrc:
 	echo "[https://www.transifex.com]" > $@
 	echo "hostname = https://www.transifex.com" >> $@
-	echo "username = c2c" >> $@
-	echo "password = c2cc2c" >> $@
+	echo "username = antoine.abt@camptocamp.com" >> $@
+	echo "password = $(TX_PWD)" >> $@
 	echo "token =" >> $@
 
 .PHONY: transifex-push

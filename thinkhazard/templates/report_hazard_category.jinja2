@@ -84,6 +84,32 @@
         © <a href='https://www.mapbox.com/about/maps/'>Mapbox</a>
         © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>
       </div>
+      {% if hazard_category %}
+      <div id="level-map-btn" class="dropdown btn-group toggle-map-btn hidden">
+        <a class="btn btn-xs btn-default" href="">
+          {{ gettext('Show hazard Level') }}
+        </a>
+      </div>
+      <div id="data-source-map-btn" class="dropdown btn-group toggle-map-btn">
+        {% if sources.__len__() > 1 %}
+        <button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="data-source-map-btn" class="btn btn-default dropdown-toggle btn-xs">
+          {{ gettext('Show Data Source') }}
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu  dropdown-menu-right small" aria-labelledby="dLabel">
+          {% for source in sources %}
+          <li class="small">
+            <a href="{{ 'data_source'|route_url(hazardset=source.id) }}">{{ source.id }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <a class="btn btn-xs btn-default" href="">
+          {{ gettext('Show data source') }}
+        </a>
+        {% endif %}
+      </div>
+      {% endif %}
     </div>
     {% if parents.__len__() >= 1 %}
     <a class="btn btn-xs btn-default drillup" href="{{ 'report' | route_url(division=parents[0], hazardtype=hazard_category.hazardtype.mnemonic if hazard_category else '')}}">
@@ -92,13 +118,7 @@
     </a>
     {% endif %}
     {% if hazard_category %}
-    <div class="caption level">
-      {{ hazard_category.hazardtype.title | translate}}
-    </div>
-    <div class="caption location">
-      {{ division.translated_name(locale_name) }}
-    </div>
-    <div class="legend">
+    <div id="level-legend" class="legend">
       <table class="table">
         <tr>
           <td class="level-HIG">
@@ -122,16 +142,39 @@
         </tr>
       </table>
     </div>
-
-    <div class="data-source text-center">
-      <h5>
-        {{ngettext('DATA SOURCE', 'DATA SOURCES', sources.__len__())}}
-      </h5>
-      {% for source in sources %}
-      <a href="{{ 'data_source'|route_url(hazardset=source.id) }}">{{ source.owner_organization}}</a>
-      {% if not loop.last %},&nbsp;{% endif %}
-      {% endfor %}
+    <div id="data-source-legend" class="legend hidden row">
+      <div class="col-md-3">
+        <img src=""/>
+      </div>
+      <div class="col-md-9">
+        {% for hazardset in sources %}
+        <dl class="dl-horizontal">
+          <dt>Hazard set</dt>
+          <dd>{{hazardset.id}}</dd>
+          <dt>Return periods</dt>
+          <dd>
+            {% for layer in hazardset.layers %}
+            {{ '·' if loop.index > 1 }}
+            <a href="#" class="rp-chooser {{ 'current-rp' if (layer.return_period == hazardset.layer_by_level(hazard_category.hazardlevel.mnemonic).return_period) }}" data-name="{{layer.typename}}">
+              {{layer.return_period if not layer.mask}}</a>
+            {% endfor %}
+          </dd>
+          <dt>Data owner</dt>
+          <dd>{{hazardset.owner_organization}}</dd>
+          <dt>Intensity unit</dt>
+          <dd>
+            {% if hazardset.layers[0] %}
+            {{hazardset.layers[0].hazardunit}}
+            {% endif %}
+          </dd>
+        </dl>
+        <div class="text-right">
+          <a type="button" class="btn btn-default btn-primary" href="{{hazardset.distribution_url}}" target="_blank">More details</a>
+        </div>
+        {% endfor %}
+      </div>
     </div>
+
     {% endif %}
   </div>
   {% if contacts and contacts|length > 0 %}

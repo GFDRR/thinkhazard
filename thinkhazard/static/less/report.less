@@ -213,6 +213,13 @@ body {
     z-index: 2;
     font-size: @font-size-small;
   }
+
+  .toggle-map-btn {
+    position: absolute;
+    top: 0.5em;
+    right: 0.5em;
+    z-index: 2;
+  }
 }
 
 
@@ -224,8 +231,8 @@ body {
   }
 
   vertical-align: middle;
-  margin-left: 50px;
-  margin-bottom: 30px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 
   table {
     width: 100%;
@@ -281,12 +288,18 @@ body {
 .data-source {
   padding: 27px 0px 30px;
   margin: 0 20px;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #e6e6e6;
   h5 {
     text-transform: uppercase;
     margin-bottom: 4px;
+  }
+}
+
+.current-rp {
+  font-weight: bold;
+  border-bottom: 1px solid @level-HIG-color;
+  cursor: default;
+  a& {
+    color: black;
   }
 }
 
