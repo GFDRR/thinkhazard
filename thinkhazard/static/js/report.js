@@ -419,15 +419,15 @@
       '?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetLegendGraphic&FORMAT=image%2Fpng' +
       '&LAYER=' + layerName
     );
-  }
+  };
   $('#data-source-map-btn a').on('click', function(e) {
     e.preventDefault();
     dataSourceSource = new ol.source.ImageWMS({
       url: 'http://www.geonode-gfdrrlab.org/geoserver/hazard/ows',
       params: {'LAYERS': $('.current-rp').attr('data-name')},
       serverType: 'geoserver'
-    })
-    updateLegend($('.current-rp').attr('data-name'))
+    });
+    updateLegend($('.current-rp').attr('data-name'));
     dataSourceLayer.setSource(dataSourceSource);
     dataSourceLayer.setVisible(true);
     levelLayer.setVisible(false);
@@ -439,12 +439,12 @@
 
   $('.rp-chooser').on('click', function(e) {
     e.preventDefault();
-    $('.rp-chooser').removeClass('current-rp')
-    $(this).addClass('current-rp')
-    updateLegend($('.current-rp').attr('data-name'))
+    $('.rp-chooser').removeClass('current-rp');
+    $(this).addClass('current-rp');
+    updateLegend($('.current-rp').attr('data-name'));
     dataSourceSource.updateParams({
       LAYERS: $(this).attr('data-name')
-    })
+    });
   });
 
 })();
