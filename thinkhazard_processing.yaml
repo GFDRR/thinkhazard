@@ -1,6 +1,6 @@
 geonode:
   scheme: http
-  netloc: 45.55.174.20
+  netloc: www.geonode-gfdrrlab.org
 
 hazard_types:
   FL:
