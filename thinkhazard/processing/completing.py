@@ -113,16 +113,24 @@ class Completer(BaseProcessor):
         for layer in layers:
             if not layer.downloaded:
                 return 'No data for layer {}'.format(layer.name())
-            with rasterio.drivers():
-                with rasterio.open(self.layer_path(layer)) as reader:
-                    if affine is None:
-                        affine = reader.affine
-                        shape = reader.shape
-                    else:
-                        if (reader.affine != affine or
-                                reader.shape != shape):
-                            return ('All layers should have the same origin,'
+            try:
+                with rasterio.drivers():
+                    with rasterio.open(self.layer_path(layer)) as reader:
+                        if affine is None:
+                            affine = reader.affine
+                            shape = reader.shape
+                        else:
+                            if (reader.affine != affine or
+                                    reader.shape != shape):
+                                return (
+                                    'All layers should have the same origin,'
                                     ' resolution and size')
+            except:
+                logger.error('Layer {} - Error opening file {}'
+                             .format(layer.name(),
+                                     self.layer_path(layer)),
+                             exc_info=True)
+                return 'Error opening layer {}'.format(layer.name())
 
         stats = DBSession.query(
             Layer.local,
