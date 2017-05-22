@@ -22,7 +22,7 @@ import traceback
 import os
 from datetime import datetime
 from urlparse import urlunsplit
-from httplib2 import Http
+import requests
 import transaction
 
 from ..models import (
@@ -102,7 +102,6 @@ class Downloader(BaseProcessor):
 
         # If file not in cache, download it
         if not os.path.isfile(path):
-            h = Http()
             geonode = self.settings['geonode']
             url = urlunsplit((geonode['scheme'],
                               geonode['netloc'],
@@ -110,16 +109,19 @@ class Downloader(BaseProcessor):
                               '',
                               ''))
             logger.info('  Retrieving {}'.format(url))
-            response, content = h.request(url)
+            try:
+                r = requests.get(url, stream=True)
+                r.raise_for_status()
+            except Exception as e:
+                logger.warning('  Unable to download data for layer {}: {}'
+                               .format(layer.name(),
+                                       str(e)))
+                return
 
             logger.info('  Saving to {}'.format(path))
-            try:
-                with open(path, 'wb') as f:
-                    f.write(content)
-            except EnvironmentError:
-                logger.error('  Writing data from layer {} failed'.format(
-                    layer.name()))
-                logger.error(traceback.format_exc())
+            with open(path, 'wb') as f:
+                for chunk in r.iter_content(chunk_size=1024):
+                    f.write(chunk)
 
         layer.downloaded = os.path.isfile(path)
 
