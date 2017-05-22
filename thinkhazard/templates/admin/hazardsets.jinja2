@@ -42,6 +42,9 @@
           {% if set.processed %}
           <small class="text-success">{{set.processed.strftime('%Y-%m-%d %I:%M%p')}}</small>
           {% endif %}
+          {% if set.processing_error %}
+          <small class="text-danger">{{set.processing_error}}</small>
+          {% endif %}
         </td>
       </tr>
     {% endfor %}
