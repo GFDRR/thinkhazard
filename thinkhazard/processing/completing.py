@@ -116,6 +116,9 @@ class Completer(BaseProcessor):
             try:
                 with rasterio.drivers():
                     with rasterio.open(self.layer_path(layer)) as reader:
+                        bounds = reader.bounds
+                        if bounds.bottom > bounds.top:
+                            return 'Image bounds.bottom > bounds.top'
                         if affine is None:
                             affine = reader.affine
                             shape = reader.shape
