@@ -18,7 +18,6 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-import traceback
 import transaction
 import rasterio
 from sqlalchemy import func
@@ -48,15 +47,20 @@ class Completer(BaseProcessor):
     def do_execute(self, hazardset_id=None):
         if self.force:
             try:
-                logger.info('Reset all hazardsets to incomplete state')
-                DBSession.query(HazardSet).update({
+                logger.info('Resetting all hazardsets to incomplete state')
+                hazardsets = DBSession.query(HazardSet)
+                if hazardset_id is not None:
+                    hazardsets = hazardsets \
+                        .filter(HazardSet.id == hazardset_id)
+                hazardsets.update({
                     HazardSet.complete: False,
                     HazardSet.processed: None
                 })
                 transaction.commit()
             except:
                 transaction.abort()
-                raise
+                logger.error('Batch reset to incomplete state failed',
+                             exc_info=True)
 
         ids = DBSession.query(HazardSet.id)
         if not self.force:
@@ -76,7 +80,8 @@ class Completer(BaseProcessor):
                 transaction.commit()
             except Exception:
                 transaction.abort()
-                logger.error(traceback.format_exc())
+                logger.error('An error occurred with hazardset {}'.format(id),
+                             exc_info=True)
 
     def complete_hazardset(self, hazardset_id, dry_run=False):
         logger.info('Completing hazardset {}'.format(hazardset_id))
