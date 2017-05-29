@@ -88,6 +88,9 @@ class Completer(BaseProcessor):
         type_settings = self.settings['hazard_types'][hazardtype.mnemonic]
         preprocessed = 'values' in type_settings
 
+        if len(hazardset.regions) == 0:
+            return 'No associated regions'
+
         layers = []
         if preprocessed:
             if len(hazardset.layers) == 0:
