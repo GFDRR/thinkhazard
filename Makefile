@@ -262,7 +262,7 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 		-e 's#{{WSGISCRIPT_ADMIN}}#$(abspath .build/thinkhazard_admin-$*.wsgi)#' $< > $@
 
 .build/wkhtmltox:
-	curl -o- http://download.gna.org/wkhtmltopdf/0.12/0.12.3/wkhtmltox-0.12.3_linux-generic-amd64.tar.xz | tar -xvJ
+	wget https://github.com/DM87/yocaza/raw/master/wkhtmltox-0.12.3_linux-generic-amd64.tar.xz && tar -xv -f wkhtmltox-0.12.3_linux-generic-amd64.tar.xz
 	mv wkhtmltox .build
 
 .PRECIOUS: node_modules/font-awesome/fonts/fontawesome-webfont.%
