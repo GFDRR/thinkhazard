@@ -263,9 +263,12 @@ class Harvester(BaseProcessor):
             # r is like "/api/regions/1/"
             region_ids.append(r.split('/')[3])
 
-        regions = DBSession.query(Region) \
-            .filter(Region.id.in_(region_ids)) \
-            .all()
+        if len(region_ids) == 0:
+            regions = []
+        else:
+            regions = DBSession.query(Region) \
+                .filter(Region.id.in_(region_ids)) \
+                .all()
 
         hazardtypes = self.collect_hazard_types(object)
         if not hazardtypes:
@@ -385,9 +388,12 @@ class Harvester(BaseProcessor):
             # r is like "/api/regions/1/"
             region_ids.append(r.split('/')[3])
 
-        regions = DBSession.query(Region) \
-            .filter(Region.id.in_(region_ids)) \
-            .all()
+        if len(region_ids) == 0:
+            regions = []
+        else:
+            regions = DBSession.query(Region) \
+                .filter(Region.id.in_(region_ids)) \
+                .all()
 
         hazardset_id = object['hazard_set']
         if not hazardset_id:
