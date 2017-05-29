@@ -72,6 +72,7 @@ class Processor(BaseProcessor):
         if ids.count() == 0:
             logger.info('No hazardset to process')
             return
+        ids = ids.order_by(HazardSet.id)
         for id in ids:
             logger.info(id[0])
             try:

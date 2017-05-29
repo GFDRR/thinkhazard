@@ -63,6 +63,7 @@ class Completer(BaseProcessor):
             ids = ids.filter(HazardSet.complete.is_(False))
         if hazardset_id is not None:
             ids = ids.filter(HazardSet.id == hazardset_id)
+        ids = ids.order_by(HazardSet.id)
         for id in ids:
             try:
                 # complete can be either True or an error message
