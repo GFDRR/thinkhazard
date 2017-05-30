@@ -438,9 +438,12 @@ def contact_edit(request):
 def contact_delete(request):
     id = request.matchdict['id']
     obj = DBSession.query(Contact).get(id)
+    if obj is None:
+        raise HTTPNotFound()
+    for association in obj.associations:
+        DBSession.delete(association)
     DBSession.delete(obj)
-    return HTTPFound(request.route_url('admin_contacts',
-                                       hazard_type=obj.hazardtype.mnemonic))
+    return HTTPFound(request.route_url('admin_contacts'))
 
 
 def contact_process(request, obj):

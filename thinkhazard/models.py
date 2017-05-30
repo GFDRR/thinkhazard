@@ -771,6 +771,6 @@ class ContactAdministrativeDivisionHazardTypeAssociation(Base):
                            ForeignKey('datamart.enum_hazardtype.id'),
                            nullable=False, index=True)
 
-    contact = relationship(Contact)
+    contact = relationship(Contact, backref="associations")
     administrativedivision = relationship(AdministrativeDivision)
     hazardtype = relationship(HazardType)
