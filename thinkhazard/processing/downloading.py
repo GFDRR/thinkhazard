@@ -44,12 +44,24 @@ class Downloader(BaseProcessor):
         parser.add_argument(
             '--hazardset_id', dest='hazardset_id', action='store',
             help='The hazardset id')
+        parser.add_argument(
+            '-c', '--clear-cache', dest='clear_cache',
+            action='store_const', const=True, default=False,
+            help='Clear raster cache')
         return parser
 
-    def do_execute(self, hazardset_id=None):
-        if self.force:
+    def clear_cache(self):
+        logger.info('Clearing raster cache.')
+        cache_path = os.path.join(self.settings['data_path'], 'hazardsets')
+        for filename in os.listdir(cache_path):
+            file_path = os.path.join(cache_path, filename)
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+
+    def do_execute(self, hazardset_id=None, clear_cache=False):
+        if self.force or clear_cache:
             try:
-                logger.info('Reset all layer to not downloaded state.')
+                logger.info('Resetting all layers to not downloaded state.')
                 DBSession.query(Layer).update({
                     Layer.downloaded: False
                 })
@@ -57,6 +69,9 @@ class Downloader(BaseProcessor):
             except:
                 transaction.abort()
                 raise
+
+        if clear_cache:
+            self.clear_cache()
 
         ids = DBSession.query(Layer.geonode_id)
 
