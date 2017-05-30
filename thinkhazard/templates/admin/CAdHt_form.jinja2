@@ -3,7 +3,7 @@
     <select name="country" class="form-control input-sm">
       {% for country in countries %}
       <option value="{{country.id}}"
-        {{ 'selected' if association and country.id == association.administrative_id else ''}}>
+        {{ 'selected' if association and country.id == association.administrativedivision_id else ''}}>
         {{country.name}}
       </option>
       {% endfor %}
