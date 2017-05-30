@@ -15,7 +15,7 @@
     <ul>
       {% for contact in contacts %}
       <li class="item-contact">
-        <div>{{ contact.name }}</div>
+        <div>{{ contact.name if contact.name != '' else '-- not set --' }}</div>
         <div>
           <a href="{{ 'admin_contact_edit' | route_url(id=contact.id) }}"
             >Edit</a>
