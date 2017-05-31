@@ -38,9 +38,14 @@
           {% endif %}
         </td>
         <td class="text-center text-{{'success' if set.processed else 'danger'}}">
+          {% if set.complete %}
           <span class="fa fa-{{'check' if set.processed else 'times'}}"></span><br>
           {% if set.processed %}
           <small class="text-success">{{set.processed.strftime('%Y-%m-%d %I:%M%p')}}</small>
+          {% endif %}
+          {% if set.processing_error %}
+          <small class="text-danger">{{set.processing_error}}</small>
+          {% endif %}
           {% endif %}
         </td>
       </tr>

@@ -72,6 +72,7 @@ class Processor(BaseProcessor):
         if ids.count() == 0:
             logger.info('No hazardset to process')
             return
+        ids = ids.order_by(HazardSet.id)
         for id in ids:
             logger.info(id[0])
             try:
@@ -142,9 +143,13 @@ class Processor(BaseProcessor):
                         self.layers['mask'] = layer
                         self.readers['mask'] = reader
 
-                outputs = self.create_outputs(hazardset)
+                outputs, error = self.create_outputs(hazardset)
+                if error:
+                    hazardset.processing_error = error
                 if outputs:
                     DBSession.add_all(outputs)
+                else:
+                    return
 
             finally:
                 logger.info("  Closing raster files")
@@ -152,15 +157,15 @@ class Processor(BaseProcessor):
                     if reader and not reader.closed:
                         reader.close()
 
-        hazardset.processed = datetime.datetime.now()
+        if not hazardset.processing_error:
+            hazardset.processed = datetime.datetime.now()
+            logger.info('  Successfully processed {},'
+                        ' {} outputs generated in {}'
+                        .format(hazardset.id,
+                                len(outputs),
+                                datetime.datetime.now() - chrono))
+
         DBSession.flush()
-
-        logger.info('  Successfully processed {}, {} outputs generated in {}'
-                    .format(hazardset.id,
-                            len(outputs),
-                            datetime.datetime.now() - chrono))
-
-        return True
 
     def create_outputs(self, hazardset):
         adminlevel_reg = AdminLevelType.get(u'REG')
@@ -223,12 +228,12 @@ class Processor(BaseProcessor):
                             hazardset.hazardtype.mnemonic,
                             shape)
 
-                except Exception as e:
-                    e.message = ("{}-{} raises an exception :\n{}"
-                                 .format(admindiv.code,
-                                         admindiv.name,
-                                         e.message))
-                    raise
+                except:
+                    error = ("Processing of div. {} failed"
+                             .format(admindiv.code))
+                    logger.error(error,
+                                 exc_info=True)
+                    return [], error
 
                 # Create output record
                 if hazardlevel is not None:
@@ -246,7 +251,7 @@ class Processor(BaseProcessor):
                     logger.info('  ... processed {}%'.format(percent))
                     last_percent = percent
 
-        return outputs
+        return outputs, None
 
     def preprocessed_hazardlevel(self, geometry):
         hazardlevel = None

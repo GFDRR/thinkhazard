@@ -18,7 +18,6 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-import traceback
 import transaction
 import rasterio
 from sqlalchemy import func
@@ -48,21 +47,27 @@ class Completer(BaseProcessor):
     def do_execute(self, hazardset_id=None):
         if self.force:
             try:
-                logger.info('Reset all hazardsets to incomplete state')
-                DBSession.query(HazardSet).update({
+                logger.info('Resetting all hazardsets to incomplete state')
+                hazardsets = DBSession.query(HazardSet)
+                if hazardset_id is not None:
+                    hazardsets = hazardsets \
+                        .filter(HazardSet.id == hazardset_id)
+                hazardsets.update({
                     HazardSet.complete: False,
                     HazardSet.processed: None
                 })
                 transaction.commit()
             except:
                 transaction.abort()
-                raise
+                logger.error('Batch reset to incomplete state failed',
+                             exc_info=True)
 
         ids = DBSession.query(HazardSet.id)
         if not self.force:
             ids = ids.filter(HazardSet.complete.is_(False))
         if hazardset_id is not None:
             ids = ids.filter(HazardSet.id == hazardset_id)
+        ids = ids.order_by(HazardSet.id)
         for id in ids:
             try:
                 # complete can be either True or an error message
@@ -75,7 +80,8 @@ class Completer(BaseProcessor):
                 transaction.commit()
             except Exception:
                 transaction.abort()
-                logger.error(traceback.format_exc())
+                logger.error('An error occurred with hazardset {}'.format(id),
+                             exc_info=True)
 
     def complete_hazardset(self, hazardset_id, dry_run=False):
         logger.info('Completing hazardset {}'.format(hazardset_id))
@@ -87,6 +93,9 @@ class Completer(BaseProcessor):
         hazardtype = hazardset.hazardtype
         type_settings = self.settings['hazard_types'][hazardtype.mnemonic]
         preprocessed = 'values' in type_settings
+
+        if len(hazardset.regions) == 0:
+            return 'No associated regions'
 
         layers = []
         if preprocessed:
@@ -113,16 +122,27 @@ class Completer(BaseProcessor):
         for layer in layers:
             if not layer.downloaded:
                 return 'No data for layer {}'.format(layer.name())
-            with rasterio.drivers():
-                with rasterio.open(self.layer_path(layer)) as reader:
-                    if affine is None:
-                        affine = reader.affine
-                        shape = reader.shape
-                    else:
-                        if (reader.affine != affine or
-                                reader.shape != shape):
-                            return ('All layers should have the same origin,'
+            try:
+                with rasterio.drivers():
+                    with rasterio.open(self.layer_path(layer)) as reader:
+                        bounds = reader.bounds
+                        if bounds.bottom > bounds.top:
+                            return 'bounds.bottom > bounds.top'
+                        if affine is None:
+                            affine = reader.affine
+                            shape = reader.shape
+                        else:
+                            if (reader.affine != affine or
+                                    reader.shape != shape):
+                                return (
+                                    'All layers should have the same origin,'
                                     ' resolution and size')
+            except:
+                logger.error('Layer {} - Error opening file {}'
+                             .format(layer.name(),
+                                     self.layer_path(layer)),
+                             exc_info=True)
+                return 'Error opening layer {}'.format(layer.name())
 
         stats = DBSession.query(
             Layer.local,

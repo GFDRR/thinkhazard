@@ -554,6 +554,8 @@ class HazardSet(Base):
     complete_error = Column(String)
     # finally it is processed:
     processed = Column(DateTime)
+    # If not processed, reason why
+    processing_error = Column(String)
 
     hazardtype = relationship('HazardType', backref="hazardsets")
 

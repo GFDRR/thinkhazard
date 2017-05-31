@@ -22,6 +22,7 @@ import transaction
 from datetime import datetime
 from mock import Mock, patch
 from rasterio._io import RasterReader
+from rasterio.coords import BoundingBox
 from affine import Affine
 
 from ...models import (
@@ -30,6 +31,7 @@ from ...models import (
     HazardSet,
     HazardType,
     Layer,
+    Region,
     )
 
 from .. import settings
@@ -48,7 +50,8 @@ def populate():
 def global_reader(path=''):
     reader = Mock(spec=RasterReader)
     reader.shape = (360, 720)
-    reader.affine = Affine(-180., 0.5, 0.0, 90., 0.0, -0.5)
+    reader.affine = Affine(-180., 0.5, 0.0, -90., 0.0, 0.5)
+    reader.bounds = BoundingBox(-180., -90., 0., 0.)
 
     context = Mock()
     context.__enter__ = Mock(return_value=reader)
@@ -59,7 +62,20 @@ def global_reader(path=''):
 def global_reader_bis(path=''):
     reader = Mock(spec=RasterReader)
     reader.shape = (361, 720)
+    reader.affine = Affine(-180., 0.5, 0.0, -90., 0.0, 0.5)
+    reader.bounds = BoundingBox(-180., -90., 0.5, 0.)
+
+    context = Mock()
+    context.__enter__ = Mock(return_value=reader)
+    context.__exit__ = Mock(return_value=False)
+    return context
+
+
+def global_reader_invalid_bounds(path=''):
+    reader = Mock(spec=RasterReader)
+    reader.shape = (360, 720)
     reader.affine = Affine(-180., 0.5, 0.0, 90., 0.0, -0.5)
+    reader.bounds = BoundingBox(-180., 90., 0.5, 0.)
 
     context = Mock()
     context.__enter__ = Mock(return_value=reader)
@@ -87,12 +103,15 @@ class TestCompleting(unittest.TestCase):
         hazardset_id = u'preprocessed'
         hazardtype = HazardType.get(u'VA')
 
+        regions = DBSession.query(Region).all()
+
         hazardset = HazardSet(
             id=hazardset_id,
             hazardtype=hazardtype,
             local=False,
             data_lastupdated_date=datetime.now(),
-            metadata_lastupdated_date=datetime.now())
+            metadata_lastupdated_date=datetime.now(),
+            regions=regions)
         DBSession.add(hazardset)
 
         layer = Layer(
@@ -115,11 +134,53 @@ class TestCompleting(unittest.TestCase):
         Completer().execute(settings)
 
         hazardset = DBSession.query(HazardSet).one()
+        self.assertEqual(hazardset.complete_error, None)
         self.assertEqual(hazardset.complete, True)
 
     @patch('rasterio.open', side_effect=global_reader)
     def test_complete_notpreprocessed(self, open_mock):
         '''Test complete notpreprocessed hazardset'''
+
+        hazardset_id = u'notpreprocessed'
+        hazardtype = HazardType.get(u'EQ')
+
+        regions = DBSession.query(Region).all()
+
+        hazardset = HazardSet(
+            id=hazardset_id,
+            hazardtype=hazardtype,
+            local=False,
+            data_lastupdated_date=datetime.now(),
+            metadata_lastupdated_date=datetime.now(),
+            regions=regions)
+        DBSession.add(hazardset)
+
+        for level in [u'HIG', u'MED', u'LOW']:
+            layer = Layer(
+                hazardlevel=HazardLevel.get(level),
+                mask=False,
+                return_period=None,
+                data_lastupdated_date=datetime.now(),
+                metadata_lastupdated_date=datetime.now(),
+                geonode_id=new_geonode_id(),
+                download_url='test',
+                calculation_method_quality=5,
+                scientific_quality=1,
+                local=False,
+                downloaded=True
+            )
+            hazardset.layers.append(layer)
+
+        transaction.commit()
+
+        Completer().execute(settings)
+
+        hazardset = DBSession.query(HazardSet).one()
+        self.assertEqual(hazardset.complete_error, None)
+        self.assertEqual(hazardset.complete, True)
+
+    def test_no_region(self):
+        '''Test no region'''
 
         hazardset_id = u'notpreprocessed'
         hazardtype = HazardType.get(u'EQ')
@@ -153,7 +214,51 @@ class TestCompleting(unittest.TestCase):
         Completer().execute(settings)
 
         hazardset = DBSession.query(HazardSet).one()
-        self.assertEqual(hazardset.complete, True)
+        self.assertEqual(hazardset.complete_error, u'No associated regions')
+        self.assertEqual(hazardset.complete, False)
+
+    @patch('rasterio.open', side_effect=global_reader_invalid_bounds)
+    def test_invalid_bounds(self, open_mock):
+        '''Test invalid invalid'''
+
+        hazardset_id = u'notpreprocessed'
+        hazardtype = HazardType.get(u'EQ')
+
+        regions = DBSession.query(Region).all()
+
+        hazardset = HazardSet(
+            id=hazardset_id,
+            hazardtype=hazardtype,
+            local=False,
+            data_lastupdated_date=datetime.now(),
+            metadata_lastupdated_date=datetime.now(),
+            regions=regions)
+        DBSession.add(hazardset)
+
+        for level in [u'HIG', u'MED', u'LOW']:
+            layer = Layer(
+                hazardlevel=HazardLevel.get(level),
+                mask=False,
+                return_period=None,
+                data_lastupdated_date=datetime.now(),
+                metadata_lastupdated_date=datetime.now(),
+                geonode_id=new_geonode_id(),
+                download_url='test',
+                calculation_method_quality=5,
+                scientific_quality=1,
+                local=False,
+                downloaded=True
+            )
+            hazardset.layers.append(layer)
+
+        transaction.commit()
+
+        Completer().execute(settings)
+
+        hazardset = DBSession.query(HazardSet).one()
+        self.assertEqual(hazardset.complete_error,
+                         u'bounds.bottom > bounds.top')
+        self.assertEqual(hazardset.complete, False)
 
     @patch('rasterio.open', side_effect=global_reader)
     def test_missing_level(self, open_mock):
@@ -162,12 +267,15 @@ class TestCompleting(unittest.TestCase):
         hazardset_id = u'notpreprocessed'
         hazardtype = HazardType.get(u'EQ')
 
+        regions = DBSession.query(Region).all()
+
         hazardset = HazardSet(
             id=hazardset_id,
             hazardtype=hazardtype,
             local=False,
             data_lastupdated_date=datetime.now(),
-            metadata_lastupdated_date=datetime.now())
+            metadata_lastupdated_date=datetime.now(),
+            regions=regions)
         DBSession.add(hazardset)
 
         for level in [u'HIG', u'MED']:
@@ -191,21 +299,25 @@ class TestCompleting(unittest.TestCase):
         Completer().execute(settings)
 
         hazardset = DBSession.query(HazardSet).one()
+        self.assertEqual(hazardset.complete_error, u'No layer for level LOW')
         self.assertEqual(hazardset.complete, False)
 
     @patch('rasterio.open', side_effect=global_reader)
     def test_missing_mask(self, open_mock):
-        '''Test missing level'''
+        '''Test missing mask'''
 
         hazardset_id = u'notpreprocessed'
         hazardtype = HazardType.get(u'FL')
+
+        regions = DBSession.query(Region).all()
 
         hazardset = HazardSet(
             id=hazardset_id,
             hazardtype=hazardtype,
             local=False,
             data_lastupdated_date=datetime.now(),
-            metadata_lastupdated_date=datetime.now())
+            metadata_lastupdated_date=datetime.now(),
+            regions=regions)
         DBSession.add(hazardset)
 
         for level in [u'HIG', u'MED', u'LOW']:
@@ -229,6 +341,50 @@ class TestCompleting(unittest.TestCase):
         Completer().execute(settings)
 
         hazardset = DBSession.query(HazardSet).one()
+        self.assertEqual(hazardset.complete_error, u'Missing mask layer')
+        self.assertEqual(hazardset.complete, False)
+
+    @patch('rasterio.open', side_effect=Exception())
+    def test_open_exception(self, open_mock):
+        '''Test handling of open exception'''
+
+        hazardset_id = u'notpreprocessed'
+        hazardtype = HazardType.get(u'EQ')
+
+        regions = DBSession.query(Region).all()
+
+        hazardset = HazardSet(
+            id=hazardset_id,
+            hazardtype=hazardtype,
+            local=False,
+            data_lastupdated_date=datetime.now(),
+            metadata_lastupdated_date=datetime.now(),
+            regions=regions)
+        DBSession.add(hazardset)
+
+        for level in [u'HIG', u'MED', u'LOW']:
+            layer = Layer(
+                hazardlevel=HazardLevel.get(level),
+                mask=False,
+                return_period=None,
+                data_lastupdated_date=datetime.now(),
+                metadata_lastupdated_date=datetime.now(),
+                geonode_id=new_geonode_id(),
+                download_url='test',
+                calculation_method_quality=5,
+                scientific_quality=1,
+                local=False,
+                downloaded=True
+            )
+            hazardset.layers.append(layer)
+
+        transaction.commit()
+
+        Completer().execute(settings)
+
+        hazardset = DBSession.query(HazardSet).one()
+        self.assertEqual(hazardset.complete_error,
+                         "Error opening layer notpreprocessed")
         self.assertEqual(hazardset.complete, False)
 
     @patch('rasterio.open', side_effect=[
@@ -242,12 +398,15 @@ class TestCompleting(unittest.TestCase):
         hazardset_id = u'notpreprocessed'
         hazardtype = HazardType.get(u'FL')
 
+        regions = DBSession.query(Region).all()
+
         hazardset = HazardSet(
             id=hazardset_id,
             hazardtype=hazardtype,
             local=False,
             data_lastupdated_date=datetime.now(),
-            metadata_lastupdated_date=datetime.now())
+            metadata_lastupdated_date=datetime.now(),
+            regions=regions)
         DBSession.add(hazardset)
 
         for level in [u'HIG', u'MED', u'LOW']:
@@ -286,4 +445,7 @@ class TestCompleting(unittest.TestCase):
         Completer().execute(settings)
 
         hazardset = DBSession.query(HazardSet).one()
+        self.assertEqual(
+            hazardset.complete_error,
+            u'All layers should have the same origin, resolution and size')
         self.assertEqual(hazardset.complete, False)

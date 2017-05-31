@@ -87,16 +87,22 @@ class BaseProcessor():
             '-v', '--verbose', dest='verbose',
             action='store_const', const=True, default=False,
             help='Increase verbosity')
+        parser.add_argument(
+            '-d', '--debug', dest='debug',
+            action='store_const', const=True, default=False,
+            help='Output debugging informations')
         return parser
 
     def execute(self, settings, dry_run=False, force=False, verbose=False,
-                **kwargs):
+                debug=False, **kwargs):
         self.settings = settings
         self.dry_run = dry_run
         self.force = force
 
-        if verbose:
+        if debug:
             logger.setLevel(logging.DEBUG)
+        elif verbose:
+            logger.setLevel(logging.INFO)
         else:
             logger.setLevel(logging.WARNING)
 

@@ -22,7 +22,7 @@ import traceback
 import os
 from datetime import datetime
 from urlparse import urlunsplit
-from httplib2 import Http
+import requests
 import transaction
 
 from ..models import (
@@ -44,12 +44,24 @@ class Downloader(BaseProcessor):
         parser.add_argument(
             '--hazardset_id', dest='hazardset_id', action='store',
             help='The hazardset id')
+        parser.add_argument(
+            '-c', '--clear-cache', dest='clear_cache',
+            action='store_const', const=True, default=False,
+            help='Clear raster cache')
         return parser
 
-    def do_execute(self, hazardset_id=None):
-        if self.force:
+    def clear_cache(self):
+        logger.info('Clearing raster cache.')
+        cache_path = os.path.join(self.settings['data_path'], 'hazardsets')
+        for filename in os.listdir(cache_path):
+            file_path = os.path.join(cache_path, filename)
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+
+    def do_execute(self, hazardset_id=None, clear_cache=False):
+        if self.force or clear_cache:
             try:
-                logger.info('Reset all layer to not downloaded state.')
+                logger.info('Resetting all layers to not downloaded state.')
                 DBSession.query(Layer).update({
                     Layer.downloaded: False
                 })
@@ -57,6 +69,9 @@ class Downloader(BaseProcessor):
             except:
                 transaction.abort()
                 raise
+
+        if clear_cache:
+            self.clear_cache()
 
         ids = DBSession.query(Layer.geonode_id)
 
@@ -102,7 +117,6 @@ class Downloader(BaseProcessor):
 
         # If file not in cache, download it
         if not os.path.isfile(path):
-            h = Http()
             geonode = self.settings['geonode']
             url = urlunsplit((geonode['scheme'],
                               geonode['netloc'],
@@ -110,16 +124,19 @@ class Downloader(BaseProcessor):
                               '',
                               ''))
             logger.info('  Retrieving {}'.format(url))
-            response, content = h.request(url)
+            try:
+                r = requests.get(url, stream=True)
+                r.raise_for_status()
+            except Exception as e:
+                logger.warning('  Unable to download data for layer {}: {}'
+                               .format(layer.name(),
+                                       str(e)))
+                return
 
             logger.info('  Saving to {}'.format(path))
-            try:
-                with open(path, 'wb') as f:
-                    f.write(content)
-            except EnvironmentError:
-                logger.error('  Writing data from layer {} failed'.format(
-                    layer.name()))
-                logger.error(traceback.format_exc())
+            with open(path, 'wb') as f:
+                for chunk in r.iter_content(chunk_size=1024):
+                    f.write(chunk)
 
         layer.downloaded = os.path.isfile(path)
 
