@@ -107,6 +107,8 @@ class Processor(BaseProcessor):
         self.type_settings = self.settings['hazard_types'][
             hazardset.hazardtype.mnemonic]
 
+        hazardset.processing_error = None
+
         with rasterio.drivers():
             try:
                 logger.info("  Opening raster files")

@@ -3,8 +3,8 @@ geonode:
   netloc: www.geonode-gfdrrlab.org
 
 hazard_types:
-  FL:
-    hazard_type: river_flood
+  FL_void:
+    hazard_type: river_flood_void-retain-for-record
     return_periods:
       HIG: [10, 25]
       MED: 50
@@ -19,7 +19,22 @@ hazard_types:
         cm: 50
         dm: 5
         m: 0.5
-
+  
+  FL:
+    hazard_type: river_flood
+    values:
+      HIG: [4]
+      MED: [3]
+      LOW: [2]
+      VLO: [1]
+  UF:
+    hazard_type: urban_flood
+    values:
+      HIG: [4]
+      MED: [3]
+      LOW: [2]
+      VLO: [1]
+  
   EQ:
     hazard_type: earthquake
     return_periods:
@@ -107,7 +122,21 @@ hazard_types:
       MED: [3]
       LOW: [2]
       VLO: [1]
-
+  
+  WF:
+    hazard_type: wildfire
+    return_periods:
+      HIG: 3
+      MED: 10
+      LOW: 30
+    thresholds:
+      HIG:
+        FWI: 15.0
+      MED:
+        FWI: 30.0
+      LOW:
+        FWI: 30.0
+        
   EH:
     hazard_type: extreme_heat
     return_periods:

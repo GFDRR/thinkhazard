@@ -88,9 +88,11 @@ class TestCompleting(unittest.TestCase):
     def setUp(self):  # NOQA
         populate()
 
-    def test_cli(self):
+    @patch.object(Completer, 'do_execute')
+    def test_cli(self, mock):
         '''Test completer cli'''
         Completer.run(['complete', '--config_uri', 'tests.ini'])
+        mock.assert_called_with(hazardset_id=None)
 
     def test_force(self):
         '''Test completer in force mode'''

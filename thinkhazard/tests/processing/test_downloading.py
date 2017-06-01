@@ -19,6 +19,7 @@
 
 import unittest
 import transaction
+from mock import patch
 
 from .. import settings
 from . import populate_datamart
@@ -35,9 +36,11 @@ class TestDownloading(unittest.TestCase):
     def setUp(self):  # NOQA
         populate()
 
-    def test_cli(self):
+    @patch.object(Downloader, 'do_execute')
+    def test_cli(self, mock):
         '''Test downloader cli'''
         Downloader.run(['complete', '--config_uri', 'tests.ini'])
+        mock.assert_called_with(hazardset_id=None, clear_cache=False)
 
     def test_force(self):
         '''Test downloader in force mode'''
