@@ -1,0 +1,49 @@
+geonode:
+  scheme: http
+  netloc: test.thinkhazard.org
+
+hazard_types:
+  FL:
+    hazard_type: river_flood
+    return_periods:
+      HIG: [10, 25]
+      MED: 50
+      LOW: [100, 1000]
+    mask_return_period: [2, 5]
+    thresholds:
+      global:
+        cm: 100
+        dm: 10
+        m: 1
+      local:
+        cm: 50
+        dm: 5
+        m: 0.5
+
+  EQ:
+    hazard_type: earthquake
+    return_periods:
+      HIG: [100, 250]
+      MED: [475, 500]
+      LOW: [1000, 2500]
+    thresholds:
+      HIG:
+        PGA-g-dec: 0.2
+        PGA-gal: 196.133
+        PGA-g-per: 20
+      MED:
+        PGA-g-dec: 0.1
+        PGA-gal: 98.0665
+        PGA-g-per: 10
+      LOW:
+        PGA-g-dec: 0.1
+        PGA-gal: 98.0665
+        PGA-g-per: 10
+
+  VA:
+    hazard_type: volcanic_ash
+    values:
+      HIG: [103]
+      MED: [102]
+      LOW: [101]
+      VLO: [100, 0]

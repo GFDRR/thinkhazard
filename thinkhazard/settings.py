@@ -12,18 +12,16 @@ def load_full_settings(config_uri, name='admin', options={}):
     settings = get_appsettings(config_uri,
                                name=name,
                                options=options)
-    load_processing_settings(settings)
     load_local_settings(settings, name)
+    load_processing_settings(settings)
     return settings
 
 
 def load_processing_settings(settings):
     """Load processing specific settings.
     """
-    root_folder = os.path.join(os.path.dirname(__file__), '..')
-    main_settings_path = os.path.join(root_folder,
-                                      'thinkhazard_processing.yaml')
-    with open(main_settings_path, 'r') as f:
+    processing_settings_path = settings['processing_settings_path']
+    with open(processing_settings_path, 'r') as f:
         settings.update(yaml.load(f.read()))
 
 
