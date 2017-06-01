@@ -81,10 +81,11 @@ class TestProcess(unittest.TestCase):
     def setUp(self):  # NOQA
         populate()
 
-    @patch('rasterio.open', return_value=global_reader())
-    def test_cli(self, open_mock):
+    @patch.object(Processor, 'do_execute')
+    def test_cli(self, mock):
         '''Test processor cli'''
-        Processor.run(['complete', '--config_uri', 'tests.ini'])
+        Processor.run(['process', '--config_uri', 'tests.ini'])
+        mock.assert_called_with(hazardset_id=None)
 
     @patch('rasterio.open', return_value=global_reader())
     def test_force(self, open_mock):

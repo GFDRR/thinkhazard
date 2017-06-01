@@ -77,10 +77,11 @@ class TestHarvesting(unittest.TestCase):
     def setUp(self):  # NOQA
         populate()
 
-    @patch.object(Harvester, 'fetch', return_value=[])
-    def test_cli(self, fetch_mock):
+    @patch.object(Harvester, 'do_execute')
+    def test_cli(self, mock):
         '''Test harvester cli'''
         Harvester.run(['harvest', '--config_uri', 'tests.ini'])
+        mock.assert_called_with(hazard_type=None)
 
     @patch.object(Harvester, 'fetch', return_value=[])
     def test_force(self, fetch_mock):
