@@ -345,18 +345,18 @@ def import_contacts(argv=sys.argv):
          -  6 is_IDA
          -  7 hazard type
          -  8 hazard mnemonic
-         -  9 name 1
-         - 10 url 1
-         - 11 phone 1
-         - 12 email 1
-         - 13 name 2
-         - 14 url 2
-         - 15 phone 2
-         - 16 email 2
-         - 17 name 3
-         - 18 url 3
-         - 19 phone 3
-         - 20 email 3
+         -  9 name 1   /—————————
+         - 10 url 1   | Contact
+         - 11 phone 1 | #1
+         - 12 email 1  \—————————
+         - 13 name 2   /—————————
+         - 14 url 2   | Contact
+         - 15 phone 2 | #2
+         - 16 email 2  \—————————
+         - 17 name 3   /—————————
+         - 18 url 3   | Contact
+         - 19 phone 3 | #3
+         - 20 email 3  \—————————
         '''
 
         filename = 'data/hazardCountryList_Organizations_20170106.csv'
@@ -379,12 +379,12 @@ def import_contacts(argv=sys.argv):
                 if hazardtype is None:
                     continue
 
-                for i in range(0, 2):
+                for i in range(0, 3):
                     offset = i * 4
                     name = unicode(row[9 + offset].decode('latin1'))
                     url = unicode(row[10 + offset].decode('latin1'))
                     phone = unicode(row[11 + offset].decode('latin1'))
-                    email = unicode(row[14 + offset].decode('latin1'))
+                    email = unicode(row[12 + offset].decode('latin1'))
                     if name is '' and url is '' and \
                        phone is '' and email is '':
                         continue
