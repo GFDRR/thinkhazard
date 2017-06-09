@@ -10,7 +10,7 @@
   // Main
   //
   var source = new ol.source.XYZ({
-    url: 'https://api.mapbox.com/styles/v1/gsdpm/cir6ljf470006bsmehhstmxeh/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZ3NkcG0iLCJhIjoiY2lqbmN5eG9mMDBndHVmbTU5Mmg1djF6MiJ9.QqFCD7tcmccysN8GUClW8w'
+    url: 'https://api.mapbox.com/styles/v1/stufraser1/cj3g19csf00062sjso7dfj4ns/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoic3R1ZnJhc2VyMSIsImEiOiJQdnhvZTlnIn0.SEC9tGQDtw9yPQssVyF-8Q'
   });
   waitForTiles();
 
