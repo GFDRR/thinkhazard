@@ -359,7 +359,7 @@ def import_contacts(argv=sys.argv):
          - 20 email 3  \—————————
         '''
 
-        filename = 'data/hazardCountryList_Organizations_20170106.csv'
+        filename = 'data/hazardCountryList_Organizations_20170609.csv'
         with open(filename, 'rb') as csvfile:
             contacts = csv.reader(csvfile, delimiter=',')
             next(contacts, None)  # skip the headers
