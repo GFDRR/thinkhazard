@@ -276,8 +276,10 @@
       })
     ];
     var styleFn = function(feature) {
-      var strokeColor = feature.get('neighbour') ? '#337ab7' : '#000000';
+      var strokeColor = feature.get('neighbour') ? '#333' : '#000000';
       strokeStyle.setColor(strokeColor);
+      var strokeWidth = feature.get('neighbour') ? 1 : 2;
+      strokeStyle.setWidth(strokeWidth);
       return styles;
     };
     var interaction = new ol.interaction.Select({
