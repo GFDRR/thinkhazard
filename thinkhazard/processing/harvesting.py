@@ -123,6 +123,9 @@ class Harvester(BaseProcessor):
 
     def fetch(self, category, params={}, order_by='title'):
         geonode = self.settings['geonode']
+        # add credentials
+        params['username'] = geonode['username']
+        params['api_key'] = geonode['api_key']
         url = urlunsplit((
             geonode['scheme'],
             geonode['netloc'],
@@ -249,7 +252,9 @@ class Harvester(BaseProcessor):
         geonode = self.settings['geonode']
         doc_url = urlunsplit((geonode['scheme'],
                               geonode['netloc'],
-                              'api/documents/{}/'.format(id), '', ''))
+                              'api/documents/{}/'.format(id),
+                              urlencode({'username': geonode['username'], 'api_key': geonode['api_key']}),
+                              ''))
         logger.info(u'  Retrieving {}'.format(doc_url))
         h = httplib2.Http()
         response, content = h.request(doc_url)
@@ -374,7 +379,9 @@ class Harvester(BaseProcessor):
         geonode = self.settings['geonode']
         layer_url = urlunsplit((geonode['scheme'],
                                 geonode['netloc'],
-                                'api/layers/{id}/'.format(**object), '', ''))
+                                'api/layers/{id}/'.format(**object),
+                                urlencode({'username': geonode['username'], 'api_key': geonode['api_key']}),
+                                ''))
         logger.info(u'  Retrieving {}'.format(layer_url))
         h = httplib2.Http()
         response, content = h.request(layer_url)

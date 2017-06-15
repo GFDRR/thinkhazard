@@ -43,6 +43,31 @@ or:
 
     $ make populatedb DATA=indonesia
 
+In order to harvest geonode instance with full access, you need to create and
+configure an API key.
+On geonode side:
+
+* create a superuser with following command:
+
+    $ python manage.py createsuperuser
+
+* Then, create api keys for all users with:
+
+    $ python manage.py backfill_api_keys
+
+* Finally, you can display all api keys with:
+
+```sql
+SELECT people_profile.id, username, key
+FROM people_profile
+LEFT JOIN tastypie_apikey ON (tastypie_apikey.user_id = people_profile.id)
+```
+
+On Thinkhazard side:
+
+* Change username and api_key value according to previous setup in
+`thinkhazard_processing.yaml` file.
+
 You’re now ready to harvest, download and process the data:
 
     $ make harvest
@@ -99,10 +124,10 @@ Publication consist in overwriting the public database with the admin one. This 
 
 And this will execute as follow :
  * Lock the public site in maintenance mode.
- * Store a publication date in the admin database. 
- * Backup the admin database in archives folder. 
- * Create a new fresh public database. 
- * Restore the admin backup into public database. 
+ * Store a publication date in the admin database.
+ * Backup the admin database in archives folder.
+ * Create a new fresh public database.
+ * Restore the admin backup into public database.
  * Unlock the public site from maintenance mode.
 
 ## Use Apache `mod_wsgi`
@@ -127,7 +152,7 @@ By default, the admin interface authentification file is `/var/www/vhosts/wb-thi
 
 To create a authentification file `.htpasswd` with `admin` as the initial user :
 
-    $ htpasswd -c .htpasswd username
+    $ htpasswd -c .htpasswd admin
 
 It will prompt for the passwd.
 
