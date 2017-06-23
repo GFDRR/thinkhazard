@@ -1,5 +1,5 @@
 geonode:
-  scheme: http
+  scheme: https
   netloc: www.geonode-gfdrrlab.org
   username: thinkhazard
   api_key: xxxxxxxxxxxxxxxxxxxxxxxxxx
