@@ -23,11 +23,20 @@ Create a Python virtual environment and install the project into it:
 
     $ make install
 
+Install postgres `unaccent` extension database engine :
+
+    $ sudo apt install postgresql-contrib
+    
+Edit `/etc/postgresql/9.5/main/postgresql.conf`, and set `max_prepared_transactions` to 10
+
 Create a database:
 
     $ sudo -u postgres createdb -O www-data thinkhazard_admin
     $ sudo -u postgres psql -d thinkhazard_admin -c 'CREATE EXTENSION postgis;'
     $ sudo -u postgres psql -d thinkhazard_admin -c 'CREATE EXTENSION unaccent;'
+    $ sudo -u postgres createdb -O www-data thinkhazard
+    $ sudo -u postgres psql -d thinkhazard -c 'CREATE EXTENSION postgis;'
+    $ sudo -u postgres psql -d thinkhazard -c 'CREATE EXTENSION unaccent;'
 
 If you want to use a different user or different database name, you’ll have to provide your own configuration file. See “Use local.ini” section below.
 
