@@ -77,6 +77,9 @@ def between(value, range):
 
 class Harvester(BaseProcessor):
 
+    # We load system ca bundle in order to trust let's encrypt certificates
+    http_client = httplib2.Http(ca_certs = '/etc/ssl/certs/ca-certificates.crt')
+
     @staticmethod
     def argument_parser():
         parser = BaseProcessor.argument_parser()
@@ -123,6 +126,9 @@ class Harvester(BaseProcessor):
 
     def fetch(self, category, params={}, order_by='title'):
         geonode = self.settings['geonode']
+        # add credentials
+        params['username'] = geonode['username']
+        params['api_key'] = geonode['api_key']
         url = urlunsplit((
             geonode['scheme'],
             geonode['netloc'],
@@ -130,8 +136,7 @@ class Harvester(BaseProcessor):
             urlencode(params),
             ''))
         logger.info(u'Retrieving {}'.format(url))
-        h = httplib2.Http()
-        response, content = h.request(url)
+        response, content = self.http_client.request(url)
         o = json.loads(content)
         return sorted(o['objects'], key=lambda object: object[order_by])
 
@@ -249,10 +254,11 @@ class Harvester(BaseProcessor):
         geonode = self.settings['geonode']
         doc_url = urlunsplit((geonode['scheme'],
                               geonode['netloc'],
-                              'api/documents/{}/'.format(id), '', ''))
+                              'api/documents/{}/'.format(id),
+                              urlencode({'username': geonode['username'], 'api_key': geonode['api_key']}),
+                              ''))
         logger.info(u'  Retrieving {}'.format(doc_url))
-        h = httplib2.Http()
-        response, content = h.request(doc_url)
+        response, content = self.http_client.request(doc_url)
         o = json.loads(content)
 
         if 'regions' not in o.keys():
@@ -374,10 +380,11 @@ class Harvester(BaseProcessor):
         geonode = self.settings['geonode']
         layer_url = urlunsplit((geonode['scheme'],
                                 geonode['netloc'],
-                                'api/layers/{id}/'.format(**object), '', ''))
+                                'api/layers/{id}/'.format(**object),
+                                urlencode({'username': geonode['username'], 'api_key': geonode['api_key']}),
+                                ''))
         logger.info(u'  Retrieving {}'.format(layer_url))
-        h = httplib2.Http()
-        response, content = h.request(layer_url)
+        response, content = self.http_client.request(layer_url)
         o = json.loads(content)
 
         if 'regions' not in o.keys():
