@@ -78,7 +78,7 @@ def between(value, range):
 class Harvester(BaseProcessor):
 
     # We load system ca bundle in order to trust let's encrypt certificates
-    http_client = httplib2.Http(ca_certs = '/etc/ssl/certs/ca-certificates.crt')
+    http_client = httplib2.Http(ca_certs='/etc/ssl/certs/ca-certificates.crt')
 
     @staticmethod
     def argument_parser():
@@ -255,7 +255,8 @@ class Harvester(BaseProcessor):
         doc_url = urlunsplit((geonode['scheme'],
                               geonode['netloc'],
                               'api/documents/{}/'.format(id),
-                              urlencode({'username': geonode['username'], 'api_key': geonode['api_key']}),
+                              urlencode({'username': geonode['username'],
+                                         'api_key': geonode['api_key']}),
                               ''))
         logger.info(u'  Retrieving {}'.format(doc_url))
         response, content = self.http_client.request(doc_url)
@@ -381,7 +382,8 @@ class Harvester(BaseProcessor):
         layer_url = urlunsplit((geonode['scheme'],
                                 geonode['netloc'],
                                 'api/layers/{id}/'.format(**object),
-                                urlencode({'username': geonode['username'], 'api_key': geonode['api_key']}),
+                                urlencode({'username': geonode['username'],
+                                           'api_key': geonode['api_key']}),
                                 ''))
         logger.info(u'  Retrieving {}'.format(layer_url))
         response, content = self.http_client.request(layer_url)
