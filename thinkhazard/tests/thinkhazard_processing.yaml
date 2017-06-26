@@ -1,6 +1,8 @@
 geonode:
   scheme: http
   netloc: test.thinkhazard.org
+  username: thinkhazard
+  api_key: xxxxxxxxxxxxxxxxxxxxxxxxxx
 
 hazard_types:
   FL:
