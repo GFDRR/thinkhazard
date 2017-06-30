@@ -21,7 +21,7 @@ hazard_types:
         cm: 50
         dm: 5
         m: 0.5
-  
+
   FL:
     hazard_type: river_flood
     values:
@@ -29,6 +29,7 @@ hazard_types:
       MED: [3]
       LOW: [2]
       VLO: [1]
+
   UF:
     hazard_type: urban_flood
     values:
@@ -36,7 +37,7 @@ hazard_types:
       MED: [3]
       LOW: [2]
       VLO: [1]
-  
+
   EQ:
     hazard_type: earthquake
     return_periods:
@@ -124,21 +125,18 @@ hazard_types:
       MED: [3]
       LOW: [2]
       VLO: [1]
-  
+
   WF:
     hazard_type: wildfire
     return_periods:
-      HIG: 3
+      HIG: 2
       MED: 10
       LOW: 30
     thresholds:
-      HIG:
-        FWI: 15.0
-      MED:
-        FWI: 30.0
-      LOW:
-        FWI: 30.0
-        
+      HIG: 30.0
+      MED: 20.0
+      LOW: 15.0
+
   EH:
     hazard_type: extreme_heat
     return_periods:
