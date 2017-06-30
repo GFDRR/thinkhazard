@@ -56,7 +56,7 @@ from ..models import (
 # An object for the "no data" category type.
 _hazardlevel_nodata = HazardLevel()
 _hazardlevel_nodata.mnemonic = 'no-data'
-_hazardlevel_nodata.title = 'No data available'
+_hazardlevel_nodata.title = 'No Data'
 _hazardlevel_nodata.description = 'No data for this hazard type.'
 _hazardlevel_nodata.order = float('inf')
 
