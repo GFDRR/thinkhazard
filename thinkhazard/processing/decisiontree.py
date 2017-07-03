@@ -50,6 +50,8 @@ class DecisionMaker(BaseProcessor):
             trans.commit()
         except:
             trans.rollback()
+            logger.error('An error occurred in decision tree',
+                         exc_info=True)
 
 
 def clearall_query():
