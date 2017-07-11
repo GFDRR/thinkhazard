@@ -134,9 +134,15 @@ class Downloader(BaseProcessor):
                 return
 
             logger.info('  Saving to {}'.format(path))
-            with open(path, 'wb') as f:
-                for chunk in r.iter_content(chunk_size=1024):
-                    f.write(chunk)
+            try:
+                with open(path, 'wb') as f:
+                    for chunk in r.iter_content(chunk_size=1024):
+                        f.write(chunk)
+            except:
+                os.unlink(path)
+                logger.error('Failed to save file: {}'.format(path),
+                             exc_info=True)
+                return False
 
         layer.downloaded = os.path.isfile(path)
 
