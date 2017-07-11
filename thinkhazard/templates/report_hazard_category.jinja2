@@ -155,8 +155,12 @@
           <dd>
             {% for layer in hazardset.layers %}
             {{ '·' if loop.index > 1 }}
+            {% if layer.return_period %}
             <a href="#" class="rp-chooser {{ 'current-rp' if (layer.return_period == hazardset.layer_by_level(hazard_category.hazardlevel.mnemonic).return_period) }}" data-name="{{layer.typename}}">
               {{layer.return_period if not layer.mask}}</a>
+            {% else %}
+            <input type=hidden class="current-rp" data-name="{{layer.typename}}"/>
+            {% endif %}
             {% endfor %}
           </dd>
           <dt>Data owner</dt>
