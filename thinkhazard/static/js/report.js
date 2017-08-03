@@ -420,7 +420,12 @@
       'http://www.geonode-gfdrrlab.org/geoserver/hazard/ows' +
       '?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetLegendGraphic&FORMAT=image%2Fpng' +
       '&LAYER=' + layerName
-    );
+    ).on('error', function() {
+      $('#data-source-legend')
+        .find('.service-warning').show().end()
+        .children('div').hide().end();
+      $(this).hide();
+    });
   };
   $('#data-source-map-btn a').on('click', function(e) {
     e.preventDefault();
