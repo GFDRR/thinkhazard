@@ -93,10 +93,17 @@ hazard_types:
 
   TS:
     hazard_type: tsunami
-    values:
-      HIG: [1]
-      MED: [2]
-      LOW: [3]
+    return_periods:
+      HIG: 100
+      MED: 500
+      LOW: 2500
+    thresholds:
+      HIG:
+        m: 2.0
+      MED:
+        m: 1.0
+      LOW:
+        m: 0.5
 
   CF:
     hazard_type: coastal_flood
