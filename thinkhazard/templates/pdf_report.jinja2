@@ -156,8 +156,12 @@
     <script>
       var app = {};
       app.mapUrl = '{{ 'report_geojson'|route_url(divisioncode=division.code, hazardtype=hazard_category.hazardtype.mnemonic)}}';
+      app.neighboursUrl = '{{ 'report_neighbours_geojson'|route_url(divisioncode=division.code)}}';
       app.divisionCode = {{division.code}};
       app.divisionBounds = {{bounds}};
+      {% if hazard_category %}
+        app.hazardType = '{{hazard_category.hazardtype.mnemonic}}';
+      {% endif %}
     </script>
     <script src="{{('%s/openlayers/dist/ol.js' % node_modules)|static_url}}"></script>
     <script src="{{'thinkhazard:static/js/report.js'|static_url}}"></script>
