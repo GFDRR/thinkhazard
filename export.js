@@ -16,7 +16,7 @@ var target = args.slice(-2)[0]
 var file_name = args.slice(-1)[0]
 
 casper.thenOpen(target, function () {
-  casper.wait(2000, function() {
+  casper.waitForSelector('.finished', function() {
     this.captureSelector(file_name, '.map', {
       quality: 90
     })

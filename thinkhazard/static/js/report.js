@@ -381,6 +381,7 @@
   function checkFinished() {
     if (vectorLoaded && tilesLoaded) {
       window.status = 'finished';
+      $('#map').addClass('finished');
     }
   }
 
