@@ -279,30 +279,23 @@ def get_map_report(request):
     file_name = '%s.jpg' % code
     file_path = '%s/%s' % (base_path, file_name)
 
-    print file_path
-
     if not path.isfile(file_path):
         try:
             command += ' %s/../../export.js "%s" %s' % (
                     path.dirname(__file__),
                     request.params.get('url'),
                     file_path)
-            print command
             p = Popen(
                 command, shell=True, stdout=PIPE, stderr=PIPE, close_fds=True)
             # Timeout wkhtmltopdf in case of http error with --window-status
             start = time()
-            print 'start: %s' % unicode(start)
             while p.poll() is None:
                 sleep(0.1)
-                print 'time - start: %s' % unicode(time() - start)
                 if time() - start > 120:
                     p.terminate()
             retcode = p.returncode
             stderr = p.stderr.read()
             stdout = p.stdout.read()
-            print 'stderr : %s' % stderr
-            print 'stdout : %s' % stdout
 
             if retcode == 0:
                 # once the generation has succeeded, rename the file so that
