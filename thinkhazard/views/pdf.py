@@ -262,6 +262,7 @@ def get_pdf_report(request):
     else:
         raise HTTPNotFound('No job found')
 
+
 @view_config(route_name='get_map_report')
 def get_map_report(request):
     """Return the JPG file for job map.
@@ -294,8 +295,6 @@ def get_map_report(request):
                 if time() - start > 120:
                     p.terminate()
             retcode = p.returncode
-            stderr = p.stderr.read()
-            stdout = p.stdout.read()
 
             if retcode == 0:
                 # once the generation has succeeded, rename the file so that
@@ -307,7 +306,6 @@ def get_map_report(request):
 
         except:
             logger.error(traceback.format_exc())
-
 
     if path.isfile(file_path):
         response = FileResponse(
