@@ -1,4 +1,5 @@
-phantom.casperPath = './node_modules/casperjs'
+const path = '/var/www/vhosts/wb-thinkhazard/private/thinkhazard'
+phantom.casperPath = path + '/node_modules/casperjs'
 phantom.injectJs(phantom.casperPath +'/bin/bootstrap.js')
 
 const casper = require('casper').create()
