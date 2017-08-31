@@ -268,8 +268,7 @@ def get_map_report(request):
     """Return the JPG file for job map.
     """
 
-    base_path = request.registry.settings.get('pdf_archive_path')
-    base_path = '/tmp/truite'
+    base_path = '/tmp/'
 
     command = path.join(
         path.dirname(__file__),
