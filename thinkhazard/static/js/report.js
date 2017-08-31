@@ -59,12 +59,16 @@
       if (feature.get('neighbour')) {
         cursor = 'pointer';
         tooltipEl.addClass('neighbour');
-        html = app.goToString.replace('name_of_location',
-            '<b>' + feature.get('name') + '</b>');
+        if (app.goToString) {
+          html = app.goToString.replace('name_of_location',
+              '<b>' + feature.get('name') + '</b>');
+        }
       } else {
         cursor = 'zoom-in';
-        html = app.zoomInString.replace('name_of_location',
-            '<b>' + feature.get('name') + '</b>');
+        if (app.zoomInString) {
+          html = app.zoomInString.replace('name_of_location',
+              '<b>' + feature.get('name') + '</b>');
+        }
       }
       if (feature.get('hazardLevelMnemonic') &&
           feature.get('hazardLevelMnemonic') != 'None') {
@@ -217,7 +221,6 @@
       }
       return styles;
     };
-
     var source = new ol.source.Vector({
       url: url + '?resolution=' + map.getView().getResolution(),
       format: new ol.format.GeoJSON({
@@ -311,7 +314,6 @@
     e.preventDefault();
     $.post(app.createPdfReportUrl)
       .done(function(data) {
-        console.log (data);
         btnStatus(true);
         checkPdfStatus(data.report_id);
       })
@@ -379,6 +381,7 @@
   function checkFinished() {
     if (vectorLoaded && tilesLoaded) {
       window.status = 'finished';
+      $('#map').addClass('finished');
     }
   }
 
@@ -388,11 +391,13 @@
   });
 
   // initialize tooltips
-  $('body').tooltip({
-    container: 'body',
-    trigger: 'hover',
-    selector: '[data-toggle="tooltip"]'
-  });
+  if ($('body').tooltip) {
+    $('body').tooltip({
+      container: 'body',
+      trigger: 'hover',
+      selector: '[data-toggle="tooltip"]'
+    });
+  }
 
   var blkImgSrc = new ol.source.ImageStatic({
     imageExtent: map.getView().calculateExtent(map.getSize()),

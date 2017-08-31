@@ -153,6 +153,7 @@ def add_public_routes(config):
                         '/report/status/{divisioncode:\d+}/{id}.json')
     add_localized_route(config, 'get_pdf_report',
                         '/report/{divisioncode:\d+}/{id}.pdf')
+    add_localized_route(config, 'get_map_report', '/report/map.jpg')
 
     add_localized_route(
         config,

@@ -177,7 +177,7 @@ def create_pdf_report(request):
 
     pages = ' page "%s"' % request.route_url('pdf_about', **query_args)
     for cat in categories:
-        pages += ' page "{}"'.format(
+        pages += ' page "{}&static=true"'.format(
             request.route_url(
                 'report_print',
                 divisioncode=division_code,
@@ -259,6 +259,63 @@ def get_pdf_report(request):
         return response
     elif path.isfile(file_name_temp):
         return HTTPBadRequest('Not finished yet')
+    else:
+        raise HTTPNotFound('No job found')
+
+
+@view_config(route_name='get_map_report')
+def get_map_report(request):
+    """Return the JPG file for job map.
+    """
+
+    base_path = request.registry.settings.get('pdf_archive_path')
+    base_path = '/tmp/truite'
+
+    command = path.join(
+        path.dirname(__file__),
+        '../../.build/phantomjs-2.1.1-linux-x86_64/bin/phantomjs')
+
+    url = request.params.get('url')
+    code = '_'.join(url.split('/')[-2:]).split('?')[0]
+    file_name = '%s.jpg' % code
+    file_path = '%s/%s' % (base_path, file_name)
+
+    if not path.isfile(file_path):
+        try:
+            command += ' %s/../../export.js "%s" %s' % (
+                    path.dirname(__file__),
+                    request.params.get('url'),
+                    file_path)
+            p = Popen(
+                command, shell=True, stdout=PIPE, stderr=PIPE, close_fds=True)
+            # Timeout wkhtmltopdf in case of http error with --window-status
+            start = time()
+            while p.poll() is None:
+                sleep(0.1)
+                if time() - start > 120:
+                    p.terminate()
+            retcode = p.returncode
+
+            if retcode == 0:
+                # once the generation has succeeded, rename the file so that
+                # waiting clients know that it is finished
+                # os.rename(file_name_temp, file_name)
+                print 'success'
+            else:
+                print 'error'
+
+        except:
+            logger.error(traceback.format_exc())
+
+    if path.isfile(file_path):
+        response = FileResponse(
+            file_path,
+            request=request,
+            content_type='application/pdf'
+        )
+        response.headers['Content-Disposition'] = \
+            'attachment; filename="map.jpg"'
+        return response
     else:
         raise HTTPNotFound('No job found')
 

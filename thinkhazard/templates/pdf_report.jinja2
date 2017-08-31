@@ -24,8 +24,12 @@
 <div class="row">
   <div class="col-sm-5 col-sm-offset-1">
     <div class="map-block">
+      {% if request.params.get('static') == 'true' %}
+        <img onload="window.status='finished'" src="{{'get_map_report'|route_url(_query={'url': request.route_url('report_print', divisioncode=division.code, hazardtype=hazard_category.hazardtype.mnemonic)})}}">
+      {% else %}
       <div id="map" class="map" data-hazardtype="{{hazard_category.hazardtype.mnemonic if hazard_category else ''}}">
       </div>
+      {% endif %}
       <div class="attribution">
         <small>
           © <a href='https://www.mapbox.com/about/maps/'>Mapbox</a>
@@ -156,8 +160,12 @@
     <script>
       var app = {};
       app.mapUrl = '{{ 'report_geojson'|route_url(divisioncode=division.code, hazardtype=hazard_category.hazardtype.mnemonic)}}';
+      app.neighboursUrl = '{{ 'report_neighbours_geojson'|route_url(divisioncode=division.code)}}';
       app.divisionCode = {{division.code}};
       app.divisionBounds = {{bounds}};
+      {% if hazard_category %}
+        app.hazardType = '{{hazard_category.hazardtype.mnemonic}}';
+      {% endif %}
     </script>
     <script src="{{('%s/openlayers/dist/ol.js' % node_modules)|static_url}}"></script>
     <script src="{{'thinkhazard:static/js/report.js'|static_url}}"></script>
