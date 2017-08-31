@@ -55,7 +55,7 @@ install: \
 		.build/requirements.timestamp \
 		.build/node_modules.timestamp \
 		.build/wkhtmltox \
-		.build/phantomjs \
+		.build/phantomjs-2.1.1-linux-x86_64 \
 		buildcss \
 		compile_catalog
 
@@ -266,9 +266,9 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 	wget https://github.com/GFDRR/thinkhazard/releases/download/wkhtmltox/wkhtmltox-0.12.3_linux-generic-amd64.tar.xz && tar -xv -f wkhtmltox-0.12.3_linux-generic-amd64.tar.xz
 	mv wkhtmltox .build
 
-.build/phantomjs:
+.build/phantomjs-2.1.1-linux-x86_64:
 	wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 && tar -jxf phantomjs-2.1.1-linux-x86_64.tar.bz2
-	mv phantomjs-2.1.1-linux-x86_64 .build
+	mv phantomjs-2.1.1-linux-x86_64 .build/
 
 .PRECIOUS: node_modules/font-awesome/fonts/fontawesome-webfont.%
 node_modules/font-awesome/fonts/fontawesome-webfont.%: .build/node_modules.timestamp
