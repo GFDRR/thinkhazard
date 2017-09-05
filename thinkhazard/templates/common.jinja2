@@ -1,40 +1,51 @@
 {% macro navbar(request, feedback_form_url) %}
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-          <a href="{{feedback_form_url}}">{{gettext('User feedback')}}</a>
-        </li>
-        <li>
-          <a href="{{'data_map'|route_url}}" class="modal-remote">{{gettext('Data Map')}}</a>
-        </li>
-        <li>
-          <a href="{{'about'|route_url}}" class="modal-remote">{{gettext('About')}}</a>
-        </li>
-        <li>
-          <a href="{{'faq'|route_url}}" class="modal-remote">{{gettext('FAQ')}}</a>
-        </li>
-        <li class="disabled divider-vertical"><br></li>
-        <li class="dropdown languages">
-          <a href="" data-toggle="dropdown" class="dropdown-toggle">
-          {% set lang = request.matchdict.get('lang') %}
-          {% if lang == 'en' %}
-          English
-          {% elif lang == 'fr' %}
-          Français
-          {% elif lang == 'es' %}
-          Español
-          {% endif %}
-          &nbsp;<i class="icon-selector-arrow small"></i></a>
-          <ul class="dropdown-menu">
-            <li><a href="{{ request.current_route_url(lang='en') }}">English</a></li>
-            <li><a href="{{ request.current_route_url(lang='fr') }}">Français</a></li>
-            <li><a href="{{ request.current_route_url(lang='es') }}">Español</a></li>
-          </ul>
-        </li>
-      </ul>
+      <div class="navbar-header visible-xs-block">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        {{ thinkhazard_logo('navbar-brand') }}
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a href="{{feedback_form_url}}">{{gettext('User feedback')}}</a>
+          </li>
+          <li>
+            <a href="{{'data_map'|route_url}}" class="modal-remote">{{gettext('Data Map')}}</a>
+          </li>
+          <li>
+            <a href="{{'about'|route_url}}" class="modal-remote">{{gettext('About')}}</a>
+          </li>
+          <li>
+            <a href="{{'faq'|route_url}}" class="modal-remote">{{gettext('FAQ')}}</a>
+          </li>
+          <li class="disabled divider-vertical"><br></li>
+          <li class="dropdown languages">
+            <a href="" data-toggle="dropdown" class="dropdown-toggle">
+            {% set lang = request.matchdict.get('lang') %}
+            {% if lang == 'en' %}
+            English
+            {% elif lang == 'fr' %}
+            Français
+            {% elif lang == 'es' %}
+            Español
+            {% endif %}
+            &nbsp;<i class="icon-selector-arrow small"></i></a>
+            <ul class="dropdown-menu">
+              <li><a href="{{ request.current_route_url(lang='en') }}">English</a></li>
+              <li><a href="{{ request.current_route_url(lang='fr') }}">Français</a></li>
+              <li><a href="{{ request.current_route_url(lang='es') }}">Español</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
 {% endmacro %}
 
-{% macro thinkhazard_logo() %}
-<a class="logo" href="{{'index'|route_url}}">
+{% macro thinkhazard_logo(klass='') %}
+<a class="logo {{klass}}" href="{{'index'|route_url}}">
   <span class="logo-think">Think</span><span class="logo-hazard">Hazard</span><span class="logo-think">!</span>
 </a>
 {% endmacro %}
