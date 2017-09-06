@@ -73,18 +73,6 @@ ul.horizontal li {
 .modal .logo {
   font-size: 25px;
 }
-@media (max-width: 768px) {
-  .navbar-nav {
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-  .navbar-nav > li > a {
-    padding: calc(@navbar-padding-vertical/2);
-  }
-  .navbar-nav .divider-vertical {
-    display: none;
-  }
-}
 
 .modal-body {
   @media (max-width: 800px) {
@@ -171,6 +159,26 @@ ul.horizontal li {
 
 .hazard-level {
   color: @text-inactive;
+}
+
+@media (max-width: 768px) {
+  .navbar-nav {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .navbar-nav > li > a {
+    padding: calc(@navbar-padding-vertical/2);
+  }
+  .navbar-nav .divider-vertical {
+    display: none;
+  }
+  .hazard-types-list {
+    li {
+      position: static;
+      margin-top: 0;
+      padding-top: 0;
+    }
+  }
 }
 
 /*************
