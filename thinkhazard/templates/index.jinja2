@@ -15,7 +15,7 @@
     <header class="text-center">
       {{ thinkhazard_logo('hidden-xs') }}
       <div class="text-muted">
-        {{gettext('Identify natural hazards in your project area<br>and understand how to reduce their impact')}}
+        {{gettext('Identify natural hazards in your project area<br>and understand how to reduce their impact') | replace('<br>','<span class=newline></span>')}}
       </div>
     </header>
   </div>
