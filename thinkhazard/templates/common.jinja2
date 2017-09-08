@@ -1,5 +1,5 @@
-{% macro navbar(request, feedback_form_url) %}
-      <div class="navbar-header visible-xs-block">
+{% macro navbar(request, feedback_form_url, includes={"home": False, "search": False}) %}
+      <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
           <span class="sr-only">Toggle navigation</span>
           <span class="icon-bar"></span>
@@ -9,6 +9,13 @@
         <span class="navbar-brand">
           {{ thinkhazard_logo() }}
         </span>
+        {% if includes.search %}
+          <form id="search" class="search navbar-form navbar-left" role="search">
+            <div class="form-group form-group-lg">
+              {% include 'search.jinja2' %}
+            </div>
+          </form>
+        {% endif %}
       </div>
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">

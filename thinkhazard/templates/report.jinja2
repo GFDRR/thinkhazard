@@ -18,17 +18,7 @@ Think Hazard - {{ division.translated_name(request.locale_name)}}
 
   <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
-      <div class="navbar-header">
-        <span class="navbar-brand">
-          {{ thinkhazard_logo() }}
-        </span>
-      </div>
-      <form id="search" class="search navbar-form navbar-left" role="search">
-        <div class="form-group form-group-lg">
-          {% include 'search.jinja2' %}
-        </div>
-      </form>
-      {{ navbar(request, feedback_form_url) }}
+      {{ navbar(request, feedback_form_url, includes={"search": True, "home": True}) }}
     </div>
   </nav>
 
