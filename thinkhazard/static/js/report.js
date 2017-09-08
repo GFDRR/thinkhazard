@@ -459,4 +459,11 @@
     });
   });
 
+  $('.search .input-group-addon').on('click', function() {
+    $('.navbar').addClass('search-focused');
+  });
+  $('.tt-input').on('blur', function() {
+    $('.navbar').removeClass('search-focused');
+  });
+
 })();
