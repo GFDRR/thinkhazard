@@ -64,6 +64,7 @@ Think Hazard - {{ division.translated_name(request.locale_name)}}
              data-toggle="tooltip"
              data-placement="bottom">
             <i class="fa hazard-icon icon-overview"></i><br>
+            <span>{{ gettext('Overview') }}</span>
             {% if not hazard_category %}
             <div class="arrow"></div>
             {% endif %}
