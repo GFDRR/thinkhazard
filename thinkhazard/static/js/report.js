@@ -460,7 +460,10 @@
   });
 
   $('.search .input-group-addon').on('click', function() {
-    $('.navbar').addClass('search-focused');
+    $('.navbar').toggleClass('search-focused');
+    if ($('.navbar').hasClass('search-focused')) {
+      $('.tt-input').focus();
+    }
   });
   $('.tt-input').on('blur', function() {
     $('.navbar').removeClass('search-focused');
