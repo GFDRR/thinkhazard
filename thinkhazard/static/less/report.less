@@ -525,6 +525,22 @@ footer {
   .hazard-level {
     width: ~"calc(26em + 5px)";
   }
+  .hazard-types-list {
+    white-space: nowrap;
+    overflow-y: hidden;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    li {
+      position: relative;
+      width: 45px;
+      &.active a i.hazard-icon,
+      a i.hazard-icon {
+        font-size: 32px;
+        top: 0;
+        left: 3px;
+      }
+    }
+  }
 }
 
 
