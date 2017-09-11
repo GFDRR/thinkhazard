@@ -469,4 +469,18 @@
     $('.navbar').removeClass('search-focused');
   });
 
+  var mediaCheck = function() {
+    var mq = '(max-width: 768px)';
+    var mapDiv = $('.map-block');
+    if (window.matchMedia(mq).matches) {
+      mapDiv.insertAfter('.page-header.detail');
+    } else {
+      mapDiv.prependTo('.row .col-sm-5');
+    }
+    map.updateSize();
+  };
+  mediaCheck();
+
+  $(window).on('resize', mediaCheck);
+
 })();
