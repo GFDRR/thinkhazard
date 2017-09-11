@@ -530,14 +530,38 @@ footer {
     overflow-y: hidden;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    display: flex;
+    width: ~"calc(100% + 20px)";
+    margin: 0 -10px;
     li {
       position: relative;
-      width: 45px;
+      min-width: 68px;
+      &.active {
+        border-radius: 5px;
+      }
       &.active a i.hazard-icon,
       a i.hazard-icon {
         font-size: 32px;
-        top: 0;
-        left: 3px;
+        position: static;
+        /* top: 0; */
+        /* left: 3px; */
+      }
+      span {
+        white-space: initial;
+        line-height: 14px;
+        font-size: 14px;
+        height: 3em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        letter-spacing: -1px;
+      }
+    }
+  }
+  [lang=es] {
+    .hazard-types-list li {
+      span {
+        font-size: 13px;
       }
     }
   }

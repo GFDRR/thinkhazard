@@ -176,6 +176,7 @@ Think Hazard - {{ division.translated_name(request.locale_name)}}
     title="{{ hazard.hazardtype.title | translate }}"
      >
     <i class="fa hazard-icon icon-{{hazard.hazardtype.mnemonic|lower|replace(' ', '')}}"></i><br>
+    <span>{{ hazard.hazardtype.title | translate }}</span>
     {% if hazard_category and hazard.hazardtype.mnemonic == hazard_category.hazardtype.mnemonic %}
     <div class="arrow"></div>
     {% endif %}
