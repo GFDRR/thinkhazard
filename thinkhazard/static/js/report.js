@@ -465,9 +465,11 @@
       $('.tt-input').focus();
     }
   });
-  $('.tt-input').on('blur', function() {
-    $('.navbar').removeClass('search-focused');
-  });
+  setTimeout(function() {
+    $('.tt-input').on('blur', function() {
+      $('.navbar').removeClass('search-focused');
+    });
+  }, 50);
 
   var mediaCheck = function() {
     var mq = '(max-width: 768px)';
