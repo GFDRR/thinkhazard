@@ -32,8 +32,9 @@
         <ul class="hazard-types-list horizontal list-unstyled">
           {% for hazard in hazards %}
           <li class="no-data text-center ">
-            <i class="fa hazard-icon icon-{{ hazard.mnemonic|lower|replace(' ', '') }}"></i><br>
-              {{ hazard.title | translate }}
+            <i class="fa hazard-icon icon-{{ hazard.mnemonic|lower|replace(' ', '') }}"></i>
+            <br>
+            <span>{{ hazard.title | translate }}</span>
           </li>
           {% endfor %}
         </ul>
