@@ -471,8 +471,8 @@
     });
   }, 50);
 
+  var mq = '(max-width: 768px)';
   var mediaCheck = function() {
-    var mq = '(max-width: 768px)';
     var mapDiv = $('.map-block');
     if (window.matchMedia(mq).matches) {
       mapDiv.insertAfter('.page-header.detail');
@@ -484,5 +484,12 @@
   mediaCheck();
 
   $(window).on('resize', mediaCheck);
+
+  // On mobile, scroll horizontally to make active hazard visible
+  if (window.matchMedia(mq).matches) {
+    $('.hazard-types-list').scrollLeft(
+      $('.hazard-types-list li.active').position().left - 5
+    );
+  }
 
 })();
