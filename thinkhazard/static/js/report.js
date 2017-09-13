@@ -1,4 +1,5 @@
 (function() {
+  var mq = '(max-width: 768px)';
 
   // Tells whether all the background layer tiles are loaded
   var tilesLoaded = false;
@@ -391,7 +392,7 @@
   });
 
   // initialize tooltips
-  if ($('body').tooltip) {
+  if ($('body').tooltip && !window.matchMedia(mq).matches) {
     $('body').tooltip({
       container: 'body',
       trigger: 'hover',
@@ -471,7 +472,6 @@
     });
   }, 50);
 
-  var mq = '(max-width: 768px)';
   var mediaCheck = function() {
     var mapDiv = $('.map-block');
     if (window.matchMedia(mq).matches) {
