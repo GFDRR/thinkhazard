@@ -66,8 +66,11 @@ ul.horizontal li {
 }
 
 .modal-body {
-  @media (max-width: 800px) {
+  @media (max-width: 768px) {
     font-size: 14px;
+    max-height: ~"calc(100vh - 12em)";
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 }
 .disclaimer-content.closed {
