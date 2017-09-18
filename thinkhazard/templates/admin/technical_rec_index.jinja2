@@ -9,9 +9,19 @@
   <div class="admin-technicalrecommendations container">
 
     <h3>Technical Recommendations
-      <a class="btn btn-primary pull-right"
-        href="{{ 'admin_technical_rec_new' | route_url }}"
-        >New Recommendation</a></h3>
+      <a class="btn btn-primary pull-right" href="{{ 'admin_technical_rec_new' | route_url }}">
+        New Recommendation
+      </a>
+    </h3>
+    <form class="form-horizontal">
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="filter">Filter</label>
+        <div class="col-sm-4">
+          <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <input class="form-control" id="filter" placeholder="">
+        </div>
+      </div>
+    </form>
     <ul>
       {% for technical_rec in technical_recs %}
       <li class="item-technicalrecommendation">
@@ -38,6 +48,17 @@
     if (confirm("Delete this technical recommendation ?")) {
       location = this.getAttribute('href');
     }
+  });
+  $('#filter').on('input', function() {
+    var search = $(this).val();
+    $('.close').toggle(search!=='');
+    $('.item-technicalrecommendation').show().each(function(i, li) {
+      if (li.innerHTML.toLowerCase().match(search.toLowerCase())) { return; }
+      $(li).hide();
+    });
+  });
+  $('.close').hide().on('click', function() {
+    $('#filter').val('').trigger('input');
   });
 </script>
 {% endblock %}

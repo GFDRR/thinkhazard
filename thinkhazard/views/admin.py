@@ -124,14 +124,13 @@ def hazardcategory(request):
              renderer='templates/admin/technical_rec_index.jinja2')
 def technical_rec(request):
     technical_recs = DBSession.query(TechnicalRecommendation) \
-        .all()
+        .order_by(TechnicalRecommendation.text).all()
     for technical_rec in technical_recs:
         technical_rec.hazardcategories = \
             ', '.join([association.hazardcategory.name() for association in
                        technical_rec.hazardcategory_associations])
     return {
-        'technical_recs': technical_recs,
-        'test': [str(x) for x in xrange(10)],
+        'technical_recs': technical_recs
         }
 
 
