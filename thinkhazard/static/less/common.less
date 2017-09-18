@@ -127,6 +127,51 @@ ul.horizontal li {
   }
 }
 
+.socialbutton-wrapper {
+  margin-bottom: 1em;
+  display: flex;
+  .btn {
+    filter: grayscale(90%) opacity(80%);
+    transition: filter .25s;
+    flex: 1;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 600;
+    max-width: ~"calc(50% - 7.5px)";
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background: none;
+    border: none;
+    &:hover {
+      text-decoration: underline;
+    }
+    &:first-child {
+      margin-right: 1em;
+    }
+    img {
+      padding: 4px;
+      border-radius: 24px;
+    }
+    &.twitter {
+      color: #5BC2F0;
+      img {
+        background: #5BC2F0;
+      }
+    }
+    &.facebook {
+      color: #435D96;
+      img {
+        background: #435D96;
+      }
+    }
+  }
+  &:hover {
+    .btn {
+      filter: none;
+    }
+  }
+}
+
 /****************
  * hazard icons *
  ***************/

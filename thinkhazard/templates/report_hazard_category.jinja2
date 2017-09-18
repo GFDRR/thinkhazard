@@ -77,6 +77,7 @@
   {% endif %}
 </div>
 <div class="col-sm-5">
+
   <div class="map-block">
     <div id="map" class="map">
       <div class="map-tooltip"></div>
@@ -182,6 +183,18 @@
 
     {% endif %}
   </div>
+
+  <div class="socialbutton-wrapper">
+    <a class="btn btn-info twitter" href="https://twitter.com/share?url=http://savjee.be/2015/01/Creating-static-social-share-buttons/&amp;via=Xafke">
+      <img src="{{'thinkhazard:static/images/icon-twitter.png'|static_url}}" alt="Twitter">
+      {{gettext('Share on twitter')}}
+    </a>
+    <a class="btn btn-primary facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://savjee.be/2015/01/Creating-static-social-share-buttons/">
+      <img src="{{'thinkhazard:static/images/icon-facebook.png'|static_url}}" alt="Facebook">
+      {{gettext('Share on Facebook')}}
+    </a>
+  </div>
+
   {% if contacts and contacts|length > 0 %}
   <div class="contacts">
     <h4>
