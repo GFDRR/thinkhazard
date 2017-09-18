@@ -278,7 +278,9 @@ def admindiv_hazardsets_hazardtype(request):
         'name': row.name,
         'level_2': row.parent.name,
         'level_1': row.parent.parent.name,
-        'hazardset': row.hazardcategories[0].hazardsets[0].id,
+        'hazardset':
+            row.hazardcategories[0].hazardsets[0].id if
+            row.hazardcategories[0].hazardsets else None,
         'hazard_level':
             row.hazardcategories[0].hazardcategory.hazardlevel.mnemonic
     } for row in query]
