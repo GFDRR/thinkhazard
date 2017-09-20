@@ -110,6 +110,7 @@ def main(global_config, **settings):
                          '/contact/CAdHt_form')
 
     config.add_renderer('geojson', GeoJSON())
+    config.add_renderer('csv', 'thinkhazard.renderers.CSVRenderer')
 
     scan_ignore = ['thinkhazard.tests']
     if settings['appname'] != 'public':
