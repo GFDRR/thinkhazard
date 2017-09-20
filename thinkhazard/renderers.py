@@ -1,12 +1,15 @@
 import csv
 try:
-    from StringIO import StringIO # python 2
+    from StringIO import StringIO  # python 2
 except ImportError:
-    from io import StringIO # python 3
+    from io import StringIO  # python 3
 
-import csv, codecs, cStringIO
+import codecs
+import cStringIO
+
 
 class CSVRenderer(object):
+
     def __init__(self, info):
         pass
 
@@ -23,7 +26,8 @@ class CSVRenderer(object):
                 response.content_type = 'text/csv; charset=utf-8'
 
         fout = StringIO()
-        writer = UnicodeWriter(fout, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        writer = UnicodeWriter(fout, delimiter=',', quotechar='"',
+                               quoting=csv.QUOTE_MINIMAL)
 
         writer.writerow(value.get('header', []))
         writer.writerows(value.get('rows', []))
@@ -32,6 +36,7 @@ class CSVRenderer(object):
 
 
 class UTF8Recoder:
+
     """
     Iterator that reads an encoded stream and reencodes the input to UTF-8
     """
@@ -44,12 +49,13 @@ class UTF8Recoder:
     def next(self):
         return self.reader.next().encode("utf-8")
 
+
 class UnicodeReader:
+
     """
     A CSV reader which will iterate over lines in the CSV file "f",
     which is encoded in the given encoding.
     """
-
     def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
         f = UTF8Recoder(f, encoding)
         self.reader = csv.reader(f, dialect=dialect, **kwds)
@@ -60,6 +66,7 @@ class UnicodeReader:
 
     def __iter__(self):
         return self
+
 
 class UnicodeWriter:
     """

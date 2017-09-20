@@ -287,6 +287,7 @@ def admindiv_hazardsets_hazardtype(request):
 
     return data
 
+
 @view_config(route_name='admin_admindiv_hazardsets_export', renderer='csv')
 def admindiv_hazardsets_export(request):
     query = DBSession.query(AdministrativeDivision) \
@@ -299,7 +300,7 @@ def admindiv_hazardsets_export(request):
         .order_by(AdministrativeDivision.name) \
         .options(contains_eager(AdministrativeDivision.hazardcategories))
 
-    data = [ [
+    data = [[
         row.hazardcategories[0].hazardcategory.hazardtype.mnemonic,
         unicode(row.code),
         row.name,
@@ -307,7 +308,7 @@ def admindiv_hazardsets_export(request):
         ] for row in query]
 
     return {
-            'headers': [ 'hazardtype', 'code', 'name', 'hazard_level' ],
+            'headers': ['hazardtype', 'code', 'name', 'hazard_level'],
             'rows': data
             }
 
