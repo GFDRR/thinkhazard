@@ -66,9 +66,13 @@
     </table>
 
     <div class="text-center">
-      <a href="#" class="btn btn-default csv" download="export.csv">
+      <a href="#" class="btn btn-primary csv" download="export.csv">
         <i class="fa fa-download"></i>
         «{{request.matchdict['hazardtype']}}» CSV Export
+      </a>&nbsp;
+      <a href="{{request.route_url('admin_admindiv_hazardsets_export')}}" class="btn btn-default" download="export.csv">
+        <i class="fa fa-download"></i>
+        Generate CSV Export for all types
       </a>
     </div>
 
