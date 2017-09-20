@@ -287,6 +287,30 @@ def admindiv_hazardsets_hazardtype(request):
 
     return data
 
+@view_config(route_name='admin_admindiv_hazardsets_export', renderer='csv')
+def admindiv_hazardsets_export(request):
+    query = DBSession.query(AdministrativeDivision) \
+        .join(HazardCategoryAdministrativeDivisionAssociation) \
+        .join(HazardCategory) \
+        .join(HazardType) \
+        .join(AdminLevelType) \
+        .filter(AdminLevelType.id == 3) \
+        .order_by(HazardType.mnemonic) \
+        .order_by(AdministrativeDivision.name) \
+        .options(contains_eager(AdministrativeDivision.hazardcategories))
+
+    data = [ [
+        row.hazardcategories[0].hazardcategory.hazardtype.mnemonic,
+        unicode(row.code),
+        row.name,
+        row.hazardcategories[0].hazardcategory.hazardlevel.mnemonic
+        ] for row in query]
+
+    return {
+            'headers': [ 'hazardtype', 'code', 'name', 'hazard_level' ],
+            'rows': data
+            }
+
 
 @view_config(route_name='admin_climate_rec')
 def climate_rec(request):
