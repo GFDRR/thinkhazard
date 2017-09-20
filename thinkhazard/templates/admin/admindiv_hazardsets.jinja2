@@ -9,7 +9,9 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ng-table/1.0.0-beta.9/ng-table.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/ng-table/1.0.0-beta.9/ng-table.min.js"></script>
+
   <div class="container" ng-app="myApp" ng-controller="MainCtrl as ctrl">
+
     <div class="changerecommendations-navbar container">
       <ul class="nav nav-tabs">
         {% for hazard_type in hazard_types %}
@@ -22,9 +24,11 @@
         {% endfor %}
       </ul>
     </div>
+
     <div class="text-muted">
       List of admin divisions (level 3) and corresponding chosen hazard set
     </div>
+
     <table ng-table="ctrl.data" class="table table-condensed table-striped" show-filter="true">
       <tr ng-repeat="row in $data">
         <td sortable"'code'" title="'Code'">
@@ -60,12 +64,27 @@
         </td>
       </tr>
     </table>
+
+    <div class="text-center">
+      <a href="#" class="btn btn-default csv" download="export.csv">
+        <i class="fa fa-download"></i>
+        «{{request.matchdict['hazardtype']}}» CSV Export
+      </a>
+    </div>
+
   </div>
+
   <script>
     var myApp = angular.module('myApp', ['ngTable']);
     myApp.controller('MainCtrl', function(NgTableParams) {
       var data = {{data}};
       this.data = new NgTableParams({ }, {dataset: data});
+      var csvContent = 'data:text/csv;charset=utf-8,';
+      data.forEach(function(item, index){
+        csvContent +=  [ "{{request.matchdict['hazardtype']}}", item.code, item.name, item.hazard_level ].join(',');
+        csvContent += index < data.length ? "\n" : "";
+      });
+      $('.csv').attr('href', encodeURI(csvContent));
     });
   </script>
 {% endblock %}
