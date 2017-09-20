@@ -164,6 +164,16 @@ ul.horizontal li {
 .hazard-level {
   color: @text-inactive;
 }
+.row10 {
+  @media (min-width: 994px) {
+    .col-md-2 {
+      width: 20%;
+      &.col-md-offset-5 {
+        margin-left: 40%;
+      }
+    }
+  }
+}
 
 @media (max-width: 768px) {
   .navbar-nav {
