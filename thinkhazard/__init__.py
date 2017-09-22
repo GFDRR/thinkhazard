@@ -80,6 +80,8 @@ def main(global_config, **settings):
                          '/technical_rec/{id:\d+}/delete')
 
         config.add_route('admin_admindiv_hazardsets', '/admindiv_hazardsets')
+        config.add_route('admin_admindiv_hazardsets_export',
+                         '/admindiv_hazardsets_export')
         config.add_route('admin_admindiv_hazardsets_hazardtype',
                          '/admindiv_hazardsets/{hazardtype:([A-Z]{2})}')
 
@@ -110,6 +112,7 @@ def main(global_config, **settings):
                          '/contact/CAdHt_form')
 
     config.add_renderer('geojson', GeoJSON())
+    config.add_renderer('csv', 'thinkhazard.renderers.CSVRenderer')
 
     scan_ignore = ['thinkhazard.tests']
     if settings['appname'] != 'public':
