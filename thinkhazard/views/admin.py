@@ -290,26 +290,17 @@ def admindiv_hazardsets_hazardtype(request):
 
 @view_config(route_name='admin_admindiv_hazardsets_export', renderer='csv')
 def admindiv_hazardsets_export(request):
-    query = DBSession.query(AdministrativeDivision) \
-        .join(HazardCategoryAdministrativeDivisionAssociation) \
-        .join(HazardCategory) \
-        .join(HazardType) \
-        .join(AdminLevelType) \
-        .filter(AdminLevelType.id == 3) \
-        .order_by(HazardType.mnemonic) \
-        .order_by(AdministrativeDivision.name) \
-        .options(contains_eager(AdministrativeDivision.hazardcategories))
-
-    data = [[
-        row.hazardcategories[0].hazardcategory.hazardtype.mnemonic,
-        unicode(row.code),
-        row.name,
-        row.hazardcategories[0].hazardcategory.hazardlevel.mnemonic
-        ] for row in query]
+    query = '''select ht.mnemonic, ad.id, ad.name, hl.mnemonic
+    from processing.output as o left join datamart.administrativedivision
+    as ad on o.admin_id = ad.id left join datamart.enum_hazardlevel hl on
+    o.hazardlevel_id = hl.id left join processing.hazardset as hs on
+    o.hazardset_id = hs.id left join datamart.enum_hazardtype as ht on
+    hs.hazardtype_id = ht.id where ad.leveltype_id = 3'''
+    rows = DBSession.execute(query).fetchall()
 
     return {
             'headers': ['hazardtype', 'code', 'name', 'hazard_level'],
-            'rows': data
+            'rows': rows
             }
 
 
