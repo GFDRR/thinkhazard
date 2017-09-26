@@ -488,10 +488,18 @@
   // On mobile, scroll horizontally to make active hazard visible
   if (window.matchMedia(mq).matches) {
     var left = $('.hazard-types-list li.active').position().left;
-    $('.hazard-types-list').scrollLeft(left - 100);
-    $('.hazard-types-list').animate({
-      scrollLeft: left - 5
-    }, 750, 'easeOutBounce');
+    var options;
+    var el;
+    if ($('.hazard-types-list li.active').hasClass('overview')) {
+      el = $('.hazard-types-list li.active');
+      el.css('margin-left', '100px');
+      options = { marginLeft: 0 };
+    } else {
+      el = $('.hazard-types-list');
+      el.scrollLeft(left - 100);
+      options = { scrollLeft: left - 5 };
+    }
+    el.animate(options, 750, 'easeOutBounce');
   }
 
 })();
