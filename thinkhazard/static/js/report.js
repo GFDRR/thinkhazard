@@ -487,9 +487,11 @@
 
   // On mobile, scroll horizontally to make active hazard visible
   if (window.matchMedia(mq).matches) {
-    $('.hazard-types-list').scrollLeft(
-      $('.hazard-types-list li.active').position().left - 5
-    );
+    var left = $('.hazard-types-list li.active').position().left;
+    $('.hazard-types-list').scrollLeft(left - 100);
+    $('.hazard-types-list').animate({
+      scrollLeft: left - 5
+    }, 750, 'easeOutBounce');
   }
 
 })();

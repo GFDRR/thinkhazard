@@ -129,6 +129,7 @@ Think Hazard - {{ division.translated_name(request.locale_name)}}
 {% else %}
     <script src="{{('%s/openlayers/dist/ol.js' % node_modules)|static_url}}"></script>
 {% endif %}
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
     <script>
       {% if hazard_category %}
       app.mapUrl = '{{ 'report_geojson'|route_url(divisioncode=division.code, hazardtype=hazard_category.hazardtype.mnemonic)}}';
