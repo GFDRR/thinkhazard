@@ -4,6 +4,7 @@
    locale_name,
    hazards_sorted=None,
    parents=[],
+   request=None,
    parent_division=None) %}
 <div class="col-sm-7">
   {% if hazard_category %}
@@ -182,16 +183,6 @@
     </div>
 
     {% endif %}
-  </div>
-
-  <div class="socialbutton-wrapper">
-    Share on
-    <a class="btn btn-info twitter" href="https://twitter.com/share?url=http://savjee.be/2015/01/Creating-static-social-share-buttons/&amp;via=Xafke">
-      <img src="{{'thinkhazard:static/images/icon-twitter.png'|static_url}}" alt="Twitter">
-    </a>
-    <a class="btn btn-primary facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://savjee.be/2015/01/Creating-static-social-share-buttons/">
-      <img src="{{'thinkhazard:static/images/icon-facebook.png'|static_url}}" alt="Facebook">
-    </a>
   </div>
 
   {% if contacts and contacts|length > 0 %}

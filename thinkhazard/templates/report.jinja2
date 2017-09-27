@@ -16,7 +16,7 @@ Think Hazard - {{ division.translated_name(request.locale_name)}}
 {% block content %}
   {% set overview_url = 'report_overview'|route_url(division=division) %}
 
-  <nav class="navbar navbar-default navbar-fixed-top">
+  <nav class="navbar navbar-default navbar-fixed-top report-navbar">
     <div class="container">
       {{ navbar(request, feedback_form_url, includes={"search": True, "home": True}) }}
     </div>
@@ -89,6 +89,7 @@ Think Hazard - {{ division.translated_name(request.locale_name)}}
           request.locale_name,
           hazards_sorted=hazards_sorted,
           parents=parents,
+          request=request,
           parent_division=parent_division) }}
     </div>
     <div class="row">
@@ -98,6 +99,17 @@ Think Hazard - {{ division.translated_name(request.locale_name)}}
             {{gettext('We welcome any suggestions for improvements to the tool, including suggestions of data, recommendations, or resources to include.')}}
             <br>
             {{gettext('If you have any, please [provide feedback](%(link)s).', link=feedback_form_url)|markdown}}
+            <hr>
+            <div class="socialbutton-wrapper">
+              Share on
+              <a class="btn btn-info twitter" href="https://twitter.com/share?url={{request.current_route_url()}}">
+                <img src="{{'thinkhazard:static/images/icon-twitter.png'|static_url}}" alt="Twitter">
+              </a>
+              <a class="btn btn-primary facebook" href="https://www.facebook.com/sharer/sharer.php?u={{request.current_route_url()}}">
+                <img src="{{'thinkhazard:static/images/icon-facebook.png'|static_url}}" alt="Facebook">
+              </a>
+            </div>
+
           </div>
         </div>
       </div>

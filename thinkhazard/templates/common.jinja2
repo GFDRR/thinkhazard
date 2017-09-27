@@ -33,10 +33,10 @@
           </li>
           <li class="socialbutton-wrapper">
             Share on:
-            <a class="btn btn-info twitter" href="https://twitter.com/share?url=http://thinkhazard.org">
+            <a class="btn btn-info twitter" href="https://twitter.com/share?url={{request.current_route_url()}}">
               <img src="{{'thinkhazard:static/images/icon-twitter.png'|static_url}}" alt="Twitter">
             </a>
-            <a class="btn btn-primary facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://thinkhazard.org">
+            <a class="btn btn-primary facebook" href="https://www.facebook.com/sharer/sharer.php?u={{request.current_route_url()}}">
               <img src="{{'thinkhazard:static/images/icon-facebook.png'|static_url}}" alt="Facebook">
             </a>
           </li>
