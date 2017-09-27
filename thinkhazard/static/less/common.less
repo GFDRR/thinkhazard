@@ -128,25 +128,22 @@ ul.horizontal li {
 }
 
 .socialbutton-wrapper {
-  margin-bottom: 1em;
-  display: flex;
+  .navbar & {
+    margin: 0 14.75px;
+    color: #777;
+  }
   .btn {
-    filter: grayscale(90%) opacity(80%);
+    filter: grayscale(90%) opacity(75%);
     transition: filter .25s;
-    flex: 1;
     font-size: 14px;
-    text-transform: uppercase;
-    font-weight: 600;
-    max-width: ~"calc(50% - 7.5px)";
-    overflow: hidden;
-    text-overflow: ellipsis;
     background: none;
     border: none;
+    display: inline-block;
     &:hover {
       text-decoration: underline;
     }
     &:first-child {
-      margin-right: 1em;
+      /* margin-right: 1em; */
     }
     img {
       padding: 4px;
@@ -167,8 +164,11 @@ ul.horizontal li {
   }
   &:hover {
     .btn {
-      filter: none;
+      filter: grayscale(0%) opacity(75%);
     }
+  }
+  .btn:hover {
+    filter: none;
   }
 }
 
