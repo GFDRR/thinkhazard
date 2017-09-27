@@ -1,4 +1,5 @@
 (function() {
+  var mq = '(max-width: 768px)';
 
   // Tells whether all the background layer tiles are loaded
   var tilesLoaded = false;
@@ -391,7 +392,7 @@
   });
 
   // initialize tooltips
-  if ($('body').tooltip) {
+  if ($('body').tooltip && !window.matchMedia(mq).matches) {
     $('body').tooltip({
       container: 'body',
       trigger: 'hover',
@@ -458,5 +459,47 @@
       LAYERS: $(this).attr('data-name')
     });
   });
+
+  $('.search .input-group-addon').on('click', function() {
+    $('.navbar').toggleClass('search-focused');
+    if ($('.navbar').hasClass('search-focused')) {
+      $('.tt-input').focus();
+    }
+  });
+  setTimeout(function() {
+    $('.tt-input').on('blur', function() {
+      $('.navbar').removeClass('search-focused');
+    });
+  }, 50);
+
+  var mediaCheck = function() {
+    var mapDiv = $('.map-block');
+    if (window.matchMedia(mq).matches) {
+      mapDiv.insertAfter('.page-header.detail');
+    } else {
+      mapDiv.prependTo('.row .col-sm-5');
+    }
+    map.updateSize();
+  };
+  mediaCheck();
+
+  $(window).on('resize', mediaCheck);
+
+  // On mobile, scroll horizontally to make active hazard visible
+  if (window.matchMedia(mq).matches) {
+    var left = $('.hazard-types-list li.active').position().left;
+    var options;
+    var el;
+    if ($('.hazard-types-list li.active').hasClass('overview')) {
+      el = $('.hazard-types-list li.active');
+      el.css('margin-left', '100px');
+      options = { marginLeft: 0 };
+    } else {
+      el = $('.hazard-types-list');
+      el.scrollLeft(left - 100);
+      options = { scrollLeft: left - 5 };
+    }
+    el.animate(options, 1000, 'easeOutBounce');
+  }
 
 })();

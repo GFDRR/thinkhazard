@@ -1,2 +1,3 @@
 (function() {
+  $('.search-field').blur();
 })();

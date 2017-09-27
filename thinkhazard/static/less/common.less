@@ -66,8 +66,11 @@ ul.horizontal li {
 }
 
 .modal-body {
-  @media (max-width: 800px) {
+  @media (max-width: 768px) {
     font-size: 14px;
+    max-height: ~"calc(100vh - 12em)";
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 }
 .disclaimer-content.closed {
@@ -113,6 +116,16 @@ ul.horizontal li {
   height: 30px;
 }
 
+.newline {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .newline {
+    display: inline-block;
+    width: .2em;
+  }
+}
 
 /****************
  * hazard icons *
@@ -150,6 +163,46 @@ ul.horizontal li {
 
 .hazard-level {
   color: @text-inactive;
+}
+.row10 {
+  @media (min-width: 994px) {
+    .col-md-2 {
+      width: 20%;
+      &.col-md-offset-5 {
+        margin-left: 40%;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-nav {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .navbar-nav > li > a {
+    padding: calc(@navbar-padding-vertical/2);
+  }
+  .navbar-nav .divider-vertical {
+    display: none;
+  }
+  .navbar-toggle {
+    z-index: 1;
+  }
+  .hazard-types-list {
+    li {
+      position: static;
+      margin-top: 0;
+      padding-top: 0;
+    }
+  }
+  .hazard_select {
+    position: absolute;
+    top: 1.3em;
+    right: 1.3em;
+    width: 10em;
+    z-index: 8000;
+  }
 }
 
 /*************
@@ -393,6 +446,7 @@ body.preview {
  ****************/
 #data-map {
   height: 500px;
+  max-height: 66vh;
 
   .legend {
     line-height: 24px;

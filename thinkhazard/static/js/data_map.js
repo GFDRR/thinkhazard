@@ -13,38 +13,31 @@ function initDataMap(dataUrl) {
   map.boxZoom.disable();
   map.keyboard.disable();
 
-  // Create control for dropdown selector
-
-  var selector = L.control({
-    position: 'topright'
-  });
 
   var select = $('<select>', {
-    'class': 'hazard_select form-control'
+    'class': 'hazard_select form-control',
+    'name': 'hazard_select'
   });
 
-  // Add content to the control
-  selector.onAdd = function(map) {
-    //create select element within container (with id, so it can be referred to later
-    for (var i = 0; i < app.hazardTypes.length; i++) {
-      var type = app.hazardTypes[i];
-      select.append($('<option>', {
-        value: type[0],
-        html: type[1]
-      }));
-    }
-    return select[0];
-  };
+  //create select element within container (with id, so it can be referred to later
+  for (var i = 0; i < app.hazardTypes.length; i++) {
+    var type = app.hazardTypes[i];
+    select.append($('<option>', {
+      value: type[0],
+      html: type[1]
+    }));
+  }
 
-  // Add the selector to the map
-  selector.addTo(map);
+  setTimeout(function() {
+    $('.modal-body').prepend(select);
+  }, 200);
 
   // Get json through jquery
 
   $.getJSON(dataUrl, function(data) {
     var geojson = L.geoJson(data);
 
-    L.DomEvent.addListener(select[0], 'change', changeHandler);
+    select.on('change', changeHandler);
 
     // Change style based on dropdown
 

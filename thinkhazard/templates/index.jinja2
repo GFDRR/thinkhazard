@@ -8,17 +8,14 @@
 {% block content %}
   <nav class="navbar navbar-default">
     <div class="container">
-      <div id="navbar" class="navbar-collapse collapse">
       {{ navbar(request, feedback_form_url) }}
-      </div>
     </div>
   </nav>
   <div class="container">
     <header class="text-center">
-        {{ thinkhazard_logo() }}
+      {{ thinkhazard_logo('hidden-xs') }}
       <div class="text-muted">
-      {{gettext('Identify natural hazards in your project area<br>and understand how to reduce their impact')}}
-
+        {{gettext('Identify natural hazards in your project area<br>and understand how to reduce their impact') | replace('<br>','<span class=newline></span>')}}
       </div>
     </header>
   </div>
@@ -35,8 +32,9 @@
         <ul class="hazard-types-list horizontal list-unstyled">
           {% for hazard in hazards %}
           <li class="no-data text-center ">
-            <i class="fa hazard-icon icon-{{ hazard.mnemonic|lower|replace(' ', '') }}"></i><br>
-              {{ hazard.title | translate }}
+            <i class="fa hazard-icon icon-{{ hazard.mnemonic|lower|replace(' ', '') }}"></i>
+            <br>
+            <span>{{ hazard.title | translate }}</span>
           </li>
           {% endfor %}
         </ul>

@@ -466,6 +466,108 @@ footer {
   padding: 0 15px;
 }
 
+@media (max-width: 768px) {
+  #search {
+    float: right;
+    margin-right: 2.5em;
+  }
+  .navbar {
+    .search .input-group-addon {
+      border-radius: 5px;
+      padding-right: 10px;
+      height: 32px;
+      padding-top: 0;
+      i {
+        font-size: 22px;
+      }
+    }
+    .twitter-typeahead {
+      display: none !important;
+    }
+    .search .input-group-addon::after {
+      display: none;
+      left: 42px;
+      border-width: 16px 0 16px 14px;
+    }
+    .navbar-form {
+      border: none;
+    }
+    .tt-hint,
+    .tt-input {
+      height: 32px;
+      padding: 6px 12px 6px 60px;
+      font-size: 18px;
+      line-height: 1.42857143;
+      border-radius: 5px;
+    }
+    &.search-focused {
+      .navbar-brand {
+        display: none !important;
+      }
+      .twitter-typeahead {
+        display: inline-block !important;
+      }
+      .search .input-group-addon {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        padding-right: 10px;
+        &::after {
+          display: block;
+        }
+      }
+      #search {
+        margin-right: 0;
+      }
+    }
+  }
+  .page-header {
+    font-size: 20px;
+  }
+  .hazard-level {
+    width: ~"calc(26em + 5px)";
+  }
+  .hazard-types-list {
+    white-space: nowrap;
+    overflow-y: hidden;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    width: ~"calc(100% + 20px)";
+    margin: 0 -10px;
+    li {
+      position: relative;
+      min-width: 68px;
+      padding-top: 20px;
+      &.active {
+        border-radius: 5px;
+        padding-top: 15px;
+      }
+      &.active a i.hazard-icon,
+      a i.hazard-icon {
+        font-size: 32px;
+        position: static;
+      }
+      span {
+        white-space: initial;
+        line-height: 14px;
+        font-size: 14px;
+        height: 3em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        letter-spacing: -1px;
+      }
+    }
+  }
+  [lang=es] {
+    .hazard-types-list li {
+      span {
+        font-size: 13px;
+      }
+    }
+  }
+}
+
 
 .fa-spin {
   -webkit-animation: fa-spin 1.5s infinite linear;
