@@ -499,7 +499,7 @@
       el.scrollLeft(left - 100);
       options = { scrollLeft: left - 5 };
     }
-    el.animate(options, 750, 'easeOutBounce');
+    el.animate(options, 1000, 'easeOutBounce');
   }
 
 })();
