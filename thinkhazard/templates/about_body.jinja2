@@ -8,6 +8,11 @@
 <p>
 {{gettext('*ThinkHazard!* also provides recommendations and guidance on how to reduce the risk from each hazard within the project area, and provides links to additional resources such as country risk assessments, best practice guidance, additional websites. *ThinkHazard!* also highlights how each hazard may change in the future as a result of climate change.') | markdown}}
 </p>
+<p>
+{{gettext('A short user guide is available [here](%(link)s).', link='thinkhazard:static/documents/ThinkHazard_briefUserGuide_v2.pdf' | static_url), and the full methodology [here](%(link)s).', link='thinkhazard:static/documents/thinkhazard-methodology-report_v2_0.pdf' | static_url).') | markdown}}
+</p>
+
+<hr>
 <div class="row">
   <div class="col-md-12 text-center">
     <p>
@@ -129,29 +134,16 @@
 </div>
 
 <br>
-<div class="row hidden-print">
-  <div class="col-md-12 text-center">
-    <p>
-    {{gettext('*ThinkHazard!* holds local data for the countries displayed in this map. Global data is available for river flood, earthquake, cyclone, water scarcity, and landslide.') | markdown}}
-    </p>
-  </div>
-  <div class="col-md-12">
-    <div id="about-map"></div>
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-12">
-    <p>
-    {{gettext('Source of Administrative boundaries: The Global Administrative Unit Layers (GAUL) dataset, implemented by FAO within the CountrySTAT and Agricultural Market Information System (AMIS) projects.') | markdown}}
-    </p>
-  </div>
-</div>
 <hr>
 <div class="row">
   <div class="col-md-12">
     <p>
     {{gettext('The tool code is open source, to encourage other users to adapt the tool to their needs. The code can be found on %(github_link)s.', github_link='<a href="https://github.com/GFDRR/thinkhazard" target="_blank">Github</a>') | markdown}}
     {{gettext('Current instance version is %(version)s', version=request.registry.settings['version'])}}.
+    {{gettext('Source of Administrative boundaries: The Global Administrative Unit Layers (GAUL) dataset, implemented by FAO within the CountrySTAT and Agricultural Market Information System (AMIS) projects.') | markdown}}
+    </p>
+  </div>
+</div>
     </p>
     <p>
       {{licence()}}
