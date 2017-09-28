@@ -568,6 +568,26 @@ footer {
   }
 }
 
+.further-resources {
+  .less,
+  .fr-hidden {
+    display: none;
+  }
+  &.further-resources-open {
+    .less {
+      display: inline;
+    }
+    .fr-hidden {
+      display: list-item;
+    }
+    .more {
+      display: none;
+    }
+  }
+}
+.further-resources-more {
+  color: #777;
+}
 
 .fa-spin {
   -webkit-animation: fa-spin 1.5s infinite linear;
