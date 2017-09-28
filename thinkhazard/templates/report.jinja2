@@ -101,7 +101,7 @@ Think Hazard - {{ division.translated_name(request.locale_name)}}
             {{gettext('If you have any, please [provide feedback](%(link)s).', link=feedback_form_url)|markdown}}
             <hr>
             <div class="socialbutton-wrapper">
-              Share on
+              {{gettext('Share')}}
               <a class="btn btn-info twitter" href="https://twitter.com/share?url={{request.current_route_url()}}">
                 <img src="{{'thinkhazard:static/images/icon-twitter.png'|static_url}}" alt="Twitter">
               </a>

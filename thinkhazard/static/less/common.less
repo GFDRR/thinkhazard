@@ -129,9 +129,8 @@ ul.horizontal li {
 
 .socialbutton-wrapper {
   text-align: center;
-  margin: 1em;
+  margin: 0 1em;
   .navbar & {
-    margin: 0 14.75px;
     color: #777;
   }
   .navbar.report-navbar & {
@@ -174,6 +173,15 @@ ul.horizontal li {
   }
   .btn:hover {
     filter: none;
+  }
+  @media (max-width: 768px) {
+    text-align: left;
+    .navbar & {
+      margin: 5px 14.75px;
+    }
+    .btn {
+      padding: 0 5px;
+    }
   }
 }
 
