@@ -226,11 +226,16 @@
     <p>{{gettext('For further information the following resources could be consulted:')}}</p>
     <ul>
     {% for resource in resources %}
-    <li><i class="icon-list-arrow"></i>
+    <li {% if loop.index > 5 %}class="fr-hidden"{% endif %}><i class="icon-list-arrow"></i>
       <a target="_blank" href="{{ resource.url }}">
         {{ resource.text }}
       </a>
     </li>
+    {% if loop.index == 5 %}
+        <li><a class="further-resources-more" href="#">
+        » <span class="more">{{gettext('see more')}}</span><span class="less">{{gettext('see less')}}</span>
+        </a></li>
+    {% endif %}
     {% endfor %}
     </ul>
   </div>

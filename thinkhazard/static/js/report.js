@@ -502,4 +502,10 @@
     el.animate(options, 1000, 'easeOutBounce');
   }
 
+  // Further resources
+  $('.further-resources-more').click(function(e) {
+    $('.further-resources').toggleClass('further-resources-open');
+    return false;
+  });
+
 })();
