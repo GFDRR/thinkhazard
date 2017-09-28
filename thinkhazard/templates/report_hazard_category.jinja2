@@ -4,6 +4,7 @@
    locale_name,
    hazards_sorted=None,
    parents=[],
+   request=None,
    parent_division=None) %}
 <div class="col-sm-7">
   {% if hazard_category %}
@@ -77,6 +78,7 @@
   {% endif %}
 </div>
 <div class="col-sm-5">
+
   <div class="map-block">
     <div id="map" class="map">
       <div class="map-tooltip"></div>
@@ -182,6 +184,7 @@
 
     {% endif %}
   </div>
+
   {% if contacts and contacts|length > 0 %}
   <div class="contacts">
     <h4>

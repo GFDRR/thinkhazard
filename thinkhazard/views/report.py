@@ -148,6 +148,7 @@ def report(request):
         'parent_division': division.parent,
         'date': datetime.datetime.now(),
         'feedback_form_url': feedback_form_url,
+        'request': request,
     }
     if hazard_category is not None:
         context.update(hazard_category)
