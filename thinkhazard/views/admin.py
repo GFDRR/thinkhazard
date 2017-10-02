@@ -290,12 +290,13 @@ def admindiv_hazardsets_hazardtype(request):
 
 @view_config(route_name='admin_admindiv_hazardsets_export', renderer='csv')
 def admindiv_hazardsets_export(request):
-    query = '''select ht.mnemonic, ad.id, ad.name, hl.mnemonic
-    from processing.output as o left join datamart.administrativedivision
-    as ad on o.admin_id = ad.id left join datamart.enum_hazardlevel hl on
-    o.hazardlevel_id = hl.id left join processing.hazardset as hs on
-    o.hazardset_id = hs.id left join datamart.enum_hazardtype as ht on
-    hs.hazardtype_id = ht.id where ad.leveltype_id = 3'''
+    query = '''SELECT ht.mnemonic, ad.id, ad.name, hl.mnemonic
+    FROM processing.output AS o LEFT JOIN datamart.administrativedivision
+    AS ad ON o.admin_id = ad.id LEFT JOIN datamart.enum_hazardlevel hl ON
+    o.hazardlevel_id = hl.id LEFT JOIN processing.hazardset AS hs ON
+    o.hazardset_id = hs.id LEFT JOIN datamart.enum_hazardtype AS ht ON
+    hs.hazardtype_id = ht.id WHERE ad.leveltype_id = 3
+    ORDER BY ht.mnemonic, ad.name'''
     rows = DBSession.execute(query).fetchall()
 
     return {
