@@ -474,6 +474,7 @@
 
   var mediaCheck = function() {
     var mapDiv = $('.map-block');
+    if (!window.matchMedia) return;
     if (window.matchMedia(mq).matches) {
       mapDiv.insertAfter('.page-header.detail');
     } else {
@@ -486,8 +487,10 @@
   $(window).on('resize', mediaCheck);
 
   // On mobile, scroll horizontally to make active hazard visible
-  if (window.matchMedia(mq).matches) {
-    var left = $('.hazard-types-list li.active').position().left;
+  if (window.matchMedia && window.matchMedia(mq).matches) {
+    var active_li = $('.hazard-types-list li.active');
+    if (active_li.length === 0) return;
+    var left = active_li.position().left;
     var options;
     var el;
     if ($('.hazard-types-list li.active').hasClass('overview')) {
