@@ -27,7 +27,7 @@ Response: Status code: 200
 
 **GET** `/report/{division_code}/{hazard_type}.json`
 
-Returns the report for a division and a hazard type.
+Returns the report for a division and a hazard type. Information includes: Data source, Hazard category and description, Recommendations and climate change statement, List of further resources, and Contact Information.
 
 Response: Status code: 200
 
@@ -38,6 +38,15 @@ Response: Status code: 200
       "detail_url": "http://45.55.174.20/layers/hazard%3Ainunmask_world_stream_6tthres_2_t_50",
       "id": "FL-GLOBAL-GLOFRIS",
       "owner_organization": "GLOFRIS"
+    },
+    ...
+  ],
+  "contacts": [
+    {
+      "url": "http://drmkc.jrc.ec.europa.eu/#news/432/list"
+      "phone": ""
+      "name": "Disaster Risk Management Knowledge Centre (DRMKC)"
+      "email": "drmkc@jrc.ec.europa.eu "
     },
     ...
   ],
