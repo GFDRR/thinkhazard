@@ -43,9 +43,9 @@ Response: Status code: 200
   ],
   "contacts": [
     {
-      "url": "http://drmkc.jrc.ec.europa.eu/#news/432/list"
-      "phone": ""
-      "name": "Disaster Risk Management Knowledge Centre (DRMKC)"
+      "url": "http://drmkc.jrc.ec.europa.eu/#news/432/list",
+      "phone": "",
+      "name": "Disaster Risk Management Knowledge Centre (DRMKC)",
       "email": "drmkc@jrc.ec.europa.eu "
     },
     ...
