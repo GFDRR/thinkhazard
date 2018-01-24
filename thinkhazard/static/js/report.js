@@ -318,7 +318,7 @@
         btnStatus(true);
         checkPdfStatus(data.report_id);
       })
-      .error(function() {
+      .fail(function() {
         alert("Something went wrong");
         btnStatus(false);
       });
@@ -337,7 +337,7 @@
           downloadPdf(id);
         }
       })
-      .error(function() {
+      .fail(function() {
         alert("Something went wrong");
         btnStatus(false);
       });
