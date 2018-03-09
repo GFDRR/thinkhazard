@@ -146,7 +146,9 @@
     </div>
     <div id="data-source-legend" class="legend hidden row">
       <div class="col-xs-3">
+        {% for hazardset in sources %}
         <img src=""/>
+        {% endfor %}
       </div>
       <div class="col-xs-9">
         {% for hazardset in sources %}
