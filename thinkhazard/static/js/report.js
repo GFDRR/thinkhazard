@@ -418,29 +418,43 @@
     el.addClass('hidden');
     $('#level-legend').removeClass('hidden');
     $('#data-source-legend').addClass('hidden');
+    $('#data-source-legend')
+      .find('.service-warning').hide().end();
+    $('#data-source-legend').find('.dl-horizontal').hide();
+    $('#data-source-legend').find('.text-right').hide();
+    $('#data-source-legend img').hide();
   });
 
+  $('#data-source-legend').find('.dl-horizontal').hide();
+  $('#data-source-legend').find('.text-right').hide();
+  $('#data-source-legend img').hide();
+
   var dataSourceSource;
-  var updateLegend = function(layerName) {
-    $('#data-source-legend img').attr('src',
+  var updateLegend = function(layerName, index) {
+    $($('#data-source-legend img').get(index)).attr('src',
       'http://www.geonode-gfdrrlab.org/geoserver/hazard/ows' +
       '?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetLegendGraphic&FORMAT=image%2Fpng' +
       '&LAYER=' + layerName
     ).on('error', function() {
-      $('#data-source-legend')
-        .find('.service-warning').show().end()
-        .children('div').hide().end();
+      console.warn('Error loading layer: ' + layerName);
+      $('#data-source-legend').find('.service-warning').show().end();
       $(this).hide();
+    }).on('load', function() {
+      $($('#data-source-legend').find('.dl-horizontal').get(index)).show();
+      $($('#data-source-legend').find('.text-right').get(index)).show();
+      $(this).show();
     });
   };
   $('#data-source-map-btn a').on('click', function(e) {
     e.preventDefault();
+    var index = $(this).parent().index();
+    var attr = $($('.current-rp').get(index)).attr('data-name');
     dataSourceSource = new ol.source.ImageWMS({
       url: 'http://www.geonode-gfdrrlab.org/geoserver/hazard/ows',
-      params: {'LAYERS': $('.current-rp').attr('data-name')},
+      params: {'LAYERS': attr},
       serverType: 'geoserver'
     });
-    updateLegend($('.current-rp').attr('data-name'));
+    updateLegend(attr, index);
     dataSourceLayer.setSource(dataSourceSource);
     dataSourceLayer.setVisible(true);
     levelLayer.setVisible(false);
@@ -452,9 +466,12 @@
 
   $('.rp-chooser').on('click', function(e) {
     e.preventDefault();
-    $('.rp-chooser').removeClass('current-rp');
+    $(this).parent().find('.rp-chooser').removeClass('current-rp');
     $(this).addClass('current-rp');
-    updateLegend($('.current-rp').attr('data-name'));
+    updateLegend(
+      $(this).parent().find('.current-rp').attr('data-name'),
+      $(this).parents('.dl-horizontal').first().index()/2
+    );
     dataSourceSource.updateParams({
       LAYERS: $(this).attr('data-name')
     });
