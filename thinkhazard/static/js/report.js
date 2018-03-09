@@ -425,6 +425,10 @@
     $('#data-source-legend img').hide()
   });
 
+  $('#data-source-legend').find('.dl-horizontal').hide()
+  $('#data-source-legend').find('.text-right').hide()
+  $('#data-source-legend img').hide()
+
   var dataSourceSource;
   var updateLegend = function(layerName, index) {
     $($('#data-source-legend img').get(index)).attr('src',
