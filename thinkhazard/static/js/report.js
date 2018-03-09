@@ -466,9 +466,12 @@
 
   $('.rp-chooser').on('click', function(e) {
     e.preventDefault();
-    $('.rp-chooser').removeClass('current-rp');
+    $(this).parent().find('.rp-chooser').removeClass('current-rp');
     $(this).addClass('current-rp');
-    updateLegend($('.current-rp').attr('data-name'));
+    updateLegend(
+      $(this).parent().find('.current-rp').attr('data-name'),
+      $(this).parents('.dl-horizontal').first().index()/2
+    );
     dataSourceSource.updateParams({
       LAYERS: $(this).attr('data-name')
     });
