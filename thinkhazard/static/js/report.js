@@ -419,15 +419,15 @@
     $('#level-legend').removeClass('hidden');
     $('#data-source-legend').addClass('hidden');
     $('#data-source-legend')
-      .find('.service-warning').hide().end()
-    $('#data-source-legend').find('.dl-horizontal').hide()
-    $('#data-source-legend').find('.text-right').hide()
-    $('#data-source-legend img').hide()
+      .find('.service-warning').hide().end();
+    $('#data-source-legend').find('.dl-horizontal').hide();
+    $('#data-source-legend').find('.text-right').hide();
+    $('#data-source-legend img').hide();
   });
 
-  $('#data-source-legend').find('.dl-horizontal').hide()
-  $('#data-source-legend').find('.text-right').hide()
-  $('#data-source-legend img').hide()
+  $('#data-source-legend').find('.dl-horizontal').hide();
+  $('#data-source-legend').find('.text-right').hide();
+  $('#data-source-legend img').hide();
 
   var dataSourceSource;
   var updateLegend = function(layerName, index) {
@@ -440,15 +440,15 @@
       $('#data-source-legend').find('.service-warning').show().end();
       $(this).hide();
     }).on('load', function() {
-      $($('#data-source-legend').find('.dl-horizontal').get(index)).show()
-      $($('#data-source-legend').find('.text-right').get(index)).show()
+      $($('#data-source-legend').find('.dl-horizontal').get(index)).show();
+      $($('#data-source-legend').find('.text-right').get(index)).show();
       $(this).show();
     });
   };
   $('#data-source-map-btn a').on('click', function(e) {
     e.preventDefault();
     var index = $(this).parent().index();
-    var attr = $($('.current-rp').get(index)).attr('data-name')
+    var attr = $($('.current-rp').get(index)).attr('data-name');
     dataSourceSource = new ol.source.ImageWMS({
       url: 'http://www.geonode-gfdrrlab.org/geoserver/hazard/ows',
       params: {'LAYERS': attr},
