@@ -438,7 +438,9 @@
       '&LAYER=' + layerName
     ).on('error', function() {
       console.warn('Error loading layer: ' + layerName);
-      $('#data-source-legend').find('.service-warning').show().end();
+      $('#data-source-legend').find('.service-warning').show().find('strong').text(
+        $($('#data-source-legend .dl-horizontal').get(index)).attr('data-owner')
+      );
       $(this).hide();
     }).on('load', function() {
       $($('#data-source-legend').find('.dl-horizontal').get(index)).show();

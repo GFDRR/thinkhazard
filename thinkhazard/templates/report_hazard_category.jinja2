@@ -152,7 +152,7 @@
       </div>
       <div class="col-xs-9">
         {% for hazardset in sources %}
-        <dl class="dl-horizontal">
+        <dl class="dl-horizontal" data-owner="{{hazardset.owner_organization}}">
           <dt>Hazard set</dt>
           <dd>{{hazardset.id}}</dd>
           <dt>Return periods</dt>
@@ -181,7 +181,9 @@
         </div>
         {% endfor %}
       </div>
-      <p class="service-warning">{{gettext('The data set used to classify the hazard in this area is not publicly available to view or download due to licensing restrictions. Please use the User Feedback link above to request more information and other similar publicly available datasets.')}}</p>
+      <p class="service-warning">
+          {{gettext('The data set used to classify the hazard in this area is not publicly available to view or download due to licensing restrictions. Please contact <strong></strong> for further information.')}}
+      </p>
     </div>
 
     {% endif %}
