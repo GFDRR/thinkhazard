@@ -16,6 +16,7 @@
         <th>Scientific Quality</th>
         <th class="text-center">Complete</th>
         <th class="text-center">Processed</th>
+        <th class="text-center">Visible</th>
       </tr>
     {% for set in hazardsets %}
       <tr>
@@ -48,8 +49,31 @@
           {% endif %}
           {% endif %}
         </td>
+        <td class="text-center">
+          <span class="fa"></span>
+          {% if set.layers[0] %}
+          <img src="" class="geonode" data-src="{{set.layers[0].typename}}"/>
+          {% endif %}
+        </td>
       </tr>
     {% endfor %}
     </table>
   </div>
+{% endblock %}
+{% block scripts %}
+  <script>
+    jQuery('img.geonode').each(function(i, img) {
+      img = jQuery(img)
+      img.on('load', function() {
+        img.hide().parent().addClass('text-success').find('span').addClass('fa-check');
+      });
+      img.on('error', function() {
+        img.hide().parent().addClass('text-danger').find('span').addClass('fa-times');
+      });
+      var src = 'https://www.geonode-gfdrrlab.org/geoserver/hazard/ows?' +
+          'SERVICE=WMS&VERSION=1.3.0&REQUEST=GetLegendGraphic' +
+          '&FORMAT=image%2Fpng&LAYER=';
+      img.attr('src', src + img.attr('data-src'));
+    });
+  </script>
 {% endblock %}
