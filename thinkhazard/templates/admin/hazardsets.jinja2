@@ -16,6 +16,7 @@
         <th>Scientific Quality</th>
         <th class="text-center">Complete</th>
         <th class="text-center">Processed</th>
+        <th class="text-center">Visible</th>
       </tr>
     {% for set in hazardsets %}
       <tr>
@@ -46,6 +47,12 @@
           {% if set.processing_error %}
           <small class="text-danger">{{set.processing_error}}</small>
           {% endif %}
+          {% endif %}
+        </td>
+        <td class="text-center">
+          <span class="fa"></span>
+          {% if set.layers[0] %}
+          <img src="" class="geonode" data-src="{{set.layers[0].typename}}"/>
           {% endif %}
         </td>
       </tr>
