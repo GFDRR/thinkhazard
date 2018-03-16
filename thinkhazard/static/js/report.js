@@ -431,6 +431,7 @@
 
   var dataSourceSource;
   var updateLegend = function(layerName, index) {
+    dataSourceLayer.setVisible(false);
     $($('#data-source-legend img').get(index)).attr('src',
       'http://www.geonode-gfdrrlab.org/geoserver/hazard/ows' +
       '?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetLegendGraphic&FORMAT=image%2Fpng' +
@@ -443,6 +444,7 @@
       $($('#data-source-legend').find('.dl-horizontal').get(index)).show();
       $($('#data-source-legend').find('.text-right').get(index)).show();
       $(this).show();
+      dataSourceLayer.setVisible(true);
     });
   };
   $('#data-source-map-btn a').on('click', function(e) {
@@ -454,10 +456,10 @@
       params: {'LAYERS': attr},
       serverType: 'geoserver'
     });
-    updateLegend(attr, index);
     dataSourceLayer.setSource(dataSourceSource);
     dataSourceLayer.setVisible(true);
     levelLayer.setVisible(false);
+    updateLegend(attr, index);
     $('#level-map-btn').removeClass('hidden');
     $('#data-source-map-btn').addClass('hidden');
     $('#level-legend').addClass('hidden');
