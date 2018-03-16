@@ -85,7 +85,7 @@
       this.data = new NgTableParams({ }, {dataset: data});
       var csvContent = 'data:text/csv;charset=utf-8,';
       data.forEach(function(item, index){
-        csvContent +=  [ "{{request.matchdict['hazardtype']}}", item.code, item.name, item.level_2, item.level_1, item.hazard_level ].join(',');
+        csvContent +=  [ "{{request.matchdict['hazardtype']}}", item.code, '"'+item.name+'"', '"'+item.level_2+'"', '"'+item.level_1+'"', item.hazard_level ].join(',');
         csvContent += index < data.length ? "\n" : "";
       });
       $('.csv').attr('href', encodeURI(csvContent));
