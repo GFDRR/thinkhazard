@@ -449,7 +449,7 @@
   };
   $('#data-source-map-btn a').on('click', function(e) {
     e.preventDefault();
-    var index = $(this).parent().index();
+    var index = ($(this).parent().prop("tagName")==='LI') ? $(this).parent().index() : 0;
     var attr = $($('.current-rp').get(index)).attr('data-name');
     dataSourceSource = new ol.source.ImageWMS({
       url: 'http://www.geonode-gfdrrlab.org/geoserver/hazard/ows',
