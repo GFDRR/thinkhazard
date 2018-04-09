@@ -177,6 +177,30 @@ Think Hazard - {{ division.translated_name(request.locale_name)}}
         'Very low': '{{gettext("Very low")}}'
       };
     </script>
+    {% if hazard_category.hazardlevel.mnemonic %}
+    <script>
+      (function() {
+        var methodologies = {
+        'FL':  "{{gettext("The maximum hazard level in this area (see map for distribution of hazard). Hazard level reflects expected frequency of damaging flood depths, using robust long-term average hazard data and expert guidance <full method>.River flood describes the flooding of urban and rural areas due to the overflow of river channels due to sustained or intense rainfall. Flood protection (i.e. flood defense) is not accounted for. Surface (pluvial) flooding is not included in this hazard (for this see urban flood hazard)")}}",
+        'UF':  "{{gettext("The maximum hazard level in this area (see map for distribution of hazard). Hazard level reflects expected frequency of damaging flood depths, using robust long-term average hazard data and expert guidance <full method>.Urban flood describes the flooding of urban areas by overflow of river channels and by surface flooding resulting from saturated drainage systems due to sustained or intense rainfall. Flood protection (i.e. flood defense) is not accounted for.")}}",
+        'CF':  "{{gettext("The maximum hazard level in this area (see map for distribution of hazard). Hazard level reflects expected frequency of damaging flood depths, using robust long-term average hazard data and expert guidance <full method>.Coastal flood describes onshore flooding due to the combination of high astronomical tides, storm-induced surge (accumulated water due to high wind), and wave set-up (energy transfer from offshore waves to the coast).")}}",
+        'CY':  "{{gettext("The maximum hazard level in this area (see map for distribution of hazard). Hazard level reflects expected frequency of damaging wind speeds, using robust long-term average hazard data and expert guidance <full method>.")}}",
+        'DR':  "{{gettext("The maximum hazard level in this area (see map for distribution of hazard). Hazard level reflects expected frequency of water scarcity, using robust long-term average hazard data and expert guidance <full method>.Water scarcity describes a lack of available fresh water resources to meet water demand. This hazard does not describe agricultural, meteorological or hydrological drought.")}}",
+        'EQ':  "{{gettext("The maximum hazard level in this area (see map for distribution of hazard). Hazard level reflects expected frequency of damaging earthquake ground shaking, using robust long-term average hazard data and expert guidance <full method>.Earthquake hazard uses peak ground acceleration as a measure of ground shaking. Liquefaction, permanent ground displacement, and induced hazards such as landslide or tsunami are not included (these are considered under separate hazards).")}}",
+        'VA':  "{{gettext("The maximum hazard level in this area (see map for distribution of hazard). Hazard level reflects the potential for damage from volcanic eruptions, using a global catalog of historical eruptions and expert guidance <full method>.Hazard level is assigned to a 100km radius of each volcano. The potential for ashfall at greater distances is not included.")}}",
+        'TS':  "{{gettext("The maximum hazard level in this area (see map for distribution of hazard). Hazard level reflects expected frequency of damaging tsunami wave height, using robust long-term average hazard data and expert guidance <full method>.")}}",
+        'LS':  "{{gettext("The maximum hazard level in this area (see map for distribution of hazard). Hazard level is classified from robust landslide susceptibility or hazard data and expert guidance <full method>.Landslide susceptibility indicates how susceptible land is, based on slope, soil and rock type, and vegetation coverage. Landslide hazard combines these factors with the likelihood of triggering factors (seismic ground shaking and rainfall).")}}",
+        'EH':  "{{gettext("The maximum hazard level in this area (see map for distribution of hazard). Hazard level reflects expected frequency of extreme heat conditions, using robust long-term average hazard data and expert guidance <full method>.Extreme heat is assessed using a widely accepted heat stress indicator, the Wet Bulb Globe Temperature (°C).")}}",
+        'WF':  "{{gettext("The maximum hazard level in this area (see map for distribution of hazard). Hazard level reflects expected frequency of weather conditions conducive to fire occurrence, using robust long-term average hazard data and expert guidance <full method>.The Canadian Fire Weather Index is used, representing weather factors that influence the likelihood a vegetation fire will ignite and spread (temperature, humidity, wind speed). It does not consider the amount of fuel present or potential for an ignition source to be present.")}}"
+        };
+
+        jQuery('.icon-question-sign').popover({
+          title: 'Methodology',
+          content: methodologies['{{hazard_category.hazardtype.mnemonic}}']
+        })
+      })();
+    </script>
+    {% endif %}
 {% endblock %}
 
 {% macro hazard_type(hazard) %}
