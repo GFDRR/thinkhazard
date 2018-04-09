@@ -196,7 +196,8 @@ Think Hazard - {{ division.translated_name(request.locale_name)}}
 
         jQuery('.icon-question-sign').popover({
           title: 'Methodology',
-          content: methodologies['{{hazard_category.hazardtype.mnemonic}}']
+          content: methodologies['{{hazard_category.hazardtype.mnemonic}}'],
+          placement: jQuery(window).width() > 1000 ? 'right' : 'left'
         })
       })();
     </script>
