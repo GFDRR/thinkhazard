@@ -13,6 +13,7 @@
       <small>
         {{gettext('Hazard level:')}}
         <span class="level">{{ hazard_category.hazardlevel.title | translate }}</span>
+        <button class="icon-question-sign">?</button>
       </small>
     </h2>
     {% if hazard_category.translated_general_recommendation(locale_name) %}
