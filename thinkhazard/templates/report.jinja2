@@ -177,7 +177,7 @@ Think Hazard - {{ division.translated_name(request.locale_name)}}
         'Very low': '{{gettext("Very low")}}'
       };
     </script>
-    {% if hazard_category.hazardlevel.mnemonic %}
+    {% if hazard_category.hazardtype.mnemonic %}
     <script>
       (function() {
         var methodologies = {
