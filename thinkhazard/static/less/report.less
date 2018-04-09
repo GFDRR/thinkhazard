@@ -603,9 +603,16 @@ footer {
 }
 
 .popover {
-  max-width: 400px;
-  width: 400px;
-  font-size: 70%;
+  max-width: 240px;
+  width: 240px;
+  font-size: 1em;
+}
+@media(min-width: @screen-md-min) {
+  .popover {
+    max-width: 400px;
+    width: 400px;
+    font-size: 70%;
+  }
 }
 
 .fa-spin {
