@@ -24,7 +24,7 @@
     controls: [],
     layers: [ new ol.layer.Group({
       layers: sources.map(function(source) {
-        return new ol.layer.Tile({ source: source })
+        return new ol.layer.Tile({ source: source });
       })
     }) ]
   });
