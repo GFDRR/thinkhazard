@@ -369,12 +369,14 @@
       }
     };
 
-    source.on('tileloadstart', function(event) {
-      tilesLoading++;
-    });
-    source.on('tileloadend', function(event) {
-      tilesLoaded++;
-      update();
+    sources.forEach(function(source) {
+      source.on('tileloadstart', function() {
+        tilesLoading++;
+      });
+      source.on('tileloadend', function() {
+        tilesLoaded++;
+        update();
+      });
     });
   }
 
