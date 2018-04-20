@@ -195,11 +195,14 @@ Think Hazard - {{ division.translated_name(request.locale_name)}}
         };
         jQuery('.icon-question-sign').popover({
           title: 'Methodology',
-          content: methodologies['{{hazard_category.hazardtype.mnemonic}}'],
+          content: '<button class="close">&times;</button>' + methodologies['{{hazard_category.hazardtype.mnemonic}}'],
           placement: 'auto right',
           html: true
         })
-      })();
+        jQuery('body').on('click', '.popover .close', function() {
+          $(this).parents('.detail').find('.icon-question-sign').trigger('click')
+        })
+      })()
     </script>
     {% endif %}
 {% endblock %}
