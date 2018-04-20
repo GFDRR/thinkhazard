@@ -10,8 +10,11 @@
   //
   // Main
   //
-  var source = new ol.source.XYZ({
-    url: 'https://api.mapbox.com/styles/v1/stufraser1/cj3g19csf00062sjso7dfj4ns/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoic3R1ZnJhc2VyMSIsImEiOiJQdnhvZTlnIn0.SEC9tGQDtw9yPQssVyF-8Q'
+  var sources = [
+    'https://api.mapbox.com/styles/v1/stufraser1/cjftf111617x32spjhncapgm2/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoic3R1ZnJhc2VyMSIsImEiOiJQdnhvZTlnIn0.SEC9tGQDtw9yPQssVyF-8Q',
+    'https://api.mapbox.com/styles/v1/gsdpm/civtq56ch000z2klqcuvgmzdw/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZ3NkcG0iLCJhIjoiY2lqbmN5eG9mMDBndHVmbTU5Mmg1djF6MiJ9.QqFCD7tcmccysN8GUClW8w'
+  ].map(function(url) {
+    return new ol.source.XYZ({ url: url });
   });
   waitForTiles();
 
@@ -19,11 +22,11 @@
     target: 'map',
     interactions: [],
     controls: [],
-    layers: [
-      new ol.layer.Tile({
-        source: source
+    layers: [ new ol.layer.Group({
+      layers: sources.map(function(source) {
+        return new ol.layer.Tile({ source: source })
       })
-    ]
+    }) ]
   });
 
   var bounds = ol.proj.transformExtent(app.divisionBounds, 'EPSG:4326',
@@ -188,6 +191,7 @@
     map.addLayer(layer);
     source.on('addfeature', function() {
       map.on('postcompose', function(event) {
+        if (window.status === 'finished') { return; }
         vectorLoaded = true;
         checkFinished();
       });
