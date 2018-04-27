@@ -532,4 +532,8 @@
     return false;
   });
 
+  $('.legend dd:not(.notitle)').each(function(i, dd) {
+    $(dd).attr('title', $.trim($(dd).text()));
+  });
+
 })();
