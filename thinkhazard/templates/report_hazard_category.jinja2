@@ -156,7 +156,7 @@
           <dt>Hazard set</dt>
           <dd>{{hazardset.id}}</dd>
           <dt>Return periods</dt>
-          <dd>
+          <dd class="notitle">
             {% for layer in hazardset.layers %}
             {{ '·' if loop.index > 1 }}
             {% if layer.return_period %}
