@@ -111,6 +111,26 @@ body {
   font-size: @icon-size;
 }
 
+.icon-question-sign {
+  border: 2px solid grey;
+  width: 1.4em;
+  border-radius: 1em;
+  height: 1.4em;
+  vertical-align: bottom;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 0;
+  background: #fff;
+  span {
+    margin-top: -1px;
+    font-family: Source Sans Pro;
+    font-size: 20px;
+    display: inline-block;
+  }
+}
+
+
 .hazard-level {
   background: @jumbotron-bg;
   outline: .2em solid white;
@@ -595,6 +615,24 @@ footer {
 }
 .further-resources-more {
   color: #777;
+}
+
+.popover {
+  max-width: 240px;
+  width: 240px;
+  font-size: 1em;
+  .close {
+    position: absolute;
+    right: 12px;
+    top: 5px;
+  }
+}
+@media(min-width: @screen-md-min) {
+  .popover {
+    max-width: 400px;
+    width: 400px;
+    font-size: 70%;
+  }
 }
 
 .fa-spin {
