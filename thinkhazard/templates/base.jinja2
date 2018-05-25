@@ -59,6 +59,34 @@
           showModal();
         }
       });
+      $(document.body).on('click', '.track-more', function(e) {
+        // Google Analytics
+        ga && ga('send', {
+          hitType: 'event',
+          eventCategory: 'Recommandations',
+          eventAction: 'open',
+          eventLabel: window.location.pathname
+        });
+      });
+      $(document.body).on('click', '.track-contact', function(e) {
+        // Google Analytics
+        ga && ga('send', {
+          hitType: 'event',
+          eventCategory: 'Contacts',
+          eventAction: 'expand',
+          eventLabel: window.location.pathname
+        });
+      });
+      $(document.body).on('click', '.track-fr', function(e) {
+        // Google Analytics
+        ga && ga('send', {
+          hitType: 'event',
+          eventCategory: 'Further Resources',
+          eventAction: 'expand',
+          eventLabel: window.location.pathname
+        });
+      });
+
 
       if (document.referrer.indexOf('{{'index'|route_url}}') == -1) {
         var disclaimerUrl = '{{'disclaimer'|route_url}}';
