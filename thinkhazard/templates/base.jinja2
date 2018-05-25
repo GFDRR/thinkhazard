@@ -39,6 +39,15 @@
         e.preventDefault();
         var self = this;
         var modal = $('#myModal');
+
+        // Google Analytics
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'Popups',
+          eventAction: 'open',
+          eventLabel: $(self).attr('href')
+        });
+
         function showModal() {
           modal.modal('show').load($(self).attr('href'));
         }
