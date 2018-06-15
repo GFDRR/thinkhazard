@@ -534,8 +534,8 @@
 
   // Further resources
   $('.further-resources-more').click(function(e) {
+    e.preventDefault();
     $('.further-resources').toggleClass('further-resources-open');
-    return false;
   });
 
   $('.legend dd:not(.notitle)').each(function(i, dd) {
