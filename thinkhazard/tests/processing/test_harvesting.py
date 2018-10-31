@@ -48,26 +48,42 @@ def populate():
 date_str = datetime.utcnow().isoformat()
 
 
-layer_defaults = {
+layers_defaults = {
     "id": 1,
     "csw_type": 'dataset',
     "title": "test layer",
-    "hazard_set": 'TEST_GLOBAL',
-    "hazard_period": '',
     "data_update_date": date_str,
-    "metadata_update_date": date_str,
     "detail_url": 'www.test.com',
     "download_url": 'test.tif',
-    "owner__organization": '',
-    "calculation_method_quality": 5,
-    "scientific_quality": 5,
     "srid": "EPSG:4326"
 }
+layer_defaults = layers_defaults
+layer_defaults.update({
+    "calculation_method_quality": 5,
+    "hazard_period": 10,
+    "hazard_unit": 'm',
+    "hazard_set": 'TEST_GLOBAL',
+    "hazard_type": 'river_flood',
+    "metadata_update_date": date_str,
+    "owner": {
+        "organization": ''
+    },
+    "scientific_quality": 5
+})
 
 
-def geonode_layer(values={}):
+def layers(values=[{}]):
+    layers = []
+    for value in values:
+        layer = layers_defaults.copy()
+        layer.update(value)
+        layers.append(layer)
+    return layers
+
+
+def layer(value={}):
     layer = layer_defaults.copy()
-    layer.update(values)
+    layer.update(value)
     return layer
 
 
@@ -98,65 +114,59 @@ class TestHarvesting(unittest.TestCase):
         fetch_mock
         harvester = Harvester()
         harvester.settings = settings
+
         harvester.harvest_regions()
 
         self.assertEqual(DBSession.query(Region).count(), 2)
 
-    @patch.object(Harvester, 'fetch', return_value=[geonode_layer({
-        "hazard_type": 'river_flood',
-        "hazard_period": 10,
-        "hazard_unit": 'm'})])
+    @patch.object(Harvester, 'fetch', return_value=layers())
     @patch.object(httplib2.Http, 'request', return_value=(
         Mock(status=200),
-        json.dumps({})))
+        json.dumps(layer())
+    ))
     def test_valid_layer(self, request_mock, fetch_mock):
         '''Valid layer must be added to database'''
         harvester = Harvester()
         harvester.settings = settings
+
         harvester.harvest_layers()
 
         self.assertEqual(DBSession.query(Layer).count(), 1)
 
     @patch.object(Harvester, 'fetch', return_value=[{
         "id": 1,
-        "csw_type": 'document',
         "title": u"Test document",
-        "hazard_type": 'earthquake',
         "supplemental_information": ''
     }])
     @patch.object(httplib2.Http, 'request', return_value=(
         Mock(status=200),
         json.dumps({
-            "regions": []
+            "id": 1,
+            "csw_type": 'document',
+            "hazard_type": 'earthquake',
+            "regions": [],
+            "supplemental_information": '',
+            "title": u"Test document"
         })))
     def test_valid_document(self, request_mock, fetch_mock):
         '''Valid document must be added to database'''
         harvester = Harvester()
         harvester.settings = settings
+
         harvester.harvest_documents()
 
         self.assertEqual(DBSession.query(FurtherResource).count(), 1)
 
-    @patch.object(Harvester, 'fetch', side_effect=[
-        [
-            geonode_layer({
-                "id": 1,
-                "hazard_type": 'volcanic_ash',
-                "data_update_date": (datetime.utcnow() -
-                                     timedelta(days=1)).isoformat()
-            })
-        ],
-        [
-            geonode_layer({
-                "id": 1,
-                "hazard_type": 'volcanic_ash',
-                "data_update_date": datetime.utcnow().isoformat()
-            })
-        ]
+    @patch.object(Harvester, 'fetch', return_value=layers())
+    @patch.object(httplib2.Http, 'request', side_effect=[
+        (Mock(status=200), json.dumps(layer({
+            "data_update_date": (datetime.utcnow() - timedelta(days=1)).
+            isoformat()
+        }))),
+        (Mock(status=200), json.dumps(layer({
+            "data_update_date": datetime.utcnow().isoformat()
+        })))
     ])
-    @patch.object(httplib2.Http, 'request', return_value=(
-        Mock(status=200),
-        json.dumps({})))
     def test_data_update_date_change(self, request_mock, fetch_mock):
         '''New data_update_date must reset hazarset.complete and processed'''
         harvester = Harvester()
@@ -173,26 +183,16 @@ class TestHarvesting(unittest.TestCase):
         self.assertEqual(hazardset.complete, False)
         self.assertEqual(hazardset.processed, None)
 
-    @patch.object(Harvester, 'fetch', side_effect=[
-        [
-            geonode_layer({
-                "id": 1,
-                "hazard_type": 'volcanic_ash',
-                "metadata_update_date": (datetime.utcnow() -
-                                         timedelta(days=1)).isoformat()
-            })
-        ],
-        [
-            geonode_layer({
-                "id": 1,
-                "hazard_type": 'volcanic_ash',
-                "metadata_update_date": datetime.utcnow().isoformat()
-            })
-        ]
+    @patch.object(Harvester, 'fetch', return_value=layers())
+    @patch.object(httplib2.Http, 'request', side_effect=[
+        (Mock(status=200), json.dumps(layer({
+            "metadata_update_date": (datetime.utcnow() - timedelta(days=1)).
+            isoformat()
+        }))),
+        (Mock(status=200), json.dumps(layer({
+            "metadata_update_date": datetime.utcnow().isoformat()
+        })))
     ])
-    @patch.object(httplib2.Http, 'request', return_value=(
-        Mock(status=200),
-        json.dumps({})))
     def test_metadata_update_date_change(self, request_mock, fetch_mock):
         '''New metadata_update_date must reset hazarset.complete'''
         harvester = Harvester()
@@ -208,25 +208,15 @@ class TestHarvesting(unittest.TestCase):
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete, False)
 
-    @patch.object(Harvester, 'fetch', side_effect=[
-        [
-            geonode_layer({
-                "id": 1,
-                "hazard_type": 'volcanic_ash',
-                "calculation_method_quality": 1
-            })
-        ],
-        [
-            geonode_layer({
-                "id": 1,
-                "hazard_type": 'volcanic_ash',
-                "calculation_method_quality": 2
-            })
-        ]
+    @patch.object(Harvester, 'fetch', return_value=layers())
+    @patch.object(httplib2.Http, 'request', side_effect=[
+        (Mock(status=200), json.dumps(layer({
+            "calculation_method_quality": 1
+        }))),
+        (Mock(status=200), json.dumps(layer({
+            "calculation_method_quality": 2
+        })))
     ])
-    @patch.object(httplib2.Http, 'request', return_value=(
-        Mock(status=200),
-        json.dumps({})))
     def test_calculation_method_quality_change(self, request_mock, fetch_mock):
         '''New calculation_method_quality must reset hazarset.complete'''
         harvester = Harvester()
@@ -242,25 +232,15 @@ class TestHarvesting(unittest.TestCase):
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete, False)
 
-    @patch.object(Harvester, 'fetch', side_effect=[
-        [
-            geonode_layer({
-                "id": 1,
-                "hazard_type": 'volcanic_ash',
-                "scientific_quality": 1
-            })
-        ],
-        [
-            geonode_layer({
-                "id": 1,
-                "hazard_type": 'volcanic_ash',
-                "scientific_quality": 2
-            })
-        ]
+    @patch.object(Harvester, 'fetch', return_value=layers())
+    @patch.object(httplib2.Http, 'request', side_effect=[
+        (Mock(status=200), json.dumps(layer({
+            "scientific_quality": 1
+        }))),
+        (Mock(status=200), json.dumps(layer({
+            "scientific_quality": 2
+        })))
     ])
-    @patch.object(httplib2.Http, 'request', return_value=(
-        Mock(status=200),
-        json.dumps({})))
     def test_scientific_quality_change(self, request_mock, fetch_mock):
         '''New scientific_quality must reset hazarset.complete'''
         harvester = Harvester()
@@ -277,26 +257,22 @@ class TestHarvesting(unittest.TestCase):
         self.assertEqual(hazardset.complete, False)
 
     @patch.object(httplib2.Http, 'request', side_effect=[
-        (Mock(status=200), json.dumps({
-            "typename": 'hazard:adm2_fu_raster_v3'})),
+        (Mock(status=200), json.dumps(layer({
+            "typename": 'hazard:adm2_fu_raster_v3'
+        }))),
         (Mock(status=500), json.dumps({
-            "error_message": "Some error."})),
+            "error_message": "Some error."
+        })),
     ])
     def test_layers_api_500(self, request_mock):
         '''Geonode API status 500 must not corrupt data'''
         harvester = Harvester()
         harvester.settings = settings
 
-        harvester.harvest_layer(geonode_layer({
-            "hazard_type": 'river_flood',
-            "hazard_period": 10,
-            "hazard_unit": 'm'}))
+        harvester.harvest_layer(layers()[0])
 
         with self.assertRaises(Exception) as cm:
-            harvester.harvest_layer(geonode_layer({
-                "hazard_type": 'river_flood',
-                "hazard_period": 10,
-                "hazard_unit": 'm'}))
+            harvester.harvest_layer(layers()[0])
 
         self.assertEqual(
             cm.exception.message,

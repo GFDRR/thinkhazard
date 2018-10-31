@@ -270,7 +270,7 @@ class Harvester(BaseProcessor):
         o = json.loads(content)
 
         if 'regions' not in o.keys():
-            warning(object, 'Attribute "regions" is missing')
+            warning(o, 'Attribute "regions" is missing')
 
         region_ids = []
         for r in o.get('regions', []):
@@ -284,7 +284,7 @@ class Harvester(BaseProcessor):
                 .filter(Region.id.in_(region_ids)) \
                 .all()
 
-        hazardtypes = self.collect_hazard_types(object)
+        hazardtypes = self.collect_hazard_types(o)
         if not hazardtypes:
             return False
 
@@ -415,12 +415,12 @@ class Harvester(BaseProcessor):
                 .filter(Region.id.in_(region_ids)) \
                 .all()
 
-        hazardset_id = object['hazard_set']
+        hazardset_id = o['hazard_set']
         if not hazardset_id:
             logger.info(u'  hazard_set is empty')
             return False
 
-        hazardtype = self.check_hazard_type(object)
+        hazardtype = self.check_hazard_type(o)
         if not hazardtype:
             return False
 
@@ -433,13 +433,13 @@ class Harvester(BaseProcessor):
         if preprocessed is True:
             hazardlevel = None
             hazard_unit = None
-            if object['hazard_period']:
+            if o['hazard_period']:
                 logger.info(u'  return period found in preprocessed hazardset')
                 return False
             hazard_period = None
 
         else:
-            hazard_period = int(object['hazard_period'])
+            hazard_period = int(o['hazard_period'])
             hazardlevel = None
             for level in (u'LOW', u'MED', u'HIG'):
                 if between(hazard_period,
@@ -456,49 +456,49 @@ class Harvester(BaseProcessor):
                 logger.info(u'  No corresponding hazard_level')
                 return False
 
-            hazard_unit = object['hazard_unit']
+            hazard_unit = o['hazard_unit']
             if hazard_unit == '':
                 logger.info(u'  hazard_unit is empty')
                 return False
 
-        if object['srid'] != 'EPSG:4326':
+        if o['srid'] != 'EPSG:4326':
             logger.info(u'  srid is different from "EPSG:4326"')
             return False
 
-        data_update_date = parse_date(object['data_update_date'])
+        data_update_date = parse_date(o['data_update_date'])
         if not data_update_date:
-            warning(object, 'data_update_date is empty')
+            warning(o, 'data_update_date is empty')
             # We use a very old date for good comparison in decision tree
             data_update_date = datetime.fromtimestamp(0)
 
-        metadata_update_date = parse_date(object['metadata_update_date'])
+        metadata_update_date = parse_date(o['metadata_update_date'])
         if not metadata_update_date:
-            warning(object, 'metadata_update_date is empty')
+            warning(o, 'metadata_update_date is empty')
             # We use a very old date for good comparison in decision tree
             metadata_update_date = datetime.fromtimestamp(0)
 
-        calculation_method_quality = object['calculation_method_quality']
+        calculation_method_quality = o['calculation_method_quality']
         if not calculation_method_quality:
-            warning(object, 'calculation_method_quality is empty')
+            warning(o, 'calculation_method_quality is empty')
             return False
         calculation_method_quality = int(float(calculation_method_quality))
 
-        scientific_quality = object['scientific_quality']
+        scientific_quality = o['scientific_quality']
         if not scientific_quality:
-            warning(object, 'scientific_quality is empty')
+            warning(o, 'scientific_quality is empty')
             return False
         scientific_quality = int(float(scientific_quality))
 
-        download_url = object['download_url']
+        download_url = o['download_url']
         if not download_url:
-            warning(object, 'download_url is empty')
+            warning(o, 'download_url is empty')
             return False
 
         hazardset = DBSession.query(HazardSet).get(hazardset_id)
 
         # Test if another layer exists for same hazardlevel (or mask)
         layer = DBSession.query(Layer) \
-            .filter(Layer.geonode_id != object['id']) \
+            .filter(Layer.geonode_id != o['id']) \
             .filter(Layer.hazardset_id == hazardset_id)
         if hazardlevel is not None:
             layer = layer.filter(Layer.hazardlevel_id == hazardlevel.id)
@@ -529,19 +529,19 @@ class Harvester(BaseProcessor):
         geonode = self.settings['geonode']
         geonode_base_url = "%s://%s" % (geonode['scheme'], geonode['netloc'])
 
-        if object['detail_url'] and not mask:
-            hazardset.detail_url = geonode_base_url + object['detail_url']
-        if object['owner__organization'] and not mask:
-            hazardset.owner_organization = object['owner__organization']
+        if o['detail_url'] and not mask:
+            hazardset.detail_url = geonode_base_url + o['detail_url']
+        if o['owner']['organization'] and not mask:
+            hazardset.owner_organization = o['owner']['organization']
         if not mask:
             hazardset.regions = regions
             DBSession.add(hazardset)
 
-        layer = DBSession.query(Layer).get(object['id'])
+        layer = DBSession.query(Layer).get(o['id'])
         if layer is None:
             logger.info('  Create new Layer {}'.format(title))
             layer = Layer()
-            layer.geonode_id = object['id']
+            layer.geonode_id = o['id']
             layer.hazardset = hazardset
 
         else:
@@ -568,7 +568,7 @@ class Harvester(BaseProcessor):
 
         typename = o.get('typename', None)
         if typename is None:
-            warning(object, 'Attribute "typename" is missing')
+            warning(o, 'Attribute "typename" is missing')
         layer.typename = typename
 
         layer.hazardlevel = hazardlevel
