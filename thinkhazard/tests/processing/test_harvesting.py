@@ -20,7 +20,7 @@
 import unittest
 import transaction
 from datetime import datetime, timedelta
-from mock import patch, mock_open
+from mock import Mock, patch, mock_open
 import httplib2
 import json
 
@@ -107,7 +107,7 @@ class TestHarvesting(unittest.TestCase):
         "hazard_period": 10,
         "hazard_unit": 'm'})])
     @patch.object(httplib2.Http, 'request', return_value=(
-        None,
+        Mock(status=200),
         json.dumps({})))
     def test_valid_layer(self, request_mock, fetch_mock):
         '''Valid layer must be added to database'''
@@ -125,7 +125,7 @@ class TestHarvesting(unittest.TestCase):
         "supplemental_information": ''
     }])
     @patch.object(httplib2.Http, 'request', return_value=(
-        None,
+        Mock(status=200),
         json.dumps({
             "regions": []
         })))
@@ -155,7 +155,7 @@ class TestHarvesting(unittest.TestCase):
         ]
     ])
     @patch.object(httplib2.Http, 'request', return_value=(
-        None,
+        Mock(status=200),
         json.dumps({})))
     def test_data_update_date_change(self, request_mock, fetch_mock):
         '''New data_update_date must reset hazarset.complete and processed'''
@@ -191,7 +191,7 @@ class TestHarvesting(unittest.TestCase):
         ]
     ])
     @patch.object(httplib2.Http, 'request', return_value=(
-        None,
+        Mock(status=200),
         json.dumps({})))
     def test_metadata_update_date_change(self, request_mock, fetch_mock):
         '''New metadata_update_date must reset hazarset.complete'''
@@ -225,7 +225,7 @@ class TestHarvesting(unittest.TestCase):
         ]
     ])
     @patch.object(httplib2.Http, 'request', return_value=(
-        None,
+        Mock(status=200),
         json.dumps({})))
     def test_calculation_method_quality_change(self, request_mock, fetch_mock):
         '''New calculation_method_quality must reset hazarset.complete'''
@@ -259,7 +259,7 @@ class TestHarvesting(unittest.TestCase):
         ]
     ])
     @patch.object(httplib2.Http, 'request', return_value=(
-        None,
+        Mock(status=200),
         json.dumps({})))
     def test_scientific_quality_change(self, request_mock, fetch_mock):
         '''New scientific_quality must reset hazarset.complete'''
@@ -275,3 +275,32 @@ class TestHarvesting(unittest.TestCase):
 
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete, False)
+
+    @patch.object(httplib2.Http, 'request', side_effect=[
+        (Mock(status=200), json.dumps({
+            "typename": 'hazard:adm2_fu_raster_v3'})),
+        (Mock(status=500), json.dumps({
+            "error_message": "Some error."})),
+    ])
+    def test_layers_api_500(self, request_mock):
+        '''Geonode API status 500 must not corrupt data'''
+        harvester = Harvester()
+        harvester.settings = settings
+
+        harvester.harvest_layer(geonode_layer({
+            "hazard_type": 'river_flood',
+            "hazard_period": 10,
+            "hazard_unit": 'm'}))
+
+        with self.assertRaises(Exception) as cm:
+            harvester.harvest_layer(geonode_layer({
+                "hazard_type": 'river_flood',
+                "hazard_period": 10,
+                "hazard_unit": 'm'}))
+
+        self.assertEqual(
+            cm.exception.message,
+            u'Geonode returned status 500: {"error_message": "Some error."}')
+
+        layer = DBSession.query(Layer).one()
+        self.assertEqual(layer.typename, 'hazard:adm2_fu_raster_v3')

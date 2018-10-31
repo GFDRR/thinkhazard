@@ -137,6 +137,9 @@ class Harvester(BaseProcessor):
             ''))
         logger.info(u'Retrieving {}'.format(url))
         response, content = self.http_client.request(url)
+        if response.status != 200:
+            raise Exception(u'Geonode returned status {}: {}'.
+                            format(response.status, content))
         o = json.loads(content)
         return sorted(o['objects'], key=lambda object: object[order_by])
 
@@ -260,6 +263,10 @@ class Harvester(BaseProcessor):
                               ''))
         logger.info(u'  Retrieving {}'.format(doc_url))
         response, content = self.http_client.request(doc_url)
+        if response.status != 200:
+            raise Exception(u'Geonode returned status {}: {}'.
+                            format(response.status, content))
+
         o = json.loads(content)
 
         if 'regions' not in o.keys():
@@ -387,6 +394,10 @@ class Harvester(BaseProcessor):
                                 ''))
         logger.info(u'  Retrieving {}'.format(layer_url))
         response, content = self.http_client.request(layer_url)
+        if response.status != 200:
+            raise Exception(u'Geonode returned status {}: {}'.
+                            format(response.status, content))
+
         o = json.loads(content)
 
         if 'regions' not in o.keys():
