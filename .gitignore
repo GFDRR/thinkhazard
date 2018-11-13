@@ -18,3 +18,7 @@ thinkhazard/locale/*/LC_MESSAGES/*.po
 
 # Don't version the translation strings from database
 *-database.po*
+
+# Dogpile cache
+cache.dbm
+cache.dbm.rw.lock
