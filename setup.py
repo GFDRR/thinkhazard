@@ -48,6 +48,7 @@ requires = [
     'paste==2.0.2',
     'alembic==0.8.10',
     'pytidylib',
+    'dogpile.cache',
     ]
 
 setup(name='thinkhazard',

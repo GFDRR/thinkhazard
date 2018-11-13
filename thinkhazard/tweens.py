@@ -22,9 +22,36 @@ import pytz
 from pyramid.response import Response
 from pyramid.renderers import render
 from pyramid.httpexceptions import HTTPNotModified
+from dogpile.cache import make_region
+from re import findall
+from os.path import dirname, join, isfile
 
 from . import lock_file
 from .models import Publication
+
+CACHED_URLS = ('/[A-Z]{2}.geojson', '/report/')
+CACHE_FILE = join(dirname(dirname(__file__)), 'cache.dbm')
+
+# Empty cache on application restart
+if isfile(CACHE_FILE):
+    os.remove(CACHE_FILE)
+
+def publiccache_tween_factory(handler, registry):
+
+    if registry.settings['appname'] != 'public':
+        return handler
+
+    region = make_region().configure('dogpile.cache.dbm',
+            expiration_time=60*60*24*365, arguments={ 'filename': CACHE_FILE})
+
+    def publiccache_tween(request):
+        if all(len(findall(match, request.url)) == 0 for match in CACHED_URLS):
+            return handler(request)
+        if not region.get(request.url):
+            region.set(request.url, handler(request))
+        return region.get(request.url)
+
+    return publiccache_tween
 
 
 def notmodified_tween_factory(handler, registry):
