@@ -31,10 +31,13 @@ from .models import Publication
 
 CACHED_URLS = ('/[A-Z]{2}.geojson', '/report/')
 CACHE_FILE = join(dirname(dirname(__file__)), 'cache.dbm')
+CACHE_LOCKFILE = CACHE_FILE + '.rw.lock'
 
 # Empty cache on application restart
 if isfile(CACHE_FILE):
     os.remove(CACHE_FILE)
+if isfile(CACHE_LOCKFILE):
+    os.remove(CACHE_LOCKFILE)
 
 def publiccache_tween_factory(handler, registry):
 
