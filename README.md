@@ -1,5 +1,11 @@
 # ThinkHazard
 
+A natural hazard screening tool for disaster risk management project planning. ThinkHazard! is maintained by the Global Facility for Disaster Reduction and Recovery (GFDRR). Provides classified hazard level (very low to high) for any location in the world, and advice on managing disaster risk, plus useful reports and contacts, for 11 natural hazards. 
+
+API instructions can be found here: https://github.com/GFDRR/thinkhazard/blob/master/API.md 
+
+
+
 [![Build Status](https://travis-ci.org/GFDRR/thinkhazard.svg?branch=master)](https://travis-ci.org/GFDRR/thinkhazard)
 
 ## System-level dependencies
