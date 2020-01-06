@@ -18,17 +18,9 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 from pyramid.view import view_config
-from pyramid.httpexceptions import (
-    HTTPFound,
-    HTTPNotFound,
-    HTTPBadRequest,
-    )
+from pyramid.httpexceptions import HTTPFound, HTTPNotFound, HTTPBadRequest
 
-from sqlalchemy import (
-    func,
-    inspect,
-    Integer,
-    )
+from sqlalchemy import func, inspect, Integer
 
 from sqlalchemy.orm import contains_eager, joinedload
 
@@ -50,139 +42,159 @@ from ..models import (
     HazardSet,
     Layer,
     TechnicalRecommendation,
-    )
+)
 
 
-@view_config(route_name='admin_index')
+@view_config(route_name="admin_index")
 def index(request):
-    return HTTPFound(request.route_url('admin_hazardsets'))
+    return HTTPFound(request.route_url("admin_hazardsets"))
 
 
-@view_config(route_name='admin_hazardcategories',
-             renderer='templates/admin/hazardcategories.jinja2')
+@view_config(
+    route_name="admin_hazardcategories",
+    renderer="templates/admin/hazardcategories.jinja2",
+)
 def hazardcategories(request):
     hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
     hazard_levels = []
-    for level in ['HIG', 'MED', 'LOW', 'VLO']:
+    for level in ["HIG", "MED", "LOW", "VLO"]:
         hazard_levels.append(HazardLevel.get(level))
-    return {
-        'hazard_types': hazard_types,
-        'hazard_levels': hazard_levels,
-        }
+    return {"hazard_types": hazard_types, "hazard_levels": hazard_levels}
 
 
-@view_config(route_name='admin_hazardcategory',
-             renderer='templates/admin/hazardcategory.jinja2')
+@view_config(
+    route_name="admin_hazardcategory", renderer="templates/admin/hazardcategory.jinja2"
+)
 def hazardcategory(request):
-    hazard_type = request.matchdict['hazard_type']
-    hazard_level = request.matchdict['hazard_level']
+    hazard_type = request.matchdict["hazard_type"]
+    hazard_level = request.matchdict["hazard_level"]
 
-    if request.method == 'GET':
-        hazard_category = DBSession.query(HazardCategory) \
-            .join(HazardType) \
-            .join(HazardLevel) \
-            .filter(HazardType.mnemonic == hazard_type) \
-            .filter(HazardLevel.mnemonic == hazard_level) \
+    if request.method == "GET":
+        hazard_category = (
+            DBSession.query(HazardCategory)
+            .join(HazardType)
+            .join(HazardLevel)
+            .filter(HazardType.mnemonic == hazard_type)
+            .filter(HazardLevel.mnemonic == hazard_level)
             .one()
+        )
         if hazard_category is None:
             raise HTTPNotFound()
 
-        associations = DBSession.query(HcTr) \
-            .filter(HcTr.hazardcategory_id == hazard_category.id) \
-            .order_by(HcTr.order) \
+        associations = (
+            DBSession.query(HcTr)
+            .filter(HcTr.hazardcategory_id == hazard_category.id)
+            .order_by(HcTr.order)
             .all()
+        )
 
         return {
-            'action': request.route_url('admin_hazardcategory',
-                                        hazard_type=hazard_type,
-                                        hazard_level=hazard_level),
-            'hazard_category': hazard_category,
-            'associations': associations
-            }
+            "action": request.route_url(
+                "admin_hazardcategory",
+                hazard_type=hazard_type,
+                hazard_level=hazard_level,
+            ),
+            "hazard_category": hazard_category,
+            "associations": associations,
+        }
 
-    if request.method == 'POST':
-        hazard_category = DBSession.query(HazardCategory) \
-            .get(request.POST.get('id'))
+    if request.method == "POST":
+        hazard_category = DBSession.query(HazardCategory).get(request.POST.get("id"))
         if hazard_category is None:
             raise HTTPNotFound()
 
-        hazard_category.general_recommendation = \
-            request.POST.get('general_recommendation')
+        hazard_category.general_recommendation = request.POST.get(
+            "general_recommendation"
+        )
 
-        associations = request.POST.getall('associations')
+        associations = request.POST.getall("associations")
         order = 0
         for association_id in associations:
             order += 1
             association = DBSession.query(HcTr).get(association_id)
             association.order = order
-        return HTTPFound(request.route_url('admin_hazardcategory',
-                                           hazard_type=hazard_type,
-                                           hazard_level=hazard_level))
+        return HTTPFound(
+            request.route_url(
+                "admin_hazardcategory",
+                hazard_type=hazard_type,
+                hazard_level=hazard_level,
+            )
+        )
 
 
-@view_config(route_name='admin_technical_rec',
-             renderer='templates/admin/technical_rec_index.jinja2')
+@view_config(
+    route_name="admin_technical_rec",
+    renderer="templates/admin/technical_rec_index.jinja2",
+)
 def technical_rec(request):
-    technical_recs = DBSession.query(TechnicalRecommendation) \
-        .order_by(TechnicalRecommendation.text).all()
+    technical_recs = (
+        DBSession.query(TechnicalRecommendation)
+        .order_by(TechnicalRecommendation.text)
+        .all()
+    )
     for technical_rec in technical_recs:
-        technical_rec.hazardcategories = \
-            ', '.join([association.hazardcategory.name() for association in
-                       technical_rec.hazardcategory_associations])
-    return {
-        'technical_recs': technical_recs
-        }
+        technical_rec.hazardcategories = ", ".join(
+            [
+                association.hazardcategory.name()
+                for association in technical_rec.hazardcategory_associations
+            ]
+        )
+    return {"technical_recs": technical_recs}
 
 
-@view_config(route_name='admin_technical_rec_new',
-             renderer='templates/admin/technical_rec_form.jinja2')
+@view_config(
+    route_name="admin_technical_rec_new",
+    renderer="templates/admin/technical_rec_form.jinja2",
+)
 def technical_rec_new(request):
     obj = TechnicalRecommendation()
     return technical_rec_process(request, obj)
 
 
-@view_config(route_name='admin_technical_rec_edit',
-             renderer='templates/admin/technical_rec_form.jinja2')
+@view_config(
+    route_name="admin_technical_rec_edit",
+    renderer="templates/admin/technical_rec_form.jinja2",
+)
 def technical_rec_edit(request):
-    id = request.matchdict['id']
+    id = request.matchdict["id"]
     obj = DBSession.query(TechnicalRecommendation).get(id)
     if obj is None:
         raise HTTPNotFound()
     return technical_rec_process(request, obj)
 
 
-@view_config(route_name='admin_technical_rec_delete')
+@view_config(route_name="admin_technical_rec_delete")
 def technical_rec_delete(request):
-    id = request.matchdict['id']
+    id = request.matchdict["id"]
     obj = DBSession.query(TechnicalRecommendation).get(id)
     DBSession.delete(obj)
-    return HTTPFound(request.route_url('admin_technical_rec'))
+    return HTTPFound(request.route_url("admin_technical_rec"))
 
 
 def technical_rec_process(request, obj):
-    if request.method == 'GET':
+    if request.method == "GET":
         hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
         hazard_levels = []
-        for level in ['HIG', 'MED', 'LOW', 'VLO']:
+        for level in ["HIG", "MED", "LOW", "VLO"]:
             hazard_levels.append(HazardLevel.get(level))
         if obj.id is None:
-            action = request.route_url('admin_technical_rec_new')
+            action = request.route_url("admin_technical_rec_new")
         else:
-            action = request.route_url('admin_technical_rec_edit', id=obj.id)
+            action = request.route_url("admin_technical_rec_edit", id=obj.id)
         return {
-            'obj': obj,
-            'action': action,
-            'hazard_types': hazard_types,
-            'hazard_levels': hazard_levels,
+            "obj": obj,
+            "action": action,
+            "hazard_types": hazard_types,
+            "hazard_levels": hazard_levels,
         }
 
-    if request.method == 'POST':
-        obj.text = request.POST.get('text')
-        obj.detail = request.POST.get('detail')
+    if request.method == "POST":
+        obj.text = request.POST.get("text")
+        obj.detail = request.POST.get("detail")
         if inspect(obj).transient:
             DBSession.add(obj)
 
-        associations = request.POST.getall('associations')
+        associations = request.POST.getall("associations")
         records = obj.hazardcategory_associations
 
         # Remove unchecked ones
@@ -192,148 +204,151 @@ def technical_rec_process(request, obj):
 
         # Add new ones
         for association in associations:
-            hazardtype, hazardlevel = association.split(' - ')
+            hazardtype, hazardlevel = association.split(" - ")
             if not obj.has_association(hazardtype, hazardlevel):
                 hazardcategory = HazardCategory.get(hazardtype, hazardlevel)
-                order = DBSession.query(
-                        func.coalesce(
-                            func.cast(
-                                func.max(HcTr.order),
-                                Integer),
-                            0)) \
-                    .select_from(HcTr) \
-                    .filter(HcTr.hazardcategory_id == hazardcategory.id) \
-                    .first()[0] + 1
+                order = (
+                    DBSession.query(
+                        func.coalesce(func.cast(func.max(HcTr.order), Integer), 0)
+                    )
+                    .select_from(HcTr)
+                    .filter(HcTr.hazardcategory_id == hazardcategory.id)
+                    .first()[0]
+                    + 1
+                )
 
-                record = HcTr(
-                    hazardcategory=hazardcategory,
-                    order=order)
+                record = HcTr(hazardcategory=hazardcategory, order=order)
                 obj.hazardcategory_associations.append(record)
 
         DBSession.flush()
-        return HTTPFound(request.route_url('admin_technical_rec'))
+        return HTTPFound(request.route_url("admin_technical_rec"))
 
 
-@view_config(route_name='admin_hazardsets',
-             renderer='templates/admin/hazardsets.jinja2')
+@view_config(
+    route_name="admin_hazardsets", renderer="templates/admin/hazardsets.jinja2"
+)
 def hazardsets(request):
-    return {
-        'hazardsets': DBSession.query(HazardSet).order_by(HazardSet.id)
-    }
+    return {"hazardsets": DBSession.query(HazardSet).order_by(HazardSet.id)}
 
 
-@view_config(route_name='admin_hazardset',
-             renderer='templates/admin/hazardset.jinja2')
+@view_config(route_name="admin_hazardset", renderer="templates/admin/hazardset.jinja2")
 def hazardset(request):
-    id = request.matchdict['hazardset']
-    hazardset = DBSession.query(HazardSet) \
-        .options(joinedload(HazardSet.layers).joinedload(Layer.hazardlevel)) \
+    id = request.matchdict["hazardset"]
+    hazardset = (
+        DBSession.query(HazardSet)
+        .options(joinedload(HazardSet.layers).joinedload(Layer.hazardlevel))
         .get(id)
-    return {
-        'hazardset': hazardset
-    }
+    )
+    return {"hazardset": hazardset}
 
 
-@view_config(route_name='admin_admindiv_hazardsets')
+@view_config(route_name="admin_admindiv_hazardsets")
 def admindiv_hazardsets(request):
     hazardtype = DBSession.query(HazardType).first()
-    return HTTPFound(request.route_url('admin_admindiv_hazardsets_hazardtype',
-                                       hazardtype=hazardtype.mnemonic))
+    return HTTPFound(
+        request.route_url(
+            "admin_admindiv_hazardsets_hazardtype", hazardtype=hazardtype.mnemonic
+        )
+    )
 
 
-@view_config(route_name='admin_admindiv_hazardsets_hazardtype',
-             renderer='templates/admin/admindiv_hazardsets.jinja2')
+@view_config(
+    route_name="admin_admindiv_hazardsets_hazardtype",
+    renderer="templates/admin/admindiv_hazardsets.jinja2",
+)
 def admin_admindiv_hazardsets_hazardtype(request):
     data = admindiv_hazardsets_hazardtype(request)
     hazard_types = DBSession.query(HazardType).order_by(HazardType.order).all()
-    return {
-        'hazard_types': hazard_types,
-        'data': json.dumps(data)
-    }
+    return {"hazard_types": hazard_types, "data": json.dumps(data)}
 
 
 def admindiv_hazardsets_hazardtype(request):
 
     try:
-        hazardtype = request.matchdict.get('hazardtype')
+        hazardtype = request.matchdict.get("hazardtype")
     except:
-        raise HTTPBadRequest(detail='incorrect value for parameter '
-                                    '"hazardtype"')
+        raise HTTPBadRequest(detail="incorrect value for parameter " '"hazardtype"')
 
     if HazardType.get(hazardtype) is None:
-        raise HTTPBadRequest(detail='hazardtype doesn\'t exist')
+        raise HTTPBadRequest(detail="hazardtype doesn't exist")
 
-    query = DBSession.query(AdministrativeDivision) \
-        .join(HazardCategoryAdministrativeDivisionAssociation) \
-        .join(HazardCategory) \
-        .join(HazardType) \
-        .filter(HazardType.mnemonic == hazardtype) \
-        .join(AdminLevelType) \
-        .filter(AdminLevelType.id == 3) \
-        .order_by(AdministrativeDivision.name) \
+    query = (
+        DBSession.query(AdministrativeDivision)
+        .join(HazardCategoryAdministrativeDivisionAssociation)
+        .join(HazardCategory)
+        .join(HazardType)
+        .filter(HazardType.mnemonic == hazardtype)
+        .join(AdminLevelType)
+        .filter(AdminLevelType.id == 3)
+        .order_by(AdministrativeDivision.name)
         .options(contains_eager(AdministrativeDivision.hazardcategories))
+    )
 
-    data = [{
-        'code': row.code,
-        'name': row.name,
-        'level_2': row.parent.name,
-        'level_1': row.parent.parent.name,
-        'hazardset':
-            row.hazardcategories[0].hazardsets[0].id if
-            row.hazardcategories[0].hazardsets else None,
-        'hazard_level':
-            row.hazardcategories[0].hazardcategory.hazardlevel.mnemonic
-    } for row in query]
+    data = [
+        {
+            "code": row.code,
+            "name": row.name,
+            "level_2": row.parent.name,
+            "level_1": row.parent.parent.name,
+            "hazardset": row.hazardcategories[0].hazardsets[0].id
+            if row.hazardcategories[0].hazardsets
+            else None,
+            "hazard_level": row.hazardcategories[0].hazardcategory.hazardlevel.mnemonic,
+        }
+        for row in query
+    ]
 
     return data
 
 
-@view_config(route_name='admin_admindiv_hazardsets_export', renderer='csv')
+@view_config(route_name="admin_admindiv_hazardsets_export", renderer="csv")
 def admindiv_hazardsets_export(request):
-    query = '''SELECT ht.mnemonic, ad.id, ad.name, hl.mnemonic
+    query = """SELECT ht.mnemonic, ad.id, ad.name, hl.mnemonic
     FROM processing.output AS o LEFT JOIN datamart.administrativedivision
     AS ad ON o.admin_id = ad.id LEFT JOIN datamart.enum_hazardlevel hl ON
     o.hazardlevel_id = hl.id LEFT JOIN processing.hazardset AS hs ON
     o.hazardset_id = hs.id LEFT JOIN datamart.enum_hazardtype AS ht ON
     hs.hazardtype_id = ht.id WHERE ad.leveltype_id = 3
-    ORDER BY ht.mnemonic, ad.name'''
+    ORDER BY ht.mnemonic, ad.name"""
     rows = DBSession.execute(query).fetchall()
 
-    return {
-            'headers': ['hazardtype', 'code', 'name', 'hazard_level'],
-            'rows': rows
-            }
+    return {"headers": ["hazardtype", "code", "name", "hazard_level"], "rows": rows}
 
 
-@view_config(route_name='admin_climate_rec')
+@view_config(route_name="admin_climate_rec")
 def climate_rec(request):
     hazardtype = DBSession.query(HazardType).first()
-    return HTTPFound(request.route_url('admin_climate_rec_hazardtype',
-                                       hazard_type=hazardtype.mnemonic))
+    return HTTPFound(
+        request.route_url(
+            "admin_climate_rec_hazardtype", hazard_type=hazardtype.mnemonic
+        )
+    )
 
 
-@view_config(route_name='admin_climate_rec_hazardtype',
-             renderer='templates/admin/climate_rec_index.jinja2')
+@view_config(
+    route_name="admin_climate_rec_hazardtype",
+    renderer="templates/admin/climate_rec_index.jinja2",
+)
 def climate_rec_hazardtype(request):
-    hazard_type = request.matchdict['hazard_type']
+    hazard_type = request.matchdict["hazard_type"]
     hazardtype = HazardType.get(hazard_type)
     if hazardtype is None:
         raise HTTPNotFound
 
     hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
 
-    climate_recs = DBSession.query(ClimateChangeRecommendation) \
-        .filter(ClimateChangeRecommendation.hazardtype == hazardtype)
-    return {
-        'hazard_types': hazard_types,
-        'climate_recs': climate_recs
-        }
+    climate_recs = DBSession.query(ClimateChangeRecommendation).filter(
+        ClimateChangeRecommendation.hazardtype == hazardtype
+    )
+    return {"hazard_types": hazard_types, "climate_recs": climate_recs}
 
 
-@view_config(route_name='admin_climate_rec_new',
-             renderer='templates/admin/climate_rec_form.jinja2')
+@view_config(
+    route_name="admin_climate_rec_new",
+    renderer="templates/admin/climate_rec_form.jinja2",
+)
 def climate_rec_new(request):
-    hazard_type = request.matchdict['hazard_type']
+    hazard_type = request.matchdict["hazard_type"]
     hazardtype = HazardType.get(hazard_type)
     if hazardtype is None:
         raise HTTPNotFound
@@ -343,67 +358,77 @@ def climate_rec_new(request):
     return climate_rec_process(request, obj)
 
 
-@view_config(route_name='admin_climate_rec_edit',
-             renderer='templates/admin/climate_rec_form.jinja2')
+@view_config(
+    route_name="admin_climate_rec_edit",
+    renderer="templates/admin/climate_rec_form.jinja2",
+)
 def climate_rec_edit(request):
-    id = request.matchdict['id']
+    id = request.matchdict["id"]
     obj = DBSession.query(ClimateChangeRecommendation).get(id)
     if obj is None:
         raise HTTPNotFound()
     return climate_rec_process(request, obj)
 
 
-@view_config(route_name='admin_climate_rec_delete')
+@view_config(route_name="admin_climate_rec_delete")
 def climate_rec_delete(request):
-    id = request.matchdict['id']
+    id = request.matchdict["id"]
     obj = DBSession.query(ClimateChangeRecommendation).get(id)
     DBSession.delete(obj)
-    return HTTPFound(request.route_url('admin_climate_rec_hazardtype',
-                                       hazard_type=obj.hazardtype.mnemonic))
+    return HTTPFound(
+        request.route_url(
+            "admin_climate_rec_hazardtype", hazard_type=obj.hazardtype.mnemonic
+        )
+    )
 
 
 def climate_rec_process(request, obj):
-    if request.method == 'GET':
+    if request.method == "GET":
         hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
 
-        association_subq = DBSession.query(CcrAd) \
-            .filter(CcrAd.hazardtype == obj.hazardtype) \
-            .subquery()
+        association_subq = (
+            DBSession.query(CcrAd).filter(CcrAd.hazardtype == obj.hazardtype).subquery()
+        )
 
-        admin_divs = DBSession.query(
-                AdministrativeDivision,
-                ClimateChangeRecommendation) \
-            .select_from(AdministrativeDivision) \
-            .outerjoin(association_subq,
-                       association_subq.c.administrativedivision_id ==
-                       AdministrativeDivision.id) \
-            .outerjoin(ClimateChangeRecommendation,
-                       ClimateChangeRecommendation.id ==
-                       association_subq.c.climatechangerecommendation_id) \
-            .join(AdminLevelType) \
-            .filter(AdminLevelType.mnemonic == 'COU') \
+        admin_divs = (
+            DBSession.query(AdministrativeDivision, ClimateChangeRecommendation)
+            .select_from(AdministrativeDivision)
+            .outerjoin(
+                association_subq,
+                association_subq.c.administrativedivision_id
+                == AdministrativeDivision.id,
+            )
+            .outerjoin(
+                ClimateChangeRecommendation,
+                ClimateChangeRecommendation.id
+                == association_subq.c.climatechangerecommendation_id,
+            )
+            .join(AdminLevelType)
+            .filter(AdminLevelType.mnemonic == "COU")
             .order_by(AdministrativeDivision.name)
+        )
 
         if obj.id is None:
-            action = request.route_url('admin_climate_rec_new',
-                                       hazard_type=obj.hazardtype.mnemonic)
+            action = request.route_url(
+                "admin_climate_rec_new", hazard_type=obj.hazardtype.mnemonic
+            )
         else:
-            action = request.route_url('admin_climate_rec_edit', id=obj.id)
+            action = request.route_url("admin_climate_rec_edit", id=obj.id)
         return {
-            'obj': obj,
-            'action': action,
-            'hazard_types': hazard_types,
-            'admin_divs': admin_divs
+            "obj": obj,
+            "action": action,
+            "hazard_types": hazard_types,
+            "admin_divs": admin_divs,
         }
 
-    if request.method == 'POST':
+    if request.method == "POST":
         if inspect(obj).transient:
             DBSession.add(obj)
 
-        obj.hazardtype = HazardType.get(request.POST.get('hazard_type'))
-        obj.text = request.POST.get('text')
+        obj.hazardtype = HazardType.get(request.POST.get("hazard_type"))
+        obj.text = request.POST.get("text")
 
-        admindiv_ids = request.POST.getall('associations')
+        admindiv_ids = request.POST.getall("associations")
 
         # Remove unchecked ones
         for association in obj.associations:
@@ -412,119 +437,122 @@ def climate_rec_process(request, obj):
 
         # Add new ones
         for admindiv_id in admindiv_ids:
-            association = DBSession.query(CcrAd) \
-                .get((admindiv_id, obj.hazardtype.id))
+            association = DBSession.query(CcrAd).get((admindiv_id, obj.hazardtype.id))
             if association is None:
                 association = CcrAd(
-                    administrativedivision_id=admindiv_id,
-                    hazardtype=obj.hazardtype)
+                    administrativedivision_id=admindiv_id, hazardtype=obj.hazardtype
+                )
                 obj.associations.append(association)
             else:
                 association.climatechangerecommendation = obj
 
         DBSession.flush()
-        return HTTPFound(request.route_url('admin_climate_rec_edit',
-                         id=obj.hazardtype.mnemonic))
+        return HTTPFound(
+            request.route_url("admin_climate_rec_edit", id=obj.hazardtype.mnemonic)
+        )
 
 
-@view_config(route_name='admin_contacts',
-             renderer='templates/admin/contact_index.jinja2')
+@view_config(
+    route_name="admin_contacts", renderer="templates/admin/contact_index.jinja2"
+)
 def contacts(request):
-    return {
-        'contacts': DBSession.query(Contact).order_by(Contact.name)
-    }
+    return {"contacts": DBSession.query(Contact).order_by(Contact.name)}
 
 
-@view_config(route_name='admin_contact_new',
-             renderer='templates/admin/contact_form.jinja2')
+@view_config(
+    route_name="admin_contact_new", renderer="templates/admin/contact_form.jinja2"
+)
 def contact_new(request):
     obj = Contact()
     return contact_process(request, obj)
 
 
-@view_config(route_name='admin_contact_edit',
-             renderer='templates/admin/contact_form.jinja2')
+@view_config(
+    route_name="admin_contact_edit", renderer="templates/admin/contact_form.jinja2"
+)
 def contact_edit(request):
-    id = request.matchdict['id']
+    id = request.matchdict["id"]
     obj = DBSession.query(Contact).get(id)
     if obj is None:
         raise HTTPNotFound()
     return contact_process(request, obj)
 
 
-@view_config(route_name='admin_contact_delete')
+@view_config(route_name="admin_contact_delete")
 def contact_delete(request):
-    id = request.matchdict['id']
+    id = request.matchdict["id"]
     obj = DBSession.query(Contact).get(id)
     if obj is None:
         raise HTTPNotFound()
     for association in obj.associations:
         DBSession.delete(association)
     DBSession.delete(obj)
-    return HTTPFound(request.route_url('admin_contacts'))
+    return HTTPFound(request.route_url("admin_contacts"))
 
 
 def contact_process(request, obj):
-    if request.method == 'GET':
+    if request.method == "GET":
         if obj.id is None:
-            action = request.route_url('admin_contact_new')
+            action = request.route_url("admin_contact_new")
         else:
-            action = request.route_url('admin_contact_edit', id=obj.id)
+            action = request.route_url("admin_contact_edit", id=obj.id)
 
-        countries = DBSession.query(AdministrativeDivision) \
-            .join(AdminLevelType) \
-            .filter(AdminLevelType.mnemonic == 'COU') \
+        countries = (
+            DBSession.query(AdministrativeDivision)
+            .join(AdminLevelType)
+            .filter(AdminLevelType.mnemonic == "COU")
             .order_by(AdministrativeDivision.name)
+        )
 
         hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
 
-        associations = DBSession.query(CAdHt) \
-            .filter(CAdHt.contact_id == obj.id)
+        associations = DBSession.query(CAdHt).filter(CAdHt.contact_id == obj.id)
 
         return {
-            'obj': obj,
-            'action': action,
-            'countries': countries,
-            'hazard_types': hazard_types,
-            'associations': associations
+            "obj": obj,
+            "action": action,
+            "countries": countries,
+            "hazard_types": hazard_types,
+            "associations": associations,
         }
 
-    if request.method == 'POST':
-        obj.name = request.POST.get('name')
-        obj.phone = request.POST.get('phone')
-        obj.url = request.POST.get('url')
-        obj.email = request.POST.get('email')
+    if request.method == "POST":
+        obj.name = request.POST.get("name")
+        obj.phone = request.POST.get("phone")
+        obj.url = request.POST.get("url")
+        obj.email = request.POST.get("email")
 
         DBSession.query(CAdHt).filter(CAdHt.contact_id == obj.id).delete()
-        countries = request.POST.getall('country')
-        hazard_types = request.POST.getall('hazard_type')
+        countries = request.POST.getall("country")
+        hazard_types = request.POST.getall("hazard_type")
         for i in range(0, len(countries)):
             association = CAdHt(
                 contact=obj,
                 administrativedivision_id=int(countries[i]),
-                hazardtype_id=int(hazard_types[i])
-                )
+                hazardtype_id=int(hazard_types[i]),
+            )
             DBSession.add(association)
 
         if inspect(obj).transient:
             DBSession.add(obj)
 
         DBSession.flush()
-        return HTTPFound(request.route_url('admin_contacts'))
+        return HTTPFound(request.route_url("admin_contacts"))
 
 
-@view_config(route_name='admin_contact_admindiv_hazardtype_association',
-             renderer='templates/admin/CAdHt_form.jinja2')
+@view_config(
+    route_name="admin_contact_admindiv_hazardtype_association",
+    renderer="templates/admin/CAdHt_form.jinja2",
+)
 def contact_admindiv_hazardtype_association(request):
 
-    countries = DBSession.query(AdministrativeDivision) \
-        .join(AdminLevelType) \
-        .filter(AdminLevelType.mnemonic == 'COU') \
+    countries = (
+        DBSession.query(AdministrativeDivision)
+        .join(AdminLevelType)
+        .filter(AdminLevelType.mnemonic == "COU")
         .order_by(AdministrativeDivision.name)
+    )
 
     hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
 
-    return {
-        'countries': countries,
-        'hazard_types': hazard_types,
-    }
+    return {"countries": countries, "hazard_types": hazard_types}

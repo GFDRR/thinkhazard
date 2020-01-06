@@ -25,10 +25,7 @@ from urllib.parse import urlunsplit
 import requests
 import transaction
 
-from ..models import (
-    DBSession,
-    Layer,
-    )
+from ..models import DBSession, Layer
 
 from . import BaseProcessor
 
@@ -37,22 +34,29 @@ logger = logging.getLogger(__name__)
 
 
 class Downloader(BaseProcessor):
-
     @staticmethod
     def argument_parser():
         parser = BaseProcessor.argument_parser()
         parser.add_argument(
-            '--hazardset_id', dest='hazardset_id', action='store',
-            help='The hazardset id')
+            "--hazardset_id",
+            dest="hazardset_id",
+            action="store",
+            help="The hazardset id",
+        )
         parser.add_argument(
-            '-c', '--clear-cache', dest='clear_cache',
-            action='store_const', const=True, default=False,
-            help='Clear raster cache')
+            "-c",
+            "--clear-cache",
+            dest="clear_cache",
+            action="store_const",
+            const=True,
+            default=False,
+            help="Clear raster cache",
+        )
         return parser
 
     def clear_cache(self):
-        logger.info('Clearing raster cache.')
-        cache_path = os.path.join(self.settings['data_path'], 'hazardsets')
+        logger.info("Clearing raster cache.")
+        cache_path = os.path.join(self.settings["data_path"], "hazardsets")
         for filename in os.listdir(cache_path):
             file_path = os.path.join(cache_path, filename)
             if os.path.isfile(file_path):
@@ -61,10 +65,8 @@ class Downloader(BaseProcessor):
     def do_execute(self, hazardset_id=None, clear_cache=False):
         if self.force or clear_cache:
             try:
-                logger.info('Resetting all layers to not downloaded state.')
-                DBSession.query(Layer).update({
-                    Layer.downloaded: False
-                })
+                logger.info("Resetting all layers to not downloaded state.")
+                DBSession.query(Layer).update({Layer.downloaded: False})
                 DBSession.flush()
             except:
                 transaction.abort()
@@ -92,9 +94,9 @@ class Downloader(BaseProcessor):
     def download_layer(self, id):
         layer = DBSession.query(Layer).get(id)
         if layer is None:
-            raise Exception('Layer {} does not exist.'.format(id))
+            raise Exception("Layer {} does not exist.".format(id))
 
-        logger.info('Downloading layer {}'.format(layer.name()))
+        logger.info("Downloading layer {}".format(layer.name()))
 
         path = self.layer_path(layer)
 
@@ -106,42 +108,41 @@ class Downloader(BaseProcessor):
         if os.path.isfile(path):
             cache_mtime = datetime.fromtimestamp(os.path.getmtime(path))
             if layer.data_lastupdated_date > cache_mtime:
-                logger.debug('  File {} considered as obsolete {} > {}'
-                             .format(layer.filename(),
-                                     layer.data_lastupdated_date,
-                                     cache_mtime))
+                logger.debug(
+                    "  File {} considered as obsolete {} > {}".format(
+                        layer.filename(), layer.data_lastupdated_date, cache_mtime
+                    )
+                )
                 os.unlink(path)
             else:
-                logger.info('  File {} found in cache'
-                            .format(layer.filename()))
+                logger.info("  File {} found in cache".format(layer.filename()))
 
         # If file not in cache, download it
         if not os.path.isfile(path):
-            geonode = self.settings['geonode']
-            url = urlunsplit((geonode['scheme'],
-                              geonode['netloc'],
-                              layer.download_url,
-                              '',
-                              ''))
-            logger.info('  Retrieving {}'.format(url))
+            geonode = self.settings["geonode"]
+            url = urlunsplit(
+                (geonode["scheme"], geonode["netloc"], layer.download_url, "", "")
+            )
+            logger.info("  Retrieving {}".format(url))
             try:
                 r = requests.get(url, stream=True)
                 r.raise_for_status()
             except Exception as e:
-                logger.warning('  Unable to download data for layer {}: {}'
-                               .format(layer.name(),
-                                       str(e)))
+                logger.warning(
+                    "  Unable to download data for layer {}: {}".format(
+                        layer.name(), str(e)
+                    )
+                )
                 return
 
-            logger.info('  Saving to {}'.format(path))
+            logger.info("  Saving to {}".format(path))
             try:
-                with open(path, 'wb') as f:
+                with open(path, "wb") as f:
                     for chunk in r.iter_content(chunk_size=1024):
                         f.write(chunk)
             except:
                 os.unlink(path)
-                logger.error('Failed to save file: {}'.format(path),
-                             exc_info=True)
+                logger.error("Failed to save file: {}".format(path), exc_info=True)
                 return False
 
         layer.downloaded = os.path.isfile(path)

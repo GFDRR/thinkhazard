@@ -34,18 +34,12 @@ from sqlalchemy import (
     Unicode,
     Index,
     select,
-    )
+)
 from sqlalchemy.schema import MetaData
 
 from sqlalchemy.ext.declarative import declarative_base
 
-from sqlalchemy.orm import (
-    backref,
-    scoped_session,
-    sessionmaker,
-    relationship,
-    deferred,
-    )
+from sqlalchemy.orm import backref, scoped_session, sessionmaker, relationship, deferred
 
 from sqlalchemy.sql.expression import true
 
@@ -56,7 +50,7 @@ from geoalchemy2 import Geometry
 from zope.sqlalchemy import ZopeTransactionExtension
 
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
-Base = declarative_base(metadata=MetaData(schema='datamart'))
+Base = declarative_base(metadata=MetaData(schema="datamart"))
 
 
 adminleveltypes = threading.local().__dict__
@@ -65,7 +59,7 @@ hazardtypes = threading.local().__dict__
 
 
 class AdminLevelType(Base):
-    __tablename__ = 'enum_adminleveltype'
+    __tablename__ = "enum_adminleveltype"
 
     id = Column(Integer, primary_key=True)
     mnemonic = Column(Unicode, unique=True)
@@ -80,25 +74,19 @@ class AdminLevelType(Base):
             if not insp.detached:
                 return adminleveltype
         with DBSession.no_autoflush:
-            adminleveltype = DBSession.query(cls) \
-                .filter(cls.mnemonic == mnemonic) \
-                .one_or_none()
+            adminleveltype = (
+                DBSession.query(cls).filter(cls.mnemonic == mnemonic).one_or_none()
+            )
             if adminleveltype is not None:
                 adminleveltypes[mnemonic] = adminleveltype
             return adminleveltype
 
 
-level_weights = {
-    None: 0,
-    'VLO': 1,
-    'LOW': 2,
-    'MED': 3,
-    'HIG': 4
-}
+level_weights = {None: 0, "VLO": 1, "LOW": 2, "MED": 3, "HIG": 4}
 
 
 class HazardLevel(Base):
-    __tablename__ = 'enum_hazardlevel'
+    __tablename__ = "enum_hazardlevel"
 
     id = Column(Integer, primary_key=True)
     mnemonic = Column(Unicode, unique=True)
@@ -108,8 +96,7 @@ class HazardLevel(Base):
     def __cmp__(self, other):
         if other is None:
             return 1
-        return cmp(level_weights[self.mnemonic],
-                   level_weights[other.mnemonic])
+        return cmp(level_weights[self.mnemonic], level_weights[other.mnemonic])
 
     @classmethod
     def get(cls, mnemonic):
@@ -119,22 +106,19 @@ class HazardLevel(Base):
             if not insp.detached:
                 return hazardlevel
         with DBSession.no_autoflush:
-            hazardlevel = DBSession.query(cls) \
-                .filter(cls.mnemonic == mnemonic) \
-                .one_or_none()
+            hazardlevel = (
+                DBSession.query(cls).filter(cls.mnemonic == mnemonic).one_or_none()
+            )
             if hazardlevel is not None:
                 hazardlevels[mnemonic] = hazardlevel
             return hazardlevel
 
     def __json__(self, request):
-        return {
-            'mnemonic': self.mnemonic,
-            'title': self.title,
-        }
+        return {"mnemonic": self.mnemonic, "title": self.title}
 
 
 class HazardType(Base):
-    __tablename__ = 'enum_hazardtype'
+    __tablename__ = "enum_hazardtype"
 
     id = Column(Integer, primary_key=True)
     mnemonic = Column(Unicode, unique=True)
@@ -151,98 +135,109 @@ class HazardType(Base):
             if not insp.detached:
                 return hazardtype
         with DBSession.no_autoflush:
-            hazardtype = DBSession.query(cls) \
-                .filter(cls.mnemonic == mnemonic) \
-                .one_or_none()
+            hazardtype = (
+                DBSession.query(cls).filter(cls.mnemonic == mnemonic).one_or_none()
+            )
             if hazardtype is not None:
                 hazardtypes[mnemonic] = hazardtype
             return hazardtype
 
     def __json__(self, request):
-        return {
-            'mnemonic': self.mnemonic,
-            'hazardtype': self.title
-        }
+        return {"mnemonic": self.mnemonic, "hazardtype": self.title}
 
 
 hazardcategory_administrativedivision_hazardset_table = Table(
-    'rel_hazardcategory_administrativedivision_hazardset', Base.metadata,
-    Column('rel_hazardcategory_administrativedivision_id', Integer,
-           ForeignKey('rel_hazardcategory_administrativedivision.id',
-                      ondelete="CASCADE"),
-           primary_key=True),
-    Column('hazardset_id', String,
-           ForeignKey('processing.hazardset.id', ondelete="CASCADE"),
-           primary_key=True))
+    "rel_hazardcategory_administrativedivision_hazardset",
+    Base.metadata,
+    Column(
+        "rel_hazardcategory_administrativedivision_id",
+        Integer,
+        ForeignKey("rel_hazardcategory_administrativedivision.id", ondelete="CASCADE"),
+        primary_key=True,
+    ),
+    Column(
+        "hazardset_id",
+        String,
+        ForeignKey("processing.hazardset.id", ondelete="CASCADE"),
+        primary_key=True,
+    ),
+)
 
 
 class HazardCategoryAdministrativeDivisionAssociation(Base):
-    __tablename__ = 'rel_hazardcategory_administrativedivision'
+    __tablename__ = "rel_hazardcategory_administrativedivision"
 
     id = Column(Integer, primary_key=True)
-    administrativedivision_id = Column(Integer,
-                                       ForeignKey('administrativedivision.id',
-                                                  ondelete="CASCADE"),
-                                       nullable=False)
-    hazardcategory_id = Column(Integer,
-                               ForeignKey('hazardcategory.id'),
-                               nullable=False)
-    administrativedivision = relationship('AdministrativeDivision',
-                                          back_populates='hazardcategories',
-                                          lazy='joined')
-    hazardcategory = relationship('HazardCategory',
-                                  back_populates='administrativedivisions',
-                                  lazy='joined')
+    administrativedivision_id = Column(
+        Integer,
+        ForeignKey("administrativedivision.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    hazardcategory_id = Column(Integer, ForeignKey("hazardcategory.id"), nullable=False)
+    administrativedivision = relationship(
+        "AdministrativeDivision", back_populates="hazardcategories", lazy="joined"
+    )
+    hazardcategory = relationship(
+        "HazardCategory", back_populates="administrativedivisions", lazy="joined"
+    )
     hazardsets = relationship(
-        'HazardSet',
+        "HazardSet",
         secondary=hazardcategory_administrativedivision_hazardset_table,
-        lazy="joined")
+        lazy="joined",
+    )
 
     # Explicitely choose index names to avoid truncation
     __table_args__ = (
-        Index('ix_datamart_rel_hc_ad_ad', 'administrativedivision_id'),
-        Index('ix_datamart_rel_hc_ad_hc', 'hazardcategory_id'),
-        {})
+        Index("ix_datamart_rel_hc_ad_ad", "administrativedivision_id"),
+        Index("ix_datamart_rel_hc_ad_hc", "hazardcategory_id"),
+        {},
+    )
 
 
 class HazardCategoryTechnicalRecommendationAssociation(Base):
-    __tablename__ = 'rel_hazardcategory_technicalrecommendation'
+    __tablename__ = "rel_hazardcategory_technicalrecommendation"
     id = Column(Integer, primary_key=True)
-    hazardcategory_id = Column(Integer, ForeignKey('hazardcategory.id'),
-                               nullable=False)
+    hazardcategory_id = Column(Integer, ForeignKey("hazardcategory.id"), nullable=False)
     technicalrecommendation_id = Column(
-        Integer, ForeignKey('technicalrecommendation.id', ondelete='CASCADE'),
-        nullable=False)
+        Integer,
+        ForeignKey("technicalrecommendation.id", ondelete="CASCADE"),
+        nullable=False,
+    )
     order = Column(Integer, nullable=False)
 
     hazardcategory = relationship(
-        'HazardCategory',
+        "HazardCategory",
         backref=backref(
             "tec_rec_associations",
-            order_by='HazardCategoryTechnicalRecommendationAssociation.order',
-        )
+            order_by="HazardCategoryTechnicalRecommendationAssociation.order",
+        ),
     )
-    technicalrecommendation = relationship('TechnicalRecommendation')
+    technicalrecommendation = relationship("TechnicalRecommendation")
 
     # Explicitely choose index names to avoid truncation
     __table_args__ = (
-        Index('ix_datamart_rel_hc_tr_hc', 'hazardcategory_id'),
-        Index('ix_datamart_rel_hc_tr_tc', 'technicalrecommendation_id'),
-        {})
+        Index("ix_datamart_rel_hc_tr_hc", "hazardcategory_id"),
+        Index("ix_datamart_rel_hc_tr_tc", "technicalrecommendation_id"),
+        {},
+    )
 
 
 region_administrativedivision_table = Table(
-    'rel_region_administrativedivision',
+    "rel_region_administrativedivision",
     Base.metadata,
-    Column('region_id', Integer,
-           ForeignKey('datamart.enum_region.id', ondelete="CASCADE")),
-    Column('administrativedivision_id', Integer,
-           ForeignKey('administrativedivision.id', ondelete="CASCADE"))
+    Column(
+        "region_id", Integer, ForeignKey("datamart.enum_region.id", ondelete="CASCADE")
+    ),
+    Column(
+        "administrativedivision_id",
+        Integer,
+        ForeignKey("administrativedivision.id", ondelete="CASCADE"),
+    ),
 )
 
 
 class Region(Base):
-    __tablename__ = 'enum_region'
+    __tablename__ = "enum_region"
 
     id = Column(Integer, primary_key=True)
     name = Column(Unicode, nullable=False)
@@ -254,71 +249,89 @@ class Region(Base):
     level = Column(Integer, nullable=False)
 
     administrativedivisions = relationship(
-        'AdministrativeDivision',
+        "AdministrativeDivision",
         secondary=region_administrativedivision_table,
-        backref='regions')
+        backref="regions",
+    )
 
 
 class HazardTypeFurtherResourceAssociation(Base):
-    __tablename__ = 'rel_hazardtype_furtherresource'
+    __tablename__ = "rel_hazardtype_furtherresource"
     id = Column(Integer, primary_key=True)
-    hazardtype_id = Column(Integer,
-                           ForeignKey('datamart.enum_hazardtype.id'),
-                           nullable=False, index=True)
-    furtherresource_id = Column(Integer,
-                                ForeignKey('furtherresource.id'),
-                                nullable=False, index=True)
+    hazardtype_id = Column(
+        Integer, ForeignKey("datamart.enum_hazardtype.id"), nullable=False, index=True
+    )
+    furtherresource_id = Column(
+        Integer, ForeignKey("furtherresource.id"), nullable=False, index=True
+    )
     # FIXME: should the region_id be nullable or not ?
-    region_id = Column(Integer,
-                       ForeignKey('enum_region.id'),
-                       nullable=False, index=True)
+    region_id = Column(
+        Integer, ForeignKey("enum_region.id"), nullable=False, index=True
+    )
 
-    hazardtype = relationship('HazardType')
-    region = relationship('Region')
-    furtherresource = relationship('FurtherResource', lazy="joined")
+    hazardtype = relationship("HazardType")
+    region = relationship("Region")
+    furtherresource = relationship("FurtherResource", lazy="joined")
 
 
 class AdministrativeDivision(Base):
-    __tablename__ = 'administrativedivision'
+    __tablename__ = "administrativedivision"
 
     id = Column(Integer, primary_key=True)
     code = Column(Integer, index=True, unique=True, nullable=False)
-    leveltype_id = Column(Integer, ForeignKey(AdminLevelType.id),
-                          nullable=False, index=True)
+    leveltype_id = Column(
+        Integer, ForeignKey(AdminLevelType.id), nullable=False, index=True
+    )
     name = Column(Unicode, nullable=False)
     name_fr = Column(Unicode)
     name_es = Column(Unicode)
-    parent_code = Column(Integer, ForeignKey(
-        'administrativedivision.code', use_alter=True,
-        name='administrativedivision_parent_code_fkey'))
-    geom = deferred(Column(Geometry('MULTIPOLYGON', 4326)))
+    parent_code = Column(
+        Integer,
+        ForeignKey(
+            "administrativedivision.code",
+            use_alter=True,
+            name="administrativedivision_parent_code_fkey",
+        ),
+    )
+    geom = deferred(Column(Geometry("MULTIPOLYGON", 4326)))
 
     leveltype = relationship(AdminLevelType)
-    parent = relationship('AdministrativeDivision', uselist=False,
-                          lazy='joined', join_depth=2,
-                          remote_side=code)
+    parent = relationship(
+        "AdministrativeDivision",
+        uselist=False,
+        lazy="joined",
+        join_depth=2,
+        remote_side=code,
+    )
     hazardcategories = relationship(
-        'HazardCategoryAdministrativeDivisionAssociation',
-        back_populates='administrativedivision')
+        "HazardCategoryAdministrativeDivisionAssociation",
+        back_populates="administrativedivision",
+    )
 
     def __json__(self, request):
         lang = request.locale_name
-        attr = 'name' if lang == 'en' else 'name_' + lang
+        attr = "name" if lang == "en" else "name_" + lang
         if self.leveltype_id == 1:
-            return {'code': self.code,
-                    'admin0': getattr(self, attr),
-                    'url': request.route_url('report_overview', division=self)}
+            return {
+                "code": self.code,
+                "admin0": getattr(self, attr),
+                "url": request.route_url("report_overview", division=self),
+            }
         if self.leveltype_id == 2:
-            return {'code': self.code,
-                    'admin0': getattr(self.parent, attr),
-                    'admin1': self.name,
-                    'url': request.route_url('report_overview', division=self)}
+            return {
+                "code": self.code,
+                "admin0": getattr(self.parent, attr),
+                "admin1": self.name,
+                "url": request.route_url("report_overview", division=self),
+            }
         if self.leveltype_id == 3:
-            return {'code': self.code,
-                    'admin0': getattr(self.parent.parent, attr),
-                    'admin1': self.parent.name,
-                    'admin2': self.name,
-                    'url': request.route_url('report_overview', division=self)}
+            return {
+                "code": self.code,
+                "admin0": getattr(self.parent.parent, attr),
+                "admin1": self.parent.name,
+                "admin2": self.name,
+                "url": request.route_url("report_overview", division=self),
+            }
 
     def slug(self):
         tokens = [self.name]
@@ -327,21 +340,23 @@ class AdministrativeDivision(Base):
             tokens.append(parent.name)
             parent = parent.parent
         tokens.reverse()
-        return slugify('-'.join(tokens))
+        return slugify("-".join(tokens))
 
     def translated_name(self, lang):
-        attr = 'name' if lang == 'en' or self.leveltype.mnemonic != 'COU' \
-            else 'name_' + lang
+        attr = (
+            "name"
+            if lang == "en" or self.leveltype.mnemonic != "COU"
+            else "name_" + lang
+        )
         return getattr(self, attr)
 
 
 class HazardCategory(Base):
-    __tablename__ = 'hazardcategory'
+    __tablename__ = "hazardcategory"
 
     id = Column(Integer, primary_key=True)
     hazardtype_id = Column(Integer, ForeignKey(HazardType.id), nullable=False)
-    hazardlevel_id = Column(Integer, ForeignKey(HazardLevel.id),
-                            nullable=False)
+    hazardlevel_id = Column(Integer, ForeignKey(HazardLevel.id), nullable=False)
     general_recommendation = Column(Unicode, nullable=False)
     general_recommendation_fr = Column(Unicode)
     general_recommendation_es = Column(Unicode)
@@ -349,16 +364,16 @@ class HazardCategory(Base):
     hazardtype = relationship(HazardType, lazy="joined")
     hazardlevel = relationship(HazardLevel)
     administrativedivisions = relationship(
-        'HazardCategoryAdministrativeDivisionAssociation',
-        back_populates='hazardcategory')
+        "HazardCategoryAdministrativeDivisionAssociation",
+        back_populates="hazardcategory",
+    )
 
     def name(self):
-        return '{} - {}'.format(self.hazardtype.mnemonic,
-                                self.hazardlevel.mnemonic)
+        return "{} - {}".format(self.hazardtype.mnemonic, self.hazardlevel.mnemonic)
 
     def translated_general_recommendation(self, lang):
-        attr = 'general_recommendation'
-        return getattr(self, attr if lang == 'en' else '%s_%s' % (attr, lang))
+        attr = "general_recommendation"
+        return getattr(self, attr if lang == "en" else "%s_%s" % (attr, lang))
 
     @classmethod
     def get(cls, hazardtype, hazardlevel):
@@ -368,72 +383,72 @@ class HazardCategory(Base):
         if not isinstance(hazardlevel, HazardLevel):
             hazardlevel = HazardLevel.get(str(hazardlevel))
 
-        return DBSession.query(cls) \
-            .filter(cls.hazardtype == hazardtype) \
-            .filter(cls.hazardlevel == hazardlevel) \
+        return (
+            DBSession.query(cls)
+            .filter(cls.hazardtype == hazardtype)
+            .filter(cls.hazardlevel == hazardlevel)
             .one()
+        )
 
     def __json__(self, request):
         return {
-            'hazard_type': self.hazardtype.title,
-            'hazard_level': self.hazardlevel.title,
-            'general_recommendation': self.general_recommendation,
-            'technical_recommendations': [
+            "hazard_type": self.hazardtype.title,
+            "hazard_level": self.hazardlevel.title,
+            "general_recommendation": self.general_recommendation,
+            "technical_recommendations": [
                 a.technicalrecommendation for a in self.tec_rec_associations
             ],
         }
 
 
 class ClimateChangeRecommendation(Base):
-    __tablename__ = 'climatechangerecommendation'
+    __tablename__ = "climatechangerecommendation"
     id = Column(Integer, primary_key=True)
     text = Column(Unicode, nullable=False)
     text_fr = Column(Unicode)
     text_es = Column(Unicode)
-    hazardtype_id = Column(Integer,
-                           ForeignKey('enum_hazardtype.id'),
-                           nullable=False)
-    hazardtype = relationship('HazardType')
+    hazardtype_id = Column(Integer, ForeignKey("enum_hazardtype.id"), nullable=False)
+    hazardtype = relationship("HazardType")
 
     def __json__(self, request):
         return self.text
 
     def translated_text(self, lang):
-        attr = 'text'
-        return getattr(self, attr if lang == 'en' else '%s_%s' % (attr, lang))
+        attr = "text"
+        return getattr(self, attr if lang == "en" else "%s_%s" % (attr, lang))
 
 
 class ClimateChangeRecAdministrativeDivisionAssociation(Base):
-    __tablename__ = 'rel_climatechangerecommendation_administrativedivision'
+    __tablename__ = "rel_climatechangerecommendation_administrativedivision"
     administrativedivision_id = Column(
         Integer,
-        ForeignKey('administrativedivision.id', ondelete="CASCADE"),
-        primary_key=True
-        )
+        ForeignKey("administrativedivision.id", ondelete="CASCADE"),
+        primary_key=True,
+    )
     # hazardtype_id is duplicate with climatechangerecommendation.hazardtype_id
     # but here it take part in primary key and ease associations handling
-    hazardtype_id = Column(
-        Integer,
-        ForeignKey('enum_hazardtype.id'),
-        primary_key=True
-        )
+    hazardtype_id = Column(Integer, ForeignKey("enum_hazardtype.id"), primary_key=True)
     climatechangerecommendation_id = Column(
         Integer,
-        ForeignKey('climatechangerecommendation.id', ondelete="CASCADE"),
-        nullable=False)
-    administrativedivision = relationship('AdministrativeDivision')
-    hazardtype = relationship('HazardType')
+        ForeignKey("climatechangerecommendation.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    administrativedivision = relationship("AdministrativeDivision")
+    hazardtype = relationship("HazardType")
     climatechangerecommendation = relationship(
-        'ClimateChangeRecommendation',
-        foreign_keys=('ClimateChangeRecAdministrativeDivisionAssociation.'
-                      'climatechangerecommendation_id'),
-        backref=backref("associations",
-                        cascade="all, delete-orphan",
-                        passive_deletes=True))
+        "ClimateChangeRecommendation",
+        foreign_keys=(
+            "ClimateChangeRecAdministrativeDivisionAssociation."
+            "climatechangerecommendation_id"
+        ),
+        backref=backref(
+            "associations", cascade="all, delete-orphan", passive_deletes=True
+        ),
+    )
 
 
 class TechnicalRecommendation(Base):
-    __tablename__ = 'technicalrecommendation'
+    __tablename__ = "technicalrecommendation"
     id = Column(Integer, primary_key=True)
     text = Column(Unicode, nullable=False)
     text_fr = Column(Unicode)
@@ -443,19 +458,20 @@ class TechnicalRecommendation(Base):
     detail_es = Column(Unicode)
 
     hazardcategory_associations = relationship(
-        'HazardCategoryTechnicalRecommendationAssociation',
-        order_by='HazardCategoryTechnicalRecommendationAssociation.order',
-        lazy='joined',
+        "HazardCategoryTechnicalRecommendationAssociation",
+        order_by="HazardCategoryTechnicalRecommendationAssociation.order",
+        lazy="joined",
         cascade="all, delete-orphan",
-        passive_deletes=True)
+        passive_deletes=True,
+    )
 
     def translated_text(self, lang):
-        attr = 'text'
-        return getattr(self, attr if lang == 'en' else '%s_%s' % (attr, lang))
+        attr = "text"
+        return getattr(self, attr if lang == "en" else "%s_%s" % (attr, lang))
 
     def translated_detail(self, lang):
-        attr = 'detail'
-        return getattr(self, attr if lang == 'en' else '%s_%s' % (attr, lang))
+        attr = "detail"
+        return getattr(self, attr if lang == "en" else "%s_%s" % (attr, lang))
 
     def has_association(self, hazardtype, hazardlevel):
         """Test if this technical recommendation is associated with specified
@@ -472,55 +488,57 @@ class TechnicalRecommendation(Base):
 
         for association in self.hazardcategory_associations:
             if (
-                    association.hazardcategory.hazardtype == hazardtype and
-                    association.hazardcategory.hazardlevel == hazardlevel):
+                association.hazardcategory.hazardtype == hazardtype
+                and association.hazardcategory.hazardlevel == hazardlevel
+            ):
                 if inspect(association).deleted:
                     return False
                 return True
         return False
 
     def __json__(self, request):
-        return {
-            'text': self.text,
-            'detail': self.detail
-        }
+        return {"text": self.text, "detail": self.detail}
 
 
 class FurtherResource(Base):
-    __tablename__ = 'furtherresource'
+    __tablename__ = "furtherresource"
 
     # the resource is referenced in geonode with an id:
     id = Column(Integer, primary_key=True)
     text = Column(Unicode, nullable=False)
 
     hazardtype_associations = relationship(
-        'HazardTypeFurtherResourceAssociation',
-        lazy='joined')
+        "HazardTypeFurtherResourceAssociation", lazy="joined"
+    )
 
 
 hazardset_region_table = Table(
-    'rel_hazardset_region',
+    "rel_hazardset_region",
     Base.metadata,
-    Column('hazardset_id', String,
-           ForeignKey('processing.hazardset.id', ondelete="CASCADE")),
-    Column('region_id', Integer,
-           ForeignKey('datamart.enum_region.id', ondelete="CASCADE")),
-    schema='processing',
+    Column(
+        "hazardset_id",
+        String,
+        ForeignKey("processing.hazardset.id", ondelete="CASCADE"),
+    ),
+    Column(
+        "region_id", Integer, ForeignKey("datamart.enum_region.id", ondelete="CASCADE")
+    ),
+    schema="processing",
 )
 
 
 class HazardSet(Base):
-    __tablename__ = 'hazardset'
-    __table_args__ = {'schema': 'processing'}
+    __tablename__ = "hazardset"
+    __table_args__ = {"schema": "processing"}
 
     # id is the string id common to the 3 layers,
     # as reported by geonode ("hazard_set" field), eg: "EQ-PA"
     id = Column(String, primary_key=True)
 
     # a hazardset is related to a hazard type:
-    hazardtype_id = Column(Integer,
-                           ForeignKey('datamart.enum_hazardtype.id'),
-                           nullable=False)
+    hazardtype_id = Column(
+        Integer, ForeignKey("datamart.enum_hazardtype.id"), nullable=False
+    )
 
     # "local" is set to false when bounds = -180/-90/180/90
     # this value comes from the linked layers
@@ -557,50 +575,47 @@ class HazardSet(Base):
     # If not processed, reason why
     processing_error = Column(String)
 
-    hazardtype = relationship('HazardType', backref="hazardsets")
+    hazardtype = relationship("HazardType", backref="hazardsets")
 
-    regions = relationship(
-        'Region',
-        secondary=hazardset_region_table)
+    regions = relationship("Region", secondary=hazardset_region_table)
 
     def layer_by_level(self, level):
         hazardlevel = HazardLevel.get(level)
-        return DBSession.query(Layer) \
-            .filter(Layer.hazardset_id == self.id) \
-            .filter(Layer.hazardlevel_id == hazardlevel.id) \
+        return (
+            DBSession.query(Layer)
+            .filter(Layer.hazardset_id == self.id)
+            .filter(Layer.hazardlevel_id == hazardlevel.id)
             .one_or_none()
+        )
 
     def __json__(self, request):
         return {
-            'id': self.id,
-            'owner_organization': self.owner_organization,
-            'detail_url': self.detail_url
+            "id": self.id,
+            "owner_organization": self.owner_organization,
+            "detail_url": self.detail_url,
         }
 
 
-@listens_for(HazardSet.processed, 'set')
+@listens_for(HazardSet.processed, "set")
 def on_hazardset_processed_set(target, value, oldvalue, initiator):
     if value is None and target.id is not None:
-        DBSession.query(Output) \
-            .filter(Output.hazardset_id == target.id) \
-            .autoflush(False) \
-            .delete()
+        DBSession.query(Output).filter(Output.hazardset_id == target.id).autoflush(
+            False
+        ).delete()
 
 
 class Layer(Base):
-    __tablename__ = 'layer'
-    __table_args__ = {'schema': 'processing'}
+    __tablename__ = "layer"
+    __table_args__ = {"schema": "processing"}
 
     # the layer is referenced in geonode with an id:
     geonode_id = Column(Integer, primary_key=True)
     typename = Column(String, unique=True)
 
     # a layer is identified by it's return_period and hazard_set:
-    hazardset_id = Column(String, ForeignKey('processing.hazardset.id'),
-                          nullable=False)
+    hazardset_id = Column(String, ForeignKey("processing.hazardset.id"), nullable=False)
     # the related hazard_level, inferred from return_period
-    hazardlevel_id = Column(Integer,
-                            ForeignKey('datamart.enum_hazardlevel.id'))
+    hazardlevel_id = Column(Integer, ForeignKey("datamart.enum_hazardlevel.id"))
     # the return period is typically 100, 475, 2475 years but it can vary
     return_period = Column(Integer)
 
@@ -634,49 +649,52 @@ class Layer(Base):
     downloaded = Column(Boolean, nullable=False, default=False)
 
     hazardlevel_order = deferred(
-        select([HazardLevel.order]).where(HazardLevel.id == hazardlevel_id))
+        select([HazardLevel.order]).where(HazardLevel.id == hazardlevel_id)
+    )
     hazardset = relationship(
-        'HazardSet',
-        backref=backref('layers', order_by='Layer.hazardlevel_order.desc()'))
-    hazardlevel = relationship('HazardLevel')
+        "HazardSet",
+        backref=backref("layers", order_by="Layer.hazardlevel_order.desc()"),
+    )
+    hazardlevel = relationship("HazardLevel")
 
     def name(self):
         if self.return_period is None:
             if self.mask:
-                return '{}-MASK'.format(self.hazardset_id)
+                return "{}-MASK".format(self.hazardset_id)
             return self.hazardset_id
         else:
-            return '{}-{}'.format(self.hazardset_id, self.return_period)
+            return "{}-{}".format(self.hazardset_id, self.return_period)
 
     def filename(self):
-        return self.download_url.split('/').pop()
+        return self.download_url.split("/").pop()
 
 
 class Output(Base):
-    __tablename__ = 'output'
-    __table_args__ = {'schema': 'processing'}
+    __tablename__ = "output"
+    __table_args__ = {"schema": "processing"}
     # processing results are identified by:
     #  * the hazardset they come from
     #  * the administrative division that they qualify
-    hazardset_id = Column(String,
-                          ForeignKey('processing.hazardset.id'),
-                          primary_key=True)
-    admin_id = Column(Integer,
-                      ForeignKey('datamart.administrativedivision.id',
-                                 ondelete="CASCADE"),
-                      primary_key=True)
+    hazardset_id = Column(
+        String, ForeignKey("processing.hazardset.id"), primary_key=True
+    )
+    admin_id = Column(
+        Integer,
+        ForeignKey("datamart.administrativedivision.id", ondelete="CASCADE"),
+        primary_key=True,
+    )
     # hazard_level_id is the processing result
-    hazardlevel_id = Column(Integer,
-                            ForeignKey('datamart.enum_hazardlevel.id'),
-                            nullable=False)
+    hazardlevel_id = Column(
+        Integer, ForeignKey("datamart.enum_hazardlevel.id"), nullable=False
+    )
 
-    hazardset = relationship('HazardSet')
-    administrativedivision = relationship('AdministrativeDivision')
-    hazardlevel = relationship('HazardLevel')
+    hazardset = relationship("HazardSet")
+    administrativedivision = relationship("AdministrativeDivision")
+    hazardlevel = relationship("HazardLevel")
 
 
 class FeedbackStatus(Base):
-    __tablename__ = 'enum_feedbackstatus'
+    __tablename__ = "enum_feedbackstatus"
 
     id = Column(Integer, primary_key=True)
     mnemonic = Column(Unicode)
@@ -684,30 +702,26 @@ class FeedbackStatus(Base):
 
 
 class UserFeedback(Base):
-    __tablename__ = 'userfeedback'
+    __tablename__ = "userfeedback"
 
     id = Column(Integer, primary_key=True)
     description = Column(Unicode, nullable=False)
-    submissiondate = Column(DateTime, nullable=False,
-                            default=datetime.datetime.utcnow)
+    submissiondate = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
     useremailaddress = Column(String(254))
     url = Column(Unicode, nullable=False)
-    feedbackstatus_id = Column(Integer, ForeignKey(FeedbackStatus.id),
-                               nullable=False)
+    feedbackstatus_id = Column(Integer, ForeignKey(FeedbackStatus.id), nullable=False)
 
     feedbackstatus = relationship(FeedbackStatus)
 
 
 class Publication(Base):
-    __tablename__ = 'publication'
+    __tablename__ = "publication"
     id = Column(Integer, primary_key=True)
     date = Column(DateTime)
 
     @classmethod
     def last(cls):
-        last = DBSession.query(cls) \
-            .order_by(cls.date.desc()) \
-            .first()
+        last = DBSession.query(cls).order_by(cls.date.desc()).first()
         return last
 
     @classmethod
@@ -718,32 +732,35 @@ class Publication(Base):
 
 
 class Harvesting(Base):
-    __tablename__ = 'harvesting'
-    __table_args__ = {'schema': 'processing'}
+    __tablename__ = "harvesting"
+    __table_args__ = {"schema": "processing"}
     id = Column(Integer, primary_key=True)
     date = Column(DateTime(timezone=True), nullable=False)
     complete = Column(Boolean, nullable=False)
 
     @classmethod
     def last_complete_date(cls):
-        last_complete = DBSession.query(cls) \
-            .filter(cls.complete == true()) \
-            .order_by(cls.date.desc()) \
+        last_complete = (
+            DBSession.query(cls)
+            .filter(cls.complete == true())
+            .order_by(cls.date.desc())
             .first()
+        )
         if last_complete is None:
             return None
         return last_complete.date
 
     @classmethod
     def new(cls, complete):
-        new = cls(date=datetime.datetime.utcnow().replace(tzinfo=pytz.utc),
-                  complete=complete)
+        new = cls(
+            date=datetime.datetime.utcnow().replace(tzinfo=pytz.utc), complete=complete
+        )
         DBSession.add(new)
         return new
 
 
 class Contact(Base):
-    __tablename__ = 'contact'
+    __tablename__ = "contact"
 
     id = Column(Integer, primary_key=True)
     name = Column(Unicode)
@@ -753,25 +770,23 @@ class Contact(Base):
 
     def __json__(self, request):
         return {
-            'name': self.name,
-            'url': self.url,
-            'phone': self.phone,
-            'email': self.email,
+            "name": self.name,
+            "url": self.url,
+            "phone": self.phone,
+            "email": self.email,
         }
 
 
 class ContactAdministrativeDivisionHazardTypeAssociation(Base):
-    __tablename__ = 'rel_contact_administrativedivision_hazardtype'
+    __tablename__ = "rel_contact_administrativedivision_hazardtype"
     id = Column(Integer, primary_key=True)
-    contact_id = Column(Integer,
-                        ForeignKey('contact.id'),
-                        nullable=False, index=True)
-    administrativedivision_id = Column(Integer,
-                                       ForeignKey('administrativedivision.id'),
-                                       nullable=False)
-    hazardtype_id = Column(Integer,
-                           ForeignKey('datamart.enum_hazardtype.id'),
-                           nullable=False, index=True)
+    contact_id = Column(Integer, ForeignKey("contact.id"), nullable=False, index=True)
+    administrativedivision_id = Column(
+        Integer, ForeignKey("administrativedivision.id"), nullable=False
+    )
+    hazardtype_id = Column(
+        Integer, ForeignKey("datamart.enum_hazardtype.id"), nullable=False, index=True
+    )
 
     contact = relationship(Contact, backref="associations")
     administrativedivision = relationship(AdministrativeDivision)

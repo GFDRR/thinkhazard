@@ -19,19 +19,14 @@
 
 from pyramid.view import view_config
 
-from ..models import (
-    DBSession,
-    AdministrativeDivision,
-    Publication,
-    )
+from ..models import DBSession, AdministrativeDivision, Publication
 
 
-@view_config(route_name='sitemap',
-             renderer='templates/sitemap.jinja2')
+@view_config(route_name="sitemap", renderer="templates/sitemap.jinja2")
 def sitemap(request):
     divisions = DBSession.query(AdministrativeDivision)
-    request.response.content_type = 'application/xml'
+    request.response.content_type = "application/xml"
     return {
-        'divisions': divisions.all(),
-        'publication_date': Publication.last().date.strftime('%Y-%m-%d')
+        "divisions": divisions.all(),
+        "publication_date": Publication.last().date.strftime("%Y-%m-%d"),
     }

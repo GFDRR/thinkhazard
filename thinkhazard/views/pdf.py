@@ -27,10 +27,7 @@ from uuid import uuid4
 
 from os import path
 
-from subprocess import (
-    Popen,
-    PIPE,
-)
+from subprocess import Popen, PIPE
 from time import time, sleep
 
 from pyramid.view import view_config
@@ -59,52 +56,53 @@ from sqlalchemy.orm import joinedload
 
 from geoalchemy2.functions import ST_Centroid
 
-REPORT_ID_REGEX = re.compile('\d{4}_\d{2}_\w{8}(-\w{4}){3}-\w{12}?')
+REPORT_ID_REGEX = re.compile("\d{4}_\d{2}_\w{8}(-\w{4}){3}-\w{12}?")
 
 logger = logging.getLogger(__name__)
 
 
-@view_config(
-    route_name='pdf_cover', renderer='templates/pdf_cover.jinja2')
+@view_config(route_name="pdf_cover", renderer="templates/pdf_cover.jinja2")
 def pdf_cover(request):
     try:
-        division_code = request.matchdict.get('divisioncode')
+        division_code = request.matchdict.get("divisioncode")
     except:
-        raise HTTPBadRequest(detail='incorrect value for parameter '
-                                    '"divisioncode"')
+        raise HTTPBadRequest(detail="incorrect value for parameter " '"divisioncode"')
     division = get_division(division_code)
     hazard_types = get_hazard_types(division_code)
 
-    hazards_sorted = sorted(hazard_types, key=lambda a: a['hazardlevel'].order)
+    hazards_sorted = sorted(hazard_types, key=lambda a: a["hazardlevel"].order)
 
     hazard_categories = []
     for h in hazards_sorted:
-        if h['hazardlevel'].mnemonic == _hazardlevel_nodata.mnemonic:
+        if h["hazardlevel"].mnemonic == _hazardlevel_nodata.mnemonic:
             continue
-        hazard_categories.append(get_info_for_hazard_type(
-            request, h['hazardtype'].mnemonic, division))
+        hazard_categories.append(
+            get_info_for_hazard_type(request, h["hazardtype"].mnemonic, division)
+        )
 
-    lon, lat = DBSession.query(
-        func.ST_X(ST_Centroid(AdministrativeDivision.geom)),
-        func.ST_Y(ST_Centroid(AdministrativeDivision.geom))) \
-        .filter(AdministrativeDivision.code == division_code) \
+    lon, lat = (
+        DBSession.query(
+            func.ST_X(ST_Centroid(AdministrativeDivision.geom)),
+            func.ST_Y(ST_Centroid(AdministrativeDivision.geom)),
+        )
+        .filter(AdministrativeDivision.code == division_code)
         .first()
+    )
 
     context = {
-        'hazards': hazard_types,
-        'hazards_sorted': sorted(hazard_types,
-                                 key=lambda a: a['hazardlevel'].order),
-        'parents': get_parents(division),
-        'division': division,
-        'division_lonlat': (lon, lat),
-        'hazard_categories': hazard_categories,
-        'date': datetime.datetime.now()
+        "hazards": hazard_types,
+        "hazards_sorted": sorted(hazard_types, key=lambda a: a["hazardlevel"].order),
+        "parents": get_parents(division),
+        "division": division,
+        "division_lonlat": (lon, lat),
+        "hazard_categories": hazard_categories,
+        "date": datetime.datetime.now(),
     }
 
     return context
 
 
-'''pdf_about: see index.py'''
+"""pdf_about: see index.py"""
 
 
 def create_pdf(file_name, file_name_temp, cover_url, pages, timeout):
@@ -113,17 +111,16 @@ def create_pdf(file_name, file_name_temp, cover_url, pages, timeout):
     has finished, the file is renamed to `file_name`.
     """
     command = path.join(
-        path.dirname(__file__),
-        '../../.build/wkhtmltox/bin/wkhtmltopdf')
+        path.dirname(__file__), "../../.build/wkhtmltox/bin/wkhtmltopdf"
+    )
 
-    command += ' --viewport-size 800x600'
+    command += " --viewport-size 800x600"
     command += ' --window-status "finished"'
     command += ' cover "%s"' % cover_url
     command += ' %s "%s"' % (pages, file_name_temp)
 
     try:
-        p = Popen(
-            command, shell=True, stdout=PIPE, stderr=PIPE, close_fds=True)
+        p = Popen(command, shell=True, stdout=PIPE, stderr=PIPE, close_fds=True)
         # Timeout wkhtmltopdf in case of http error with --window-status
         start = time()
         while p.poll() is None:
@@ -153,140 +150,136 @@ def create_pdf(file_name, file_name_temp, cover_url, pages, timeout):
             pass
 
 
-@view_config(
-    route_name='create_pdf_report', request_method='POST', renderer='json')
+@view_config(route_name="create_pdf_report", request_method="POST", renderer="json")
 def create_pdf_report(request):
     """View to create an asynchronous print job.
     """
     division_code = get_divison_code(request)
 
-    base_path = request.registry.settings.get('pdf_archive_path')
+    base_path = request.registry.settings.get("pdf_archive_path")
     report_id = _get_report_id(division_code, base_path)
 
-    categories = DBSession.query(HazardCategory) \
-        .options(joinedload(HazardCategory.hazardtype)) \
-        .join(HazardCategoryAdministrativeDivisionAssociation) \
-        .join(AdministrativeDivision) \
-        .join(HazardLevel) \
-        .filter(AdministrativeDivision.code == division_code) \
+    categories = (
+        DBSession.query(HazardCategory)
+        .options(joinedload(HazardCategory.hazardtype))
+        .join(HazardCategoryAdministrativeDivisionAssociation)
+        .join(AdministrativeDivision)
+        .join(HazardLevel)
+        .filter(AdministrativeDivision.code == division_code)
         .order_by(HazardLevel.order)
+    )
 
-    query_args = {
-        '_query': {'_LOCALE_': request.locale_name}
-    }
+    query_args = {"_query": {"_LOCALE_": request.locale_name}}
 
-    pages = ' page "%s"' % request.route_url('pdf_about', **query_args)
+    pages = ' page "%s"' % request.route_url("pdf_about", **query_args)
     for cat in categories:
         pages += ' page "{}&static=true"'.format(
             request.route_url(
-                'report_print',
+                "report_print",
                 divisioncode=division_code,
                 hazardtype=cat.hazardtype.mnemonic,
-                **query_args
+                **query_args,
             )
         )
 
-    cover_url = request.route_url('pdf_cover', divisioncode=division_code,
-                                  **query_args)
+    cover_url = request.route_url("pdf_cover", divisioncode=division_code, **query_args)
 
     file_name = _get_report_filename(base_path, division_code, report_id)
     file_name_temp = _get_report_filename(
-        base_path, division_code, report_id, temp=True)
+        base_path, division_code, report_id, temp=True
+    )
 
-    timeout = float(request.registry.settings['pdf_timeout'])
+    timeout = float(request.registry.settings["pdf_timeout"])
 
     # already create the file, so that the client can poll the status
     _touch(file_name_temp)
 
     scheduler.add_job(
-        create_pdf,
-        args=[file_name, file_name_temp, cover_url, pages, timeout])
+        create_pdf, args=[file_name, file_name_temp, cover_url, pages, timeout]
+    )
 
-    return {
-        'divisioncode': division_code,
-        'report_id': report_id
-    }
+    return {"divisioncode": division_code, "report_id": report_id}
 
 
-@view_config(route_name='get_report_status', renderer='json')
+@view_config(route_name="get_report_status", renderer="json")
 def get_report_status(request):
     """View to poll the status of a print job.
     """
     division_code = get_divison_code(request)
     report_id = get_report_id(request)
 
-    base_path = request.registry.settings.get('pdf_archive_path')
+    base_path = request.registry.settings.get("pdf_archive_path")
     file_name = _get_report_filename(base_path, division_code, report_id)
     file_name_temp = _get_report_filename(
-        base_path, division_code, report_id, temp=True)
+        base_path, division_code, report_id, temp=True
+    )
 
     if path.isfile(file_name):
-        return {
-            'status': 'done'
-        }
+        return {"status": "done"}
     elif path.isfile(file_name_temp):
-        return {
-            'status': 'running'
-        }
+        return {"status": "running"}
     else:
-        raise HTTPNotFound('No job found or job has failed')
+        raise HTTPNotFound("No job found or job has failed")
 
 
-@view_config(route_name='get_pdf_report')
+@view_config(route_name="get_pdf_report")
 def get_pdf_report(request):
     """Return the PDF file for finished print jobs.
     """
     division_code = get_divison_code(request)
     report_id = get_report_id(request)
 
-    base_path = request.registry.settings.get('pdf_archive_path')
+    base_path = request.registry.settings.get("pdf_archive_path")
     file_name = _get_report_filename(base_path, division_code, report_id)
     file_name_temp = _get_report_filename(
-        base_path, division_code, report_id, temp=True)
+        base_path, division_code, report_id, temp=True
+    )
 
     if path.isfile(file_name):
-        division_name = DBSession.query(AdministrativeDivision.name) \
-            .filter(AdministrativeDivision.code == division_code) \
+        division_name = (
+            DBSession.query(AdministrativeDivision.name)
+            .filter(AdministrativeDivision.code == division_code)
             .scalar()
-        response = FileResponse(
-            file_name,
-            request=request,
-            content_type='application/pdf'
         )
-        response.headers['Content-Disposition'] = \
-            'attachment; filename="ThinkHazard - %s.pdf"' \
-            % str(division_name.encode('utf-8'))
+        response = FileResponse(
+            file_name, request=request, content_type="application/pdf"
+        )
+        response.headers["Content-Disposition"] = (
+            'attachment; filename="ThinkHazard - %s.pdf"'
+            % str(division_name.encode("utf-8"))
+        )
         return response
     elif path.isfile(file_name_temp):
-        return HTTPBadRequest('Not finished yet')
+        return HTTPBadRequest("Not finished yet")
     else:
-        raise HTTPNotFound('No job found')
+        raise HTTPNotFound("No job found")
 
 
-@view_config(route_name='get_map_report')
+@view_config(route_name="get_map_report")
 def get_map_report(request):
     """Return the JPG file for job map.
     """
 
-    base_path = '/tmp/'
+    base_path = "/tmp/"
 
     command = path.join(
         path.dirname(__file__),
-        '../../.build/phantomjs-2.1.1-linux-x86_64/bin/phantomjs')
+        "../../.build/phantomjs-2.1.1-linux-x86_64/bin/phantomjs",
+    )
 
-    url = request.params.get('url')
-    code = '_'.join(url.split('/')[-2:]).split('?')[0]
-    file_name = '%s.jpg' % code
-    file_path = '%s/%s' % (base_path, file_name)
+    url = request.params.get("url")
+    code = "_".join(url.split("/")[-2:]).split("?")[0]
+    file_name = "%s.jpg" % code
+    file_path = "%s/%s" % (base_path, file_name)
 
     if not path.isfile(file_path):
         try:
             command += ' %s/../../export.js "%s" %s' % (
-                    path.dirname(__file__),
-                    request.params.get('url'),
-                    file_path)
-            p = Popen(
-                command, shell=True, stdout=PIPE, stderr=PIPE, close_fds=True)
+                path.dirname(__file__),
+                request.params.get("url"),
+                file_path,
+            )
+            p = Popen(command, shell=True, stdout=PIPE, stderr=PIPE, close_fds=True)
             # Timeout wkhtmltopdf in case of http error with --window-status
             start = time()
             while p.poll() is None:
@@ -299,24 +292,21 @@ def get_map_report(request):
                 # once the generation has succeeded, rename the file so that
                 # waiting clients know that it is finished
                 # os.rename(file_name_temp, file_name)
-                print('success')
+                print("success")
             else:
-                print('error')
+                print("error")
 
         except:
             logger.error(traceback.format_exc())
 
     if path.isfile(file_path):
         response = FileResponse(
-            file_path,
-            request=request,
-            content_type='application/pdf'
+            file_path, request=request, content_type="application/pdf"
         )
-        response.headers['Content-Disposition'] = \
-            'attachment; filename="map.jpg"'
+        response.headers["Content-Disposition"] = 'attachment; filename="map.jpg"'
         return response
     else:
-        raise HTTPNotFound('No job found')
+        raise HTTPNotFound("No job found")
 
 
 def _get_report_id(division_code, base_path):
@@ -325,45 +315,45 @@ def _get_report_id(division_code, base_path):
     """
     while True:
         date = datetime.datetime.now()
-        year = date.strftime('%Y')
-        month = date.strftime('%m')
-        report_id = '_'.join([year, month, str(uuid4())])
-        file_name = _get_report_filename(
-            base_path, division_code, report_id)
+        year = date.strftime("%Y")
+        month = date.strftime("%m")
+        report_id = "_".join([year, month, str(uuid4())])
+        file_name = _get_report_filename(base_path, division_code, report_id)
         file_name_temp = _get_report_filename(
-            base_path, division_code, report_id, temp=True)
+            base_path, division_code, report_id, temp=True
+        )
         if not (path.isfile(file_name) or path.isfile(file_name_temp)):
             return report_id
 
 
 def _get_report_filename(base_path, division_code, report_id, temp=False):
-    year, month, id = report_id.split('_')
+    year, month, id = report_id.split("_")
     return path.join(
-        base_path, year, month,
-        ('_' if temp else '') + '{:s}-{:s}.pdf'.format(
-            division_code, id))
+        base_path,
+        year,
+        month,
+        ("_" if temp else "") + "{:s}-{:s}.pdf".format(division_code, id),
+    )
 
 
 def _touch(file):
     path = os.path.dirname(file)
     if not os.path.exists(path):
         os.makedirs(path)
-    with open(file, 'a'):
+    with open(file, "a"):
         os.utime(file, None)
 
 
 def get_divison_code(request):
     try:
-        return request.matchdict.get('divisioncode')
+        return request.matchdict.get("divisioncode")
     except:
-        raise HTTPBadRequest(detail='incorrect value for parameter '
-                                    '"divisioncode"')
+        raise HTTPBadRequest(detail="incorrect value for parameter " '"divisioncode"')
 
 
 def get_report_id(request):
-    report_id = request.matchdict.get('id')
+    report_id = request.matchdict.get("id")
     if report_id and REPORT_ID_REGEX.match(report_id):
         return report_id
     else:
-        raise HTTPBadRequest(detail='incorrect value for parameter '
-                                    '"report_id"')
+        raise HTTPBadRequest(detail="incorrect value for parameter " '"report_id"')

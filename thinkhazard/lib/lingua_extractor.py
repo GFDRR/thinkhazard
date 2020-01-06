@@ -36,14 +36,14 @@ from thinkhazard.models import (
 class EnumExtractor(Extractor):
 
     # fake extension but working for at least one file
-    extensions = ['.enum-i18n']
+    extensions = [".enum-i18n"]
 
     def __call__(self, filename, options):
 
         # FIXME find a better way to load settings
-        settings = load_full_settings('development.ini')
+        settings = load_full_settings("development.ini")
 
-        engine = engine_from_config(settings, 'sqlalchemy.')
+        engine = engine_from_config(settings, "sqlalchemy.")
         DBSession.configure(bind=engine)
 
         messages = []
@@ -55,24 +55,23 @@ class EnumExtractor(Extractor):
             messages.append((rec.title, type(rec).__name__))
 
         return [
-            Message(None, text, None, [],
-                    class_name,
-                    '', (filename, 1))
-            for text, class_name in messages if text != '' and text is not None
+            Message(None, text, None, [], class_name, "", (filename, 1))
+            for text, class_name in messages
+            if text != "" and text is not None
         ]
 
 
 class DatabaseExtractor(Extractor):
 
     # fake extension but working for at least one file
-    extensions = ['.db-i18n']
+    extensions = [".db-i18n"]
 
     def __call__(self, filename, options):
 
         # FIXME find a better way to load settings
-        settings = load_full_settings('development.ini')
+        settings = load_full_settings("development.ini")
 
-        engine = engine_from_config(settings, 'sqlalchemy.')
+        engine = engine_from_config(settings, "sqlalchemy.")
         DBSession.configure(bind=engine)
 
         messages = []
@@ -88,8 +87,7 @@ class DatabaseExtractor(Extractor):
             messages.append((rec.detail, type(rec).__name__))
 
         return [
-            Message(None, text, None, [],
-                    class_name,
-                    '', (filename, 1))
-            for text, class_name in messages if text != '' and text is not None
+            Message(None, text, None, [], class_name, "", (filename, 1))
+            for text, class_name in messages
+            if text != "" and text is not None
         ]

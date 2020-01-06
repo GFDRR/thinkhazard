@@ -12,11 +12,12 @@ def custom_locale_negotiator(request):
       :term:`default locale name`.
     """
 
-    name = '_LOCALE_'
+    name = "_LOCALE_"
     if request.params.get(name) is not None:
         return request.params.get(name)
     if request.cookies.get(name) is not None:
         return request.cookies.get(name)
     return request.accept_language.best_match(
         request.registry.settings.available_languages.split(),
-        request.registry.settings.default_locale_name)
+        request.registry.settings.default_locale_name,
+    )
