@@ -57,7 +57,7 @@ class EnumExtractor(Extractor):
         return [
             Message(None, text, None, [],
                     class_name,
-                    u'', (filename, 1))
+                    '', (filename, 1))
             for text, class_name in messages if text != '' and text is not None
         ]
 
@@ -90,6 +90,6 @@ class DatabaseExtractor(Extractor):
         return [
             Message(None, text, None, [],
                     class_name,
-                    u'', (filename, 1))
+                    '', (filename, 1))
             for text, class_name in messages if text != '' and text is not None
         ]

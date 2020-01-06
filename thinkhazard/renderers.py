@@ -1,11 +1,11 @@
 import csv
 try:
-    from StringIO import StringIO  # python 2
+    from io import StringIO  # python 2
 except ImportError:
     from io import StringIO  # python 3
 
 import codecs
-import cStringIO
+import io
 
 
 class CSVRenderer(object):
@@ -46,7 +46,7 @@ class UTF8Recoder:
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         return self.reader.next().encode("utf-8")
 
 
@@ -60,9 +60,9 @@ class UnicodeReader:
         f = UTF8Recoder(f, encoding)
         self.reader = csv.reader(f, dialect=dialect, **kwds)
 
-    def next(self):
-        row = self.reader.next()
-        return [unicode(s, "utf-8") for s in row]
+    def __next__(self):
+        row = next(self.reader)
+        return [str(s, "utf-8") for s in row]
 
     def __iter__(self):
         return self
@@ -76,14 +76,14 @@ class UnicodeWriter:
 
     def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
         # Redirect output to a queue
-        self.queue = cStringIO.StringIO()
+        self.queue = io.StringIO()
         self.writer = csv.writer(self.queue, dialect=dialect, **kwds)
         self.stream = f
         self.encoder = codecs.getincrementalencoder(encoding)()
 
     def writerow(self, row):
         self.writer.writerow([
-            s.encode("utf-8") if isinstance(s, basestring) else unicode(s)
+            s.encode("utf-8") if isinstance(s, str) else str(s)
             for s in row])
         # Fetch UTF-8 output from the queue ...
         data = self.queue.getvalue()

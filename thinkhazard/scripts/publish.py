@@ -21,7 +21,7 @@ import os
 import sys
 from datetime import datetime
 from subprocess import call
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from pyramid.paster import (
     get_appsettings,
@@ -42,8 +42,8 @@ from ..models import (
 
 def usage(argv):
     cmd = os.path.basename(argv[0])
-    print('usage: %s <config_uri> [var=value]\n'
-          '(example: "%s development.ini")' % (cmd, cmd))
+    print(('usage: %s <config_uri> [var=value]\n'
+          '(example: "%s development.ini")' % (cmd, cmd)))
     sys.exit(1)
 
 
@@ -64,12 +64,12 @@ def main(argv=sys.argv):
     admin_database = database_name(config_uri, 'admin', options=options)
     public_database = database_name(config_uri, 'public', options=options)
 
-    print 'Lock public application in maintenance mode'
+    print('Lock public application in maintenance mode')
     with open(lock_file, 'w') as f:
         f.write('This file sets the public application in maintenance mode.')
 
     # Create new publication in admin database
-    print 'Log event to publication table in', admin_database
+    print('Log event to publication table in', admin_database)
     settings = get_appsettings(config_uri, name='admin', options=options)
     load_local_settings(settings, 'admin')
     engine = engine_from_config(settings, 'sqlalchemy.')
@@ -85,27 +85,27 @@ def main(argv=sys.argv):
         folder_path,
         'thinkhazard.{}.backup'.format(datetime.utcnow().isoformat()))
 
-    print 'Backup', admin_database, 'to', backup_path
+    print('Backup', admin_database, 'to', backup_path)
     cmd = 'sudo -u postgres pg_dump -Fc {} > {}'.format(
         admin_database,
         backup_path)
     call(cmd, shell=True)
 
-    print 'Restart PostgreSQL'
+    print('Restart PostgreSQL')
     call(["sudo", "service", "postgresql", 'restart'])
 
-    print 'Drop database', public_database
+    print('Drop database', public_database)
     call(["sudo", "-u", "postgres", "dropdb", public_database])
 
-    print 'Create new fresh database', public_database
+    print('Create new fresh database', public_database)
     call(["sudo", "-u", "postgres", "createdb", public_database])
 
-    print 'Restore backup into', public_database
+    print('Restore backup into', public_database)
     call(["sudo", "-u", "postgres",
           "pg_restore", "--exit-on-error", "-d", public_database, backup_path])
 
-    print 'Restarting Apache to clear cached data'
+    print('Restarting Apache to clear cached data')
     call(["sudo", "apache2ctl", "graceful"])
 
-    print 'Unlock public application from maintenance mode'
+    print('Unlock public application from maintenance mode')
     os.unlink(lock_file)

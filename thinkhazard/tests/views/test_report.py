@@ -125,7 +125,7 @@ class TestReportFunction(BaseTestCase):
 
     def test_report__data_sources(self):
         resp = self.testapp.get('/en/report/31-slug/EQ')
-        print resp.body
+        print(resp.body)
         self.assertTrue('data_provider' in resp.body)
 
     def test_create_pdf_cover(self):

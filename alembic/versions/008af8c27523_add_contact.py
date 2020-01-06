@@ -31,8 +31,8 @@ def upgrade(engine_name):
     sa.Column('contact_id', sa.Integer(), nullable=False),
     sa.Column('administrativedivision_id', sa.Integer(), nullable=False),
     sa.Column('hazardtype_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['administrativedivision_id'], [u'datamart.administrativedivision.id'], ),
-    sa.ForeignKeyConstraint(['contact_id'], [u'datamart.contact.id'], ),
+    sa.ForeignKeyConstraint(['administrativedivision_id'], ['datamart.administrativedivision.id'], ),
+    sa.ForeignKeyConstraint(['contact_id'], ['datamart.contact.id'], ),
     sa.ForeignKeyConstraint(['hazardtype_id'], ['datamart.enum_hazardtype.id'], ),
     sa.PrimaryKeyConstraint('id'),
     schema='datamart'

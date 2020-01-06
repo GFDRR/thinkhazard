@@ -35,12 +35,12 @@ from ...models import (
 
 
 def populate_datamart():
-    print 'populate datamart'
+    print('populate datamart')
     DBSession.query(AdministrativeDivision).delete()
 
-    adminlevel_cou = AdminLevelType.get(u'COU')
-    adminlevel_pro = AdminLevelType.get(u'PRO')
-    adminlevel_reg = AdminLevelType.get(u'REG')
+    adminlevel_cou = AdminLevelType.get('COU')
+    adminlevel_pro = AdminLevelType.get('PRO')
+    adminlevel_reg = AdminLevelType.get('REG')
 
     shape = MultiPolygon([
         Polygon([(0, 0), (0, 1), (1, 1), (1, 0), (0, 0)])
@@ -50,7 +50,7 @@ def populate_datamart():
     country = AdministrativeDivision(**{
         'code': 10,
         'leveltype_id': adminlevel_cou.id,
-        'name': u'Administrative division level 1'
+        'name': 'Administrative division level 1'
     })
     region = Region(id=random.randint(0, 0xffffff),
                     name=uuid.uuid4(), level=3)
@@ -61,7 +61,7 @@ def populate_datamart():
     province = AdministrativeDivision(**{
         'code': 20,
         'leveltype_id': adminlevel_pro.id,
-        'name': u'Administrative division level 2'
+        'name': 'Administrative division level 2'
     })
     province.parent = country
     DBSession.add(province)
@@ -69,7 +69,7 @@ def populate_datamart():
     div = AdministrativeDivision(**{
         'code': 30,
         'leveltype_id': adminlevel_reg.id,
-        'name': u'Administrative division level 3'
+        'name': 'Administrative division level 3'
     })
     div.geom = geometry
     div.hazardcategories = []

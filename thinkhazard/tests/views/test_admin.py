@@ -82,7 +82,7 @@ class TestAdminFunction(BaseTestCase):
         form['text'] = 'Bar'
         admindivs = DBSession.query(AdministrativeDivision) \
             .join(AdminLevelType) \
-            .filter(AdminLevelType.mnemonic == u'COU')
+            .filter(AdminLevelType.mnemonic == 'COU')
         form['associations'] = [admindiv.id for admindiv in admindivs]
         form.submit(status=302)
 
@@ -95,7 +95,7 @@ class TestAdminFunction(BaseTestCase):
         form['text'] = 'Bar'
         admindivs = DBSession.query(AdministrativeDivision) \
             .join(AdminLevelType) \
-            .filter(AdminLevelType.mnemonic == u'COU') \
+            .filter(AdminLevelType.mnemonic == 'COU') \
             .filter(AdministrativeDivision.code == 11)
         form['associations'] = [admindiv.id for admindiv in admindivs]
         form.submit(status=302)

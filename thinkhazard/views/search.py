@@ -46,13 +46,13 @@ def administrativedivision(request):
     if request.locale_name != 'en':
         attribute = getattr(AdDiv, 'name_' + request.locale_name)
         filter_lang = func.unaccent(attribute) \
-            .ilike(func.unaccent(u'%{}%'.format(term)))
+            .ilike(func.unaccent('%{}%'.format(term)))
         filter_lang = and_(
             filter_lang,
             AdminLevelType.mnemonic == 'COU')
 
     filter = func.unaccent(AdDiv.name) \
-        .ilike(func.unaccent(u'%{}%'.format(term)))
+        .ilike(func.unaccent('%{}%'.format(term)))
 
     if filter_lang is not None:
         filter = or_(filter_lang, filter)
@@ -62,7 +62,7 @@ def administrativedivision(request):
         .join(AdminLevelType) \
         .order_by(
             AdDiv.name.ilike(term).desc(),
-            AdDiv.name.ilike(u'{}%'.format(term)).desc(),
+            AdDiv.name.ilike('{}%'.format(term)).desc(),
             AdDiv.leveltype_id,
             AdDiv.name) \
         .limit(10)

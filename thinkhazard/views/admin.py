@@ -63,7 +63,7 @@ def index(request):
 def hazardcategories(request):
     hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
     hazard_levels = []
-    for level in [u'HIG', u'MED', u'LOW', u'VLO']:
+    for level in ['HIG', 'MED', 'LOW', 'VLO']:
         hazard_levels.append(HazardLevel.get(level))
     return {
         'hazard_types': hazard_types,
@@ -163,7 +163,7 @@ def technical_rec_process(request, obj):
     if request.method == 'GET':
         hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
         hazard_levels = []
-        for level in [u'HIG', u'MED', u'LOW', u'VLO']:
+        for level in ['HIG', 'MED', 'LOW', 'VLO']:
             hazard_levels.append(HazardLevel.get(level))
         if obj.id is None:
             action = request.route_url('admin_technical_rec_new')
@@ -381,7 +381,7 @@ def climate_rec_process(request, obj):
                        ClimateChangeRecommendation.id ==
                        association_subq.c.climatechangerecommendation_id) \
             .join(AdminLevelType) \
-            .filter(AdminLevelType.mnemonic == u'COU') \
+            .filter(AdminLevelType.mnemonic == 'COU') \
             .order_by(AdministrativeDivision.name)
 
         if obj.id is None:
@@ -473,7 +473,7 @@ def contact_process(request, obj):
 
         countries = DBSession.query(AdministrativeDivision) \
             .join(AdminLevelType) \
-            .filter(AdminLevelType.mnemonic == u'COU') \
+            .filter(AdminLevelType.mnemonic == 'COU') \
             .order_by(AdministrativeDivision.name)
 
         hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
@@ -519,7 +519,7 @@ def contact_admindiv_hazardtype_association(request):
 
     countries = DBSession.query(AdministrativeDivision) \
         .join(AdminLevelType) \
-        .filter(AdminLevelType.mnemonic == u'COU') \
+        .filter(AdminLevelType.mnemonic == 'COU') \
         .order_by(AdministrativeDivision.name)
 
     hazard_types = DBSession.query(HazardType).order_by(HazardType.order)

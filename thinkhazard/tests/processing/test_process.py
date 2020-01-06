@@ -38,11 +38,11 @@ from ...models import (
 from .. import settings
 from . import populate_datamart
 from ...processing.processing import Processor
-from common import new_geonode_id
+from .common import new_geonode_id
 
 
-preprocessed_type = u'VA'
-notpreprocessed_type = u'FL'
+preprocessed_type = 'VA'
+notpreprocessed_type = 'FL'
 notpreprocessed_unit = 'm'
 
 
@@ -121,7 +121,7 @@ class TestProcess(unittest.TestCase):
         '''Test value > threshold in LOW layer'''
         Processor().execute(settings, hazardset_id='notpreprocessed')
         output = DBSession.query(Output).first()
-        self.assertEqual(output.hazardlevel.mnemonic, u'LOW')
+        self.assertEqual(output.hazardlevel.mnemonic, 'LOW')
 
     @patch('rasterio.open', side_effect=[
         global_reader(),
@@ -133,7 +133,7 @@ class TestProcess(unittest.TestCase):
         '''Test value > threshold in MED layer'''
         Processor().execute(settings, hazardset_id='notpreprocessed')
         output = DBSession.query(Output).first()
-        self.assertEqual(output.hazardlevel.mnemonic, u'MED')
+        self.assertEqual(output.hazardlevel.mnemonic, 'MED')
 
     @patch('rasterio.open', side_effect=[
         global_reader(100.0),
@@ -145,7 +145,7 @@ class TestProcess(unittest.TestCase):
         '''Test value > threshold in HIG layer'''
         Processor().execute(settings, hazardset_id='notpreprocessed')
         output = DBSession.query(Output).first()
-        self.assertEqual(output.hazardlevel.mnemonic, u'HIG')
+        self.assertEqual(output.hazardlevel.mnemonic, 'HIG')
 
     @patch('rasterio.open', side_effect=[
         global_reader(100.0),
@@ -178,7 +178,7 @@ class TestProcess(unittest.TestCase):
         ]
         Processor().execute(settings, hazardset_id='preprocessed')
         output = DBSession.query(Output).first()
-        self.assertEqual(output.hazardlevel.mnemonic, u'VLO')
+        self.assertEqual(output.hazardlevel.mnemonic, 'VLO')
 
     @patch('rasterio.open')
     def test_preprocessed_low(self, open_mock):
@@ -190,7 +190,7 @@ class TestProcess(unittest.TestCase):
         ]
         Processor().execute(settings, hazardset_id='preprocessed')
         output = DBSession.query(Output).first()
-        self.assertEqual(output.hazardlevel.mnemonic, u'VLO')
+        self.assertEqual(output.hazardlevel.mnemonic, 'VLO')
 
     @patch('rasterio.open')
     def test_preprocessed_med(self, open_mock):
@@ -202,7 +202,7 @@ class TestProcess(unittest.TestCase):
         ]
         Processor().execute(settings, hazardset_id='preprocessed')
         output = DBSession.query(Output).first()
-        self.assertEqual(output.hazardlevel.mnemonic, u'MED')
+        self.assertEqual(output.hazardlevel.mnemonic, 'MED')
 
     @patch('rasterio.open')
     def test_preprocessed_hig(self, open_mock):
@@ -214,17 +214,17 @@ class TestProcess(unittest.TestCase):
         ]
         Processor().execute(settings, hazardset_id='preprocessed')
         output = DBSession.query(Output).first()
-        self.assertEqual(output.hazardlevel.mnemonic, u'HIG')
+        self.assertEqual(output.hazardlevel.mnemonic, 'HIG')
 
 
 def populate_notpreprocessed(type, unit):
-    hazardset_id = u'notpreprocessed'
+    hazardset_id = 'notpreprocessed'
     hazardtype = HazardType.get(type)
     hazardtype_settings = settings['hazard_types'][hazardtype.mnemonic]
 
     regions = DBSession.query(Region).all()
 
-    print 'Populating hazardset {}'.format(hazardset_id)
+    print('Populating hazardset {}'.format(hazardset_id))
     hazardset = HazardSet(
         id=hazardset_id,
         hazardtype=hazardtype,
@@ -236,7 +236,7 @@ def populate_notpreprocessed(type, unit):
 
     return_periods = hazardtype_settings['return_periods']
 
-    for level in (u'HIG', u'MED', u'LOW'):
+    for level in ('HIG', 'MED', 'LOW'):
         hazardlevel = HazardLevel.get(level)
         level_return_periods = return_periods[level]
         if isinstance(level_return_periods, list):
@@ -286,12 +286,12 @@ def populate_notpreprocessed(type, unit):
 
 
 def populate_preprocessed(type):
-    hazardset_id = u'preprocessed'
+    hazardset_id = 'preprocessed'
     hazardtype = HazardType.get(type)
 
     regions = DBSession.query(Region).all()
 
-    print 'Populating hazardset {}'.format(hazardset_id)
+    print('Populating hazardset {}'.format(hazardset_id))
     hazardset = HazardSet(
         id=hazardset_id,
         hazardtype=hazardtype,

@@ -299,9 +299,9 @@ def get_map_report(request):
                 # once the generation has succeeded, rename the file so that
                 # waiting clients know that it is finished
                 # os.rename(file_name_temp, file_name)
-                print 'success'
+                print('success')
             else:
-                print 'error'
+                print('error')
 
         except:
             logger.error(traceback.format_exc())

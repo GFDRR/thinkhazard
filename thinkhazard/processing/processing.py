@@ -115,7 +115,7 @@ class Processor(BaseProcessor):
                 # Open rasters
                 self.layers = {}
                 self.readers = {}
-                if 'values' in self.type_settings.keys():
+                if 'values' in list(self.type_settings.keys()):
                     # preprocessed layer
                     layer = DBSession.query(Layer) \
                         .filter(Layer.hazardset_id == hazardset.id) \
@@ -126,7 +126,7 @@ class Processor(BaseProcessor):
                     self.readers[0] = reader
 
                 else:
-                    for level in (u'HIG', u'MED', u'LOW'):
+                    for level in ('HIG', 'MED', 'LOW'):
                         hazardlevel = HazardLevel.get(level)
                         layer = DBSession.query(Layer) \
                             .filter(Layer.hazardset_id == hazardset.id) \
@@ -155,7 +155,7 @@ class Processor(BaseProcessor):
 
             finally:
                 logger.info("  Closing raster files")
-                for key, reader in self.readers.iteritems():
+                for key, reader in self.readers.items():
                     if reader and not reader.closed:
                         reader.close()
 
@@ -170,10 +170,10 @@ class Processor(BaseProcessor):
         DBSession.flush()
 
     def create_outputs(self, hazardset):
-        adminlevel_reg = AdminLevelType.get(u'REG')
+        adminlevel_reg = AdminLevelType.get('REG')
 
         self.bbox = None
-        for reader in self.readers.itervalues():
+        for reader in self.readers.values():
             polygon = polygon_from_boundingbox(reader.bounds)
             if self.bbox is None:
                 self.bbox = polygon
@@ -207,7 +207,7 @@ class Processor(BaseProcessor):
         # Windowed querying to limit memory usage
         limit = 1000  # 1000 records <=> 10 Mo
         admindivs = admindivs.limit(limit)
-        for offset in xrange(0, total, limit):
+        for offset in range(0, total, limit):
             admindivs = admindivs.offset(offset)
 
             for admindiv in admindivs:
@@ -222,7 +222,7 @@ class Processor(BaseProcessor):
 
                 # Try block to include admindiv.code in exception message
                 try:
-                    if 'values' in self.type_settings.keys():
+                    if 'values' in list(self.type_settings.keys()):
                         # preprocessed layer
                         hazardlevel = self.preprocessed_hazardlevel(shape)
                     else:
@@ -283,7 +283,7 @@ class Processor(BaseProcessor):
             if data.mask.all():
                 continue
 
-            for level in (u'HIG', u'MED', u'LOW', u'VLO'):
+            for level in ('HIG', 'MED', 'LOW', 'VLO'):
                 level_obj = HazardLevel.get(level)
                 if level_obj <= hazardlevel:
                     break
@@ -300,7 +300,7 @@ class Processor(BaseProcessor):
     def notpreprocessed_hazardlevel(self,
                                     hazardtype,
                                     geometry):
-        level_vlo = HazardLevel.get(u'VLO')
+        level_vlo = HazardLevel.get('VLO')
 
         hazardlevel = None
 
@@ -312,7 +312,7 @@ class Processor(BaseProcessor):
         inverted_comparison = ('inverted_comparison' in self.type_settings and
                                self.type_settings['inverted_comparison'])
 
-        for level in (u'HIG', u'MED', u'LOW'):
+        for level in ('HIG', 'MED', 'LOW'):
             layer = self.layers[level]
             reader = self.readers[level]
 
@@ -321,7 +321,7 @@ class Processor(BaseProcessor):
                                            layer.hazardlevel.mnemonic,
                                            layer.hazardunit)
 
-            for i in xrange(0, len(geometry.geoms)):
+            for i in range(0, len(geometry.geoms)):
                 if i not in polygons:
                     polygon = geometry.geoms[i]
                     bbox = polygon.bounds
@@ -361,7 +361,7 @@ class Processor(BaseProcessor):
                     mask_threshold = self.get_threshold(
                         hazardtype,
                         mask_layer.local,
-                        u'MASK',
+                        'MASK',
                         mask_layer.hazardunit)
 
                     mask_window = mask_reader.window(*bbox)
@@ -417,11 +417,11 @@ class Processor(BaseProcessor):
     def get_threshold(self, hazardtype, local, level, unit):
         mysettings = self.settings['hazard_types'][hazardtype]['thresholds']
         while type(mysettings) is dict:
-            if 'local' in mysettings.keys():
+            if 'local' in list(mysettings.keys()):
                 mysettings = mysettings['local' if local else 'global']
-            elif 'HIG' in mysettings.keys():
+            elif 'HIG' in list(mysettings.keys()):
                 mysettings = mysettings[level]
-            elif unit in mysettings.keys():
+            elif unit in list(mysettings.keys()):
                 mysettings = mysettings[unit]
             else:
                 raise ProcessException(

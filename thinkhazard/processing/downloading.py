@@ -21,7 +21,7 @@ import logging
 import traceback
 import os
 from datetime import datetime
-from urlparse import urlunsplit
+from urllib.parse import urlunsplit
 import requests
 import transaction
 

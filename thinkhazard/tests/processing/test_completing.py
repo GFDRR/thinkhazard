@@ -102,8 +102,8 @@ class TestCompleting(unittest.TestCase):
     def test_complete_preprocessed(self, open_mock):
         '''Test complete preprocessed hazardset'''
 
-        hazardset_id = u'preprocessed'
-        hazardtype = HazardType.get(u'VA')
+        hazardset_id = 'preprocessed'
+        hazardtype = HazardType.get('VA')
 
         regions = DBSession.query(Region).all()
 
@@ -143,8 +143,8 @@ class TestCompleting(unittest.TestCase):
     def test_complete_notpreprocessed(self, open_mock):
         '''Test complete notpreprocessed hazardset'''
 
-        hazardset_id = u'notpreprocessed'
-        hazardtype = HazardType.get(u'EQ')
+        hazardset_id = 'notpreprocessed'
+        hazardtype = HazardType.get('EQ')
 
         regions = DBSession.query(Region).all()
 
@@ -157,7 +157,7 @@ class TestCompleting(unittest.TestCase):
             regions=regions)
         DBSession.add(hazardset)
 
-        for level in [u'HIG', u'MED', u'LOW']:
+        for level in ['HIG', 'MED', 'LOW']:
             layer = Layer(
                 hazardlevel=HazardLevel.get(level),
                 mask=False,
@@ -184,8 +184,8 @@ class TestCompleting(unittest.TestCase):
     def test_no_region(self):
         '''Test no region'''
 
-        hazardset_id = u'notpreprocessed'
-        hazardtype = HazardType.get(u'EQ')
+        hazardset_id = 'notpreprocessed'
+        hazardtype = HazardType.get('EQ')
 
         hazardset = HazardSet(
             id=hazardset_id,
@@ -195,7 +195,7 @@ class TestCompleting(unittest.TestCase):
             metadata_lastupdated_date=datetime.now())
         DBSession.add(hazardset)
 
-        for level in [u'HIG', u'MED', u'LOW']:
+        for level in ['HIG', 'MED', 'LOW']:
             layer = Layer(
                 hazardlevel=HazardLevel.get(level),
                 mask=False,
@@ -216,15 +216,15 @@ class TestCompleting(unittest.TestCase):
         Completer().execute(settings)
 
         hazardset = DBSession.query(HazardSet).one()
-        self.assertEqual(hazardset.complete_error, u'No associated regions')
+        self.assertEqual(hazardset.complete_error, 'No associated regions')
         self.assertEqual(hazardset.complete, False)
 
     @patch('rasterio.open', side_effect=global_reader_invalid_bounds)
     def test_invalid_bounds(self, open_mock):
         '''Test invalid invalid'''
 
-        hazardset_id = u'notpreprocessed'
-        hazardtype = HazardType.get(u'EQ')
+        hazardset_id = 'notpreprocessed'
+        hazardtype = HazardType.get('EQ')
 
         regions = DBSession.query(Region).all()
 
@@ -237,7 +237,7 @@ class TestCompleting(unittest.TestCase):
             regions=regions)
         DBSession.add(hazardset)
 
-        for level in [u'HIG', u'MED', u'LOW']:
+        for level in ['HIG', 'MED', 'LOW']:
             layer = Layer(
                 hazardlevel=HazardLevel.get(level),
                 mask=False,
@@ -259,15 +259,15 @@ class TestCompleting(unittest.TestCase):
 
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete_error,
-                         u'bounds.bottom > bounds.top')
+                         'bounds.bottom > bounds.top')
         self.assertEqual(hazardset.complete, False)
 
     @patch('rasterio.open', side_effect=global_reader)
     def test_missing_level(self, open_mock):
         '''Test missing level'''
 
-        hazardset_id = u'notpreprocessed'
-        hazardtype = HazardType.get(u'EQ')
+        hazardset_id = 'notpreprocessed'
+        hazardtype = HazardType.get('EQ')
 
         regions = DBSession.query(Region).all()
 
@@ -280,7 +280,7 @@ class TestCompleting(unittest.TestCase):
             regions=regions)
         DBSession.add(hazardset)
 
-        for level in [u'HIG', u'MED']:
+        for level in ['HIG', 'MED']:
             layer = Layer(
                 hazardlevel=HazardLevel.get(level),
                 mask=False,
@@ -301,15 +301,15 @@ class TestCompleting(unittest.TestCase):
         Completer().execute(settings)
 
         hazardset = DBSession.query(HazardSet).one()
-        self.assertEqual(hazardset.complete_error, u'No layer for level LOW')
+        self.assertEqual(hazardset.complete_error, 'No layer for level LOW')
         self.assertEqual(hazardset.complete, False)
 
     @patch('rasterio.open', side_effect=global_reader)
     def test_missing_mask(self, open_mock):
         '''Test missing mask'''
 
-        hazardset_id = u'notpreprocessed'
-        hazardtype = HazardType.get(u'FL')
+        hazardset_id = 'notpreprocessed'
+        hazardtype = HazardType.get('FL')
 
         regions = DBSession.query(Region).all()
 
@@ -322,7 +322,7 @@ class TestCompleting(unittest.TestCase):
             regions=regions)
         DBSession.add(hazardset)
 
-        for level in [u'HIG', u'MED', u'LOW']:
+        for level in ['HIG', 'MED', 'LOW']:
             layer = Layer(
                 hazardlevel=HazardLevel.get(level),
                 mask=False,
@@ -343,15 +343,15 @@ class TestCompleting(unittest.TestCase):
         Completer().execute(settings)
 
         hazardset = DBSession.query(HazardSet).one()
-        self.assertEqual(hazardset.complete_error, u'Missing mask layer')
+        self.assertEqual(hazardset.complete_error, 'Missing mask layer')
         self.assertEqual(hazardset.complete, False)
 
     @patch('rasterio.open', side_effect=Exception())
     def test_open_exception(self, open_mock):
         '''Test handling of open exception'''
 
-        hazardset_id = u'notpreprocessed'
-        hazardtype = HazardType.get(u'EQ')
+        hazardset_id = 'notpreprocessed'
+        hazardtype = HazardType.get('EQ')
 
         regions = DBSession.query(Region).all()
 
@@ -364,7 +364,7 @@ class TestCompleting(unittest.TestCase):
             regions=regions)
         DBSession.add(hazardset)
 
-        for level in [u'HIG', u'MED', u'LOW']:
+        for level in ['HIG', 'MED', 'LOW']:
             layer = Layer(
                 hazardlevel=HazardLevel.get(level),
                 mask=False,
@@ -397,8 +397,8 @@ class TestCompleting(unittest.TestCase):
     def test_not_corresponding_rasters(self, open_mock):
         '''Difference in origin, resolution or size must not complete'''
 
-        hazardset_id = u'notpreprocessed'
-        hazardtype = HazardType.get(u'FL')
+        hazardset_id = 'notpreprocessed'
+        hazardtype = HazardType.get('FL')
 
         regions = DBSession.query(Region).all()
 
@@ -411,7 +411,7 @@ class TestCompleting(unittest.TestCase):
             regions=regions)
         DBSession.add(hazardset)
 
-        for level in [u'HIG', u'MED', u'LOW']:
+        for level in ['HIG', 'MED', 'LOW']:
             layer = Layer(
                 hazardlevel=HazardLevel.get(level),
                 mask=False,
@@ -449,5 +449,5 @@ class TestCompleting(unittest.TestCase):
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(
             hazardset.complete_error,
-            u'All layers should have the same origin, resolution and size')
+            'All layers should have the same origin, resolution and size')
         self.assertEqual(hazardset.complete, False)

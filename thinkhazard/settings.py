@@ -1,5 +1,5 @@
 import os
-import ConfigParser
+import configparser
 import yaml
 from pyramid.paster import get_appsettings
 
@@ -31,6 +31,6 @@ def load_local_settings(settings, name):
     local_settings_path = os.environ.get(
         'LOCAL_SETTINGS_PATH', settings.get('local_settings_path'))
     if local_settings_path and os.path.exists(local_settings_path):
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         config.read(local_settings_path)
         settings.update(config.items('app:{}'.format(name)))

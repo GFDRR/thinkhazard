@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import datetime
 import math
 
@@ -32,7 +32,7 @@ from sqlalchemy.sql.expression import literal_column
 from shapely.geometry.polygon import Polygon
 
 from geoalchemy2.shape import to_shape, from_shape
-from urlparse import urlunsplit
+from urllib.parse import urlunsplit
 
 from ..models import (
     DBSession,
@@ -128,15 +128,15 @@ def report(request):
             division_bounds = bounds_shifted
 
     feedback_params = {}
-    feedback_params['entry.1144401731'] = u'{} - {}'.format(
+    feedback_params['entry.1144401731'] = '{} - {}'.format(
         division.code, division.name).encode('utf8')
     if selected_hazard is not None:
         feedback_params['entry.93444540'] = \
             HazardType.get(selected_hazard).title.encode('utf8')
 
-    feedback_form_url = u'{}?{}'.format(
+    feedback_form_url = '{}?{}'.format(
         request.registry.settings['feedback_form_url'],
-        urllib.urlencode(feedback_params))
+        urllib.parse.urlencode(feedback_params))
 
     context = {
         'hazards': hazard_types,

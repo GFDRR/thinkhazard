@@ -113,7 +113,7 @@ class BaseProcessor():
         self.do_execute(**kwargs)
 
         if dry_run:
-            logger.info(u'Dry run : rolling back transaction')
+            logger.info('Dry run : rolling back transaction')
             trans.rollback()
 
     def layer_path(self, layer):

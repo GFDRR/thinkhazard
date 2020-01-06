@@ -69,14 +69,14 @@ def populate_db():
     DBSession.query(AdministrativeDivision).delete()
 
     hazardtype_eq = DBSession.query(HazardType) \
-        .filter(HazardType.mnemonic == u'EQ').one()
+        .filter(HazardType.mnemonic == 'EQ').one()
     hazardset1 = HazardSet()
-    hazardset1.id = u'hazardset1'
+    hazardset1.id = 'hazardset1'
     hazardset1.hazardtype = hazardtype_eq
     hazardset1.data_lastupdated_date = datetime.now()
     hazardset1.metadata_lastupdated_date = datetime.now()
-    hazardset1.detail_url = u'http://domain.com/path/'
-    hazardset1.owner_organization = u'data_provider'
+    hazardset1.detail_url = 'http://domain.com/path/'
+    hazardset1.owner_organization = 'data_provider'
     DBSession.add(hazardset1)
 
     shape = MultiPolygon([
@@ -88,7 +88,7 @@ def populate_db():
     admin_div_10 = AdministrativeDivision(**{
         'code': 10,
         'leveltype_id': 1,
-        'name': u'Division level 1'
+        'name': 'Division level 1'
     })
     admin_div_10.geom = geometry
     DBSession.add(admin_div_10)
@@ -97,7 +97,7 @@ def populate_db():
     admin_div_11 = AdministrativeDivision(**{
         'code': 11,
         'leveltype_id': 1,
-        'name': u'Division level 1 2'
+        'name': 'Division level 1 2'
     })
     admin_div_11.geom = geometry
     DBSession.add(admin_div_11)
@@ -106,7 +106,7 @@ def populate_db():
     admin_div_12 = AdministrativeDivision(**{
         'code': 12,
         'leveltype_id': 1,
-        'name': u'Division level 1 3'
+        'name': 'Division level 1 3'
     })
     admin_div_12.geom = geometry
     DBSession.add(admin_div_12)
@@ -115,7 +115,7 @@ def populate_db():
     admin_div_13 = AdministrativeDivision(**{
         'code': 13,
         'leveltype_id': 1,
-        'name': u'Division level 1 4'
+        'name': 'Division level 1 4'
     })
     admin_div_13.geom = geometry
     DBSession.add(admin_div_13)
@@ -125,7 +125,7 @@ def populate_db():
     admin_div_20 = AdministrativeDivision(**{
         'code': 20,
         'leveltype_id': 2,
-        'name': u'Division level 2'
+        'name': 'Division level 2'
     })
     admin_div_20.parent_code = admin_div_10.code
     admin_div_20.geom = geometry
@@ -141,7 +141,7 @@ def populate_db():
     admin_div_31 = AdministrativeDivision(**{
         'code': 31,
         'leveltype_id': 3,
-        'name': u'Division level 3 - 1'
+        'name': 'Division level 3 - 1'
     })
     admin_div_31.parent_code = admin_div_20.code
     admin_div_31.geom = geometry
@@ -157,7 +157,7 @@ def populate_db():
     admin_div_32 = AdministrativeDivision(**{
         'code': 32,
         'leveltype_id': 3,
-        'name': u'Division level 3 - 2'
+        'name': 'Division level 3 - 2'
     })
     admin_div_32.parent_code = admin_div_20.code
     admin_div_32.geom = geometry
@@ -176,7 +176,7 @@ def populate_db():
     global_region = Region(**{
         'id': 1,
         'level': 0,
-        'name': u'Global region'
+        'name': 'Global region'
     })
     global_region.administrativedivisions.append(admin_div_10)
     global_region.administrativedivisions.append(admin_div_11)
@@ -187,7 +187,7 @@ def populate_db():
     region_1 = Region(**{
         'id': 2,
         'level': 3,
-        'name': u'Country 1'
+        'name': 'Country 1'
     })
     region_1.administrativedivisions.append(admin_div_10)
 
@@ -196,7 +196,7 @@ def populate_db():
     region_2 = Region(**{
         'id': 3,
         'level': 3,
-        'name': u'Country 2'
+        'name': 'Country 2'
     })
     region_2.administrativedivisions.append(admin_div_11)
 
@@ -205,7 +205,7 @@ def populate_db():
     region_3 = Region(**{
         'id': 4,
         'level': 3,
-        'name': u'Country 3'
+        'name': 'Country 3'
     })
     region_3.administrativedivisions.append(admin_div_12)
 
@@ -221,7 +221,7 @@ def populate_db():
 
     category_eq_hig = HazardCategory.get('EQ', 'HIG')
     category_eq_hig.general_recommendation = \
-        u'General recommendation for EQ HIG'
+        'General recommendation for EQ HIG'
 
     category_fl_hig = HazardCategory.get('FL', 'HIG')
 
@@ -269,23 +269,23 @@ def populate_db():
     )
 
     climate_rec = ClimateChangeRecommendation(
-        text=u'Climate change recommendation',
-        hazardtype=HazardType.get(u'EQ'))
+        text='Climate change recommendation',
+        hazardtype=HazardType.get('EQ'))
     climate_rec.associations.append(CcrAd(
         administrativedivision=admin_div_10,
-        hazardtype=HazardType.get(u'EQ')))
+        hazardtype=HazardType.get('EQ')))
     DBSession.add(climate_rec)
 
     climate_rec = ClimateChangeRecommendation(
-        text=u'Climate change recommendation 2',
-        hazardtype=HazardType.get(u'EQ'))
+        text='Climate change recommendation 2',
+        hazardtype=HazardType.get('EQ'))
     climate_rec.associations.append(CcrAd(
         administrativedivision=admin_div_11,
-        hazardtype=HazardType.get(u'EQ')))
+        hazardtype=HazardType.get('EQ')))
     DBSession.add(climate_rec)
 
     technical_rec = TechnicalRecommendation(**{
-        'text': u'Recommendation #1 for earthquake, applied to'
+        'text': 'Recommendation #1 for earthquake, applied to'
                 ' hazard categories HIG, MED and LOW'
     })
     association = HazardCategoryTechnicalRecommendationAssociation(order=1)
@@ -294,7 +294,7 @@ def populate_db():
     DBSession.add(technical_rec)
 
     technical_rec = TechnicalRecommendation(**{
-        'text': u'Educational web resources on earthquakes and'
+        'text': 'Educational web resources on earthquakes and'
                 ' seismic hazard'
     })
     association = HazardCategoryTechnicalRecommendationAssociation(order=1)
@@ -304,7 +304,7 @@ def populate_db():
 
     category_fl_med = HazardCategory.get('FL', 'MED')
     category_fl_med.general_recommendation = \
-        u'General recommendation for FL MED'
+        'General recommendation for FL MED'
 
     admin_div_31.hazardcategories.append(
         HazardCategoryAdministrativeDivisionAssociation(**{
@@ -323,7 +323,7 @@ def populate_db():
     # it should be found on every EQ report page
     # (except admin_div_12 which is not linked with global region)
     further_resource = FurtherResource(**{
-        'text': u'Educational web resources on earthquakes and' +
+        'text': 'Educational web resources on earthquakes and' +
                 ' seismic hazard',
         'id': 3
     })
@@ -336,7 +336,7 @@ def populate_db():
     # further resource for EQ & region 1:
     # it should be found only on region 1 (and sub-divisions) page
     further_resource = FurtherResource(**{
-        'text': u'Further resource for earthquake for region 1',
+        'text': 'Further resource for earthquake for region 1',
         'id': 5
     })
     association = HazardTypeFurtherResourceAssociation()
@@ -347,10 +347,10 @@ def populate_db():
 
     # contact for EQ & admin_div_11:
     contact1 = Contact(**{
-        'name': u'Contact name',
-        'url': u'http://domain.com',
-        'phone': u'0123456789',
-        'email': u'mail@domain.com'
+        'name': 'Contact name',
+        'url': 'http://domain.com',
+        'phone': '0123456789',
+        'email': 'mail@domain.com'
     })
     DBSession.add(contact1)
     association = CAdHt()
@@ -361,10 +361,10 @@ def populate_db():
 
     # contact for EQ & admin_div_11:
     contact2 = Contact(**{
-        'name': u'Contact name 2',
-        'url': u'http://domain.com',
-        'phone': u'0123456789',
-        'email': u'mail@domain.com'
+        'name': 'Contact name 2',
+        'url': 'http://domain.com',
+        'phone': '0123456789',
+        'email': 'mail@domain.com'
     })
     DBSession.add(contact1)
     association = CAdHt()

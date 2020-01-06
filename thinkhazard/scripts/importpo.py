@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
-from urlparse import urlparse
+from urllib.parse import urlparse
 from sqlalchemy import engine_from_config
 
 from pyramid.paster import get_appsettings
@@ -34,7 +34,7 @@ def main(argv=sys.argv):
     engine = engine_from_config(settings, 'sqlalchemy.')
     with engine.begin() as db:
         DBSession.configure(bind=db)
-        map(import_lang, LOCALE_LIST)
+        list(map(import_lang, LOCALE_LIST))
 
 
 def import_lang(lang):
@@ -54,5 +54,5 @@ def import_lang(lang):
             .update({'detail_%s' % lang: entry.msgstr})
         total += DBSession.query(CcRec) \
             .filter(CcRec.text == msgid).update(params)
-    print '[%s] %s strings updated' % (lang, total)
+    print('[%s] %s strings updated' % (lang, total))
     DBSession.flush()

@@ -103,7 +103,7 @@ class Completer(BaseProcessor):
                 return 'No layer found'
             layers.append(hazardset.layers[0])
         else:
-            for level in (u'LOW', u'MED', u'HIG'):
+            for level in ('LOW', 'MED', 'HIG'):
                 layer = hazardset.layer_by_level(level)
                 if layer is None:
                     return 'No layer for level {}'.format(level)

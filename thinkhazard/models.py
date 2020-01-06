@@ -90,10 +90,10 @@ class AdminLevelType(Base):
 
 level_weights = {
     None: 0,
-    u'VLO': 1,
-    u'LOW': 2,
-    u'MED': 3,
-    u'HIG': 4
+    'VLO': 1,
+    'LOW': 2,
+    'MED': 3,
+    'HIG': 4
 }
 
 
@@ -363,10 +363,10 @@ class HazardCategory(Base):
     @classmethod
     def get(cls, hazardtype, hazardlevel):
         if not isinstance(hazardtype, HazardType):
-            hazardtype = HazardType.get(unicode(hazardtype))
+            hazardtype = HazardType.get(str(hazardtype))
 
         if not isinstance(hazardlevel, HazardLevel):
-            hazardlevel = HazardLevel.get(unicode(hazardlevel))
+            hazardlevel = HazardLevel.get(str(hazardlevel))
 
         return DBSession.query(cls) \
             .filter(cls.hazardtype == hazardtype) \
@@ -465,10 +465,10 @@ class TechnicalRecommendation(Base):
         @return boolean: True if association exists
         """
         if not isinstance(hazardtype, HazardType):
-            hazardtype = HazardType.get(unicode(hazardtype))
+            hazardtype = HazardType.get(str(hazardtype))
 
         if not isinstance(hazardlevel, HazardLevel):
-            hazardlevel = HazardLevel.get(unicode(hazardlevel))
+            hazardlevel = HazardLevel.get(str(hazardlevel))
 
         for association in self.hazardcategory_associations:
             if (
@@ -511,7 +511,7 @@ hazardset_region_table = Table(
 
 class HazardSet(Base):
     __tablename__ = 'hazardset'
-    __table_args__ = {u'schema': 'processing'}
+    __table_args__ = {'schema': 'processing'}
 
     # id is the string id common to the 3 layers,
     # as reported by geonode ("hazard_set" field), eg: "EQ-PA"
@@ -589,7 +589,7 @@ def on_hazardset_processed_set(target, value, oldvalue, initiator):
 
 class Layer(Base):
     __tablename__ = 'layer'
-    __table_args__ = {u'schema': 'processing'}
+    __table_args__ = {'schema': 'processing'}
 
     # the layer is referenced in geonode with an id:
     geonode_id = Column(Integer, primary_key=True)
@@ -654,7 +654,7 @@ class Layer(Base):
 
 class Output(Base):
     __tablename__ = 'output'
-    __table_args__ = {u'schema': 'processing'}
+    __table_args__ = {'schema': 'processing'}
     # processing results are identified by:
     #  * the hazardset they come from
     #  * the administrative division that they qualify
@@ -719,7 +719,7 @@ class Publication(Base):
 
 class Harvesting(Base):
     __tablename__ = 'harvesting'
-    __table_args__ = {u'schema': 'processing'}
+    __table_args__ = {'schema': 'processing'}
     id = Column(Integer, primary_key=True)
     date = Column(DateTime(timezone=True), nullable=False)
     complete = Column(Boolean, nullable=False)

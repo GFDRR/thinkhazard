@@ -39,8 +39,8 @@ from ..models import (
 
 def usage(argv):
     cmd = os.path.basename(argv[0])
-    print('usage: %s <config_uri> [var=value]\n'
-          '(example: "%s development.ini")' % (cmd, cmd))
+    print(('usage: %s <config_uri> [var=value]\n'
+          '(example: "%s development.ini")' % (cmd, cmd)))
     sys.exit(1)
 
 
@@ -97,9 +97,9 @@ WHERE schema_name = '{}';
 def populate_datamart():
     # AdminLevelType
     for i in [
-        (u'COU', u'Country', u'Administrative division of level 0'),
-        (u'PRO', u'Province', u'Administrative division of level 1'),
-        (u'REG', u'Region', u'Administrative division of level 2'),
+        ('COU', 'Country', 'Administrative division of level 0'),
+        ('PRO', 'Province', 'Administrative division of level 1'),
+        ('REG', 'Region', 'Administrative division of level 2'),
     ]:
         r = AdminLevelType()
         r.mnemonic, r.title, r.description = i
@@ -107,10 +107,10 @@ def populate_datamart():
 
     # HazardLevel
     for i in [
-        (u'HIG', u'High', 1),
-        (u'MED', u'Medium', 2),
-        (u'LOW', u'Low', 3),
-        (u'VLO', u'Very low', 4),
+        ('HIG', 'High', 1),
+        ('MED', 'Medium', 2),
+        ('LOW', 'Low', 3),
+        ('VLO', 'Very low', 4),
     ]:
         r = HazardLevel()
         r.mnemonic, r.title, r.order = i
@@ -118,18 +118,18 @@ def populate_datamart():
 
     # HazardType
     for i in [
-        (u'FL', u'River flood', 1),
-        (u'UF', u'Urban flood', 2),
-        (u'CF', u'Coastal flood', 3),
-        (u'EQ', u'Earthquake', 4),
-        (u'LS', u'Landslide', 5),
-        (u'TS', u'Tsunami', 6),
-        (u'VA', u'Volcano', 7),
-        (u'CY', u'Cyclone', 8),
-        (u'DG', u'Water scarcity', 9),
-        (u'EH', u'Extreme heat', 10),
-        (u'WF', u'Wildfire', 11),
-        (u'AP', u'Air pollution', 12),
+        ('FL', 'River flood', 1),
+        ('UF', 'Urban flood', 2),
+        ('CF', 'Coastal flood', 3),
+        ('EQ', 'Earthquake', 4),
+        ('LS', 'Landslide', 5),
+        ('TS', 'Tsunami', 6),
+        ('VA', 'Volcano', 7),
+        ('CY', 'Cyclone', 8),
+        ('DG', 'Water scarcity', 9),
+        ('EH', 'Extreme heat', 10),
+        ('WF', 'Wildfire', 11),
+        ('AP', 'Air pollution', 12),
     ]:
         r = HazardType()
         r.mnemonic, r.title, r.order = i
@@ -142,6 +142,6 @@ def populate_datamart():
             r = HazardCategory()
             r.hazardtype = hazardtype
             r.hazardlevel = hazardlevel
-            r.general_recommendation = u'General recommendation for {} {}'\
+            r.general_recommendation = 'General recommendation for {} {}'\
                 .format(hazardtype.mnemonic, hazardlevel.mnemonic)
             DBSession.add(r)

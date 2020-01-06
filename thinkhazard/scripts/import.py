@@ -46,8 +46,8 @@ from ..models import (
 
 def usage(argv):
     cmd = os.path.basename(argv[0])
-    print('usage: %s <config_uri> [var=value]\n'
-          '(example: "%s development.ini")' % (cmd, cmd))
+    print(('usage: %s <config_uri> [var=value]\n'
+          '(example: "%s development.ini")' % (cmd, cmd)))
     sys.exit(1)
 
 
@@ -71,8 +71,8 @@ def import_admindivs(argv=sys.argv):
 
     folder = options['folder']
     for i in [0, 1, 2]:
-        print "Importing GAUL data for level {}".format(i)
-        print "This may take a while"
+        print("Importing GAUL data for level {}".format(i))
+        print("This may take a while")
         trans = connection.begin()
         table_name = "g2015_2014_{}".format(i)
         shapefile = os.path.join(folder, table_name + '_upd270117.shp')
@@ -87,7 +87,7 @@ def import_admindivs(argv=sys.argv):
 
     trans = connection.begin()
 
-    print "Creating administrative divs"
+    print("Creating administrative divs")
     connection.execute('''
 WITH new_values (code, leveltype_id, name, parent_code, name_fr, name_es,
                  geom) AS (
@@ -198,9 +198,9 @@ DROP TABLE g2015_2014_2;
 
     trans.commit()
 
-    print "{} administrative divisions created".format(
+    print("{} administrative divisions created".format(
         DBSession.query(AdministrativeDivision).count()
-    )
+    ))
 
 
 def import_recommendations(argv=sys.argv):
@@ -236,8 +236,8 @@ def import_recommendations(argv=sys.argv):
                 DBSession.add(hazardcategory)
 
         categories = []
-        for type in [u'EQ', u'FL', u'CY', u'TS', u'CF', u'VA', u'DG']:
-            for level in [u'HIG', u'MED', u'LOW', u'VLO']:
+        for type in ['EQ', 'FL', 'CY', 'TS', 'CF', 'VA', 'DG']:
+            for level in ['HIG', 'MED', 'LOW', 'VLO']:
                 hazardcategory = DBSession.query(HazardCategory) \
                     .join(HazardLevel) \
                     .join(HazardType) \
@@ -274,14 +274,14 @@ def import_recommendations(argv=sys.argv):
 
         # hazard types and corresponding columns
         hazard_types = [
-            (u'FL', 6),
-            (u'EQ', 7),
-            (u'CY', 8),
-            (u'CF', 9),
-            (u'DG', 10),
-            (u'TS', 11),
-            (u'VA', 12),
-            (u'LS', 13),
+            ('FL', 6),
+            ('EQ', 7),
+            ('CY', 8),
+            ('CF', 9),
+            ('DG', 10),
+            ('TS', 11),
+            ('VA', 12),
+            ('LS', 13),
         ]
 
         with open('data/climate_change_recommendations.csv', 'rb') as csvfile:
@@ -374,17 +374,17 @@ def import_contacts(argv=sys.argv):
                     continue
 
                 hazardtype = DBSession.query(HazardType) \
-                    .filter(HazardType.mnemonic == unicode(row[8])) \
+                    .filter(HazardType.mnemonic == str(row[8])) \
                     .one_or_none()
                 if hazardtype is None:
                     continue
 
                 for i in range(0, 3):
                     offset = i * 4
-                    name = unicode(row[9 + offset].decode('latin1'))
-                    url = unicode(row[10 + offset].decode('latin1'))
-                    phone = unicode(row[11 + offset].decode('latin1'))
-                    email = unicode(row[12 + offset].decode('latin1'))
+                    name = str(row[9 + offset].decode('latin1'))
+                    url = str(row[10 + offset].decode('latin1'))
+                    phone = str(row[11 + offset].decode('latin1'))
+                    email = str(row[12 + offset].decode('latin1'))
                     if name is '' and url is '' and \
                        phone is '' and email is '':
                         continue
