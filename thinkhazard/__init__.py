@@ -50,10 +50,8 @@ def main(global_config, **settings):
 
     config.add_tween("thinkhazard.tweens.notmodified_tween_factory")
 
-    config.add_static_view("static", "static", cache_max_age=3600, cachebust=True)
-    config.add_static_view(
-        "lib", settings.get("node_modules"), cache_max_age=86000, cachebust=True
-    )
+    config.add_static_view("static", "static", cache_max_age=3600)
+    config.add_static_view("lib", settings.get("node_modules"), cache_max_age=86000)
 
     config.add_translation_dirs("thinkhazard:locale")
     config.set_locale_negotiator("thinkhazard.i18n.custom_locale_negotiator")
@@ -238,7 +236,7 @@ def add_localized_route(config, name, pattern, factory=None, pregenerator=None, 
         # determine if this is a supported lang and convert it to a locale,
         # likely defaulting to your default language if the requested one is
         # not supported by your app
-        if lang not in request.registry.settings.available_languages.split():
+        if lang not in request.registry.settings['available_languages'].split():
             raise HTTPFound(
                 request.current_route_url(
                     lang=request.registry.settings.default_locale_name
@@ -277,7 +275,7 @@ def add_localized_route(config, name, pattern, factory=None, pregenerator=None, 
         new_pattern,
         factory=wrapper_factory,
         pregenerator=wrapper_pregenerator,
-        **kw,
+        **kw
     )
 
     # Add redirect to the default language routes
