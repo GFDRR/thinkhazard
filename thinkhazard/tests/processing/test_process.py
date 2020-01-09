@@ -22,7 +22,7 @@ import transaction
 from datetime import datetime
 import numpy as np
 from mock import Mock, patch
-from rasterio._io import RasterReader
+from rasterio.io import DatasetReader
 from affine import Affine
 
 from ...models import (
@@ -67,7 +67,7 @@ def global_reader(value=None):
         array.fill(value)
         array.mask.fill(False)
     transform = Affine(-180.0, 0.5, 0.0, 90.0, 0.0, -0.5)
-    reader = Mock(spec=RasterReader)
+    reader = Mock(spec=DatasetReader)
     reader.read.return_value = array
     reader.shape = array.shape
     reader.transform = transform

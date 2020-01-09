@@ -307,7 +307,7 @@ class TestHarvesting(unittest.TestCase):
             harvester.harvest_layer(layers()[0])
 
         self.assertEqual(
-            cm.exception.message,
+            str(cm.exception),
             'Geonode returned status 500: {"error_message": "Some error."}',
         )
 

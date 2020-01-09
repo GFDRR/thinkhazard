@@ -71,11 +71,11 @@ class TestReportFunction(BaseTestCase):
     def test_report__zoom_out(self):
         resp = self.testapp.get("/en/report/10-slug")
         # no zoom out for level 1
-        self.assertFalse("drillup" in resp.body)
+        self.assertFalse("drillup" in resp.text)
 
         resp = self.testapp.get("/en/report/20-slug")
         # zoom out for level > 1
-        self.assertTrue("drillup" in resp.body)
+        self.assertTrue("drillup" in resp.text)
 
     def test_report__hazard_categories(self):
         resp = self.testapp.get("/en/report/32-slug")
@@ -98,7 +98,7 @@ class TestReportFunction(BaseTestCase):
 
     def test_report__hazard(self):
         resp = self.testapp.get("/en/report/32-slug/EQ", status=200)
-        self.assertTrue("Climate change recommendation" in resp.body)
+        self.assertTrue("Climate change recommendation" in resp.text)
         self.assertEqual(len(resp.pyquery(".recommendations li")), 2)
 
     def test_report__further_resources_division(self):
@@ -125,8 +125,8 @@ class TestReportFunction(BaseTestCase):
 
     def test_report__data_sources(self):
         resp = self.testapp.get("/en/report/31-slug/EQ")
-        print(resp.body)
-        self.assertTrue("data_provider" in resp.body)
+        print(resp.text)
+        self.assertTrue("data_provider" in resp.text)
 
     def test_create_pdf_cover(self):
         self.testapp.get("/en/pdf_cover/31", status=200)
@@ -209,7 +209,7 @@ class TestReportFunction(BaseTestCase):
     def test_get_pdf_report__found(self):
         self._touch_file(self.pdf_file)
         resp = self.testapp.get("/en/report/31/1970_01_{:s}.pdf".format(self.report_id))
-        self.assertEqual(resp.body, "The pdf file")
+        self.assertEqual(resp.text, "The pdf file")
         self.assertEqual(resp.content_type, "application/pdf")
 
     def test_get_pdf_report__still_running(self):

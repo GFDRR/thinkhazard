@@ -106,7 +106,7 @@ class Processor(BaseProcessor):
 
         hazardset.processing_error = None
 
-        with rasterio.drivers():
+        with rasterio.Env():
             try:
                 logger.info("  Opening raster files")
                 # Open rasters

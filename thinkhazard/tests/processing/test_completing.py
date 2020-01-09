@@ -21,7 +21,7 @@ import unittest
 import transaction
 from datetime import datetime
 from mock import Mock, patch
-from rasterio._io import RasterReader
+from rasterio.io import DatasetReader
 from rasterio.coords import BoundingBox
 from affine import Affine
 
@@ -41,7 +41,7 @@ def populate():
 
 
 def global_reader(path=""):
-    reader = Mock(spec=RasterReader)
+    reader = Mock(spec=DatasetReader)
     reader.shape = (360, 720)
     reader.affine = Affine(-180.0, 0.5, 0.0, -90.0, 0.0, 0.5)
     reader.bounds = BoundingBox(-180.0, -90.0, 0.0, 0.0)
@@ -53,7 +53,7 @@ def global_reader(path=""):
 
 
 def global_reader_bis(path=""):
-    reader = Mock(spec=RasterReader)
+    reader = Mock(spec=DatasetReader)
     reader.shape = (361, 720)
     reader.affine = Affine(-180.0, 0.5, 0.0, -90.0, 0.0, 0.5)
     reader.bounds = BoundingBox(-180.0, -90.0, 0.5, 0.0)
@@ -65,7 +65,7 @@ def global_reader_bis(path=""):
 
 
 def global_reader_invalid_bounds(path=""):
-    reader = Mock(spec=RasterReader)
+    reader = Mock(spec=DatasetReader)
     reader.shape = (360, 720)
     reader.affine = Affine(-180.0, 0.5, 0.0, 90.0, 0.0, -0.5)
     reader.bounds = BoundingBox(-180.0, 90.0, 0.5, 0.0)

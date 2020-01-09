@@ -239,7 +239,7 @@ def add_localized_route(config, name, pattern, factory=None, pregenerator=None, 
         if lang not in request.registry.settings['available_languages'].split():
             raise HTTPFound(
                 request.current_route_url(
-                    lang=request.registry.settings.default_locale_name
+                    lang=request.registry.settings['default_locale_name']
                 )
             )
 
@@ -256,7 +256,7 @@ def add_localized_route(config, name, pattern, factory=None, pregenerator=None, 
     def wrapper_pregenerator(request, elements, kw):
         if "lang" not in kw:
             kw["lang"] = (
-                request.locale_name or config.registry.settings.default_locale_name
+                request.locale_name or config.registry.settings['default_locale_name']
             )
         if orig_pregenerator:
             return orig_pregenerator(request, elements, kw)

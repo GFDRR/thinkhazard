@@ -20,7 +20,7 @@ def load_processing_settings(settings):
     """
     processing_settings_path = settings["processing_settings_path"]
     with open(processing_settings_path, "r") as f:
-        settings.update(yaml.load(f.read()))
+        settings.update(yaml.load(f.read(), Loader=yaml.FullLoader))
 
 
 def load_local_settings(settings, name):

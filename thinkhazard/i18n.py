@@ -18,6 +18,6 @@ def custom_locale_negotiator(request):
     if request.cookies.get(name) is not None:
         return request.cookies.get(name)
     return request.accept_language.best_match(
-        request.registry.settings.available_languages.split(),
-        request.registry.settings.default_locale_name,
+        request.registry.settings['available_languages'].split(),
+        request.registry.settings['default_locale_name'],
     )
