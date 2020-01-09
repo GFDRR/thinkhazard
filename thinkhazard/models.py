@@ -94,10 +94,15 @@ class HazardLevel(Base):
     title = Column(Unicode, nullable=False)
     order = Column(Integer)
 
-    def __cmp__(self, other):
+    def __le__(self, other):
         if other is None:
-            return 1
-        return cmp(level_weights[self.mnemonic], level_weights[other.mnemonic])
+            return False
+        return level_weights[self.mnemonic] <= level_weights[other.mnemonic]
+
+    def __ge__(self, other):
+        if other is None:
+            return True
+        return level_weights[self.mnemonic] >= level_weights[other.mnemonic]
 
     @classmethod
     def get(cls, mnemonic):
