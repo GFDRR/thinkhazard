@@ -4,7 +4,7 @@ cache:
   directories:
   - "$HOME/.cache/pip"
 python:
-- 2.7
+- 3.6.1
 addons:
   postgresql: '9.3'
 before_install:
