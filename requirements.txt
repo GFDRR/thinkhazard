@@ -1,3 +1,25 @@
+geoalchemy2
+psycopg2
+pyramid
+pyramid_jinja2
+pyramid_debugtoolbar
+pyramid_tm
+simplejson
+SQLAlchemy
+shapely
+transaction
+zope.sqlalchemy
+waitress
+papyrus
+WebTest
+nose
+pyquery
+markdown
+APScheduler
+paste
+alembic
+pytidylib
+
 pyyaml
 rasterio
 pyproj
@@ -10,4 +32,3 @@ lingua
 transifex-client
 jinja2
 requests
--e .

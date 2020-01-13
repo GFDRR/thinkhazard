@@ -25,30 +25,9 @@ with open(os.path.join(here, "README.md")) as f:
     README = f.read()
 with open(os.path.join(here, "CHANGES.rst")) as f:
     CHANGES = f.read()
+with open(os.path.join(here, "requirements.txt")) as f:
+    requires = f.read().splitlines()
 
-requires = [
-    "geoalchemy2",
-    "psycopg2",
-    "pyramid",
-    "pyramid_jinja2",
-    "pyramid_debugtoolbar",
-    "pyramid_tm",
-    "simplejson",
-    "SQLAlchemy",
-    "shapely",
-    "transaction",
-    "zope.sqlalchemy",
-    "waitress",
-    "papyrus",
-    "WebTest",
-    "nose",
-    "pyquery",
-    "markdown",
-    "APScheduler",
-    "paste",
-    "alembic",
-    "pytidylib",
-]
 
 setup(
     name="thinkhazard",
