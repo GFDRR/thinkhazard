@@ -38,7 +38,6 @@ help:
 	@echo "- serve_public            Run the dev server (public app)"
 	@echo "- serve_admin             Run the dev server (admin app)"
 	@echo "- check                   Check the code with flake8, jshint and bootlint"
-	@echo "- modwsgi                 Create files for Apache mod_wsgi"
 	@echo "- test                    Run the unit tests"
 	@echo "- dist                    Build a source distribution"
 	@echo "- routes                  Show the application routes"
@@ -163,9 +162,6 @@ jshint: .build/node_modules.timestamp .build/jshint.timestamp
 
 .PHONY: bootlint
 bootlint: .build/node_modules.timestamp .build/bootlint.timestamp
-
-.PHONY: modwsgi
-modwsgi: .build/apache.timestamp
 
 .PHONY: test
 test: install .build/dev-requirements.timestamp
