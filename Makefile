@@ -51,7 +51,7 @@ help:
 
 .PHONY: install
 install: \
-		.build/requirements.timestamp \
+		.build/docker.timestamp \
 		.build/node_modules.timestamp \
 		.build/wkhtmltox \
 		.build/phantomjs-2.1.1-linux-x86_64 \
@@ -139,9 +139,17 @@ publish: .build/requirements.timestamp
 transifex-import: .build/requirements.timestamp
 	.build/venv/bin/importpo $(INI_FILE)
 
+.build/docker.timestamp: thinkhazard development.ini production.ini setup.py
+	mkdir -p $(dir $@)
+	docker build -t camptocamp/thinkhazard .
+	touch $@
+
+.PHONY: docker_build
+docker_build: .build/docker.timestamp
+
 .PHONY: serve_public
-serve_public: install
-	.build/venv/bin/pserve --reload $(INI_FILE) --app-name=public
+serve_public: .build/docker.timestamp
+	docker run -it --net=host --env-file=.env camptocamp/thinkhazard pserve --reload c2c://$(INI_FILE) -n public
 
 .PHONY: serve_admin
 serve_admin: install
