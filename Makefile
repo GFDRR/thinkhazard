@@ -172,8 +172,8 @@ jshint: .build/node_modules.timestamp .build/jshint.timestamp
 bootlint: .build/node_modules.timestamp .build/bootlint.timestamp
 
 .PHONY: test
-test: install .build/dev-requirements.timestamp
-	.build/venv/bin/nosetests
+test: 
+	docker run -it --env-file=.env camptocamp/thinkhazard nosetests
 
 .PHONY: dist
 dist: .build/venv
