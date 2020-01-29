@@ -83,7 +83,7 @@ class TestCompleting(unittest.TestCase):
     @patch.object(Completer, "do_execute")
     def test_cli(self, mock):
         """Test completer cli"""
-        Completer.run(["complete", "--config_uri", "tests.ini"])
+        Completer.run(["complete", "--config_uri", "c2c://tests.ini"])
         mock.assert_called_with(hazardset_id=None)
 
     def test_force(self):

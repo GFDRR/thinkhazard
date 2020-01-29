@@ -22,7 +22,7 @@ from ..settings import load_full_settings
 from ..scripts.initializedb import initdb
 
 
-settings = load_full_settings("tests.ini", name="admin")
+settings = load_full_settings("c2c://tests.ini", name="admin")
 
 
 def populatedb():

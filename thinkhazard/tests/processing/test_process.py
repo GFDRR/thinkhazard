@@ -84,7 +84,7 @@ class TestProcess(unittest.TestCase):
     @patch.object(Processor, "do_execute")
     def test_cli(self, mock):
         """Test processor cli"""
-        Processor.run(["process", "--config_uri", "tests.ini"])
+        Processor.run(["process", "--config_uri", "c2c://tests.ini"])
         mock.assert_called_with(hazardset_id=None)
 
     @patch("rasterio.open", return_value=global_reader())

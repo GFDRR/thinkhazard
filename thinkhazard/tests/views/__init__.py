@@ -22,7 +22,7 @@ import os
 import transaction
 from datetime import datetime
 
-from paste.deploy import loadapp
+from pyramid.paster import bootstrap
 
 from ...models import (
     DBSession,
@@ -352,11 +352,8 @@ class BaseTestCase(unittest.TestCase):
 
         from webtest import TestApp
 
-        conf_dir = os.getcwd()
-        config = "config:tests.ini"
-
-        app = loadapp(config, name=self.app_name, relative_to=conf_dir)
-        self.testapp = TestApp(app)
+        env = bootstrap('c2c://tests.ini#{}'.format(self.app_name))
+        self.testapp = TestApp(env['app'])
 
     def tearDown(self):  # NOQA
         del self.testapp

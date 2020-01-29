@@ -38,7 +38,7 @@ class TestDownloading(unittest.TestCase):
     @patch.object(Downloader, "do_execute")
     def test_cli(self, mock):
         """Test downloader cli"""
-        Downloader.run(["complete", "--config_uri", "tests.ini"])
+        Downloader.run(["complete", "--config_uri", "c2c://tests.ini"])
         mock.assert_called_with(hazardset_id=None, clear_cache=False)
 
     def test_force(self):
