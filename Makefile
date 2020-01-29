@@ -139,7 +139,7 @@ publish: .build/requirements.timestamp
 transifex-import: .build/requirements.timestamp
 	.build/venv/bin/importpo $(INI_FILE)
 
-.build/docker.timestamp: thinkhazard development.ini production.ini setup.py
+.build/docker.timestamp: thinkhazard development.ini production.ini setup.py Dockerfile
 	mkdir -p $(dir $@)
 	docker build -t camptocamp/thinkhazard .
 	touch $@
@@ -149,7 +149,7 @@ docker_build: .build/docker.timestamp
 
 .PHONY: serve_public
 serve_public: .build/docker.timestamp
-	docker run -it --net=host --env-file=.env camptocamp/thinkhazard pserve --reload c2c://$(INI_FILE) -n public
+	docker run -it --net=host --env-file=.env -v $(shell pwd):/app camptocamp/thinkhazard pserve --reload c2c://$(INI_FILE) -n public
 
 .PHONY: serve_admin
 serve_admin: install
@@ -173,7 +173,7 @@ bootlint: .build/node_modules.timestamp .build/bootlint.timestamp
 
 .PHONY: test
 test: 
-	docker run -it --env-file=.env camptocamp/thinkhazard nosetests
+	docker run -it --net=host --env-file=.env -v $(shell pwd):/app camptocamp/thinkhazard nosetests
 
 .PHONY: dist
 dist: .build/venv
