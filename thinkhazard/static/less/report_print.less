@@ -121,11 +121,17 @@ a.logo {
 
 .hazard-types-list {
   padding: 0;
+  display: flex;
+  flex-wrap: wrap;
   li {
+    flex: 1;
+    min-width: 5em;
+    text-align: center;
+    padding-top: 0;
+    margin-top: 1em;
     border: 0;
-    padding-top: 25px;
     .hazard-icon {
-      left: (@hazard-width - @icon-size) / 2 - @padding-size;
+      position: static;
     }
   }
 }
