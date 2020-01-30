@@ -166,6 +166,7 @@
       {% if hazard_category %}
         app.hazardType = '{{hazard_category.hazardtype.mnemonic}}';
       {% endif %}
+      app.pdf = true
     </script>
     <script src="{{('%s/openlayers/dist/ol.js' % node_modules)|static_url}}"></script>
     <script src="{{'thinkhazard:static/js/report.js'|static_url}}"></script>

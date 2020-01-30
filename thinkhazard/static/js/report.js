@@ -509,9 +509,10 @@
     }
     map.updateSize();
   };
-  mediaCheck();
-
-  $(window).on('resize', mediaCheck);
+  if (!app.pdf) {
+    mediaCheck();
+    $(window).on('resize', mediaCheck);
+  }
 
   // On mobile, scroll horizontally to make active hazard visible
   if (window.matchMedia && window.matchMedia(mq).matches) {
