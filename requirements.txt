@@ -32,3 +32,4 @@ lingua
 transifex-client
 jinja2
 requests
+pyppeteer
