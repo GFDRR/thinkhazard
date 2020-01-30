@@ -33,3 +33,5 @@ transifex-client
 jinja2
 requests
 pyppeteer
+PyPDF2
+asyncio
