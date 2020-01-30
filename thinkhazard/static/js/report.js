@@ -317,39 +317,27 @@
 
   $('#download').on('click', function(e) {
     e.preventDefault();
-    $.post(app.createPdfReportUrl)
-      .done(function(data) {
-        btnStatus(true);
-        checkPdfStatus(data.report_id);
-      })
-      .fail(function() {
-        alert("Something went wrong");
-        btnStatus(false);
-      });
+    btnStatus(true);
+    fetch(app.createPdfReportUrl, { method: 'POST'})
+    .then(function(r) { return r.blob() })
+    .then(function(data) {
+      btnStatus(false);
+      var blob = new Blob([data], {type: 'image/pdf'});
+      let a = document.createElement("a");
+      a.style = "display: none";
+      document.body.appendChild(a);
+      let url = window.URL.createObjectURL(blob);
+      a.href = url;
+      a.download = this.getAttribute('download')
+      a.click();
+      window.URL.revokeObjectURL(url);
+    }.bind(this))
+    .catch(function() {
+      alert("Something went wrong");
+      btnStatus(false);
+    })
   });
 
-  function checkPdfStatus(id) {
-    var url = app.getReportStatusUrl.replace(999, id);
-    $.get(url, {salt: new Date().getTime()})
-      .done(function(data) {
-        if (data.status == 'running') {
-          window.setTimeout(function() {
-            checkPdfStatus(id);
-          }, 1000);
-        } else {
-          btnStatus(false);
-          downloadPdf(id);
-        }
-      })
-      .fail(function() {
-        alert("Something went wrong");
-        btnStatus(false);
-      });
-  }
-
-  function downloadPdf(id) {
-    window.location.href = app.getPdfReportUrl.replace(999, id);
-  }
 
   // status:
   // true: generating, false: finished

@@ -110,12 +110,9 @@ def pdf_cover(request):
 """pdf_about: see index.py"""
 
 
-async def create_pdf(file_name: str, file_name_temp: str, pages: List[str]):
+async def create_pdf(file_name: str, pages: List[str]):
     """Create a PDF file with the given pages using pyppeteer.
     """
-
-    # Create temporary file
-    open(file_name_temp, "a").close()
     chunks = []
 
     # --no-sandbox is required to make Chrome/Chromium run under root.
@@ -144,17 +141,12 @@ async def create_pdf(file_name: str, file_name_temp: str, pages: List[str]):
     writer.write(output)
     output.close()
 
-    try:
-        os.remove(file_name_temp)
-    except OSError:
-        pass
 
-
-@view_config(route_name="create_pdf_report", request_method="POST", renderer="json")
+@view_config(route_name="create_pdf_report", request_method="POST")
 def create_pdf_report(request):
     """View to create an asynchronous print job.
     """
-    division_code = get_divison_code(request)
+    division_code = request.matchdict.get("divisioncode")
 
     base_path = request.registry.settings.get("pdf_archive_path")
     report_id = _get_report_id(division_code, base_path)
@@ -186,69 +178,14 @@ def create_pdf_report(request):
         )
 
     file_name = _get_report_filename(base_path, division_code, report_id)
-    file_name_temp = _get_report_filename(
-        base_path, division_code, report_id, temp=True
+
+    run(create_pdf(file_name, pages))
+
+    response = FileResponse(file_name, request=request, content_type="application/pdf")
+    response.headers["Content-Disposition"] = (
+        'attachment; filename="ThinkHazard.pdf"'
     )
-
-    # already create the file, so that the client can poll the status
-    _touch(file_name_temp)
-
-    run(create_pdf(file_name, file_name_temp, pages))
-
-    return {"divisioncode": division_code, "report_id": report_id}
-
-
-@view_config(route_name="get_report_status", renderer="json")
-def get_report_status(request):
-    """View to poll the status of a print job.
-    """
-    division_code = get_divison_code(request)
-    report_id = get_report_id(request)
-
-    base_path = request.registry.settings.get("pdf_archive_path")
-    file_name = _get_report_filename(base_path, division_code, report_id)
-    file_name_temp = _get_report_filename(
-        base_path, division_code, report_id, temp=True
-    )
-
-    if path.isfile(file_name):
-        return {"status": "done"}
-    elif path.isfile(file_name_temp):
-        return {"status": "running"}
-    else:
-        raise HTTPNotFound("No job found or job has failed")
-
-
-@view_config(route_name="get_pdf_report")
-def get_pdf_report(request):
-    """Return the PDF file for finished print jobs.
-    """
-    division_code = get_divison_code(request)
-    report_id = get_report_id(request)
-
-    base_path = request.registry.settings.get("pdf_archive_path")
-    file_name = _get_report_filename(base_path, division_code, report_id)
-    file_name_temp = _get_report_filename(
-        base_path, division_code, report_id, temp=True
-    )
-
-    if path.isfile(file_name):
-        division_name = (
-            DBSession.query(AdministrativeDivision.name)
-            .filter(AdministrativeDivision.code == division_code)
-            .scalar()
-        )
-        response = FileResponse(
-            file_name, request=request, content_type="application/pdf"
-        )
-        response.headers["Content-Disposition"] = (
-            'attachment; filename="ThinkHazard - %s.pdf"'
-            % division_name)
-        return response
-    elif path.isfile(file_name_temp):
-        return HTTPBadRequest("Not finished yet")
-    else:
-        raise HTTPNotFound("No job found")
+    return response
 
 
 def _get_report_id(division_code, base_path):
@@ -261,41 +198,15 @@ def _get_report_id(division_code, base_path):
         month = date.strftime("%m")
         report_id = "_".join([year, month, str(uuid4())])
         file_name = _get_report_filename(base_path, division_code, report_id)
-        file_name_temp = _get_report_filename(
-            base_path, division_code, report_id, temp=True
-        )
-        if not (path.isfile(file_name) or path.isfile(file_name_temp)):
+        if not (path.isfile(file_name)):
             return report_id
 
 
-def _get_report_filename(base_path, division_code, report_id, temp=False):
+def _get_report_filename(base_path, division_code, report_id):
     year, month, id = report_id.split("_")
     return path.join(
         base_path,
         year,
         month,
-        ("_" if temp else "") + "{:s}-{:s}.pdf".format(division_code, id),
+        "{:s}-{:s}.pdf".format(division_code, id),
     )
-
-
-def _touch(file):
-    path = os.path.dirname(file)
-    if not os.path.exists(path):
-        os.makedirs(path)
-    with open(file, "a"):
-        os.utime(file, None)
-
-
-def get_divison_code(request):
-    try:
-        return request.matchdict.get("divisioncode")
-    except:
-        raise HTTPBadRequest(detail="incorrect value for parameter " '"divisioncode"')
-
-
-def get_report_id(request):
-    report_id = request.matchdict.get("id")
-    if report_id and REPORT_ID_REGEX.match(report_id):
-        return report_id
-    else:
-        raise HTTPBadRequest(detail="incorrect value for parameter " '"report_id"')

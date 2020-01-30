@@ -26,7 +26,7 @@ Think Hazard - {{ division.translated_name(request.locale_name)}}
     <div class="container">
       {% if request.registry['settings'].appname != 'admin' %}
       <div class="pull-right">
-        <a class="btn btn-default btn-xs" href id="download">
+        <a class="btn btn-default btn-xs" href id="download" download="ThinkHazard - {{ division.name }}.pdf">
           <i class="icon-spinner fa-spin hide"></i>
           <i class="icon-download-arrow"></i>
           <span class="hidden-xs">{{ gettext('Download PDF') }}</span>
