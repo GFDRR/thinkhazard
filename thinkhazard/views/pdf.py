@@ -26,6 +26,7 @@ import traceback
 from uuid import uuid4
 
 from os import path
+from typing import List
 
 from subprocess import Popen, PIPE
 from time import time, sleep
@@ -33,7 +34,11 @@ from time import time, sleep
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest, HTTPNotFound
 from pyramid.response import FileResponse
-from thinkhazard import scheduler
+
+from io import BytesIO
+from PyPDF2 import PdfFileReader, PdfFileWriter
+from asyncio import run
+from pyppeteer import launch
 
 from .report import (
     _hazardlevel_nodata,
@@ -105,49 +110,44 @@ def pdf_cover(request):
 """pdf_about: see index.py"""
 
 
-def create_pdf(file_name, file_name_temp, cover_url, pages, timeout):
-    """Create a PDF file with the given pages using wkhtmltopdf.
-    wkhtmltopdf is writing the PDF in `file_name_temp`, once the generation
-    has finished, the file is renamed to `file_name`.
+async def create_pdf(file_name: str, file_name_temp: str, pages: List[str]):
+    """Create a PDF file with the given pages using pyppeteer.
     """
-    command = path.join(
-        path.dirname(__file__), "../../.build/wkhtmltox/bin/wkhtmltopdf"
-    )
 
-    command += " --viewport-size 800x600"
-    command += ' --window-status "finished"'
-    command += ' cover "%s"' % cover_url
-    command += ' %s "%s"' % (pages, file_name_temp)
+    # Create temporary file
+    open(file_name_temp, "a").close()
+    chunks = []
+
+    # --no-sandbox is required to make Chrome/Chromium run under root.
+    browser = await launch(
+        handleSIGINT=False,
+        handleSIGTERM=False,
+        handleSIGHUP=False,
+        args=["--no-sandbox"],
+    )
+    page = await browser.newPage()
+    for url in pages:
+        await page.goto(url, {"waitUntil": "networkidle0"})
+        chunks.append(
+            BytesIO(await page.pdf({"format": "A4", "printBackground": True}))
+        )
+    await browser.close()
+
+    # merge all pages
+    writer = PdfFileWriter()
+    # for page in pages:
+    for chunk in chunks:
+        reader = PdfFileReader(chunk)
+        for index in range(reader.numPages):
+            writer.addPage(reader.getPage(index))
+    output = open(file_name, "wb")
+    writer.write(output)
+    output.close()
 
     try:
-        p = Popen(command, shell=True, stdout=PIPE, stderr=PIPE, close_fds=True)
-        # Timeout wkhtmltopdf in case of http error with --window-status
-        start = time()
-        while p.poll() is None:
-            sleep(0.1)
-            if time() - start > timeout:
-                p.terminate()
-        retcode = p.returncode
-        stderr = p.stderr.read()
-
-        if retcode == 0:
-            # once the generation has succeeded, rename the file so that
-            # waiting clients know that it is finished
-            os.rename(file_name_temp, file_name)
-        elif retcode < 0:
-            logger.error(stderr)
-            logger.error("wkhtmltopdf terminated by signal: %s", -retcode)
-        else:
-            logger.error(stderr)
-
-    except:
-        logger.error(traceback.format_exc())
-
-    finally:
-        try:
-            os.remove(file_name_temp)
-        except OSError:
-            pass
+        os.remove(file_name_temp)
+    except OSError:
+        pass
 
 
 @view_config(route_name="create_pdf_report", request_method="POST", renderer="json")
@@ -171,9 +171,12 @@ def create_pdf_report(request):
 
     query_args = {"_query": {"_LOCALE_": request.locale_name}}
 
-    pages = ' page "%s"' % request.route_url("pdf_about", **query_args)
+    pages = [
+        request.route_url("pdf_cover", divisioncode=division_code, **query_args),
+        request.route_url("pdf_about", **query_args),
+    ]
     for cat in categories:
-        pages += ' page "{}&static=true"'.format(
+        pages.append(
             request.route_url(
                 "report_print",
                 divisioncode=division_code,
@@ -182,21 +185,15 @@ def create_pdf_report(request):
             )
         )
 
-    cover_url = request.route_url("pdf_cover", divisioncode=division_code, **query_args)
-
     file_name = _get_report_filename(base_path, division_code, report_id)
     file_name_temp = _get_report_filename(
         base_path, division_code, report_id, temp=True
     )
 
-    timeout = float(request.registry.settings["pdf_timeout"])
-
     # already create the file, so that the client can poll the status
     _touch(file_name_temp)
 
-    scheduler.add_job(
-        create_pdf, args=[file_name, file_name_temp, cover_url, pages, timeout]
-    )
+    run(create_pdf(file_name, file_name_temp, pages))
 
     return {"divisioncode": division_code, "report_id": report_id}
 
@@ -246,65 +243,10 @@ def get_pdf_report(request):
         )
         response.headers["Content-Disposition"] = (
             'attachment; filename="ThinkHazard - %s.pdf"'
-            % str(division_name.encode("utf-8"))
-        )
+            % division_name)
         return response
     elif path.isfile(file_name_temp):
         return HTTPBadRequest("Not finished yet")
-    else:
-        raise HTTPNotFound("No job found")
-
-
-@view_config(route_name="get_map_report")
-def get_map_report(request):
-    """Return the JPG file for job map.
-    """
-
-    base_path = "/tmp/"
-
-    command = path.join(
-        path.dirname(__file__),
-        "../../.build/phantomjs-2.1.1-linux-x86_64/bin/phantomjs",
-    )
-
-    url = request.params.get("url")
-    code = "_".join(url.split("/")[-2:]).split("?")[0]
-    file_name = "%s.jpg" % code
-    file_path = "%s/%s" % (base_path, file_name)
-
-    if not path.isfile(file_path):
-        try:
-            command += ' %s/../../export.js "%s" %s' % (
-                path.dirname(__file__),
-                request.params.get("url"),
-                file_path,
-            )
-            p = Popen(command, shell=True, stdout=PIPE, stderr=PIPE, close_fds=True)
-            # Timeout wkhtmltopdf in case of http error with --window-status
-            start = time()
-            while p.poll() is None:
-                sleep(0.1)
-                if time() - start > 120:
-                    p.terminate()
-            retcode = p.returncode
-
-            if retcode == 0:
-                # once the generation has succeeded, rename the file so that
-                # waiting clients know that it is finished
-                # os.rename(file_name_temp, file_name)
-                print("success")
-            else:
-                print("error")
-
-        except:
-            logger.error(traceback.format_exc())
-
-    if path.isfile(file_path):
-        response = FileResponse(
-            file_path, request=request, content_type="application/pdf"
-        )
-        response.headers["Content-Disposition"] = 'attachment; filename="map.jpg"'
-        return response
     else:
         raise HTTPNotFound("No job found")
 
