@@ -33,6 +33,7 @@ from thinkhazard import lock_file
 from thinkhazard.session import get_session_factory
 from thinkhazard.settings import load_local_settings
 from thinkhazard.models import Publication
+from thinkhazard.scripts.s3helper import S3Helper
 
 
 def usage(argv):
@@ -56,6 +57,8 @@ def database_name(config_uri, name, options={}):
 def main(argv=sys.argv):
     if len(argv) < 2:
         usage(argv)
+    # practical for debug use in container
+    # config_uri = 'c2c://' + argv[1]
     config_uri = argv[1]
     options = parse_vars(argv[2:])
     setup_logging(config_uri)
@@ -77,16 +80,28 @@ def main(argv=sys.argv):
         Publication.new()
         dbsession.flush()
 
+    backup_filename = "thinkhazard.{}.backup".format(datetime.utcnow().isoformat())
     folder_path = settings["backup_path"]
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
     backup_path = os.path.join(
-        folder_path, "thinkhazard.{}.backup".format(datetime.utcnow().isoformat())
+        folder_path, backup_filename
     )
 
     print("Backup", admin_database, "to", backup_path)
-    cmd = "sudo -u postgres pg_dump -Fc {} > {}".format(admin_database, backup_path)
+    # TODO: postgres user needed ? (permission denied for schema topology)
+    cmd = "pg_dump -Fc {} > {}".format(admin_database, backup_path)
     call(cmd, shell=True)
+
+    s3_helper = S3Helper(
+        endpoint_url=settings["aws_endpoint_url"],
+        aws_access_key_id=settings["aws_access_key_id"],
+        aws_secret_access_key=settings["aws_secret_access_key"])
+
+    if not s3_helper.bucket_exists(settings["aws_bucket_name"]):
+        s3_helper.create_bucket(settings["aws_bucket_name"])
+    
+    s3_helper.upload_file(backup_path, settings["aws_bucket_name"], backup_filename)
 
     print("Restart PostgreSQL")
     call(["sudo", "service", "postgresql", "restart"])
@@ -96,6 +111,9 @@ def main(argv=sys.argv):
 
     print("Create new fresh database", public_database)
     call(["sudo", "-u", "postgres", "createdb", public_database])
+
+    # # TODO: do not write to fs at all (stream) and add download ?
+    # s3_helper.download_file(settings["aws_bucket_name"], backup_filename, backup_path + '_download')
 
     print("Restore backup into", public_database)
     call(

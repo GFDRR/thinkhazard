@@ -32,4 +32,4 @@ simplejson
 transaction
 waitress
 zope.sqlalchemy
-
+boto3
