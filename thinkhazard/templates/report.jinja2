@@ -165,8 +165,6 @@ Think Hazard - {{ division.translated_name(request.locale_name)}}
       app.leveltype = {{division.leveltype_id}};
 
       app.createPdfReportUrl = '{{ 'create_pdf_report'|route_url(divisioncode=division.code)}}'
-      app.getReportStatusUrl = '{{ 'get_report_status'|route_url(divisioncode=division.code, id=999)}}'
-      app.getPdfReportUrl = '{{ 'get_pdf_report'|route_url(divisioncode=division.code, id=999)}}'
 
       app.goToString = '{{ gettext("Go to name_of_location") }}';
       app.zoomInString = '{{ gettext("Zoom in to name_of_location") }}';
