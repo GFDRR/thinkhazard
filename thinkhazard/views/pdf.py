@@ -28,7 +28,6 @@ from uuid import uuid4
 from os import path
 from typing import List
 
-from subprocess import Popen, PIPE
 from time import time, sleep
 
 from pyramid.view import view_config
@@ -151,35 +150,33 @@ def create_pdf_report(request):
     base_path = request.registry.settings.get("pdf_archive_path")
     report_id = _get_report_id(division_code, base_path)
 
-    categories = (
-        DBSession.query(HazardCategory)
-        .options(joinedload(HazardCategory.hazardtype))
-        .join(HazardCategoryAdministrativeDivisionAssociation)
-        .join(AdministrativeDivision)
-        .join(HazardLevel)
-        .filter(AdministrativeDivision.code == division_code)
-        .order_by(HazardLevel.order)
-    )
-
-    query_args = {"_query": {"_LOCALE_": request.locale_name}}
-
-    pages = [
-        request.route_url("pdf_cover", divisioncode=division_code, **query_args),
-        request.route_url("pdf_about", **query_args),
-    ]
-    for cat in categories:
-        pages.append(
-            request.route_url(
-                "report_print",
-                divisioncode=division_code,
-                hazardtype=cat.hazardtype.mnemonic,
-                **query_args,
-            )
-        )
-
     file_name = _get_report_filename(base_path, division_code, report_id)
 
-    run(create_pdf(file_name, pages))
+    if not path.isfile(file_name):
+        categories = (
+            DBSession.query(HazardCategory)
+            .options(joinedload(HazardCategory.hazardtype))
+            .join(HazardCategoryAdministrativeDivisionAssociation)
+            .join(AdministrativeDivision)
+            .join(HazardLevel)
+            .filter(AdministrativeDivision.code == division_code)
+            .order_by(HazardLevel.order)
+        )
+        query_args = {"_query": {"_LOCALE_": request.locale_name}}
+        pages = [
+            request.route_url("pdf_cover", divisioncode=division_code, **query_args),
+            request.route_url("pdf_about", **query_args),
+        ]
+        for cat in categories:
+            pages.append(
+                request.route_url(
+                    "report_print",
+                    divisioncode=division_code,
+                    hazardtype=cat.hazardtype.mnemonic,
+                    **query_args,
+                )
+            )
+        run(create_pdf(file_name, pages))
 
     response = FileResponse(file_name, request=request, content_type="application/pdf")
     response.headers["Content-Disposition"] = (
