@@ -15,7 +15,7 @@ gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexp
 
 # install dependencies
 COPY ./requirements.txt /app/requirements.txt
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt && pyppeteer-install
 COPY ./dev-requirements.txt /app/dev-requirements.txt
 RUN pip install -r dev-requirements.txt
 
