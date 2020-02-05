@@ -66,6 +66,7 @@ def main(argv=sys.argv):
     admin_database = database_name(config_uri, "admin", options=options)
     public_database = database_name(config_uri, "public", options=options)
 
+    # TODO: adapt to new infra?
     print("Lock public application in maintenance mode")
     with open(lock_file, "w") as f:
         f.write("This file sets the public application in maintenance mode.")
@@ -80,7 +81,8 @@ def main(argv=sys.argv):
         Publication.new()
         dbsession.flush()
 
-    backup_filename = "thinkhazard.{}.backup".format(datetime.utcnow().isoformat())
+    filename_prefix = "thinkhazard"
+    backup_filename = filename_prefix + ".{}.backup".format(datetime.utcnow().isoformat())
     folder_path = settings["backup_path"]
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
@@ -89,10 +91,14 @@ def main(argv=sys.argv):
     )
 
     print("Backup", admin_database, "to", backup_path)
-    # TODO: postgres user needed ? (permission denied for schema topology)
+    # TODO: adapt to new infra? => no we need to pass credentials to pg commands?
+    # pg_user = settings.global_conf['PGUSER']
+    # pg_password = settings.global_conf['PGPASSWORD']
+    # cmd = "PGPASSWORD=" + pg_password + " pg_dump -U " + pg_user + " -Fc {} > {}".format(admin_database, backup_path)
     cmd = "pg_dump -Fc {} > {}".format(admin_database, backup_path)
     call(cmd, shell=True)
 
+    print("Load backup to S3 bucket")
     s3_helper = S3Helper(
         endpoint_url=settings["aws_endpoint_url"],
         aws_access_key_id=settings["aws_access_key_id"],
@@ -103,6 +109,7 @@ def main(argv=sys.argv):
     
     s3_helper.upload_file(backup_path, settings["aws_bucket_name"], backup_filename)
 
+    # TODO: adapt to new infra? => no we need to pass credentials to pg commands?
     print("Restart PostgreSQL")
     call(["sudo", "service", "postgresql", "restart"])
 
@@ -111,9 +118,6 @@ def main(argv=sys.argv):
 
     print("Create new fresh database", public_database)
     call(["sudo", "-u", "postgres", "createdb", public_database])
-
-    # # TODO: do not write to fs at all (stream) and add download ?
-    # s3_helper.download_file(settings["aws_bucket_name"], backup_filename, backup_path + '_download')
 
     print("Restore backup into", public_database)
     call(
@@ -129,6 +133,11 @@ def main(argv=sys.argv):
         ]
     )
 
+    print("Delete backup file from filesystem")
+    cmd_delete = "rm " + folder_path + "/" + filename_prefix + ".*"
+    call(cmd_delete, shell=True)
+
+    # TODO: adapt to new infra?
     print("Restarting Apache to clear cached data")
     call(["sudo", "apache2ctl", "graceful"])
 

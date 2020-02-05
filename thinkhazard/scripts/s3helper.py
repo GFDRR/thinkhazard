@@ -37,15 +37,3 @@ class S3Helper:
             logging.error(e)
             return False
         return True
-
-    def download_file(self, bucket, object_name, file_name=None):
-        # If S3 file_name was not specified, use object_name
-        if file_name is None:
-            file_name = object_name
-
-        try:
-            response = self.s3_client.download_file(bucket, object_name, file_name)
-        except ClientError as e:
-            logging.error(e)
-            return False
-        return True
