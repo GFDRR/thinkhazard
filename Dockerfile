@@ -1,3 +1,11 @@
+FROM node:12-slim as front-builder
+
+RUN apt-get update && apt-get install make
+COPY package.json Makefile /app/
+WORKDIR /app
+COPY thinkhazard/static/ /app/thinkhazard/static/
+RUN make buildcss
+
 FROM python:3.8-slim
 
 WORKDIR /app
@@ -21,4 +29,5 @@ RUN pip install -r dev-requirements.txt
 
 # copy project
 COPY . /app/
+COPY --from=front-builder /app/thinkhazard/static/build /app/thinkhazard/static/build
 RUN pip install -e .
