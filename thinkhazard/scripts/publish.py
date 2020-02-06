@@ -81,8 +81,7 @@ def main(argv=sys.argv):
         Publication.new()
         dbsession.flush()
 
-    filename_prefix = "thinkhazard"
-    backup_filename = filename_prefix + ".{}.backup".format(datetime.utcnow().isoformat())
+    backup_filename = "thinkhazard.backup"
     folder_path = settings["backup_path"]
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
@@ -106,7 +105,7 @@ def main(argv=sys.argv):
 
     if not s3_helper.bucket_exists(settings["aws_bucket_name"]):
         s3_helper.create_bucket(settings["aws_bucket_name"])
-    
+
     s3_helper.upload_file(backup_path, settings["aws_bucket_name"], backup_filename)
 
     print("Drop database schemas datamart, processing from", public_database)
@@ -127,7 +126,7 @@ def main(argv=sys.argv):
     )
 
     print("Delete backup file from filesystem")
-    cmd_delete = "rm " + folder_path + "/" + filename_prefix + ".*"
+    cmd_delete = "rm " + backup_path
     call(cmd_delete, shell=True)
 
     # TODO: adapt to new infra in tween
