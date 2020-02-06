@@ -91,11 +91,11 @@ def main(argv=sys.argv):
     )
 
     print("Backup", admin_database, "to", backup_path)
-    # TODO: adapt to new infra? => no we need to pass credentials to pg commands?
+    # TODO: adapt to new infra? => do we need to pass credentials to pg commands?
     # pg_user = settings.global_conf['PGUSER']
     # pg_password = settings.global_conf['PGPASSWORD']
     # cmd = "PGPASSWORD=" + pg_password + " pg_dump -U " + pg_user + " -Fc {} > {}".format(admin_database, backup_path)
-    cmd = "pg_dump -Fc {} > {}".format(admin_database, backup_path)
+    cmd = "pg_dump -n datamart -n processing -Fc {} > {}".format(admin_database, backup_path)
     call(cmd, shell=True)
 
     print("Load backup to S3 bucket")
@@ -109,22 +109,15 @@ def main(argv=sys.argv):
     
     s3_helper.upload_file(backup_path, settings["aws_bucket_name"], backup_filename)
 
-    # TODO: adapt to new infra? => no we need to pass credentials to pg commands?
-    print("Restart PostgreSQL")
-    call(["sudo", "service", "postgresql", "restart"])
+    print("Drop database schemas datamart, processing from", public_database)
+    call(["psql", "-d", public_database, "-c", "DROP SCHEMA IF EXISTS datamart, processing CASCADE;"])
 
-    print("Drop database", public_database)
-    call(["sudo", "-u", "postgres", "dropdb", public_database])
-
-    print("Create new fresh database", public_database)
-    call(["sudo", "-u", "postgres", "createdb", public_database])
+    print("Create new fresh database schemas datamart, processing in", public_database)
+    call(["psql", "-d", public_database, "-c", "CREATE SCHEMA datamart, processing;"])
 
     print("Restore backup into", public_database)
     call(
         [
-            "sudo",
-            "-u",
-            "postgres",
             "pg_restore",
             "--exit-on-error",
             "-d",
@@ -137,7 +130,7 @@ def main(argv=sys.argv):
     cmd_delete = "rm " + folder_path + "/" + filename_prefix + ".*"
     call(cmd_delete, shell=True)
 
-    # TODO: adapt to new infra?
+    # TODO: adapt to new infra in tween
     print("Restarting Apache to clear cached data")
     call(["sudo", "apache2ctl", "graceful"])
 
