@@ -136,6 +136,7 @@ async def create_pdf(file_name: str, pages: List[str]):
         reader = PdfFileReader(chunk)
         for index in range(reader.numPages):
             writer.addPage(reader.getPage(index))
+    os.makedirs(os.path.dirname(file_name), exist_ok=True)
     output = open(file_name, "wb")
     writer.write(output)
     output.close()
