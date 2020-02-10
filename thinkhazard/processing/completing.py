@@ -22,11 +22,7 @@ import transaction
 import rasterio
 from sqlalchemy import func
 
-from ..models import (
-    DBSession,
-    HazardSet,
-    Layer,
-    )
+from ..models import DBSession, HazardSet, Layer
 
 from ..processing import BaseProcessor
 
@@ -35,32 +31,31 @@ logger = logging.getLogger(__name__)
 
 
 class Completer(BaseProcessor):
-
     @staticmethod
     def argument_parser():
         parser = BaseProcessor.argument_parser()
         parser.add_argument(
-            '--hazardset_id', dest='hazardset_id', action='store',
-            help='The hazardset id')
+            "--hazardset_id",
+            dest="hazardset_id",
+            action="store",
+            help="The hazardset id",
+        )
         return parser
 
     def do_execute(self, hazardset_id=None):
         if self.force:
             try:
-                logger.info('Resetting all hazardsets to incomplete state')
+                logger.info("Resetting all hazardsets to incomplete state")
                 hazardsets = DBSession.query(HazardSet)
                 if hazardset_id is not None:
-                    hazardsets = hazardsets \
-                        .filter(HazardSet.id == hazardset_id)
-                hazardsets.update({
-                    HazardSet.complete: False,
-                    HazardSet.processed: None
-                })
+                    hazardsets = hazardsets.filter(HazardSet.id == hazardset_id)
+                hazardsets.update(
+                    {HazardSet.complete: False, HazardSet.processed: None}
+                )
                 transaction.commit()
             except:
                 transaction.abort()
-                logger.error('Batch reset to incomplete state failed',
-                             exc_info=True)
+                logger.error("Batch reset to incomplete state failed", exc_info=True)
 
         ids = DBSession.query(HazardSet.id)
         if not self.force:
@@ -75,87 +70,95 @@ class Completer(BaseProcessor):
                 if complete is not True:
                     hazardset = DBSession.query(HazardSet).get(id)
                     hazardset.complete_error = complete
-                    logger.warning('Hazardset {} incomplete: {}'
-                                   .format(hazardset.id, complete))
+                    logger.warning(
+                        "Hazardset {} incomplete: {}".format(hazardset.id, complete)
+                    )
                 transaction.commit()
             except Exception:
                 transaction.abort()
-                logger.error('An error occurred with hazardset {}'.format(id),
-                             exc_info=True)
+                logger.error(
+                    "An error occurred with hazardset {}".format(id), exc_info=True
+                )
 
     def complete_hazardset(self, hazardset_id, dry_run=False):
-        logger.info('Completing hazardset {}'.format(hazardset_id))
+        logger.info("Completing hazardset {}".format(hazardset_id))
         hazardset = DBSession.query(HazardSet).get(hazardset_id)
         if hazardset is None:
-            raise Exception('Hazardset {} does not exist.'
-                            .format(hazardset_id))
+            raise Exception("Hazardset {} does not exist.".format(hazardset_id))
 
         hazardtype = hazardset.hazardtype
-        type_settings = self.settings['hazard_types'][hazardtype.mnemonic]
-        preprocessed = 'values' in type_settings
+        type_settings = self.settings["hazard_types"][hazardtype.mnemonic]
+        preprocessed = "values" in type_settings
 
         if len(hazardset.regions) == 0:
-            return 'No associated regions'
+            return "No associated regions"
 
         layers = []
         if preprocessed:
             if len(hazardset.layers) == 0:
-                return 'No layer found'
+                return "No layer found"
             layers.append(hazardset.layers[0])
         else:
-            for level in (u'LOW', u'MED', u'HIG'):
+            for level in ("LOW", "MED", "HIG"):
                 layer = hazardset.layer_by_level(level)
                 if layer is None:
-                    return 'No layer for level {}'.format(level)
+                    return "No layer for level {}".format(level)
 
                 layers.append(layer)
-            if ('mask_return_period' in type_settings):
-                layer = DBSession.query(Layer) \
-                    .filter(Layer.hazardset_id == hazardset_id) \
+            if "mask_return_period" in type_settings:
+                layer = (
+                    DBSession.query(Layer)
+                    .filter(Layer.hazardset_id == hazardset_id)
                     .filter(Layer.mask.is_(True))
+                )
                 if layer.count() == 0:
-                    return 'Missing mask layer'
+                    return "Missing mask layer"
                 layers.append(layer.one())
 
         affine = None
         shape = None
         for layer in layers:
             if not layer.downloaded:
-                return 'No data for layer {}'.format(layer.name())
+                return "No data for layer {}".format(layer.name())
             try:
-                with rasterio.drivers():
+                with rasterio.Env():
                     with rasterio.open(self.layer_path(layer)) as reader:
                         bounds = reader.bounds
                         if bounds.bottom > bounds.top:
-                            return 'bounds.bottom > bounds.top'
+                            return "bounds.bottom > bounds.top"
                         if affine is None:
                             affine = reader.affine
                             shape = reader.shape
                         else:
-                            if (reader.affine != affine or
-                                    reader.shape != shape):
+                            if reader.affine != affine or reader.shape != shape:
                                 return (
-                                    'All layers should have the same origin,'
-                                    ' resolution and size')
+                                    "All layers should have the same origin,"
+                                    " resolution and size"
+                                )
             except:
-                logger.error('Layer {} - Error opening file {}'
-                             .format(layer.name(),
-                                     self.layer_path(layer)),
-                             exc_info=True)
-                return 'Error opening layer {}'.format(layer.name())
+                logger.error(
+                    "Layer {} - Error opening file {}".format(
+                        layer.name(), self.layer_path(layer)
+                    ),
+                    exc_info=True,
+                )
+                return "Error opening layer {}".format(layer.name())
 
-        stats = DBSession.query(
-            Layer.local,
-            func.min(Layer.data_lastupdated_date),
-            func.min(Layer.metadata_lastupdated_date),
-            func.min(Layer.calculation_method_quality),
-            func.min(Layer.scientific_quality)) \
-            .filter(Layer.hazardset_id == hazardset.id) \
-            .filter(Layer.mask.isnot(True)) \
+        stats = (
+            DBSession.query(
+                Layer.local,
+                func.min(Layer.data_lastupdated_date),
+                func.min(Layer.metadata_lastupdated_date),
+                func.min(Layer.calculation_method_quality),
+                func.min(Layer.scientific_quality),
+            )
+            .filter(Layer.hazardset_id == hazardset.id)
+            .filter(Layer.mask.isnot(True))
             .group_by(Layer.local)
+        )
 
         if stats.count() > 1:
-            return 'Mixed local and global layers'
+            return "Mixed local and global layers"
 
         stat = stats.one()
 
@@ -168,5 +171,5 @@ class Completer(BaseProcessor):
         hazardset.complete_error = None
         DBSession.flush()
 
-        logger.info('  Completed')
+        logger.info("  Completed")
         return True

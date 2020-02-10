@@ -32,16 +32,15 @@ def populate():
 
 
 class TestDownloading(unittest.TestCase):
-
     def setUp(self):  # NOQA
         populate()
 
-    @patch.object(Downloader, 'do_execute')
+    @patch.object(Downloader, "do_execute")
     def test_cli(self, mock):
-        '''Test downloader cli'''
-        Downloader.run(['complete', '--config_uri', 'tests.ini'])
+        """Test downloader cli"""
+        Downloader.run(["complete", "--config_uri", "c2c://tests.ini"])
         mock.assert_called_with(hazardset_id=None, clear_cache=False)
 
     def test_force(self):
-        '''Test downloader in force mode'''
+        """Test downloader in force mode"""
         Downloader().execute(settings, force=True)

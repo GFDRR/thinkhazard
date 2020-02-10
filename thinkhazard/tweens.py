@@ -29,22 +29,21 @@ from .models import Publication
 
 def notmodified_tween_factory(handler, registry):
 
-    if registry.settings['appname'] == 'public':
+    if registry.settings["appname"] == "public":
 
-        gmt = pytz.timezone('GMT')
+        gmt = pytz.timezone("GMT")
         publication_date = gmt.localize(Publication.last().date)
 
         def notmodified_tween(request):
             if os.path.isfile(lock_file):
-                response = Response(render('templates/maintenance.jinja2',
-                                           {},
-                                           request))
+                response = Response(render("templates/maintenance.jinja2", {}, request))
                 response.status_code = 503
                 return response
 
-            if (request.if_modified_since is not None and
-                    request.if_modified_since >=
-                    publication_date.replace(microsecond=0)):
+            if (
+                request.if_modified_since is not None
+                and request.if_modified_since >= publication_date.replace(microsecond=0)
+            ):
                 return HTTPNotModified()
 
             response = handler(request)
@@ -55,7 +54,7 @@ def notmodified_tween_factory(handler, registry):
 
         return notmodified_tween
 
-    if registry.settings['appname'] == 'admin':
+    if registry.settings["appname"] == "admin":
 
         def nocache_tween(request):
             response = handler(request)

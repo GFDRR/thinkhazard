@@ -18,10 +18,7 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-from ..models import (
-    DBSession,
-    AdminLevelType,
-    )
+from ..models import DBSession, AdminLevelType
 
 from . import BaseProcessor
 
@@ -30,7 +27,6 @@ logger = logging.getLogger(__name__)
 
 
 class DecisionMaker(BaseProcessor):
-
     def do_execute(self, hazardset_id=None):
         connection = DBSession.bind.connect()
         trans = connection.begin()
@@ -42,27 +38,26 @@ class DecisionMaker(BaseProcessor):
             connection.execute(level_reg_query())
 
             logger.info("Upscaling to PRO")
-            connection.execute(upscaling_query(u'PRO'))
+            connection.execute(upscaling_query("PRO"))
 
             logger.info("Upscaling to COU")
-            connection.execute(upscaling_query(u'COU'))
+            connection.execute(upscaling_query("COU"))
 
             trans.commit()
         except:
             trans.rollback()
-            logger.error('An error occurred in decision tree',
-                         exc_info=True)
+            logger.error("An error occurred in decision tree", exc_info=True)
 
 
 def clearall_query():
-    return '''
+    return """
 DELETE FROM datamart.rel_hazardcategory_administrativedivision_hazardset;
 DELETE FROM datamart.rel_hazardcategory_administrativedivision;
-'''
+"""
 
 
 def level_reg_query():
-    return '''
+    return """
 /*
  * Apply decision tree on first level
  */
@@ -123,11 +118,11 @@ WINDOW w AS (
         set.local DESC,
         set.data_lastupdated_date DESC
 );
-'''
+"""
 
 
 def upscaling_query(level):
-    return '''
+    return """
 /*
  * Upscale hazard categories for each administrative division
  */
@@ -190,4 +185,6 @@ FROM
         ON hc_ad_parent.administrativedivision_id = ad_parent.id
         AND hc_ad_parent.hazardcategory_id = hc_ad_child.hazardcategory_id
 WHERE ad_parent.leveltype_id = {leveltype_id};
-'''.format(leveltype_id=AdminLevelType.get(level).id)
+""".format(
+        leveltype_id=AdminLevelType.get(level).id
+    )

@@ -33,19 +33,20 @@ logger = colorlog.getLogger(__name__)
 ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
 formatter = colorlog.ColoredFormatter(
-    '%(log_color)s%(levelname)-8s %(message)s',
+    "%(log_color)s%(levelname)-8s %(message)s",
     log_colors={
-        'DEBUG': 'cyan',
-        'INFO': 'green',
-        'WARNING': 'yellow',
-        'ERROR': 'red',
-        'CRITICAL': 'red,bg_white'})
+        "DEBUG": "cyan",
+        "INFO": "green",
+        "WARNING": "yellow",
+        "ERROR": "red",
+        "CRITICAL": "red,bg_white",
+    },
+)
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
 
-class BaseProcessor():
-
+class BaseProcessor:
     def __init__(self):
         self.force = False
 
@@ -54,12 +55,11 @@ class BaseProcessor():
         parser = cls.argument_parser()
         args = vars(parser.parse_args(argv[1:]))
 
-        config_uri = args.pop('config_uri')
-        name = args.pop('name')
-        settings = load_full_settings(config_uri,
-                                      name=name)
+        config_uri = args.pop("config_uri")
+        name = args.pop("name")
+        settings = load_full_settings(config_uri, name=name)
 
-        engine = engine_from_config(settings, 'sqlalchemy.')
+        engine = engine_from_config(settings, "sqlalchemy.")
         DBSession.configure(bind=engine)
 
         processor = cls()
@@ -69,32 +69,58 @@ class BaseProcessor():
     def argument_parser():
         parser = argparse.ArgumentParser()
         parser.add_argument(
-            '--config_uri', dest='config_uri', default='development.ini',
-            help='Configuration uri. Defaults to development.ini')
+            "--config_uri",
+            dest="config_uri",
+            default="development.ini",
+            help="Configuration uri. Defaults to development.ini",
+        )
         parser.add_argument(
-            '--name', dest='name', default='admin',
-            help='Application name. Default to admin app')
+            "--name",
+            dest="name",
+            default="admin",
+            help="Application name. Default to admin app",
+        )
         parser.add_argument(
-            '-f', '--force', dest='force',
-            action='store_const', const=True, default=False,
-            help='Force execution even if layer metadata have already \
-                  been fetched')
+            "-f",
+            "--force",
+            dest="force",
+            action="store_const",
+            const=True,
+            default=False,
+            help="Force execution even if layer metadata have already \
+                  been fetched",
+        )
         parser.add_argument(
-            '--dry-run', dest='dry_run',
-            action='store_const', const=True, default=False,
-            help='Perform a trial run that does not commit changes')
+            "--dry-run",
+            dest="dry_run",
+            action="store_const",
+            const=True,
+            default=False,
+            help="Perform a trial run that does not commit changes",
+        )
         parser.add_argument(
-            '-v', '--verbose', dest='verbose',
-            action='store_const', const=True, default=False,
-            help='Increase verbosity')
+            "-v",
+            "--verbose",
+            dest="verbose",
+            action="store_const",
+            const=True,
+            default=False,
+            help="Increase verbosity",
+        )
         parser.add_argument(
-            '-d', '--debug', dest='debug',
-            action='store_const', const=True, default=False,
-            help='Output debugging informations')
+            "-d",
+            "--debug",
+            dest="debug",
+            action="store_const",
+            const=True,
+            default=False,
+            help="Output debugging informations",
+        )
         return parser
 
-    def execute(self, settings, dry_run=False, force=False, verbose=False,
-                debug=False, **kwargs):
+    def execute(
+        self, settings, dry_run=False, force=False, verbose=False, debug=False, **kwargs
+    ):
         self.settings = settings
         self.dry_run = dry_run
         self.force = force
@@ -113,10 +139,8 @@ class BaseProcessor():
         self.do_execute(**kwargs)
 
         if dry_run:
-            logger.info(u'Dry run : rolling back transaction')
+            logger.info("Dry run : rolling back transaction")
             trans.rollback()
 
     def layer_path(self, layer):
-        return os.path.join(self.settings['data_path'],
-                            'hazardsets',
-                            layer.filename())
+        return os.path.join(self.settings["data_path"], "hazardsets", layer.filename())

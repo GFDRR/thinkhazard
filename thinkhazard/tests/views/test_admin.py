@@ -25,77 +25,79 @@ from thinkhazard.models import (
     AdministrativeDivision,
     ClimateChangeRecommendation,
     TechnicalRecommendation,
-    )
+)
 
 
 class TestAdminFunction(BaseTestCase):
 
-    app_name = 'admin'
+    app_name = "admin"
 
     def test_index(self):
-        self.testapp.get('/', status=302)
+        self.testapp.get("/", status=302)
 
     def test_hazardcategories(self):
-        resp = self.testapp.get('/hazardcategories', status=200)
-        categories = resp.html.select('.hazardcategory-link')
-        self.assertEqual(len(categories), 12*4)
+        resp = self.testapp.get("/hazardcategories", status=200)
+        categories = resp.html.select(".hazardcategory-link")
+        self.assertEqual(len(categories), 12 * 4)
 
     def test_hazardcategory(self):
-        resp = self.testapp.get('/hazardcategory/EQ/HIG', status=200)
+        resp = self.testapp.get("/hazardcategory/EQ/HIG", status=200)
         form = resp.form
-        form['general_recommendation'] = 'Bar'
+        form["general_recommendation"] = "Bar"
         form.submit(status=302)
 
     def test_technical_rec(self):
-        resp = self.testapp.get('/technical_rec', status=200)
-        records = resp.html.select('.item-technicalrecommendation')
+        resp = self.testapp.get("/technical_rec", status=200)
+        records = resp.html.select(".item-technicalrecommendation")
         self.assertEqual(len(records), 2)
 
     def test_technical_rec_new(self):
-        resp = self.testapp.get('/technical_rec/new', status=200)
+        resp = self.testapp.get("/technical_rec/new", status=200)
         form = resp.form
-        form['text'] = 'Bar'
-        form['associations'] = ['EQ - MED', 'EQ - LOW']
+        form["text"] = "Bar"
+        form["associations"] = ["EQ - MED", "EQ - LOW"]
         form.submit(status=302)
 
     def test_technical_rec_edit(self):
         technical_rec = DBSession.query(TechnicalRecommendation).first()
-        resp = self.testapp.get('/technical_rec/{}'
-                                .format(technical_rec.id),
-                                status=200)
+        resp = self.testapp.get(
+            "/technical_rec/{}".format(technical_rec.id), status=200
+        )
         form = resp.form
         # here we get ['EQ - HIG'] for associations
-        form['associations'] = ['EQ - MED', 'EQ - LOW']
+        form["associations"] = ["EQ - MED", "EQ - LOW"]
         form.submit(status=302)
 
     def test_climate_rec(self):
-        self.testapp.get('/climate_rec', status=302)
+        self.testapp.get("/climate_rec", status=302)
 
     def test_climate_rec_hazardtype(self):
-        resp = self.testapp.get('/climate_rec/EQ', status=200)
-        records = resp.html.select('.item-climatechangerecommendation')
+        resp = self.testapp.get("/climate_rec/EQ", status=200)
+        records = resp.html.select(".item-climatechangerecommendation")
         self.assertEqual(len(records), 2)
 
     def test_climate_rec_new(self):
-        resp = self.testapp.get('/climate_rec/FL/new', status=200)
+        resp = self.testapp.get("/climate_rec/FL/new", status=200)
         form = resp.form
-        form['text'] = 'Bar'
-        admindivs = DBSession.query(AdministrativeDivision) \
-            .join(AdminLevelType) \
-            .filter(AdminLevelType.mnemonic == u'COU')
-        form['associations'] = [admindiv.id for admindiv in admindivs]
+        form["text"] = "Bar"
+        admindivs = (
+            DBSession.query(AdministrativeDivision)
+            .join(AdminLevelType)
+            .filter(AdminLevelType.mnemonic == "COU")
+        )
+        form["associations"] = [admindiv.id for admindiv in admindivs]
         form.submit(status=302)
 
     def test_climate_rec_edit(self):
         climate_rec = DBSession.query(ClimateChangeRecommendation).first()
-        resp = self.testapp.get('/climate_rec/{}'
-                                .format(climate_rec.id),
-                                status=200)
+        resp = self.testapp.get("/climate_rec/{}".format(climate_rec.id), status=200)
         form = resp.form
-        form['text'] = 'Bar'
-        admindivs = DBSession.query(AdministrativeDivision) \
-            .join(AdminLevelType) \
-            .filter(AdminLevelType.mnemonic == u'COU') \
+        form["text"] = "Bar"
+        admindivs = (
+            DBSession.query(AdministrativeDivision)
+            .join(AdminLevelType)
+            .filter(AdminLevelType.mnemonic == "COU")
             .filter(AdministrativeDivision.code == 11)
-        form['associations'] = [admindiv.id for admindiv in admindivs]
+        )
+        form["associations"] = [admindiv.id for admindiv in admindivs]
         form.submit(status=302)

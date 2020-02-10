@@ -20,52 +20,49 @@
 from pyramid.view import view_config
 from pyramid.i18n import get_localizer, TranslationStringFactory
 
-from ..models import (
-    DBSession,
-    HazardType,
-    Publication,
+from ..models import DBSession, HazardType, Publication
+
+
+@view_config(route_name="index", renderer="templates/index.jinja2")
+def index(request):
+    hazard_types = (
+        DBSession.query(HazardType)
+        .order_by(HazardType.order)
+        .filter(HazardType.ready.isnot(False))
     )
 
-
-@view_config(route_name='index', renderer='templates/index.jinja2')
-def index(request):
-    hazard_types = DBSession.query(HazardType).order_by(HazardType.order) \
-        .filter(HazardType.ready.isnot(False))
-
     return {
-        'hazards': hazard_types,
-        'feedback_form_url': request.registry.settings['feedback_form_url']
+        "hazards": hazard_types,
+        "feedback_form_url": request.registry.settings["feedback_form_url"],
     }
 
 
-@view_config(route_name='about', renderer='templates/about.jinja2')
-@view_config(route_name='pdf_about', renderer='templates/pdf_about.jinja2')
+@view_config(route_name="about", renderer="templates/about.jinja2")
+@view_config(route_name="pdf_about", renderer="templates/pdf_about.jinja2")
 def about(request):
     publication_date = Publication.last()
     return {
-        'publication_date': (publication_date.date.strftime('%c')
-                             if publication_date else '')
+        "publication_date": (
+            publication_date.date.strftime("%c") if publication_date else ""
+        )
     }
 
 
-@view_config(route_name='faq', renderer='templates/faq.jinja2')
+@view_config(route_name="faq", renderer="templates/faq.jinja2")
 def faq(request):
     return {}
 
 
-@view_config(route_name='disclaimer', renderer='templates/disclaimer.jinja2')
+@view_config(route_name="disclaimer", renderer="templates/disclaimer.jinja2")
 def disclaimer(request):
-    return {
-        'feedback_form_url': request.registry.settings['feedback_form_url']
-    }
+    return {"feedback_form_url": request.registry.settings["feedback_form_url"]}
 
 
-@view_config(route_name='data_map', renderer='templates/data_map.jinja2')
+@view_config(route_name="data_map", renderer="templates/data_map.jinja2")
 def data_map(request):
-    tsf = TranslationStringFactory('thinkhazard')
+    tsf = TranslationStringFactory("thinkhazard")
     localizer = get_localizer(request)
 
     hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
-    types = [(h.mnemonic, localizer.translate(tsf(h.title)))
-             for h in hazard_types]
-    return {'hazard_types': types}
+    types = [(h.mnemonic, localizer.translate(tsf(h.title))) for h in hazard_types]
+    return {"hazard_types": types}

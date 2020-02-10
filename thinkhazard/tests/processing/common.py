@@ -19,10 +19,7 @@
 
 from sqlalchemy import func
 
-from ...models import (
-    DBSession,
-    Layer,
-    )
+from ...models import DBSession, Layer
 
 
 def new_geonode_id():

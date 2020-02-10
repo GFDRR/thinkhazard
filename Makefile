@@ -38,7 +38,6 @@ help:
 	@echo "- serve_public            Run the dev server (public app)"
 	@echo "- serve_admin             Run the dev server (admin app)"
 	@echo "- check                   Check the code with flake8, jshint and bootlint"
-	@echo "- modwsgi                 Create files for Apache mod_wsgi"
 	@echo "- test                    Run the unit tests"
 	@echo "- dist                    Build a source distribution"
 	@echo "- routes                  Show the application routes"
@@ -52,7 +51,7 @@ help:
 
 .PHONY: install
 install: \
-		.build/requirements.timestamp \
+		.build/docker.timestamp \
 		.build/node_modules.timestamp \
 		.build/wkhtmltox \
 		.build/phantomjs-2.1.1-linux-x86_64 \
@@ -140,9 +139,17 @@ publish: .build/requirements.timestamp
 transifex-import: .build/requirements.timestamp
 	.build/venv/bin/importpo $(INI_FILE)
 
+.build/docker.timestamp: thinkhazard development.ini production.ini setup.py Dockerfile
+	mkdir -p $(dir $@)
+	docker build -t camptocamp/thinkhazard .
+	touch $@
+
+.PHONY: docker_build
+docker_build: .build/docker.timestamp
+
 .PHONY: serve_public
-serve_public: install
-	.build/venv/bin/pserve --reload $(INI_FILE) --app-name=public
+serve_public: .build/docker.timestamp
+	docker run -it --net=host --env-file=.env -v $(shell pwd):/app camptocamp/thinkhazard pserve --reload c2c://$(INI_FILE) -n public
 
 .PHONY: serve_admin
 serve_admin: install
@@ -164,12 +171,9 @@ jshint: .build/node_modules.timestamp .build/jshint.timestamp
 .PHONY: bootlint
 bootlint: .build/node_modules.timestamp .build/bootlint.timestamp
 
-.PHONY: modwsgi
-modwsgi: .build/apache.timestamp
-
 .PHONY: test
-test: install .build/dev-requirements.timestamp
-	.build/venv/bin/nosetests
+test: 
+	docker run -it --net=host --env-file=.env -v $(shell pwd):/app camptocamp/thinkhazard nosetests
 
 .PHONY: dist
 dist: .build/venv
@@ -178,7 +182,7 @@ dist: .build/venv
 .PHONY: dbtunnel
 dbtunnel:
 	@echo "Opening tunnel…"
-	ssh -N -L 9999:localhost:5432 ec2-54-171-218-87.eu-west-1.compute.amazonaws.com
+	ssh -N -L 9999:localhost:5432 wb-thinkhazard-dev-1.sig.cloud.camptocamp.net
 
 .PHONY: watch
 watch: .build/dev-requirements.timestamp

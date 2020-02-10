@@ -21,19 +21,18 @@ from . import BaseTestCase
 
 
 class TestIndexFunction(BaseTestCase):
-
     def test_index(self):
-        resp = self.testapp.get('/en/', status=200)
-        hazards = resp.html.select('.hazard-types-list .hazard-icon')
+        resp = self.testapp.get("/en/", status=200)
+        hazards = resp.html.select(".hazard-types-list .hazard-icon")
         self.assertEqual(len(hazards), 12)
 
     def test_index__check_lang(self):
-        resp = self.testapp.get('/fr/', status=200)
-        print resp.html.findAll('html')[0]['lang']
-        self.assertEqual(resp.html.findAll('html')[0]['lang'], 'fr')
+        resp = self.testapp.get("/fr/", status=200)
+        print(resp.html.findAll("html")[0]["lang"])
+        self.assertEqual(resp.html.findAll("html")[0]["lang"], "fr")
 
     def test_index__redirect_lang_not_available(self):
-        self.testapp.get('/xx/', status=302)
+        self.testapp.get("/xx/", status=302)
 
     def test_index__redirect(self):
-        self.testapp.get('/', status=302)
+        self.testapp.get("/", status=302)

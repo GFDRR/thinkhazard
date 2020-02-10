@@ -22,8 +22,8 @@ import re
 import logging
 import traceback
 import httplib2
-from urllib import urlencode
-from urlparse import urlunsplit
+from urllib.parse import urlencode
+from urllib.parse import urlunsplit
 import json
 import transaction
 import csv
@@ -42,32 +42,31 @@ from ..models import (
     FurtherResource,
     HazardTypeFurtherResourceAssociation,
     Harvesting,
-    )
+)
 
 from . import BaseProcessor
 
 
 logger = logging.getLogger(__name__)
 
-region_admindiv_csv_path = \
-    'data/geonode_regions_to_administrative_divisions_code.csv'
+region_admindiv_csv_path = "data/geonode_regions_to_administrative_divisions_code.csv"
 
 
 def warning(object, msg):
-    logger.warning(('{csw_type} {id}: '+msg).format(**object))
+    logger.warning(("{csw_type} {id}: " + msg).format(**object))
 
 
 def parse_date(str):
     if str is None or len(str) == 0:
         return None
-    if '.' in str:
-        return datetime.strptime(str, '%Y-%m-%dT%H:%M:%S.%f')
+    if "." in str:
+        return datetime.strptime(str, "%Y-%m-%dT%H:%M:%S.%f")
     else:
-        return datetime.strptime(str, '%Y-%m-%dT%H:%M:%S')
+        return datetime.strptime(str, "%Y-%m-%dT%H:%M:%S")
 
 
 def between(value, range):
-    '''Test hazard_period against value or interval in settings'''
+    """Test hazard_period against value or interval in settings"""
     if not isinstance(range, list):
         range = [range, range]
     if range[0] <= value <= range[1]:
@@ -78,28 +77,35 @@ def between(value, range):
 class Harvester(BaseProcessor):
 
     # We load system ca bundle in order to trust let's encrypt certificates
-    http_client = httplib2.Http(ca_certs='/etc/ssl/certs/ca-certificates.crt')
+    http_client = httplib2.Http(ca_certs="/etc/ssl/certs/ca-certificates.crt")
 
     @staticmethod
     def argument_parser():
         parser = BaseProcessor.argument_parser()
         parser.add_argument(
-            '--hazard-type',  dest='hazard_type', action='store',
-            help='The hazard type (ie. earthquake, ...)')
+            "--hazard-type",
+            dest="hazard_type",
+            action="store",
+            help="The hazard type (ie. earthquake, ...)",
+        )
         return parser
 
     def do_execute(self, hazard_type=None):
         setting_path = os.path.join(
-            os.path.dirname(__file__), '..', '..',
-            'thinkhazard_processing.yaml')
+            os.path.dirname(__file__), "..", "..", "thinkhazard_processing.yaml"
+        )
         settings_mtime = datetime.utcfromtimestamp(
-            os.path.getmtime(setting_path)).replace(tzinfo=pytz.utc)
+            os.path.getmtime(setting_path)
+        ).replace(tzinfo=pytz.utc)
 
         last_complete_harvesting_date = Harvesting.last_complete_date()
-        if (last_complete_harvesting_date is None or
-                settings_mtime > last_complete_harvesting_date):
-            logger.info('Settings have been modified, '
-                        'passing in force/complete mode.')
+        if (
+            last_complete_harvesting_date is None
+            or settings_mtime > last_complete_harvesting_date
+        ):
+            logger.info(
+                "Settings have been modified, " "passing in force/complete mode."
+            )
             self.force = True
             self.hazard_type = None
 
@@ -108,13 +114,13 @@ class Harvester(BaseProcessor):
             self.create_region_admindiv_associations()
         except Exception:
             logger.error(traceback.format_exc())
-            logger.info(u'Continue with layers')
+            logger.info("Continue with layers")
 
         try:
             self.harvest_layers(hazard_type)
         except Exception:
             logger.error(traceback.format_exc())
-            logger.info(u'Continue with documents')
+            logger.info("Continue with documents")
 
         try:
             self.harvest_documents()
@@ -124,144 +130,158 @@ class Harvester(BaseProcessor):
         Harvesting.new(complete=(self.force is True and hazard_type is None))
         transaction.commit()
 
-    def fetch(self, category, params={}, order_by='title'):
-        geonode = self.settings['geonode']
+    def fetch(self, category, params={}, order_by="title"):
+        geonode = self.settings["geonode"]
         # add credentials
-        params['username'] = geonode['username']
-        params['api_key'] = geonode['api_key']
-        url = urlunsplit((
-            geonode['scheme'],
-            geonode['netloc'],
-            'api/{}/'.format(category),
-            urlencode(params),
-            ''))
-        logger.info(u'Retrieving {}'.format(url))
+        params["username"] = geonode["username"]
+        params["api_key"] = geonode["api_key"]
+        url = urlunsplit(
+            (
+                geonode["scheme"],
+                geonode["netloc"],
+                "api/{}/".format(category),
+                urlencode(params),
+                "",
+            )
+        )
+        logger.info("Retrieving {}".format(url))
         response, content = self.http_client.request(url)
         if response.status != 200:
             raise Exception(u'Geonode returned status {}: {}'.
                             format(response.status, content))
         o = json.loads(content)
-        return sorted(o['objects'], key=lambda object: object[order_by])
+        return sorted(o["objects"], key=lambda object: object[order_by])
 
     def hazardtype_from_geonode(self, geonode_name):
-        for mnemonic, type_settings in \
-                self.settings['hazard_types'].iteritems():
-            if type_settings['hazard_type'] == geonode_name:
-                return HazardType.get(unicode(mnemonic))
+        for mnemonic, type_settings in self.settings["hazard_types"].items():
+            if type_settings["hazard_type"] == geonode_name:
+                return HazardType.get(str(mnemonic))
         return None
 
     def check_hazard_type(self, object):
-        hazard_type = object['hazard_type']
+        hazard_type = object["hazard_type"]
         if not hazard_type:
-            warning(object, 'hazard_type is empty')
+            warning(object, "hazard_type is empty")
             return False
         hazardtype = self.hazardtype_from_geonode(hazard_type)
         if hazardtype is None:
-            warning(object, 'hazard_type not supported: {hazard_type}')
+            warning(object, "hazard_type not supported: {hazard_type}")
         return hazardtype
 
     def create_region_admindiv_associations(self):
-        with open(region_admindiv_csv_path, 'rb') as csvfile:
-            rows = csv.reader(csvfile, delimiter=',')
+        with open(region_admindiv_csv_path, "rb") as csvfile:
+            rows = csv.reader(csvfile, delimiter=",")
             for row in rows:
                 try:
                     self.create_region_admindiv_association(row)
                     transaction.commit()
                 except Exception:
                     transaction.abort()
-                    logger.error(u'Linking region {} & admin div {} failed'
-                                 .format(row[1], row[2]))
+                    logger.error(
+                        "Linking region {} & admin div {} failed".format(row[1], row[2])
+                    )
                     logger.error(traceback.format_exc())
 
     def create_region_admindiv_association(self, row):
         # row[0] is geonode region's name_en (useless here)
         # row[1] is geonode region id
         # row[2] is GAUL administrative division **code** (not id!)
-        region = DBSession.query(Region) \
-            .filter(Region.id == row[1]) \
-            .one_or_none()
+        region = DBSession.query(Region).filter(Region.id == row[1]).one_or_none()
 
         if region is None:
-            logger.warning(u'Region {} id {} does not exist in GeoNode'
-                           .format(row[0], row[1]))
+            logger.warning(
+                "Region {} id {} does not exist in GeoNode".format(row[0], row[1])
+            )
             return False
 
-        admindiv = DBSession.query(AdministrativeDivision) \
-            .filter(AdministrativeDivision.code == row[2]) \
+        admindiv = (
+            DBSession.query(AdministrativeDivision)
+            .filter(AdministrativeDivision.code == row[2])
             .one_or_none()
+        )
 
         if admindiv is None:
-            logger.warning(u'AdminUnit code {} is not in our GAUL dataset'
-                           .format(row[2]))
+            logger.warning(
+                "AdminUnit code {} is not in our GAUL dataset".format(row[2])
+            )
             return False
 
         region.administrativedivisions.append(admindiv)
         DBSession.flush()
 
     def harvest_regions(self):
-        regions = self.fetch('regions', order_by='name')
+        regions = self.fetch("regions", order_by="name")
         for region in regions:
             try:
                 self.harvest_region(region)
                 transaction.commit()
             except Exception as e:
                 transaction.abort()
-                logger.error(u'Region {} raises an exception :\n{}'
-                             .format(region['name'], e.message))
+                logger.error(
+                    "Region {} raises an exception :\n{}".format(
+                        region["name"], e.message
+                    )
+                )
                 logger.error(traceback.format_exc())
 
     def harvest_region(self, object):
-        logger.info(u'Harvesting region {id} - {name_en}'.format(**object))
-        name = object['name_en']
-        id = object['id']
+        logger.info("Harvesting region {id} - {name_en}".format(**object))
+        name = object["name_en"]
+        id = object["id"]
 
-        region = DBSession.query(Region) \
-            .filter(Region.id == id) \
-            .one_or_none()
+        region = DBSession.query(Region).filter(Region.id == id).one_or_none()
 
         if region is None:
             region = Region()
             region.id = id
-            logger.info(u'  Creating new Region - {}'.format(name))
+            logger.info("  Creating new Region - {}".format(name))
         else:
-            logger.info(u'  Updating Region - {}'.format(name))
+            logger.info("  Updating Region - {}".format(name))
             # drop existing relationships with GAUL administrative divisions
             for ad in region.administrativedivisions:
                 region.administrativedivisions.remove(ad)
 
         region.name = name
-        region.level = object['level']
+        region.level = object["level"]
         DBSession.add(region)
         DBSession.flush()
 
     def harvest_documents(self):
-        documents = self.fetch('documents')
+        documents = self.fetch("documents")
         for doc in documents:
             try:
                 self.harvest_document(doc)
                 transaction.commit()
             except Exception as e:
                 transaction.abort()
-                logger.error(u'Document {} raises an exception :\n{}'
-                             .format(doc['title'], e.message))
+                logger.error(
+                    "Document {} raises an exception :\n{}".format(
+                        doc["title"], e.message
+                    )
+                )
                 logger.error(traceback.format_exc())
 
     def harvest_document(self, object):
-        logger.info(u'Harvesting document {id} - {title}'.format(**object))
-        title = object['title']
-        id = object['id']
+        logger.info("Harvesting document {id} - {title}".format(**object))
+        title = object["title"]
+        id = object["id"]
 
         # we need to retrieve more information on this document
         # since the regions array is not advertised by the main
         # regions listing from GeoNode
-        geonode = self.settings['geonode']
-        doc_url = urlunsplit((geonode['scheme'],
-                              geonode['netloc'],
-                              'api/documents/{}/'.format(id),
-                              urlencode({'username': geonode['username'],
-                                         'api_key': geonode['api_key']}),
-                              ''))
-        logger.info(u'  Retrieving {}'.format(doc_url))
+        geonode = self.settings["geonode"]
+        doc_url = urlunsplit(
+            (
+                geonode["scheme"],
+                geonode["netloc"],
+                "api/documents/{}/".format(id),
+                urlencode(
+                    {"username": geonode["username"], "api_key": geonode["api_key"]}
+                ),
+                "",
+            )
+        )
+        logger.info("  Retrieving {}".format(doc_url))
         response, content = self.http_client.request(doc_url)
         if response.status != 200:
             raise Exception(u'Geonode returned status {}: {}'.
@@ -269,39 +289,41 @@ class Harvester(BaseProcessor):
 
         o = json.loads(content)
 
-        if 'regions' not in o.keys():
+        if 'regions' not in list(o.keys()):
             warning(o, 'Attribute "regions" is missing')
 
         region_ids = []
-        for r in o.get('regions', []):
+        for r in o.get("regions", []):
             # r is like "/api/regions/1/"
-            region_ids.append(r.split('/')[3])
+            region_ids.append(r.split("/")[3])
 
         if len(region_ids) == 0:
             regions = []
         else:
-            regions = DBSession.query(Region) \
-                .filter(Region.id.in_(region_ids)) \
-                .all()
+            regions = DBSession.query(Region).filter(Region.id.in_(region_ids)).all()
 
         hazardtypes = self.collect_hazard_types(o)
         if not hazardtypes:
             return False
 
-        furtherresource = DBSession.query(FurtherResource) \
-            .filter(FurtherResource.id == id) \
+        furtherresource = (
+            DBSession.query(FurtherResource)
+            .filter(FurtherResource.id == id)
             .one_or_none()
+        )
 
         if furtherresource is None:
             furtherresource = FurtherResource()
             furtherresource.id = id
-            logger.info(u'  Creating new FurtherResource')
+            logger.info("  Creating new FurtherResource")
         else:
-            logger.info(u'  Updating FurtherResource')
+            logger.info("  Updating FurtherResource")
             # drop existing relationships
-            assocs = DBSession.query(HazardTypeFurtherResourceAssociation) \
-                .filter(HazardTypeFurtherResourceAssociation
-                        .furtherresource_id == id).all()
+            assocs = (
+                DBSession.query(HazardTypeFurtherResourceAssociation)
+                .filter(HazardTypeFurtherResourceAssociation.furtherresource_id == id)
+                .all()
+            )
             for a in assocs:
                 DBSession.delete(a)
 
@@ -311,8 +333,11 @@ class Harvester(BaseProcessor):
                 association = HazardTypeFurtherResourceAssociation()
                 association.hazardtype = type
                 association.region = region
-                logger.info(u'  Linked with Region {} for HazardType {}'
-                            .format(region.name, type.mnemonic))
+                logger.info(
+                    "  Linked with Region {} for HazardType {}".format(
+                        region.name, type.mnemonic
+                    )
+                )
                 furtherresource.hazardtype_associations.append(association)
 
         DBSession.add(furtherresource)
@@ -326,24 +351,24 @@ class Harvester(BaseProcessor):
         primary_type = self.check_hazard_type(object)
         if not primary_type:
             return False
-        if object['csw_type'] == "document":
+        if object["csw_type"] == "document":
             # supplemental information holds additional hazard types
             hazard_types = [primary_type]
-            more = object['supplemental_information']
-            if more == u'No information provided':
-                logger.info(u'  Supplemental_information is empty')
+            more = object["supplemental_information"]
+            if more == "No information provided":
+                logger.info("  Supplemental_information is empty")
             else:
                 # we assume the form:
                 # "drought, river_flood, tsunami, coastal_flood, strong_wind"
-                logger.info(u'  Supplemental_information is {}'.format(more))
-                types = re.split(r'\s*,\s*', more)
+                logger.info("  Supplemental_information is {}".format(more))
+                types = re.split(r"\s*,\s*", more)
                 for type in types:
-                    if type != '':
+                    if type != "":
                         tmp_object = {
-                            'csw_type': object['csw_type'],
-                            'id': object['id'],
-                            'title': object['title'],
-                            'hazard_type': type
+                            "csw_type": object["csw_type"],
+                            "id": object["id"],
+                            "title": object["title"],
+                            "hazard_type": type,
                         }
                         hazardtype = self.check_hazard_type(tmp_object)
                         if hazardtype:
@@ -355,7 +380,7 @@ class Harvester(BaseProcessor):
     def harvest_layers(self, hazard_type=None):
         if self.force:
             try:
-                logger.info(u'Cleaning previous data')
+                logger.info("Cleaning previous data")
                 DBSession.query(Output).delete()
                 DBSession.query(Layer).delete()
                 DBSession.query(HazardSet).delete()
@@ -366,33 +391,41 @@ class Harvester(BaseProcessor):
 
         params = {}
         if hazard_type is not None:
-            params['hazard_type__in'] = hazard_type
-        layers = self.fetch('layers', params)
+            params["hazard_type__in"] = hazard_type
+        layers = self.fetch("layers", params)
         for layer in layers:
             try:
                 self.harvest_layer(layer)
                 transaction.commit()
             except Exception as e:
                 transaction.abort()
-                logger.error(u'Layer {} raises an exception :\n{}'
-                             .format(layer['title'], e.message))
+                logger.error(
+                    "Layer {} raises an exception :\n{}".format(
+                        layer["title"], e.message
+                    )
+                )
                 logger.error(traceback.format_exc())
 
     def harvest_layer(self, object):
-        logger.info(u'Harvesting layer {id} - {title}'.format(**object))
-        title = object['title']
+        logger.info("Harvesting layer {id} - {title}".format(**object))
+        title = object["title"]
 
         # we need to retrieve more information on this layer
         # since the regions array is not advertised by the main
         # regions listing from GeoNode
-        geonode = self.settings['geonode']
-        layer_url = urlunsplit((geonode['scheme'],
-                                geonode['netloc'],
-                                'api/layers/{id}/'.format(**object),
-                                urlencode({'username': geonode['username'],
-                                           'api_key': geonode['api_key']}),
-                                ''))
-        logger.info(u'  Retrieving {}'.format(layer_url))
+        geonode = self.settings["geonode"]
+        layer_url = urlunsplit(
+            (
+                geonode["scheme"],
+                geonode["netloc"],
+                "api/layers/{id}/".format(**object),
+                urlencode(
+                    {"username": geonode["username"], "api_key": geonode["api_key"]}
+                ),
+                "",
+            )
+        )
+        logger.info("  Retrieving {}".format(layer_url))
         response, content = self.http_client.request(layer_url)
         if response.status != 200:
             raise Exception(u'Geonode returned status {}: {}'.
@@ -400,69 +433,66 @@ class Harvester(BaseProcessor):
 
         o = json.loads(content)
 
-        if 'regions' not in o.keys():
+        if "regions" not in list(o.keys()):
             warning(object, 'Attribute "regions" is missing')
 
         region_ids = []
-        for r in o.get('regions', []):
+        for r in o.get("regions", []):
             # r is like "/api/regions/1/"
-            region_ids.append(r.split('/')[3])
+            region_ids.append(r.split("/")[3])
 
         if len(region_ids) == 0:
             regions = []
         else:
-            regions = DBSession.query(Region) \
-                .filter(Region.id.in_(region_ids)) \
-                .all()
+            regions = DBSession.query(Region).filter(Region.id.in_(region_ids)).all()
 
         hazardset_id = o['hazard_set']
         if not hazardset_id:
-            logger.info(u'  hazard_set is empty')
+            logger.info("  hazard_set is empty")
             return False
 
         hazardtype = self.check_hazard_type(o)
         if not hazardtype:
             return False
 
-        type_settings = self.settings['hazard_types'][hazardtype.mnemonic]
-        preprocessed = 'values' in type_settings
+        type_settings = self.settings["hazard_types"][hazardtype.mnemonic]
+        preprocessed = "values" in type_settings
 
-        local = 'GLOBAL' not in hazardset_id
+        local = "GLOBAL" not in hazardset_id
 
         mask = False
         if preprocessed is True:
             hazardlevel = None
             hazard_unit = None
             if o['hazard_period']:
-                logger.info(u'  return period found in preprocessed hazardset')
+                logger.info('  return period found in preprocessed hazardset')
                 return False
             hazard_period = None
 
         else:
             hazard_period = int(o['hazard_period'])
             hazardlevel = None
-            for level in (u'LOW', u'MED', u'HIG'):
-                if between(hazard_period,
-                           type_settings['return_periods'][level]):
+            for level in ("LOW", "MED", "HIG"):
+                if between(hazard_period, type_settings["return_periods"][level]):
                     hazardlevel = HazardLevel.get(level)
                     break
 
-            if ('mask_return_period' in type_settings and
-                    between(hazard_period,
-                            type_settings['mask_return_period'])):
+            if "mask_return_period" in type_settings and between(
+                hazard_period, type_settings["mask_return_period"]
+            ):
                 mask = True
 
             if hazardlevel is None and not mask:
-                logger.info(u'  No corresponding hazard_level')
+                logger.info("  No corresponding hazard_level")
                 return False
 
             hazard_unit = o['hazard_unit']
             if hazard_unit == '':
-                logger.info(u'  hazard_unit is empty')
+                logger.info('  hazard_unit is empty')
                 return False
 
         if o['srid'] != 'EPSG:4326':
-            logger.info(u'  srid is different from "EPSG:4326"')
+            logger.info('  srid is different from "EPSG:4326"')
             return False
 
         data_update_date = parse_date(o['data_update_date'])
@@ -507,27 +537,30 @@ class Harvester(BaseProcessor):
         layer = layer.first()
         if layer is not None:
             if hazard_period > layer.return_period:
-                logger.info('  Superseded by shorter return period {}'
-                            .format(layer.return_period))
+                logger.info(
+                    "  Superseded by shorter return period {}".format(
+                        layer.return_period
+                    )
+                )
                 return False
-            logger.info('  Supersede longer return period {}'
-                        .format(layer.return_period))
+            logger.info(
+                "  Supersede longer return period {}".format(layer.return_period)
+            )
             DBSession.delete(layer)
             hazardset.complete = False
             hazardset.processed = None
 
         # Create hazardset before layer
         if hazardset is None:
-            logger.info('  Create new hazardset {}'
-                        .format(hazardset_id))
+            logger.info("  Create new hazardset {}".format(hazardset_id))
             hazardset = HazardSet()
             hazardset.id = hazardset_id
             hazardset.hazardtype = hazardtype
             DBSession.add(hazardset)
 
         # get detail_url and owner_organization from last updated layer
-        geonode = self.settings['geonode']
-        geonode_base_url = "%s://%s" % (geonode['scheme'], geonode['netloc'])
+        geonode = self.settings["geonode"]
+        geonode_base_url = "%s://%s" % (geonode["scheme"], geonode["netloc"])
 
         if o['detail_url'] and not mask:
             hazardset.detail_url = geonode_base_url + o['detail_url']
@@ -539,34 +572,37 @@ class Harvester(BaseProcessor):
 
         layer = DBSession.query(Layer).get(o['id'])
         if layer is None:
-            logger.info('  Create new Layer {}'.format(title))
+            logger.info("  Create new Layer {}".format(title))
             layer = Layer()
             layer.geonode_id = o['id']
             layer.hazardset = hazardset
 
         else:
             # If data has changed
-            if (layer.data_lastupdated_date != data_update_date or
-                    layer.download_url != download_url):
-                logger.info('  Invalidate downloaded')
+            if (
+                layer.data_lastupdated_date != data_update_date
+                or layer.download_url != download_url
+            ):
+                logger.info("  Invalidate downloaded")
                 layer.downloaded = False
                 hazardset.complete = False
                 hazardset.processed = None
 
             # Some hazardset fields are calculated during completing
-            if (layer.calculation_method_quality !=
-                    calculation_method_quality or
-                    layer.scientific_quality != scientific_quality or
-                    layer.metadata_lastupdated_date != metadata_update_date):
-                logger.info('  Invalidate complete')
+            if (
+                layer.calculation_method_quality != calculation_method_quality
+                or layer.scientific_quality != scientific_quality
+                or layer.metadata_lastupdated_date != metadata_update_date
+            ):
+                logger.info("  Invalidate complete")
                 hazardset.complete = False
 
             # Some fields invalidate outputs
-            if (layer.hazardunit != hazard_unit):
-                logger.info('  Invalidate processed')
+            if layer.hazardunit != hazard_unit:
+                logger.info("  Invalidate processed")
                 hazardset.processed = None
 
-        typename = o.get('typename', None)
+        typename = o.get("typename", None)
         if typename is None:
             warning(o, 'Attribute "typename" is missing')
         layer.typename = typename

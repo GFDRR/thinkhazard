@@ -20,57 +20,52 @@
 import random
 import uuid
 
-from shapely.geometry import (
-    MultiPolygon,
-    Polygon,
-    )
+from shapely.geometry import MultiPolygon, Polygon
 from geoalchemy2.shape import from_shape
 
-from ...models import (
-    DBSession,
-    AdminLevelType,
-    AdministrativeDivision,
-    Region,
-    )
+from ...models import DBSession, AdminLevelType, AdministrativeDivision, Region
 
 
 def populate_datamart():
-    print 'populate datamart'
+    print("populate datamart")
     DBSession.query(AdministrativeDivision).delete()
 
-    adminlevel_cou = AdminLevelType.get(u'COU')
-    adminlevel_pro = AdminLevelType.get(u'PRO')
-    adminlevel_reg = AdminLevelType.get(u'REG')
+    adminlevel_cou = AdminLevelType.get("COU")
+    adminlevel_pro = AdminLevelType.get("PRO")
+    adminlevel_reg = AdminLevelType.get("REG")
 
-    shape = MultiPolygon([
-        Polygon([(0, 0), (0, 1), (1, 1), (1, 0), (0, 0)])
-    ])
+    shape = MultiPolygon([Polygon([(0, 0), (0, 1), (1, 1), (1, 0), (0, 0)])])
     geometry = from_shape(shape, 4326)
 
-    country = AdministrativeDivision(**{
-        'code': 10,
-        'leveltype_id': adminlevel_cou.id,
-        'name': u'Administrative division level 1'
-    })
-    region = Region(id=random.randint(0, 0xffffff),
-                    name=uuid.uuid4(), level=3)
+    country = AdministrativeDivision(
+        **{
+            "code": 10,
+            "leveltype_id": adminlevel_cou.id,
+            "name": "Administrative division level 1",
+        }
+    )
+    region = Region(id=random.randint(0, 0xFFFFFF), name=uuid.uuid4(), level=3)
     DBSession.add(region)
     country.regions = [region]
     DBSession.add(country)
 
-    province = AdministrativeDivision(**{
-        'code': 20,
-        'leveltype_id': adminlevel_pro.id,
-        'name': u'Administrative division level 2'
-    })
+    province = AdministrativeDivision(
+        **{
+            "code": 20,
+            "leveltype_id": adminlevel_pro.id,
+            "name": "Administrative division level 2",
+        }
+    )
     province.parent = country
     DBSession.add(province)
 
-    div = AdministrativeDivision(**{
-        'code': 30,
-        'leveltype_id': adminlevel_reg.id,
-        'name': u'Administrative division level 3'
-    })
+    div = AdministrativeDivision(
+        **{
+            "code": 30,
+            "leveltype_id": adminlevel_reg.id,
+            "name": "Administrative division level 3",
+        }
+    )
     div.geom = geometry
     div.hazardcategories = []
     div.parent = province

@@ -22,12 +22,12 @@ from ..settings import load_full_settings
 from ..scripts.initializedb import initdb
 
 
-settings = load_full_settings('tests.ini',
-                              name='admin')
+settings = load_full_settings("c2c://tests.ini", name="admin")
 
 
 def populatedb():
-    engine = engine_from_config(settings, 'sqlalchemy.')
+    engine = engine_from_config(settings, "sqlalchemy.")
     initdb(engine, True)
+
 
 populatedb()

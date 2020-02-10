@@ -1,4 +1,4 @@
-from __future__ import with_statement
+
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 from logging.config import fileConfig
@@ -37,10 +37,10 @@ def include_object(object, name, type_, reflected, compare_to):
     """Ignore the indices and table specified in the ini file.
     """
     if type_ == "table" and name in exclude_tables:
-        print '=> ignore table: %s' % name
+        print('=> ignore table: %s' % name)
         return False
     if type_ == "index" and name in exclude_indexes:
-        print '=> ignore index: %s' % name
+        print('=> ignore index: %s' % name)
         return False
     return True
 
@@ -99,7 +99,7 @@ def run_migrations_online():
         }
 
     try:
-        for name, rec in engines.items():
+        for name, rec in list(engines.items()):
             logger.info("Migrating database %s" % name)
             context.configure(
                 connection=rec['connection'],
@@ -112,17 +112,17 @@ def run_migrations_online():
             context.run_migrations(engine_name=name)
 
         if use_two_phase:
-            for rec in engines.values():
+            for rec in list(engines.values()):
                 rec['transaction'].prepare()
 
-        for rec in engines.values():
+        for rec in list(engines.values()):
             rec['transaction'].commit()
     except:
-        for rec in engines.values():
+        for rec in list(engines.values()):
             rec['transaction'].rollback()
         raise
     finally:
-        for rec in engines.values():
+        for rec in list(engines.values()):
             rec['connection'].close()
 
 run_migrations_online()

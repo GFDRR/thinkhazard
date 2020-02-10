@@ -30,8 +30,8 @@ def markdown_filter(text):
 
 @contextfilter
 def translate(ctx, text, *elements, **kw):
-    request = ctx.get('request') or get_current_request()
-    tsf = TranslationStringFactory('thinkhazard')
+    request = ctx.get("request") or get_current_request()
+    tsf = TranslationStringFactory("thinkhazard")
     localizer = get_localizer(request)
     return localizer.translate(tsf(text))
 

@@ -18,43 +18,34 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 from pyramid.view import view_config
-from pyramid.httpexceptions import (
-    HTTPNotFound,
-    )
+from pyramid.httpexceptions import HTTPNotFound
 
-from .admin import (
-    admindiv_hazardsets_hazardtype,
-)
+from .admin import admindiv_hazardsets_hazardtype
 
-from ..models import (
-    DBSession,
-    HazardCategory,
-    HazardType,
-    HazardLevel,
-    )
+from ..models import DBSession, HazardCategory, HazardType, HazardLevel
 
 
-@view_config(route_name='api_hazardcategory', renderer='json')
+@view_config(route_name="api_hazardcategory", renderer="json")
 def api_hazardcategory(request):
-    hazard_type = request.matchdict['hazard_type']
-    hazard_level = request.matchdict['hazard_level']
+    hazard_type = request.matchdict["hazard_type"]
+    hazard_level = request.matchdict["hazard_level"]
 
     try:
-        hazard_category = DBSession.query(HazardCategory) \
-            .join(HazardType) \
-            .join(HazardLevel) \
-            .filter(HazardType.mnemonic == hazard_type) \
-            .filter(HazardLevel.mnemonic == hazard_level) \
+        hazard_category = (
+            DBSession.query(HazardCategory)
+            .join(HazardType)
+            .join(HazardLevel)
+            .filter(HazardType.mnemonic == hazard_type)
+            .filter(HazardLevel.mnemonic == hazard_level)
             .one()
+        )
     except:
         raise HTTPNotFound()
 
-    return {
-        'hazard_category': hazard_category
-    }
+    return {"hazard_category": hazard_category}
 
 
-@view_config(route_name='api_admindiv_hazardsets_hazardtype', renderer='json')
+@view_config(route_name="api_admindiv_hazardsets_hazardtype", renderer="json")
 def api_admindiv_hazardsets_hazardtype(request):
     data = admindiv_hazardsets_hazardtype(request)
     return data
