@@ -51,7 +51,7 @@ help:
 
 .PHONY: install
 install: \
-		.build/docker.timestamp \
+		docker_build \
 		.build/node_modules.timestamp \
 		.build/wkhtmltox \
 		.build/phantomjs-2.1.1-linux-x86_64 \
@@ -141,21 +141,21 @@ transifex-import: .build/requirements.timestamp
 
 .build/docker.timestamp: thinkhazard development.ini production.ini setup.py Dockerfile requirements.txt
 	mkdir -p $(dir $@)
-	sudo docker build --target front-builder -t camptocamp/thinkhazard:front-builder .
-	sudo docker build --target app -t camptocamp/thinkhazard:app .
-	make docker_buildcss
+	sudo rm -rf $(shell pwd)/node_modules
+	docker build --target front-builder -t camptocamp/thinkhazard:front-builder .
+	docker build --target app -t camptocamp/thinkhazard:app .
 	touch $@
 
 .PHONY: docker_build
-docker_build: .build/docker.timestamp
+docker_build: .build/docker.timestamp docker_buildcss
 
 .PHONY: docker_buildcss
 docker_buildcss:
 	docker run -it --net=host --env-file=.env -v $(shell pwd):/app camptocamp/thinkhazard:front-builder make buildcss
 
 .PHONY: serve_public
-serve_public: .build/docker.timestamp
-	docker-compose up thinkhazard
+serve_public: docker_build
+	docker run -it --net=host --env-file=.env -v $(shell pwd):/app camptocamp/thinkhazard:app pserve --reload c2c://$(INI_FILE) -n public
 
 .PHONY: serve_admin
 serve_admin: install
