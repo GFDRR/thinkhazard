@@ -141,11 +141,17 @@ transifex-import: .build/requirements.timestamp
 
 .build/docker.timestamp: thinkhazard development.ini production.ini setup.py Dockerfile requirements.txt
 	mkdir -p $(dir $@)
-	docker build -t camptocamp/thinkhazard .
+	sudo docker build --target front-builder -t camptocamp/thinkhazard:front-builder .
+	sudo docker build --target app -t camptocamp/thinkhazard:app .
+	make docker_buildcss
 	touch $@
 
 .PHONY: docker_build
 docker_build: .build/docker.timestamp
+
+.PHONY: docker_buildcss
+docker_buildcss:
+	docker run -it --net=host --env-file=.env -v $(shell pwd):/app camptocamp/thinkhazard:front-builder make buildcss
 
 .PHONY: serve_public
 serve_public: .build/docker.timestamp

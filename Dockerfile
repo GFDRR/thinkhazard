@@ -4,9 +4,8 @@ RUN apt-get update && apt-get install make
 COPY package.json Makefile /app/
 WORKDIR /app
 COPY thinkhazard/static/ /app/thinkhazard/static/
-RUN make buildcss
 
-FROM python:3.8-slim
+FROM python:3.8-slim as app
 
 WORKDIR /app
 
@@ -29,6 +28,4 @@ RUN pip install -r dev-requirements.txt
 
 # copy project
 COPY . /app/
-COPY --from=front-builder /app/thinkhazard/static/build /app/thinkhazard/static/build
-COPY --from=front-builder /app/node_modules /app/node_modules
 RUN pip install -e .
