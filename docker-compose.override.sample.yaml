@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  thinkhazard:
+    network_mode: "host"
+    volumes:
+      - '${PWD}:/app'
+    command: 'pserve --reload c2c://${INI_FILE} -n public'
+
+  thinkhazard_admin:
+    network_mode: "host"
+    volumes:
+      - '${PWD}:/app'
+    command: 'pserve --reload c2c://${INI_FILE} -n admin'

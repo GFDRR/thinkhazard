@@ -18,3 +18,5 @@ thinkhazard/locale/*/LC_MESSAGES/*.po
 
 # Don't version the translation strings from database
 *-database.po*
+
+docker-compose.override.yaml

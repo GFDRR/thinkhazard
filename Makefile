@@ -149,11 +149,11 @@ docker_build: .build/docker.timestamp
 
 .PHONY: serve_public
 serve_public: .build/docker.timestamp
-	docker run -it --net=host --env-file=.env -v $(shell pwd):/app camptocamp/thinkhazard pserve --reload c2c://$(INI_FILE) -n public
+	docker-compose up thinkhazard
 
 .PHONY: serve_admin
 serve_admin: install
-	.build/venv/bin/pserve --reload $(INI_FILE) --app-name=admin
+	docker-compose up thinkhazard_admin
 
 .PHONY: routes
 routes:
