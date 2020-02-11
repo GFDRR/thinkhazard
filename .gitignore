@@ -20,3 +20,4 @@ thinkhazard/locale/*/LC_MESSAGES/*.po
 *-database.po*
 
 docker-compose.override.yaml
+local.mk

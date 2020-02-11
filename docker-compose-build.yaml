@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  test:
+    image: camptocamp/thinkhazard-tester
+    network_mode: "host"
+    volumes:
+      - '${PWD}/thinkhazard:/app/thinkhazard'
+      - '${PWD}/tests:/app/tests'
+    environment:
+      - PGHOST
+      - PGPORT
+      - PGUSER
+      - PGPASSWORD
+      - PGDATABASE
+      - PGDATABASE_ADMIN
+      - INI_FILE

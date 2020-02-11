@@ -25,9 +25,9 @@ The following packages must be installed on the system:
 
 The following commands assume that the system is Debian/Ubuntu. Commands may need to be adapted when working on a different system.
 
-Create a Python virtual environment and install the project into it:
+Build docker images:
 
-    $ make install
+    $ make docker_build
 
 Install postgres `unaccent` extension database engine :
 

@@ -18,8 +18,8 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 from sqlalchemy import engine_from_config
-from ..settings import load_full_settings
-from ..scripts.initializedb import initdb
+from thinkhazard.settings import load_full_settings
+from thinkhazard.scripts.initializedb import initdb
 
 
 settings = load_full_settings("c2c://tests.ini", name="admin")

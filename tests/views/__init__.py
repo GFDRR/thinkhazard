@@ -24,7 +24,7 @@ from datetime import datetime
 
 from pyramid.paster import bootstrap
 
-from ...models import (
+from thinkhazard.models import (
     DBSession,
     AdministrativeDivision,
     ClimateChangeRecommendation,

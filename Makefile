@@ -1,6 +1,4 @@
-LESS_FILES = $(shell find thinkhazard/static/less -type f -name '*.less' 2> /dev/null)
-JS_FILES = $(shell find thinkhazard/static/js -type f -name '*.js' 2> /dev/null)
-PY_FILES = $(shell find thinkhazard -type f -name '*.py' 2> /dev/null)
+
 INSTANCEID ?= main
 ifeq ($(INSTANCEID), main)
 	INSTANCEPATH = /
@@ -11,13 +9,11 @@ else
 endif
 AUTHUSERFILE ?= /var/www/vhosts/wb-thinkhazard/conf/.htpasswd
 DATA ?= world
-INI_FILE ?= development.ini
 
-.PHONY: all
-all: help
+-include local.mk
 
-.PHONY: help
-help:
+.PHONY: help_old
+help_old:
 	@echo "Usage: make <target>"
 	@echo
 	@echo "Possible targets:"
@@ -49,27 +45,58 @@ help:
 	@echo "- compile_catalog         Compile language files"
 	@echo
 
-.PHONY: install
-install: \
-		docker_build \
-		.build/node_modules.timestamp \
-		.build/wkhtmltox \
-		.build/phantomjs-2.1.1-linux-x86_64 \
-		buildcss \
-		compile_catalog
+default: help
 
-.PHONY: buildcss
-buildcss: thinkhazard/static/build/index.css \
-	      thinkhazard/static/build/index.min.css \
-	      thinkhazard/static/build/report.css \
-	      thinkhazard/static/build/report.min.css \
-	      thinkhazard/static/build/report_print.css \
-	      thinkhazard/static/build/report_print.min.css \
-	      thinkhazard/static/build/common.css \
-	      thinkhazard/static/build/common.min.css \
-	      thinkhazard/static/build/admin.css \
-	      thinkhazard/static/build/admin.min.css \
-	      $(addprefix thinkhazard/static/fonts/fontawesome-webfont., eot ttf woff woff2)
+.PHONY: help
+help: ## Display this help message
+	@echo "Usage: make <target>"
+	@echo
+	@echo "Possible targets:"
+	@grep -Eh '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "    %-20s%s\n", $$1, $$2}'
+
+
+################
+# Entry points #
+################
+
+.PHONY: build
+build: ## Build docker images
+build: docker_build_thinkhazard docker_build_python_builder docker_build_tester
+
+.PHONY: check
+check: ## Check the code with flake8, jshint and bootlint
+check:
+	docker-compose -f docker-compose-build.yaml run --rm test make -f docker.mk check
+
+.PHONY: test
+test: ## Run the unit tests
+	docker-compose -f docker-compose-build.yaml run --rm test nosetests -v
+
+
+#######################
+# Build docker images #
+#######################
+
+.PHONY: docker_build_thinkhazard
+docker_build_thinkhazard:
+	docker build \
+		--build-arg TX_USR=${TX_USR} \
+		--build-arg TX_PWD=${TX_PWD} \
+		--target app -t camptocamp/thinkhazard .
+
+.PHONY: docker_build_python_builder
+docker_build_python_builder:
+	docker build \
+		--build-arg TX_USR=${TX_USR} \
+		--build-arg TX_PWD=${TX_PWD} \
+		--target python-builder -t camptocamp/thinkhazard-python-builder .
+
+.PHONY: docker_build_tester
+docker_build_tester:
+	docker build \
+		--build-arg TX_USR=${TX_USR} \
+		--build-arg TX_PWD=${TX_PWD} \
+		--target tester -t camptocamp/thinkhazard-tester .
 
 .PHONY: populatedb
 populatedb: initdb import_admindivs import_recommendations import_contacts
@@ -139,23 +166,13 @@ publish: .build/requirements.timestamp
 transifex-import: .build/requirements.timestamp
 	.build/venv/bin/importpo $(INI_FILE)
 
-.build/docker.timestamp: thinkhazard development.ini production.ini setup.py Dockerfile requirements.txt
-	mkdir -p $(dir $@)
-	sudo rm -rf $(shell pwd)/node_modules
-	docker build --target front-builder -t camptocamp/thinkhazard:front-builder .
-	docker build --target app -t camptocamp/thinkhazard:app .
-	touch $@
-
-.PHONY: docker_build
-docker_build: .build/docker.timestamp docker_buildcss
-
 .PHONY: docker_buildcss
 docker_buildcss:
-	docker run -it --net=host --env-file=.env -v $(shell pwd):/app camptocamp/thinkhazard:front-builder make buildcss
+	docker run -it --net=host --env-file=.env -v $(shell pwd):/app camptocamp/thinkhazard-builder make buildcss
 
 .PHONY: serve_public
-serve_public: docker_build
-	docker run -it --net=host --env-file=.env -v $(shell pwd):/app camptocamp/thinkhazard:app pserve --reload c2c://$(INI_FILE) -n public
+serve_public: build
+	docker-compose up thinkhazard
 
 .PHONY: serve_admin
 serve_admin: install
@@ -164,22 +181,6 @@ serve_admin: install
 .PHONY: routes
 routes:
 	.build/venv/bin/proutes $(INI_FILE)
-
-.PHONY: check
-check: flake8 jshint bootlint
-
-.PHONY: flake8
-flake8: .build/dev-requirements.timestamp .build/flake8.timestamp
-
-.PHONY: jshint
-jshint: .build/node_modules.timestamp .build/jshint.timestamp
-
-.PHONY: bootlint
-bootlint: .build/node_modules.timestamp .build/bootlint.timestamp
-
-.PHONY: test
-test: 
-	docker run -it --net=host --env-file=.env -v $(shell pwd):/app camptocamp/thinkhazard nosetests
 
 .PHONY: dist
 dist: .build/venv
@@ -195,98 +196,8 @@ watch: .build/dev-requirements.timestamp
 	@echo "Watching static files..."
 	.build/venv/bin/nosier -p thinkhazard/static "make buildcss"
 
-thinkhazard/static/build/%.min.css: $(LESS_FILES) .build/node_modules.timestamp
-	mkdir -p $(dir $@)
-	./node_modules/.bin/lessc --clean-css thinkhazard/static/less/$*.less $@
 
-thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
-	mkdir -p $(dir $@)
-	./node_modules/.bin/lessc thinkhazard/static/less/$*.less $@
 
-.build/venv:
-	mkdir -p $(dir $@)
-	# make a first virtualenv to get a recent version of virtualenv
-	virtualenv venv
-	venv/bin/pip install virtualenv
-	venv/bin/virtualenv .build/venv
-	# remove the temporary virtualenv
-	rm -rf venv
-
-.build/node_modules.timestamp: package.json
-	mkdir -p $(dir $@)
-	npm install
-	touch $@
-
-.build/dev-requirements.timestamp: .build/venv dev-requirements.txt
-	mkdir -p $(dir $@)
-	.build/venv/bin/pip install -r dev-requirements.txt > /dev/null 2>&1
-	touch $@
-
-.build/requirements.timestamp: .build/venv setup.py requirements.txt
-	mkdir -p $(dir $@)
-	.build/venv/bin/pip install numpy==1.10.1
-	.build/venv/bin/pip install -r requirements.txt
-	touch $@
-
-.build/flake8.timestamp: $(PY_FILES)
-	mkdir -p $(dir $@)
-	.build/venv/bin/flake8 $?
-	touch $@
-
-.build/jshint.timestamp: $(JS_FILES)
-	mkdir -p $(dir $@)
-	./node_modules/.bin/jshint --verbose $?
-	touch $@
-
-.build/bootlint.timestamp: $(JINJA2_FILES)
-	mkdir -p $(dir $@)
-	./node_modules/.bin/bootlint $?
-	touch $@
-
-.build/apache.timestamp: \
-		.build/thinkhazard_public-production.wsgi \
-		.build/thinkhazard_public-development.wsgi \
-		.build/thinkhazard_admin-production.wsgi \
-		.build/thinkhazard_admin-development.wsgi \
-		.build/apache-production.conf \
-		.build/apache-development.conf
-	sudo apache2ctl graceful
-	touch $@
-
-.build/thinkhazard_public-%.wsgi: thinkhazard_public.wsgi
-	mkdir -p $(dir $@)
-	sed 's#{{APP_INI_FILE}}#$(CURDIR)/$*.ini#' $< > $@
-	chmod 755 $@
-
-.build/thinkhazard_admin-%.wsgi: thinkhazard_admin.wsgi
-	mkdir -p $(dir $@)
-	sed 's#{{APP_INI_FILE}}#$(CURDIR)/$*.ini#' $< > $@
-	chmod 755 $@
-
-.build/apache-%.conf: apache.conf .build/venv
-	sed -e 's#{{PYTHONPATH}}#$(shell .build/venv/bin/python -c "import sys; print(sys.path[-1])")#' \
-		-e 's#{{INSTANCEID}}#$(INSTANCEID)#g' \
-		-e 's#{{INSTANCEPATH}}#$(INSTANCEPATH)#g' \
-		-e 's#{{INSTANCEADMINPATH}}#$(INSTANCEADMINPATH)#g' \
-		-e 's#{{AUTHUSERFILE}}#$(AUTHUSERFILE)#g' \
-		-e 's#{{WSGISCRIPT}}#$(abspath .build/thinkhazard_public-$*.wsgi)#' \
-		-e 's#{{WSGISCRIPT_ADMIN}}#$(abspath .build/thinkhazard_admin-$*.wsgi)#' $< > $@
-
-.build/wkhtmltox:
-	wget https://github.com/GFDRR/thinkhazard/releases/download/wkhtmltox/wkhtmltox-0.12.3_linux-generic-amd64.tar.xz && tar -xv -f wkhtmltox-0.12.3_linux-generic-amd64.tar.xz
-	mv wkhtmltox .build
-
-.build/phantomjs-2.1.1-linux-x86_64:
-	wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 && tar -jxf phantomjs-2.1.1-linux-x86_64.tar.bz2
-	mv phantomjs-2.1.1-linux-x86_64 .build/
-
-.PRECIOUS: node_modules/font-awesome/fonts/fontawesome-webfont.%
-node_modules/font-awesome/fonts/fontawesome-webfont.%: .build/node_modules.timestamp
-	touch -c $@
-
-thinkhazard/static/fonts/fontawesome-webfont.%: node_modules/font-awesome/fonts/fontawesome-webfont.%
-	mkdir -p $(dir $@)
-	cp $< $@
 
 .PHONY: clean
 clean:
@@ -311,22 +222,8 @@ extract_messages:
 	# removes the creation date to avoid unnecessary git changes
 	sed -i '/^"POT-Creation-Date: /d' thinkhazard/locale/thinkhazard.pot
 
-$(HOME)/.transifexrc:
-	echo "[https://www.transifex.com]" > $@
-	echo "hostname = https://www.transifex.com" >> $@
-	echo "username = antoine.abt@camptocamp.com" >> $@
-	echo "password = $(TX_PWD)" >> $@
-	echo "token =" >> $@
-
 .PHONY: transifex-push
 transifex-push: $(HOME)/.transifexrc
 	.build/venv/bin/tx push -s
 
-.PHONY: transifex-pull
-transifex-pull: $(HOME)/.transifexrc
-	.build/venv/bin/tx pull
 
-.PHONY: compile_catalog
-compile_catalog: $(HOME)/.transifexrc transifex-pull
-	msgfmt -o thinkhazard/locale/fr/LC_MESSAGES/thinkhazard.mo thinkhazard/locale/fr/LC_MESSAGES/thinkhazard.po
-	msgfmt -o thinkhazard/locale/es/LC_MESSAGES/thinkhazard.mo thinkhazard/locale/es/LC_MESSAGES/thinkhazard.po
