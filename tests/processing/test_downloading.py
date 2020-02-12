@@ -21,9 +21,10 @@ import unittest
 import transaction
 from mock import patch
 
+from thinkhazard.processing.downloading import Downloader
+
 from .. import settings
 from . import populate_datamart
-from ...processing.downloading import Downloader
 
 
 def populate():
