@@ -319,23 +319,23 @@
     e.preventDefault();
     btnStatus(true);
     fetch(app.createPdfReportUrl, { method: 'POST'})
-    .then(function(r) { return r.blob() })
+    .then(function(r) { return r.blob(); })
     .then(function(data) {
       btnStatus(false);
       var blob = new Blob([data], {type: 'image/pdf'});
-      let a = document.createElement("a");
+      var a = document.createElement("a");
       a.style = "display: none";
       document.body.appendChild(a);
-      let url = window.URL.createObjectURL(blob);
+      var url = window.URL.createObjectURL(blob);
       a.href = url;
-      a.download = this.getAttribute('download')
+      a.download = this.getAttribute('download');
       a.click();
       window.URL.revokeObjectURL(url);
     }.bind(this))
     .catch(function() {
       alert("Something went wrong");
       btnStatus(false);
-    })
+    });
   });
 
 
