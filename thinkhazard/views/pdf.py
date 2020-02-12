@@ -26,14 +26,18 @@ import traceback
 from uuid import uuid4
 
 from os import path
+from typing import List
 
-from subprocess import Popen, PIPE
 from time import time, sleep
 
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest, HTTPNotFound
 from pyramid.response import FileResponse
-from thinkhazard import scheduler
+
+from io import BytesIO
+from PyPDF2 import PdfFileReader, PdfFileWriter
+from asyncio import run
+from pyppeteer import launch
 
 from .report import (
     _hazardlevel_nodata,
@@ -105,208 +109,81 @@ def pdf_cover(request):
 """pdf_about: see index.py"""
 
 
-def create_pdf(file_name, file_name_temp, cover_url, pages, timeout):
-    """Create a PDF file with the given pages using wkhtmltopdf.
-    wkhtmltopdf is writing the PDF in `file_name_temp`, once the generation
-    has finished, the file is renamed to `file_name`.
+async def create_pdf(file_name: str, pages: List[str]):
+    """Create a PDF file with the given pages using pyppeteer.
     """
-    command = path.join(
-        path.dirname(__file__), "../../.build/wkhtmltox/bin/wkhtmltopdf"
+    chunks = []
+
+    # --no-sandbox is required to make Chrome/Chromium run under root.
+    browser = await launch(
+        handleSIGINT=False,
+        handleSIGTERM=False,
+        handleSIGHUP=False,
+        args=["--no-sandbox"],
     )
+    page = await browser.newPage()
+    for url in pages:
+        await page.goto(url, {"waitUntil": "networkidle0"})
+        chunks.append(
+            BytesIO(await page.pdf({"format": "A4", "printBackground": True}))
+        )
+    await browser.close()
 
-    command += " --viewport-size 800x600"
-    command += ' --window-status "finished"'
-    command += ' cover "%s"' % cover_url
-    command += ' %s "%s"' % (pages, file_name_temp)
-
-    try:
-        p = Popen(command, shell=True, stdout=PIPE, stderr=PIPE, close_fds=True)
-        # Timeout wkhtmltopdf in case of http error with --window-status
-        start = time()
-        while p.poll() is None:
-            sleep(0.1)
-            if time() - start > timeout:
-                p.terminate()
-        retcode = p.returncode
-        stderr = p.stderr.read()
-
-        if retcode == 0:
-            # once the generation has succeeded, rename the file so that
-            # waiting clients know that it is finished
-            os.rename(file_name_temp, file_name)
-        elif retcode < 0:
-            logger.error(stderr)
-            logger.error("wkhtmltopdf terminated by signal: %s", -retcode)
-        else:
-            logger.error(stderr)
-
-    except:
-        logger.error(traceback.format_exc())
-
-    finally:
-        try:
-            os.remove(file_name_temp)
-        except OSError:
-            pass
+    # merge all pages
+    writer = PdfFileWriter()
+    # for page in pages:
+    for chunk in chunks:
+        reader = PdfFileReader(chunk)
+        for index in range(reader.numPages):
+            writer.addPage(reader.getPage(index))
+    os.makedirs(os.path.dirname(file_name), exist_ok=True)
+    output = open(file_name, "wb")
+    writer.write(output)
+    output.close()
 
 
-@view_config(route_name="create_pdf_report", request_method="POST", renderer="json")
+@view_config(route_name="create_pdf_report", request_method="POST")
 def create_pdf_report(request):
     """View to create an asynchronous print job.
     """
-    division_code = get_divison_code(request)
+    division_code = request.matchdict.get("divisioncode")
 
     base_path = request.registry.settings.get("pdf_archive_path")
     report_id = _get_report_id(division_code, base_path)
 
-    categories = (
-        DBSession.query(HazardCategory)
-        .options(joinedload(HazardCategory.hazardtype))
-        .join(HazardCategoryAdministrativeDivisionAssociation)
-        .join(AdministrativeDivision)
-        .join(HazardLevel)
-        .filter(AdministrativeDivision.code == division_code)
-        .order_by(HazardLevel.order)
-    )
-
-    query_args = {"_query": {"_LOCALE_": request.locale_name}}
-
-    pages = ' page "%s"' % request.route_url("pdf_about", **query_args)
-    for cat in categories:
-        pages += ' page "{}&static=true"'.format(
-            request.route_url(
-                "report_print",
-                divisioncode=division_code,
-                hazardtype=cat.hazardtype.mnemonic,
-                **query_args,
-            )
-        )
-
-    cover_url = request.route_url("pdf_cover", divisioncode=division_code, **query_args)
-
     file_name = _get_report_filename(base_path, division_code, report_id)
-    file_name_temp = _get_report_filename(
-        base_path, division_code, report_id, temp=True
-    )
 
-    timeout = float(request.registry.settings["pdf_timeout"])
-
-    # already create the file, so that the client can poll the status
-    _touch(file_name_temp)
-
-    scheduler.add_job(
-        create_pdf, args=[file_name, file_name_temp, cover_url, pages, timeout]
-    )
-
-    return {"divisioncode": division_code, "report_id": report_id}
-
-
-@view_config(route_name="get_report_status", renderer="json")
-def get_report_status(request):
-    """View to poll the status of a print job.
-    """
-    division_code = get_divison_code(request)
-    report_id = get_report_id(request)
-
-    base_path = request.registry.settings.get("pdf_archive_path")
-    file_name = _get_report_filename(base_path, division_code, report_id)
-    file_name_temp = _get_report_filename(
-        base_path, division_code, report_id, temp=True
-    )
-
-    if path.isfile(file_name):
-        return {"status": "done"}
-    elif path.isfile(file_name_temp):
-        return {"status": "running"}
-    else:
-        raise HTTPNotFound("No job found or job has failed")
-
-
-@view_config(route_name="get_pdf_report")
-def get_pdf_report(request):
-    """Return the PDF file for finished print jobs.
-    """
-    division_code = get_divison_code(request)
-    report_id = get_report_id(request)
-
-    base_path = request.registry.settings.get("pdf_archive_path")
-    file_name = _get_report_filename(base_path, division_code, report_id)
-    file_name_temp = _get_report_filename(
-        base_path, division_code, report_id, temp=True
-    )
-
-    if path.isfile(file_name):
-        division_name = (
-            DBSession.query(AdministrativeDivision.name)
+    if not path.isfile(file_name):
+        categories = (
+            DBSession.query(HazardCategory)
+            .options(joinedload(HazardCategory.hazardtype))
+            .join(HazardCategoryAdministrativeDivisionAssociation)
+            .join(AdministrativeDivision)
+            .join(HazardLevel)
             .filter(AdministrativeDivision.code == division_code)
-            .scalar()
+            .order_by(HazardLevel.order)
         )
-        response = FileResponse(
-            file_name, request=request, content_type="application/pdf"
-        )
-        response.headers["Content-Disposition"] = (
-            'attachment; filename="ThinkHazard - %s.pdf"'
-            % str(division_name.encode("utf-8"))
-        )
-        return response
-    elif path.isfile(file_name_temp):
-        return HTTPBadRequest("Not finished yet")
-    else:
-        raise HTTPNotFound("No job found")
-
-
-@view_config(route_name="get_map_report")
-def get_map_report(request):
-    """Return the JPG file for job map.
-    """
-
-    base_path = "/tmp/"
-
-    command = path.join(
-        path.dirname(__file__),
-        "../../.build/phantomjs-2.1.1-linux-x86_64/bin/phantomjs",
-    )
-
-    url = request.params.get("url")
-    code = "_".join(url.split("/")[-2:]).split("?")[0]
-    file_name = "%s.jpg" % code
-    file_path = "%s/%s" % (base_path, file_name)
-
-    if not path.isfile(file_path):
-        try:
-            command += ' %s/../../export.js "%s" %s' % (
-                path.dirname(__file__),
-                request.params.get("url"),
-                file_path,
+        query_args = {"_query": {"_LOCALE_": request.locale_name}}
+        pages = [
+            request.route_url("pdf_cover", divisioncode=division_code, **query_args),
+            request.route_url("pdf_about", **query_args),
+        ]
+        for cat in categories:
+            pages.append(
+                request.route_url(
+                    "report_print",
+                    divisioncode=division_code,
+                    hazardtype=cat.hazardtype.mnemonic,
+                    **query_args,
+                )
             )
-            p = Popen(command, shell=True, stdout=PIPE, stderr=PIPE, close_fds=True)
-            # Timeout wkhtmltopdf in case of http error with --window-status
-            start = time()
-            while p.poll() is None:
-                sleep(0.1)
-                if time() - start > 120:
-                    p.terminate()
-            retcode = p.returncode
+        run(create_pdf(file_name, pages))
 
-            if retcode == 0:
-                # once the generation has succeeded, rename the file so that
-                # waiting clients know that it is finished
-                # os.rename(file_name_temp, file_name)
-                print("success")
-            else:
-                print("error")
-
-        except:
-            logger.error(traceback.format_exc())
-
-    if path.isfile(file_path):
-        response = FileResponse(
-            file_path, request=request, content_type="application/pdf"
-        )
-        response.headers["Content-Disposition"] = 'attachment; filename="map.jpg"'
-        return response
-    else:
-        raise HTTPNotFound("No job found")
+    response = FileResponse(file_name, request=request, content_type="application/pdf")
+    response.headers["Content-Disposition"] = (
+        'attachment; filename="ThinkHazard.pdf"'
+    )
+    return response
 
 
 def _get_report_id(division_code, base_path):
@@ -319,41 +196,15 @@ def _get_report_id(division_code, base_path):
         month = date.strftime("%m")
         report_id = "_".join([year, month, str(uuid4())])
         file_name = _get_report_filename(base_path, division_code, report_id)
-        file_name_temp = _get_report_filename(
-            base_path, division_code, report_id, temp=True
-        )
-        if not (path.isfile(file_name) or path.isfile(file_name_temp)):
+        if not (path.isfile(file_name)):
             return report_id
 
 
-def _get_report_filename(base_path, division_code, report_id, temp=False):
+def _get_report_filename(base_path, division_code, report_id):
     year, month, id = report_id.split("_")
     return path.join(
         base_path,
         year,
         month,
-        ("_" if temp else "") + "{:s}-{:s}.pdf".format(division_code, id),
+        "{:s}-{:s}.pdf".format(division_code, id),
     )
-
-
-def _touch(file):
-    path = os.path.dirname(file)
-    if not os.path.exists(path):
-        os.makedirs(path)
-    with open(file, "a"):
-        os.utime(file, None)
-
-
-def get_divison_code(request):
-    try:
-        return request.matchdict.get("divisioncode")
-    except:
-        raise HTTPBadRequest(detail="incorrect value for parameter " '"divisioncode"')
-
-
-def get_report_id(request):
-    report_id = request.matchdict.get("id")
-    if report_id and REPORT_ID_REGEX.match(report_id):
-        return report_id
-    else:
-        raise HTTPBadRequest(detail="incorrect value for parameter " '"report_id"')

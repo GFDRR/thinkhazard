@@ -9,14 +9,6 @@ from papyrus.renderers import GeoJSON
 from .settings import load_processing_settings, load_local_settings
 from .models import DBSession, Base
 
-from apscheduler.schedulers.background import BackgroundScheduler
-
-# background scheduler to run print jobs asynchronously. by default a thread
-# pool with 10 threads is used. to change the number of parallel print jobs,
-# see https://apscheduler.readthedocs.org/en/latest/userguide.html#configuring-the-scheduler  # noqa
-scheduler = None
-
-
 lock_file = os.path.join(os.path.dirname(__file__), "maintenance.lock")
 
 
@@ -31,9 +23,6 @@ except Exception as e:
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
-    global scheduler
-    scheduler = BackgroundScheduler()
-    scheduler.start()
 
     load_processing_settings(settings)
     load_local_settings(settings, settings["appname"])
@@ -156,11 +145,6 @@ def add_public_routes(config):
     add_localized_route(
         config, "create_pdf_report", "/report/create/{divisioncode:\d+}"
     )
-    add_localized_route(
-        config, "get_report_status", "/report/status/{divisioncode:\d+}/{id}.json"
-    )
-    add_localized_route(config, "get_pdf_report", "/report/{divisioncode:\d+}/{id}.pdf")
-    add_localized_route(config, "get_map_report", "/report/map.jpg")
 
     add_localized_route(
         config,

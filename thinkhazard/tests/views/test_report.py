@@ -18,10 +18,10 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 import os
 import shutil
+import asyncio
+from mock.mock import patch, Mock
 
-from mock.mock import Mock, patch
 from . import BaseTestCase
-
 
 class TestReportFunction(BaseTestCase):
     def setUp(self):  # noqa
@@ -151,79 +151,16 @@ class TestReportFunction(BaseTestCase):
         resp = self.testapp.get("/en/report/12-slug/EQ")
         self.assertEqual(len(resp.pyquery(".contacts ul li")), 0)
 
-    @patch("thinkhazard.views.pdf.Popen")
-    def test_create_pdf(self, mock):
-        # tests that wkhtmltopdf is called and that the generated pdf file is
-        # returned
-        def popen_mock(command, **kwargs):
-            class PopenMock:
-                def __init__(self):
-                    self.returncode = 0
-                    self.stderr = Mock(**{"read.return_value": ""})
-
-                def poll(self):
-                    return self.returncode
-
-            return PopenMock()
-
-        mock.side_effect = popen_mock
-
-        self._touch_file(self.pdf_temp_file)
-
-        from thinkhazard.views.pdf import create_pdf
-
-        create_pdf(self.pdf_file, self.pdf_temp_file, "cover_url", "pages", 0.1)
-
-        self.assertTrue(os.path.isfile(self.pdf_file))
-
-    @patch("thinkhazard.views.pdf.scheduler.add_job")
+    @patch('thinkhazard.views.pdf.create_pdf')
     def test_create_pdf_report(self, mock):
-        def add_job(func, **kwargs):
-            pass
+        # thanks to https://stackoverflow.com/a/29905620
+        @asyncio.coroutine
+        def create(file_name, pages):
+            os.makedirs(os.path.dirname(file_name))
+            with open(file_name, "w") as file:
+                file.write("The pdf file")
 
-        mock.side_effect = add_job
-
+        mock.side_effect = Mock(wraps=create)
         resp = self.testapp.post("/en/report/create/32", status=200)
-        self.assertEqual(resp.json["divisioncode"], "32")
-        self.assertIsNotNone(resp.json["report_id"])
-
-    def test_get_report_status__finished(self):
-        self._touch_file(self.pdf_file)
-        resp = self.testapp.get(
-            "/en/report/status/31/1970_01_{:s}.json".format(self.report_id)
-        )
-        self.assertEqual(resp.json["status"], "done")
-
-    def test_get_report_status__still_running(self):
-        self._touch_file(self.pdf_temp_file)
-        resp = self.testapp.get(
-            "/en/report/status/31/1970_01_{:s}.json".format(self.report_id)
-        )
-        self.assertEqual(resp.json["status"], "running")
-
-    def test_get_pdf_report__not_found(self):
-        self.testapp.get(
-            "/en/report/status/31/1970_01_{:s}.json".format(self.report_id), status=404
-        )
-
-    def test_get_pdf_report__found(self):
-        self._touch_file(self.pdf_file)
-        resp = self.testapp.get("/en/report/31/1970_01_{:s}.pdf".format(self.report_id))
-        self.assertEqual(resp.text, "The pdf file")
-        self.assertEqual(resp.content_type, "application/pdf")
-
-    def test_get_pdf_report__still_running(self):
-        self._touch_file(self.pdf_temp_file)
-        self.testapp.get(
-            "/en/report/31/1970_01_{:s}.pdf".format(self.report_id), status=400
-        )
-
-    def test_get_pdf_report__not_found_bis(self):
-        self.testapp.get(
-            "/en/report/31/1970_01_{:s}.pdf".format(self.report_id), status=404
-        )
-
-    def _touch_file(self, file_name):
-        os.makedirs(os.path.dirname(file_name))
-        with open(file_name, "w") as file:
-            file.write("The pdf file")
+        self.assertEqual(resp.body.decode(), 'The pdf file')
+        self.assertEqual(resp.content_type, 'application/pdf')

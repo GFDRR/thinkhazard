@@ -139,7 +139,7 @@ publish: .build/requirements.timestamp
 transifex-import: .build/requirements.timestamp
 	.build/venv/bin/importpo $(INI_FILE)
 
-.build/docker.timestamp: thinkhazard development.ini production.ini setup.py Dockerfile
+.build/docker.timestamp: thinkhazard development.ini production.ini setup.py Dockerfile requirements.txt
 	mkdir -p $(dir $@)
 	docker build -t camptocamp/thinkhazard .
 	touch $@
