@@ -17,7 +17,9 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
-import urllib.request, urllib.parse, urllib.error
+import urllib.error
+import urllib.parse
+import urllib.request
 import datetime
 import math
 

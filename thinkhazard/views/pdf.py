@@ -22,16 +22,13 @@ import logging
 import re
 
 import os
-import traceback
 from uuid import uuid4
 
 from os import path
 from typing import List
 
-from time import time, sleep
-
 from pyramid.view import view_config
-from pyramid.httpexceptions import HTTPBadRequest, HTTPNotFound
+from pyramid.httpexceptions import HTTPBadRequest
 from pyramid.response import FileResponse
 
 from io import BytesIO
