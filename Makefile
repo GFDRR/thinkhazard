@@ -61,7 +61,7 @@ help: ## Display this help message
 
 .PHONY: build
 build: ## Build docker images
-build: docker_build_thinkhazard docker_build_python_builder docker_build_tester
+build: docker_build_thinkhazard docker_build_builder
 
 .PHONY: check
 check: ## Check the code with flake8, jshint and bootlint
@@ -84,19 +84,12 @@ docker_build_thinkhazard:
 		--build-arg TX_PWD=${TX_PWD} \
 		--target app -t camptocamp/thinkhazard .
 
-.PHONY: docker_build_python_builder
-docker_build_python_builder:
+.PHONY: docker_build_builder
+docker_build_builder:
 	docker build \
 		--build-arg TX_USR=${TX_USR} \
 		--build-arg TX_PWD=${TX_PWD} \
-		--target python-builder -t camptocamp/thinkhazard-python-builder .
-
-.PHONY: docker_build_tester
-docker_build_tester:
-	docker build \
-		--build-arg TX_USR=${TX_USR} \
-		--build-arg TX_PWD=${TX_PWD} \
-		--target tester -t camptocamp/thinkhazard-tester .
+		--target builder -t camptocamp/thinkhazard-builder .
 
 .PHONY: populatedb
 populatedb: initdb import_admindivs import_recommendations import_contacts

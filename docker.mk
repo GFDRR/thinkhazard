@@ -7,6 +7,9 @@ PY_FILES = $(shell find thinkhazard -type f -name '*.py' 2> /dev/null)
 # Internal build target #
 #########################
 
+.PHONY: build
+build: buildcss compile_catalog
+
 .PHONY: buildcss
 buildcss: \
 		thinkhazard/static/build/index.css \
@@ -55,7 +58,7 @@ $(HOME)/.transifexrc:
 	echo "token =" >> $@
 
 
-check: flake8 jslint bootlint
+check: flake8 jshint bootlint
 
 .PHONY: flake8
 flake8:

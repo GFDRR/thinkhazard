@@ -2,7 +2,7 @@ version: '3'
 
 services:
   test:
-    image: camptocamp/thinkhazard-tester
+    image: camptocamp/thinkhazard-builder
     network_mode: "host"
     volumes:
       - '${PWD}/thinkhazard:/app/thinkhazard'
