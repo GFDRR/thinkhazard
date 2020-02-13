@@ -26,29 +26,32 @@ buildcss: \
 
 thinkhazard/static/build/%.min.css: $(LESS_FILES)
 	mkdir -p $(dir $@)
-	/app/node_modules/.bin/lessc --clean-css thinkhazard/static/less/$*.less $@
+	lessc --include-path=${NODE_PATH} --clean-css thinkhazard/static/less/$*.less $@
 
 thinkhazard/static/build/%.css: $(LESS_FILES)
 	mkdir -p $(dir $@)
-	/app/node_modules/.bin/lessc thinkhazard/static/less/$*.less $@
+	lessc --include-path=${NODE_PATH} thinkhazard/static/less/$*.less $@
 
-.PRECIOUS: node_modules/font-awesome/fonts/fontawesome-webfont.%
-node_modules/font-awesome/fonts/fontawesome-webfont.%:
+.PRECIOUS: ${NODE_PATH}/font-awesome/fonts/fontawesome-webfont.%
+${NODE_PATH}/font-awesome/fonts/fontawesome-webfont.%:
 	touch -c $@
 
-thinkhazard/static/fonts/fontawesome-webfont.%: node_modules/font-awesome/fonts/fontawesome-webfont.%
+thinkhazard/static/fonts/fontawesome-webfont.%: ${NODE_PATH}/font-awesome/fonts/fontawesome-webfont.%
 	mkdir -p $(dir $@)
 	cp $< $@
 
 
 .PHONY: compile_catalog
-compile_catalog: transifex-pull
-	msgfmt -o thinkhazard/locale/fr/LC_MESSAGES/thinkhazard.mo thinkhazard/locale/fr/LC_MESSAGES/thinkhazard.po
-	msgfmt -o thinkhazard/locale/es/LC_MESSAGES/thinkhazard.mo thinkhazard/locale/es/LC_MESSAGES/thinkhazard.po
+compile_catalog: \
+	thinkhazard/locale/fr/LC_MESSAGES/thinkhazard.mo \
+	thinkhazard/locale/es/LC_MESSAGES/thinkhazard.mo
 
-.PHONY: transifex-pull
-transifex-pull: $(HOME)/.transifexrc
+thinkhazard/locale/%/LC_MESSAGES/thinkhazard.mo: thinkhazard/locale/%/LC_MESSAGES/thinkhazard.po
+	msgfmt -o $@ $<
+
+thinkhazard/locale/%/LC_MESSAGES/thinkhazard.po: $(HOME)/.transifexrc
 	tx pull
+	touch $(shell find thinkhazard/locale/ -name *.po)
 
 $(HOME)/.transifexrc:
 	echo "[https://www.transifex.com]" > $@

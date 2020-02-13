@@ -42,19 +42,23 @@ RUN \
   #apt-get clean && \
   #rm --recursive --force /var/lib/apt/lists/*
 
-WORKDIR /app
-
-COPY package.json /app/
-RUN cd /app/ && npm install
+COPY package.json /opt/thinkhazard/
+RUN cd /opt/thinkhazard/ && npm install
+ENV PATH=${PATH}:/opt/thinkhazard/node_modules/.bin/
 
 COPY ./requirements-dev.txt /app/requirements-dev.txt
-RUN pip install -r requirements-dev.txt
+RUN pip install -r /app/requirements-dev.txt
 
+ENV NODE_PATH=/opt/thinkhazard/node_modules
+
+WORKDIR /app
 COPY . /app/
 
 ARG TX_USR
 ARG TX_PWD
-RUN TX_USR=$TX_USR TX_PWD=$TX_PWD make -f docker.mk build
+RUN TX_USR=$TX_USR \
+    TX_PWD=$TX_PWD \
+    make -f docker.mk build
 
 RUN pip install --no-deps -e .
 
@@ -62,6 +66,9 @@ RUN pip install --no-deps -e .
 # Runtime image #
 #################
 FROM base as app
+
+COPY --from=builder /opt/thinkhazard/ /opt/thinkhazard/
+ENV NODE_PATH=/opt/thinkhazard/node_modules
 
 WORKDIR /app
 COPY --from=builder /app/ /app/

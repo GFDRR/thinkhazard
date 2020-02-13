@@ -59,6 +59,8 @@ help: ## Display this help message
 # Entry points #
 ################
 
+DOCKER_MAKE_CMD=docker-compose -f docker-compose-build.yaml run --rm test make -f docker.mk
+
 .PHONY: build
 build: ## Build docker images
 build: docker_build_thinkhazard docker_build_builder docker_build_testdb
@@ -66,7 +68,12 @@ build: docker_build_thinkhazard docker_build_builder docker_build_testdb
 .PHONY: check
 check: ## Check the code with flake8, jshint and bootlint
 check:
-	docker-compose -f docker-compose-build.yaml run --rm test make -f docker.mk check
+	$(DOCKER_MAKE_CMD) check
+
+.PHONY: buildcss
+buildcss: ## Build css files
+buildcss:
+	$(DOCKER_MAKE_CMD) buildcss
 
 .PHONY: test
 test: ## Run the unit tests
@@ -165,37 +172,21 @@ publish: .build/requirements.timestamp
 transifex-import: .build/requirements.timestamp
 	.build/venv/bin/importpo $(INI_FILE)
 
-.PHONY: docker_buildcss
-docker_buildcss:
-	docker run -it --net=host --env-file=.env -v $(shell pwd):/app camptocamp/thinkhazard-builder make buildcss
-
-.PHONY: serve_public
-serve_public: build
-	docker-compose up thinkhazard
-
-.PHONY: serve_admin
-serve_admin: install
-	docker-compose up thinkhazard_admin
-
 .PHONY: routes
 routes:
 	.build/venv/bin/proutes $(INI_FILE)
 
-.PHONY: dist
-dist: .build/venv
-	.build/venv/bin/python setup.py sdist
 
 .PHONY: dbtunnel
 dbtunnel:
 	@echo "Opening tunnel…"
 	ssh -N -L 9999:localhost:5432 wb-thinkhazard-dev-1.sig.cloud.camptocamp.net
 
+
 .PHONY: watch
 watch: .build/dev-requirements.timestamp
 	@echo "Watching static files..."
 	.build/venv/bin/nosier -p thinkhazard/static "make buildcss"
-
-
 
 
 .PHONY: clean

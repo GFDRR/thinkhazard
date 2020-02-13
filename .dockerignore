@@ -1,2 +1,7 @@
 docker
+thinkhazard/static/build
+thinkhazard/static/font
+thinkhazard/locale/**/*.mo
+thinkhazard/locale/**/*.po
 thinkhazard.egg-info
+Dockerfile
