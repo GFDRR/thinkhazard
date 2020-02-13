@@ -61,7 +61,7 @@ help: ## Display this help message
 
 .PHONY: build
 build: ## Build docker images
-build: docker_build_thinkhazard docker_build_builder
+build: docker_build_thinkhazard docker_build_builder docker_build_testdb
 
 .PHONY: check
 check: ## Check the code with flake8, jshint and bootlint
@@ -90,6 +90,12 @@ docker_build_builder:
 		--build-arg TX_USR=${TX_USR} \
 		--build-arg TX_PWD=${TX_PWD} \
 		--target builder -t camptocamp/thinkhazard-builder .
+
+.PHONY: docker_build_testdb
+docker_build_testdb:
+	docker build -t camptocamp/thinkhazard-testdb docker/testdb
+
+
 
 .PHONY: populatedb
 populatedb: initdb import_admindivs import_recommendations import_contacts

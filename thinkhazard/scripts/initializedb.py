@@ -26,6 +26,8 @@ from pyramid.scripts.common import parse_vars
 from alembic.config import Config
 from alembic import command
 
+from thinkhazard.scripts import wait_for_db
+
 from ..settings import load_full_settings
 from ..models import (
     Base,
@@ -57,6 +59,8 @@ def main(argv=sys.argv):
     settings = load_full_settings(config_uri, options=options)
 
     engine = engine_from_config(settings, "sqlalchemy.")
+    wait_for_db(engine)
+
     with engine.begin() as connection:
         initdb(connection, drop_all="--force" in options)
 
