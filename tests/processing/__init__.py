@@ -23,7 +23,7 @@ import uuid
 from shapely.geometry import MultiPolygon, Polygon
 from geoalchemy2.shape import from_shape
 
-from ...models import DBSession, AdminLevelType, AdministrativeDivision, Region
+from thinkhazard.models import DBSession, AdminLevelType, AdministrativeDivision, Region
 
 
 def populate_datamart():

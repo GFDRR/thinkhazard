@@ -23,7 +23,7 @@ from datetime import datetime
 from shapely.geometry import Polygon
 from geoalchemy2.shape import from_shape
 
-from ...models import (
+from thinkhazard.models import (
     DBSession,
     AdministrativeDivision,
     HazardLevel,

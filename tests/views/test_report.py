@@ -160,7 +160,7 @@ class TestReportFunction(BaseTestCase):
             with open(file_name, "w") as file:
                 file.write("The pdf file")
 
-        mock.side_effect = Mock(wraps=create)
+        mock.side_effect = create
         resp = self.testapp.post("/en/report/create/32", status=200)
         self.assertEqual(resp.body.decode(), 'The pdf file')
         self.assertEqual(resp.content_type, 'application/pdf')

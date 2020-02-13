@@ -17,30 +17,17 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
-import unittest
-import transaction
-from mock import patch
-
-from .. import settings
-from . import populate_datamart
-from ...processing.downloading import Downloader
+from sqlalchemy import engine_from_config
+from thinkhazard.settings import load_full_settings
+from thinkhazard.scripts.initializedb import initdb
 
 
-def populate():
-    populate_datamart()
-    transaction.commit()
+settings = load_full_settings("c2c://tests.ini", name="admin")
 
 
-class TestDownloading(unittest.TestCase):
-    def setUp(self):  # NOQA
-        populate()
+def populatedb():
+    engine = engine_from_config(settings, "sqlalchemy.")
+    initdb(engine, True)
 
-    @patch.object(Downloader, "do_execute")
-    def test_cli(self, mock):
-        """Test downloader cli"""
-        Downloader.run(["complete", "--config_uri", "c2c://tests.ini"])
-        mock.assert_called_with(hazardset_id=None, clear_cache=False)
 
-    def test_force(self):
-        """Test downloader in force mode"""
-        Downloader().execute(settings, force=True)
+populatedb()

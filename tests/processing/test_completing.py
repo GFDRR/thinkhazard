@@ -25,12 +25,12 @@ from rasterio.io import DatasetReader
 from rasterio.coords import BoundingBox
 from affine import Affine
 
-from ...models import DBSession, HazardLevel, HazardSet, HazardType, Layer, Region
+from thinkhazard.models import DBSession, HazardLevel, HazardSet, HazardType, Layer, Region
 
 from .. import settings
 from . import populate_datamart
 from .common import new_geonode_id
-from ...processing.completing import Completer
+from thinkhazard.processing.completing import Completer
 
 
 def populate():

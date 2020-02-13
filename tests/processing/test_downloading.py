@@ -17,13 +17,31 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
-from sqlalchemy import func
+import unittest
+import transaction
+from mock import patch
 
-from ...models import DBSession, Layer
+from thinkhazard.processing.downloading import Downloader
+
+from .. import settings
+from . import populate_datamart
 
 
-def new_geonode_id():
-    row = DBSession.query(func.max(Layer.geonode_id)).one_or_none()
-    if row[0] is None:
-        return 1
-    return row[0] + 1
+def populate():
+    populate_datamart()
+    transaction.commit()
+
+
+class TestDownloading(unittest.TestCase):
+    def setUp(self):  # NOQA
+        populate()
+
+    @patch.object(Downloader, "do_execute")
+    def test_cli(self, mock):
+        """Test downloader cli"""
+        Downloader.run(["complete", "--config_uri", "c2c://tests.ini"])
+        mock.assert_called_with(hazardset_id=None, clear_cache=False)
+
+    def test_force(self):
+        """Test downloader in force mode"""
+        Downloader().execute(settings, force=True)

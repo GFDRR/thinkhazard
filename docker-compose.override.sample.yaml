@@ -4,11 +4,18 @@ services:
   thinkhazard:
     network_mode: "host"
     volumes:
-      - '${PWD}:/app'
-    command: 'pserve --reload c2c://${INI_FILE} -n public'
+      - '${PWD}/development.ini:/app/development.ini'
+      - '${PWD}/thinkhazard:/app/thinkhazard'
+    command: 'pserve --reload c2c://development.ini -n public'
 
   thinkhazard_admin:
     network_mode: "host"
     volumes:
-      - '${PWD}:/app'
-    command: 'pserve --reload c2c://${INI_FILE} -n admin'
+      - '${PWD}/thinkhazard:/app/thinkhazard'
+    command: 'pserve --reload c2c://development.ini -n admin'
+
+  builder:
+    image: camptocamp/thinkhazard-builder
+    volumes:
+      - '${PWD}/thinkhazard:/app/thinkhazard'
+    command: 'make -f docker.mk build'

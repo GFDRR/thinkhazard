@@ -24,11 +24,11 @@ from mock import Mock, patch, mock_open
 import httplib2
 import json
 
-from ...models import DBSession, FurtherResource, HazardSet, Layer, Region
+from thinkhazard.models import DBSession, FurtherResource, HazardSet, Layer, Region
+from thinkhazard.processing.harvesting import Harvester
 
 from .. import settings
 from . import populate_datamart
-from ...processing.harvesting import Harvester
 
 
 def populate():

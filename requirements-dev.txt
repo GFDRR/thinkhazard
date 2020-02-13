@@ -1,7 +1,11 @@
 #
 # This file defines the requirements.txt for development.
 #
-flake8
-pep8-naming
-mock
 coverage
+flake8
+mock
+nose
+pep8-naming
+pydevd
+transifex-client
+WebTest

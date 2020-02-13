@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  db:
+    image: camptocamp/thinkhazard-testdb
+
+  test:
+    image: camptocamp/thinkhazard-builder
+    depends_on:
+      - db
+    volumes:
+      - '${PWD}/thinkhazard:/app/thinkhazard'
+      - '${PWD}/tests:/app/tests'
+    environment:
+      - PGHOST=db
+      - PGPORT=5432
+      - PGUSER=thinkhazard
+      - PGPASSWORD=thinkhazard
+      - PGDATABASE
+      - PGDATABASE_ADMIN
+      - INI_FILE

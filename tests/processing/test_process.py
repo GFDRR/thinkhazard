@@ -25,7 +25,7 @@ from mock import Mock, patch
 from rasterio.io import DatasetReader
 from affine import Affine
 
-from ...models import (
+from thinkhazard.models import (
     DBSession,
     HazardLevel,
     HazardSet,
@@ -34,10 +34,10 @@ from ...models import (
     Output,
     Region,
 )
+from thinkhazard.processing.processing import Processor
 
 from .. import settings
 from . import populate_datamart
-from ...processing.processing import Processor
 from .common import new_geonode_id
 
 

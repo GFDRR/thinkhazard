@@ -17,17 +17,13 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
-from sqlalchemy import engine_from_config
-from ..settings import load_full_settings
-from ..scripts.initializedb import initdb
+from sqlalchemy import func
+
+from thinkhazard.models import DBSession, Layer
 
 
-settings = load_full_settings("c2c://tests.ini", name="admin")
-
-
-def populatedb():
-    engine = engine_from_config(settings, "sqlalchemy.")
-    initdb(engine, True)
-
-
-populatedb()
+def new_geonode_id():
+    row = DBSession.query(func.max(Layer.geonode_id)).one_or_none()
+    if row[0] is None:
+        return 1
+    return row[0] + 1
