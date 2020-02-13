@@ -4,6 +4,7 @@ services:
   thinkhazard:
     network_mode: "host"
     volumes:
+      - '${PWD}/development.ini:/app/development.ini'
       - '${PWD}/thinkhazard:/app/thinkhazard'
     command: 'pserve --reload c2c://development.ini -n public'
 

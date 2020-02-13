@@ -1,7 +1,8 @@
-
 LESS_FILES = $(shell find thinkhazard/static/less -type f -name '*.less' 2> /dev/null)
 JS_FILES = $(shell find thinkhazard/static/js -type f -name '*.js' 2> /dev/null)
 PY_FILES = $(shell find thinkhazard -type f -name '*.py' 2> /dev/null)
+
+-include local.mk
 
 #########################
 # Internal build target #
@@ -51,8 +52,9 @@ thinkhazard/locale/%/LC_MESSAGES/thinkhazard.mo: thinkhazard/locale/%/LC_MESSAGE
 
 thinkhazard/locale/%/LC_MESSAGES/thinkhazard.po: $(HOME)/.transifexrc
 	tx pull
-	touch $(shell find thinkhazard/locale/ -name *.po)
+	touch `find thinkhazard/locale/ -name '*.po' 2> /dev/null`
 
+.INTERMEDIATE: $(HOME)/.transifexrc
 $(HOME)/.transifexrc:
 	echo "[https://www.transifex.com]" > $@
 	echo "hostname = https://www.transifex.com" >> $@
@@ -69,8 +71,8 @@ flake8:
 
 .PHONY: jshint
 jshint:
-	./node_modules/.bin/jshint --verbose $(JS_FILES)
+	jshint --verbose $(JS_FILES)
 
 .PHONY: bootlint
 bootlint:
-	./node_modules/.bin/bootlint $(JINJA2_FILES)
+	bootlint $(JINJA2_FILES)

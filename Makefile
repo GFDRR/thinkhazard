@@ -59,11 +59,17 @@ help: ## Display this help message
 # Entry points #
 ################
 
-DOCKER_MAKE_CMD=docker-compose -f docker-compose-build.yaml run --rm test make -f docker.mk
+DOCKER_CMD=docker-compose -f docker-compose-test.yaml run --rm --user `id -u` test
+
+DOCKER_MAKE_CMD=$(DOCKER_CMD) make -f docker.mk
 
 .PHONY: build
 build: ## Build docker images
 build: docker_build_thinkhazard docker_build_builder docker_build_testdb
+
+.PHONY: bash
+bash: ## Open bash in builder
+	$(DOCKER_CMD) bash
 
 .PHONY: check
 check: ## Check the code with flake8, jshint and bootlint
@@ -75,9 +81,29 @@ buildcss: ## Build css files
 buildcss:
 	$(DOCKER_MAKE_CMD) buildcss
 
+.PHONY: compile_catalog
+compile_catalog: ## Compile language files
+compile_catalog:
+	$(DOCKER_MAKE_CMD) compile_catalog
+
 .PHONY: test
-test: ## Run the unit tests
-	docker-compose -f docker-compose-build.yaml run --rm test nosetests -v
+test: ## Run automated tests
+	docker-compose -f docker-compose-test.yaml run --rm test nosetests -v
+
+
+.PHONY: clean
+clean:
+	rm -rf thinkhazard/static/build
+	rm -rf thinkhazard/static/fonts
+	rm -rf `find thinkhazard/locale -name *.po 2> /dev/null`
+	rm -rf `find thinkhazard/locale -name *.mo 2> /dev/null`
+	docker-compose down -v --remove-orphans
+
+.PHONY: cleanall
+cleanall: clean
+	docker rmi -f \
+		camptocamp/thinkhazard \
+		camptocamp/thinkhazard-builder
 
 
 #######################
@@ -189,21 +215,6 @@ watch: .build/dev-requirements.timestamp
 	.build/venv/bin/nosier -p thinkhazard/static "make buildcss"
 
 
-.PHONY: clean
-clean:
-	rm -f .build/thinkhazard-*.wsgi
-	rm -f .build/apache-*.conf
-	rm -f .build/flake8.timestamp
-	rm -f .build/jshint.timestamp
-	rm -f .build/booltlint.timestamp
-	rm -rf thinkhazard/static/build
-	rm -f thinkhazard/static/fonts/FontAwesome.otf
-	rm -f thinkhazard/static/fonts/fontawesome-webfont.*
-
-.PHONY: cleanall
-cleanall:
-	rm -rf .build
-	rm -rf node_modules
 
 .PHONY: extract_messages
 extract_messages:

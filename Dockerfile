@@ -49,7 +49,8 @@ ENV PATH=${PATH}:/opt/thinkhazard/node_modules/.bin/
 COPY ./requirements-dev.txt /app/requirements-dev.txt
 RUN pip install -r /app/requirements-dev.txt
 
-ENV NODE_PATH=/opt/thinkhazard/node_modules
+ENV NODE_PATH=/opt/thinkhazard/node_modules \
+    HOME=/tmp
 
 WORKDIR /app
 COPY . /app/
