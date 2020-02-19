@@ -33,3 +33,4 @@ transaction
 waitress
 zope.sqlalchemy
 boto3
+slugify
