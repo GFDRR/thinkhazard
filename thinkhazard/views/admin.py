@@ -26,8 +26,7 @@ from sqlalchemy.orm import contains_eager, joinedload
 
 import json
 
-from ..models import (
-    DBSession,
+from thinkhazard.models import (
     AdminLevelType,
     AdministrativeDivision,
     Contact,
@@ -55,10 +54,10 @@ def index(request):
     renderer="templates/admin/hazardcategories.jinja2",
 )
 def hazardcategories(request):
-    hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
+    hazard_types = request.dbsession.query(HazardType).order_by(HazardType.order)
     hazard_levels = []
     for level in ["HIG", "MED", "LOW", "VLO"]:
-        hazard_levels.append(HazardLevel.get(level))
+        hazard_levels.append(HazardLevel.get(request.dbsession, level))
     return {"hazard_types": hazard_types, "hazard_levels": hazard_levels}
 
 
@@ -71,7 +70,7 @@ def hazardcategory(request):
 
     if request.method == "GET":
         hazard_category = (
-            DBSession.query(HazardCategory)
+            request.dbsession.query(HazardCategory)
             .join(HazardType)
             .join(HazardLevel)
             .filter(HazardType.mnemonic == hazard_type)
@@ -82,7 +81,7 @@ def hazardcategory(request):
             raise HTTPNotFound()
 
         associations = (
-            DBSession.query(HcTr)
+            request.dbsession.query(HcTr)
             .filter(HcTr.hazardcategory_id == hazard_category.id)
             .order_by(HcTr.order)
             .all()
@@ -99,7 +98,7 @@ def hazardcategory(request):
         }
 
     if request.method == "POST":
-        hazard_category = DBSession.query(HazardCategory).get(request.POST.get("id"))
+        hazard_category = request.dbsession.query(HazardCategory).get(request.POST.get("id"))
         if hazard_category is None:
             raise HTTPNotFound()
 
@@ -111,7 +110,7 @@ def hazardcategory(request):
         order = 0
         for association_id in associations:
             order += 1
-            association = DBSession.query(HcTr).get(association_id)
+            association = request.dbsession.query(HcTr).get(association_id)
             association.order = order
         return HTTPFound(
             request.route_url(
@@ -128,7 +127,7 @@ def hazardcategory(request):
 )
 def technical_rec(request):
     technical_recs = (
-        DBSession.query(TechnicalRecommendation)
+        request.dbsession.query(TechnicalRecommendation)
         .order_by(TechnicalRecommendation.text)
         .all()
     )
@@ -157,7 +156,7 @@ def technical_rec_new(request):
 )
 def technical_rec_edit(request):
     id = request.matchdict["id"]
-    obj = DBSession.query(TechnicalRecommendation).get(id)
+    obj = request.dbsession.query(TechnicalRecommendation).get(id)
     if obj is None:
         raise HTTPNotFound()
     return technical_rec_process(request, obj)
@@ -166,17 +165,17 @@ def technical_rec_edit(request):
 @view_config(route_name="admin_technical_rec_delete")
 def technical_rec_delete(request):
     id = request.matchdict["id"]
-    obj = DBSession.query(TechnicalRecommendation).get(id)
-    DBSession.delete(obj)
+    obj = request.dbsession.query(TechnicalRecommendation).get(id)
+    request.dbsession.delete(obj)
     return HTTPFound(request.route_url("admin_technical_rec"))
 
 
 def technical_rec_process(request, obj):
     if request.method == "GET":
-        hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
+        hazard_types = request.dbsession.query(HazardType).order_by(HazardType.order)
         hazard_levels = []
         for level in ["HIG", "MED", "LOW", "VLO"]:
-            hazard_levels.append(HazardLevel.get(level))
+            hazard_levels.append(HazardLevel.get(request.dbsession, level))
         if obj.id is None:
             action = request.route_url("admin_technical_rec_new")
         else:
@@ -192,7 +191,7 @@ def technical_rec_process(request, obj):
         obj.text = request.POST.get("text")
         obj.detail = request.POST.get("detail")
         if inspect(obj).transient:
-            DBSession.add(obj)
+            request.dbsession.add(obj)
 
         associations = request.POST.getall("associations")
         records = obj.hazardcategory_associations
@@ -200,15 +199,15 @@ def technical_rec_process(request, obj):
         # Remove unchecked ones
         for record in records:
             if record.hazardcategory.name() not in associations:
-                DBSession.delete(record)
+                request.dbsession.delete(record)
 
         # Add new ones
         for association in associations:
             hazardtype, hazardlevel = association.split(" - ")
             if not obj.has_association(hazardtype, hazardlevel):
-                hazardcategory = HazardCategory.get(hazardtype, hazardlevel)
+                hazardcategory = HazardCategory.get(request.dbsession, hazardtype, hazardlevel)
                 order = (
-                    DBSession.query(
+                    request.dbsession.query(
                         func.coalesce(func.cast(func.max(HcTr.order), Integer), 0)
                     )
                     .select_from(HcTr)
@@ -220,7 +219,7 @@ def technical_rec_process(request, obj):
                 record = HcTr(hazardcategory=hazardcategory, order=order)
                 obj.hazardcategory_associations.append(record)
 
-        DBSession.flush()
+        request.dbsession.flush()
         return HTTPFound(request.route_url("admin_technical_rec"))
 
 
@@ -228,14 +227,14 @@ def technical_rec_process(request, obj):
     route_name="admin_hazardsets", renderer="templates/admin/hazardsets.jinja2"
 )
 def hazardsets(request):
-    return {"hazardsets": DBSession.query(HazardSet).order_by(HazardSet.id)}
+    return {"hazardsets": request.dbsession.query(HazardSet).order_by(HazardSet.id)}
 
 
 @view_config(route_name="admin_hazardset", renderer="templates/admin/hazardset.jinja2")
 def hazardset(request):
     id = request.matchdict["hazardset"]
     hazardset = (
-        DBSession.query(HazardSet)
+        request.dbsession.query(HazardSet)
         .options(joinedload(HazardSet.layers).joinedload(Layer.hazardlevel))
         .get(id)
     )
@@ -244,7 +243,7 @@ def hazardset(request):
 
 @view_config(route_name="admin_admindiv_hazardsets")
 def admindiv_hazardsets(request):
-    hazardtype = DBSession.query(HazardType).first()
+    hazardtype = request.dbsession.query(HazardType).first()
     return HTTPFound(
         request.route_url(
             "admin_admindiv_hazardsets_hazardtype", hazardtype=hazardtype.mnemonic
@@ -258,7 +257,7 @@ def admindiv_hazardsets(request):
 )
 def admin_admindiv_hazardsets_hazardtype(request):
     data = admindiv_hazardsets_hazardtype(request)
-    hazard_types = DBSession.query(HazardType).order_by(HazardType.order).all()
+    hazard_types = request.dbsession.query(HazardType).order_by(HazardType.order).all()
     return {"hazard_types": hazard_types, "data": json.dumps(data)}
 
 
@@ -269,11 +268,11 @@ def admindiv_hazardsets_hazardtype(request):
     except:
         raise HTTPBadRequest(detail="incorrect value for parameter " '"hazardtype"')
 
-    if HazardType.get(hazardtype) is None:
+    if HazardType.get(request.dbsession, hazardtype) is None:
         raise HTTPBadRequest(detail="hazardtype doesn't exist")
 
     query = (
-        DBSession.query(AdministrativeDivision)
+        request.dbsession.query(AdministrativeDivision)
         .join(HazardCategoryAdministrativeDivisionAssociation)
         .join(HazardCategory)
         .join(HazardType)
@@ -310,14 +309,14 @@ def admindiv_hazardsets_export(request):
     o.hazardset_id = hs.id LEFT JOIN datamart.enum_hazardtype AS ht ON
     hs.hazardtype_id = ht.id WHERE ad.leveltype_id = 3
     ORDER BY ht.mnemonic, ad.name"""
-    rows = DBSession.execute(query).fetchall()
+    rows = request.dbsession.execute(query).fetchall()
 
     return {"headers": ["hazardtype", "code", "name", "hazard_level"], "rows": rows}
 
 
 @view_config(route_name="admin_climate_rec")
 def climate_rec(request):
-    hazardtype = DBSession.query(HazardType).first()
+    hazardtype = request.dbsession.query(HazardType).first()
     return HTTPFound(
         request.route_url(
             "admin_climate_rec_hazardtype", hazard_type=hazardtype.mnemonic
@@ -331,13 +330,13 @@ def climate_rec(request):
 )
 def climate_rec_hazardtype(request):
     hazard_type = request.matchdict["hazard_type"]
-    hazardtype = HazardType.get(hazard_type)
+    hazardtype = HazardType.get(request.dbsession, hazard_type)
     if hazardtype is None:
         raise HTTPNotFound
 
-    hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
+    hazard_types = request.dbsession.query(HazardType).order_by(HazardType.order)
 
-    climate_recs = DBSession.query(ClimateChangeRecommendation).filter(
+    climate_recs = request.dbsession.query(ClimateChangeRecommendation).filter(
         ClimateChangeRecommendation.hazardtype == hazardtype
     )
     return {"hazard_types": hazard_types, "climate_recs": climate_recs}
@@ -349,7 +348,7 @@ def climate_rec_hazardtype(request):
 )
 def climate_rec_new(request):
     hazard_type = request.matchdict["hazard_type"]
-    hazardtype = HazardType.get(hazard_type)
+    hazardtype = HazardType.get(request.dbsession, hazard_type)
     if hazardtype is None:
         raise HTTPNotFound
 
@@ -364,7 +363,7 @@ def climate_rec_new(request):
 )
 def climate_rec_edit(request):
     id = request.matchdict["id"]
-    obj = DBSession.query(ClimateChangeRecommendation).get(id)
+    obj = request.dbsession.query(ClimateChangeRecommendation).get(id)
     if obj is None:
         raise HTTPNotFound()
     return climate_rec_process(request, obj)
@@ -373,8 +372,8 @@ def climate_rec_edit(request):
 @view_config(route_name="admin_climate_rec_delete")
 def climate_rec_delete(request):
     id = request.matchdict["id"]
-    obj = DBSession.query(ClimateChangeRecommendation).get(id)
-    DBSession.delete(obj)
+    obj = request.dbsession.query(ClimateChangeRecommendation).get(id)
+    request.dbsession.delete(obj)
     return HTTPFound(
         request.route_url(
             "admin_climate_rec_hazardtype", hazard_type=obj.hazardtype.mnemonic
@@ -384,14 +383,14 @@ def climate_rec_delete(request):
 
 def climate_rec_process(request, obj):
     if request.method == "GET":
-        hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
+        hazard_types = request.dbsession.query(HazardType).order_by(HazardType.order)
 
         association_subq = (
-            DBSession.query(CcrAd).filter(CcrAd.hazardtype == obj.hazardtype).subquery()
+            request.dbsession.query(CcrAd).filter(CcrAd.hazardtype == obj.hazardtype).subquery()
         )
 
         admin_divs = (
-            DBSession.query(AdministrativeDivision, ClimateChangeRecommendation)
+            request.dbsession.query(AdministrativeDivision, ClimateChangeRecommendation)
             .select_from(AdministrativeDivision)
             .outerjoin(
                 association_subq,
@@ -423,9 +422,9 @@ def climate_rec_process(request, obj):
 
     if request.method == "POST":
         if inspect(obj).transient:
-            DBSession.add(obj)
+            request.dbsession.add(obj)
 
-        obj.hazardtype = HazardType.get(request.POST.get("hazard_type"))
+        obj.hazardtype = HazardType.get(request.dbsession, request.POST.get("hazard_type"))
         obj.text = request.POST.get("text")
 
         admindiv_ids = request.POST.getall("associations")
@@ -433,11 +432,11 @@ def climate_rec_process(request, obj):
         # Remove unchecked ones
         for association in obj.associations:
             if association.administrativedivision_id not in admindiv_ids:
-                DBSession.delete(association)
+                request.dbsession.delete(association)
 
         # Add new ones
         for admindiv_id in admindiv_ids:
-            association = DBSession.query(CcrAd).get((admindiv_id, obj.hazardtype.id))
+            association = request.dbsession.query(CcrAd).get((admindiv_id, obj.hazardtype.id))
             if association is None:
                 association = CcrAd(
                     administrativedivision_id=admindiv_id, hazardtype=obj.hazardtype
@@ -446,7 +445,7 @@ def climate_rec_process(request, obj):
             else:
                 association.climatechangerecommendation = obj
 
-        DBSession.flush()
+        request.dbsession.flush()
         return HTTPFound(
             request.route_url("admin_climate_rec_edit", id=obj.hazardtype.mnemonic)
         )
@@ -456,7 +455,7 @@ def climate_rec_process(request, obj):
     route_name="admin_contacts", renderer="templates/admin/contact_index.jinja2"
 )
 def contacts(request):
-    return {"contacts": DBSession.query(Contact).order_by(Contact.name)}
+    return {"contacts": request.dbsession.query(Contact).order_by(Contact.name)}
 
 
 @view_config(
@@ -472,7 +471,7 @@ def contact_new(request):
 )
 def contact_edit(request):
     id = request.matchdict["id"]
-    obj = DBSession.query(Contact).get(id)
+    obj = request.dbsession.query(Contact).get(id)
     if obj is None:
         raise HTTPNotFound()
     return contact_process(request, obj)
@@ -481,12 +480,12 @@ def contact_edit(request):
 @view_config(route_name="admin_contact_delete")
 def contact_delete(request):
     id = request.matchdict["id"]
-    obj = DBSession.query(Contact).get(id)
+    obj = request.dbsession.query(Contact).get(id)
     if obj is None:
         raise HTTPNotFound()
     for association in obj.associations:
-        DBSession.delete(association)
-    DBSession.delete(obj)
+        request.dbsession.delete(association)
+    request.dbsession.delete(obj)
     return HTTPFound(request.route_url("admin_contacts"))
 
 
@@ -498,15 +497,15 @@ def contact_process(request, obj):
             action = request.route_url("admin_contact_edit", id=obj.id)
 
         countries = (
-            DBSession.query(AdministrativeDivision)
+            request.dbsession.query(AdministrativeDivision)
             .join(AdminLevelType)
             .filter(AdminLevelType.mnemonic == "COU")
             .order_by(AdministrativeDivision.name)
         )
 
-        hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
+        hazard_types = request.dbsession.query(HazardType).order_by(HazardType.order)
 
-        associations = DBSession.query(CAdHt).filter(CAdHt.contact_id == obj.id)
+        associations = request.dbsession.query(CAdHt).filter(CAdHt.contact_id == obj.id)
 
         return {
             "obj": obj,
@@ -522,7 +521,7 @@ def contact_process(request, obj):
         obj.url = request.POST.get("url")
         obj.email = request.POST.get("email")
 
-        DBSession.query(CAdHt).filter(CAdHt.contact_id == obj.id).delete()
+        request.dbsession.query(CAdHt).filter(CAdHt.contact_id == obj.id).delete()
         countries = request.POST.getall("country")
         hazard_types = request.POST.getall("hazard_type")
         for i in range(0, len(countries)):
@@ -531,12 +530,12 @@ def contact_process(request, obj):
                 administrativedivision_id=int(countries[i]),
                 hazardtype_id=int(hazard_types[i]),
             )
-            DBSession.add(association)
+            request.dbsession.add(association)
 
         if inspect(obj).transient:
-            DBSession.add(obj)
+            request.dbsession.add(obj)
 
-        DBSession.flush()
+        request.dbsession.flush()
         return HTTPFound(request.route_url("admin_contacts"))
 
 
@@ -547,12 +546,12 @@ def contact_process(request, obj):
 def contact_admindiv_hazardtype_association(request):
 
     countries = (
-        DBSession.query(AdministrativeDivision)
+        request.dbsession.query(AdministrativeDivision)
         .join(AdminLevelType)
         .filter(AdminLevelType.mnemonic == "COU")
         .order_by(AdministrativeDivision.name)
     )
 
-    hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
+    hazard_types = request.dbsession.query(HazardType).order_by(HazardType.order)
 
     return {"countries": countries, "hazard_types": hazard_types}

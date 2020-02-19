@@ -19,14 +19,14 @@
 
 from pyramid.view import view_config
 
-from ..models import DBSession, AdministrativeDivision, Publication
+from thinkhazard.models import AdministrativeDivision, Publication
 
 
 @view_config(route_name="sitemap", renderer="templates/sitemap.jinja2")
 def sitemap(request):
-    divisions = DBSession.query(AdministrativeDivision)
+    divisions = request.dbsession.query(AdministrativeDivision)
     request.response.content_type = "application/xml"
     return {
         "divisions": divisions.all(),
-        "publication_date": Publication.last().date.strftime("%Y-%m-%d"),
+        "publication_date": Publication.last(request.dbsession).date.strftime("%Y-%m-%d"),
     }

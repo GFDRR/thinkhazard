@@ -22,9 +22,8 @@ from lingua.extractors import Message
 
 from sqlalchemy import engine_from_config
 from thinkhazard.settings import load_full_settings
-
+from thinkhazard.session import get_session_factory
 from thinkhazard.models import (
-    DBSession,
     ClimateChangeRecommendation,
     HazardCategory,
     HazardLevel,
@@ -44,14 +43,14 @@ class EnumExtractor(Extractor):
         settings = load_full_settings("development.ini")
 
         engine = engine_from_config(settings, "sqlalchemy.")
-        DBSession.configure(bind=engine)
+        dbsession = get_session_factory(engine)()
 
         messages = []
 
-        for rec in DBSession.query(HazardLevel):
+        for rec in dbsession.query(HazardLevel):
             messages.append((rec.title, type(rec).__name__))
 
-        for rec in DBSession.query(HazardType):
+        for rec in dbsession.query(HazardType):
             messages.append((rec.title, type(rec).__name__))
 
         return [
@@ -72,17 +71,17 @@ class DatabaseExtractor(Extractor):
         settings = load_full_settings("development.ini")
 
         engine = engine_from_config(settings, "sqlalchemy.")
-        DBSession.configure(bind=engine)
+        dbsession = get_session_factory(engine)()
 
         messages = []
 
-        for rec in DBSession.query(ClimateChangeRecommendation):
+        for rec in dbsession.query(ClimateChangeRecommendation):
             messages.append((rec.text, type(rec).__name__))
 
-        for rec in DBSession.query(HazardCategory):
+        for rec in dbsession.query(HazardCategory):
             messages.append((rec.general_recommendation, type(rec).__name__))
 
-        for rec in DBSession.query(TechnicalRecommendation):
+        for rec in dbsession.query(TechnicalRecommendation):
             messages.append((rec.text, type(rec).__name__))
             messages.append((rec.detail, type(rec).__name__))
 

@@ -18,26 +18,18 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 import unittest
-import transaction
 from datetime import datetime
 from mock import Mock, patch
 from rasterio.io import DatasetReader
 from rasterio.coords import BoundingBox
 from affine import Affine
 
-from thinkhazard.models import DBSession, HazardLevel, HazardSet, HazardType, Layer, Region
-
-from .. import settings
-from . import populate_datamart
-from .common import new_geonode_id
+from thinkhazard.models import HazardLevel, HazardSet, HazardType, Layer, Region
 from thinkhazard.processing.completing import Completer
 
-
-def populate():
-    DBSession.query(Layer).delete()
-    DBSession.query(HazardSet).delete()
-    populate_datamart()
-    transaction.commit()
+from .. import DBSession, settings
+from . import BaseTestCase, populate_datamart
+from .common import new_geonode_id
 
 
 def global_reader(path=""):
@@ -76,9 +68,7 @@ def global_reader_invalid_bounds(path=""):
     return context
 
 
-class TestCompleting(unittest.TestCase):
-    def setUp(self):  # NOQA
-        populate()
+class TestCompleting(BaseTestCase):
 
     @patch.object(Completer, "do_execute")
     def test_cli(self, mock):
@@ -88,14 +78,16 @@ class TestCompleting(unittest.TestCase):
 
     def test_force(self):
         """Test completer in force mode"""
-        Completer().execute(settings, force=True)
+        completer = Completer()
+        completer.dbsession = DBSession
+        completer.execute(settings, force=True)
 
     @patch("rasterio.open", side_effect=global_reader)
     def test_complete_preprocessed(self, open_mock):
         """Test complete preprocessed hazardset"""
 
         hazardset_id = "preprocessed"
-        hazardtype = HazardType.get("VA")
+        hazardtype = HazardType.get(DBSession, "VA")
 
         regions = DBSession.query(Region).all()
 
@@ -115,7 +107,7 @@ class TestCompleting(unittest.TestCase):
             return_period=None,
             data_lastupdated_date=datetime.now(),
             metadata_lastupdated_date=datetime.now(),
-            geonode_id=new_geonode_id(),
+            geonode_id=new_geonode_id(DBSession),
             download_url="test",
             calculation_method_quality=5,
             scientific_quality=1,
@@ -124,9 +116,11 @@ class TestCompleting(unittest.TestCase):
         )
         hazardset.layers.append(layer)
 
-        transaction.commit()
+        DBSession.flush()
 
-        Completer().execute(settings)
+        completer = Completer()
+        completer.dbsession = DBSession
+        completer.execute(settings)
 
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete_error, None)
@@ -137,7 +131,7 @@ class TestCompleting(unittest.TestCase):
         """Test complete notpreprocessed hazardset"""
 
         hazardset_id = "notpreprocessed"
-        hazardtype = HazardType.get("EQ")
+        hazardtype = HazardType.get(DBSession, "EQ")
 
         regions = DBSession.query(Region).all()
 
@@ -153,12 +147,12 @@ class TestCompleting(unittest.TestCase):
 
         for level in ["HIG", "MED", "LOW"]:
             layer = Layer(
-                hazardlevel=HazardLevel.get(level),
+                hazardlevel=HazardLevel.get(DBSession, level),
                 mask=False,
                 return_period=None,
                 data_lastupdated_date=datetime.now(),
                 metadata_lastupdated_date=datetime.now(),
-                geonode_id=new_geonode_id(),
+                geonode_id=new_geonode_id(DBSession),
                 download_url="test",
                 calculation_method_quality=5,
                 scientific_quality=1,
@@ -167,9 +161,11 @@ class TestCompleting(unittest.TestCase):
             )
             hazardset.layers.append(layer)
 
-        transaction.commit()
+        DBSession.flush()
 
-        Completer().execute(settings)
+        completer = Completer()
+        completer.dbsession = DBSession
+        completer.execute(settings)
 
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete_error, None)
@@ -179,7 +175,7 @@ class TestCompleting(unittest.TestCase):
         """Test no region"""
 
         hazardset_id = "notpreprocessed"
-        hazardtype = HazardType.get("EQ")
+        hazardtype = HazardType.get(DBSession, "EQ")
 
         hazardset = HazardSet(
             id=hazardset_id,
@@ -192,12 +188,12 @@ class TestCompleting(unittest.TestCase):
 
         for level in ["HIG", "MED", "LOW"]:
             layer = Layer(
-                hazardlevel=HazardLevel.get(level),
+                hazardlevel=HazardLevel.get(DBSession, level),
                 mask=False,
                 return_period=None,
                 data_lastupdated_date=datetime.now(),
                 metadata_lastupdated_date=datetime.now(),
-                geonode_id=new_geonode_id(),
+                geonode_id=new_geonode_id(DBSession),
                 download_url="test",
                 calculation_method_quality=5,
                 scientific_quality=1,
@@ -206,9 +202,11 @@ class TestCompleting(unittest.TestCase):
             )
             hazardset.layers.append(layer)
 
-        transaction.commit()
+        DBSession.flush()
 
-        Completer().execute(settings)
+        completer = Completer()
+        completer.dbsession = DBSession
+        completer.execute(settings)
 
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete_error, "No associated regions")
@@ -219,7 +217,7 @@ class TestCompleting(unittest.TestCase):
         """Test invalid invalid"""
 
         hazardset_id = "notpreprocessed"
-        hazardtype = HazardType.get("EQ")
+        hazardtype = HazardType.get(DBSession, "EQ")
 
         regions = DBSession.query(Region).all()
 
@@ -235,12 +233,12 @@ class TestCompleting(unittest.TestCase):
 
         for level in ["HIG", "MED", "LOW"]:
             layer = Layer(
-                hazardlevel=HazardLevel.get(level),
+                hazardlevel=HazardLevel.get(DBSession, level),
                 mask=False,
                 return_period=None,
                 data_lastupdated_date=datetime.now(),
                 metadata_lastupdated_date=datetime.now(),
-                geonode_id=new_geonode_id(),
+                geonode_id=new_geonode_id(DBSession),
                 download_url="test",
                 calculation_method_quality=5,
                 scientific_quality=1,
@@ -249,9 +247,11 @@ class TestCompleting(unittest.TestCase):
             )
             hazardset.layers.append(layer)
 
-        transaction.commit()
+        DBSession.flush()
 
-        Completer().execute(settings)
+        completer = Completer()
+        completer.dbsession = DBSession
+        completer.execute(settings)
 
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete_error, "bounds.bottom > bounds.top")
@@ -262,7 +262,7 @@ class TestCompleting(unittest.TestCase):
         """Test missing level"""
 
         hazardset_id = "notpreprocessed"
-        hazardtype = HazardType.get("EQ")
+        hazardtype = HazardType.get(DBSession, "EQ")
 
         regions = DBSession.query(Region).all()
 
@@ -278,12 +278,12 @@ class TestCompleting(unittest.TestCase):
 
         for level in ["HIG", "MED"]:
             layer = Layer(
-                hazardlevel=HazardLevel.get(level),
+                hazardlevel=HazardLevel.get(DBSession, level),
                 mask=False,
                 return_period=None,
                 data_lastupdated_date=datetime.now(),
                 metadata_lastupdated_date=datetime.now(),
-                geonode_id=new_geonode_id(),
+                geonode_id=new_geonode_id(DBSession),
                 download_url="test",
                 calculation_method_quality=5,
                 scientific_quality=1,
@@ -292,9 +292,11 @@ class TestCompleting(unittest.TestCase):
             )
             hazardset.layers.append(layer)
 
-        transaction.commit()
+        DBSession.flush()
 
-        Completer().execute(settings)
+        completer = Completer()
+        completer.dbsession = DBSession
+        completer.execute(settings)
 
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete_error, "No layer for level LOW")
@@ -305,7 +307,7 @@ class TestCompleting(unittest.TestCase):
         """Test missing mask"""
 
         hazardset_id = "notpreprocessed"
-        hazardtype = HazardType.get("FL")
+        hazardtype = HazardType.get(DBSession, "FL")
 
         regions = DBSession.query(Region).all()
 
@@ -321,12 +323,12 @@ class TestCompleting(unittest.TestCase):
 
         for level in ["HIG", "MED", "LOW"]:
             layer = Layer(
-                hazardlevel=HazardLevel.get(level),
+                hazardlevel=HazardLevel.get(DBSession, level),
                 mask=False,
                 return_period=None,
                 data_lastupdated_date=datetime.now(),
                 metadata_lastupdated_date=datetime.now(),
-                geonode_id=new_geonode_id(),
+                geonode_id=new_geonode_id(DBSession),
                 download_url="test",
                 calculation_method_quality=5,
                 scientific_quality=1,
@@ -335,9 +337,11 @@ class TestCompleting(unittest.TestCase):
             )
             hazardset.layers.append(layer)
 
-        transaction.commit()
+        DBSession.flush()
 
-        Completer().execute(settings)
+        completer = Completer()
+        completer.dbsession = DBSession
+        completer.execute(settings)
 
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete_error, "Missing mask layer")
@@ -348,7 +352,7 @@ class TestCompleting(unittest.TestCase):
         """Test handling of open exception"""
 
         hazardset_id = "notpreprocessed"
-        hazardtype = HazardType.get("EQ")
+        hazardtype = HazardType.get(DBSession, "EQ")
 
         regions = DBSession.query(Region).all()
 
@@ -364,12 +368,12 @@ class TestCompleting(unittest.TestCase):
 
         for level in ["HIG", "MED", "LOW"]:
             layer = Layer(
-                hazardlevel=HazardLevel.get(level),
+                hazardlevel=HazardLevel.get(DBSession, level),
                 mask=False,
                 return_period=None,
                 data_lastupdated_date=datetime.now(),
                 metadata_lastupdated_date=datetime.now(),
-                geonode_id=new_geonode_id(),
+                geonode_id=new_geonode_id(DBSession),
                 download_url="test",
                 calculation_method_quality=5,
                 scientific_quality=1,
@@ -378,9 +382,11 @@ class TestCompleting(unittest.TestCase):
             )
             hazardset.layers.append(layer)
 
-        transaction.commit()
+        DBSession.flush()
 
-        Completer().execute(settings)
+        completer = Completer()
+        completer.dbsession = DBSession
+        completer.execute(settings)
 
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(
@@ -401,7 +407,7 @@ class TestCompleting(unittest.TestCase):
         """Difference in origin, resolution or size must not complete"""
 
         hazardset_id = "notpreprocessed"
-        hazardtype = HazardType.get("FL")
+        hazardtype = HazardType.get(DBSession, "FL")
 
         regions = DBSession.query(Region).all()
 
@@ -417,12 +423,12 @@ class TestCompleting(unittest.TestCase):
 
         for level in ["HIG", "MED", "LOW"]:
             layer = Layer(
-                hazardlevel=HazardLevel.get(level),
+                hazardlevel=HazardLevel.get(DBSession, level),
                 mask=False,
                 return_period=None,
                 data_lastupdated_date=datetime.now(),
                 metadata_lastupdated_date=datetime.now(),
-                geonode_id=new_geonode_id(),
+                geonode_id=new_geonode_id(DBSession),
                 download_url="test",
                 calculation_method_quality=5,
                 scientific_quality=1,
@@ -437,7 +443,7 @@ class TestCompleting(unittest.TestCase):
             return_period=None,
             data_lastupdated_date=datetime.now(),
             metadata_lastupdated_date=datetime.now(),
-            geonode_id=new_geonode_id(),
+            geonode_id=new_geonode_id(DBSession),
             download_url="test",
             calculation_method_quality=5,
             scientific_quality=1,
@@ -446,9 +452,11 @@ class TestCompleting(unittest.TestCase):
         )
         hazardset.layers.append(mask_layer)
 
-        transaction.commit()
+        DBSession.flush()
 
-        Completer().execute(settings)
+        completer = Completer()
+        completer.dbsession = DBSession
+        completer.execute(settings)
 
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(

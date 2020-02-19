@@ -20,13 +20,13 @@
 from pyramid.view import view_config
 from pyramid.i18n import get_localizer, TranslationStringFactory
 
-from ..models import DBSession, HazardType, Publication
+from thinkhazard.models import HazardType, Publication
 
 
 @view_config(route_name="index", renderer="templates/index.jinja2")
 def index(request):
     hazard_types = (
-        DBSession.query(HazardType)
+        request.dbsession.query(HazardType)
         .order_by(HazardType.order)
         .filter(HazardType.ready.isnot(False))
     )
@@ -63,6 +63,6 @@ def data_map(request):
     tsf = TranslationStringFactory("thinkhazard")
     localizer = get_localizer(request)
 
-    hazard_types = DBSession.query(HazardType).order_by(HazardType.order)
+    hazard_types = request.dbsession.query(HazardType).order_by(HazardType.order)
     types = [(h.mnemonic, localizer.translate(tsf(h.title))) for h in hazard_types]
     return {"hazard_types": types}

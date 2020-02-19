@@ -18,23 +18,15 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 import unittest
-import transaction
 from mock import patch
 
 from thinkhazard.processing.downloading import Downloader
 
-from .. import settings
-from . import populate_datamart
+from .. import DBSession, settings
+from . import BaseTestCase, populate_datamart
 
 
-def populate():
-    populate_datamart()
-    transaction.commit()
-
-
-class TestDownloading(unittest.TestCase):
-    def setUp(self):  # NOQA
-        populate()
+class TestDownloading(BaseTestCase):
 
     @patch.object(Downloader, "do_execute")
     def test_cli(self, mock):
@@ -44,4 +36,6 @@ class TestDownloading(unittest.TestCase):
 
     def test_force(self):
         """Test downloader in force mode"""
-        Downloader().execute(settings, force=True)
+        downloader = Downloader()
+        downloader.dbsession = DBSession
+        downloader.execute(settings, force=True)

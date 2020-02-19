@@ -39,7 +39,7 @@ from sqlalchemy.schema import MetaData
 
 from sqlalchemy.ext.declarative import declarative_base
 
-from sqlalchemy.orm import backref, scoped_session, sessionmaker, relationship, deferred
+from sqlalchemy.orm import backref, relationship, deferred
 
 from sqlalchemy.sql.expression import true
 
@@ -47,10 +47,6 @@ from sqlalchemy.event import listens_for
 
 from geoalchemy2 import Geometry
 
-from zope.sqlalchemy import register
-
-DBSession = scoped_session(sessionmaker())
-register(DBSession)
 Base = declarative_base(metadata=MetaData(schema="datamart"))
 
 
@@ -68,15 +64,15 @@ class AdminLevelType(Base):
     description = Column(Unicode)
 
     @classmethod
-    def get(cls, mnemonic):
+    def get(cls, dbsession, mnemonic):
         if mnemonic in adminleveltypes:
             adminleveltype = adminleveltypes[mnemonic]
             insp = inspect(adminleveltype)
             if not insp.detached:
                 return adminleveltype
-        with DBSession.no_autoflush:
+        with dbsession.no_autoflush:
             adminleveltype = (
-                DBSession.query(cls).filter(cls.mnemonic == mnemonic).one_or_none()
+                dbsession.query(cls).filter(cls.mnemonic == mnemonic).one_or_none()
             )
             if adminleveltype is not None:
                 adminleveltypes[mnemonic] = adminleveltype
@@ -105,15 +101,15 @@ class HazardLevel(Base):
         return level_weights[self.mnemonic] >= level_weights[other.mnemonic]
 
     @classmethod
-    def get(cls, mnemonic):
+    def get(cls, dbsession, mnemonic):
         if mnemonic in hazardlevels:
             hazardlevel = hazardlevels[mnemonic]
             insp = inspect(hazardlevel)
             if not insp.detached:
                 return hazardlevel
-        with DBSession.no_autoflush:
+        with dbsession.no_autoflush:
             hazardlevel = (
-                DBSession.query(cls).filter(cls.mnemonic == mnemonic).one_or_none()
+                dbsession.query(cls).filter(cls.mnemonic == mnemonic).one_or_none()
             )
             if hazardlevel is not None:
                 hazardlevels[mnemonic] = hazardlevel
@@ -134,15 +130,15 @@ class HazardType(Base):
     ready = Column(Boolean)
 
     @classmethod
-    def get(cls, mnemonic):
+    def get(cls, dbsession, mnemonic):
         if mnemonic in hazardtypes:
             hazardtype = hazardtypes[mnemonic]
             insp = inspect(hazardtype)
             if not insp.detached:
                 return hazardtype
-        with DBSession.no_autoflush:
+        with dbsession.no_autoflush:
             hazardtype = (
-                DBSession.query(cls).filter(cls.mnemonic == mnemonic).one_or_none()
+                dbsession.query(cls).filter(cls.mnemonic == mnemonic).one_or_none()
             )
             if hazardtype is not None:
                 hazardtypes[mnemonic] = hazardtype
@@ -382,15 +378,15 @@ class HazardCategory(Base):
         return getattr(self, attr if lang == "en" else "%s_%s" % (attr, lang))
 
     @classmethod
-    def get(cls, hazardtype, hazardlevel):
+    def get(cls, dbsession, hazardtype, hazardlevel):
         if not isinstance(hazardtype, HazardType):
-            hazardtype = HazardType.get(str(hazardtype))
+            hazardtype = HazardType.get(dbsession, str(hazardtype))
 
         if not isinstance(hazardlevel, HazardLevel):
-            hazardlevel = HazardLevel.get(str(hazardlevel))
+            hazardlevel = HazardLevel.get(dbsession, str(hazardlevel))
 
         return (
-            DBSession.query(cls)
+            dbsession.query(cls)
             .filter(cls.hazardtype == hazardtype)
             .filter(cls.hazardlevel == hazardlevel)
             .one()
@@ -487,10 +483,10 @@ class TechnicalRecommendation(Base):
         @return boolean: True if association exists
         """
         if not isinstance(hazardtype, HazardType):
-            hazardtype = HazardType.get(str(hazardtype))
+            hazardtype = HazardType.get(inspect(self).session, str(hazardtype))
 
         if not isinstance(hazardlevel, HazardLevel):
-            hazardlevel = HazardLevel.get(str(hazardlevel))
+            hazardlevel = HazardLevel.get(inspect(self).session, str(hazardlevel))
 
         for association in self.hazardcategory_associations:
             if (
@@ -586,9 +582,9 @@ class HazardSet(Base):
     regions = relationship("Region", secondary=hazardset_region_table)
 
     def layer_by_level(self, level):
-        hazardlevel = HazardLevel.get(level)
+        hazardlevel = HazardLevel.get(inspect(self).session, level)
         return (
-            DBSession.query(Layer)
+            inspect(self).session.query(Layer)
             .filter(Layer.hazardset_id == self.id)
             .filter(Layer.hazardlevel_id == hazardlevel.id)
             .one_or_none()
@@ -605,7 +601,7 @@ class HazardSet(Base):
 @listens_for(HazardSet.processed, "set")
 def on_hazardset_processed_set(target, value, oldvalue, initiator):
     if value is None and target.id is not None:
-        DBSession.query(Output).filter(Output.hazardset_id == target.id).autoflush(
+        inspect(target).session.query(Output).filter(Output.hazardset_id == target.id).autoflush(
             False
         ).delete()
 
@@ -726,14 +722,14 @@ class Publication(Base):
     date = Column(DateTime)
 
     @classmethod
-    def last(cls):
-        last = DBSession.query(cls).order_by(cls.date.desc()).first()
+    def last(cls, dbsession):
+        last = dbsession.query(cls).order_by(cls.date.desc()).first()
         return last
 
     @classmethod
-    def new(cls):
+    def new(cls, dbsession):
         new = cls(date=datetime.datetime.now())
-        DBSession.add(new)
+        dbsession.add(new)
         return new
 
 
@@ -745,9 +741,9 @@ class Harvesting(Base):
     complete = Column(Boolean, nullable=False)
 
     @classmethod
-    def last_complete_date(cls):
+    def last_complete_date(cls, dbsession):
         last_complete = (
-            DBSession.query(cls)
+            dbsession.query(cls)
             .filter(cls.complete == true())
             .order_by(cls.date.desc())
             .first()
@@ -757,11 +753,11 @@ class Harvesting(Base):
         return last_complete.date
 
     @classmethod
-    def new(cls, complete):
+    def new(cls, dbsession, complete):
         new = cls(
             date=datetime.datetime.utcnow().replace(tzinfo=pytz.utc), complete=complete
         )
-        DBSession.add(new)
+        dbsession.add(new)
         return new
 
 

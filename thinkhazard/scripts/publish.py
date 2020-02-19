@@ -29,9 +29,10 @@ from pyramid.scripts.common import parse_vars
 
 from sqlalchemy import engine_from_config
 
-from .. import lock_file
-from .. import load_local_settings
-from ..models import DBSession, Publication
+from thinkhazard import lock_file
+from thinkhazard.session import get_session_factory
+from thinkhazard.settings import load_local_settings
+from thinkhazard.models import Publication
 
 
 def usage(argv):
@@ -72,9 +73,9 @@ def main(argv=sys.argv):
     load_local_settings(settings, "admin")
     engine = engine_from_config(settings, "sqlalchemy.")
     with engine.begin() as db:
-        DBSession.configure(bind=db)
+        dbsession = get_session_factory(db)()
         Publication.new()
-        DBSession.flush()
+        dbsession.flush()
 
     folder_path = settings["backup_path"]
     if not os.path.exists(folder_path):

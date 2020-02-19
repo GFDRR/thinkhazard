@@ -36,8 +36,7 @@ from shapely.geometry.polygon import Polygon
 from geoalchemy2.shape import to_shape, from_shape
 from urllib.parse import urlunsplit
 
-from ..models import (
-    DBSession,
+from thinkhazard.models import (
     AdministrativeDivision,
     HazardLevel,
     HazardCategory,
@@ -75,11 +74,11 @@ def report(request):
 
     selected_hazard = request.matchdict.get("hazardtype", None)
 
-    hazard_types = get_hazard_types(division_code)
+    hazard_types = get_hazard_types(request, division_code)
 
     hazard_category = None
 
-    division = get_division(division_code)
+    division = get_division(request, division_code)
 
     if selected_hazard is not None:
         try:
@@ -97,7 +96,7 @@ def report(request):
         .cte("bounds")
     )
     bounds = list(
-        DBSession.query(
+        request.dbsession.query(
             func.ST_XMIN(cte.c.box2d),
             func.ST_YMIN(cte.c.box2d),
             func.ST_XMAX(cte.c.box2d),
@@ -127,7 +126,7 @@ def report(request):
             .cte("bounds")
         )
         bounds_shifted = list(
-            DBSession.query(
+            request.dbsession.query(
                 func.ST_XMIN(cte.c.shift),
                 func.ST_YMIN(cte.c.shift),
                 func.ST_XMAX(cte.c.shift),
@@ -145,6 +144,7 @@ def report(request):
     ).encode("utf8")
     if selected_hazard is not None:
         feedback_params["entry.93444540"] = HazardType.get(
+            request.dbsession,
             selected_hazard
         ).title.encode("utf8")
 
@@ -187,7 +187,7 @@ def report_geojson(request):
     We first check how big the polygons are compared to map resolution.
     """
     area = (
-        DBSession.query(
+        request.dbsession.query(
             func.ST_Area(func.ST_Transform(AdministrativeDivision.geom, 3857))
         )
         .filter(AdministrativeDivision.code == division_code)
@@ -215,7 +215,7 @@ def report_geojson(request):
 
     if hazard_type is not None:
         divisions = (
-            DBSession.query(AdministrativeDivision)
+            request.dbsession.query(AdministrativeDivision)
             .add_columns(simplify, HazardLevel.mnemonic, HazardLevel.title)
             .outerjoin(AdministrativeDivision.hazardcategories)
             .join(HazardCategory)
@@ -225,7 +225,7 @@ def report_geojson(request):
         )
     else:
         divisions = (
-            DBSession.query(AdministrativeDivision)
+            request.dbsession.query(AdministrativeDivision)
             .add_columns(simplify, literal_column("'None'"), literal_column("'blah'"))
             .filter(_filter)
         )
@@ -249,7 +249,7 @@ def report_geojson(request):
 @view_config(route_name="report_overview_json", renderer="json")
 def report_overview_json(request):
     division_code = request.matchdict.get("divisioncode")
-    hazard_types = get_hazard_types(division_code)
+    hazard_types = get_hazard_types(request, division_code)
     return hazard_types
 
 
@@ -258,7 +258,7 @@ def report_json(request):
     division_code = request.matchdict.get("divisioncode")
     selected_hazard = request.matchdict.get("hazardtype")
     hazard_category = None
-    division = get_division(division_code)
+    division = get_division(request, division_code)
 
     try:
         hazard_category = get_info_for_hazard_type(request, selected_hazard, division)
@@ -278,22 +278,22 @@ def get_parents(division):
     return parents
 
 
-def get_division(code):
+def get_division(request, code):
     # Get the administrative division whose code is division_code.
     _alias = aliased(AdministrativeDivision)
     return (
-        DBSession.query(AdministrativeDivision)
+        request.dbsession.query(AdministrativeDivision)
         .outerjoin(_alias, _alias.code == AdministrativeDivision.parent_code)
         .filter(AdministrativeDivision.code == code)
         .one()
     )
 
 
-def get_hazard_types(code):
+def get_hazard_types(request, code):
 
     # Get all the hazard types.
     hazardtype_query = (
-        DBSession.query(HazardType)
+        request.dbsession.query(HazardType)
         .order_by(HazardType.order)
         .filter(HazardType.ready.isnot(False))
     )
@@ -301,7 +301,7 @@ def get_hazard_types(code):
     # Get the hazard categories corresponding to the administrative
     # division whose code is division_code.
     hazardcategories_query = (
-        DBSession.query(HazardCategory)
+        request.dbsession.query(HazardCategory)
         .join(HazardCategoryAdministrativeDivisionAssociation)
         .join(AdministrativeDivision)
         .options(
@@ -329,7 +329,7 @@ def get_info_for_hazard_type(request, hazard, division):
     climate_change_recommendation = None
 
     hazard_category = (
-        DBSession.query(HazardCategory)
+        request.dbsession.query(HazardCategory)
         .join(HazardCategoryAdministrativeDivisionAssociation)
         .join(AdministrativeDivision)
         .options(joinedload(HazardCategory.hazardlevel))
@@ -347,7 +347,7 @@ def get_info_for_hazard_type(request, hazard, division):
     if division.leveltype_id == 3:
         code = division.parent.parent.code
     climate_change_recommendation = (
-        DBSession.query(ClimateChangeRecommendation)
+        request.dbsession.query(ClimateChangeRecommendation)
         .join(CcrAd)
         .join(HazardType)
         .join(AdministrativeDivision)
@@ -357,7 +357,7 @@ def get_info_for_hazard_type(request, hazard, division):
     )
 
     contacts = (
-        DBSession.query(Contact)
+        request.dbsession.query(Contact)
         .join(CAdHt)
         .join(HazardType)
         .join(AdministrativeDivision)
@@ -367,13 +367,13 @@ def get_info_for_hazard_type(request, hazard, division):
     )
 
     regions_subq = (
-        DBSession.query(Region.id)
+        request.dbsession.query(Region.id)
         .join(Region.administrativedivisions)
         .filter(AdministrativeDivision.code == code)
         .subquery()
     )
     further_resources_query = (
-        DBSession.query(HazardTypeFurtherResourceAssociation)
+        request.dbsession.query(HazardTypeFurtherResourceAssociation)
         .join(FurtherResource)
         .join(HazardType)
         .join(Region)
@@ -405,7 +405,7 @@ def get_info_for_hazard_type(request, hazard, division):
         )
 
     sources = (
-        DBSession.query(HazardCategoryAdministrativeDivisionAssociation)
+        request.dbsession.query(HazardCategoryAdministrativeDivisionAssociation)
         .join(AdministrativeDivision)
         .join(HazardCategory)
         .filter(HazardCategory.id == hazard_category.id)
@@ -428,7 +428,7 @@ def data_source(request):
     try:
         hazardset_id = request.matchdict.get("hazardset")
         hazardset = (
-            DBSession.query(HazardSet)
+            request.dbsession.query(HazardSet)
             .join(Layer)
             .filter(HazardSet.id == hazardset_id)
             .order_by(Layer.return_period)
@@ -475,10 +475,10 @@ def report_neighbours_geojson(request):
         func.ST_Transform(AdministrativeDivision.geom, 3857), resolution
     )
 
-    division = get_division(division_code)
+    division = get_division(request, division_code)
 
     divisions = (
-        DBSession.query(AdministrativeDivision)
+        request.dbsession.query(AdministrativeDivision)
         .add_columns(simplify)
         .filter(func.ST_DWITHIN(AdministrativeDivision.geom, bbox, 0))
         .filter(AdministrativeDivision.leveltype_id == division.leveltype_id)

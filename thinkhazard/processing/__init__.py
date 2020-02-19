@@ -22,10 +22,9 @@ import argparse
 import os
 import logging
 import colorlog
-from sqlalchemy import engine_from_config
 
-from ..settings import load_full_settings
-from ..models import DBSession
+from thinkhazard.settings import load_full_settings
+from thinkhazard.session import get_engine, get_session_factory
 
 
 logger = colorlog.getLogger(__name__)
@@ -59,10 +58,9 @@ class BaseProcessor:
         name = args.pop("name")
         settings = load_full_settings(config_uri, name=name)
 
-        engine = engine_from_config(settings, "sqlalchemy.")
-        DBSession.configure(bind=engine)
-
         processor = cls()
+        processor.engine = get_engine(settings, "sqlalchemy.")
+        processor.session = get_session_factory(processor.engine)()
         processor.execute(settings=settings, **args)
 
     @staticmethod
@@ -133,7 +131,7 @@ class BaseProcessor:
             logger.setLevel(logging.WARNING)
 
         if dry_run:
-            connection = DBSession.bind.connect()
+            connection = self.engine.connect()
             trans = connection.begin()
 
         self.do_execute(**kwargs)

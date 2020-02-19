@@ -20,7 +20,7 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest
 
-from ..models import DBSession, AdministrativeDivision as AdDiv, AdminLevelType
+from thinkhazard.models import AdministrativeDivision as AdDiv, AdminLevelType
 
 from sqlalchemy import func, or_, and_
 
@@ -46,7 +46,7 @@ def administrativedivision(request):
         filter = or_(filter_lang, filter)
 
     query = (
-        DBSession.query(AdDiv)
+        request.dbsession.query(AdDiv)
         .filter(filter)
         .join(AdminLevelType)
         .order_by(

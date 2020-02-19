@@ -17,17 +17,21 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
-from sqlalchemy import engine_from_config
+import transaction
+from thinkhazard.session import get_engine, get_session_factory, get_tm_session
 from thinkhazard.settings import load_full_settings
 from thinkhazard.scripts.initializedb import initdb
 
 
 settings = load_full_settings("c2c://tests.ini", name="admin")
+engine = get_engine(settings)
+session_factory = get_session_factory(engine)
+DBSession = get_tm_session(session_factory, transaction.manager)
 
 
 def populatedb():
-    engine = engine_from_config(settings, "sqlalchemy.")
-    initdb(engine, True)
+    with engine.begin() as connection:
+        initdb(connection, True)
 
 
 populatedb()

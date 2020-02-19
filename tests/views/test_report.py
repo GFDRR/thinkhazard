@@ -23,6 +23,7 @@ from mock.mock import patch, Mock
 
 from . import BaseTestCase
 
+
 class TestReportFunction(BaseTestCase):
     def setUp(self):  # noqa
         super(TestReportFunction, self).setUp()

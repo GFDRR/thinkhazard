@@ -18,7 +18,6 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 import unittest
-import transaction
 from datetime import datetime
 import numpy as np
 from mock import Mock, patch
@@ -26,7 +25,6 @@ from rasterio.io import DatasetReader
 from affine import Affine
 
 from thinkhazard.models import (
-    DBSession,
     HazardLevel,
     HazardSet,
     HazardType,
@@ -37,23 +35,13 @@ from thinkhazard.models import (
 from thinkhazard.processing.processing import Processor
 
 from .. import settings
-from . import populate_datamart
+from . import BaseTestCase, DBSession, populate_datamart
 from .common import new_geonode_id
 
 
 preprocessed_type = "VA"
 notpreprocessed_type = "FL"
 notpreprocessed_unit = "m"
-
-
-def populate():
-    DBSession.query(Output).delete()
-    DBSession.query(Layer).delete()
-    DBSession.query(HazardSet).delete()
-    populate_datamart()
-    populate_notpreprocessed(notpreprocessed_type, notpreprocessed_unit)
-    populate_preprocessed(preprocessed_type)
-    transaction.commit()
 
 
 def global_reader(value=None):
@@ -77,9 +65,13 @@ def global_reader(value=None):
     return reader
 
 
-class TestProcess(unittest.TestCase):
+class TestProcess(BaseTestCase):
+
     def setUp(self):  # NOQA
-        populate()
+        super().setUp()
+        populate_notpreprocessed(notpreprocessed_type, notpreprocessed_unit)
+        populate_preprocessed(preprocessed_type)
+        DBSession.flush()
 
     @patch.object(Processor, "do_execute")
     def test_cli(self, mock):
@@ -90,12 +82,16 @@ class TestProcess(unittest.TestCase):
     @patch("rasterio.open", return_value=global_reader())
     def test_force(self, open_mock):
         """Test processor in force mode"""
-        Processor().execute(settings, force=True)
+        processor = Processor()
+        processor.dbsession = DBSession
+        processor.execute(settings, force=True)
 
     @patch("rasterio.open", return_value=global_reader())
     def test_process_empty(self, open_mock):
         """Test nodata everywhere"""
-        Processor().execute(settings, hazardset_id="notpreprocessed")
+        processor = Processor()
+        processor.dbsession = DBSession
+        processor.execute(settings, hazardset_id="notpreprocessed")
         output = DBSession.query(Output).first()
         self.assertEqual(output, None)
 
@@ -110,7 +106,9 @@ class TestProcess(unittest.TestCase):
     )
     def test_process_vlo(self, open_mock):
         """Test value < threshold <=> hazardlevel VLO"""
-        Processor().execute(settings, hazardset_id="notpreprocessed")
+        processor = Processor()
+        processor.dbsession = DBSession
+        processor.execute(settings, hazardset_id="notpreprocessed")
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, "VLO")
 
@@ -125,7 +123,9 @@ class TestProcess(unittest.TestCase):
     )
     def test_process_low(self, open_mock):
         """Test value > threshold in LOW layer"""
-        Processor().execute(settings, hazardset_id="notpreprocessed")
+        processor = Processor()
+        processor.dbsession = DBSession
+        processor.execute(settings, hazardset_id="notpreprocessed")
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, "LOW")
 
@@ -140,7 +140,9 @@ class TestProcess(unittest.TestCase):
     )
     def test_process_med(self, open_mock):
         """Test value > threshold in MED layer"""
-        Processor().execute(settings, hazardset_id="notpreprocessed")
+        processor = Processor()
+        processor.dbsession = DBSession
+        processor.execute(settings, hazardset_id="notpreprocessed")
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, "MED")
 
@@ -155,7 +157,9 @@ class TestProcess(unittest.TestCase):
     )
     def test_process_hig(self, open_mock):
         """Test value > threshold in HIG layer"""
-        Processor().execute(settings, hazardset_id="notpreprocessed")
+        processor = Processor()
+        processor.dbsession = DBSession
+        processor.execute(settings, hazardset_id="notpreprocessed")
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, "HIG")
 
@@ -170,61 +174,73 @@ class TestProcess(unittest.TestCase):
     )
     def test_process_mask(self, open_mock):
         """Test mask layer"""
-        Processor().execute(settings, hazardset_id="notpreprocessed")
+        processor = Processor()
+        processor.dbsession = DBSession
+        processor.execute(settings, hazardset_id="notpreprocessed")
         output = DBSession.query(Output).first()
         self.assertEqual(output, None)
 
     @patch("rasterio.open", side_effect=[global_reader()])
     def test_preprocessed_empty(self, open_mock):
         """Test preprocessed nodata everywhere"""
-        Processor().execute(settings, hazardset_id="preprocessed")
+        processor = Processor()
+        processor.dbsession = DBSession
+        processor.execute(settings, hazardset_id="preprocessed")
         output = DBSession.query(Output).first()
         self.assertEqual(output, None)
 
     @patch("rasterio.open")
     def test_preprocessed_vlo(self, open_mock):
         """Test preprocessed VLO"""
-        hazardtype = HazardType.get(preprocessed_type)
+        hazardtype = HazardType.get(DBSession, preprocessed_type)
         hazardtype_settings = settings["hazard_types"][hazardtype.mnemonic]
         open_mock.side_effect = [global_reader(hazardtype_settings["values"]["VLO"][0])]
-        Processor().execute(settings, hazardset_id="preprocessed")
+        processor = Processor()
+        processor.dbsession = DBSession
+        processor.execute(settings, hazardset_id="preprocessed")
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, "VLO")
 
     @patch("rasterio.open")
     def test_preprocessed_low(self, open_mock):
         """Test preprocessed LOW"""
-        hazardtype = HazardType.get(preprocessed_type)
+        hazardtype = HazardType.get(DBSession, preprocessed_type)
         hazardtype_settings = settings["hazard_types"][hazardtype.mnemonic]
         open_mock.side_effect = [global_reader(hazardtype_settings["values"]["VLO"][0])]
-        Processor().execute(settings, hazardset_id="preprocessed")
+        processor = Processor()
+        processor.dbsession = DBSession
+        processor.execute(settings, hazardset_id="preprocessed")
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, "VLO")
 
     @patch("rasterio.open")
     def test_preprocessed_med(self, open_mock):
         """Test preprocessed MED"""
-        hazardtype = HazardType.get(preprocessed_type)
+        hazardtype = HazardType.get(DBSession, preprocessed_type)
         hazardtype_settings = settings["hazard_types"][hazardtype.mnemonic]
         open_mock.side_effect = [global_reader(hazardtype_settings["values"]["MED"][0])]
-        Processor().execute(settings, hazardset_id="preprocessed")
+        processor = Processor()
+        processor.dbsession = DBSession
+        processor.execute(settings, hazardset_id="preprocessed")
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, "MED")
 
     @patch("rasterio.open")
     def test_preprocessed_hig(self, open_mock):
         """Test preprocessed HIG"""
-        hazardtype = HazardType.get(preprocessed_type)
+        hazardtype = HazardType.get(DBSession, preprocessed_type)
         hazardtype_settings = settings["hazard_types"][hazardtype.mnemonic]
         open_mock.side_effect = [global_reader(hazardtype_settings["values"]["HIG"][0])]
-        Processor().execute(settings, hazardset_id="preprocessed")
+        processor = Processor()
+        processor.dbsession = DBSession
+        processor.execute(settings, hazardset_id="preprocessed")
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, "HIG")
 
 
 def populate_notpreprocessed(type, unit):
     hazardset_id = "notpreprocessed"
-    hazardtype = HazardType.get(type)
+    hazardtype = HazardType.get(DBSession, type)
     hazardtype_settings = settings["hazard_types"][hazardtype.mnemonic]
 
     regions = DBSession.query(Region).all()
@@ -243,7 +259,7 @@ def populate_notpreprocessed(type, unit):
     return_periods = hazardtype_settings["return_periods"]
 
     for level in ("HIG", "MED", "LOW"):
-        hazardlevel = HazardLevel.get(level)
+        hazardlevel = HazardLevel.get(DBSession, level)
         level_return_periods = return_periods[level]
         if isinstance(level_return_periods, list):
             return_period = level_return_periods[0]
@@ -257,7 +273,7 @@ def populate_notpreprocessed(type, unit):
             hazardunit=unit,
             data_lastupdated_date=datetime.now(),
             metadata_lastupdated_date=datetime.now(),
-            geonode_id=new_geonode_id(),
+            geonode_id=new_geonode_id(DBSession),
             download_url="test",
             calculation_method_quality=5,
             scientific_quality=1,
@@ -278,7 +294,7 @@ def populate_notpreprocessed(type, unit):
         hazardunit=unit,
         data_lastupdated_date=datetime.now(),
         metadata_lastupdated_date=datetime.now(),
-        geonode_id=new_geonode_id(),
+        geonode_id=new_geonode_id(DBSession),
         download_url="test",
         calculation_method_quality=5,
         scientific_quality=1,
@@ -293,7 +309,7 @@ def populate_notpreprocessed(type, unit):
 
 def populate_preprocessed(type):
     hazardset_id = "preprocessed"
-    hazardtype = HazardType.get(type)
+    hazardtype = HazardType.get(DBSession, type)
 
     regions = DBSession.query(Region).all()
 
@@ -314,7 +330,7 @@ def populate_preprocessed(type):
         return_period=None,
         data_lastupdated_date=datetime.now(),
         metadata_lastupdated_date=datetime.now(),
-        geonode_id=new_geonode_id(),
+        geonode_id=new_geonode_id(DBSession),
         download_url="test",
         calculation_method_quality=5,
         scientific_quality=1,

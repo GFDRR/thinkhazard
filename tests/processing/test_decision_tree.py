@@ -18,13 +18,11 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 import unittest
-import transaction
 from datetime import datetime
 from shapely.geometry import Polygon
 from geoalchemy2.shape import from_shape
 
 from thinkhazard.models import (
-    DBSession,
     AdministrativeDivision,
     HazardLevel,
     HazardSet,
@@ -33,6 +31,8 @@ from thinkhazard.models import (
     Output,
 )
 
+from .. import DBSession
+from . import BaseTestCase
 from .common import new_geonode_id
 
 
@@ -43,7 +43,7 @@ def populate():
     DBSession.query(HazardSet).delete()
     populate_datamart()
     populate_processing()
-    transaction.commit()
+    DBSession.flush()
 
 
 # make dumb layers for hazardsets
@@ -387,6 +387,8 @@ def populate_processing():
     DBSession.flush()
 
 
-class TestDecisionTree(unittest.TestCase):
+class TestDecisionTree(BaseTestCase):
+
     def setUp(self):  # NOQA
+        super().setUp()
         populate()
