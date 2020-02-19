@@ -105,6 +105,10 @@ cleanall: clean
 		camptocamp/thinkhazard \
 		camptocamp/thinkhazard-builder
 
+.PHONY: .env
+.env:
+	rm -f .env
+	cat .env.tmpl | envsubst > .env
 
 #######################
 # Build docker images #
