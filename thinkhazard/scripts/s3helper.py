@@ -8,24 +8,9 @@ class S3Helper:
         self.s3_client = boto3.client('s3',
             **kwargs,
             config=Config(signature_version='s3v4'),
-            region_name='paris'
+            region_name='eu-west-1'
         )
 
-    def bucket_exists(self, bucket_name):
-        buckets = self.s3_client.list_buckets()
-        for bucket in buckets['Buckets']:
-            if bucket["Name"] == bucket_name:
-                return True
-        return False
-
-    def create_bucket(self, bucket_name):
-        try:
-            self.s3_client.create_bucket(Bucket=bucket_name)
-        except ClientError as e:
-            logging.error(e)
-            return False
-        return True
-        
     def upload_file(self, file_name, bucket, object_name=None):
         # If S3 object_name was not specified, use file_name
         if object_name is None:

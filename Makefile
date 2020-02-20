@@ -1,6 +1,7 @@
 
 AUTHUSERFILE ?= /var/www/vhosts/wb-thinkhazard/conf/.htpasswd
 DATA ?= world
+INI_FILE ?= development.ini
 
 -include local.mk
 

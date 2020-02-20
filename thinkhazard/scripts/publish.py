@@ -99,12 +99,8 @@ def main(argv=sys.argv):
 
     print("Load backup to S3 bucket")
     s3_helper = S3Helper(
-        endpoint_url=settings["aws_endpoint_url"],
         aws_access_key_id=settings["aws_access_key_id"],
         aws_secret_access_key=settings["aws_secret_access_key"])
-
-    if not s3_helper.bucket_exists(settings["aws_bucket_name"]):
-        s3_helper.create_bucket(settings["aws_bucket_name"])
 
     s3_helper.upload_file(backup_path, settings["aws_bucket_name"], backup_filename)
 
