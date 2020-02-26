@@ -99,10 +99,12 @@ def main(argv=sys.argv):
 
     print("Load backup to S3 bucket")
     s3_helper = S3Helper(
+        settings["aws_bucket_name"],
         aws_access_key_id=settings["aws_access_key_id"],
-        aws_secret_access_key=settings["aws_secret_access_key"])
+        aws_secret_access_key=settings["aws_secret_access_key"]
+    )
 
-    s3_helper.upload_file(backup_path, settings["aws_bucket_name"], backup_filename)
+    s3_helper.upload_file(backup_path, backup_filename)
 
     print("Drop database schemas datamart, processing from", public_database)
     call(["psql", "-d", public_database, "-c", "DROP SCHEMA IF EXISTS datamart, processing CASCADE;"])

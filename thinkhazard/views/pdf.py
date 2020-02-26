@@ -56,6 +56,9 @@ from sqlalchemy.orm import joinedload
 
 from geoalchemy2.functions import ST_Centroid
 
+from pyramid.paster import get_appsettings
+from thinkhazard.scripts.s3helper import S3Helper
+
 REPORT_ID_REGEX = re.compile("\d{4}_\d{2}_\w{8}(-\w{4}){3}-\w{12}?")
 
 logger = logging.getLogger(__name__)
@@ -105,7 +108,7 @@ def pdf_cover(request):
 """pdf_about: see index.py"""
 
 
-async def create_pdf(file_name: str, pages: List[str]):
+async def create_pdf(file_name: str, pages: List[str], object_name: str):
     """Create a PDF file with the given pages using pyppeteer.
     """
     chunks = []
@@ -136,6 +139,8 @@ async def create_pdf(file_name: str, pages: List[str]):
     output = open(file_name, "wb")
     writer.write(output)
     output.close()
+    s3_helper = _create_s3_helper()
+    s3_helper.upload_file(file_name, object_name)
 
 
 @view_config(route_name="create_pdf_report", request_method="POST")
@@ -145,11 +150,11 @@ def create_pdf_report(request):
     division_code = request.matchdict.get("divisioncode")
 
     base_path = request.registry.settings.get("pdf_archive_path")
-    report_id = _get_report_id(division_code, base_path)
+    object_name = "{:s}.pdf".format(division_code)
+    file_name = path.join(base_path, object_name)
 
-    file_name = _get_report_filename(base_path, division_code, report_id)
-
-    if not path.isfile(file_name):
+    s3_helper = _create_s3_helper()
+    if not s3_helper.download_file(object_name, file_name):
         categories = (
             request.dbsession.query(HazardCategory)
             .options(joinedload(HazardCategory.hazardtype))
@@ -173,34 +178,20 @@ def create_pdf_report(request):
                     **query_args,
                 )
             )
-        run(create_pdf(file_name, pages))
+        run(create_pdf(file_name, pages, object_name))
 
     response = FileResponse(file_name, request=request, content_type="application/pdf")
     response.headers["Content-Disposition"] = (
         'attachment; filename="ThinkHazard.pdf"'
     )
+    os.remove(file_name)
     return response
 
-
-def _get_report_id(division_code, base_path):
-    """Generate a random report id. Check that there is no existing file with
-    the generated id.
-    """
-    while True:
-        date = datetime.datetime.now()
-        year = date.strftime("%Y")
-        month = date.strftime("%m")
-        report_id = "_".join([year, month, str(uuid4())])
-        file_name = _get_report_filename(base_path, division_code, report_id)
-        if not (path.isfile(file_name)):
-            return report_id
-
-
-def _get_report_filename(base_path, division_code, report_id):
-    year, month, id = report_id.split("_")
-    return path.join(
-        base_path,
-        year,
-        month,
-        "{:s}-{:s}.pdf".format(division_code, id),
+def _create_s3_helper():
+    ini_file = 'c2c://' + os.environ['INI_FILE']
+    settings = get_appsettings(ini_file, name="admin")
+    return S3Helper(
+        settings["aws_bucket_name"],
+        aws_access_key_id=settings["aws_access_key_id"],
+        aws_secret_access_key=settings["aws_secret_access_key"]
     )
