@@ -3,6 +3,7 @@ import subprocess
 
 from pyramid.config import Configurator
 from pyramid.httpexceptions import HTTPFound
+from pyramid.tweens import MAIN
 from papyrus.renderers import GeoJSON
 
 from thinkhazard.settings import load_processing_settings, load_local_settings
@@ -32,7 +33,7 @@ def main(global_config, **settings):
     config.include("papyrus")
     config.include("thinkhazard.session")
 
-    config.add_tween("thinkhazard.tweens.notmodified_tween_factory")
+    config.add_tween("thinkhazard.tweens.notmodified_tween_factory", over=MAIN)
 
     config.add_static_view("static", "static", cache_max_age=3600)
     config.add_static_view("lib", settings.get("node_modules"), cache_max_age=86000)
