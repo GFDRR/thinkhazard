@@ -40,7 +40,7 @@ def index(request):
 @view_config(route_name="about", renderer="templates/about.jinja2")
 @view_config(route_name="pdf_about", renderer="templates/pdf_about.jinja2")
 def about(request):
-    publication_date = Publication.last()
+    publication_date = Publication.last(request.dbsession)
     return {
         "publication_date": (
             publication_date.date.strftime("%c") if publication_date else ""
