@@ -8,12 +8,6 @@ services:
       - '${PWD}/thinkhazard:/app/thinkhazard'
     command: 'pserve --reload c2c://development.ini -n public'
 
-  thinkhazard_admin:
-    network_mode: "host"
-    volumes:
-      - '${PWD}/thinkhazard:/app/thinkhazard'
-    command: 'pserve --reload c2c://development.ini -n admin'
-
   builder:
     image: camptocamp/thinkhazard-builder
     volumes:
