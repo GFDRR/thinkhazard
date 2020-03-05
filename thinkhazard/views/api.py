@@ -23,11 +23,14 @@ from pyramid.httpexceptions import HTTPNotFound
 from thinkhazard.models import HazardCategory, HazardType, HazardLevel
 from thinkhazard.views.admin import admindiv_hazardsets_hazardtype
 
+from ..analytics import GoogleAnalytics
+
 
 @view_config(route_name="api_hazardcategory", renderer="json")
 def api_hazardcategory(request):
     hazard_type = request.matchdict["hazard_type"]
     hazard_level = request.matchdict["hazard_level"]
+    GoogleAnalytics().hit(request.path)
 
     try:
         hazard_category = (
@@ -47,4 +50,5 @@ def api_hazardcategory(request):
 @view_config(route_name="api_admindiv_hazardsets_hazardtype", renderer="json")
 def api_admindiv_hazardsets_hazardtype(request):
     data = admindiv_hazardsets_hazardtype(request)
+    GoogleAnalytics().hit(request.path)
     return data
