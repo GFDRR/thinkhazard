@@ -2,6 +2,7 @@
 from contextlib import suppress
 from transaction.interfaces import NoTransaction
 
+
 def setup(env):
     request = env['request']
 
@@ -15,4 +16,3 @@ def setup(env):
     finally:
         with suppress(NoTransaction):
             request.tm.abort()
-
