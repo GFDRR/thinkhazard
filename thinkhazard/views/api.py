@@ -20,9 +20,8 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPNotFound
 
-from .admin import admindiv_hazardsets_hazardtype
-
-from ..models import DBSession, HazardCategory, HazardType, HazardLevel
+from thinkhazard.models import HazardCategory, HazardType, HazardLevel
+from thinkhazard.views.admin import admindiv_hazardsets_hazardtype
 
 
 @view_config(route_name="api_hazardcategory", renderer="json")
@@ -32,7 +31,7 @@ def api_hazardcategory(request):
 
     try:
         hazard_category = (
-            DBSession.query(HazardCategory)
+            request.dbsession.query(HazardCategory)
             .join(HazardType)
             .join(HazardLevel)
             .filter(HazardType.mnemonic == hazard_type)

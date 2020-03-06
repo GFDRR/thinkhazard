@@ -18,13 +18,11 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-import transaction
 import rasterio
 from sqlalchemy import func
 
-from ..models import DBSession, HazardSet, Layer
-
-from ..processing import BaseProcessor
+from thinkhazard.models import HazardSet, Layer
+from thinkhazard.processing import BaseProcessor
 
 
 logger = logging.getLogger(__name__)
@@ -46,18 +44,17 @@ class Completer(BaseProcessor):
         if self.force:
             try:
                 logger.info("Resetting all hazardsets to incomplete state")
-                hazardsets = DBSession.query(HazardSet)
-                if hazardset_id is not None:
-                    hazardsets = hazardsets.filter(HazardSet.id == hazardset_id)
-                hazardsets.update(
-                    {HazardSet.complete: False, HazardSet.processed: None}
-                )
-                transaction.commit()
+                with self.dbsession.begin_nested():
+                    hazardsets = self.dbsession.query(HazardSet)
+                    if hazardset_id is not None:
+                        hazardsets = hazardsets.filter(HazardSet.id == hazardset_id)
+                    hazardsets.update(
+                        {HazardSet.complete: False, HazardSet.processed: None}
+                    )
             except:
-                transaction.abort()
                 logger.error("Batch reset to incomplete state failed", exc_info=True)
 
-        ids = DBSession.query(HazardSet.id)
+        ids = self.dbsession.query(HazardSet.id)
         if not self.force:
             ids = ids.filter(HazardSet.complete.is_(False))
         if hazardset_id is not None:
@@ -67,22 +64,21 @@ class Completer(BaseProcessor):
             try:
                 # complete can be either True or an error message
                 complete = self.complete_hazardset(id[0])
-                if complete is not True:
-                    hazardset = DBSession.query(HazardSet).get(id)
-                    hazardset.complete_error = complete
-                    logger.warning(
-                        "Hazardset {} incomplete: {}".format(hazardset.id, complete)
-                    )
-                transaction.commit()
+                with self.dbsession.begin_nested():
+                    if complete is not True:
+                        hazardset = self.dbsession.query(HazardSet).get(id)
+                        hazardset.complete_error = complete
+                        logger.warning(
+                            "Hazardset {} incomplete: {}".format(hazardset.id, complete)
+                        )
             except Exception:
-                transaction.abort()
                 logger.error(
                     "An error occurred with hazardset {}".format(id), exc_info=True
                 )
 
     def complete_hazardset(self, hazardset_id, dry_run=False):
         logger.info("Completing hazardset {}".format(hazardset_id))
-        hazardset = DBSession.query(HazardSet).get(hazardset_id)
+        hazardset = self.dbsession.query(HazardSet).get(hazardset_id)
         if hazardset is None:
             raise Exception("Hazardset {} does not exist.".format(hazardset_id))
 
@@ -107,7 +103,7 @@ class Completer(BaseProcessor):
                 layers.append(layer)
             if "mask_return_period" in type_settings:
                 layer = (
-                    DBSession.query(Layer)
+                    self.dbsession.query(Layer)
                     .filter(Layer.hazardset_id == hazardset_id)
                     .filter(Layer.mask.is_(True))
                 )
@@ -145,7 +141,7 @@ class Completer(BaseProcessor):
                 return "Error opening layer {}".format(layer.name())
 
         stats = (
-            DBSession.query(
+            self.dbsession.query(
                 Layer.local,
                 func.min(Layer.data_lastupdated_date),
                 func.min(Layer.metadata_lastupdated_date),
@@ -169,7 +165,7 @@ class Completer(BaseProcessor):
         hazardset.scientific_quality = stat[4]
         hazardset.complete = True
         hazardset.complete_error = None
-        DBSession.flush()
+        self.dbsession.flush()
 
         logger.info("  Completed")
         return True

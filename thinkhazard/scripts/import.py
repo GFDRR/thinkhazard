@@ -27,10 +27,9 @@ from sqlalchemy import engine_from_config
 from pyramid.paster import setup_logging
 from pyramid.scripts.common import parse_vars
 
-from ..settings import load_full_settings
-
-from ..models import (
-    DBSession,
+from thinkhazard.session import get_session_factory
+from thinkhazard.settings import load_full_settings
+from thinkhazard.models import (
     AdministrativeDivision,
     ClimateChangeRecommendation,
     ClimateChangeRecAdministrativeDivisionAssociation as CcrAd,
@@ -68,10 +67,10 @@ def import_admindivs(argv=sys.argv):
     settings = load_full_settings(config_uri, options=options)
 
     engine = engine_from_config(settings, "sqlalchemy.")
-    DBSession.configure(bind=engine)
+    dbsession = get_session_factory(engine)()
 
-    connection = DBSession.bind.connect()
-    engine_url = DBSession.bind.url
+    connection = dbsession.bind.connect()
+    engine_url = dbsession.bind.url
 
     folder = options["folder"]
     for i in [0, 1, 2]:
@@ -215,7 +214,7 @@ DROP TABLE g2015_2014_2;
 
     print(
         "{} administrative divisions created".format(
-            DBSession.query(AdministrativeDivision).count()
+            dbsession.query(AdministrativeDivision).count()
         )
     )
 
@@ -229,12 +228,12 @@ def import_recommendations(argv=sys.argv):
     settings = load_full_settings(config_uri, options=options)
 
     engine = engine_from_config(settings, "sqlalchemy.")
-    DBSession.configure(bind=engine)
+    dbsession = get_session_factory(engine)()
 
     with transaction.manager:
 
-        DBSession.query(HazardCategoryTechnicalRecommendationAssociation).delete()
-        DBSession.query(TechnicalRecommendation).delete()
+        dbsession.query(HazardCategoryTechnicalRecommendationAssociation).delete()
+        dbsession.query(TechnicalRecommendation).delete()
 
         # First load general recommendations
 
@@ -243,7 +242,7 @@ def import_recommendations(argv=sys.argv):
             for row in recommendations:
 
                 hazardcategory = (
-                    DBSession.query(HazardCategory)
+                    dbsession.query(HazardCategory)
                     .join(HazardLevel)
                     .join(HazardType)
                     .filter(HazardLevel.mnemonic == row[1])
@@ -251,13 +250,13 @@ def import_recommendations(argv=sys.argv):
                     .one()
                 )
                 hazardcategory.general_recommendation = row[2]
-                DBSession.add(hazardcategory)
+                dbsession.add(hazardcategory)
 
         categories = []
         for type in ["EQ", "FL", "CY", "TS", "CF", "VA", "DG"]:
             for level in ["HIG", "MED", "LOW", "VLO"]:
                 hazardcategory = (
-                    DBSession.query(HazardCategory)
+                    dbsession.query(HazardCategory)
                     .join(HazardLevel)
                     .join(HazardType)
                     .filter(HazardLevel.mnemonic == level)
@@ -284,11 +283,11 @@ def import_recommendations(argv=sys.argv):
                         association = hctra(order=value)
                         association.hazardcategory = categories[col_index - 1]
                         associations.append(association)
-                DBSession.add(technical_rec)
+                dbsession.add(technical_rec)
 
         # Climate change recommendations
 
-        DBSession.query(ClimateChangeRecommendation).delete()
+        dbsession.query(ClimateChangeRecommendation).delete()
 
         # hazard types and corresponding columns
         hazard_types = [
@@ -307,7 +306,7 @@ def import_recommendations(argv=sys.argv):
             next(countries, None)  # skip the headers
             for row in countries:
                 division = (
-                    DBSession.query(AdministrativeDivision)
+                    dbsession.query(AdministrativeDivision)
                     .filter(AdministrativeDivision.code == row[1])
                     .one_or_none()
                 )
@@ -321,7 +320,7 @@ def import_recommendations(argv=sys.argv):
                         continue
 
                     climate_rec = (
-                        DBSession.query(ClimateChangeRecommendation)
+                        dbsession.query(ClimateChangeRecommendation)
                         .filter(ClimateChangeRecommendation.text == text)
                         .filter(ClimateChangeRecommendation.hazardtype == hazardtype)
                         .first()
@@ -330,7 +329,7 @@ def import_recommendations(argv=sys.argv):
                         climate_rec = ClimateChangeRecommendation()
                         climate_rec.text = text
                         climate_rec.hazardtype = hazardtype
-                        DBSession.add(climate_rec)
+                        dbsession.add(climate_rec)
 
                     association = CcrAd(
                         administrativedivision=division, hazardtype=hazardtype
@@ -348,12 +347,12 @@ def import_contacts(argv=sys.argv):
     settings = load_full_settings(config_uri, options=options)
 
     engine = engine_from_config(settings, "sqlalchemy.")
-    DBSession.configure(bind=engine)
+    dbsession = get_session_factory(engine)()
 
     with transaction.manager:
 
-        DBSession.query(CAdHt).delete()
-        DBSession.query(Contact).delete()
+        dbsession.query(CAdHt).delete()
+        dbsession.query(Contact).delete()
 
         """ Columns are:
          -  0
@@ -388,7 +387,7 @@ def import_contacts(argv=sys.argv):
                 if not row[2]:
                     continue
                 division = (
-                    DBSession.query(AdministrativeDivision)
+                    dbsession.query(AdministrativeDivision)
                     .filter(AdministrativeDivision.code == int(row[2]))
                     .one_or_none()
                 )
@@ -396,7 +395,7 @@ def import_contacts(argv=sys.argv):
                     continue
 
                 hazardtype = (
-                    DBSession.query(HazardType)
+                    dbsession.query(HazardType)
                     .filter(HazardType.mnemonic == str(row[8]))
                     .one_or_none()
                 )
@@ -413,7 +412,7 @@ def import_contacts(argv=sys.argv):
                         continue
 
                     contact = (
-                        DBSession.query(Contact)
+                        dbsession.query(Contact)
                         .filter(Contact.name == name)
                         .filter(Contact.url == url)
                         .filter(Contact.phone == phone)
@@ -427,11 +426,11 @@ def import_contacts(argv=sys.argv):
                         contact.url = url
                         contact.phone = phone
                         contact.email = email
-                        DBSession.add(contact)
+                        dbsession.add(contact)
 
                     association = CAdHt(
                         contact=contact,
                         administrativedivision=division,
                         hazardtype=hazardtype,
                     )
-                    DBSession.add(association)
+                    dbsession.add(association)

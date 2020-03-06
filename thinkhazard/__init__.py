@@ -3,11 +3,10 @@ import subprocess
 
 from pyramid.config import Configurator
 from pyramid.httpexceptions import HTTPFound
-from sqlalchemy import engine_from_config
+from pyramid.tweens import MAIN
 from papyrus.renderers import GeoJSON
 
-from .settings import load_processing_settings, load_local_settings
-from .models import DBSession, Base
+from thinkhazard.settings import load_processing_settings, load_local_settings
 
 lock_file = os.path.join(os.path.dirname(__file__), "maintenance.lock")
 
@@ -28,16 +27,13 @@ def main(global_config, **settings):
     load_local_settings(settings, settings["appname"])
     settings.update({"version": version})
 
-    engine = engine_from_config(settings, "sqlalchemy.")
-    DBSession.configure(bind=engine)
-    Base.metadata.bind = engine
-
     config = Configurator(settings=settings)
 
     config.include("pyramid_jinja2")
     config.include("papyrus")
+    config.include("thinkhazard.session")
 
-    config.add_tween("thinkhazard.tweens.notmodified_tween_factory")
+    config.add_tween("thinkhazard.tweens.notmodified_tween_factory", over=MAIN)
 
     config.add_static_view("static", "static", cache_max_age=3600)
     config.add_static_view("lib", settings.get("node_modules"), cache_max_age=86000)

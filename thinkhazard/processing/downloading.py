@@ -25,9 +25,8 @@ from urllib.parse import urlunsplit
 import requests
 import transaction
 
-from ..models import DBSession, Layer
-
-from . import BaseProcessor
+from thinkhazard.models import Layer
+from thinkhazard.processing import BaseProcessor
 
 
 logger = logging.getLogger(__name__)
@@ -66,8 +65,8 @@ class Downloader(BaseProcessor):
         if self.force or clear_cache:
             try:
                 logger.info("Resetting all layers to not downloaded state.")
-                DBSession.query(Layer).update({Layer.downloaded: False})
-                DBSession.flush()
+                self.dbsession.query(Layer).update({Layer.downloaded: False})
+                self.dbsession.flush()
             except:
                 transaction.abort()
                 raise
@@ -75,7 +74,7 @@ class Downloader(BaseProcessor):
         if clear_cache:
             self.clear_cache()
 
-        ids = DBSession.query(Layer.geonode_id)
+        ids = self.dbsession.query(Layer.geonode_id)
 
         if not self.force:
             ids = ids.filter(Layer.downloaded.is_(False))
@@ -92,7 +91,7 @@ class Downloader(BaseProcessor):
                 logger.error(traceback.format_exc())
 
     def download_layer(self, id):
-        layer = DBSession.query(Layer).get(id)
+        layer = self.dbsession.query(Layer).get(id)
         if layer is None:
             raise Exception("Layer {} does not exist.".format(id))
 
@@ -147,4 +146,4 @@ class Downloader(BaseProcessor):
 
         layer.downloaded = os.path.isfile(path)
 
-        DBSession.flush()
+        self.dbsession.flush()

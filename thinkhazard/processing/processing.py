@@ -19,7 +19,6 @@
 
 import logging
 import traceback
-import transaction
 import datetime
 import rasterio
 from rasterio import features
@@ -28,8 +27,7 @@ from shapely.geometry import box
 from geoalchemy2.shape import to_shape
 from sqlalchemy import func
 
-from ..models import (
-    DBSession,
+from thinkhazard.models import (
     AdministrativeDivision,
     AdminLevelType,
     HazardLevel,
@@ -38,8 +36,7 @@ from ..models import (
     Output,
     Region,
 )
-
-from . import BaseProcessor
+from thinkhazard.processing import BaseProcessor
 
 
 logger = logging.getLogger(__name__)
@@ -63,7 +60,7 @@ class Processor(BaseProcessor):
         return parser
 
     def do_execute(self, hazardset_id=None):
-        ids = DBSession.query(HazardSet.id).filter(HazardSet.complete.is_(True))
+        ids = self.dbsession.query(HazardSet.id).filter(HazardSet.complete.is_(True))
         if hazardset_id is not None:
             ids = ids.filter(HazardSet.id == hazardset_id)
         if not self.force:
@@ -75,14 +72,13 @@ class Processor(BaseProcessor):
         for id in ids:
             logger.info(id[0])
             try:
-                self.process_hazardset(id[0])
-                transaction.commit()
+                with self.dbsession.begin_nested():
+                    self.process_hazardset(id[0])
             except Exception:
-                transaction.abort()
                 logger.error(traceback.format_exc())
 
     def process_hazardset(self, hazardset_id):
-        hazardset = DBSession.query(HazardSet).get(hazardset_id)
+        hazardset = self.dbsession.query(HazardSet).get(hazardset_id)
         if hazardset is None:
             raise ProcessException("Hazardset {} does not exist.".format(hazardset_id))
 
@@ -97,8 +93,8 @@ class Processor(BaseProcessor):
                 )
 
         logger.info("  Cleaning previous outputs")
-        DBSession.query(Output).filter(Output.hazardset_id == hazardset.id).delete()
-        DBSession.flush()
+        self.dbsession.query(Output).filter(Output.hazardset_id == hazardset.id).delete()
+        self.dbsession.flush()
 
         self.type_settings = self.settings["hazard_types"][
             hazardset.hazardtype.mnemonic
@@ -115,7 +111,7 @@ class Processor(BaseProcessor):
                 if "values" in list(self.type_settings.keys()):
                     # preprocessed layer
                     layer = (
-                        DBSession.query(Layer)
+                        self.dbsession.query(Layer)
                         .filter(Layer.hazardset_id == hazardset.id)
                         .one()
                     )
@@ -126,9 +122,9 @@ class Processor(BaseProcessor):
 
                 else:
                     for level in ("HIG", "MED", "LOW"):
-                        hazardlevel = HazardLevel.get(level)
+                        hazardlevel = HazardLevel.get(self.dbsession, level)
                         layer = (
-                            DBSession.query(Layer)
+                            self.dbsession.query(Layer)
                             .filter(Layer.hazardset_id == hazardset.id)
                             .filter(Layer.hazardlevel_id == hazardlevel.id)
                             .one()
@@ -139,7 +135,7 @@ class Processor(BaseProcessor):
                         self.readers[level] = reader
                     if "mask_return_period" in self.type_settings:
                         layer = (
-                            DBSession.query(Layer)
+                            self.dbsession.query(Layer)
                             .filter(Layer.hazardset_id == hazardset.id)
                             .filter(Layer.mask.is_(True))
                             .one()
@@ -152,7 +148,7 @@ class Processor(BaseProcessor):
                 if error:
                     hazardset.processing_error = error
                 if outputs:
-                    DBSession.add_all(outputs)
+                    self.dbsession.add_all(outputs)
                 else:
                     return
 
@@ -171,10 +167,10 @@ class Processor(BaseProcessor):
                 )
             )
 
-        DBSession.flush()
+        self.dbsession.flush()
 
     def create_outputs(self, hazardset):
-        adminlevel_reg = AdminLevelType.get("REG")
+        adminlevel_reg = AdminLevelType.get(self.dbsession, "REG")
 
         self.bbox = None
         for reader in self.readers.values():
@@ -195,7 +191,7 @@ class Processor(BaseProcessor):
         )
 
         admindivs = (
-            DBSession.query(AdministrativeDivision)
+            self.dbsession.query(AdministrativeDivision)
             .filter(AdministrativeDivision.leveltype_id == adminlevel_reg.id)
             .filter(
                 func.ST_Intersects(
@@ -256,7 +252,7 @@ class Processor(BaseProcessor):
                     outputs.append(output)
 
                 # Remove admindiv from memory
-                DBSession.expunge(admindiv)
+                self.dbsession.expunge(admindiv)
 
                 percent = int(100.0 * current / total)
                 if percent % 10 == 0 and percent != last_percent:
@@ -295,7 +291,7 @@ class Processor(BaseProcessor):
                 continue
 
             for level in ("HIG", "MED", "LOW", "VLO"):
-                level_obj = HazardLevel.get(level)
+                level_obj = HazardLevel.get(self.dbsession, level)
                 if level_obj <= hazardlevel:
                     break
 
@@ -309,7 +305,7 @@ class Processor(BaseProcessor):
         return hazardlevel
 
     def notpreprocessed_hazardlevel(self, hazardtype, geometry):
-        level_vlo = HazardLevel.get("VLO")
+        level_vlo = HazardLevel.get(self.dbsession, "VLO")
 
         hazardlevel = None
 

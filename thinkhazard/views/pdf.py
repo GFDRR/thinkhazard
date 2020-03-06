@@ -44,8 +44,7 @@ from .report import (
     get_parents,
 )
 
-from ..models import (
-    DBSession,
+from thinkhazard.models import (
     AdministrativeDivision,
     HazardLevel,
     HazardCategory,
@@ -68,8 +67,8 @@ def pdf_cover(request):
         division_code = request.matchdict.get("divisioncode")
     except:
         raise HTTPBadRequest(detail="incorrect value for parameter " '"divisioncode"')
-    division = get_division(division_code)
-    hazard_types = get_hazard_types(division_code)
+    division = get_division(request, division_code)
+    hazard_types = get_hazard_types(request, division_code)
 
     hazards_sorted = sorted(hazard_types, key=lambda a: a["hazardlevel"].order)
 
@@ -82,7 +81,7 @@ def pdf_cover(request):
         )
 
     lon, lat = (
-        DBSession.query(
+        request.dbsession.query(
             func.ST_X(ST_Centroid(AdministrativeDivision.geom)),
             func.ST_Y(ST_Centroid(AdministrativeDivision.geom)),
         )
@@ -152,7 +151,7 @@ def create_pdf_report(request):
 
     if not path.isfile(file_name):
         categories = (
-            DBSession.query(HazardCategory)
+            request.dbsession.query(HazardCategory)
             .options(joinedload(HazardCategory.hazardtype))
             .join(HazardCategoryAdministrativeDivisionAssociation)
             .join(AdministrativeDivision)

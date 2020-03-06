@@ -20,12 +20,13 @@
 from . import BaseTestCase
 
 from thinkhazard.models import (
-    DBSession,
     AdminLevelType,
     AdministrativeDivision,
     ClimateChangeRecommendation,
     TechnicalRecommendation,
 )
+
+from .. import DBSession
 
 
 class TestAdminFunction(BaseTestCase):

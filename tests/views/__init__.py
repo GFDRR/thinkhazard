@@ -19,13 +19,13 @@
 
 import unittest
 import os
-import transaction
 from datetime import datetime
 
+from pyramid import testing
 from pyramid.paster import bootstrap
+from webtest import TestApp
 
 from thinkhazard.models import (
-    DBSession,
     AdministrativeDivision,
     ClimateChangeRecommendation,
     ClimateChangeRecAdministrativeDivisionAssociation as CcrAd,
@@ -47,6 +47,32 @@ from thinkhazard.models import (
 
 from shapely.geometry import MultiPolygon, Polygon
 from geoalchemy2.shape import from_shape
+
+from .. import DBSession, settings
+
+
+class BaseTestCase(unittest.TestCase):
+
+    app_name = "public"
+
+    @classmethod
+    def setUpClass(cls):
+        populate_db()
+        env = bootstrap('c2c://tests.ini#{}'.format(cls.app_name))
+        config = testing.setUp(registry=env["registry"])
+        config.add_request_method(lambda request: DBSession, "dbsession", reify=True)
+        app = config.make_wsgi_app()
+        cls.testapp = TestApp(app)
+
+    @classmethod
+    def tearDownClass(cls):
+        del cls.testapp
+
+    def setUp(self):  # NOQA
+        self.t = DBSession.begin_nested()
+
+    def tearDown(self):  # NOQA
+        self.t.rollback()
 
 
 def populate_db():
@@ -181,10 +207,10 @@ def populate_db():
     #
     # region_3 = admin_div_12
 
-    category_eq_hig = HazardCategory.get("EQ", "HIG")
+    category_eq_hig = HazardCategory.get(DBSession, "EQ", "HIG")
     category_eq_hig.general_recommendation = "General recommendation for EQ HIG"
 
-    category_fl_hig = HazardCategory.get("FL", "HIG")
+    category_fl_hig = HazardCategory.get(DBSession, "FL", "HIG")
 
     # admin_div_31 has (EQ, HIGH)
     association = HazardCategoryAdministrativeDivisionAssociation(
@@ -230,18 +256,18 @@ def populate_db():
     )
 
     climate_rec = ClimateChangeRecommendation(
-        text="Climate change recommendation", hazardtype=HazardType.get("EQ")
+        text="Climate change recommendation", hazardtype=HazardType.get(DBSession, "EQ")
     )
     climate_rec.associations.append(
-        CcrAd(administrativedivision=admin_div_10, hazardtype=HazardType.get("EQ"))
+        CcrAd(administrativedivision=admin_div_10, hazardtype=HazardType.get(DBSession, "EQ"))
     )
     DBSession.add(climate_rec)
 
     climate_rec = ClimateChangeRecommendation(
-        text="Climate change recommendation 2", hazardtype=HazardType.get("EQ")
+        text="Climate change recommendation 2", hazardtype=HazardType.get(DBSession, "EQ")
     )
     climate_rec.associations.append(
-        CcrAd(administrativedivision=admin_div_11, hazardtype=HazardType.get("EQ"))
+        CcrAd(administrativedivision=admin_div_11, hazardtype=HazardType.get(DBSession, "EQ"))
     )
     DBSession.add(climate_rec)
 
@@ -264,7 +290,7 @@ def populate_db():
     technical_rec.hazardcategory_associations.append(association)
     DBSession.add(technical_rec)
 
-    category_fl_med = HazardCategory.get("FL", "MED")
+    category_fl_med = HazardCategory.get(DBSession, "FL", "MED")
     category_fl_med.general_recommendation = "General recommendation for FL MED"
 
     admin_div_31.hazardcategories.append(
@@ -338,22 +364,6 @@ def populate_db():
     association.contact = contact2
     DBSession.add(association)
 
-    Publication.new()
+    Publication.new(DBSession)
 
-    transaction.commit()
-
-
-class BaseTestCase(unittest.TestCase):
-
-    app_name = "public"
-
-    def setUp(self):  # NOQA
-        populate_db()
-
-        from webtest import TestApp
-
-        env = bootstrap('c2c://tests.ini#{}'.format(self.app_name))
-        self.testapp = TestApp(env['app'])
-
-    def tearDown(self):  # NOQA
-        del self.testapp
+    DBSession.flush()

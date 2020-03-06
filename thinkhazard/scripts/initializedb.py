@@ -27,11 +27,10 @@ from alembic.config import Config
 from alembic import command
 
 from thinkhazard.scripts import wait_for_db
-
-from ..settings import load_full_settings
-from ..models import (
+from thinkhazard.session import get_session_factory
+from thinkhazard.settings import load_full_settings
+from thinkhazard.models import (
     Base,
-    DBSession,
     AdminLevelType,
     HazardCategory,
     HazardLevel,
@@ -85,9 +84,9 @@ def initdb(connection, drop_all=False):
 
     Base.metadata.create_all(connection)
 
-    DBSession.configure(bind=connection)
-    populate_datamart()
-    DBSession.flush()
+    dbsession = get_session_factory(connection)()
+    populate_datamart(dbsession)
+    dbsession.commit()
 
 
 def schema_exists(connection, schema_name):
@@ -103,7 +102,7 @@ WHERE schema_name = '{}';
     return row[0] == 1
 
 
-def populate_datamart():
+def populate_datamart(dbsession):
     # AdminLevelType
     for i in [
         ("COU", "Country", "Administrative division of level 0"),
@@ -112,7 +111,7 @@ def populate_datamart():
     ]:
         r = AdminLevelType()
         r.mnemonic, r.title, r.description = i
-        DBSession.add(r)
+        dbsession.add(r)
 
     # HazardLevel
     for i in [
@@ -123,7 +122,7 @@ def populate_datamart():
     ]:
         r = HazardLevel()
         r.mnemonic, r.title, r.order = i
-        DBSession.add(r)
+        dbsession.add(r)
 
     # HazardType
     for i in [
@@ -142,11 +141,11 @@ def populate_datamart():
     ]:
         r = HazardType()
         r.mnemonic, r.title, r.order = i
-        DBSession.add(r)
+        dbsession.add(r)
 
     # HazardCategory
-    hazardlevels = DBSession.query(HazardLevel)
-    for hazardtype in DBSession.query(HazardType):
+    hazardlevels = dbsession.query(HazardLevel)
+    for hazardtype in dbsession.query(HazardType):
         for hazardlevel in hazardlevels:
             r = HazardCategory()
             r.hazardtype = hazardtype
@@ -154,4 +153,4 @@ def populate_datamart():
             r.general_recommendation = "General recommendation for {} {}".format(
                 hazardtype.mnemonic, hazardlevel.mnemonic
             )
-            DBSession.add(r)
+            dbsession.add(r)

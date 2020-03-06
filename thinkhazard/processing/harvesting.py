@@ -25,13 +25,11 @@ import httplib2
 from urllib.parse import urlencode
 from urllib.parse import urlunsplit
 import json
-import transaction
 import csv
 from datetime import datetime
 import pytz
 
-from ..models import (
-    DBSession,
+from thinkhazard.models import (
     HazardLevel,
     HazardSet,
     HazardType,
@@ -43,8 +41,7 @@ from ..models import (
     HazardTypeFurtherResourceAssociation,
     Harvesting,
 )
-
-from . import BaseProcessor
+from thinkhazard.processing import BaseProcessor
 
 
 logger = logging.getLogger(__name__)
@@ -98,7 +95,7 @@ class Harvester(BaseProcessor):
             os.path.getmtime(setting_path)
         ).replace(tzinfo=pytz.utc)
 
-        last_complete_harvesting_date = Harvesting.last_complete_date()
+        last_complete_harvesting_date = Harvesting.last_complete_date(self.dbsession)
         if (
             last_complete_harvesting_date is None
             or settings_mtime > last_complete_harvesting_date
@@ -127,8 +124,7 @@ class Harvester(BaseProcessor):
         except Exception:
             logger.error(traceback.format_exc())
 
-        Harvesting.new(complete=(self.force is True and hazard_type is None))
-        transaction.commit()
+        Harvesting.new(self.dbsession, complete=(self.force is True and hazard_type is None))
 
     def fetch(self, category, params={}, order_by="title"):
         geonode = self.settings["geonode"]
@@ -155,7 +151,7 @@ class Harvester(BaseProcessor):
     def hazardtype_from_geonode(self, geonode_name):
         for mnemonic, type_settings in self.settings["hazard_types"].items():
             if type_settings["hazard_type"] == geonode_name:
-                return HazardType.get(str(mnemonic))
+                return HazardType.get(self.dbsession, str(mnemonic))
         return None
 
     def check_hazard_type(self, object):
@@ -173,10 +169,9 @@ class Harvester(BaseProcessor):
             rows = csv.reader(csvfile, delimiter=",")
             for row in rows:
                 try:
-                    self.create_region_admindiv_association(row)
-                    transaction.commit()
+                    with self.dbsession.begin_nested():
+                        self.create_region_admindiv_association(row)
                 except Exception:
-                    transaction.abort()
                     logger.error(
                         "Linking region {} & admin div {} failed".format(row[1], row[2])
                     )
@@ -186,7 +181,7 @@ class Harvester(BaseProcessor):
         # row[0] is geonode region's name_en (useless here)
         # row[1] is geonode region id
         # row[2] is GAUL administrative division **code** (not id!)
-        region = DBSession.query(Region).filter(Region.id == row[1]).one_or_none()
+        region = self.dbsession.query(Region).filter(Region.id == row[1]).one_or_none()
 
         if region is None:
             logger.warning(
@@ -195,7 +190,7 @@ class Harvester(BaseProcessor):
             return False
 
         admindiv = (
-            DBSession.query(AdministrativeDivision)
+            self.dbsession.query(AdministrativeDivision)
             .filter(AdministrativeDivision.code == row[2])
             .one_or_none()
         )
@@ -207,19 +202,18 @@ class Harvester(BaseProcessor):
             return False
 
         region.administrativedivisions.append(admindiv)
-        DBSession.flush()
+        self.dbsession.flush()
 
     def harvest_regions(self):
         regions = self.fetch("regions", order_by="name")
         for region in regions:
             try:
-                self.harvest_region(region)
-                transaction.commit()
+                with self.dbsession.begin_nested():
+                    self.harvest_region(region)
             except Exception as e:
-                transaction.abort()
                 logger.error(
                     "Region {} raises an exception :\n{}".format(
-                        region["name"], e.message
+                        region["name"], str(e)
                     )
                 )
                 logger.error(traceback.format_exc())
@@ -229,7 +223,7 @@ class Harvester(BaseProcessor):
         name = object["name_en"]
         id = object["id"]
 
-        region = DBSession.query(Region).filter(Region.id == id).one_or_none()
+        region = self.dbsession.query(Region).filter(Region.id == id).one_or_none()
 
         if region is None:
             region = Region()
@@ -243,20 +237,19 @@ class Harvester(BaseProcessor):
 
         region.name = name
         region.level = object["level"]
-        DBSession.add(region)
-        DBSession.flush()
+        self.dbsession.add(region)
+        self.dbsession.flush()
 
     def harvest_documents(self):
         documents = self.fetch("documents")
         for doc in documents:
             try:
-                self.harvest_document(doc)
-                transaction.commit()
+                with self.dbsession.begin_nested():
+                    self.harvest_document(doc)
             except Exception as e:
-                transaction.abort()
                 logger.error(
                     "Document {} raises an exception :\n{}".format(
-                        doc["title"], e.message
+                        doc["title"], str(e)
                     )
                 )
                 logger.error(traceback.format_exc())
@@ -300,14 +293,14 @@ class Harvester(BaseProcessor):
         if len(region_ids) == 0:
             regions = []
         else:
-            regions = DBSession.query(Region).filter(Region.id.in_(region_ids)).all()
+            regions = self.dbsession.query(Region).filter(Region.id.in_(region_ids)).all()
 
         hazardtypes = self.collect_hazard_types(o)
         if not hazardtypes:
             return False
 
         furtherresource = (
-            DBSession.query(FurtherResource)
+            self.dbsession.query(FurtherResource)
             .filter(FurtherResource.id == id)
             .one_or_none()
         )
@@ -320,12 +313,12 @@ class Harvester(BaseProcessor):
             logger.info("  Updating FurtherResource")
             # drop existing relationships
             assocs = (
-                DBSession.query(HazardTypeFurtherResourceAssociation)
+                self.dbsession.query(HazardTypeFurtherResourceAssociation)
                 .filter(HazardTypeFurtherResourceAssociation.furtherresource_id == id)
                 .all()
             )
             for a in assocs:
-                DBSession.delete(a)
+                self.dbsession.delete(a)
 
         furtherresource.text = title
         for region in regions:
@@ -340,8 +333,8 @@ class Harvester(BaseProcessor):
                 )
                 furtherresource.hazardtype_associations.append(association)
 
-        DBSession.add(furtherresource)
-        DBSession.flush()
+        self.dbsession.add(furtherresource)
+        self.dbsession.flush()
 
     def collect_hazard_types(self, object):
         # handle documents linked to several hazard types
@@ -379,15 +372,11 @@ class Harvester(BaseProcessor):
 
     def harvest_layers(self, hazard_type=None):
         if self.force:
-            try:
-                logger.info("Cleaning previous data")
-                DBSession.query(Output).delete()
-                DBSession.query(Layer).delete()
-                DBSession.query(HazardSet).delete()
-                transaction.commit()
-            except:
-                transaction.abort()
-                raise
+            logger.info("Cleaning previous data")
+            self.dbsession.query(Output).delete()
+            self.dbsession.query(Layer).delete()
+            self.dbsession.query(HazardSet).delete()
+            self.dbsession.flush()
 
         params = {}
         if hazard_type is not None:
@@ -395,13 +384,12 @@ class Harvester(BaseProcessor):
         layers = self.fetch("layers", params)
         for layer in layers:
             try:
-                self.harvest_layer(layer)
-                transaction.commit()
+                with self.dbsession.begin_nested():
+                    self.harvest_layer(layer)
             except Exception as e:
-                transaction.abort()
                 logger.error(
                     "Layer {} raises an exception :\n{}".format(
-                        layer["title"], e.message
+                        layer["title"], str(e)
                     )
                 )
                 logger.error(traceback.format_exc())
@@ -444,7 +432,7 @@ class Harvester(BaseProcessor):
         if len(region_ids) == 0:
             regions = []
         else:
-            regions = DBSession.query(Region).filter(Region.id.in_(region_ids)).all()
+            regions = self.dbsession.query(Region).filter(Region.id.in_(region_ids)).all()
 
         hazardset_id = o['hazard_set']
         if not hazardset_id:
@@ -474,7 +462,7 @@ class Harvester(BaseProcessor):
             hazardlevel = None
             for level in ("LOW", "MED", "HIG"):
                 if between(hazard_period, type_settings["return_periods"][level]):
-                    hazardlevel = HazardLevel.get(level)
+                    hazardlevel = HazardLevel.get(self.dbsession, level)
                     break
 
             if "mask_return_period" in type_settings and between(
@@ -524,10 +512,10 @@ class Harvester(BaseProcessor):
             warning(o, 'download_url is empty')
             return False
 
-        hazardset = DBSession.query(HazardSet).get(hazardset_id)
+        hazardset = self.dbsession.query(HazardSet).get(hazardset_id)
 
         # Test if another layer exists for same hazardlevel (or mask)
-        layer = DBSession.query(Layer) \
+        layer = self.dbsession.query(Layer) \
             .filter(Layer.geonode_id != o['id']) \
             .filter(Layer.hazardset_id == hazardset_id)
         if hazardlevel is not None:
@@ -546,7 +534,7 @@ class Harvester(BaseProcessor):
             logger.info(
                 "  Supersede longer return period {}".format(layer.return_period)
             )
-            DBSession.delete(layer)
+            self.dbsession.delete(layer)
             hazardset.complete = False
             hazardset.processed = None
 
@@ -556,7 +544,7 @@ class Harvester(BaseProcessor):
             hazardset = HazardSet()
             hazardset.id = hazardset_id
             hazardset.hazardtype = hazardtype
-            DBSession.add(hazardset)
+            self.dbsession.add(hazardset)
 
         # get detail_url and owner_organization from last updated layer
         geonode = self.settings["geonode"]
@@ -568,9 +556,9 @@ class Harvester(BaseProcessor):
             hazardset.owner_organization = o['owner']['organization']
         if not mask:
             hazardset.regions = regions
-            DBSession.add(hazardset)
+            self.dbsession.add(hazardset)
 
-        layer = DBSession.query(Layer).get(o['id'])
+        layer = self.dbsession.query(Layer).get(o['id'])
         if layer is None:
             logger.info("  Create new Layer {}".format(title))
             layer = Layer()
@@ -620,5 +608,5 @@ class Harvester(BaseProcessor):
         layer.scientific_quality = scientific_quality
         layer.local = local
 
-        DBSession.flush()
+        self.dbsession.flush()
         return True

@@ -18,9 +18,9 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-from ..models import DBSession, AdminLevelType
 
-from . import BaseProcessor
+from thinkhazard.models import AdminLevelType
+from thinkhazard.processing import BaseProcessor
 
 
 logger = logging.getLogger(__name__)
@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 class DecisionMaker(BaseProcessor):
     def do_execute(self, hazardset_id=None):
-        connection = DBSession.bind.connect()
+        connection = self.dbsession.bind.connect()
         trans = connection.begin()
         try:
             logger.info("Purging previous relations")

@@ -16,6 +16,4 @@ services:
       - PGPORT=5432
       - PGUSER=thinkhazard
       - PGPASSWORD=thinkhazard
-      - PGDATABASE
-      - PGDATABASE_ADMIN
       - INI_FILE

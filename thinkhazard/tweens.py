@@ -32,9 +32,10 @@ def notmodified_tween_factory(handler, registry):
     if registry.settings["appname"] == "public":
 
         gmt = pytz.timezone("GMT")
-        publication_date = gmt.localize(Publication.last().date)
 
         def notmodified_tween(request):
+            publication_date = gmt.localize(Publication.last(request.dbsession).date)
+
             if os.path.isfile(lock_file):
                 response = Response(render("templates/maintenance.jinja2", {}, request))
                 response.status_code = 503

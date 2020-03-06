@@ -18,25 +18,16 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 import unittest
-import transaction
 from datetime import datetime, timedelta
 from mock import Mock, patch, mock_open
 import httplib2
 import json
 
-from thinkhazard.models import DBSession, FurtherResource, HazardSet, Layer, Region
+from thinkhazard.models import FurtherResource, HazardSet, Layer, Region
 from thinkhazard.processing.harvesting import Harvester
 
-from .. import settings
-from . import populate_datamart
-
-
-def populate():
-    DBSession.query(Layer).delete()
-    DBSession.query(HazardSet).delete()
-    DBSession.query(Region).delete()
-    populate_datamart()
-    transaction.commit()
+from .. import DBSession, settings
+from . import BaseTestCase, populate_datamart
 
 
 date_str = datetime.utcnow().isoformat()
@@ -82,9 +73,7 @@ def layer(value={}):
 
 
 @patch("thinkhazard.processing.harvesting.open", mock_open())
-class TestHarvesting(unittest.TestCase):
-    def setUp(self):  # NOQA
-        populate()
+class TestHarvesting(BaseTestCase):
 
     @patch.object(Harvester, "do_execute")
     def test_cli(self, mock):
@@ -95,7 +84,9 @@ class TestHarvesting(unittest.TestCase):
     @patch.object(Harvester, "fetch", return_value=[])
     def test_force(self, fetch_mock):
         """Test harvester in force mode"""
-        Harvester().execute(settings, force=True)
+        harvester = Harvester()
+        harvester.dbsession = DBSession
+        harvester.execute(settings, force=True)
 
     @patch.object(
         Harvester,
@@ -107,6 +98,7 @@ class TestHarvesting(unittest.TestCase):
         fetch_mock
         harvester = Harvester()
         harvester.settings = settings
+        harvester.dbsession = DBSession
 
         harvester.harvest_regions()
 
@@ -120,6 +112,7 @@ class TestHarvesting(unittest.TestCase):
         """Valid layer must be added to database"""
         harvester = Harvester()
         harvester.settings = settings
+        harvester.dbsession = DBSession
 
         harvester.harvest_layers()
 
@@ -153,6 +146,7 @@ class TestHarvesting(unittest.TestCase):
         """Valid document must be added to database"""
         harvester = Harvester()
         harvester.settings = settings
+        harvester.dbsession = DBSession
 
         harvester.harvest_documents()
 
@@ -185,6 +179,7 @@ class TestHarvesting(unittest.TestCase):
         """New data_update_date must reset hazarset.complete and processed"""
         harvester = Harvester()
         harvester.settings = settings
+        harvester.dbsession = DBSession
         harvester.harvest_layers()
 
         hazardset = DBSession.query(HazardSet).one()
@@ -226,6 +221,7 @@ class TestHarvesting(unittest.TestCase):
         """New metadata_update_date must reset hazarset.complete"""
         harvester = Harvester()
         harvester.settings = settings
+        harvester.dbsession = DBSession
         harvester.harvest_layers()
 
         hazardset = DBSession.query(HazardSet).one()
@@ -250,6 +246,7 @@ class TestHarvesting(unittest.TestCase):
         """New calculation_method_quality must reset hazarset.complete"""
         harvester = Harvester()
         harvester.settings = settings
+        harvester.dbsession = DBSession
         harvester.harvest_layers()
 
         hazardset = DBSession.query(HazardSet).one()
@@ -274,6 +271,7 @@ class TestHarvesting(unittest.TestCase):
         """New scientific_quality must reset hazarset.complete"""
         harvester = Harvester()
         harvester.settings = settings
+        harvester.dbsession = DBSession
         harvester.harvest_layers()
 
         hazardset = DBSession.query(HazardSet).one()
@@ -300,6 +298,7 @@ class TestHarvesting(unittest.TestCase):
         """Geonode API status 500 must not corrupt data"""
         harvester = Harvester()
         harvester.settings = settings
+        harvester.dbsession = DBSession
 
         harvester.harvest_layer(layers()[0])
 

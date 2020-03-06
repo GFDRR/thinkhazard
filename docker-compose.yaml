@@ -6,28 +6,13 @@ services:
     environment:
       - PGHOST
       - PGPORT
-      - PGUSER
-      - PGPASSWORD
-      - PGDATABASE
+      - PGUSER_PUBLIC
+      - PGPASSWORD_PUBLIC
+      - PGDATABASE_PUBLIC
+      - PGUSER_ADMIN
+      - PGPASSWORD_ADMIN
       - PGDATABASE_ADMIN
       - INI_FILE
-    command: 'pserve c2c://${INI_FILE} -n public'
+    command: 'pserve c2c://${INI_FILE}'
     ports:
       - 8080:6543
-
-  thinkhazard_admin:
-    image: camptocamp/thinkhazard
-    environment:
-      - PGHOST
-      - PGPORT
-      - PGUSER
-      - PGPASSWORD
-      - PGDATABASE
-      - PGDATABASE_ADMIN
-      - INI_FILE
-    command: 'pserve c2c://${INI_FILE} -n public'
-    ports:
-      - 8081:6543
-
-
-  #thinkhazard_admin:

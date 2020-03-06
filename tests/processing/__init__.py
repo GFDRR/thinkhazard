@@ -19,20 +19,43 @@
 
 import random
 import uuid
+import unittest
+import transaction
 
 from shapely.geometry import MultiPolygon, Polygon
 from geoalchemy2.shape import from_shape
 
-from thinkhazard.models import DBSession, AdminLevelType, AdministrativeDivision, Region
+from thinkhazard.models import AdminLevelType, AdministrativeDivision, Region
+
+from .. import DBSession, settings
+
+
+class BaseTestCase(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        populate_datamart()
+
+    @classmethod
+    def tearDownClass(cls):
+        DBSession.rollback()
+
+    def setUp(self):  # NOQA
+        self.t = DBSession.begin_nested()
+        pass
+
+    def tearDown(self):  # NOQA
+        self.t.rollback()
+        pass
 
 
 def populate_datamart():
     print("populate datamart")
     DBSession.query(AdministrativeDivision).delete()
 
-    adminlevel_cou = AdminLevelType.get("COU")
-    adminlevel_pro = AdminLevelType.get("PRO")
-    adminlevel_reg = AdminLevelType.get("REG")
+    adminlevel_cou = AdminLevelType.get(DBSession, "COU")
+    adminlevel_pro = AdminLevelType.get(DBSession, "PRO")
+    adminlevel_reg = AdminLevelType.get(DBSession, "REG")
 
     shape = MultiPolygon([Polygon([(0, 0), (0, 1), (1, 1), (1, 0), (0, 0)])])
     geometry = from_shape(shape, 4326)
