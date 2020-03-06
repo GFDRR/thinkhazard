@@ -1,8 +1,16 @@
 version: '3'
 
 services:
+
+  db:
+    image: camptocamp/thinkhazard-testdb
+
   thinkhazard:
     image: camptocamp/thinkhazard
+    user: www-data
+    restart: unless-stopped
+    depends_on:
+      - db
     environment:
       - PGHOST
       - PGPORT

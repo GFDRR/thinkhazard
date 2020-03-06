@@ -19,6 +19,8 @@ RUN apt-get update && apt-get install -y \
 COPY ./requirements.txt /app/requirements.txt
 RUN pip install -r /app/requirements.txt && pyppeteer-install
 
+ENV INI_FILE=c2c://production.ini
+
 
 ########################
 # Build and test image #
