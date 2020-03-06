@@ -20,6 +20,7 @@
 import transaction
 from thinkhazard.session import get_engine, get_session_factory, get_tm_session
 from thinkhazard.settings import load_full_settings
+from thinkhazard.scripts import wait_for_db
 from thinkhazard.scripts.initializedb import initdb
 
 
@@ -30,6 +31,7 @@ DBSession = get_tm_session(session_factory, transaction.manager)
 
 
 def populatedb():
+    wait_for_db(engine)
     with engine.begin() as connection:
         initdb(connection, True)
 
