@@ -28,6 +28,12 @@ from . import BaseTestCase, populate_datamart
 
 class TestDownloading(BaseTestCase):
 
+    def downloader(self):
+        downloader = Downloader()
+        downloader.dbsession = DBSession
+        downloader.settings = settings
+        return downloader
+
     @patch.object(Downloader, "do_execute")
     def test_cli(self, mock):
         """Test downloader cli"""
@@ -36,6 +42,4 @@ class TestDownloading(BaseTestCase):
 
     def test_force(self):
         """Test downloader in force mode"""
-        downloader = Downloader()
-        downloader.dbsession = DBSession
-        downloader.execute(settings, force=True)
+        self.downloader().execute(force=True)

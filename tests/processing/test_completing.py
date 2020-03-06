@@ -70,6 +70,12 @@ def global_reader_invalid_bounds(path=""):
 
 class TestCompleting(BaseTestCase):
 
+    def completer(self):
+        completer = Completer()
+        completer.dbsession = DBSession
+        completer.settings = settings
+        return completer
+
     @patch.object(Completer, "do_execute")
     def test_cli(self, mock):
         """Test completer cli"""
@@ -78,9 +84,7 @@ class TestCompleting(BaseTestCase):
 
     def test_force(self):
         """Test completer in force mode"""
-        completer = Completer()
-        completer.dbsession = DBSession
-        completer.execute(settings, force=True)
+        self.completer().execute(force=True)
 
     @patch("rasterio.open", side_effect=global_reader)
     def test_complete_preprocessed(self, open_mock):
@@ -118,9 +122,7 @@ class TestCompleting(BaseTestCase):
 
         DBSession.flush()
 
-        completer = Completer()
-        completer.dbsession = DBSession
-        completer.execute(settings)
+        self.completer().execute()
 
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete_error, None)
@@ -163,9 +165,7 @@ class TestCompleting(BaseTestCase):
 
         DBSession.flush()
 
-        completer = Completer()
-        completer.dbsession = DBSession
-        completer.execute(settings)
+        self.completer().execute()
 
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete_error, None)
@@ -204,9 +204,7 @@ class TestCompleting(BaseTestCase):
 
         DBSession.flush()
 
-        completer = Completer()
-        completer.dbsession = DBSession
-        completer.execute(settings)
+        self.completer().execute()
 
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete_error, "No associated regions")
@@ -249,9 +247,7 @@ class TestCompleting(BaseTestCase):
 
         DBSession.flush()
 
-        completer = Completer()
-        completer.dbsession = DBSession
-        completer.execute(settings)
+        self.completer().execute()
 
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete_error, "bounds.bottom > bounds.top")
@@ -294,9 +290,7 @@ class TestCompleting(BaseTestCase):
 
         DBSession.flush()
 
-        completer = Completer()
-        completer.dbsession = DBSession
-        completer.execute(settings)
+        self.completer().execute()
 
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete_error, "No layer for level LOW")
@@ -339,9 +333,7 @@ class TestCompleting(BaseTestCase):
 
         DBSession.flush()
 
-        completer = Completer()
-        completer.dbsession = DBSession
-        completer.execute(settings)
+        self.completer().execute()
 
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete_error, "Missing mask layer")
@@ -384,9 +376,7 @@ class TestCompleting(BaseTestCase):
 
         DBSession.flush()
 
-        completer = Completer()
-        completer.dbsession = DBSession
-        completer.execute(settings)
+        self.completer().execute()
 
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(
@@ -454,9 +444,7 @@ class TestCompleting(BaseTestCase):
 
         DBSession.flush()
 
-        completer = Completer()
-        completer.dbsession = DBSession
-        completer.execute(settings)
+        self.completer().execute()
 
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(

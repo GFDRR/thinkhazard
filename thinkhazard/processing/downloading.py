@@ -18,12 +18,10 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-import traceback
 import os
 from datetime import datetime
 from urllib.parse import urlunsplit
 import requests
-import transaction
 
 from thinkhazard.models import Layer
 from thinkhazard.processing import BaseProcessor
@@ -64,11 +62,11 @@ class Downloader(BaseProcessor):
     def do_execute(self, hazardset_id=None, clear_cache=False):
         if self.force or clear_cache:
             try:
-                logger.info("Resetting all layers to not downloaded state.")
-                self.dbsession.query(Layer).update({Layer.downloaded: False})
-                self.dbsession.flush()
+                with self.dbsession.begin_nested():
+                    logger.info("Resetting all layers to not downloaded state.")
+                    self.dbsession.query(Layer).update({Layer.downloaded: False})
+                    self.dbsession.flush()
             except:
-                transaction.abort()
                 raise
 
         if clear_cache:
@@ -83,12 +81,8 @@ class Downloader(BaseProcessor):
             ids = ids.filter(Layer.hazardset_id == hazardset_id)
 
         for id in ids:
-            try:
+            with self.dbsession.begin_nested():
                 self.download_layer(id)
-                transaction.commit()
-            except Exception:
-                transaction.abort()
-                logger.error(traceback.format_exc())
 
     def download_layer(self, id):
         layer = self.dbsession.query(Layer).get(id)

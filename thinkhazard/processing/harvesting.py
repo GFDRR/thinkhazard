@@ -165,7 +165,7 @@ class Harvester(BaseProcessor):
         return hazardtype
 
     def create_region_admindiv_associations(self):
-        with open(region_admindiv_csv_path, "rb") as csvfile:
+        with open(region_admindiv_csv_path, "r") as csvfile:
             rows = csv.reader(csvfile, delimiter=",")
             for row in rows:
                 try:

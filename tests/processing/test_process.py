@@ -73,6 +73,12 @@ class TestProcess(BaseTestCase):
         populate_preprocessed(preprocessed_type)
         DBSession.flush()
 
+    def processor(self):
+        processor = Processor()
+        processor.dbsession = DBSession
+        processor.settings = settings
+        return processor
+
     @patch.object(Processor, "do_execute")
     def test_cli(self, mock):
         """Test processor cli"""
@@ -82,16 +88,12 @@ class TestProcess(BaseTestCase):
     @patch("rasterio.open", return_value=global_reader())
     def test_force(self, open_mock):
         """Test processor in force mode"""
-        processor = Processor()
-        processor.dbsession = DBSession
-        processor.execute(settings, force=True)
+        self.processor().execute(force=True)
 
     @patch("rasterio.open", return_value=global_reader())
     def test_process_empty(self, open_mock):
         """Test nodata everywhere"""
-        processor = Processor()
-        processor.dbsession = DBSession
-        processor.execute(settings, hazardset_id="notpreprocessed")
+        self.processor().execute(hazardset_id="notpreprocessed")
         output = DBSession.query(Output).first()
         self.assertEqual(output, None)
 
@@ -106,9 +108,7 @@ class TestProcess(BaseTestCase):
     )
     def test_process_vlo(self, open_mock):
         """Test value < threshold <=> hazardlevel VLO"""
-        processor = Processor()
-        processor.dbsession = DBSession
-        processor.execute(settings, hazardset_id="notpreprocessed")
+        self.processor().execute(hazardset_id="notpreprocessed")
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, "VLO")
 
@@ -123,9 +123,7 @@ class TestProcess(BaseTestCase):
     )
     def test_process_low(self, open_mock):
         """Test value > threshold in LOW layer"""
-        processor = Processor()
-        processor.dbsession = DBSession
-        processor.execute(settings, hazardset_id="notpreprocessed")
+        self.processor().execute(hazardset_id="notpreprocessed")
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, "LOW")
 
@@ -140,9 +138,7 @@ class TestProcess(BaseTestCase):
     )
     def test_process_med(self, open_mock):
         """Test value > threshold in MED layer"""
-        processor = Processor()
-        processor.dbsession = DBSession
-        processor.execute(settings, hazardset_id="notpreprocessed")
+        self.processor().execute(hazardset_id="notpreprocessed")
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, "MED")
 
@@ -157,9 +153,7 @@ class TestProcess(BaseTestCase):
     )
     def test_process_hig(self, open_mock):
         """Test value > threshold in HIG layer"""
-        processor = Processor()
-        processor.dbsession = DBSession
-        processor.execute(settings, hazardset_id="notpreprocessed")
+        self.processor().execute(hazardset_id="notpreprocessed")
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, "HIG")
 
@@ -174,18 +168,14 @@ class TestProcess(BaseTestCase):
     )
     def test_process_mask(self, open_mock):
         """Test mask layer"""
-        processor = Processor()
-        processor.dbsession = DBSession
-        processor.execute(settings, hazardset_id="notpreprocessed")
+        self.processor().execute(hazardset_id="notpreprocessed")
         output = DBSession.query(Output).first()
         self.assertEqual(output, None)
 
     @patch("rasterio.open", side_effect=[global_reader()])
     def test_preprocessed_empty(self, open_mock):
         """Test preprocessed nodata everywhere"""
-        processor = Processor()
-        processor.dbsession = DBSession
-        processor.execute(settings, hazardset_id="preprocessed")
+        self.processor().execute(hazardset_id="preprocessed")
         output = DBSession.query(Output).first()
         self.assertEqual(output, None)
 
@@ -195,9 +185,7 @@ class TestProcess(BaseTestCase):
         hazardtype = HazardType.get(DBSession, preprocessed_type)
         hazardtype_settings = settings["hazard_types"][hazardtype.mnemonic]
         open_mock.side_effect = [global_reader(hazardtype_settings["values"]["VLO"][0])]
-        processor = Processor()
-        processor.dbsession = DBSession
-        processor.execute(settings, hazardset_id="preprocessed")
+        self.processor().execute(hazardset_id="preprocessed")
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, "VLO")
 
@@ -207,9 +195,7 @@ class TestProcess(BaseTestCase):
         hazardtype = HazardType.get(DBSession, preprocessed_type)
         hazardtype_settings = settings["hazard_types"][hazardtype.mnemonic]
         open_mock.side_effect = [global_reader(hazardtype_settings["values"]["VLO"][0])]
-        processor = Processor()
-        processor.dbsession = DBSession
-        processor.execute(settings, hazardset_id="preprocessed")
+        self.processor().execute(hazardset_id="preprocessed")
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, "VLO")
 
@@ -219,9 +205,7 @@ class TestProcess(BaseTestCase):
         hazardtype = HazardType.get(DBSession, preprocessed_type)
         hazardtype_settings = settings["hazard_types"][hazardtype.mnemonic]
         open_mock.side_effect = [global_reader(hazardtype_settings["values"]["MED"][0])]
-        processor = Processor()
-        processor.dbsession = DBSession
-        processor.execute(settings, hazardset_id="preprocessed")
+        self.processor().execute(hazardset_id="preprocessed")
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, "MED")
 
@@ -231,9 +215,7 @@ class TestProcess(BaseTestCase):
         hazardtype = HazardType.get(DBSession, preprocessed_type)
         hazardtype_settings = settings["hazard_types"][hazardtype.mnemonic]
         open_mock.side_effect = [global_reader(hazardtype_settings["values"]["HIG"][0])]
-        processor = Processor()
-        processor.dbsession = DBSession
-        processor.execute(settings, hazardset_id="preprocessed")
+        self.processor().execute(hazardset_id="preprocessed")
         output = DBSession.query(Output).first()
         self.assertEqual(output.hazardlevel.mnemonic, "HIG")
 

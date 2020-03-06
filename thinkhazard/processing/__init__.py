@@ -59,9 +59,11 @@ class BaseProcessor:
         settings = load_full_settings(config_uri, name=name)
 
         processor = cls()
+        processor.settings = settings
         processor.engine = get_engine(settings, "sqlalchemy.")
-        processor.session = get_session_factory(processor.engine)()
-        processor.execute(settings=settings, **args)
+        processor.dbsession = get_session_factory(processor.engine)()
+        processor.execute(**args)
+        processor.dbsession.commit()
 
     @staticmethod
     def argument_parser():
@@ -117,9 +119,8 @@ class BaseProcessor:
         return parser
 
     def execute(
-        self, settings, dry_run=False, force=False, verbose=False, debug=False, **kwargs
+        self, dry_run=False, force=False, verbose=False, debug=False, **kwargs
     ):
-        self.settings = settings
         self.dry_run = dry_run
         self.force = force
 
@@ -131,14 +132,13 @@ class BaseProcessor:
             logger.setLevel(logging.WARNING)
 
         if dry_run:
-            connection = self.engine.connect()
-            trans = connection.begin()
+            t = self.dbsession.begin_nested()
 
         self.do_execute(**kwargs)
 
         if dry_run:
             logger.info("Dry run : rolling back transaction")
-            trans.rollback()
+            t.abort()
 
     def layer_path(self, layer):
         return os.path.join(self.settings["data_path"], "hazardsets", layer.filename())

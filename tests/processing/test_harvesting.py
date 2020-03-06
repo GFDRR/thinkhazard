@@ -75,6 +75,12 @@ def layer(value={}):
 @patch("thinkhazard.processing.harvesting.open", mock_open())
 class TestHarvesting(BaseTestCase):
 
+    def harvester(self):
+        harvester = Harvester()
+        harvester.dbsession = DBSession
+        harvester.settings = settings
+        return harvester
+
     @patch.object(Harvester, "do_execute")
     def test_cli(self, mock):
         """Test harvester cli"""
@@ -84,9 +90,9 @@ class TestHarvesting(BaseTestCase):
     @patch.object(Harvester, "fetch", return_value=[])
     def test_force(self, fetch_mock):
         """Test harvester in force mode"""
-        harvester = Harvester()
-        harvester.dbsession = DBSession
-        harvester.execute(settings, force=True)
+        harvester = self.harvester()
+        harvester.force = True
+        harvester.execute()
 
     @patch.object(
         Harvester,
@@ -96,12 +102,7 @@ class TestHarvesting(BaseTestCase):
     def test_valid_region(self, fetch_mock):
         """Valid region must be added to database"""
         fetch_mock
-        harvester = Harvester()
-        harvester.settings = settings
-        harvester.dbsession = DBSession
-
-        harvester.harvest_regions()
-
+        self.harvester().harvest_regions()
         self.assertEqual(DBSession.query(Region).count(), 2)
 
     @patch.object(Harvester, "fetch", return_value=layers())
@@ -110,12 +111,7 @@ class TestHarvesting(BaseTestCase):
     )
     def test_valid_layer(self, request_mock, fetch_mock):
         """Valid layer must be added to database"""
-        harvester = Harvester()
-        harvester.settings = settings
-        harvester.dbsession = DBSession
-
-        harvester.harvest_layers()
-
+        self.harvester().harvest_layers()
         self.assertEqual(DBSession.query(Layer).count(), 1)
 
     @patch.object(
@@ -144,12 +140,7 @@ class TestHarvesting(BaseTestCase):
     )
     def test_valid_document(self, request_mock, fetch_mock):
         """Valid document must be added to database"""
-        harvester = Harvester()
-        harvester.settings = settings
-        harvester.dbsession = DBSession
-
-        harvester.harvest_documents()
-
+        self.harvester().harvest_documents()
         self.assertEqual(DBSession.query(FurtherResource).count(), 1)
 
     @patch.object(Harvester, "fetch", return_value=layers())
@@ -177,16 +168,13 @@ class TestHarvesting(BaseTestCase):
     )
     def test_data_update_date_change(self, request_mock, fetch_mock):
         """New data_update_date must reset hazarset.complete and processed"""
-        harvester = Harvester()
-        harvester.settings = settings
-        harvester.dbsession = DBSession
-        harvester.harvest_layers()
+        self.harvester().harvest_layers()
 
         hazardset = DBSession.query(HazardSet).one()
         hazardset.complete = True
         hazardset.processed = datetime.now()
 
-        harvester.harvest_layers()
+        self.harvester().harvest_layers()
 
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete, False)
@@ -219,16 +207,13 @@ class TestHarvesting(BaseTestCase):
     )
     def test_metadata_update_date_change(self, request_mock, fetch_mock):
         """New metadata_update_date must reset hazarset.complete"""
-        harvester = Harvester()
-        harvester.settings = settings
-        harvester.dbsession = DBSession
-        harvester.harvest_layers()
+        self.harvester().harvest_layers()
 
         hazardset = DBSession.query(HazardSet).one()
         hazardset.complete = True
         hazardset.processed = datetime.now()
 
-        harvester.harvest_layers()
+        self.harvester().harvest_layers()
 
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete, False)
@@ -244,16 +229,13 @@ class TestHarvesting(BaseTestCase):
     )
     def test_calculation_method_quality_change(self, request_mock, fetch_mock):
         """New calculation_method_quality must reset hazarset.complete"""
-        harvester = Harvester()
-        harvester.settings = settings
-        harvester.dbsession = DBSession
-        harvester.harvest_layers()
+        self.harvester().harvest_layers()
 
         hazardset = DBSession.query(HazardSet).one()
         hazardset.complete = True
         hazardset.processed = datetime.now()
 
-        harvester.harvest_layers()
+        self.harvester().harvest_layers()
 
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete, False)
@@ -269,16 +251,13 @@ class TestHarvesting(BaseTestCase):
     )
     def test_scientific_quality_change(self, request_mock, fetch_mock):
         """New scientific_quality must reset hazarset.complete"""
-        harvester = Harvester()
-        harvester.settings = settings
-        harvester.dbsession = DBSession
-        harvester.harvest_layers()
+        self.harvester().harvest_layers()
 
         hazardset = DBSession.query(HazardSet).one()
         hazardset.complete = True
         hazardset.processed = datetime.now()
 
-        harvester.harvest_layers()
+        self.harvester().harvest_layers()
 
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete, False)
@@ -296,14 +275,10 @@ class TestHarvesting(BaseTestCase):
     )
     def test_layers_api_500(self, request_mock):
         """Geonode API status 500 must not corrupt data"""
-        harvester = Harvester()
-        harvester.settings = settings
-        harvester.dbsession = DBSession
-
-        harvester.harvest_layer(layers()[0])
+        self.harvester().harvest_layer(layers()[0])
 
         with self.assertRaises(Exception) as cm:
-            harvester.harvest_layer(layers()[0])
+            self.harvester().harvest_layer(layers()[0])
 
         self.assertEqual(
             str(cm.exception),

@@ -137,23 +137,23 @@ harvest: ## Harvest GeoNode layers metadata
 
 .PHONY: download
 download: ## Download raster data from GeoNode
-	.build/venv/bin/download -v
+	docker-compose run --rm thinkhazard download -v
 
 .PHONY: complete
 complete: ## Mark complete hazardsets as such
-	.build/venv/bin/complete -v
+	docker-compose run --rm thinkhazard complete -v
 
 .PHONY: process
 process: ## Compute hazard levels from hazardsets for administrative divisions level 2
-	.build/venv/bin/process -v
+	docker-compose run --rm thinkhazard process -v
 
 .PHONY: decisiontree
 decisiontree: ## Run the decision tree and perform upscaling
-	.build/venv/bin/decision_tree -v
+	docker-compose run --rm thinkhazard decision_tree -v
 
 .PHONY: publish
 publish: ## Publish validated data on public web site
-	.build/venv/bin/publish $(INI_FILE)
+	docker-compose run --rm thinkhazard publish $(INI_FILE)
 
 
 #######################
