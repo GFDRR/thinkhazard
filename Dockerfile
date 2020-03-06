@@ -21,6 +21,10 @@ RUN pip install -r /app/requirements.txt && pyppeteer-install
 
 ENV INI_FILE=c2c://production.ini
 
+# Layer cache
+RUN mkdir /tmp/hazardsets && chown www-data /tmp/hazardsets
+VOLUME /tmp/hazardsets
+
 
 ########################
 # Build and test image #
