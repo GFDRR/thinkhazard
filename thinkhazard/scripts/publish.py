@@ -57,8 +57,6 @@ def database_name(config_uri, name, options={}):
 def main(argv=sys.argv):
     if len(argv) < 2:
         usage(argv)
-    # practical for debug use in container
-    # config_uri = 'c2c://' + argv[1]
     config_uri = argv[1]
     options = parse_vars(argv[2:])
     setup_logging(config_uri)
@@ -78,7 +76,7 @@ def main(argv=sys.argv):
     engine = engine_from_config(settings, "sqlalchemy.")
     with engine.begin() as db:
         dbsession = get_session_factory(db)()
-        Publication.new()
+        Publication.new(dbsession)
         dbsession.flush()
 
     backup_filename = "thinkhazard.backup"
