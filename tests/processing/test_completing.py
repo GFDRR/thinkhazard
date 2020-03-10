@@ -35,7 +35,7 @@ from .common import new_geonode_id
 def global_reader(path=""):
     reader = Mock(spec=DatasetReader)
     reader.shape = (360, 720)
-    reader.affine = Affine(-180.0, 0.5, 0.0, -90.0, 0.0, 0.5)
+    reader.transform = Affine(-180.0, 0.5, 0.0, -90.0, 0.0, 0.5)
     reader.bounds = BoundingBox(-180.0, -90.0, 0.0, 0.0)
 
     context = Mock()
@@ -47,7 +47,7 @@ def global_reader(path=""):
 def global_reader_bis(path=""):
     reader = Mock(spec=DatasetReader)
     reader.shape = (361, 720)
-    reader.affine = Affine(-180.0, 0.5, 0.0, -90.0, 0.0, 0.5)
+    reader.transform = Affine(-180.0, 0.5, 0.0, -90.0, 0.0, 0.5)
     reader.bounds = BoundingBox(-180.0, -90.0, 0.5, 0.0)
 
     context = Mock()
@@ -59,7 +59,7 @@ def global_reader_bis(path=""):
 def global_reader_invalid_bounds(path=""):
     reader = Mock(spec=DatasetReader)
     reader.shape = (360, 720)
-    reader.affine = Affine(-180.0, 0.5, 0.0, 90.0, 0.0, -0.5)
+    reader.transform = Affine(-180.0, 0.5, 0.0, 90.0, 0.0, -0.5)
     reader.bounds = BoundingBox(-180.0, 90.0, 0.5, 0.0)
 
     context = Mock()
