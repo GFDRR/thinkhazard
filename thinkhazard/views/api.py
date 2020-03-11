@@ -30,7 +30,7 @@ from ..analytics import GoogleAnalytics
 def api_hazardcategory(request):
     hazard_type = request.matchdict["hazard_type"]
     hazard_level = request.matchdict["hazard_level"]
-    GoogleAnalytics().hit(request.path)
+    GoogleAnalytics().hit(request.path, "hazardcategory-hazard_type-hazard_level")
 
     try:
         hazard_category = (
@@ -50,5 +50,5 @@ def api_hazardcategory(request):
 @view_config(route_name="api_admindiv_hazardsets_hazardtype", renderer="json")
 def api_admindiv_hazardsets_hazardtype(request):
     data = admindiv_hazardsets_hazardtype(request)
-    GoogleAnalytics().hit(request.path)
+    GoogleAnalytics().hit(request.path, "admindiv_hazardsets-hazard_type")
     return data

@@ -151,7 +151,7 @@ Add or modify `username2` in the password file `.htpasswd`:
 
 If you want to get some analytics on the website usage (via Google analytics), you can add the tracking code using a analytics variable:
 
-    analytics = UA-75358940-1
+    analytics = UA-75301865-1
 
 ### Feedback
 

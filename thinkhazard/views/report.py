@@ -250,8 +250,8 @@ def report_geojson(request):
 @view_config(route_name="report_overview_json", renderer="json")
 def report_overview_json(request):
     division_code = request.matchdict.get("divisioncode")
-    hazard_types = get_hazard_types(division_code)
-    GoogleAnalytics().hit(request.path)
+    hazard_types = get_hazard_types(request, division_code)
+    GoogleAnalytics().hit(request.path, "report-division_code")
     return hazard_types
 
 
@@ -260,8 +260,8 @@ def report_json(request):
     division_code = request.matchdict.get("divisioncode")
     selected_hazard = request.matchdict.get("hazardtype")
     hazard_category = None
-    division = get_division(division_code)
-    GoogleAnalytics().hit(request.path)
+    division = get_division(request, division_code)
+    GoogleAnalytics().hit(request.path, "report-division_code-hazard_type")
 
     try:
         hazard_category = get_info_for_hazard_type(request, selected_hazard, division)
