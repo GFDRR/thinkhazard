@@ -168,6 +168,10 @@ populatedb: initdb import_admindivs import_recommendations import_contacts
 initdb: ## Initialize database model
 	docker-compose run --rm thinkhazard initialize_thinkhazard_db "$(INI_FILE)#admin"
 
+.PHONY: alembic_upgrade
+alembic_upgrade: ## Upgrade database model
+	docker-compose run --rm thinkhazard alembic -n admin -n public upgrade head
+
 .PHONY: initdb_force
 initdb_force:
 	docker-compose run --rm thinkhazard initialize_thinkhazard_db "$(INI_FILE)#admin" --force=1
