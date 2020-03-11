@@ -59,7 +59,7 @@ DOCKER_MAKE_CMD=$(DOCKER_CMD) make -f docker.mk
 
 .PHONY: build
 build: ## Build docker images
-build: docker_build_thinkhazard docker_build_builder docker_build_testdb
+build: docker_build_testdb docker_build_builder docker_build_thinkhazard
 
 .PHONY: bash
 bash: ## Open bash in builder
