@@ -63,6 +63,8 @@ def run_migrations_offline():
     context.configure(
         url=engine.url,
         target_metadata=target_metadata,
+        include_object=include_object,
+        include_schemas=True,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
     )
