@@ -17,4 +17,3 @@ services:
       - PGUSER=thinkhazard
       - PGPASSWORD=thinkhazard
       - INI_FILE
-      - GEONODE_API_KEY

@@ -19,11 +19,12 @@ RUN apt-get update && apt-get install -y \
 COPY ./requirements.txt /app/requirements.txt
 RUN pip install -r /app/requirements.txt && pyppeteer-install
 
-ENV INI_FILE=c2c://production.ini
-
 # Layer cache
 RUN mkdir /tmp/hazardsets && chown www-data /tmp/hazardsets
 VOLUME /tmp/hazardsets
+
+ENV INI_FILE=c2c://production.ini \
+    GEONODE_API_KEY=tbd
 
 
 ########################
