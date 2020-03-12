@@ -26,7 +26,7 @@ import os
 class GoogleAnalytics:
     def __init__(self):
         self.tracking_id = 'UA-75301865-1'
-        self.debug = "/debug" if os.environ['INI_FILE'] == "development.ini" else ""
+        self.debug = "" if os.environ['INI_FILE'] == "production.ini" else "/debug"
 
     def hit(self, api_path, title):
         params = {
@@ -35,46 +35,11 @@ class GoogleAnalytics:
             "cid": "api",
             "t": "pageview",
             "dt": "API - {}".format(title),
-            # "ec": "api",
-            # "ea": "hazardset",
-            # "dh": 'www.thinkhazard.org',
             "dp": api_path
         }
         payload = urlencode(params)
         session = FuturesSession()
         r = session.get("https://www.google-analytics.com{}/collect?{}".format(self.debug, payload))
-        response = r.result()
-        print('GA response status: {0}'.format(response.status_code))
-        # print(response.content)
-        if not response.status_code == 200:
-            print('GA not responding')
-
-
-# Attempt to implement async request without requests_futures
-# from webob import Request
-# from urllib.parse import urlencode
-# import asyncio
-
-
-# async def send_request(tracking_id, hit_type):
-#     params = {
-#         "v": "v1",
-#         "tid": tracking_id,
-#         "t": hit_type
-#     }
-#     payload = urlencode(params)
-#     r = Request.blank("https://www.google-analytics.com/collect?{}".format(payload))
-#     r.send()
-#     print(r)
-
-
-# class GoogleAnalytics:
-#     def __init__(self):
-#         # TODO : replace by 'UA-75358940-1'
-#         self.tracking_id = ''
-
-#     def hit(self, hit_type):
-#         loop = asyncio.new_event_loop()
-#         asyncio.set_event_loop(loop)
-#         task = loop.create_task(send_request(self.tracking_id, hit_type))
-#         loop.run_until_complete(task)
+        if self.debug == "/debug":
+            response = r.result()
+            print(response.content)
