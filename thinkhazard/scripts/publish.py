@@ -19,7 +19,7 @@
 
 import os
 import sys
-from datetime import datetime
+import tempfile
 from subprocess import call
 from urllib.parse import urlparse
 
@@ -80,11 +80,8 @@ def main(argv=sys.argv):
         dbsession.flush()
 
     backup_filename = "thinkhazard.backup"
-    folder_path = settings["backup_path"]
-    if not os.path.exists(folder_path):
-        os.makedirs(folder_path)
     backup_path = os.path.join(
-        folder_path, backup_filename
+        tempfile.gettempdir(), backup_filename
     )
 
     print("Backup", admin_database, "to", backup_path)
@@ -122,8 +119,7 @@ def main(argv=sys.argv):
     )
 
     print("Delete backup file from filesystem")
-    cmd_delete = "rm " + backup_path
-    call(cmd_delete, shell=True)
+    os.remove(backup_path)
 
     # TODO: adapt to new infra in tween
     print("Restarting Apache to clear cached data")

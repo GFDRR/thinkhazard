@@ -108,7 +108,7 @@ def pdf_cover(request):
 """pdf_about: see index.py"""
 
 
-async def create_pdf(file_name: str, pages: List[str], object_name: str):
+async def create_and_upload_pdf(file_name: str, pages: List[str], object_name: str, s3_helper: S3Helper):
     """Create a PDF file with the given pages using pyppeteer.
     """
     chunks = []
@@ -139,7 +139,6 @@ async def create_pdf(file_name: str, pages: List[str], object_name: str):
     output = open(file_name, "wb")
     writer.write(output)
     output.close()
-    s3_helper = _create_s3_helper()
     s3_helper.upload_file(file_name, object_name)
 
 
@@ -178,14 +177,14 @@ def create_pdf_report(request):
                     **query_args,
                 )
             )
-        run(create_pdf(file_name, pages, object_name))
+        run(create_and_upload_pdf(file_name, pages, object_name, s3_helper))
 
     response = FileResponse(file_name, request=request, content_type="application/pdf")
     response.headers["Content-Disposition"] = (
         'attachment; filename="ThinkHazard.pdf"'
     )
-    os.remove(file_name)
     return response
+
 
 def _create_s3_helper():
     ini_file = 'c2c://' + os.environ['INI_FILE']
