@@ -9,9 +9,17 @@ def load_full_settings(config_uri, name="admin", options={}):
     Fallback to admin app by default as this should mainly be used by admin
     scripts.
     """
-    settings = get_appsettings(config_uri, name=name, options=options)
+    settings = get_appsettings(
+        config_uri,
+        name=name,
+        options={
+            **os.environ,
+            **options,
+        }
+    )
     load_local_settings(settings, name)
     load_processing_settings(settings)
+    settings['geonode']['api_key'] = os.environ['GEONODE_API_KEY']
     return settings
 
 

@@ -111,7 +111,7 @@ class Completer(BaseProcessor):
                     return "Missing mask layer"
                 layers.append(layer.one())
 
-        affine = None
+        transform = None
         shape = None
         for layer in layers:
             if not layer.downloaded:
@@ -122,11 +122,11 @@ class Completer(BaseProcessor):
                         bounds = reader.bounds
                         if bounds.bottom > bounds.top:
                             return "bounds.bottom > bounds.top"
-                        if affine is None:
-                            affine = reader.affine
+                        if transform is None:
+                            transform = reader.transform
                             shape = reader.shape
                         else:
-                            if reader.affine != affine or reader.shape != shape:
+                            if reader.transform != transform or reader.shape != shape:
                                 return (
                                     "All layers should have the same origin,"
                                     " resolution and size"

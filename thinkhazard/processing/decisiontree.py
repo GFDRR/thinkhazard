@@ -29,24 +29,17 @@ logger = logging.getLogger(__name__)
 class DecisionMaker(BaseProcessor):
     def do_execute(self, hazardset_id=None):
         connection = self.dbsession.bind.connect()
-        trans = connection.begin()
-        try:
-            logger.info("Purging previous relations")
-            connection.execute(clearall_query())
+        logger.info("Purging previous relations")
+        connection.execute(clearall_query())
 
-            logger.info("Calculating level REG")
-            connection.execute(level_reg_query())
+        logger.info("Calculating level REG")
+        connection.execute(level_reg_query())
 
-            logger.info("Upscaling to PRO")
-            connection.execute(upscaling_query("PRO"))
+        logger.info("Upscaling to PRO")
+        connection.execute(upscaling_query(AdminLevelType.get(self.dbsession, "PRO").id))
 
-            logger.info("Upscaling to COU")
-            connection.execute(upscaling_query("COU"))
-
-            trans.commit()
-        except:
-            trans.rollback()
-            logger.error("An error occurred in decision tree", exc_info=True)
+        logger.info("Upscaling to COU")
+        connection.execute(upscaling_query(AdminLevelType.get(self.dbsession, "COU").id))
 
 
 def clearall_query():
@@ -121,7 +114,7 @@ WINDOW w AS (
 """
 
 
-def upscaling_query(level):
+def upscaling_query(level_id):
     return """
 /*
  * Upscale hazard categories for each administrative division
@@ -186,5 +179,5 @@ FROM
         AND hc_ad_parent.hazardcategory_id = hc_ad_child.hazardcategory_id
 WHERE ad_parent.leveltype_id = {leveltype_id};
 """.format(
-        leveltype_id=AdminLevelType.get(level).id
+        leveltype_id=level_id
     )

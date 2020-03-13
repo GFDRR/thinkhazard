@@ -150,7 +150,7 @@ class Processor(BaseProcessor):
                 if outputs:
                     self.dbsession.add_all(outputs)
                 else:
-                    return
+                    hazardset.processing_error = 'No output generated'
 
             finally:
                 logger.info("  Closing raster files")
@@ -166,6 +166,11 @@ class Processor(BaseProcessor):
                     hazardset.id, len(outputs), datetime.datetime.now() - chrono
                 )
             )
+        else:
+            logger.info('  Process of {} failed in {}, {}'
+                        .format(hazardset.id,
+                                datetime.datetime.now() - chrono,
+                                hazardset.processing_error))
 
         self.dbsession.flush()
 

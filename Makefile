@@ -1,16 +1,23 @@
 
-INSTANCEID ?= main
-ifeq ($(INSTANCEID), main)
-	INSTANCEPATH = /
-	INSTANCEADMINPATH = /admin
-else
-	INSTANCEPATH = /$(INSTANCEID)
-	INSTANCEADMINPATH = /$(INSTANCEID)/admin
-endif
 AUTHUSERFILE ?= /var/www/vhosts/wb-thinkhazard/conf/.htpasswd
 DATA ?= world
 
 -include local.mk
+
+export INI_FILE ?= c2c://development.ini
+
+export PGHOST ?= db
+export PGHOST_SLAVE ?= db
+export PGPORT ?= 5432
+
+export PGDATABASE_PUBLIC ?= thinkhazard
+export PGUSER_PUBLIC ?= thinkhazard
+export PGPASSWORD_PUBLIC ?= thinkhazard
+
+export PGDATABASE_ADMIN ?= thinkhazard_admin
+export PGUSER_ADMIN ?= thinkhazard
+export PGPASSWORD_ADMIN ?= thinkhazard
+
 
 .PHONY: help_old
 help_old:
@@ -20,19 +27,6 @@ help_old:
 	@echo
 	@echo "- install                 Install thinkhazard"
 	@echo "- buildcss                Build CSS"
-	@echo "- populatedb              Populates database. Use DATA=turkey if you want to work with a sample data set"
-	@echo "- initdb                  Initialize db using development.ini"
-	@echo "- reinit_all              Completely clear and re-init database. Only for developement purpose."
-	@echo "- import_admindivs        Import administrative divisions. Use DATA=turkey or DATA=indonesia if you want to work with a sample data set"
-	@echo "- import_recommendations  Import recommendations"
-	@echo "- harvest                 Harvest GeoNode layers metadata"
-	@echo "- download                Download raster data from GeoNode"
-	@echo "- complete                Mark complete hazardsets as such"
-	@echo "- process                 Compute hazard levels from hazardsets for administrative divisions level 2"
-	@echo "- decisiontree            Run the decision tree and perform upscaling"
-	@echo "- publish                 Publish validated data on public web site"
-	@echo "- serve_public            Run the dev server (public app)"
-	@echo "- serve_admin             Run the dev server (admin app)"
 	@echo "- check                   Check the code with flake8, jshint and bootlint"
 	@echo "- test                    Run the unit tests"
 	@echo "- dist                    Build a source distribution"
@@ -65,7 +59,7 @@ DOCKER_MAKE_CMD=$(DOCKER_CMD) make -f docker.mk
 
 .PHONY: build
 build: ## Build docker images
-build: docker_build_thinkhazard docker_build_builder docker_build_testdb
+build: docker_build_testdb docker_build_builder docker_build_thinkhazard
 
 .PHONY: bash
 bash: ## Open bash in builder
@@ -133,23 +127,62 @@ docker_build_testdb:
 	docker build -t camptocamp/thinkhazard-testdb docker/testdb
 
 
+##############
+# Processing #
+##############
+
+.PHONY: harvest
+harvest: ## Harvest GeoNode layers metadata
+	docker-compose run --rm thinkhazard harvest -v
+
+.PHONY: download
+download: ## Download raster data from GeoNode
+	docker-compose run --rm thinkhazard download -v
+
+.PHONY: complete
+complete: ## Mark complete hazardsets as such
+	docker-compose run --rm thinkhazard complete -v
+
+.PHONY: process
+process: ## Compute hazard levels from hazardsets for administrative divisions level 2
+	docker-compose run --rm thinkhazard process -v
+
+.PHONY: decisiontree
+decisiontree: ## Run the decision tree and perform upscaling
+	docker-compose run --rm thinkhazard decision_tree -v
+
+.PHONY: publish
+publish: ## Publish validated data on public web site
+	docker-compose run --rm thinkhazard publish $(INI_FILE)
+
+
+#######################
+# Initialize database #
+#######################
 
 .PHONY: populatedb
+populatedb: ## Populates database. Use DATA=turkey if you want to work with a sample data set
 populatedb: initdb import_admindivs import_recommendations import_contacts
 
-.PHONY: reinit_all
-reinit_all: initdb_force import_admindivs import_recommendations import_contacts harvest download complete process decisiontree
-
 .PHONY: initdb
-initdb:
-	.build/venv/bin/initialize_thinkhazard_db $(INI_FILE)
+initdb: ## Initialize database model
+	docker-compose run --rm thinkhazard initialize_thinkhazard_db "$(INI_FILE)#admin"
+
+.PHONY: alembic_upgrade
+alembic_upgrade: ## Upgrade database model
+	docker-compose run --rm thinkhazard alembic -n admin -n public upgrade head
 
 .PHONY: initdb_force
 initdb_force:
-	.build/venv/bin/initialize_thinkhazard_db $(INI_FILE) --force=1
+	docker-compose run --rm thinkhazard initialize_thinkhazard_db "$(INI_FILE)#admin" --force=1
+
+.PHONY: reinit_all
+reinit_all: ## Completely clear and re-init database. Only for developement purpose
+reinit_all: initdb_force import_admindivs import_recommendations import_contacts harvest download complete process decisiontree
 
 .PHONY: import_admindivs
-import_admindivs: .build/requirements.timestamp \
+import_admindivs: ## Import administrative divisions. Use DATA=turkey or DATA=indonesia if you want to work with a sample data set
+import_admindivs: \
 		/tmp/thinkhazard/admindiv/$(DATA)/g2015_2014_0_upd270117.shp \
 		/tmp/thinkhazard/admindiv/$(DATA)/g2015_2014_1_upd270117.shp \
 		/tmp/thinkhazard/admindiv/$(DATA)/g2015_2014_2_upd270117.shp
@@ -167,36 +200,13 @@ import_admindivs: .build/requirements.timestamp \
 	wget -nc "http://dev.camptocamp.com/files/thinkhazard/$(DATA)/$(notdir $@)" -O $@
 
 .PHONY: import_recommendations
-import_recommendations: .build/requirements.timestamp
-	.build/venv/bin/import_recommendations $(INI_FILE)
+import_recommendations: ## Import recommendations
+	docker-compose run --rm thinkhazard import_recommendations "$(INI_FILE)#admin"
 
 .PHONY: import_contacts
 import_contacts: .build/requirements.timestamp
-	.build/venv/bin/import_contacts $(INI_FILE)
+	docker-compose run --rm thinkhazard import_contacts "$(INI_FILE)#admin"
 
-.PHONY: harvest
-harvest: .build/requirements.timestamp
-	.build/venv/bin/harvest -v
-
-.PHONY: download
-download: .build/requirements.timestamp
-	.build/venv/bin/download -v
-
-.PHONY: complete
-complete: .build/requirements.timestamp
-	.build/venv/bin/complete -v
-
-.PHONY: process
-process: .build/requirements.timestamp
-	.build/venv/bin/process -v
-
-.PHONY: decisiontree
-decisiontree: .build/requirements.timestamp
-	.build/venv/bin/decision_tree -v
-
-.PHONY: publish
-publish: .build/requirements.timestamp
-	.build/venv/bin/publish $(INI_FILE)
 
 .PHONY: transifex-import
 transifex-import: .build/requirements.timestamp

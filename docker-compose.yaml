@@ -1,8 +1,21 @@
 version: '3'
 
+volumes:
+  hazardsets:
+
 services:
+
+  db:
+    image: camptocamp/thinkhazard-testdb
+
   thinkhazard:
     image: camptocamp/thinkhazard
+    user: www-data
+    restart: unless-stopped
+    depends_on:
+      - db
+    volumes:
+      - hazardsets:/tmp/hazardsets
     environment:
       - PGHOST
       - PGPORT
@@ -13,6 +26,7 @@ services:
       - PGPASSWORD_ADMIN
       - PGDATABASE_ADMIN
       - INI_FILE
+      - GEONODE_API_KEY
     command: 'pserve c2c://${INI_FILE}'
     ports:
       - 8080:6543

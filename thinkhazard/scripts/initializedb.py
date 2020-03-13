@@ -19,6 +19,7 @@
 
 import os
 import sys
+import urllib
 
 from sqlalchemy import engine_from_config
 from pyramid.paster import setup_logging
@@ -63,9 +64,10 @@ def main(argv=sys.argv):
     with engine.begin() as connection:
         initdb(connection, drop_all="--force" in options)
 
+    app_name = urllib.parse.urlparse(config_uri).fragment
+
     # generate the Alembic version table and stamp it with the latest revision
-    alembic_cfg = Config("alembic.ini")
-    alembic_cfg.set_section_option("alembic", "sqlalchemy.url", engine.url.__str__())
+    alembic_cfg = Config("alembic.ini", ini_section=app_name)
     command.stamp(alembic_cfg, "head")
 
 

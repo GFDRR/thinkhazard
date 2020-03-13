@@ -1,23 +1,26 @@
+"""Pylons bootstrap environment.
+
+Place 'pylons_config_file' into alembic.ini, and the application will
+be loaded from there.
+
+"""
+import os
 
 from alembic import context
-from sqlalchemy import engine_from_config, pool
-from logging.config import fileConfig
-import logging
-from sqlalchemy.exc import OperationalError
-from thinkhazard.settings import load_local_settings
-from thinkhazard import models
+from pyramid.scripts.common import parse_vars, get_config_loader
 
+from thinkhazard.session import get_engine
 
-# this is the Alembic Config object, which provides
-# access to the values within the .ini file in use.
 config = context.config
+app = context.config.get_main_option("type")
+loader = get_config_loader("{}#{}".format(os.environ['INI_FILE'], app))
+loader.setup_logging()
+settings = loader.get_wsgi_app_settings()
+engine = get_engine(settings)
 
-# Interpret the config file for Python logging.
-# This line sets up loggers basically.
-fileConfig(config.config_file_name)
-logger = logging.getLogger('alembic.env')
-
-# MetaData object for 'autogenerate' support
+# add your model's MetaData object here
+# for 'autogenerate' support
+from thinkhazard import models  # noqa
 target_metadata = models.Base.metadata
 
 
@@ -45,6 +48,30 @@ def include_object(object, name, type_, reflected, compare_to):
     return True
 
 
+def run_migrations_offline():
+    """Run migrations in 'offline' mode.
+
+    This configures the context with just a URL
+    and not an Engine, though an Engine is acceptable
+    here as well.  By skipping the Engine creation
+    we don't even need a DBAPI to be available.
+
+    Calls to context.execute() here emit the given string to the
+    script output.
+
+    """
+    context.configure(
+        url=engine.url,
+        target_metadata=target_metadata,
+        include_object=include_object,
+        include_schemas=True,
+        literal_binds=True,
+        dialect_opts={"paramstyle": "named"},
+    )
+    with context.begin_transaction():
+        context.run_migrations()
+
+
 def run_migrations_online():
     """Run migrations in 'online' mode.
 
@@ -52,77 +79,19 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
-    # use the 2-phase protocol to make sure that the migration is applied
-    # correctly to all databases or none.
-    twophase_argument = context.get_x_argument(
-        as_dictionary=True).get('twophase', True)
-    use_two_phase = twophase_argument != 'False' and \
-                    twophase_argument != 'false'
-    logger.info("Using two-phase commit: %s" % use_two_phase)
+    with engine.connect() as connection:  # noqa
+        context.configure(
+            connection=connection,
+            target_metadata=target_metadata,
+            include_object=include_object,
+            include_schemas=True,
+        )
 
-    opts = config.cmd_opts
-    if opts and 'autogenerate' in opts and opts.autogenerate:
-        # when generating migration scripts only check the 'admin' db
-        names = ['admin']
-    else:
-        names = ['public', 'admin']
+        with context.begin_transaction():
+            context.run_migrations(engine_name=app)
 
-    # for the direct-to-DB use case, start a transaction on all
-    # engines, then run all migrations, then commit all transactions.
-    engines = {}
-    for name in names:
-        settings = config.get_section(config.config_ini_section)
-        settings.update(config.get_section('app:{}'.format(name)))
-        load_local_settings(settings, name)
-        engine = engine_from_config(
-            settings,
-            prefix='sqlalchemy.',
-            poolclass=pool.NullPool)
 
-        try:
-            connection = engine.connect()
-        except OperationalError as exc:
-            if name == 'public':
-                # if the 'public' database was not created yet, skip
-                logger.warning(
-                    'failed to connect to public database (skipping): '
-                    '{}'.format(exc))
-                continue
-            else:
-                raise exc
-
-        engines[name] = {
-            'engine': engine,
-            'connection': connection,
-            'transaction': connection.begin_twophase() if use_two_phase
-            else connection.begin()
-        }
-
-    try:
-        for name, rec in list(engines.items()):
-            logger.info("Migrating database %s" % name)
-            context.configure(
-                connection=rec['connection'],
-                upgrade_token="upgrades",
-                downgrade_token="downgrades",
-                target_metadata=target_metadata,
-                include_object=include_object,
-                include_schemas=True,
-            )
-            context.run_migrations(engine_name=name)
-
-        if use_two_phase:
-            for rec in list(engines.values()):
-                rec['transaction'].prepare()
-
-        for rec in list(engines.values()):
-            rec['transaction'].commit()
-    except:
-        for rec in list(engines.values()):
-            rec['transaction'].rollback()
-        raise
-    finally:
-        for rec in list(engines.values()):
-            rec['connection'].close()
-
-run_migrations_online()
+if context.is_offline_mode():
+    run_migrations_offline()
+else:
+    run_migrations_online()
