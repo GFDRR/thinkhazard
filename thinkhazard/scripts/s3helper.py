@@ -1,10 +1,14 @@
 import boto3
 import logging
+import os
 from botocore.client import Config
 from botocore.exceptions import ClientError
 
 class S3Helper:
     def __init__(self, bucket, **kwargs):
+        # only set endpoint_url for debug, boto generates aws endpoint_url for prod 
+        if os.environ['INI_FILE'] == "development.ini":
+            kwargs["endpoint_url"] = "http://localhost:9000/"
         self.s3_client = boto3.client('s3',
             **kwargs,
             config=Config(signature_version='s3v4'),
