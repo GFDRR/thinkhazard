@@ -19,6 +19,7 @@ Build docker images:
 Run the composition:
 
     $ docker-compose up -d
+    $ make initdb
 
 Now point your browser to <http://localhost:6543>.
 
