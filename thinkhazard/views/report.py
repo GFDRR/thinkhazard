@@ -52,6 +52,7 @@ from thinkhazard.models import (
     Contact,
     ContactAdministrativeDivisionHazardTypeAssociation as CAdHt,
 )
+from ..analytics import GoogleAnalytics
 
 
 # An object for the "no data" category type.
@@ -250,6 +251,7 @@ def report_geojson(request):
 def report_overview_json(request):
     division_code = request.matchdict.get("divisioncode")
     hazard_types = get_hazard_types(request, division_code)
+    GoogleAnalytics().hit(request.path, "report-division_code")
     return hazard_types
 
 
@@ -259,6 +261,7 @@ def report_json(request):
     selected_hazard = request.matchdict.get("hazardtype")
     hazard_category = None
     division = get_division(request, division_code)
+    GoogleAnalytics().hit(request.path, "report-division_code-hazard_type")
 
     try:
         hazard_category = get_info_for_hazard_type(request, selected_hazard, division)

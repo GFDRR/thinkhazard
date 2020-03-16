@@ -25,6 +25,7 @@ python-slugify
 pyyaml
 rasterio
 requests
+requests_futures
 shapely
 shapely
 simplejson
