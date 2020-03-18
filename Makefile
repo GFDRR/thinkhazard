@@ -1,7 +1,6 @@
 
 AUTHUSERFILE ?= /var/www/vhosts/wb-thinkhazard/conf/.htpasswd
 DATA ?= world
-INI_FILE ?= development.ini
 
 -include local.mk
 
@@ -18,6 +17,10 @@ export PGPASSWORD_PUBLIC ?= thinkhazard
 export PGDATABASE_ADMIN ?= thinkhazard_admin
 export PGUSER_ADMIN ?= thinkhazard
 export PGPASSWORD_ADMIN ?= thinkhazard
+
+export AWS_ACCESS_KEY_ID ?= minioadmin
+export AWS_SECRET_ACCESS_KEY ?= minioadmin
+export AWS_BUCKET_NAME ?= thinkhazard
 
 
 .PHONY: help_old
