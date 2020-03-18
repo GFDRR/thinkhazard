@@ -29,7 +29,7 @@ from pyramid.scripts.common import parse_vars
 
 from sqlalchemy import engine_from_config
 
-from thinkhazard import lock_file
+# from thinkhazard import lock_file
 from thinkhazard.session import get_session_factory
 from thinkhazard.settings import load_local_settings
 from thinkhazard.models import Publication
@@ -65,9 +65,9 @@ def main(argv=sys.argv):
     public_database = database_name(config_uri, "public", options=options)
 
     # TODO: adapt to new infra?
-    print("Lock public application in maintenance mode")
-    with open(lock_file, "w") as f:
-        f.write("This file sets the public application in maintenance mode.")
+    # print("Lock public application in maintenance mode")
+    # with open(lock_file, "w") as f:
+    #     f.write("This file sets the public application in maintenance mode.")
 
     # Create new publication in admin database
     print("Log event to publication table in", admin_database)
@@ -85,11 +85,10 @@ def main(argv=sys.argv):
     )
 
     print("Backup", admin_database, "to", backup_path)
-    # TODO: adapt to new infra? => do we need to pass credentials to pg commands?
-    # pg_user = settings.global_conf['PGUSER']
-    # pg_password = settings.global_conf['PGPASSWORD']
-    # cmd = "PGPASSWORD=" + pg_password + " pg_dump -U " + pg_user + " -Fc {} > {}".format(admin_database, backup_path)
-    cmd = "pg_dump -n datamart -n processing -Fc {} > {}".format(admin_database, backup_path)
+    pg_user_admin = settings.global_conf['PGUSER_ADMIN']
+    pg_password_admin = settings.global_conf['PGUSER_ADMIN']
+    cmd = "PGPASSWORD=" + pg_password_admin + " pg_dump -O -U " + pg_user_admin + \
+        " -Fc {} > {}".format(admin_database, backup_path)
     call(cmd, shell=True)
 
     print("Load backup to S3 bucket")
@@ -101,29 +100,34 @@ def main(argv=sys.argv):
 
     s3_helper.upload_file(backup_path, backup_filename)
 
+    pg_user_public = settings.global_conf['PGUSER_PUBLIC']
+    pg_password_public = settings.global_conf['PGUSER_PUBLIC']
+
     print("Drop database schemas datamart, processing from", public_database)
-    call(["psql", "-d", public_database, "-c", "DROP SCHEMA IF EXISTS datamart, processing CASCADE;"])
+    cmd_drop = "PGPASSWORD=" + pg_password_public + " psql -U " + pg_user_public + \
+        " -d " + public_database + " -c 'DROP SCHEMA IF EXISTS datamart, processing CASCADE';"
+    call(cmd_drop, shell=True)
 
     print("Create new fresh database schemas datamart, processing in", public_database)
-    call(["psql", "-d", public_database, "-c", "CREATE SCHEMA datamart, processing;"])
+    cmd_create_datamart = "PGPASSWORD=" + pg_password_public + " psql -U " + pg_user_public + \
+        " -d " + public_database + " -c 'CREATE SCHEMA datamart';"
+    cmd_create_processing = "PGPASSWORD=" + pg_password_public + " psql -U " + pg_user_public + \
+        " -d " + public_database + " -c 'CREATE SCHEMA processing';"
+    call(cmd_create_datamart, shell=True)
+    call(cmd_create_processing, shell=True)
 
     print("Restore backup into", public_database)
-    call(
-        [
-            "pg_restore",
-            "--exit-on-error",
-            "-d",
-            public_database,
-            backup_path,
-        ]
-    )
+    cmd_restore = "PGPASSWORD=" + pg_password_public + " pg_restore -U " + pg_user_public + \
+        " --exit-on-error -n datamart -n processing -d " + public_database + " " + backup_path
+    print(cmd_restore)
+    call(cmd_restore, shell=True)
 
     print("Delete backup file from filesystem")
     os.remove(backup_path)
 
     # TODO: adapt to new infra in tween
-    print("Restarting Apache to clear cached data")
-    call(["sudo", "apache2ctl", "graceful"])
+    # print("Restarting Apache to clear cached data")
+    # call(["sudo", "apache2ctl", "graceful"])
 
-    print("Unlock public application from maintenance mode")
-    os.unlink(lock_file)
+    # print("Unlock public application from maintenance mode")
+    # os.unlink(lock_file)

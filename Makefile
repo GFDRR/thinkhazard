@@ -3,6 +3,7 @@ AUTHUSERFILE ?= /var/www/vhosts/wb-thinkhazard/conf/.htpasswd
 DATA ?= world
 
 -include local.mk
+-include .env
 
 export INI_FILE ?= c2c://development.ini
 
