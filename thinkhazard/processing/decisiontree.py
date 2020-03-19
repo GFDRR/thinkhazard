@@ -28,7 +28,8 @@ logger = logging.getLogger(__name__)
 
 class DecisionMaker(BaseProcessor):
     def do_execute(self, hazardset_id=None):
-        connection = self.dbsession.bind.connect()
+        connection = self.dbsession.connection()
+
         logger.info("Purging previous relations")
         connection.execute(clearall_query())
 
