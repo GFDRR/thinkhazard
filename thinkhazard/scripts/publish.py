@@ -86,7 +86,7 @@ def main(argv=sys.argv):
 
     print("Backup", admin_database, "to", backup_path)
     pg_user_admin = settings.global_conf['PGUSER_ADMIN']
-    pg_password_admin = settings.global_conf['PGUSER_ADMIN']
+    pg_password_admin = settings.global_conf['PGPASSWORD_ADMIN']
     cmd = "PGPASSWORD=" + pg_password_admin + " pg_dump -O -U " + pg_user_admin + \
         " -Fc {} > {}".format(admin_database, backup_path)
     call(cmd, shell=True)
@@ -101,7 +101,7 @@ def main(argv=sys.argv):
     s3_helper.upload_file(backup_path, backup_filename)
 
     pg_user_public = settings.global_conf['PGUSER_PUBLIC']
-    pg_password_public = settings.global_conf['PGUSER_PUBLIC']
+    pg_password_public = settings.global_conf['PGPASSWORD_PUBLIC']
 
     print("Drop database schemas datamart, processing from", public_database)
     cmd_drop = "PGPASSWORD=" + pg_password_public + " psql -U " + pg_user_public + \
