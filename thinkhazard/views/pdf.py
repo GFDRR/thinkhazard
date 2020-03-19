@@ -56,7 +56,6 @@ from sqlalchemy.orm import joinedload
 
 from geoalchemy2.functions import ST_Centroid
 
-from pyramid.paster import get_appsettings
 from thinkhazard.scripts.s3helper import S3Helper
 
 REPORT_ID_REGEX = re.compile("\d{4}_\d{2}_\w{8}(-\w{4}){3}-\w{12}?")
@@ -152,7 +151,7 @@ def create_pdf_report(request):
     object_name = "{:s}.pdf".format(division_code)
     file_name = path.join(base_path, object_name)
 
-    s3_helper = _create_s3_helper()
+    s3_helper = _create_s3_helper(request)
     if not s3_helper.download_file(object_name, file_name):
         categories = (
             request.dbsession.query(HazardCategory)
@@ -186,9 +185,8 @@ def create_pdf_report(request):
     return response
 
 
-def _create_s3_helper():
-    ini_file = 'c2c://' + os.environ['INI_FILE']
-    settings = get_appsettings(ini_file, name="admin")
+def _create_s3_helper(request):
+    settings = request.registry.settings
     return S3Helper(
         settings["aws_bucket_name"],
         aws_access_key_id=settings["aws_access_key_id"],
