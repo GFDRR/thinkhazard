@@ -32,7 +32,7 @@ services:
       - GEONODE_API_KEY
     command: 'pserve c2c://${INI_FILE}'
     ports:
-      - 8080:6543
+      - 8080:8080
 
   minio:
     image: minio/minio
