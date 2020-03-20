@@ -10,4 +10,5 @@ lingua==4.12
 transifex-client==0.12.2
 jinja2==2.9.5
 requests==2.14.2
+zope.sqlalchemy==0.7.6
 -e .
