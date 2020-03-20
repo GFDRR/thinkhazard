@@ -21,11 +21,8 @@ import datetime
 import logging
 import re
 import tempfile
-
 import os
-from uuid import uuid4
 
-from os import path
 from typing import List
 
 from pyramid.view import view_config

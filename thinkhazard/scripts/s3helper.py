@@ -1,19 +1,19 @@
 import boto3
 import logging
-import os
 from botocore.client import Config
 from botocore.exceptions import ClientError
 
+
 class S3Helper:
     def __init__(self, bucket, **kwargs):
-        # only set endpoint_url for debug, boto generates aws endpoint_url for prod 
+        # only set endpoint_url for debug, boto generates aws endpoint_url for prod
         if kwargs["aws_access_key_id"] == "minioadmin":
             kwargs["endpoint_url"] = "http://minio:9000/"
         self.s3_client = boto3.client('s3',
-            **kwargs,
-            config=Config(signature_version='s3v4'),
-            region_name='eu-west-1'
-        )
+                                      **kwargs,
+                                      config=Config(signature_version='s3v4'),
+                                      region_name='eu-west-1'
+                                      )
         self.bucket = bucket
 
     def upload_file(self, file_name, object_name=None):
@@ -22,7 +22,7 @@ class S3Helper:
             object_name = file_name
 
         try:
-            response = self.s3_client.upload_file(file_name, self.bucket, object_name)
+            self.s3_client.upload_file(file_name, self.bucket, object_name)
         except ClientError as e:
             logging.error(e)
             return False
@@ -34,7 +34,7 @@ class S3Helper:
             file_name = object_name
 
         try:
-            response = self.s3_client.download_file(self.bucket, object_name, file_name)
+            self.s3_client.download_file(self.bucket, object_name, file_name)
         except ClientError as e:
             logging.error(e)
             return False
