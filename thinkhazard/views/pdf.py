@@ -145,10 +145,12 @@ async def create_and_upload_pdf(file_name: str, pages: List[str], object_name: s
 def create_pdf_report(request):
     """View to create an asynchronous print job.
     """
+    publication_date = request.publication_date
+    locale = request.locale_name
     division_code = request.matchdict.get("divisioncode")
 
     base_path = request.registry.settings.get("pdf_archive_path")
-    object_name = "{:s}.pdf".format(division_code)
+    object_name = "{:%Y-%m-%d}-{:s}-{:s}.pdf".format(publication_date, locale, division_code)
     file_name = path.join(base_path, object_name)
 
     s3_helper = _create_s3_helper(request)

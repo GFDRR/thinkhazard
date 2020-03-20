@@ -47,8 +47,8 @@ def notmodified_tween_factory(handler, registry):
             ):
                 return HTTPNotModified()
 
+            request.publication_date = publication_date
             response = handler(request)
-
             response.last_modified = publication_date
 
             return response
