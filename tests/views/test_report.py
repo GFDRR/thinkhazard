@@ -19,6 +19,7 @@
 import os
 import shutil
 import asyncio
+import tempfile
 from mock.mock import patch, Mock
 
 from . import BaseTestCase
@@ -27,23 +28,16 @@ from . import BaseTestCase
 class TestReportFunction(BaseTestCase):
     def setUp(self):  # noqa
         super(TestReportFunction, self).setUp()
-        self.pdf_archive_path = self.testapp.app.registry.settings.get(
-            "pdf_archive_path"
-        )
-        if not os.path.exists(self.pdf_archive_path):
-            os.makedirs(self.pdf_archive_path)
         self.report_id = "1d235e51-44d5-47ac-b6da-a96c46f21639"
         filename = "31-" + self.report_id + ".pdf"
         year = "1970"
         month = "01"
-        self.pdf_file = os.path.join(self.pdf_archive_path, year, month, filename)
+        self.pdf_file = os.path.join(tempfile.gettempdir(), year, month, filename)
         self.pdf_temp_file = os.path.join(
-            self.pdf_archive_path, year, month, "_" + filename
+            tempfile.gettempdir(), year, month, "_" + filename
         )
 
     def tearDown(self):  # noqa
-        # delete pdf archive directory
-        shutil.rmtree(self.pdf_archive_path)
         super(TestReportFunction, self).tearDown()
 
     def test_report(self):
@@ -152,12 +146,11 @@ class TestReportFunction(BaseTestCase):
         resp = self.testapp.get("/en/report/12-slug/EQ")
         self.assertEqual(len(resp.pyquery(".contacts ul li")), 0)
 
-    @patch('thinkhazard.views.pdf.create_pdf')
+    @patch('thinkhazard.views.pdf.create_and_upload_pdf')
     def test_create_pdf_report(self, mock):
         # thanks to https://stackoverflow.com/a/29905620
         @asyncio.coroutine
-        def create(file_name, pages):
-            os.makedirs(os.path.dirname(file_name))
+        def create(file_name, pages, object_name, s3_helper):
             with open(file_name, "w") as file:
                 file.write("The pdf file")
 
