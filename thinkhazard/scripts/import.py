@@ -262,7 +262,7 @@ def import_recommendations(argv=sys.argv):
                 # the other columns are hazard category (type / level)
                 for col_index in range(1, 28):
                     value = row[col_index]
-                    if value is not '' and value is not 'Y':
+                    if value != '' and value != 'Y':
                         association = hctra(order=value)
                         association.hazardcategory = categories[col_index - 1]
                         associations.append(association)
@@ -385,8 +385,8 @@ def import_contacts(argv=sys.argv):
                     url = unicode(row[10 + offset].decode('latin1'))
                     phone = unicode(row[11 + offset].decode('latin1'))
                     email = unicode(row[12 + offset].decode('latin1'))
-                    if name is '' and url is '' and \
-                       phone is '' and email is '':
+                    if name == '' and url == '' and \
+                       phone == '' and email == '':
                         continue
 
                     contact = DBSession.query(Contact) \
