@@ -20,6 +20,7 @@
 import datetime
 import logging
 import re
+import tempfile
 
 import os
 from uuid import uuid4
@@ -134,7 +135,6 @@ async def create_and_upload_pdf(file_name: str, pages: List[str], object_name: s
         reader = PdfFileReader(chunk)
         for index in range(reader.numPages):
             writer.addPage(reader.getPage(index))
-    os.makedirs(os.path.dirname(file_name), exist_ok=True)
     output = open(file_name, "wb")
     writer.write(output)
     output.close()
@@ -149,9 +149,10 @@ def create_pdf_report(request):
     locale = request.locale_name
     division_code = request.matchdict.get("divisioncode")
 
-    base_path = request.registry.settings.get("pdf_archive_path")
     object_name = "{:%Y-%m-%d}-{:s}-{:s}.pdf".format(publication_date, locale, division_code)
-    file_name = path.join(base_path, object_name)
+    file_name = os.path.join(
+        tempfile.gettempdir(), object_name
+    )
 
     s3_helper = _create_s3_helper(request)
     if not s3_helper.download_file(object_name, file_name):
