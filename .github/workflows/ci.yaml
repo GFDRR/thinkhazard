@@ -1,0 +1,23 @@
+---
+
+name: Continuous integration
+
+on:
+  push:
+
+jobs:
+  main:
+    name: Continuous integration
+    runs-on: ubuntu-18.04
+    timeout-minutes: 60
+    env:
+      TX_PWD: ${{ secrets.TX_PWD }}
+      TX_USR: ${{ secrets.TX_USR }}
+    steps:
+      - uses: actions/checkout@v1
+      - name: Build
+        run: make build
+      - name: Lint
+        run: make check
+      - name: Tests
+        run: make test

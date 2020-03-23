@@ -59,11 +59,11 @@ $(HOME)/.transifexrc:
 	echo "[https://www.transifex.com]" > $@
 	echo "hostname = https://www.transifex.com" >> $@
 	echo "username = $(TX_USR)" >> $@
-	echo "password = $(TX_PWD)" >> $@
+	@echo "password = $(TX_PWD)" >> $@
 	echo "token =" >> $@
 
 
-check: flake8 jshint bootlint
+check: flake8 jshint
 
 .PHONY: flake8
 flake8:
@@ -72,7 +72,3 @@ flake8:
 .PHONY: jshint
 jshint:
 	jshint --verbose $(JS_FILES)
-
-.PHONY: bootlint
-bootlint:
-	bootlint $(JINJA2_FILES)
