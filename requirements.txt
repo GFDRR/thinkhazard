@@ -4,6 +4,7 @@ PyPDF2
 SQLAlchemy
 alembic
 asyncio
+boto3
 colorlog
 geoalchemy2
 httplib2
@@ -29,8 +30,7 @@ requests_futures
 shapely
 shapely
 simplejson
+slugify
 transaction
 waitress
 zope.sqlalchemy
-boto3
-slugify

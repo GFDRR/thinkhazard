@@ -3,7 +3,6 @@ AUTHUSERFILE ?= /var/www/vhosts/wb-thinkhazard/conf/.htpasswd
 DATA ?= world
 
 -include local.mk
--include .env
 
 export INI_FILE ?= c2c://development.ini
 
@@ -18,6 +17,8 @@ export PGPASSWORD_PUBLIC ?= thinkhazard
 export PGDATABASE_ADMIN ?= thinkhazard_admin
 export PGUSER_ADMIN ?= thinkhazard
 export PGPASSWORD_ADMIN ?= thinkhazard
+
+export GEONODE_API_KEY ?= geonode
 
 export AWS_ACCESS_KEY_ID ?= minioadmin
 export AWS_SECRET_ACCESS_KEY ?= minioadmin
@@ -157,7 +158,7 @@ decisiontree: ## Run the decision tree and perform upscaling
 	docker-compose run --rm thinkhazard decision_tree -v
 
 .PHONY: publish
-publish: ## Publish validated data on public web site
+publish: ## Publish validated data on public web site (for prod: make -f prod.mk publish)
 	docker-compose run --rm thinkhazard publish $(INI_FILE)
 
 
