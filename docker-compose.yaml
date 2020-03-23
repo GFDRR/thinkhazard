@@ -25,8 +25,36 @@ services:
       - PGUSER_ADMIN
       - PGPASSWORD_ADMIN
       - PGDATABASE_ADMIN
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_BUCKET_NAME
       - INI_FILE
       - GEONODE_API_KEY
     command: 'pserve c2c://${INI_FILE}'
     ports:
-      - 8080:6543
+      - 8080:8080
+
+  minio:
+    image: minio/minio
+    ports:
+      - "9000:9000"
+    command: 'server start'
+
+  minio-client:
+    image: minio/mc
+    depends_on:
+      - minio
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_BUCKET_NAME
+    entrypoint: >
+      /bin/sh -c "
+      while ! nc -z minio 9000; do echo 'Wait minio to startup...' && sleep 0.1; done;
+      sleep 5;
+      /usr/bin/mc config host add localminio http://minio:9000 ${AWS_ACCESS_KEY_ID} ${AWS_SECRET_ACCESS_KEY};
+      /usr/bin/mc rm -r --force localminio/${AWS_BUCKET_NAME};
+      /usr/bin/mc mb localminio/${AWS_BUCKET_NAME};
+      /usr/bin/mc policy download localminio/${AWS_BUCKET_NAME};
+      exit 0;
+      "

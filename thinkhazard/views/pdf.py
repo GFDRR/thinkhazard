@@ -20,11 +20,9 @@
 import datetime
 import logging
 import re
-
+import tempfile
 import os
-from uuid import uuid4
 
-from os import path
 from typing import List
 
 from pyramid.view import view_config
@@ -55,6 +53,8 @@ from sqlalchemy import func
 from sqlalchemy.orm import joinedload
 
 from geoalchemy2.functions import ST_Centroid
+
+from thinkhazard.scripts.s3helper import S3Helper
 
 REPORT_ID_REGEX = re.compile("\d{4}_\d{2}_\w{8}(-\w{4}){3}-\w{12}?")
 
@@ -105,7 +105,7 @@ def pdf_cover(request):
 """pdf_about: see index.py"""
 
 
-async def create_pdf(file_name: str, pages: List[str]):
+async def create_and_upload_pdf(file_name: str, pages: List[str], object_name: str, s3_helper: S3Helper):
     """Create a PDF file with the given pages using pyppeteer.
     """
     chunks = []
@@ -132,24 +132,27 @@ async def create_pdf(file_name: str, pages: List[str]):
         reader = PdfFileReader(chunk)
         for index in range(reader.numPages):
             writer.addPage(reader.getPage(index))
-    os.makedirs(os.path.dirname(file_name), exist_ok=True)
     output = open(file_name, "wb")
     writer.write(output)
     output.close()
+    s3_helper.upload_file(file_name, object_name)
 
 
 @view_config(route_name="create_pdf_report", request_method="POST")
 def create_pdf_report(request):
     """View to create an asynchronous print job.
     """
+    publication_date = request.publication_date
+    locale = request.locale_name
     division_code = request.matchdict.get("divisioncode")
 
-    base_path = request.registry.settings.get("pdf_archive_path")
-    report_id = _get_report_id(division_code, base_path)
+    object_name = "{:%Y-%m-%d}-{:s}-{:s}.pdf".format(publication_date, locale, division_code)
+    file_name = os.path.join(
+        tempfile.gettempdir(), object_name
+    )
 
-    file_name = _get_report_filename(base_path, division_code, report_id)
-
-    if not path.isfile(file_name):
+    s3_helper = _create_s3_helper(request)
+    if not s3_helper.download_file(object_name, file_name):
         categories = (
             request.dbsession.query(HazardCategory)
             .options(joinedload(HazardCategory.hazardtype))
@@ -173,7 +176,7 @@ def create_pdf_report(request):
                     **query_args,
                 )
             )
-        run(create_pdf(file_name, pages))
+        run(create_and_upload_pdf(file_name, pages, object_name, s3_helper))
 
     response = FileResponse(file_name, request=request, content_type="application/pdf")
     response.headers["Content-Disposition"] = (
@@ -182,25 +185,10 @@ def create_pdf_report(request):
     return response
 
 
-def _get_report_id(division_code, base_path):
-    """Generate a random report id. Check that there is no existing file with
-    the generated id.
-    """
-    while True:
-        date = datetime.datetime.now()
-        year = date.strftime("%Y")
-        month = date.strftime("%m")
-        report_id = "_".join([year, month, str(uuid4())])
-        file_name = _get_report_filename(base_path, division_code, report_id)
-        if not (path.isfile(file_name)):
-            return report_id
-
-
-def _get_report_filename(base_path, division_code, report_id):
-    year, month, id = report_id.split("_")
-    return path.join(
-        base_path,
-        year,
-        month,
-        "{:s}-{:s}.pdf".format(division_code, id),
+def _create_s3_helper(request):
+    settings = request.registry.settings
+    return S3Helper(
+        settings["aws_bucket_name"],
+        aws_access_key_id=settings["aws_access_key_id"],
+        aws_secret_access_key=settings["aws_secret_access_key"]
     )
