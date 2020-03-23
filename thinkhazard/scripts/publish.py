@@ -118,8 +118,7 @@ def main(argv=sys.argv):
 
     print("Restore backup into", public_database)
     cmd_restore = "PGPASSWORD=" + pg_password_public + " pg_restore -U " + pg_user_public + \
-        " --exit-on-error -n datamart -n processing -d " + public_database + " " + backup_path
-    print(cmd_restore)
+        " --exit-on-error -O -n datamart -n processing -d " + public_database + " " + backup_path
     call(cmd_restore, shell=True)
 
     print("Delete backup file from filesystem")
