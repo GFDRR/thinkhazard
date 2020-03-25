@@ -41,6 +41,8 @@ def main(global_config, **settings):
     config.add_translation_dirs("thinkhazard:locale")
     config.set_locale_negotiator("thinkhazard.i18n.custom_locale_negotiator")
 
+    config.add_route("healthcheck", "/healthcheck")
+
     if settings["appname"] == "public":
         config.include(add_public_routes)
         config.add_route("sitemap", "/sitemap.xml")
