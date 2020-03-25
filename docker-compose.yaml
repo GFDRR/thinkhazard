@@ -30,7 +30,6 @@ services:
       - AWS_BUCKET_NAME
       - INI_FILE
       - GEONODE_API_KEY
-    command: 'pserve c2c://${INI_FILE}'
     ports:
       - 8080:8080
 
