@@ -11,8 +11,10 @@ jobs:
     runs-on: ubuntu-18.04
     timeout-minutes: 60
     env:
-      TX_PWD: ${{ secrets.TX_PWD }}
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       TX_USR: ${{ secrets.TX_USR }}
+      TX_PWD: ${{ secrets.TX_PWD }}
     steps:
       - uses: actions/checkout@v1
       - name: Build
@@ -21,3 +23,26 @@ jobs:
         run: make check
       - name: Tests
         run: make test
+      - name: Push to Docker hub
+        if: >
+          github.repository == 'GFDRR/thinkhazard'
+          && success()
+          && (
+            startsWith(github.ref, 'refs/tags/')
+            || github.ref == 'refs/heads/master'
+            || github.ref == 'refs/heads/docker-push-using-docker-action'
+          )
+        uses: docker/build-push-action@v1
+        with:
+          repository: camptocamp/thinkhazard
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          build_args: TX_USR=${{ secrets.TX_USR }},TX_PWD=${{ secrets.TX_PWD }}
+          target: app
+          tag_with_ref: true
+      - name: Push to transifex
+        if: >
+          github.repository == 'GFDRR/thinkhazard'
+          && success()
+          && github.ref == 'refs/heads/master'
+        run: make transifex-push

@@ -133,6 +133,20 @@ docker_build_testdb:
 	docker build -t camptocamp/thinkhazard-testdb docker/testdb
 
 
+####################################
+# Push to docker hub and transifex #
+####################################
+
+.PHONY: docker-push
+docker-push: ## Push images to docker hub
+	./scripts/docker-push
+
+.PHONY: transifex-push
+transifex-push: ## Push translations to transifex
+transifex-push:
+	$(DOCKER_MAKE_CMD) transifex-push
+
+
 ##############
 # Processing #
 ##############
@@ -242,9 +256,3 @@ extract_messages:
 	.build/venv/bin/pot-create -c lingua.cfg -o thinkhazard/locale/thinkhazard-database.pot thinkhazard/dont_remove_me.db-i18n
 	# removes the creation date to avoid unnecessary git changes
 	sed -i '/^"POT-Creation-Date: /d' thinkhazard/locale/thinkhazard.pot
-
-.PHONY: transifex-push
-transifex-push: $(HOME)/.transifexrc
-	.build/venv/bin/tx push -s
-
-

@@ -1,0 +1,39 @@
+#!/bin/bash -ex
+
+if [[ "${GITHUB_ACTIONS}" == "true" ]]
+then
+    if [[ "${GITHUB_REF}" =~ ^refs/tags/.* ]]
+    then
+      GIT_TAGS=$(echo "${GITHUB_REF}"|sed 's|^refs/tags/||g')
+    elif [[ "${GITHUB_REF}" =~ ^refs/heads/.* ]]
+    then
+      GIT_BRANCH=$(echo "${GITHUB_REF}"|sed 's|^refs/heads/||g')
+    fi
+else
+    GIT_BRANCH=`git rev-parse --abbrev-ref HEAD`
+    GIT_TAGS=`git tag --points-at HEAD`
+fi
+
+docker_push () {
+    docker tag camptocamp/thinkhazard:latest camptocamp/thinkhazard:${DOCKER_TAG}
+    docker push camptocamp/thinkhazard:${DOCKER_TAG}
+}
+
+# If we are on a branch, push branch
+if [ ${GIT_BRANCH} != HEAD ]
+then
+    if [ "${GIT_BRANCH}" == "main" ]
+    then
+        DOCKER_TAG='latest'
+    else
+        DOCKER_TAG=${GIT_BRANCH}
+    fi
+    docker_push
+fi
+
+# Push tags
+for GIT_TAG in ${GIT_TAGS}
+do
+    DOCKER_TAG=$GIT_TAG
+    docker_push
+done
