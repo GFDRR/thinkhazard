@@ -72,3 +72,8 @@ flake8:
 .PHONY: jshint
 jshint:
 	jshint --verbose $(JS_FILES)
+
+
+.PHONY: transifex-push
+transifex-push: $(HOME)/.transifexrc
+	tx push -s
