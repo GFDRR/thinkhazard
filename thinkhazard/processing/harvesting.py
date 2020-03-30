@@ -29,6 +29,7 @@ import transaction
 import csv
 from datetime import datetime
 import pytz
+from time import sleep
 
 from ..models import (
     DBSession,
@@ -124,6 +125,19 @@ class Harvester(BaseProcessor):
         Harvesting.new(complete=(self.force is True and hazard_type is None))
         transaction.commit()
 
+    def request(self, url):
+        """
+        Send request and retry in case of 503 (unavailable).
+        """
+        tries = 3
+        while tries > 0:
+            response, content = self.http_client.request(url)
+            if response.status != 503:
+                break
+            sleep(3)
+            tries -= 1
+        return response, content
+
     def fetch(self, category, params={}, order_by='title'):
         geonode = self.settings['geonode']
         # add credentials
@@ -136,7 +150,7 @@ class Harvester(BaseProcessor):
             urlencode(params),
             ''))
         logger.info(u'Retrieving {}'.format(url))
-        response, content = self.http_client.request(url)
+        response, content = self.request(url)
         if response.status != 200:
             raise Exception(u'Geonode returned status {}: {}'.
                             format(response.status, content))
@@ -262,7 +276,7 @@ class Harvester(BaseProcessor):
                                          'api_key': geonode['api_key']}),
                               ''))
         logger.info(u'  Retrieving {}'.format(doc_url))
-        response, content = self.http_client.request(doc_url)
+        response, content = self.request(doc_url)
         if response.status != 200:
             raise Exception(u'Geonode returned status {}: {}'.
                             format(response.status, content))
@@ -393,7 +407,7 @@ class Harvester(BaseProcessor):
                                            'api_key': geonode['api_key']}),
                                 ''))
         logger.info(u'  Retrieving {}'.format(layer_url))
-        response, content = self.http_client.request(layer_url)
+        response, content = self.request(layer_url)
         if response.status != 200:
             raise Exception(u'Geonode returned status {}: {}'.
                             format(response.status, content))
