@@ -195,12 +195,9 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 
 .build/venv:
 	mkdir -p $(dir $@)
-	# make a first virtualenv to get a recent version of virtualenv
-	virtualenv venv
-	venv/bin/pip install virtualenv
-	venv/bin/virtualenv .build/venv
-	# remove the temporary virtualenv
-	rm -rf venv
+	virtualenv --setuptools .build/venv
+	.build/venv/bin/pip install pip==8.1.1
+	.build/venv/bin/pip install setuptools==20.3.1
 
 .build/node_modules.timestamp: package.json
 	mkdir -p $(dir $@)
@@ -215,7 +212,8 @@ thinkhazard/static/build/%.css: $(LESS_FILES) .build/node_modules.timestamp
 .build/requirements.timestamp: .build/venv setup.py requirements.txt
 	mkdir -p $(dir $@)
 	.build/venv/bin/pip install numpy==1.10.1
-	.build/venv/bin/pip install -r requirements.txt
+	.build/venv/bin/pip install -r freeze.txt
+	.build/venv/bin/pip install -e .
 	touch $@
 
 .build/flake8.timestamp: $(PY_FILES)
