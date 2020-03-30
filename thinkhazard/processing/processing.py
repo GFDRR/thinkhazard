@@ -151,7 +151,7 @@ class Processor(BaseProcessor):
                 if outputs:
                     DBSession.add_all(outputs)
                 else:
-                    return
+                    hazardset.processing_error = 'No output generated'
 
             finally:
                 logger.info("  Closing raster files")
@@ -166,6 +166,11 @@ class Processor(BaseProcessor):
                         .format(hazardset.id,
                                 len(outputs),
                                 datetime.datetime.now() - chrono))
+        else:
+            logger.info('  Process of {} failed in {}, {}'
+                        .format(hazardset.id,
+                                datetime.datetime.now() - chrono,
+                                hazardset.processing_error))
 
         DBSession.flush()
 
