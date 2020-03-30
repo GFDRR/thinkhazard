@@ -552,6 +552,9 @@ class Harvester(BaseProcessor):
                 layer.downloaded = False
                 hazardset.complete = False
                 hazardset.processed = None
+                # Remove file from cache
+                layer.download_url = download_url
+                os.unlink(self.layer_path(layer))
 
             # Some hazardset fields are calculated during completing
             if (layer.calculation_method_quality !=
