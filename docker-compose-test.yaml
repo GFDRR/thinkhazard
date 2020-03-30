@@ -13,11 +13,15 @@ services:
       - '${PWD}/thinkhazard:/app/thinkhazard'
       - '${PWD}/tests:/app/tests'
     environment:
+      - INI_FILE
       - PGHOST=db
       - PGPORT=5432
       - PGUSER=thinkhazard
       - PGPASSWORD=thinkhazard
-      - INI_FILE
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_BUCKET_NAME
+      - GEONODE_API_KEY
 
   minio:
     image: minio/minio

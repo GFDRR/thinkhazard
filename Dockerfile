@@ -73,6 +73,8 @@ RUN TX_USR=$TX_USR \
 
 RUN pip install --no-deps -e .
 
+CMD ["sh", "-c", "pserve ${INI_FILE} -n main"]
+
 #################
 # Runtime image #
 #################
@@ -84,3 +86,5 @@ ENV NODE_PATH=/opt/thinkhazard/node_modules
 WORKDIR /app
 COPY --from=builder /app/ /app/
 RUN pip install --no-deps -e .
+
+CMD ["sh", "-c", "pserve ${INI_FILE} -n main"]

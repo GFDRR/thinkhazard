@@ -16,3 +16,12 @@
 #
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
+
+from pyramid.view import view_config
+
+
+@view_config(route_name="healthcheck", renderer="json")
+def healthcheck(request):
+    return {
+        'success': True
+    }

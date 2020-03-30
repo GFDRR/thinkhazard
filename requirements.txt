@@ -7,6 +7,7 @@ asyncio
 boto3
 colorlog
 geoalchemy2
+gunicorn
 httplib2
 jinja2
 lingua
