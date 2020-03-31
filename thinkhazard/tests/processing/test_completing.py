@@ -47,40 +47,41 @@ def populate():
     transaction.commit()
 
 
+def reader_context(**attrs):
+    reader = Mock(
+        spec=RasterReader,
+        shape=(360, 720),
+        affine=Affine(-180., 0.5, 0.0, -90., 0.0, 0.5),
+        bounds=BoundingBox(-180., -90., 0., 0.),
+        crs={'init': 'epsg:4326'},
+    )
+    reader.configure_mock(**attrs)
+    context = Mock()
+    context.__enter__ = Mock(return_value=reader)
+    context.__exit__ = Mock(return_value=False)
+    return context
+
+
 def global_reader(path=''):
-    reader = Mock(spec=RasterReader)
-    reader.shape = (360, 720)
-    reader.affine = Affine(-180., 0.5, 0.0, -90., 0.0, 0.5)
-    reader.bounds = BoundingBox(-180., -90., 0., 0.)
-
-    context = Mock()
-    context.__enter__ = Mock(return_value=reader)
-    context.__exit__ = Mock(return_value=False)
-    return context
+    return reader_context()
 
 
-def global_reader_bis(path=''):
-    reader = Mock(spec=RasterReader)
-    reader.shape = (361, 720)
-    reader.affine = Affine(-180., 0.5, 0.0, -90., 0.0, 0.5)
-    reader.bounds = BoundingBox(-180., -90., 0.5, 0.)
-
-    context = Mock()
-    context.__enter__ = Mock(return_value=reader)
-    context.__exit__ = Mock(return_value=False)
-    return context
+def global_reader_bad_shape(path=''):
+    return reader_context(
+        shape=(361, 720)
+    )
 
 
 def global_reader_invalid_bounds(path=''):
-    reader = Mock(spec=RasterReader)
-    reader.shape = (360, 720)
-    reader.affine = Affine(-180., 0.5, 0.0, 90., 0.0, -0.5)
-    reader.bounds = BoundingBox(-180., 90., 0.5, 0.)
+    return reader_context(
+        bounds=BoundingBox(-180., 90., 0.5, 0.)
+    )
 
-    context = Mock()
-    context.__enter__ = Mock(return_value=reader)
-    context.__exit__ = Mock(return_value=False)
-    return context
+
+def global_reader_bad_crs(path=''):
+    return reader_context(
+        crs={}
+    )
 
 
 class TestCompleting(unittest.TestCase):
@@ -393,7 +394,7 @@ class TestCompleting(unittest.TestCase):
         global_reader(),
         global_reader(),
         global_reader(),
-        global_reader_bis()])
+        global_reader_bad_shape()])
     def test_not_corresponding_rasters(self, open_mock):
         '''Difference in origin, resolution or size must not complete'''
 
@@ -450,4 +451,45 @@ class TestCompleting(unittest.TestCase):
         self.assertEqual(
             hazardset.complete_error,
             u'All layers should have the same origin, resolution and size')
+        self.assertEqual(hazardset.complete, False)
+
+    @patch('rasterio.open', side_effect=global_reader_bad_crs)
+    def test_invalid_crs(self, open_mock):
+        '''Test invalid CRS'''
+
+        hazardset_id = u'preprocessed'
+        hazardtype = HazardType.get(u'VA')
+
+        regions = DBSession.query(Region).all()
+        hazardset = HazardSet(
+            id=hazardset_id,
+            hazardtype=hazardtype,
+            local=False,
+            data_lastupdated_date=datetime.now(),
+            metadata_lastupdated_date=datetime.now(),
+            regions=regions)
+        DBSession.add(hazardset)
+
+        layer = Layer(
+            hazardlevel=None,
+            mask=False,
+            return_period=None,
+            data_lastupdated_date=datetime.now(),
+            metadata_lastupdated_date=datetime.now(),
+            geonode_id=new_geonode_id(),
+            download_url='test',
+            calculation_method_quality=5,
+            scientific_quality=1,
+            local=False,
+            downloaded=True
+        )
+        hazardset.layers.append(layer)
+
+        transaction.commit()
+
+        Completer().execute(settings)
+
+        hazardset = DBSession.query(HazardSet).one()
+        self.assertEqual(hazardset.complete_error,
+                         u'crs is none (epsg:4326 is required)')
         self.assertEqual(hazardset.complete, False)
