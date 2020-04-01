@@ -41,12 +41,13 @@ from thinkhazard.models import (
     HazardSet,
     Layer,
     TechnicalRecommendation,
+    Publication,
 )
 
 
-@view_config(route_name="admin_index")
+@view_config(route_name="admin_index", renderer="templates/admin/index.jinja2")
 def index(request):
-    return HTTPFound(request.route_url("admin_hazardsets"))
+    return {"publication_date": Publication.last(request.dbsession).date}
 
 
 @view_config(
@@ -98,7 +99,9 @@ def hazardcategory(request):
         }
 
     if request.method == "POST":
-        hazard_category = request.dbsession.query(HazardCategory).get(request.POST.get("id"))
+        hazard_category = request.dbsession.query(HazardCategory).get(
+            request.POST.get("id")
+        )
         if hazard_category is None:
             raise HTTPNotFound()
 
@@ -205,7 +208,9 @@ def technical_rec_process(request, obj):
         for association in associations:
             hazardtype, hazardlevel = association.split(" - ")
             if not obj.has_association(hazardtype, hazardlevel):
-                hazardcategory = HazardCategory.get(request.dbsession, hazardtype, hazardlevel)
+                hazardcategory = HazardCategory.get(
+                    request.dbsession, hazardtype, hazardlevel
+                )
                 order = (
                     request.dbsession.query(
                         func.coalesce(func.cast(func.max(HcTr.order), Integer), 0)
@@ -386,7 +391,9 @@ def climate_rec_process(request, obj):
         hazard_types = request.dbsession.query(HazardType).order_by(HazardType.order)
 
         association_subq = (
-            request.dbsession.query(CcrAd).filter(CcrAd.hazardtype == obj.hazardtype).subquery()
+            request.dbsession.query(CcrAd)
+            .filter(CcrAd.hazardtype == obj.hazardtype)
+            .subquery()
         )
 
         admin_divs = (
@@ -424,7 +431,9 @@ def climate_rec_process(request, obj):
         if inspect(obj).transient:
             request.dbsession.add(obj)
 
-        obj.hazardtype = HazardType.get(request.dbsession, request.POST.get("hazard_type"))
+        obj.hazardtype = HazardType.get(
+            request.dbsession, request.POST.get("hazard_type")
+        )
         obj.text = request.POST.get("text")
 
         admindiv_ids = request.POST.getall("associations")
@@ -436,7 +445,9 @@ def climate_rec_process(request, obj):
 
         # Add new ones
         for admindiv_id in admindiv_ids:
-            association = request.dbsession.query(CcrAd).get((admindiv_id, obj.hazardtype.id))
+            association = request.dbsession.query(CcrAd).get(
+                (admindiv_id, obj.hazardtype.id)
+            )
             if association is None:
                 association = CcrAd(
                     administrativedivision_id=admindiv_id, hazardtype=obj.hazardtype

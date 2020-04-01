@@ -1,6 +1,9 @@
 {% macro navbar(category) %}
   <div class="navbar navbar-default container-fluid">
     <ul class="nav navbar-nav">
+      <li role="presentation" class="{{ 'active' if category == 'index' else '' }}">
+        <a href="{{ 'admin_index' | route_url }}">Home</a>
+      </li>
       <li role="presentation" class="{{ 'active' if category == 'hazardsets' else '' }}">
         <a href="{{ 'admin_hazardsets' | route_url }}">Hazard sets</a>
       </li>

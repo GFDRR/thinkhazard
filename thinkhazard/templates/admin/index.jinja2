@@ -1,0 +1,53 @@
+{% extends "base.jinja2" %}
+
+{% from 'common.jinja2' import navbar %}
+
+{% block name %}admin{% endblock %}
+
+{% block content %}
+  {{ navbar('index') }}
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="panel panel-primary">
+          <div class="panel-heading text-center">
+            Latest publication date:
+            <strong>{{publication_date.strftime("%Y-%m-%d")}}</strong>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">Tasks</div>
+          <div class="panel-body">
+            <h4>Processing</h4>
+            Harvest, download, complete &amp; process.<br><br>
+            <p class="text-right">
+              <button class="btn btn-info">Process</button>
+            </p>
+            <hr>
+            <h4>Translations</h4>
+            Fetch translations from transifex and reimport them into ThinkHazard. <br><br>
+            <p class="text-right">
+              <button class="btn btn-info">Import from Transifex</button>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="panel panel-warning">
+          <div class="panel-heading">Publication</div>
+          <div class="panel-body">
+            Publish current preview to public site. <br><br>
+            <p class="text-right">
+              <button class="btn btn-danger">Publish now</button>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
