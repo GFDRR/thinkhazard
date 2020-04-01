@@ -35,3 +35,4 @@ transaction
 transifex-client
 waitress
 zope.sqlalchemy
+pyramid_celery

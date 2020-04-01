@@ -31,7 +31,10 @@ def main(global_config, **settings):
 
     config.include("pyramid_jinja2")
     config.include("papyrus")
+    config.include("pyramid_celery")
     config.include("thinkhazard.session")
+
+    config.configure_celery(global_config['__file__'])
 
     config.add_tween("thinkhazard.tweens.notmodified_tween_factory", over=MAIN)
 
