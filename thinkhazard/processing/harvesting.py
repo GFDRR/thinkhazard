@@ -53,6 +53,12 @@ logger = logging.getLogger(__name__)
 region_admindiv_csv_path = \
     'data/geonode_regions_to_administrative_divisions_code.csv'
 
+# FIXME: temporary override
+excluded_hazardsets = [
+    'LS(EQ)-GLOBAL-ARUP',
+    'LS(PP)-GLOBAL-ARUP',
+]
+
 
 def warning(object, msg):
     logger.warning(('{csw_type} {id}: '+msg).format(**object))
@@ -432,6 +438,11 @@ class Harvester(BaseProcessor):
         hazardset_id = o['hazard_set']
         if not hazardset_id:
             logger.info(u'  hazard_set is empty')
+            return False
+
+        # FIXME: temporary override
+        if hazardset_id in excluded_hazardsets:
+            logger.info("  hazard_set {} is excluded, skipping")
             return False
 
         hazardtype = self.check_hazard_type(o)

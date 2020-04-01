@@ -125,6 +125,11 @@ class Completer(BaseProcessor):
             try:
                 with rasterio.drivers():
                     with rasterio.open(self.layer_path(layer)) as reader:
+                        crs = reader.crs.get('init', 'None').lower()
+                        if crs != 'epsg:4326':
+                            return 'crs is {} (epsg:4326 is required)'.format(
+                                crs
+                            )
                         bounds = reader.bounds
                         if bounds.bottom > bounds.top:
                             return 'bounds.bottom > bounds.top'
