@@ -103,7 +103,8 @@ class Harvester(BaseProcessor):
             logger.info(
                 "Settings have been modified, " "passing in force/complete mode."
             )
-            self.force = True
+            # Commented to test with old DB dump
+            # self.force = True
             self.hazard_type = None
 
         try:
@@ -371,6 +372,9 @@ class Harvester(BaseProcessor):
             return [primary_type]
 
     def harvest_layers(self, hazard_type=None):
+        layers_db_start = self.dbsession.query(Layer).all()
+        for layer in layers_db_start:
+            layer.set_harvested(False)
         if self.force:
             logger.info("Cleaning previous data")
             self.dbsession.query(Output).delete()
@@ -393,6 +397,26 @@ class Harvester(BaseProcessor):
                     )
                 )
                 logger.error(traceback.format_exc())
+
+        layers_db_end = self.dbsession.query(Layer).all()
+        for layer in layers_db_end:
+            if layer.is_harvested() is False:
+                logger.info("Deleting layer {}".format(layer.hazardset_id))
+                self.dbsession.delete(layer)
+
+        hazardsets = self.dbsession.query(HazardSet).all()
+        for hazardset in hazardsets:
+            if len(hazardset.layers) == 0:
+                logger.info("Deleting hazardset {} with output".format(hazardset.id))
+                self.dbsession.query(Output) \
+                    .filter(Output.hazardset_id == hazardset.id) \
+                    .delete()
+                self.dbsession.flush()
+                self.dbsession.delete(hazardset)
+            else:
+                logger.info("Keeping hazardset {}".format(hazardset.id))
+                hazardset.completed = False
+                hazardset.processed = None
 
     def harvest_layer(self, object):
         logger.info("Harvesting layer {id} - {title}".format(**object))
@@ -523,7 +547,8 @@ class Harvester(BaseProcessor):
         if mask:
             layer = layer.filter(Layer.mask.is_(True))
         layer = layer.first()
-        if layer is not None:
+        if layer is not None:   # and layer.is_harvested(): ?
+            print('LAYER HARVESTED ', layer.is_harvested())
             if hazard_period > layer.return_period:
                 logger.info(
                     "  Superseded by shorter return period {}".format(
@@ -608,5 +633,6 @@ class Harvester(BaseProcessor):
         layer.scientific_quality = scientific_quality
         layer.local = local
 
+        layer.set_harvested(True)
         self.dbsession.flush()
         return True
