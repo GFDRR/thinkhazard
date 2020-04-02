@@ -659,6 +659,8 @@ class Layer(Base):
     )
     hazardlevel = relationship("HazardLevel")
 
+    harvested = False
+
     def name(self):
         if self.return_period is None:
             if self.mask:
@@ -669,6 +671,12 @@ class Layer(Base):
 
     def filename(self):
         return self.download_url.split("/").pop()
+
+    def is_harvested(self):
+        return self.harvested
+
+    def set_harvested(self, harvested):
+        self.harvested = harvested
 
 
 class Output(Base):
