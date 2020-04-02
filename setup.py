@@ -53,10 +53,10 @@ setup(
         "paste.app_factory": ["main = thinkhazard:main"],
         "console_scripts": [
             "initialize_thinkhazard_db = thinkhazard.scripts.initializedb:main",
-            "import_admindivs = thinkhazard.scripts.import:import_admindivs",
-            "import_recommendations = thinkhazard.scripts.import:import_recommendations",
+            "import_admindivs = thinkhazard.processing.import:AdministrativeDivisionsImporter.run",
+            "import_recommendations = thinkhazard.processing.import:RecommendationsImporter.run",
             "import_further_resources = thinkhazard.scripts.import_further_resources:main",
-            "import_contacts = thinkhazard.scripts.import:import_contacts",
+            "import_contacts = thinkhazard.processing.import:ContactsImporter.run",
             "harvest = thinkhazard.processing.harvesting:Harvester.run",
             "download = thinkhazard.processing.downloading:Downloader.run",
             "complete = thinkhazard.processing.completing:Completer.run",

@@ -67,10 +67,6 @@ DOCKER_MAKE_CMD=$(DOCKER_CMD) make -f docker.mk
 build: ## Build docker images
 build: docker_build_testdb docker_build_builder docker_build_thinkhazard
 
-.PHONY: bash
-bash: ## Open bash in builder
-	$(DOCKER_CMD) bash
-
 .PHONY: check
 check: ## Check the code with flake8, jshint and bootlint
 check:
@@ -89,6 +85,10 @@ compile_catalog:
 .PHONY: test
 test: ## Run automated tests
 	docker-compose -f docker-compose-test.yaml run --rm test nosetests -v
+
+.PHONY: bash
+test-bash: ## Open bash in a test container
+	$(DOCKER_CMD) bash
 
 
 .PHONY: clean
@@ -186,32 +186,22 @@ initdb_force:
 reinit_all: ## Completely clear and re-init database. Only for developement purpose
 reinit_all: initdb_force import_admindivs import_recommendations import_contacts harvest download complete process decisiontree
 
+.PHONY: bash
+bash: ## Open bash in an app container
+	docker-compose run --rm thinkhazard bash
+
 .PHONY: import_admindivs
 import_admindivs: ## Import administrative divisions. Use DATA=turkey or DATA=indonesia if you want to work with a sample data set
-import_admindivs: \
-		/tmp/thinkhazard/admindiv/$(DATA)/g2015_2014_0_upd270117.shp \
-		/tmp/thinkhazard/admindiv/$(DATA)/g2015_2014_1_upd270117.shp \
-		/tmp/thinkhazard/admindiv/$(DATA)/g2015_2014_2_upd270117.shp
-	@while [ -z "$$CONTINUE" ]; do \
-		read -r -p "This will remove all the existing data in the administrative divisions table. Continue? [y] " CONTINUE;  \
-	done ; \
-	[ $$CONTINUE = "y" ] || [ $$CONTINUE = "Y" ] || (echo "Exiting."; exit 1;)
-	.build/venv/bin/import_admindivs $(INI_FILE) folder=/tmp/thinkhazard/admindiv/$(DATA)
-
-/tmp/thinkhazard/admindiv/$(DATA)/%.shp: /tmp/thinkhazard/admindiv/$(DATA)/%.zip
-	unzip -o $< -d /tmp/thinkhazard/admindiv/$(DATA)
-
-/tmp/thinkhazard/admindiv/$(DATA)/%_upd270117.zip:
-	mkdir -p $(dir $@)
-	wget -nc "http://dev.camptocamp.com/files/thinkhazard/$(DATA)/$(notdir $@)" -O $@
+import_admindivs:
+	docker-compose run --rm thinkhazard import_admindivs -v
 
 .PHONY: import_recommendations
 import_recommendations: ## Import recommendations
-	docker-compose run --rm thinkhazard import_recommendations "$(INI_FILE)#admin"
+	docker-compose run --rm thinkhazard import_recommendations -v
 
 .PHONY: import_contacts
-import_contacts: .build/requirements.timestamp
-	docker-compose run --rm thinkhazard import_contacts "$(INI_FILE)#admin"
+import_contacts: ## Import contacts
+	docker-compose run --rm thinkhazard import_contacts -v
 
 
 .PHONY: transifex-import
