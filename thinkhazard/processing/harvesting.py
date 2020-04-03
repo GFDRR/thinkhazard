@@ -425,20 +425,20 @@ class Harvester(BaseProcessor):
             if layer.is_harvested() is False:
                 logger.info("Deleting layer {}".format(layer.hazardset_id))
                 self.dbsession.delete(layer)
-
-        hazardsets = self.dbsession.query(HazardSet).all()
-        for hazardset in hazardsets:
-            if len(hazardset.layers) == 0:
-                logger.info("Deleting hazardset {} with output".format(hazardset.id))
-                self.dbsession.query(Output) \
-                    .filter(Output.hazardset_id == hazardset.id) \
-                    .delete()
                 self.dbsession.flush()
-                self.dbsession.delete(hazardset)
-            else:
-                logger.info("Keeping hazardset {}".format(hazardset.id))
-                hazardset.completed = False
-                hazardset.processed = None
+
+                hazardset = layer.hazardset
+                self.dbsession.expire(hazardset)
+                self.dbsession.flush()
+
+                if len(hazardset.layers) == 0:
+                    logger.info("Deleting hazardset {}".format(hazardset.id))
+                    self.dbsession.query(Output).filter(Output.hazardset_id == hazardset.id).delete()
+                    self.dbsession.delete(hazardset)
+                else:
+                    logger.info("Keeping hazardset {}".format(hazardset.id))
+                    hazardset.completed = False
+                    hazardset.processed = None
 
     def harvest_layer(self, object):
         logger.info("Harvesting layer {id} - {title}".format(**object))
