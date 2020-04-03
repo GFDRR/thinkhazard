@@ -149,6 +149,8 @@ class Harvester(BaseProcessor):
         # add credentials
         params['username'] = geonode['username']
         params['api_key'] = geonode['api_key']
+        # get all entries (geonode default limit is 200)
+        params['limit'] = 0
         url = urlunsplit((
             geonode['scheme'],
             geonode['netloc'],
