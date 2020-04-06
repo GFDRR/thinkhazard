@@ -167,7 +167,7 @@ class TestHarvesting(BaseTestCase):
         ],
     )
     def test_data_update_date_change(self, request_mock, fetch_mock):
-        """New data_update_date must reset hazarset.complete and processed"""
+        """New data_update_date must reset hazardset.complete and processed"""
         self.harvester().harvest_layers()
 
         hazardset = DBSession.query(HazardSet).one()
@@ -206,7 +206,7 @@ class TestHarvesting(BaseTestCase):
         ],
     )
     def test_metadata_update_date_change(self, request_mock, fetch_mock):
-        """New metadata_update_date must reset hazarset.complete"""
+        """New metadata_update_date must reset hazardset.complete"""
         self.harvester().harvest_layers()
 
         hazardset = DBSession.query(HazardSet).one()
@@ -228,7 +228,7 @@ class TestHarvesting(BaseTestCase):
         ],
     )
     def test_calculation_method_quality_change(self, request_mock, fetch_mock):
-        """New calculation_method_quality must reset hazarset.complete"""
+        """New calculation_method_quality must reset hazardset.complete"""
         self.harvester().harvest_layers()
 
         hazardset = DBSession.query(HazardSet).one()
@@ -250,7 +250,7 @@ class TestHarvesting(BaseTestCase):
         ],
     )
     def test_scientific_quality_change(self, request_mock, fetch_mock):
-        """New scientific_quality must reset hazarset.complete"""
+        """New scientific_quality must reset hazardset.complete"""
         self.harvester().harvest_layers()
 
         hazardset = DBSession.query(HazardSet).one()
@@ -261,6 +261,27 @@ class TestHarvesting(BaseTestCase):
 
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete, False)
+
+    @patch.object(Harvester, "fetch", return_value=layers())
+    @patch.object(
+        httplib2.Http,
+        "request",
+        side_effect=[
+            (Mock(status=200), json.dumps(layer({"id": 1}))),
+            (Mock(status=200), json.dumps(layer({"id": 2}))),
+        ]
+    )
+    def test_layer_harvested(self, request_mock, fetch_mock):
+        """Valid layer must be added to database and deleted if not harvested"""
+        self.harvester().harvest_layers()
+        self.assertEqual(DBSession.query(Layer).count(), 1)
+        layer_one = DBSession.query(Layer).one()
+        self.assertEqual(layer_one.geonode_id, 1)
+
+        self.harvester().harvest_layers()
+        self.assertEqual(DBSession.query(Layer).count(), 1)
+        layer_two = DBSession.query(Layer).one()
+        self.assertEqual(layer_two.geonode_id, 2)
 
     @patch.object(
         httplib2.Http,

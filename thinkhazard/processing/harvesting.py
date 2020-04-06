@@ -374,8 +374,8 @@ class Harvester(BaseProcessor):
             return [primary_type]
 
     def harvest_layers(self, hazard_type=None):
-        layers_db_start = self.dbsession.query(Layer).all()
-        for layer in layers_db_start:
+        layers_db = self.dbsession.query(Layer).all()
+        for layer in layers_db:
             layer.set_harvested(False)
         if self.force:
             logger.info("Cleaning previous data")
@@ -400,8 +400,7 @@ class Harvester(BaseProcessor):
                 )
                 logger.error(traceback.format_exc())
 
-        layers_db_end = self.dbsession.query(Layer).all()
-        for layer in layers_db_end:
+        for layer in layers_db:
             if layer.is_harvested() is False:
                 logger.info("Deleting layer {}".format(layer.hazardset_id))
                 self.dbsession.delete(layer)
