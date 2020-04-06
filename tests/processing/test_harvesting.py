@@ -45,6 +45,7 @@ layers_defaults = {
 layer_defaults = layers_defaults
 layer_defaults.update(
     {
+        "regions": [],
         "calculation_method_quality": 5,
         "hazard_period": 10,
         "hazard_unit": "m",
@@ -69,6 +70,10 @@ def layers(values=[{}]):
 def layer(value={}):
     layer = layer_defaults.copy()
     layer.update(value)
+    if not "typename" in value:
+        layer.update({
+            "typename": "{}-{}".format(layer["hazard_set"], layer["hazard_period"])
+        })
     return layer
 
 
