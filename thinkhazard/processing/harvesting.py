@@ -29,6 +29,7 @@ import csv
 from datetime import datetime
 import pytz
 from time import sleep
+from sqlalchemy import inspect
 
 from thinkhazard.models import (
     HazardLevel,
@@ -421,23 +422,77 @@ class Harvester(BaseProcessor):
                 logger.error(traceback.format_exc())
 
         for layer in layers_db:
-            if layer.is_harvested() is False:
-                logger.info("Deleting layer {}".format(layer.hazardset_id))
-                self.dbsession.delete(layer)
-                self.dbsession.flush()
+            if not layer.is_harvested():
+                self.delete_layer(layer)
 
-                hazardset = layer.hazardset
-                self.dbsession.expire(hazardset)
-                self.dbsession.flush()
+        # Purge superseeded layers
+        for hazardset in self.dbsession.query(HazardSet):
+            type_settings = self.settings["hazard_types"][hazardset.hazardtype.mnemonic]
+            preprocessed = "values" in type_settings
+            if preprocessed:
+                continue
+            self.dbsession.expire(hazardset)
+            for level_mne in ('HIG', 'MED', 'LOW'):
+                level = HazardLevel.get(self.dbsession, level_mne)
+                self.select_layer_for_level(hazardset, level)
+            if type_settings.get("mask_return_period"):
+                self.select_mask_layer(hazardset)
 
-                if len(hazardset.layers) == 0:
-                    logger.info("Deleting hazardset {}".format(hazardset.id))
-                    self.dbsession.query(Output).filter(Output.hazardset_id == hazardset.id).delete()
-                    self.dbsession.delete(hazardset)
+        self.dbsession.flush()
+
+    def select_layer_for_range(self, hazardset, range):
+        winner = None
+        for layer in hazardset.layers:
+            if inspect(layer).deleted:
+                continue
+            if between(layer.return_period, range):
+                if winner is None:
+                    winner = layer
                 else:
-                    logger.info("Keeping hazardset {}".format(hazardset.id))
-                    hazardset.completed = False
-                    hazardset.processed = None
+                    if layer.return_period < winner.return_period:
+                        self.delete_layer(winner)
+                        winner = layer
+        return winner
+
+    def select_layer_for_level(self, hazardset, level):
+        type_settings = self.settings["hazard_types"][hazardset.hazardtype.mnemonic]
+        layer = self.select_layer_for_range(hazardset, type_settings["return_periods"][level.mnemonic])
+        if layer is None:
+            return
+        if layer.hazardlevel != level:
+            layer.hazardlevel = level
+            hazardset.complete = False
+            hazardset.processed = None
+
+    def select_mask_layer(self, hazardset):
+        type_settings = self.settings["hazard_types"][hazardset.hazardtype.mnemonic]
+        layer = self.select_layer_for_range(hazardset, type_settings["mask_return_period"])
+        if layer is None:
+            return
+        if not layer.mask:
+            layer.mask = True
+            hazardset.complete = False
+            hazardset.processed = None
+
+    def delete_layer(self, layer):
+        logger.info("Deleting layer {}".format(layer.hazardset_id))
+        self.dbsession.delete(layer)
+
+        hazardset = layer.hazardset
+        empty = True
+        for layer in hazardset.layers:
+            if inspect(layer).deleted:
+                continue
+            empty = False
+
+        if empty:
+            logger.info("Deleting hazardset {}".format(hazardset.id))
+            self.dbsession.query(Output).filter(Output.hazardset_id == hazardset.id).delete()
+            self.dbsession.delete(hazardset)
+        else:
+            logger.info("Keeping hazardset {}".format(hazardset.id))
+            hazardset.completed = False
+            hazardset.processed = None
 
     def harvest_layer(self, object):
         logger.info("Harvesting layer {id} - {title}".format(**object))
@@ -500,7 +555,6 @@ class Harvester(BaseProcessor):
 
         mask = False
         if preprocessed is True:
-            hazardlevel = None
             hazard_unit = None
             if o['hazard_period']:
                 logger.info('  return period found in preprocessed hazardset')
@@ -509,20 +563,11 @@ class Harvester(BaseProcessor):
 
         else:
             hazard_period = int(o['hazard_period'])
-            hazardlevel = None
-            for level in ("LOW", "MED", "HIG"):
-                if between(hazard_period, type_settings["return_periods"][level]):
-                    hazardlevel = HazardLevel.get(self.dbsession, level)
-                    break
 
             if "mask_return_period" in type_settings and between(
                 hazard_period, type_settings["mask_return_period"]
             ):
                 mask = True
-
-            if hazardlevel is None and not mask:
-                logger.info("  No corresponding hazard_level")
-                return False
 
             hazard_unit = o['hazard_unit']
             if hazard_unit == '':
@@ -564,31 +609,6 @@ class Harvester(BaseProcessor):
 
         hazardset = self.dbsession.query(HazardSet).get(hazardset_id)
 
-        # Test if another layer exists for same hazardlevel (or mask)
-        layer = self.dbsession.query(Layer) \
-            .filter(Layer.geonode_id != o['id']) \
-            .filter(Layer.hazardset_id == hazardset_id)
-        if hazardlevel is not None:
-            layer = layer.filter(Layer.hazardlevel_id == hazardlevel.id)
-        if mask:
-            layer = layer.filter(Layer.mask.is_(True))
-        layer = layer.first()
-        if layer is not None:   # and layer.is_harvested(): ?
-            print('LAYER HARVESTED ', layer.is_harvested())
-            if hazard_period > layer.return_period:
-                logger.info(
-                    "  Superseded by shorter return period {}".format(
-                        layer.return_period
-                    )
-                )
-                return False
-            logger.info(
-                "  Supersede longer return period {}".format(layer.return_period)
-            )
-            self.dbsession.delete(layer)
-            hazardset.complete = False
-            hazardset.processed = None
-
         # Create hazardset before layer
         if hazardset is None:
             logger.info("  Create new hazardset {}".format(hazardset_id))
@@ -607,7 +627,6 @@ class Harvester(BaseProcessor):
             hazardset.owner_organization = o['owner']['organization']
         if not mask:
             hazardset.regions = regions
-            self.dbsession.add(hazardset)
 
         layer = self.dbsession.query(Layer).get(o['id'])
         if layer is None:
@@ -615,6 +634,7 @@ class Harvester(BaseProcessor):
             layer = Layer()
             layer.geonode_id = o['id']
             layer.hazardset = hazardset
+            layer.mask = False
 
         else:
             # If data has changed
@@ -649,8 +669,6 @@ class Harvester(BaseProcessor):
             warning(o, 'Attribute "typename" is missing')
         layer.typename = typename
 
-        layer.hazardlevel = hazardlevel
-        layer.mask = mask
         layer.return_period = hazard_period
         layer.hazardunit = hazard_unit
         layer.data_lastupdated_date = data_update_date
