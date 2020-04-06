@@ -262,26 +262,49 @@ class TestHarvesting(BaseTestCase):
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete, False)
 
-    @patch.object(Harvester, "fetch", return_value=layers())
+    @patch.object(Harvester, "fetch", side_effect=[layers(), layers([])])
+    @patch.object(
+        httplib2.Http,
+        "request",
+        side_effect=[
+            (Mock(status=200), json.dumps(layer()))
+        ]
+    )
+    def test_layer_harvested_one(self, request_mock, fetch_mock):
+        """Valid layer must be added to database and deleted if not harvested"""
+        self.harvester().harvest_layers()
+        self.assertEqual(DBSession.query(Layer).count(), 1)
+
+        self.harvester().harvest_layers()
+        self.assertEqual(DBSession.query(Layer).count(), 0)
+
+    @patch.object(
+        Harvester,
+        "fetch",
+        side_effect=[
+            layers([{"id": 1}, {"id": 2}]),
+            layers()
+        ]
+    )
     @patch.object(
         httplib2.Http,
         "request",
         side_effect=[
             (Mock(status=200), json.dumps(layer({"id": 1}))),
-            (Mock(status=200), json.dumps(layer({"id": 2}))),
+            (Mock(status=200), json.dumps(layer({"id": 2})))
         ]
     )
-    def test_layer_harvested(self, request_mock, fetch_mock):
-        """Valid layer must be added to database and deleted if not harvested"""
+    def test_layer_harvested_multi(self, request_mock, fetch_mock):
+        """Valid layers must be added to database and deleted if not harvested"""
         self.harvester().harvest_layers()
         self.assertEqual(DBSession.query(Layer).count(), 1)
-        layer_one = DBSession.query(Layer).one()
-        self.assertEqual(layer_one.geonode_id, 1)
+
+        self.assertEqual(DBSession.query(HazardSet).count(), 1)
 
         self.harvester().harvest_layers()
-        self.assertEqual(DBSession.query(Layer).count(), 1)
-        layer_two = DBSession.query(Layer).one()
-        self.assertEqual(layer_two.geonode_id, 2)
+        self.assertEqual(DBSession.query(Layer).count(), 0)
+
+        self.assertEqual(DBSession.query(HazardSet).count(), 0)
 
     @patch.object(
         httplib2.Http,
