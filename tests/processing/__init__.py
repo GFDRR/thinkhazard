@@ -46,6 +46,7 @@ class BaseTestCase(unittest.TestCase):
 
     def tearDown(self):  # NOQA
         self.t.rollback()
+        DBSession.expunge_all()
         pass
 
 
