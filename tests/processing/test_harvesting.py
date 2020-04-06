@@ -315,6 +315,42 @@ class TestHarvesting(BaseTestCase):
         self.assertIsNone(hazardset.processed)
 
     @patch.object(
+        Harvester,
+        "fetch",
+        side_effect=[
+            layers([{"id": 1}, {"id": 2}]),
+            layers([{"id": 1}, {"id": 2}])
+        ]
+    )
+    @patch.object(
+        httplib2.Http,
+        "request",
+        side_effect=[
+            (Mock(status=200), json.dumps(layer({"id": 1, "hazard_period": 15}))),
+            (Mock(status=200), json.dumps(layer({"id": 2, "hazard_period": 10}))),
+            (Mock(status=200), json.dumps(layer({"id": 1, "hazard_period": 15}))),
+            (Mock(status=200), json.dumps(layer({"id": 2, "hazard_period": 10}))),
+        ]
+    )
+    def test_no_useless_process_invalidate(self, request_mock, fetch_mock):
+        """Multiple layers matching same level should not invalidate processing uselessly"""
+        self.harvester().harvest_layers()
+        self.assertEqual(DBSession.query(Layer).count(), 1)
+        self.assertEqual(DBSession.query(HazardSet).count(), 1)
+
+        hazardset = DBSession.query(HazardSet).one()
+        hazardset.completed = True
+        hazardset.processed = datetime.now()
+        DBSession.flush()
+        DBSession.expunge_all()
+
+        self.harvester().harvest_layers()
+        self.assertEqual(DBSession.query(Layer).count(), 1)
+        self.assertEqual(DBSession.query(HazardSet).count(), 1)
+        self.assertTrue(hazardset.completed)
+        self.assertIsNotNone(hazardset.processed)
+
+    @patch.object(
         httplib2.Http,
         "request",
         side_effect=[
