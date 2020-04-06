@@ -116,6 +116,12 @@ class Downloader(BaseProcessor):
             url = urlunsplit(
                 (geonode["scheme"], geonode["netloc"], layer.download_url, "", "")
             )
+
+            # FIXME: temporary override
+            if layer.hazardset_id == "LS-GLOBAL-arup":
+                url = ("https://drive.google.com/uc?export=download"
+                       "&id=1YI6OSqMruupF3CrK6UsdXQc3A4UPUtCc")
+
             logger.info("  Retrieving {}".format(url))
             try:
                 r = requests.get(url, stream=True)

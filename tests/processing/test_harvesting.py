@@ -166,7 +166,8 @@ class TestHarvesting(BaseTestCase):
             ),
         ],
     )
-    def test_data_update_date_change(self, request_mock, fetch_mock):
+    @patch("thinkhazard.processing.harvesting.os.unlink")
+    def test_data_update_date_change(self, unlink_mock, request_mock, fetch_mock):
         """New data_update_date must reset hazarset.complete and processed"""
         self.harvester().harvest_layers()
 
@@ -179,6 +180,7 @@ class TestHarvesting(BaseTestCase):
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete, False)
         self.assertEqual(hazardset.processed, None)
+        unlink_mock.assert_called_once_with("/tmp/hazardsets/test.tif")
 
     @patch.object(Harvester, "fetch", return_value=layers())
     @patch.object(

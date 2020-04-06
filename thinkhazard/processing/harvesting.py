@@ -28,6 +28,7 @@ import json
 import csv
 from datetime import datetime
 import pytz
+from time import sleep
 
 from thinkhazard.models import (
     HazardLevel,
@@ -47,6 +48,12 @@ from thinkhazard.processing import BaseProcessor
 logger = logging.getLogger(__name__)
 
 region_admindiv_csv_path = "data/geonode_regions_to_administrative_divisions_code.csv"
+
+# FIXME: temporary override
+excluded_hazardsets = [
+    'LS(EQ)-GLOBAL-ARUP',
+    'LS(PP)-GLOBAL-ARUP',
+]
 
 
 def warning(object, msg):
@@ -126,6 +133,19 @@ class Harvester(BaseProcessor):
 
         Harvesting.new(self.dbsession, complete=(self.force is True and hazard_type is None))
 
+    def request(self, url):
+        """
+        Send request and retry in case of 503 (unavailable).
+        """
+        tries = 3
+        while tries > 0:
+            response, content = self.http_client.request(url)
+            if response.status != 503:
+                break
+            sleep(3)
+            tries -= 1
+        return response, content
+
     def fetch(self, category, params={}, order_by="title"):
         geonode = self.settings["geonode"]
         # add credentials
@@ -143,7 +163,7 @@ class Harvester(BaseProcessor):
             )
         )
         logger.info("Retrieving {}".format(url))
-        response, content = self.http_client.request(url)
+        response, content = self.request(url)
         if response.status != 200:
             raise Exception(u'Geonode returned status {}: {}'.
                             format(response.status, content))
@@ -277,7 +297,7 @@ class Harvester(BaseProcessor):
             )
         )
         logger.info("  Retrieving {}".format(doc_url))
-        response, content = self.http_client.request(doc_url)
+        response, content = self.request(doc_url)
         if response.status != 200:
             raise Exception(u'Geonode returned status {}: {}'.
                             format(response.status, content))
@@ -416,7 +436,7 @@ class Harvester(BaseProcessor):
             )
         )
         logger.info("  Retrieving {}".format(layer_url))
-        response, content = self.http_client.request(layer_url)
+        response, content = self.request(layer_url)
         if response.status != 200:
             raise Exception(u'Geonode returned status {}: {}'.
                             format(response.status, content))
@@ -439,6 +459,11 @@ class Harvester(BaseProcessor):
         hazardset_id = o['hazard_set']
         if not hazardset_id:
             logger.info("  hazard_set is empty")
+            return False
+
+        # FIXME: temporary override
+        if hazardset_id in excluded_hazardsets:
+            logger.info("  hazard_set {} is excluded, skipping")
             return False
 
         hazardtype = self.check_hazard_type(o)
@@ -577,6 +602,9 @@ class Harvester(BaseProcessor):
                 layer.downloaded = False
                 hazardset.complete = False
                 hazardset.processed = None
+                # Remove file from cache
+                layer.download_url = download_url
+                os.unlink(self.layer_path(layer))
 
             # Some hazardset fields are calculated during completing
             if (
