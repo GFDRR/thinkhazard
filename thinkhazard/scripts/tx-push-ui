@@ -1,0 +1,7 @@
+#!/bin/bash
+
+$(dirname $0)/tx-init
+
+pot-create -c lingua.cfg -o /tmp/thinkhazard.pot thinkhazard/templates thinkhazard/dont_remove_me.enum-i18n
+
+tx push -s -r gfdrr-thinkhazard.ui

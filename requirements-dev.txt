@@ -7,5 +7,4 @@ mock
 nose
 pep8-naming
 pydevd
-transifex-client
 WebTest

@@ -51,7 +51,7 @@ thinkhazard/locale/%/LC_MESSAGES/thinkhazard.mo: thinkhazard/locale/%/LC_MESSAGE
 	msgfmt -o $@ $<
 
 thinkhazard/locale/%/LC_MESSAGES/thinkhazard.po: $(HOME)/.transifexrc
-	tx pull
+	tx pull -r gfdrr-thinkhazard.ui
 	touch `find thinkhazard/locale/ -name '*.po' 2> /dev/null`
 
 .INTERMEDIATE: $(HOME)/.transifexrc
@@ -72,8 +72,3 @@ flake8:
 .PHONY: jshint
 jshint:
 	jshint --verbose $(JS_FILES)
-
-
-.PHONY: transifex-push
-transifex-push: $(HOME)/.transifexrc
-	tx push -s

@@ -32,8 +32,11 @@ VOLUME /tmp/hazardsets
 RUN mkdir /tmp/geonode_api && chown www-data /tmp/geonode_api
 VOLUME /tmp/geonode_api
 
+RUN mkdir -p /home/user && chmod 777 /home/user
+
 ENV INI_FILE=c2c://production.ini \
-    GEONODE_API_KEY=tbd
+    GEONODE_API_KEY=tbd \
+    HOME=/home/user
 
 
 ########################
@@ -79,6 +82,8 @@ RUN TX_USR=$TX_USR \
 
 RUN pip install --no-deps -e .
 
+RUN chmod 777 /app
+USER www-data
 CMD ["sh", "-c", "pserve ${INI_FILE} -n main"]
 
 #################
@@ -93,4 +98,5 @@ WORKDIR /app
 COPY --from=builder /app/ /app/
 RUN pip install --no-deps -e .
 
+USER www-data
 CMD ["sh", "-c", "pserve ${INI_FILE} -n main"]
