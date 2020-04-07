@@ -287,6 +287,20 @@ class TestHarvesting(BaseTestCase):
         self.assertEqual(DBSession.query(Layer).count(), 0)
         self.assertEqual(DBSession.query(HazardSet).count(), 0)
 
+    @patch.object(Harvester, "fetch", return_value=layers())
+    @patch.object(
+        httplib2.Http,
+        "request",
+        side_effect=[
+            (Mock(status=200), json.dumps(layer({"id": 1, "hazard_period": 0})))
+        ]
+    )
+    def test_hazardlevel_mismatch(self, request_mock, fetch_mock):
+        """Layers without hazardlevel (invalid hazard_period) should not be harvested"""
+        self.harvester().harvest_layers()
+        self.assertEqual(DBSession.query(Layer).count(), 0)
+        self.assertEqual(DBSession.query(HazardSet).count(), 0)
+
     @patch.object(
         Harvester,
         "fetch",
