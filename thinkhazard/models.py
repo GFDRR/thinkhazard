@@ -389,7 +389,7 @@ class HazardCategory(Base):
             dbsession.query(cls)
             .filter(cls.hazardtype == hazardtype)
             .filter(cls.hazardlevel == hazardlevel)
-            .one()
+            .one_or_none()
         )
 
     def __json__(self, request):

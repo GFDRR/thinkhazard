@@ -143,6 +143,7 @@ docker-push: ## Push images to docker hub
 
 .PHONY: transifex-push-ui
 transifex-push-ui: ## Push UI strings to transifex
+transifex-push-ui: initdb
 	docker-compose run --rm thinkhazard /app/thinkhazard/scripts/tx-push-ui
 
 .PHONY: transifex-push-db
