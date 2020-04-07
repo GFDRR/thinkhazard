@@ -530,6 +530,7 @@ class Harvester(BaseProcessor):
 
         mask = False
         if preprocessed is True:
+            hazardlevel = None
             hazard_unit = None
             if o['hazard_period']:
                 logger.info('  return period found in preprocessed hazardset')
@@ -538,11 +539,20 @@ class Harvester(BaseProcessor):
 
         else:
             hazard_period = int(o['hazard_period'])
+            hazardlevel = None
+            for level in ("LOW", "MED", "HIG"):
+                if between(hazard_period, type_settings["return_periods"][level]):
+                    hazardlevel = HazardLevel.get(self.dbsession, level)
+                    break
 
             if "mask_return_period" in type_settings and between(
                 hazard_period, type_settings["mask_return_period"]
             ):
                 mask = True
+
+            if hazardlevel is None and not mask:
+                logger.info("  No corresponding hazard_level")
+                return False
 
             hazard_unit = o['hazard_unit']
             if hazard_unit == '':
