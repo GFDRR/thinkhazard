@@ -439,9 +439,13 @@ class Harvester(BaseProcessor):
             self.dbsession.query(HazardSet).delete()
             self.dbsession.flush()
 
+        # see https://docs.djangoproject.com/en/1.8/ref/models/querysets
         params = {}
         if hazard_type is not None:
             params["hazard_type__in"] = hazard_type
+        else:
+            params["hazard_type__isnull"] = "False"
+
         layers = self.fetch("layers", params)
         for layer in layers:
             try:
