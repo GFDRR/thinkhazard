@@ -126,8 +126,7 @@ class Harvester(BaseProcessor):
             logger.info(
                 "Settings have been modified, " "passing in force/complete mode."
             )
-            # Commented to test with old DB dump
-            # self.force = True
+            self.force = True
             self.hazard_type = None
 
         try:
