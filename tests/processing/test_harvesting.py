@@ -90,7 +90,7 @@ class TestHarvesting(BaseTestCase):
     def test_cli(self, mock):
         """Test harvester cli"""
         Harvester.run(["harvest", "--config_uri", "c2c://tests.ini"])
-        mock.assert_called_with(hazard_type=None)
+        mock.assert_called_with(hazard_type=None, use_cache=False)
 
     @patch.object(Harvester, "fetch", return_value=[])
     def test_force(self, fetch_mock):
@@ -300,6 +300,22 @@ class TestHarvesting(BaseTestCase):
         self.harvester().harvest_layers()
         self.assertEqual(DBSession.query(Layer).count(), 0)
         self.assertEqual(DBSession.query(HazardSet).count(), 0)
+
+    @patch.object(Harvester, "fetch", return_value=layers([{}, {}, {}]))
+    @patch.object(
+        httplib2.Http,
+        "request",
+        side_effect=[
+            (Mock(status=200), json.dumps(layer({"id": 1, "hazard_period": 15}))),
+            (Mock(status=200), json.dumps(layer({"id": 2, "hazard_period": 10}))),
+            (Mock(status=200), json.dumps(layer({"id": 3, "hazard_period": 20}))),
+        ]
+    )
+    def test_superseeded_layer(self, request_mock, fetch_mock):
+        """Should retain no superseeded layer"""
+        self.harvester().harvest_layers()
+        self.assertEqual(DBSession.query(Layer).count(), 1)
+        self.assertEqual(DBSession.query(HazardSet).count(), 1)
 
     @patch.object(
         Harvester,

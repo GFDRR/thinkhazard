@@ -115,7 +115,8 @@ class TestReportFunction(BaseTestCase):
         resp = self.testapp.get("/en/report/31-slug/EQ", status=200)
         self.assertEqual(len(resp.pyquery(".further-resources ul li")), 2)
 
-    def test_report__json(self):
+    @patch("thinkhazard.views.report.GoogleAnalytics.hit")
+    def test_report__json(self, hit_mock):
         self.testapp.get("/en/report/31/EQ.json?resolution=1000", status=200)
 
     def test_report__data_sources(self):

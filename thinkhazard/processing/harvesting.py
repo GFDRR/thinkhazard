@@ -29,7 +29,6 @@ import csv
 from datetime import datetime
 import pytz
 from time import sleep
-from sqlalchemy import inspect
 
 from thinkhazard.models import (
     HazardLevel,
@@ -55,6 +54,8 @@ excluded_hazardsets = [
     'LS(EQ)-GLOBAL-ARUP',
     'LS(PP)-GLOBAL-ARUP',
 ]
+
+cache_path = '/tmp/geonode_api'
 
 
 def warning(object, msg):
@@ -84,6 +85,10 @@ class Harvester(BaseProcessor):
     # We load system ca bundle in order to trust let's encrypt certificates
     http_client = httplib2.Http(ca_certs="/etc/ssl/certs/ca-certificates.crt")
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.use_cache = False
+
     @staticmethod
     def argument_parser():
         parser = BaseProcessor.argument_parser()
@@ -93,9 +98,19 @@ class Harvester(BaseProcessor):
             action="store",
             help="The hazard type (ie. earthquake, ...)",
         )
+        parser.add_argument(
+            "--use-cache",
+            dest="use_cache",
+            action="store_const",
+            const=True,
+            default=False,
+            help="Use geonode local cache (for development)",
+        )
         return parser
 
-    def do_execute(self, hazard_type=None):
+    def do_execute(self, hazard_type=None, use_cache=False):
+        self.use_cache = use_cache
+
         setting_path = os.path.join(
             os.path.dirname(__file__), "..", "..", "thinkhazard_processing.yaml"
         )
@@ -139,13 +154,31 @@ class Harvester(BaseProcessor):
         """
         Send request and retry in case of 503 (unavailable).
         """
-        tries = 3
-        while tries > 0:
-            response, content = self.http_client.request(url)
-            if response.status != 503:
-                break
-            sleep(3)
-            tries -= 1
+
+        tmp_path = os.path.join(cache_path, url.replace("/", '_').replace(":", '_'))
+        if self.use_cache and os.path.isfile(tmp_path):
+
+            class DummyResponse():
+                pass
+
+            with open(tmp_path) as f:
+                content = f.read()
+                response = DummyResponse()
+                response.status = 200
+
+        else:
+            tries = 3
+            while tries > 0:
+                response, content = self.http_client.request(url)
+                if response.status != 503:
+                    break
+                sleep(3)
+                tries -= 1
+
+            if self.use_cache and response.status == 200:
+                with open(tmp_path, "wb") as f:
+                    f.write(content)
+
         return response, content
 
     def fetch(self, category, params={}, order_by="title"):
@@ -405,9 +438,13 @@ class Harvester(BaseProcessor):
             self.dbsession.query(HazardSet).delete()
             self.dbsession.flush()
 
+        # see https://docs.djangoproject.com/en/1.8/ref/models/querysets
         params = {}
         if hazard_type is not None:
             params["hazard_type__in"] = hazard_type
+        else:
+            params["hazard_type__isnull"] = "False"
+
         layers = self.fetch("layers", params)
         for layer in layers:
             try:
@@ -425,34 +462,47 @@ class Harvester(BaseProcessor):
             if not layer.is_harvested():
                 self.delete_layer(layer)
 
-        # Purge superseeded layers
+        self.select_levels()
+
+        self.dbsession.flush()
+
+    def delete_layer(self, layer):
+        logger.info("Deleting layer {}-{}".format(layer.hazardset_id, layer.return_period))
+
+        hazardset = layer.hazardset
+
+        layer.hazardset.layers.remove(layer)
+        self.dbsession.delete(layer)
+
+        if len(hazardset.layers) == 0:
+            logger.info("Deleting hazardset {}".format(hazardset.id))
+            self.dbsession.query(Output).filter(Output.hazardset_id == hazardset.id).delete()
+            self.dbsession.delete(hazardset)
+        else:
+            logger.info("Keeping hazardset {}".format(hazardset.id))
+            hazardset.completed = False
+            hazardset.processed = None
+
+    def select_levels(self):
         for hazardset in self.dbsession.query(HazardSet):
             type_settings = self.settings["hazard_types"][hazardset.hazardtype.mnemonic]
             preprocessed = "values" in type_settings
             if preprocessed:
                 continue
-            self.dbsession.expire(hazardset)
+
             for level_mne in ('HIG', 'MED', 'LOW'):
                 level = HazardLevel.get(self.dbsession, level_mne)
                 self.select_layer_for_level(hazardset, level)
+
             if type_settings.get("mask_return_period"):
                 self.select_mask_layer(hazardset)
 
-        self.dbsession.flush()
-
-    def select_layer_for_range(self, hazardset, range):
-        winner = None
-        for layer in hazardset.layers:
-            if inspect(layer).deleted:
-                continue
-            if between(layer.return_period, range):
-                if winner is None:
-                    winner = layer
-                else:
-                    if layer.return_period < winner.return_period:
-                        self.delete_layer(winner)
-                        winner = layer
-        return winner
+            # Purge superseeded layers
+            self.dbsession.query(Layer) \
+                .filter(Layer.hazardset_id == hazardset.id) \
+                .filter(Layer.hazardlevel_id.is_(None)) \
+                .filter(Layer.mask.is_(False)) \
+                .delete()
 
     def select_layer_for_level(self, hazardset, level):
         type_settings = self.settings["hazard_types"][hazardset.hazardtype.mnemonic]
@@ -474,25 +524,16 @@ class Harvester(BaseProcessor):
             hazardset.complete = False
             hazardset.processed = None
 
-    def delete_layer(self, layer):
-        logger.info("Deleting layer {}".format(layer.hazardset_id))
-        self.dbsession.delete(layer)
-
-        hazardset = layer.hazardset
-        empty = True
+    def select_layer_for_range(self, hazardset, range):
+        winner = None
         for layer in hazardset.layers:
-            if inspect(layer).deleted:
-                continue
-            empty = False
-
-        if empty:
-            logger.info("Deleting hazardset {}".format(hazardset.id))
-            self.dbsession.query(Output).filter(Output.hazardset_id == hazardset.id).delete()
-            self.dbsession.delete(hazardset)
-        else:
-            logger.info("Keeping hazardset {}".format(hazardset.id))
-            hazardset.completed = False
-            hazardset.processed = None
+            if between(layer.return_period, range):
+                if winner is None:
+                    winner = layer
+                else:
+                    if layer.return_period < winner.return_period:
+                        winner = layer
+        return winner
 
     def harvest_layer(self, object):
         logger.info("Harvesting layer {id} - {title}".format(**object))
