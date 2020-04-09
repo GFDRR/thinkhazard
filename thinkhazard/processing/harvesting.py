@@ -510,6 +510,9 @@ class Harvester(BaseProcessor):
         if layer is None:
             return
         if layer.hazardlevel != level:
+            looser = hazardset.layer_by_level(level.mnemonic)
+            if looser is not None:
+                looser.hazardlevel = None
             layer.hazardlevel = level
             hazardset.complete = False
             hazardset.processed = None
@@ -520,6 +523,9 @@ class Harvester(BaseProcessor):
         if layer is None:
             return
         if not layer.mask:
+            looser = hazardset.mask_layer()
+            if looser is not None:
+                looser.mask = False
             layer.mask = True
             hazardset.complete = False
             hazardset.processed = None
