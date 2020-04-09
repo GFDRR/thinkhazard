@@ -54,6 +54,7 @@ def main(global_config, **settings):
         config.include(add_public_routes, route_prefix="preview")
 
         config.add_route("admin_index", "/")
+        config.add_route("admin_add_task", "/addtask")
 
         config.add_route("admin_technical_rec", "/technical_rec")
         config.add_route("admin_technical_rec_new", "/technical_rec/new")

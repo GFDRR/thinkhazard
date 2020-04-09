@@ -19,12 +19,11 @@
 
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound, HTTPNotFound, HTTPBadRequest
-
 from sqlalchemy import func, inspect, Integer
-
 from sqlalchemy.orm import contains_eager, joinedload
-
+from pyramid_celery import celery_app as app
 import json
+from datetime import datetime
 
 from thinkhazard.models import (
     AdminLevelType,
@@ -43,11 +42,29 @@ from thinkhazard.models import (
     TechnicalRecommendation,
     Publication,
 )
+from thinkhazard.views.tasks import process
 
 
 @view_config(route_name="admin_index", renderer="templates/admin/index.jinja2")
 def index(request):
-    return {"publication_date": Publication.last(request.dbsession).date}
+    tasks = list(app.control.inspect().active().values())[0]
+    for t in tasks:
+        t['time_start'] = datetime.fromtimestamp(t['time_start'])
+    return {
+        "publication_date": Publication.last(request.dbsession).date,
+        "running": tasks
+    }
+
+
+@view_config(route_name="admin_add_task")
+def add_task(request):
+    import string
+    import random
+
+    process.delay(
+        "toto #{}".format(random.choice(string.ascii_letters + string.digits))
+    )
+    return HTTPFound(request.route_url("admin_index"))
 
 
 @view_config(

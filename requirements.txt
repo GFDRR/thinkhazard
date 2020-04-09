@@ -26,6 +26,7 @@ pytidylib
 python-slugify<2.0.0
 pyyaml
 rasterio
+redis
 requests
 requests_futures
 shapely
@@ -35,4 +36,5 @@ transaction
 transifex-client
 waitress
 zope.sqlalchemy
+celery
 pyramid_celery
