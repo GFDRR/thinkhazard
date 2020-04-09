@@ -427,15 +427,16 @@ class Harvester(BaseProcessor):
             return [primary_type]
 
     def harvest_layers(self, hazard_type=None):
-        layers_db = self.dbsession.query(Layer).all()
-        for layer in layers_db:
-            layer.set_harvested(False)
         if self.force:
             logger.info("Cleaning previous data")
             self.dbsession.query(Output).delete()
             self.dbsession.query(Layer).delete()
             self.dbsession.query(HazardSet).delete()
             self.dbsession.flush()
+
+        layers_db = self.dbsession.query(Layer).all()
+        for layer in layers_db:
+            layer.set_harvested(False)
 
         # see https://docs.djangoproject.com/en/1.8/ref/models/querysets
         params = {}
