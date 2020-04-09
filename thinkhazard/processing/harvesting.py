@@ -610,7 +610,13 @@ class Harvester(BaseProcessor):
             hazard_period = None
 
         else:
-            hazard_period = int(o['hazard_period'])
+            try:
+                hazard_period = int(o['hazard_period'])
+            except:
+                hazard_period = None
+            if hazard_period is None:
+                logger.info('  no return period found')
+                return False
             hazardlevel = None
             for level in ("LOW", "MED", "HIG"):
                 if between(hazard_period, type_settings["return_periods"][level]):
