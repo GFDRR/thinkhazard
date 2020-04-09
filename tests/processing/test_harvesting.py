@@ -317,6 +317,29 @@ class TestHarvesting(BaseTestCase):
         self.assertEqual(DBSession.query(Layer).count(), 1)
         self.assertEqual(DBSession.query(HazardSet).count(), 1)
 
+    @patch.object(Harvester, "fetch", side_effect=[
+        layers([{"id": 1}]),
+        layers([{"id": 1}, {"id": 2}]),
+    ])
+    @patch.object(
+        httplib2.Http,
+        "request",
+        side_effect=[
+            (Mock(status=200), json.dumps(layer({"id": 1, "hazard_period": 15}))),
+            (Mock(status=200), json.dumps(layer({"id": 1, "hazard_period": 15}))),
+            (Mock(status=200), json.dumps(layer({"id": 2, "hazard_period": 10}))),
+        ]
+    )
+    def test_superseeded_layer_accross_harvestings(self, request_mock, fetch_mock):
+        """Should retain no superseeded layer accross harvestings"""
+        self.harvester().harvest_layers()
+        self.assertEqual(DBSession.query(Layer).count(), 1)
+        self.assertEqual(DBSession.query(HazardSet).count(), 1)
+
+        self.harvester().harvest_layers()
+        self.assertEqual(DBSession.query(Layer).count(), 1)
+        self.assertEqual(DBSession.query(HazardSet).count(), 1)
+
     @patch.object(
         Harvester,
         "fetch",
