@@ -32,6 +32,14 @@
         <div class="panel panel-default">
           <div class="panel-heading">Tasks</div>
           <div class="panel-body">
+            <h4>Administrative Divisions</h4>
+            <p>
+              Import administrative division from Geonode
+            </p>
+            <p class="text-right">
+              <a class="btn btn-info" href="{{request.route_url('admin_add_task', _query={'task': 'admindivs'})}}">Import from Geonode</a>
+            </p>
+            <hr>
             <h4>Processing</h4>
             <p>
               Harvest, download, complete &amp; process.
@@ -59,7 +67,6 @@
               Publish current preview to public site.
             </p>
             <p class="text-right">
-              {# <button class="btn btn-danger">Publish now</button> #}
               <a class="btn btn-danger" href="{{request.route_url('admin_add_task', _query={'task': 'publish'})}}">Publish now</a>
             </p>
           </div>
