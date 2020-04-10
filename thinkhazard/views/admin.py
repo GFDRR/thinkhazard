@@ -42,14 +42,15 @@ from thinkhazard.models import (
     TechnicalRecommendation,
     Publication,
 )
-from thinkhazard.views.tasks import process
+import thinkhazard.views.tasks as tasks
 
 
 @view_config(route_name="admin_index", renderer="templates/admin/index.jinja2")
 def index(request):
     tasks = list(app.control.inspect().active().values())[0]
     for t in tasks:
-        t['time_start'] = datetime.fromtimestamp(t['time_start'])
+        t['time_label'] = datetime.fromtimestamp(t['time_start']).strftime("%a, %d %b %Y %H:%M")
+        t['label'] = t['name'].split('.').pop().capitalize()
     return {
         "publication_date": Publication.last(request.dbsession).date,
         "running": tasks
@@ -58,12 +59,8 @@ def index(request):
 
 @view_config(route_name="admin_add_task")
 def add_task(request):
-    import string
-    import random
-
-    process.delay(
-        "toto #{}".format(random.choice(string.ascii_letters + string.digits))
-    )
+    task = request.params.get('task')
+    getattr(tasks, task).delay()
     return HTTPFound(request.route_url("admin_index"))
 
 
