@@ -590,6 +590,14 @@ class HazardSet(Base):
             .one_or_none()
         )
 
+    def mask_layer(self):
+        return (
+            inspect(self).session.query(Layer)
+            .filter(Layer.hazardset_id == self.id)
+            .filter(Layer.mask.is_(True))
+            .one_or_none()
+        )
+
     def __json__(self, request):
         return {
             "id": self.id,
@@ -659,6 +667,8 @@ class Layer(Base):
     )
     hazardlevel = relationship("HazardLevel")
 
+    harvested = False
+
     def name(self):
         if self.return_period is None:
             if self.mask:
@@ -669,6 +679,12 @@ class Layer(Base):
 
     def filename(self):
         return self.download_url.split("/").pop()
+
+    def is_harvested(self):
+        return self.harvested
+
+    def set_harvested(self, harvested):
+        self.harvested = harvested
 
 
 class Output(Base):

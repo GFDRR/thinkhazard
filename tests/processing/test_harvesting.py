@@ -45,6 +45,7 @@ layers_defaults = {
 layer_defaults = layers_defaults
 layer_defaults.update(
     {
+        "regions": [],
         "calculation_method_quality": 5,
         "hazard_period": 10,
         "hazard_unit": "m",
@@ -69,6 +70,10 @@ def layers(values=[{}]):
 def layer(value={}):
     layer = layer_defaults.copy()
     layer.update(value)
+    if not "typename" in value:
+        layer.update({
+            "typename": "{}-{}".format(layer["hazard_set"], layer["hazard_period"])
+        })
     return layer
 
 
@@ -85,7 +90,7 @@ class TestHarvesting(BaseTestCase):
     def test_cli(self, mock):
         """Test harvester cli"""
         Harvester.run(["harvest", "--config_uri", "c2c://tests.ini"])
-        mock.assert_called_with(hazard_type=None)
+        mock.assert_called_with(hazard_type=None, use_cache=False)
 
     @patch.object(Harvester, "fetch", return_value=[])
     def test_force(self, fetch_mock):
@@ -208,7 +213,7 @@ class TestHarvesting(BaseTestCase):
         ],
     )
     def test_metadata_update_date_change(self, request_mock, fetch_mock):
-        """New metadata_update_date must reset hazarset.complete"""
+        """New metadata_update_date must reset hazardset.complete"""
         self.harvester().harvest_layers()
 
         hazardset = DBSession.query(HazardSet).one()
@@ -230,7 +235,7 @@ class TestHarvesting(BaseTestCase):
         ],
     )
     def test_calculation_method_quality_change(self, request_mock, fetch_mock):
-        """New calculation_method_quality must reset hazarset.complete"""
+        """New calculation_method_quality must reset hazardset.complete"""
         self.harvester().harvest_layers()
 
         hazardset = DBSession.query(HazardSet).one()
@@ -252,7 +257,7 @@ class TestHarvesting(BaseTestCase):
         ],
     )
     def test_scientific_quality_change(self, request_mock, fetch_mock):
-        """New scientific_quality must reset hazarset.complete"""
+        """New scientific_quality must reset hazardset.complete"""
         self.harvester().harvest_layers()
 
         hazardset = DBSession.query(HazardSet).one()
@@ -263,6 +268,147 @@ class TestHarvesting(BaseTestCase):
 
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete, False)
+
+    @patch.object(Harvester, "fetch", side_effect=[layers(), layers([])])
+    @patch.object(
+        httplib2.Http,
+        "request",
+        side_effect=[
+            (Mock(status=200), json.dumps(layer()))
+        ]
+    )
+    def test_hazardset_removed(self, request_mock, fetch_mock):
+        """Empty hazardsets should be removed from database"""
+        self.harvester().harvest_layers()
+        self.assertEqual(DBSession.query(Layer).count(), 1)
+        self.assertEqual(DBSession.query(HazardSet).count(), 1)
+
+        self.harvester().harvest_layers()
+        self.assertEqual(DBSession.query(Layer).count(), 0)
+        self.assertEqual(DBSession.query(HazardSet).count(), 0)
+
+    @patch.object(Harvester, "fetch", return_value=layers())
+    @patch.object(
+        httplib2.Http,
+        "request",
+        side_effect=[
+            (Mock(status=200), json.dumps(layer({"id": 1, "hazard_period": 0})))
+        ]
+    )
+    def test_hazardlevel_mismatch(self, request_mock, fetch_mock):
+        """Layers without hazardlevel (invalid hazard_period) should not be harvested"""
+        self.harvester().harvest_layers()
+        self.assertEqual(DBSession.query(Layer).count(), 0)
+        self.assertEqual(DBSession.query(HazardSet).count(), 0)
+
+    @patch.object(Harvester, "fetch", return_value=layers([{}, {}, {}]))
+    @patch.object(
+        httplib2.Http,
+        "request",
+        side_effect=[
+            (Mock(status=200), json.dumps(layer({"id": 1, "hazard_period": 15}))),
+            (Mock(status=200), json.dumps(layer({"id": 2, "hazard_period": 10}))),
+            (Mock(status=200), json.dumps(layer({"id": 3, "hazard_period": 20}))),
+        ]
+    )
+    def test_superseeded_layer(self, request_mock, fetch_mock):
+        """Should retain no superseeded layer"""
+        self.harvester().harvest_layers()
+        self.assertEqual(DBSession.query(Layer).count(), 1)
+        self.assertEqual(DBSession.query(HazardSet).count(), 1)
+
+    @patch.object(Harvester, "fetch", side_effect=[
+        layers([{"id": 1}]),
+        layers([{"id": 1}, {"id": 2}]),
+    ])
+    @patch.object(
+        httplib2.Http,
+        "request",
+        side_effect=[
+            (Mock(status=200), json.dumps(layer({"id": 1, "hazard_period": 15}))),
+            (Mock(status=200), json.dumps(layer({"id": 1, "hazard_period": 15}))),
+            (Mock(status=200), json.dumps(layer({"id": 2, "hazard_period": 10}))),
+        ]
+    )
+    def test_superseeded_layer_accross_harvestings(self, request_mock, fetch_mock):
+        """Should retain no superseeded layer accross harvestings"""
+        self.harvester().harvest_layers()
+        self.assertEqual(DBSession.query(Layer).count(), 1)
+        self.assertEqual(DBSession.query(HazardSet).count(), 1)
+
+        self.harvester().harvest_layers()
+        self.assertEqual(DBSession.query(Layer).count(), 1)
+        self.assertEqual(DBSession.query(HazardSet).count(), 1)
+
+    @patch.object(
+        Harvester,
+        "fetch",
+        side_effect=[
+            layers([{"id": 1}, {"id": 2}]),
+            layers([{"id": 1}])
+        ]
+    )
+    @patch.object(
+        httplib2.Http,
+        "request",
+        side_effect=[
+            (Mock(status=200), json.dumps(layer({"id": 1, "hazard_period": 10}))),
+            (Mock(status=200), json.dumps(layer({"id": 2, "hazard_period": 50}))),
+            (Mock(status=200), json.dumps(layer({"id": 1, "hazard_period": 10}))),
+        ]
+    )
+    def test_layer_removed(self, request_mock, fetch_mock):
+        """Layer removed from geonode should be removed from database"""
+        self.harvester().harvest_layers()
+        self.assertEqual(DBSession.query(Layer).count(), 2)
+        self.assertEqual(DBSession.query(HazardSet).count(), 1)
+
+        hazardset = DBSession.query(HazardSet).one()
+        hazardset.completed = True
+        hazardset.processed = datetime.now()
+        DBSession.flush()
+
+        self.harvester().harvest_layers()
+        self.assertEqual(DBSession.query(Layer).count(), 1)
+        self.assertEqual(DBSession.query(HazardSet).count(), 1)
+        self.assertFalse(hazardset.completed)
+        self.assertIsNone(hazardset.processed)
+
+    @patch.object(
+        Harvester,
+        "fetch",
+        side_effect=[
+            layers([{"id": 1}, {"id": 2}]),
+            layers([{"id": 1}, {"id": 2}])
+        ]
+    )
+    @patch.object(
+        httplib2.Http,
+        "request",
+        side_effect=[
+            (Mock(status=200), json.dumps(layer({"id": 1, "hazard_period": 15}))),
+            (Mock(status=200), json.dumps(layer({"id": 2, "hazard_period": 10}))),
+            (Mock(status=200), json.dumps(layer({"id": 1, "hazard_period": 15}))),
+            (Mock(status=200), json.dumps(layer({"id": 2, "hazard_period": 10}))),
+        ]
+    )
+    def test_no_useless_process_invalidate(self, request_mock, fetch_mock):
+        """Multiple layers matching same level should not invalidate processing uselessly"""
+        self.harvester().harvest_layers()
+        self.assertEqual(DBSession.query(Layer).count(), 1)
+        self.assertEqual(DBSession.query(HazardSet).count(), 1)
+
+        hazardset = DBSession.query(HazardSet).one()
+        hazardset.completed = True
+        hazardset.processed = datetime.now()
+        DBSession.flush()
+        DBSession.expunge_all()
+
+        self.harvester().harvest_layers()
+        self.assertEqual(DBSession.query(Layer).count(), 1)
+        self.assertEqual(DBSession.query(HazardSet).count(), 1)
+        self.assertTrue(hazardset.completed)
+        self.assertIsNotNone(hazardset.processed)
 
     @patch.object(
         httplib2.Http,

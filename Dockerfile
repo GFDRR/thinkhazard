@@ -26,6 +26,10 @@ RUN pip install -r /app/requirements.txt && pyppeteer-install
 RUN mkdir /tmp/hazardsets && chown www-data /tmp/hazardsets
 VOLUME /tmp/hazardsets
 
+# Geonode API cache
+RUN mkdir /tmp/geonode_api && chown www-data /tmp/geonode_api
+VOLUME /tmp/geonode_api
+
 ENV INI_FILE=c2c://production.ini \
     GEONODE_API_KEY=tbd
 
