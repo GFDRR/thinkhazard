@@ -16,7 +16,7 @@ def publish():
 
 
 @app.task
-def transifexFetch():
+def transifex_fetch():
     print("start pull/import from transifex")
     time.sleep(10)
     print("end pull/import from transifex")

@@ -46,7 +46,7 @@ import thinkhazard.views.tasks as tasks
 
 TASKS_LABELS = {
     "publish": "Publication",
-    "transifexFetch": "Import from Transifex",
+    "transifex_fetch": "Import from Transifex",
     "admindivs": "Import administrative division from GeoNode",
 }
 
