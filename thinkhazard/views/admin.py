@@ -58,10 +58,12 @@ def index(request):
         t["time_label"] = datetime.fromtimestamp(t["time_start"]).strftime(
             "%a, %d %b %Y %H:%M"
         )
-        t["label"] = TASKS_LABELS[t["name"].split(".").pop()]
+        t["name"] = t["name"].split(".").pop()
+        t["label"] = TASKS_LABELS[t["name"]]
     return {
         "publication_date": Publication.last(request.dbsession).date,
         "running": tasks,
+        "running_keys": list(map(lambda t: t["name"], tasks)),
     }
 
 
