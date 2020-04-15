@@ -44,22 +44,30 @@ from thinkhazard.models import (
 )
 import thinkhazard.views.tasks as tasks
 
+TASKS_LABELS = {
+    "publish": "Publication",
+    "transifexFetch": "Import from Transifex",
+    "admindivs": "Import administrative division from GeoNode",
+}
+
 
 @view_config(route_name="admin_index", renderer="templates/admin/index.jinja2")
 def index(request):
     tasks = list(app.control.inspect().active().values())[0]
     for t in tasks:
-        t['time_label'] = datetime.fromtimestamp(t['time_start']).strftime("%a, %d %b %Y %H:%M")
-        t['label'] = t['name'].split('.').pop().capitalize()
+        t["time_label"] = datetime.fromtimestamp(t["time_start"]).strftime(
+            "%a, %d %b %Y %H:%M"
+        )
+        t["label"] = TASKS_LABELS[t["name"].split(".").pop()]
     return {
         "publication_date": Publication.last(request.dbsession).date,
-        "running": tasks
+        "running": tasks,
     }
 
 
 @view_config(route_name="admin_add_task")
 def add_task(request):
-    task = request.params.get('task')
+    task = request.params.get("task")
     getattr(tasks, task).delay()
     return HTTPFound(request.route_url("admin_index"))
 
