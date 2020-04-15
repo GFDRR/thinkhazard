@@ -7,3 +7,10 @@ services:
       - '${PWD}/development.ini:/app/development.ini'
       - '${PWD}/thinkhazard:/app/thinkhazard'
     command: 'pserve --reload c2c://development.ini'
+
+  taskrunner:
+    image: camptocamp/thinkhazard-builder
+    volumes:
+      - '${PWD}/development.ini:/app/development.ini'
+      - '${PWD}/thinkhazard:/app/thinkhazard'
+    command: 'celery worker -A pyramid_celery.celery_app --ini c2c://development.ini'
