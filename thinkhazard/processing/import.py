@@ -186,7 +186,7 @@ WITH new_values (
         name_es,
         geom
     ) AS (
-        SELECT
+        SELECT DISTINCT ON (adm{level}_code)
             adm{level}_code::integer,
             {levelplus1},
             adm{level}_name,
@@ -195,17 +195,7 @@ WITH new_values (
             esp,
             geom
         FROM adm{level}_th
-),
-upsert AS (
-        UPDATE datamart.administrativedivision ad
-        SET name = nv.name,
-            name_fr = nv.name_fr,
-            name_es = nv.name_es,
-            geom = nv.geom
-        FROM new_values nv
-        WHERE ad.code = nv.code
-        RETURNING ad.*
-    )
+)
 INSERT INTO datamart.administrativedivision (
         code,
         leveltype_id,
@@ -222,11 +212,14 @@ INSERT INTO datamart.administrativedivision (
         name_es,
         geom
     FROM new_values
-    WHERE NOT EXISTS (
-        SELECT {levelplus1}
-        FROM upsert up
-        WHERE up.code = new_values.code
-);
+ON CONFLICT (code)
+DO
+    UPDATE
+        SET name = EXCLUDED.name,
+            name_fr = EXCLUDED.name_fr,
+            name_es = EXCLUDED.name_es,
+            geom = EXCLUDED.geom
+;
 """.format(level=level, levelplus1=level + 1)
 
 
