@@ -59,12 +59,28 @@ class AdministrativeDivisionsImporter(BaseProcessor):
     """
     TMP_PATH = "/tmp/admindivs"
 
-    def do_execute(self):
-        connection = self.dbsession.connection()
-        if self.force:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.use_cache = False
 
-            # FIXME: we should need this only once per database migration
-            connection.execute("""
+    @staticmethod
+    def argument_parser():
+        parser = BaseProcessor.argument_parser()
+        parser.add_argument(
+            "--use-cache",
+            dest="use_cache",
+            action="store_const",
+            const=True,
+            default=False,
+            help="Keep files and temporary data between runs (for development)",
+        )
+        return parser
+
+    def do_execute(self, use_cache=False):
+        connection = self.dbsession.connection()
+
+        # FIXME: we should need this only once per database migration
+        connection.execute("""
 SELECT SETVAL(
     'datamart.administrativedivision_id_seq',
     COALESCE(MAX(id), 1)
@@ -74,26 +90,28 @@ SELECT SETVAL(
         for level in (0, 1, 2):
 
             zip_path = os.path.join(self.TMP_PATH, "adm{}_th.zip".format(level))
-            if self.force or not os.path.isfile(zip_path):
+            if not use_cache or not os.path.isfile(zip_path):
                 LOG.info("Downloading data for level {}".format(level))
                 if os.path.isfile(zip_path):
                     os.unlink(zip_path)
                 self.download_zip(level, zip_path)
 
             shp_path = os.path.join(self.TMP_PATH, "adm{}_th.shp".format(level))
-            if self.force or not os.path.isfile(shp_path):
+            if not use_cache or not os.path.isfile(shp_path):
                 LOG.info("Decompressing data for level {}".format(level))
                 subprocess.run(["unzip", "-o", zip_path, "-d", self.TMP_PATH], check=True)
 
-            if self.force or not table_exists(connection, "public", "adm{}_th".format(level)):
+            table_name = "adm{}_th".format(level)
+            if not use_cache or not table_exists(connection, "public", table_name):
                 LOG.info("Importing data for level {}".format(level))
                 connection.execute("DROP TABLE IF EXISTS {};".format(table_name))
                 self.import_shapefile_shp2pgsql(shp_path, table_name, connection)
 
             LOG.info("Updating administrative divisions for level {}".format(level))
-            connection.execute(self.update_query(0))
+            connection.execute(self.update_query(level))
 
-            # connection.execute("DROP TABLE adm{level}_th;".format(level))
+            if not use_cache:
+                connection.execute("DROP TABLE adm{}_th;".format(level))
 
         # Remove climate change recommendations that are not linked to divisions
         # that don't exist anymore
