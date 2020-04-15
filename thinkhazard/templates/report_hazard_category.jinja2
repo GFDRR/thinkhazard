@@ -164,6 +164,7 @@
             <a href="#" class="rp-chooser {{ 'current-rp' if (layer.return_period == hazardset.layer_by_level(hazard_category.hazardlevel.mnemonic).return_period) }}" data-name="{{layer.typename}}">
               {{layer.return_period if not layer.mask}}</a>
             {% else %}
+            {{ layer.return_period if loop.index == 1 }}
             <input type=hidden class="current-rp" data-name="{{layer.typename}}"/>
             {% endif %}
             {% endfor %}
