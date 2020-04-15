@@ -87,8 +87,8 @@ SELECT SETVAL(
 
             if self.force or not table_exists(connection, "public", "adm{}_th".format(level)):
                 LOG.info("Importing data for level {}".format(level))
-                connection.execute("DROP TABLE adm{level}_th;".format(level))
-                self.import_shapefile(shp_path)
+                connection.execute("DROP TABLE IF EXISTS {};".format(table_name))
+                self.import_shapefile_shp2pgsql(shp_path, table_name, connection)
 
             LOG.info("Updating administrative divisions for level {}".format(level))
             connection.execute(self.update_query(0))
@@ -110,7 +110,7 @@ DELETE from datamart.rel_climatechangerecommendation_administrativedivision
             )
         )
 
-    def import_shapefile(self, path):
+    def import_shapefile_ogr2ogr(self, path):
         subprocess.run([
             "ogr2ogr",
             "-f", "PostgreSQL",
@@ -123,6 +123,15 @@ DELETE from datamart.rel_climatechangerecommendation_administrativedivision
             "PG:""host=db port=5432 dbname=thinkhazard_admin user=thinkhazard password=thinkhazard""",
             path,
         ], check=True)
+
+    def import_shapefile_shp2pgsql(self, path, table_name, connection):
+        p1 = subprocess.Popen(
+            ["shp2pgsql", "-d", "-s", "4326", path, table_name],
+            stdout=subprocess.PIPE)
+        p2 = subprocess.Popen(
+            ["psql", "-d", str(self.dbsession.bind.url)],
+            stdin=p1.stdout)
+        p2.communicate()
 
     def download_zip(self, level, path):
         if not os.path.isfile(path):
@@ -166,7 +175,7 @@ WITH new_values (
             NULL,
             fre,
             esp,
-            wkb_geometry
+            geom
         FROM adm{level}_th
 ),
 upsert AS (
