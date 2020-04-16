@@ -59,12 +59,28 @@ class AdministrativeDivisionsImporter(BaseProcessor):
     """
     TMP_PATH = "/tmp/admindivs"
 
-    def do_execute(self):
-        connection = self.dbsession.connection()
-        if self.force:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.use_cache = False
 
-            # FIXME: we should need this only once per database migration
-            connection.execute("""
+    @staticmethod
+    def argument_parser():
+        parser = BaseProcessor.argument_parser()
+        parser.add_argument(
+            "--use-cache",
+            dest="use_cache",
+            action="store_const",
+            const=True,
+            default=False,
+            help="Keep files and temporary data between runs (for development)",
+        )
+        return parser
+
+    def do_execute(self, use_cache=False):
+        connection = self.dbsession.connection()
+
+        # FIXME: we should need this only once per database migration
+        connection.execute("""
 SELECT SETVAL(
     'datamart.administrativedivision_id_seq',
     COALESCE(MAX(id), 1)
@@ -74,26 +90,28 @@ SELECT SETVAL(
         for level in (0, 1, 2):
 
             zip_path = os.path.join(self.TMP_PATH, "adm{}_th.zip".format(level))
-            if self.force or not os.path.isfile(zip_path):
+            if not use_cache or not os.path.isfile(zip_path):
                 LOG.info("Downloading data for level {}".format(level))
                 if os.path.isfile(zip_path):
                     os.unlink(zip_path)
                 self.download_zip(level, zip_path)
 
             shp_path = os.path.join(self.TMP_PATH, "adm{}_th.shp".format(level))
-            if self.force or not os.path.isfile(shp_path):
+            if not use_cache or not os.path.isfile(shp_path):
                 LOG.info("Decompressing data for level {}".format(level))
                 subprocess.run(["unzip", "-o", zip_path, "-d", self.TMP_PATH], check=True)
 
-            if self.force or not table_exists(connection, "public", "adm{}_th".format(level)):
+            table_name = "adm{}_th".format(level)
+            if not use_cache or not table_exists(connection, "public", table_name):
                 LOG.info("Importing data for level {}".format(level))
-                connection.execute("DROP TABLE adm{level}_th;".format(level))
-                self.import_shapefile(shp_path)
+                connection.execute("DROP TABLE IF EXISTS {};".format(table_name))
+                self.import_shapefile_shp2pgsql(shp_path, table_name, connection)
 
             LOG.info("Updating administrative divisions for level {}".format(level))
-            connection.execute(self.update_query(0))
+            connection.execute(self.update_query(level))
 
-            # connection.execute("DROP TABLE adm{level}_th;".format(level))
+            if not use_cache:
+                connection.execute("DROP TABLE adm{}_th;".format(level))
 
         # Remove climate change recommendations that are not linked to divisions
         # that don't exist anymore
@@ -110,7 +128,7 @@ DELETE from datamart.rel_climatechangerecommendation_administrativedivision
             )
         )
 
-    def import_shapefile(self, path):
+    def import_shapefile_ogr2ogr(self, path):
         subprocess.run([
             "ogr2ogr",
             "-f", "PostgreSQL",
@@ -123,6 +141,15 @@ DELETE from datamart.rel_climatechangerecommendation_administrativedivision
             "PG:""host=db port=5432 dbname=thinkhazard_admin user=thinkhazard password=thinkhazard""",
             path,
         ], check=True)
+
+    def import_shapefile_shp2pgsql(self, path, table_name, connection):
+        p1 = subprocess.Popen(
+            ["shp2pgsql", "-d", "-s", "4326", path, table_name],
+            stdout=subprocess.PIPE)
+        p2 = subprocess.Popen(
+            ["psql", "-d", str(self.dbsession.bind.url)],
+            stdin=p1.stdout)
+        p2.communicate()
 
     def download_zip(self, level, path):
         if not os.path.isfile(path):
@@ -159,26 +186,16 @@ WITH new_values (
         name_es,
         geom
     ) AS (
-        SELECT
+        SELECT DISTINCT ON (adm{level}_code)
             adm{level}_code::integer,
             {levelplus1},
             adm{level}_name,
             NULL,
             fre,
             esp,
-            wkb_geometry
+            geom
         FROM adm{level}_th
-),
-upsert AS (
-        UPDATE datamart.administrativedivision ad
-        SET name = nv.name,
-            name_fr = nv.name_fr,
-            name_es = nv.name_es,
-            geom = nv.geom
-        FROM new_values nv
-        WHERE ad.code = nv.code
-        RETURNING ad.*
-    )
+)
 INSERT INTO datamart.administrativedivision (
         code,
         leveltype_id,
@@ -195,11 +212,14 @@ INSERT INTO datamart.administrativedivision (
         name_es,
         geom
     FROM new_values
-    WHERE NOT EXISTS (
-        SELECT {levelplus1}
-        FROM upsert up
-        WHERE up.code = new_values.code
-);
+ON CONFLICT (code)
+DO
+    UPDATE
+        SET name = EXCLUDED.name,
+            name_fr = EXCLUDED.name_fr,
+            name_es = EXCLUDED.name_es,
+            geom = EXCLUDED.geom
+;
 """.format(level=level, levelplus1=level + 1)
 
 
