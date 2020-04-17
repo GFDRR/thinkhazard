@@ -108,7 +108,7 @@ hazard_types:
   CF:
     hazard_type: coastal_flood
     return_periods:
-      HIG: 10
+      HIG: [10, 25]
       MED: 50
       LOW: 100
     thresholds:
