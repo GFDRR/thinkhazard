@@ -1,0 +1,7 @@
+#!/bin/bash
+
+$(dirname $0)/tx-init
+
+tx pull -s -r gfdrr-thinkhazard.database
+
+import_l10n -v

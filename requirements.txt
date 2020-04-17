@@ -23,7 +23,7 @@ pyramid_debugtoolbar
 pyramid_jinja2
 pyramid_tm
 pytidylib
-python-slugify
+python-slugify<2.0.0
 pyyaml
 rasterio
 requests
@@ -31,7 +31,7 @@ requests_futures
 shapely
 shapely
 simplejson
-slugify
 transaction
+transifex-client
 waitress
 zope.sqlalchemy

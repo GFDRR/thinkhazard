@@ -1,0 +1,9 @@
+#!/bin/bash
+
+cat <<EOF > ${HOME}/.transifexrc
+[https://www.transifex.com]
+hostname = https://www.transifex.com
+username = ${TX_USR}
+password = ${TX_PWD}
+token =
+EOF

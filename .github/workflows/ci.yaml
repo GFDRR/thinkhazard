@@ -30,7 +30,6 @@ jobs:
           && (
             startsWith(github.ref, 'refs/tags/')
             || github.ref == 'refs/heads/master'
-            || github.ref == 'refs/heads/docker-push'
           )
         run: |
           docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD}
@@ -40,4 +39,4 @@ jobs:
           github.repository == 'GFDRR/thinkhazard'
           && success()
           && github.ref == 'refs/heads/master'
-        run: make transifex-push
+        run: make transifex-push-ui

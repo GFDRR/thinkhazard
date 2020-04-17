@@ -111,6 +111,8 @@ def populate_datamart(dbsession):
         ("PRO", "Province", "Administrative division of level 1"),
         ("REG", "Region", "Administrative division of level 2"),
     ]:
+        if AdminLevelType.get(dbsession, i[0]):
+            continue
         r = AdminLevelType()
         r.mnemonic, r.title, r.description = i
         dbsession.add(r)
@@ -122,6 +124,8 @@ def populate_datamart(dbsession):
         ("LOW", "Low", 3),
         ("VLO", "Very low", 4),
     ]:
+        if HazardLevel.get(dbsession, i[0]):
+            continue
         r = HazardLevel()
         r.mnemonic, r.title, r.order = i
         dbsession.add(r)
@@ -141,6 +145,8 @@ def populate_datamart(dbsession):
         ("WF", "Wildfire", 11),
         ("AP", "Air pollution", 12),
     ]:
+        if HazardType.get(dbsession, i[0]):
+            continue
         r = HazardType()
         r.mnemonic, r.title, r.order = i
         dbsession.add(r)
@@ -149,6 +155,8 @@ def populate_datamart(dbsession):
     hazardlevels = dbsession.query(HazardLevel)
     for hazardtype in dbsession.query(HazardType):
         for hazardlevel in hazardlevels:
+            if HazardCategory.get(dbsession, hazardtype, hazardlevel):
+                continue
             r = HazardCategory()
             r.hazardtype = hazardtype
             r.hazardlevel = hazardlevel

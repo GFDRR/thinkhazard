@@ -18,6 +18,8 @@ services:
       - hazardsets:/tmp/hazardsets
     environment:
       - INI_FILE
+      - TX_USR
+      - TX_PWD
       - PGHOST
       - PGPORT
       - PGUSER_PUBLIC

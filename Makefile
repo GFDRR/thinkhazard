@@ -84,7 +84,7 @@ compile_catalog:
 
 .PHONY: test
 test: ## Run automated tests
-	docker-compose -f docker-compose-test.yaml run --rm test nosetests -v
+	$(DOCKER_CMD) nosetests -v
 
 .PHONY: bash
 test-bash: ## Open bash in a test container
@@ -141,10 +141,18 @@ docker_build_testdb:
 docker-push: ## Push images to docker hub
 	./scripts/docker-push
 
-.PHONY: transifex-push
-transifex-push: ## Push translations to transifex
-transifex-push:
-	$(DOCKER_MAKE_CMD) transifex-push
+.PHONY: transifex-push-ui
+transifex-push-ui: ## Push UI strings to transifex
+transifex-push-ui: initdb
+	docker-compose run --rm thinkhazard /app/thinkhazard/scripts/tx-push-ui
+
+.PHONY: transifex-push-db
+transifex-push-db: ## Push database strings to transifex
+	docker-compose run --rm thinkhazard /app/thinkhazard/scripts/tx-push-db
+
+.PHONY: transifex-pull-db
+transifex-pull-db: ## Pull database strings from transifex
+	docker-compose run --rm thinkhazard /app/thinkhazard/scripts/tx-pull-db
 
 
 ##############
@@ -218,10 +226,6 @@ import_contacts: ## Import contacts
 	docker-compose run --rm thinkhazard import_contacts -v
 
 
-.PHONY: transifex-import
-transifex-import: .build/requirements.timestamp
-	.build/venv/bin/importpo $(INI_FILE)
-
 .PHONY: routes
 routes:
 	.build/venv/bin/proutes $(INI_FILE)
@@ -239,10 +243,3 @@ watch: .build/dev-requirements.timestamp
 	.build/venv/bin/nosier -p thinkhazard/static "make buildcss"
 
 
-
-.PHONY: extract_messages
-extract_messages:
-	.build/venv/bin/pot-create -c lingua.cfg -o thinkhazard/locale/thinkhazard.pot thinkhazard/templates thinkhazard/dont_remove_me.enum-i18n
-	.build/venv/bin/pot-create -c lingua.cfg -o thinkhazard/locale/thinkhazard-database.pot thinkhazard/dont_remove_me.db-i18n
-	# removes the creation date to avoid unnecessary git changes
-	sed -i '/^"POT-Creation-Date: /d' thinkhazard/locale/thinkhazard.pot
