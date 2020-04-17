@@ -447,6 +447,10 @@
     e.preventDefault();
     var index = ($(this).parent().prop("tagName")==='LI') ? $(this).parent().index() : 0;
     var attr = $($('.current-rp').get(index)).attr('data-name');
+    // takes first layer if no layer was found for requested hazard level
+    if (!attr) {
+      attr = $($('.rp-chooser').get(0)).attr('data-name');
+    }
     dataSourceSource = new ol.source.ImageWMS({
       url: 'http://www.geonode-gfdrrlab.org/geoserver/hazard/ows',
       params: {'LAYERS': attr},
