@@ -22,7 +22,7 @@ docker_push () {
 # If we are on a branch, push branch
 if [ ${GIT_BRANCH} != HEAD ]
 then
-    if [ "${GIT_BRANCH}" == "main" ]
+    if [ "${GIT_BRANCH}" == "master" ]
     then
         DOCKER_TAG='latest'
     else
