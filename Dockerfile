@@ -24,6 +24,10 @@ RUN apt-get update && apt-get install -y \
 COPY ./requirements.txt /app/requirements.txt
 RUN pip install -r /app/requirements.txt && pyppeteer-install
 
+# Administrative divisions cache
+RUN mkdir /tmp/admindivs && chown www-data /tmp/admindivs
+VOLUME /tmp/admindivs
+
 # Layer cache
 RUN mkdir /tmp/hazardsets && chown www-data /tmp/hazardsets
 VOLUME /tmp/hazardsets
