@@ -27,7 +27,6 @@ from urllib.parse import urlunsplit
 import json
 import csv
 from datetime import datetime
-import pytz
 from time import sleep
 
 from thinkhazard.models import (
@@ -110,24 +109,6 @@ class Harvester(BaseProcessor):
 
     def do_execute(self, hazard_type=None, use_cache=False):
         self.use_cache = use_cache
-
-        setting_path = os.path.join(
-            os.path.dirname(__file__), "..", "..", "thinkhazard_processing.yaml"
-        )
-        settings_mtime = datetime.utcfromtimestamp(
-            os.path.getmtime(setting_path)
-        ).replace(tzinfo=pytz.utc)
-
-        last_complete_harvesting_date = Harvesting.last_complete_date(self.dbsession)
-        if (
-            last_complete_harvesting_date is None
-            or settings_mtime > last_complete_harvesting_date
-        ):
-            logger.info(
-                "Settings have been modified, " "passing in force/complete mode."
-            )
-            self.force = True
-            self.hazard_type = None
 
         try:
             self.harvest_regions()
