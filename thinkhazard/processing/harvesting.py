@@ -624,19 +624,19 @@ class Harvester(BaseProcessor):
 
         data_update_date = parse_date(o['data_update_date'])
         if not data_update_date:
-            warning(o, 'data_update_date is empty')
+            warning(o, 'data_update_date is empty: set to {}'.format(datetime.fromtimestamp(0)))
             # We use a very old date for good comparison in decision tree
             data_update_date = datetime.fromtimestamp(0)
 
         metadata_update_date = parse_date(o['metadata_update_date'])
         if not metadata_update_date:
-            warning(o, 'metadata_update_date is empty')
+            warning(o, 'metadata_update_date is empty: set to {}'.format(datetime.fromtimestamp(0)))
             # We use a very old date for good comparison in decision tree
             metadata_update_date = datetime.fromtimestamp(0)
 
         calculation_method_quality = o['calculation_method_quality']
         if not calculation_method_quality:
-            warning(o, 'calculation_method_quality is empty')
+            warning(o, 'calculation_method_quality is empty: skip layer')
             return False
         calculation_method_quality = int(float(calculation_method_quality))
 
