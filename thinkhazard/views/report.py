@@ -234,7 +234,7 @@ def report_geojson(request):
     return [
         {
             "type": "Feature",
-            "geometry": to_shape(geom_simplified),
+            "geometry": to_shape(geom_simplified) if geom_simplified is not None else None,
             "properties": {
                 "name": division.name,
                 "code": division.code,
@@ -490,7 +490,7 @@ def report_neighbours_geojson(request):
     return [
         {
             "type": "Feature",
-            "geometry": to_shape(geom_simplified),
+            "geometry": to_shape(geom_simplified) if geom_simplified is not None else None,
             "properties": {
                 "name": div.name,
                 "code": div.code,
