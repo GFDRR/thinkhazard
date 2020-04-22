@@ -27,7 +27,6 @@ from urllib.parse import urlunsplit
 import json
 import csv
 from datetime import datetime
-import pytz
 from time import sleep
 
 from thinkhazard.models import (
@@ -110,24 +109,6 @@ class Harvester(BaseProcessor):
 
     def do_execute(self, hazard_type=None, use_cache=False):
         self.use_cache = use_cache
-
-        setting_path = os.path.join(
-            os.path.dirname(__file__), "..", "..", "thinkhazard_processing.yaml"
-        )
-        settings_mtime = datetime.utcfromtimestamp(
-            os.path.getmtime(setting_path)
-        ).replace(tzinfo=pytz.utc)
-
-        last_complete_harvesting_date = Harvesting.last_complete_date(self.dbsession)
-        if (
-            last_complete_harvesting_date is None
-            or settings_mtime > last_complete_harvesting_date
-        ):
-            logger.info(
-                "Settings have been modified, " "passing in force/complete mode."
-            )
-            self.force = True
-            self.hazard_type = None
 
         try:
             self.harvest_regions()
@@ -643,19 +624,19 @@ class Harvester(BaseProcessor):
 
         data_update_date = parse_date(o['data_update_date'])
         if not data_update_date:
-            warning(o, 'data_update_date is empty')
+            warning(o, 'data_update_date is empty: set to {}'.format(datetime.fromtimestamp(0)))
             # We use a very old date for good comparison in decision tree
             data_update_date = datetime.fromtimestamp(0)
 
         metadata_update_date = parse_date(o['metadata_update_date'])
         if not metadata_update_date:
-            warning(o, 'metadata_update_date is empty')
+            warning(o, 'metadata_update_date is empty: set to {}'.format(datetime.fromtimestamp(0)))
             # We use a very old date for good comparison in decision tree
             metadata_update_date = datetime.fromtimestamp(0)
 
         calculation_method_quality = o['calculation_method_quality']
         if not calculation_method_quality:
-            warning(o, 'calculation_method_quality is empty')
+            warning(o, 'calculation_method_quality is empty: skip layer')
             return False
         calculation_method_quality = int(float(calculation_method_quality))
 

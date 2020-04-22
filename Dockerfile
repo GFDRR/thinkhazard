@@ -25,15 +25,15 @@ COPY ./requirements.txt /app/requirements.txt
 RUN pip install -r /app/requirements.txt && pyppeteer-install
 
 # Administrative divisions cache
-RUN mkdir /tmp/admindivs && chown www-data /tmp/admindivs
+RUN mkdir /tmp/admindivs && chmod 777 /tmp/admindivs
 VOLUME /tmp/admindivs
 
 # Layer cache
-RUN mkdir /tmp/hazardsets && chown www-data /tmp/hazardsets
+RUN mkdir /tmp/hazardsets && chmod 777 /tmp/hazardsets
 VOLUME /tmp/hazardsets
 
 # Geonode API cache
-RUN mkdir /tmp/geonode_api && chown www-data /tmp/geonode_api
+RUN mkdir /tmp/geonode_api && chmod 777 /tmp/geonode_api
 VOLUME /tmp/geonode_api
 
 RUN mkdir -p /home/user && chmod 777 /home/user

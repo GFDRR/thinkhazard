@@ -96,22 +96,18 @@ SELECT SETVAL(
                     os.unlink(zip_path)
                 self.download_zip(level, zip_path)
 
-            shp_path = os.path.join(self.TMP_PATH, "adm{}_th.shp".format(level))
-            if not use_cache or not os.path.isfile(shp_path):
-                LOG.info("Decompressing data for level {}".format(level))
-                subprocess.run(["unzip", "-o", zip_path, "-d", self.TMP_PATH], check=True)
+            LOG.info("Decompressing data for level {}".format(level))
+            subprocess.run(["unzip", "-o", zip_path, "-d", self.TMP_PATH], check=True)
 
+            LOG.info("Importing data for level {}".format(level))
+            shp_path = os.path.join(self.TMP_PATH, "adm{}_th.shp".format(level))
             table_name = "adm{}_th".format(level)
-            if not use_cache or not table_exists(connection, "public", table_name):
-                LOG.info("Importing data for level {}".format(level))
-                connection.execute("DROP TABLE IF EXISTS {};".format(table_name))
-                self.import_shapefile_shp2pgsql(shp_path, table_name, connection)
+            self.import_shapefile_shp2pgsql(shp_path, table_name, connection)
 
             LOG.info("Updating administrative divisions for level {}".format(level))
             connection.execute(self.update_query(level))
 
-            if not use_cache:
-                connection.execute("DROP TABLE adm{}_th;".format(level))
+            connection.execute("DROP TABLE IF EXISTS adm{}_th;".format(level))
 
         # Remove climate change recommendations that are not linked to divisions
         # that don't exist anymore
