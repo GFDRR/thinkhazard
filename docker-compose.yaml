@@ -58,7 +58,7 @@ services:
       - AWS_SECRET_ACCESS_KEY
       - AWS_BUCKET_NAME
       - GEONODE_API_KEY
-    command: 'celery worker -A pyramid_celery.celery_app --ini ${INI_FILE}'
+    command: 'celery -A thinkhazard.celery worker -l info'
 
   minio:
     image: minio/minio

@@ -37,6 +37,5 @@ transifex-client
 waitress
 zope.sqlalchemy
 celery
-pyramid_celery
 celery[s3]
 celery[redis]

@@ -8,6 +8,8 @@ from papyrus.renderers import GeoJSON
 
 from thinkhazard.settings import load_processing_settings, load_local_settings
 
+from thinkhazard.celery import app as celery_app
+
 lock_file = os.path.join(os.path.dirname(__file__), "maintenance.lock")
 
 
@@ -31,10 +33,11 @@ def main(global_config, **settings):
 
     config.include("pyramid_jinja2")
     config.include("papyrus")
-    config.include("pyramid_celery")
     config.include("thinkhazard.session")
 
-    config.configure_celery(global_config['__file__'])
+    # Celery
+    config.add_request_method(lambda x: celery_app, 'celery_app', reify=True)
+
 
     config.add_tween("thinkhazard.tweens.notmodified_tween_factory", over=MAIN)
 
