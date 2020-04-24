@@ -24,6 +24,7 @@ export AWS_ACCESS_KEY_ID ?= minioadmin
 export AWS_SECRET_ACCESS_KEY ?= minioadmin
 export AWS_BUCKET_NAME ?= thinkhazard
 
+export ANALYTICS ?= DO-NOT-TRACK
 
 .PHONY: help_old
 help_old:
