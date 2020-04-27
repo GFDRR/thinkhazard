@@ -26,6 +26,9 @@ export AWS_BUCKET_NAME ?= thinkhazard
 
 export ANALYTICS ?= DO-NOT-TRACK
 
+export BROKER_URL ?= redis://redis:6379/0
+
+
 .PHONY: help_old
 help_old:
 	@echo "Usage: make <target>"

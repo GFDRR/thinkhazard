@@ -8,7 +8,7 @@ imp = importlib.import_module("thinkhazard.processing.import")
 INI_FILE = os.environ["INI_FILE"]
 
 app = Celery()
-app.conf.broker_url = "redis://redis:6379/0"
+app.conf.broker_url = os.environ["BROKER_URL"]
 app.conf.result_backend = 's3'
 app.conf.s3_bucket = 'thinkhazard'
 app.conf.s3_access_key_id = os.environ["AWS_ACCESS_KEY_ID"]

@@ -33,6 +33,7 @@ services:
       - AWS_BUCKET_NAME
       - GEONODE_API_KEY
       - ANALYTICS
+      - BROKER_URL
     ports:
       - 8080:8080
 
@@ -58,6 +59,7 @@ services:
       - AWS_SECRET_ACCESS_KEY
       - AWS_BUCKET_NAME
       - GEONODE_API_KEY
+      - BROKER_URL
     command: 'celery -A thinkhazard.celery worker -l info'
 
   minio:
