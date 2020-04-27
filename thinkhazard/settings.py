@@ -13,7 +13,6 @@ def load_full_settings(config_uri, name="admin", options={}):
         config_uri,
         name=name,
         options={
-            **os.environ,
             **options,
         }
     )
