@@ -32,6 +32,7 @@ services:
       - AWS_SECRET_ACCESS_KEY
       - AWS_BUCKET_NAME
       - GEONODE_API_KEY
+      - ANALYTICS
     ports:
       - 8080:8080
 
