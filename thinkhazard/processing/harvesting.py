@@ -584,12 +584,12 @@ class Harvester(BaseProcessor):
         mask = False
         if preprocessed is True:
             hazardlevel = None
-            # keep hazard_unit and hazard_period optinal for preprocessed layers
+            # harvest hazard_unit for preprocessed layers
             hazard_unit = o['hazard_unit']
-            try:
-                hazard_period = int(o['hazard_period'])
-            except:
-                hazard_period = None
+            if o['hazard_period']:
+                logger.info('  return period found in preprocessed hazardset')
+                return False
+            hazard_period = None
 
         else:
             try:
