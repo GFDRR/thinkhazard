@@ -69,15 +69,15 @@ setup(
             "database = thinkhazard.lib.lingua_extractor:DatabaseExtractor",
             "enum = thinkhazard.lib.lingua_extractor:EnumExtractor",
         ],
-        'plaster.loader_factory': [
-            'c2c=thinkhazard.loader:Loader',
-            'c2c+ini=thinkhazard.loader:Loader',
-            'c2c+egg=thinkhazard.loader:Loader',
+        "plaster.loader_factory": [
+            "c2c=thinkhazard.loader:Loader",
+            "c2c+ini=thinkhazard.loader:Loader",
+            "c2c+egg=thinkhazard.loader:Loader",
         ],
-        'plaster.wsgi_loader_factory': [
-            'c2c=thinkhazard.loader:Loader',
-            'c2c+ini=thinkhazard.loader:Loader',
-            'c2c+egg=thinkhazard.loader:Loader',
+        "plaster.wsgi_loader_factory": [
+            "c2c=thinkhazard.loader:Loader",
+            "c2c+ini=thinkhazard.loader:Loader",
+            "c2c+egg=thinkhazard.loader:Loader",
         ],
     },
 )

@@ -9,11 +9,7 @@ class Loader(BaseLoader):  # type: ignore
         self, defaults: Optional[Dict[str, str]] = None
     ) -> Dict[str, str]:
         d: Dict[str, str] = {}
-        env = {
-            key: value
-            for key, value in os.environ.items()
-            if key[0] != '_'
-        }
+        env = {key: value for key, value in os.environ.items() if key[0] != "_"}
         d.update(env)
         d.update(defaults or {})
         settings = super()._get_defaults(d)

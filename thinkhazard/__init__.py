@@ -36,8 +36,7 @@ def main(global_config, **settings):
     config.include("thinkhazard.session")
 
     # Celery
-    config.add_request_method(lambda x: celery_app, 'celery_app', reify=True)
-
+    config.add_request_method(lambda x: celery_app, "celery_app", reify=True)
 
     config.add_tween("thinkhazard.tweens.notmodified_tween_factory", over=MAIN)
 
@@ -225,10 +224,10 @@ def add_localized_route(config, name, pattern, factory=None, pregenerator=None, 
         # determine if this is a supported lang and convert it to a locale,
         # likely defaulting to your default language if the requested one is
         # not supported by your app
-        if lang not in request.registry.settings['available_languages'].split():
+        if lang not in request.registry.settings["available_languages"].split():
             raise HTTPFound(
                 request.current_route_url(
-                    lang=request.registry.settings['default_locale_name']
+                    lang=request.registry.settings["default_locale_name"]
                 )
             )
 
@@ -245,7 +244,7 @@ def add_localized_route(config, name, pattern, factory=None, pregenerator=None, 
     def wrapper_pregenerator(request, elements, kw):
         if "lang" not in kw:
             kw["lang"] = (
-                request.locale_name or config.registry.settings['default_locale_name']
+                request.locale_name or config.registry.settings["default_locale_name"]
             )
         if orig_pregenerator:
             return orig_pregenerator(request, elements, kw)
