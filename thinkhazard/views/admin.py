@@ -309,7 +309,7 @@ def admindiv_hazardsets_export(request):
     o.hazardset_id = hs.id LEFT JOIN datamart.enum_hazardtype AS ht ON
     hs.hazardtype_id = ht.id WHERE ad.leveltype_id = 3
     ORDER BY ht.mnemonic, ad.name"""
-    rows = request.dbsession.execute(query).fetchall()
+    rows = request.dbsession.execute(query)
 
     return {"headers": ["hazardtype", "code", "name", "hazard_level"], "rows": rows}
 
