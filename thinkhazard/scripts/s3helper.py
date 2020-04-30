@@ -39,3 +39,24 @@ class S3Helper:
             logging.error(e)
             return False
         return True
+
+    def delete_object(self, object_name):
+        try:
+            self.s3_client.delete_object(
+                Bucket=self.bucket,
+                Key=object_name
+            )
+        except ClientError as e:
+            logging.error(e)
+            return False
+        return True
+
+    def check_object_exists(self, object_name):
+        try:
+            self.s3_client.head_object(
+                Bucket=self.bucket,
+                Key=object_name
+            )
+        except ClientError:
+            return False
+        return True

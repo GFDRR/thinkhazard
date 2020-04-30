@@ -1,5 +1,6 @@
 import os
 import subprocess
+import tempfile
 
 from pyramid.config import Configurator
 from pyramid.httpexceptions import HTTPFound
@@ -8,7 +9,7 @@ from papyrus.renderers import GeoJSON
 
 from thinkhazard.settings import load_processing_settings, load_local_settings
 
-lock_file = os.path.join(os.path.dirname(__file__), "maintenance.lock")
+lock_file = os.path.join(tempfile.gettempdir(), "maintenance.lock")
 
 
 try:

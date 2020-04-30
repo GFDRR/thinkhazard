@@ -25,6 +25,7 @@ from pyramid.httpexceptions import HTTPNotModified
 
 from . import lock_file
 from .models import Publication
+from thinkhazard.scripts.s3helper import S3Helper
 
 
 def notmodified_tween_factory(handler, registry):
@@ -39,7 +40,14 @@ def notmodified_tween_factory(handler, registry):
 
             publication_date = gmt.localize(Publication.last(request.dbsession).date)
 
-            if os.path.isfile(lock_file):
+            settings = request.registry.settings
+            s3_helper = S3Helper(
+                settings["aws_bucket_name"],
+                aws_access_key_id=settings["aws_access_key_id"],
+                aws_secret_access_key=settings["aws_secret_access_key"]
+            )
+
+            if s3_helper.check_object_exists(os.path.basename(lock_file)):
                 response = Response(render("templates/maintenance.jinja2", {}, request))
                 response.status_code = 503
                 return response
