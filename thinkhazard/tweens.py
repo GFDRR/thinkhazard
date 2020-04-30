@@ -40,12 +40,7 @@ def notmodified_tween_factory(handler, registry):
 
             publication_date = gmt.localize(Publication.last(request.dbsession).date)
 
-            settings = request.registry.settings
-            s3_helper = S3Helper(
-                settings["aws_bucket_name"],
-                aws_access_key_id=settings["aws_access_key_id"],
-                aws_secret_access_key=settings["aws_secret_access_key"]
-            )
+            s3_helper = S3Helper(request.registry.settings)
 
             if s3_helper.check_object_exists(os.path.basename(lock_file)):
                 response = Response(render("templates/maintenance.jinja2", {}, request))

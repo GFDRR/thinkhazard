@@ -152,7 +152,7 @@ def create_pdf_report(request):
     s3_path = "reports/{}".format(filename)
     local_path = os.path.join(tempfile.gettempdir(), filename)
 
-    s3_helper = _create_s3_helper(request)
+    s3_helper = S3Helper(request.registry.settings)
     if not s3_helper.download_file(s3_path, local_path):
         categories = (
             request.dbsession.query(HazardCategory)
@@ -184,12 +184,3 @@ def create_pdf_report(request):
         'attachment; filename="ThinkHazard.pdf"'
     )
     return response
-
-
-def _create_s3_helper(request):
-    settings = request.registry.settings
-    return S3Helper(
-        settings["aws_bucket_name"],
-        aws_access_key_id=settings["aws_access_key_id"],
-        aws_secret_access_key=settings["aws_secret_access_key"]
-    )
