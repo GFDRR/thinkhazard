@@ -47,6 +47,7 @@ TASKS_LABELS = {
     "publish": "Publication",
     "transifex_fetch": "Import from Transifex",
     "admindivs": "Import administrative division from GeoNode",
+    "process": "Processing",
 }
 
 

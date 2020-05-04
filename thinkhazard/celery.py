@@ -3,6 +3,10 @@ import os
 import time
 from celery import Celery
 
+from thinkhazard.processing.harvesting import Harvester
+from thinkhazard.processing.downloading import Downloader
+from thinkhazard.processing.completing import Completer
+from thinkhazard.processing.decisiontree import DecisionMaker
 from thinkhazard.scripts.publish import main as publish_main
 imp = importlib.import_module("thinkhazard.processing.import")
 
@@ -37,3 +41,13 @@ def admindivs():
     print("start admindivis")
     imp.AdministrativeDivisionsImporter.run((INI_FILE,))
     print("end admindivis")
+
+
+@app.task
+def process():
+    print("start processing")
+    Harvester.run((INI_FILE,))
+    Downloader.run((INI_FILE,))
+    Completer.run((INI_FILE,))
+    DecisionMaker.run((INI_FILE,))
+    print("end processing")

@@ -53,7 +53,15 @@
               Harvest, download, complete &amp; process.
             </p>
             <p class="text-right">
-              <button class="btn btn-info">Process</button>
+              <a
+                class="btn btn-info"
+                href="{{request.route_url('admin_add_task', _query={'task': 'process'})}}"
+                {% if 'process' in running_keys %}
+                disabled="disabled"
+                {% endif %}
+              >
+                Process
+              </a>
             </p>
             <hr>
             <h4>Translations</h4>
