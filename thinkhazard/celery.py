@@ -21,9 +21,7 @@ app.conf.s3_region = "eu-west-1"
 @app.task
 def publish():
     print("start publish")
-    print(INI_FILE)
-    print((None, INI_FILE))
-    publish_main(argv=(None, INI_FILE))
+    publish_main(argv=(None, INI_FILE.strip("'")))
     print("end publish")
 
 
