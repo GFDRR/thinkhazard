@@ -33,9 +33,6 @@ def main(global_config, **settings):
     config.include("papyrus")
     config.include("thinkhazard.session")
 
-    # Celery
-    config.add_request_method(lambda x: celery_app, "celery_app", reify=True)
-
     config.add_tween("thinkhazard.tweens.notmodified_tween_factory", over=MAIN)
 
     config.add_static_view("static", "static", cache_max_age=3600)
@@ -51,7 +48,9 @@ def main(global_config, **settings):
         config.add_route("sitemap", "/sitemap.xml")
 
     if settings["appname"] == "admin":
+        # Celery
         from thinkhazard.celery import app as celery_app
+        config.add_request_method(lambda x: celery_app, "celery_app", reify=True)
 
         config.include(add_public_routes, route_prefix="preview")
 
