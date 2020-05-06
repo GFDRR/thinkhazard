@@ -127,7 +127,7 @@ class Downloader(BaseProcessor):
             # FIXME: temporary override
             if layer.hazardset_id == 'LS-GLOBAL-arup':
                 url = ("https://drive.google.com/uc?export=download"
-                       "&id=1YI6OSqMruupF3CrK6UsdXQc3A4UPUtCc")
+                       "&id=18ilYOnMikhBZ708uole4jpeghRd4soD7")
 
             logger.info('  Retrieving {}'.format(url))
             try:
