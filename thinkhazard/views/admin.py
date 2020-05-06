@@ -44,10 +44,10 @@ from thinkhazard.models import (
 import thinkhazard.celery as tasks
 
 TASKS_LABELS = {
-    "publish": "Publication",
+    "publish": "Publish on public site",
     "transifex_fetch": "Import from Transifex",
     "admindivs": "Import administrative division from GeoNode",
-    "process": "Processing",
+    "process": "Harvest & process Geonode datasets",
 }
 
 

@@ -16,7 +16,6 @@ INI_FILE = os.environ["INI_FILE"]
 app = Celery()
 app.conf.broker_url = os.environ["BROKER_URL"]
 app.conf.result_backend = "s3"
-app.conf.s3_bucket = "thinkhazard"
 app.conf.s3_access_key_id = os.environ["AWS_ACCESS_KEY_ID"]
 app.conf.s3_secret_access_key = os.environ["AWS_SECRET_ACCESS_KEY"]
 app.conf.s3_bucket = os.environ["AWS_BUCKET_NAME"]
@@ -33,6 +32,7 @@ def publish():
 @app.task
 def transifex_fetch():
     print("start transifex_fetch")
+    # FIXME plug to real task
     time.sleep(10)
     print("end transifex_fetch")
 
