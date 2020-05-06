@@ -3,6 +3,8 @@ version: '3'
 services:
   thinkhazard:
     image: camptocamp/thinkhazard-builder
+    environment:
+      USE_CACHE: 'TRUE'
     volumes:
       - '${PWD}/development.ini:/app/development.ini'
       - '${PWD}/thinkhazard:/app/thinkhazard'
@@ -10,6 +12,8 @@ services:
 
   taskrunner:
     image: camptocamp/thinkhazard-builder
+    environment:
+      USE_CACHE: 'TRUE'
     volumes:
       - '${PWD}/development.ini:/app/development.ini'
       - '${PWD}/thinkhazard:/app/thinkhazard'

@@ -8,7 +8,7 @@ from thinkhazard.processing.downloading import Downloader
 from thinkhazard.processing.completing import Completer
 from thinkhazard.processing.processing import Processor
 from thinkhazard.processing.decisiontree import DecisionMaker
-from thinkhazard.scripts.publish import main as publish_main
+from thinkhazard.processing.publish import Publisher
 imp = importlib.import_module("thinkhazard.processing.import")
 
 INI_FILE = os.environ["INI_FILE"]
@@ -25,7 +25,7 @@ app.conf.s3_region = "eu-west-1"
 @app.task
 def publish():
     print("start publish")
-    publish_main(argv=(None, INI_FILE.strip("'")))
+    Publisher.run((INI_FILE, "-v"))
     print("end publish")
 
 
@@ -40,16 +40,16 @@ def transifex_fetch():
 @app.task
 def admindivs():
     print("start admindivis")
-    imp.AdministrativeDivisionsImporter.run((INI_FILE,))
+    imp.AdministrativeDivisionsImporter.run((INI_FILE, "-v"))
     print("end admindivis")
 
 
 @app.task
 def process():
     print("start processing")
-    Harvester.run((INI_FILE,))
-    Downloader.run((INI_FILE,))
-    Completer.run((INI_FILE,))
-    Processor.run((INI_FILE,))
-    DecisionMaker.run((INI_FILE,))
+    Harvester.run((INI_FILE, "-v"))
+    Downloader.run((INI_FILE, "-v"))
+    Completer.run((INI_FILE, "-v"))
+    Processor.run((INI_FILE, "-v"))
+    DecisionMaker.run((INI_FILE, "-v"))
     print("end processing")

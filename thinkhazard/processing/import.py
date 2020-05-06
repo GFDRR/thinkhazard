@@ -23,6 +23,8 @@ import subprocess
 import logging
 import requests
 
+from pyramid.settings import asbool
+
 from thinkhazard.processing import BaseProcessor
 from thinkhazard.models import (
     AdministrativeDivision,
@@ -77,6 +79,8 @@ class AdministrativeDivisionsImporter(BaseProcessor):
         return parser
 
     def do_execute(self, use_cache=False):
+        self.use_cache = use_cache or asbool(os.environ.get("USE_CACHE", False))
+
         connection = self.dbsession.connection()
 
         # FIXME: we should need this only once per database migration
@@ -90,7 +94,7 @@ SELECT SETVAL(
         for level in (0, 1, 2):
 
             zip_path = os.path.join(self.TMP_PATH, "adm{}_th.zip".format(level))
-            if not use_cache or not os.path.isfile(zip_path):
+            if not self.use_cache or not os.path.isfile(zip_path):
                 LOG.info("Downloading data for level {}".format(level))
                 if os.path.isfile(zip_path):
                     os.unlink(zip_path)

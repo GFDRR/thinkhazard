@@ -41,7 +41,7 @@ from thinkhazard.models import (
     TechnicalRecommendation,
     Publication,
 )
-import thinkhazard.celery as tasks
+import thinkhazard.celery as celery_tasks
 
 TASKS_LABELS = {
     "publish": "Publish on public site",
@@ -70,7 +70,7 @@ def index(request):
 @view_config(route_name="admin_add_task")
 def add_task(request):
     task = request.params.get("task")
-    getattr(tasks, task).delay()
+    getattr(celery_tasks, task).delay()
     return HTTPFound(request.route_url("admin_index"))
 
 

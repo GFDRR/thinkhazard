@@ -8,8 +8,6 @@ from papyrus.renderers import GeoJSON
 
 from thinkhazard.settings import load_processing_settings, load_local_settings
 
-from thinkhazard.celery import app as celery_app
-
 lock_file = os.path.join(os.path.dirname(__file__), "maintenance.lock")
 
 
@@ -53,6 +51,8 @@ def main(global_config, **settings):
         config.add_route("sitemap", "/sitemap.xml")
 
     if settings["appname"] == "admin":
+        from thinkhazard.celery import app as celery_app
+
         config.include(add_public_routes, route_prefix="preview")
 
         config.add_route("admin_index", "/")

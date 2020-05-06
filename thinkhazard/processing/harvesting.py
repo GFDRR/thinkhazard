@@ -29,6 +29,8 @@ import csv
 from datetime import datetime
 from time import sleep
 
+from pyramid.settings import asbool
+
 from thinkhazard.models import (
     HazardLevel,
     HazardSet,
@@ -108,7 +110,7 @@ class Harvester(BaseProcessor):
         return parser
 
     def do_execute(self, hazard_type=None, use_cache=False):
-        self.use_cache = use_cache
+        self.use_cache = use_cache or asbool(os.environ.get("USE_CACHE", False))
 
         try:
             self.harvest_regions()

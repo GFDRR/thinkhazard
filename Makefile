@@ -185,7 +185,7 @@ decisiontree: ## Run the decision tree and perform upscaling
 
 .PHONY: publish
 publish: ## Publish validated data on public web site (for prod: make -f prod.mk publish)
-	docker-compose run --rm thinkhazard publish $(INI_FILE)
+	docker-compose run --rm thinkhazard publish -v
 
 
 #######################

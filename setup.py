@@ -63,7 +63,7 @@ setup(
             "complete = thinkhazard.processing.completing:Completer.run",
             "process = thinkhazard.processing.processing:Processor.run",
             "decision_tree = thinkhazard.processing.decisiontree:DecisionMaker.run",
-            "publish = thinkhazard.scripts.publish:main",
+            "publish = thinkhazard.processing.publish:Publisher.run",
         ],
         "lingua.extractors": [
             "database = thinkhazard.lib.lingua_extractor:DatabaseExtractor",
