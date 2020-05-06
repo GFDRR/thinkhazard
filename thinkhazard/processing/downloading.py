@@ -60,6 +60,9 @@ class Downloader(BaseProcessor):
                 os.unlink(file_path)
 
     def do_execute(self, hazardset_id=None, clear_cache=False):
+        # Layer.downloaded field is not reliable in docker context
+        self.force = True
+
         if self.force or clear_cache:
             try:
                 with self.dbsession.begin_nested():
