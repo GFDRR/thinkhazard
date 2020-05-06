@@ -1,16 +1,15 @@
 import boto3
 import logging
-import os
 from botocore.client import Config
 from botocore.exceptions import ClientError
 
 
 class S3Helper:
     def __init__(self, settings):
-        # only set endpoint_url for dev, boto generates aws endpoint_url for prod
-        kwargs = ({"endpoint_url": "http://minio:9000/"}
-                  if os.environ['INI_FILE'] == "c2c://development.ini"
-                  else {})
+        # boto generates endpoint_url for AWS if left empty
+        kwargs = ({}
+                  if settings["aws_endpoint_url"] == ""
+                  else {"endpoint_url": settings["aws_endpoint_url"]})
         self.s3_client = boto3.client('s3',
                                       **kwargs,
                                       aws_access_key_id=settings["aws_access_key_id"],
