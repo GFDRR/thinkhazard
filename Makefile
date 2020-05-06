@@ -234,10 +234,6 @@ import_contacts: ## Import contacts
 routes:
 	.build/venv/bin/proutes $(INI_FILE)
 
-.PHONY: tasks
-tasks:
-	docker-compose run --rm thinkhazard celery worker -A pyramid_celery.celery_app --ini $(INI_FILE)
-
 
 .PHONY: dbtunnel
 dbtunnel:
