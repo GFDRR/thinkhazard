@@ -8,6 +8,7 @@ from pyramid.tweens import MAIN
 from papyrus.renderers import GeoJSON
 
 from thinkhazard.settings import load_processing_settings, load_local_settings
+from thinkhazard.lib.s3helper import S3Helper
 
 lock_file = os.path.join(tempfile.gettempdir(), "maintenance.lock")
 
@@ -101,6 +102,13 @@ def main(global_config, **settings):
 
     config.add_renderer("geojson", GeoJSON())
     config.add_renderer("csv", "thinkhazard.renderers.CSVRenderer")
+
+    config.add_request_method(
+        lambda r: S3Helper(r.registry.settings),
+        "s3_helper",
+        property=True,
+        reify=True,
+    )
 
     scan_ignore = ["thinkhazard.tests"]
     if settings["appname"] != "public":
