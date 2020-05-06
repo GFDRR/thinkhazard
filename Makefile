@@ -69,7 +69,7 @@ DOCKER_MAKE_CMD=$(DOCKER_CMD) make -f docker.mk
 
 .PHONY: build
 build: ## Build docker images
-build: docker_build_testdb docker_build_builder docker_build_thinkhazard
+build: docker_build_testdb docker_build_build docker_build_thinkhazard
 
 .PHONY: check
 check: ## Check the code with flake8, jshint and bootlint
@@ -121,16 +121,19 @@ cleanall: clean
 .PHONY: docker_build_thinkhazard
 docker_build_thinkhazard:
 	docker build \
+		--cache-from camptocamp/thinkhazard-build:latest \
+		--cache-from camptocamp/thinkhazard:latest \
 		--build-arg TX_USR=${TX_USR} \
 		--build-arg TX_PWD=${TX_PWD} \
 		--target app -t camptocamp/thinkhazard .
 
-.PHONY: docker_build_builder
-docker_build_builder:
+.PHONY: docker_build_build
+docker_build_build:
 	docker build \
+		--cache-from camptocamp/thinkhazard-build:latest \
 		--build-arg TX_USR=${TX_USR} \
 		--build-arg TX_PWD=${TX_PWD} \
-		--target builder -t camptocamp/thinkhazard-builder .
+		--target builder -t camptocamp/thinkhazard-build .
 
 .PHONY: docker_build_testdb
 docker_build_testdb:

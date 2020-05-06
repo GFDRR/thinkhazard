@@ -17,6 +17,10 @@ jobs:
       TX_PWD: ${{ secrets.TX_PWD }}
     steps:
       - uses: actions/checkout@v1
+      - name: Pull
+        run: |
+          docker pull camptocamp/thinkhazard-build:latest || true
+          docker pull camptocamp/thinkhazard:latest || true
       - name: Build
         run: make build
       - name: Lint
