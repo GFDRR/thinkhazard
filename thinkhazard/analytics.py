@@ -20,26 +20,25 @@
 
 from requests_futures.sessions import FuturesSession
 from urllib.parse import urlencode
-import os
 
 
 class GoogleAnalytics:
     def __init__(self):
-        self.tracking_id = 'UA-75301865-1'
-        self.debug = "" if os.environ['INI_FILE'] == "production.ini" else "/debug"
+        self.debug = False
 
-    def hit(self, api_path, title):
+    def hit(self, request, title):
         params = {
             "v": "1",
-            "tid": self.tracking_id,
+            "tid": request.registry.settings['analytics'],
             "cid": "api",
             "t": "pageview",
             "dt": "API - {}".format(title),
-            "dp": api_path
+            "dp": request.path
         }
         payload = urlencode(params)
         session = FuturesSession()
-        r = session.get("https://www.google-analytics.com{}/collect?{}".format(self.debug, payload))
-        if self.debug == "/debug":
+        debug_url = "/debug" if self.debug else ""
+        r = session.get("https://www.google-analytics.com{}/collect?{}".format(debug_url, payload))
+        if self.debug:
             response = r.result()
             print(response.content)
