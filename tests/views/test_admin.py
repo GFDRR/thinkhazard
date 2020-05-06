@@ -34,7 +34,9 @@ class TestAdminFunction(BaseTestCase):
     app_name = "admin"
 
     def test_index(self):
-        self.testapp.get("/", status=302)
+        resp = self.testapp.get("/", status=200)
+        published = resp.html.select(".panel-primary .panel-heading")
+        self.assertEqual(len(published), 1)
 
     def test_hazardcategories(self):
         resp = self.testapp.get("/hazardcategories", status=200)
