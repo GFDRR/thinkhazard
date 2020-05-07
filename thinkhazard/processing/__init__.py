@@ -71,7 +71,7 @@ class BaseProcessor:
         parser.add_argument(
             "--config_uri",
             dest="config_uri",
-            default="development.ini",
+            default="c2c://development.ini",
             help="Configuration uri. Defaults to development.ini",
         )
         parser.add_argument(

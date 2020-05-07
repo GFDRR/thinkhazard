@@ -13,13 +13,12 @@ def load_full_settings(config_uri, name="admin", options={}):
         config_uri,
         name=name,
         options={
-            **os.environ,
             **options,
         }
     )
     load_local_settings(settings, name)
     load_processing_settings(settings)
-    settings['geonode']['api_key'] = os.environ['GEONODE_API_KEY']
+    settings["geonode"]["api_key"] = os.environ["GEONODE_API_KEY"]
     return settings
 
 

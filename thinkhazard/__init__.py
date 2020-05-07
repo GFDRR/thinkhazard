@@ -48,9 +48,14 @@ def main(global_config, **settings):
         config.add_route("sitemap", "/sitemap.xml")
 
     if settings["appname"] == "admin":
+        # Celery
+        from thinkhazard.celery import app as celery_app
+        config.add_request_method(lambda x: celery_app, "celery_app", reify=True)
+
         config.include(add_public_routes, route_prefix="preview")
 
         config.add_route("admin_index", "/")
+        config.add_route("admin_add_task", "/addtask")
 
         config.add_route("admin_technical_rec", "/technical_rec")
         config.add_route("admin_technical_rec_new", "/technical_rec/new")
@@ -218,10 +223,10 @@ def add_localized_route(config, name, pattern, factory=None, pregenerator=None, 
         # determine if this is a supported lang and convert it to a locale,
         # likely defaulting to your default language if the requested one is
         # not supported by your app
-        if lang not in request.registry.settings['available_languages'].split():
+        if lang not in request.registry.settings["available_languages"].split():
             raise HTTPFound(
                 request.current_route_url(
-                    lang=request.registry.settings['default_locale_name']
+                    lang=request.registry.settings["default_locale_name"]
                 )
             )
 
@@ -238,7 +243,7 @@ def add_localized_route(config, name, pattern, factory=None, pregenerator=None, 
     def wrapper_pregenerator(request, elements, kw):
         if "lang" not in kw:
             kw["lang"] = (
-                request.locale_name or config.registry.settings['default_locale_name']
+                request.locale_name or config.registry.settings["default_locale_name"]
             )
         if orig_pregenerator:
             return orig_pregenerator(request, elements, kw)

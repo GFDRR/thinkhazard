@@ -36,11 +36,16 @@ VOLUME /tmp/hazardsets
 RUN mkdir /tmp/geonode_api && chmod 777 /tmp/geonode_api
 VOLUME /tmp/geonode_api
 
+# PostgreSQL backups
+RUN mkdir /tmp/backups && chmod 777 /tmp/backups
+VOLUME /tmp/backups
+
 RUN mkdir -p /home/user && chmod 777 /home/user
 
 ENV INI_FILE=c2c://production.ini \
     GEONODE_API_KEY=tbd \
-    HOME=/home/user
+    HOME=/home/user \
+    USE_CACHE=FALSE
 
 
 ########################

@@ -19,12 +19,10 @@
 
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound, HTTPNotFound, HTTPBadRequest
-
 from sqlalchemy import func, inspect, Integer
-
 from sqlalchemy.orm import contains_eager, joinedload
-
 import json
+from datetime import datetime
 
 from thinkhazard.models import (
     AdminLevelType,
@@ -41,12 +39,40 @@ from thinkhazard.models import (
     HazardSet,
     Layer,
     TechnicalRecommendation,
+    Publication,
 )
+import thinkhazard.celery as celery_tasks
+
+TASKS_LABELS = {
+    "publish": "Publish on public site",
+    "transifex_fetch": "Import from Transifex",
+    "admindivs": "Import administrative division from GeoNode",
+    "process": "Harvest & process Geonode datasets",
+}
 
 
-@view_config(route_name="admin_index")
+@view_config(route_name="admin_index", renderer="templates/admin/index.jinja2")
 def index(request):
-    return HTTPFound(request.route_url("admin_hazardsets"))
+    active = request.celery_app.control.inspect().active()
+    tasks = [t for w in active.values() for t in w] if active else []
+    for t in tasks:
+        t["time_label"] = datetime.fromtimestamp(t["time_start"]).strftime(
+            "%a, %d %b %Y %H:%M"
+        )
+        t["name"] = t["name"].split(".").pop()
+        t["label"] = TASKS_LABELS[t["name"]]
+    return {
+        "publication_date": Publication.last(request.dbsession).date,
+        "running": tasks,
+        "running_keys": list(map(lambda t: t["name"], tasks)),
+    }
+
+
+@view_config(route_name="admin_add_task")
+def add_task(request):
+    task = request.params.get("task")
+    getattr(celery_tasks, task).delay()
+    return HTTPFound(request.route_url("admin_index"))
 
 
 @view_config(
@@ -98,7 +124,9 @@ def hazardcategory(request):
         }
 
     if request.method == "POST":
-        hazard_category = request.dbsession.query(HazardCategory).get(request.POST.get("id"))
+        hazard_category = request.dbsession.query(HazardCategory).get(
+            request.POST.get("id")
+        )
         if hazard_category is None:
             raise HTTPNotFound()
 
@@ -205,7 +233,9 @@ def technical_rec_process(request, obj):
         for association in associations:
             hazardtype, hazardlevel = association.split(" - ")
             if not obj.has_association(hazardtype, hazardlevel):
-                hazardcategory = HazardCategory.get(request.dbsession, hazardtype, hazardlevel)
+                hazardcategory = HazardCategory.get(
+                    request.dbsession, hazardtype, hazardlevel
+                )
                 order = (
                     request.dbsession.query(
                         func.coalesce(func.cast(func.max(HcTr.order), Integer), 0)
@@ -386,7 +416,9 @@ def climate_rec_process(request, obj):
         hazard_types = request.dbsession.query(HazardType).order_by(HazardType.order)
 
         association_subq = (
-            request.dbsession.query(CcrAd).filter(CcrAd.hazardtype == obj.hazardtype).subquery()
+            request.dbsession.query(CcrAd)
+            .filter(CcrAd.hazardtype == obj.hazardtype)
+            .subquery()
         )
 
         admin_divs = (
@@ -424,7 +456,9 @@ def climate_rec_process(request, obj):
         if inspect(obj).transient:
             request.dbsession.add(obj)
 
-        obj.hazardtype = HazardType.get(request.dbsession, request.POST.get("hazard_type"))
+        obj.hazardtype = HazardType.get(
+            request.dbsession, request.POST.get("hazard_type")
+        )
         obj.text = request.POST.get("text")
 
         admindiv_ids = request.POST.getall("associations")
@@ -436,7 +470,9 @@ def climate_rec_process(request, obj):
 
         # Add new ones
         for admindiv_id in admindiv_ids:
-            association = request.dbsession.query(CcrAd).get((admindiv_id, obj.hazardtype.id))
+            association = request.dbsession.query(CcrAd).get(
+                (admindiv_id, obj.hazardtype.id)
+            )
             if association is None:
                 association = CcrAd(
                     administrativedivision_id=admindiv_id, hazardtype=obj.hazardtype

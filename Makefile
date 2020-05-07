@@ -26,6 +26,9 @@ export AWS_BUCKET_NAME ?= thinkhazard
 
 export ANALYTICS ?= DO-NOT-TRACK
 
+export BROKER_URL ?= redis://redis:6379/0
+
+
 .PHONY: help_old
 help_old:
 	@echo "Usage: make <target>"
@@ -182,7 +185,7 @@ decisiontree: ## Run the decision tree and perform upscaling
 
 .PHONY: publish
 publish: ## Publish validated data on public web site (for prod: make -f prod.mk publish)
-	docker-compose run --rm thinkhazard publish $(INI_FILE)
+	docker-compose run --rm thinkhazard publish -v
 
 
 #######################

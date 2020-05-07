@@ -1,5 +1,8 @@
 version: '3'
 
+volumes:
+  hazardsets:
+
 services:
   db:
     image: camptocamp/thinkhazard-testdb
@@ -8,20 +11,39 @@ services:
     image: camptocamp/thinkhazard-builder
     depends_on:
       - db
+      - redis
       - minio-client
+      - taskrunner
     volumes:
       - '${PWD}/thinkhazard:/app/thinkhazard'
       - '${PWD}/tests:/app/tests'
-    environment:
+    environment: &env
       - INI_FILE
       - PGHOST=db
       - PGPORT=5432
-      - PGUSER=thinkhazard
-      - PGPASSWORD=thinkhazard
-      - AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY
-      - AWS_BUCKET_NAME
+      - PGUSER_PUBLIC=thinkhazard
+      - PGPASSWORD_PUBLIC=thinkhazard
+      - PGDATABASE_PUBLIC=thinkhazard_test
+      - PGUSER_ADMIN=thinkhazard
+      - PGPASSWORD_ADMIN=thinkhazard
+      - PGDATABASE_ADMIN=thinkhazard_test
+      - AWS_ACCESS_KEY_ID=minioadmin
+      - AWS_SECRET_ACCESS_KEY=minioadmin
+      - AWS_BUCKET_NAME=thinkhazard
       - GEONODE_API_KEY
+      - ANALYTICS
+      - BROKER_URL
+
+  taskrunner:
+    image: camptocamp/thinkhazard
+    user: www-data
+    restart: unless-stopped
+    depends_on:
+      - db
+    volumes:
+      - hazardsets:/tmp/hazardsets
+    environment: *env
+    command: 'celery -A thinkhazard.celery worker -l info'
 
   minio:
     image: minio/minio
@@ -29,14 +51,19 @@ services:
       - "9000:9000"
     command: 'server start'
 
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+
   minio-client:
     image: minio/mc
     depends_on:
       - minio
     environment:
-      - AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY
-      - AWS_BUCKET_NAME
+      - AWS_ACCESS_KEY_ID=minioadmin
+      - AWS_SECRET_ACCESS_KEY=minioadmin
+      - AWS_BUCKET_NAME=thinkhazard
     entrypoint: >
       /bin/sh -c "
       while ! nc -z minio 9000; do echo 'Wait minio to startup...' && sleep 0.1; done;

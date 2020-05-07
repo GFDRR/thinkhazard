@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Drop and create schemas before restore of database schemas
+
+SCHEMAS="$1"
+
+for schema in ${SCHEMAS}
+do
+cat <<EOF
+DROP SCHEMA IF EXISTS ${schema} CASCADE;
+CREATE SCHEMA ${schema};
+EOF
+done
+
+cat /dev/stdin
+
+exit 0
