@@ -17,16 +17,21 @@ services:
     volumes:
       - '${PWD}/thinkhazard:/app/thinkhazard'
       - '${PWD}/tests:/app/tests'
-    environment:
+    environment: &env
       - INI_FILE
       - PGHOST=db
       - PGPORT=5432
-      - PGUSER=thinkhazard
-      - PGPASSWORD=thinkhazard
-      - AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY
-      - AWS_BUCKET_NAME
+      - PGUSER_PUBLIC=thinkhazard
+      - PGPASSWORD_PUBLIC=thinkhazard
+      - PGDATABASE_PUBLIC=thinkhazard_test
+      - PGUSER_ADMIN=thinkhazard
+      - PGPASSWORD_ADMIN=thinkhazard
+      - PGDATABASE_ADMIN=thinkhazard_test
+      - AWS_ACCESS_KEY_ID=minioadmin
+      - AWS_SECRET_ACCESS_KEY=minioadmin
+      - AWS_BUCKET_NAME=thinkhazard
       - GEONODE_API_KEY
+      - ANALYTICS
       - BROKER_URL
 
   taskrunner:
@@ -37,21 +42,7 @@ services:
       - db
     volumes:
       - hazardsets:/tmp/hazardsets
-    environment:
-      - INI_FILE
-      - PGHOST
-      - PGPORT
-      - PGUSER_PUBLIC
-      - PGPASSWORD_PUBLIC
-      - PGDATABASE_PUBLIC
-      - PGUSER_ADMIN
-      - PGPASSWORD_ADMIN
-      - PGDATABASE_ADMIN
-      - AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY
-      - AWS_BUCKET_NAME
-      - GEONODE_API_KEY
-      - BROKER_URL
+    environment: *env
     command: 'celery -A thinkhazard.celery worker -l info'
 
   minio:
@@ -70,9 +61,9 @@ services:
     depends_on:
       - minio
     environment:
-      - AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY
-      - AWS_BUCKET_NAME
+      - AWS_ACCESS_KEY_ID=minioadmin
+      - AWS_SECRET_ACCESS_KEY=minioadmin
+      - AWS_BUCKET_NAME=thinkhazard
     entrypoint: >
       /bin/sh -c "
       while ! nc -z minio 9000; do echo 'Wait minio to startup...' && sleep 0.1; done;

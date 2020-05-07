@@ -16,7 +16,7 @@ services:
       - db
     volumes:
       - hazardsets:/tmp/hazardsets
-    environment:
+    environment: &env
       - INI_FILE
       - TX_USR
       - TX_PWD
@@ -45,21 +45,7 @@ services:
       - db
     volumes:
       - hazardsets:/tmp/hazardsets
-    environment:
-      - INI_FILE
-      - PGHOST
-      - PGPORT
-      - PGUSER_PUBLIC
-      - PGPASSWORD_PUBLIC
-      - PGDATABASE_PUBLIC
-      - PGUSER_ADMIN
-      - PGPASSWORD_ADMIN
-      - PGDATABASE_ADMIN
-      - AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY
-      - AWS_BUCKET_NAME
-      - GEONODE_API_KEY
-      - BROKER_URL
+    environment: *env
     command: 'celery -A thinkhazard.celery worker -l info'
 
   minio:
