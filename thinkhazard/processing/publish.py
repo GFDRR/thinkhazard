@@ -20,6 +20,7 @@
 import logging
 import os
 from datetime import datetime
+from pkg_resources import resource_filename
 from subprocess import run
 
 from pyramid.settings import asbool
@@ -85,22 +86,14 @@ class Publisher(BaseProcessor):
             "PGDATABASE": os.environ['PGDATABASE_PUBLIC'],
         }
 
-        LOG.info("Reset schemas datamart and processing in public database")
-        run(
-            "psql -c '"
-            "DROP SCHEMA IF EXISTS datamart, processing CASCADE;"
-            "CREATE SCHEMA datamart;"
-            "CREATE SCHEMA processing;"
-            "'",
-            env=public_env,
-            shell=True,
-        )
-
         LOG.info("Restore backup into public database")
         run(
-            "pg_restore --exit-on-error --no-owner -n datamart -n processing -d {} '{}'".format(
-                public_env["PGDATABASE"],
-                LOCAL_BACKUP_PATH
+            "pg_restore --exit-on-error --no-owner -n datamart -n processing -f - '{backup}'"
+            " | {reset_schemas} 'datamart processing'"
+            " | psql --single-transaction -d {database}".format(
+                backup=LOCAL_BACKUP_PATH,
+                reset_schemas=resource_filename("thinkhazard", "scripts/reset-schemas"),
+                database=public_env["PGDATABASE"],
             ),
             env=public_env,
             shell=True,
