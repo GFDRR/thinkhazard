@@ -34,6 +34,9 @@ def notmodified_tween_factory(handler, registry):
         gmt = pytz.timezone("GMT")
 
         def notmodified_tween(request):
+            if request.path == "/healthcheck":
+                return handler(request)
+
             publication_date = gmt.localize(Publication.last(request.dbsession).date)
 
             if os.path.isfile(lock_file):
