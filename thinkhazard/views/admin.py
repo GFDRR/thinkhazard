@@ -53,7 +53,8 @@ TASKS_LABELS = {
 
 @view_config(route_name="admin_index", renderer="templates/admin/index.jinja2")
 def index(request):
-    tasks = list(request.celery_app.control.inspect().active().values())[0]
+    active = request.celery_app.control.inspect().active()
+    tasks = [t for w in active.values() for t in w] if active else []
     for t in tasks:
         t["time_label"] = datetime.fromtimestamp(t["time_start"]).strftime(
             "%a, %d %b %Y %H:%M"
