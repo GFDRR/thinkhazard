@@ -142,6 +142,10 @@ async def create_and_upload_pdf(file_name: str, pages: List[str], object_name: s
 def create_pdf_report(request):
     """View to create an asynchronous print job.
     """
+    # applies https://github.com/miyakogi/pyppeteer/pull/160/files which is still not merged in release
+    # new repo: https://github.com/pyppeteer/pyppeteer/commit/63b364a19840ed940bb780825f2f47766b4e87d3
+    patch_pyppeteer()
+
     publication_date = request.publication_date
     locale = request.locale_name
     division_code = request.matchdict.get("divisioncode")
@@ -192,3 +196,15 @@ def _create_s3_helper(request):
         aws_access_key_id=settings["aws_access_key_id"],
         aws_secret_access_key=settings["aws_secret_access_key"]
     )
+
+
+def patch_pyppeteer():
+    import pyppeteer.connection
+    original_method = pyppeteer.connection.websockets.client.connect
+
+    def new_method(*args, **kwargs):
+        kwargs['ping_interval'] = None
+        kwargs['ping_timeout'] = None
+        return original_method(*args, **kwargs)
+
+    pyppeteer.connection.websockets.client.connect = new_method
