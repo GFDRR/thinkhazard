@@ -1,6 +1,5 @@
 import importlib
 import os
-import time
 from celery import Celery
 
 from thinkhazard.processing.harvesting import Harvester
@@ -32,9 +31,15 @@ def publish():
 @app.task
 def transifex_fetch():
     print("start transifex_fetch")
-    # FIXME plug to real task
-    time.sleep(10)
+    os.system("/app/thinkhazard/scripts/tx-pull-db")
     print("end transifex_fetch")
+
+
+@app.task
+def transifex_push():
+    print("start transifex_push")
+    os.system("/app/thinkhazard/scripts/tx-push-db")
+    print("end transifex_push")
 
 
 @app.task

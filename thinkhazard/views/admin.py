@@ -46,6 +46,7 @@ import thinkhazard.celery as celery_tasks
 TASKS_LABELS = {
     "publish": "Publish on public site",
     "transifex_fetch": "Import from Transifex",
+    "transifex_push": "Push to Transifex",
     "admindivs": "Import administrative division from GeoNode",
     "process": "Harvest & process Geonode datasets",
 }

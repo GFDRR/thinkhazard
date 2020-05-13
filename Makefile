@@ -26,6 +26,9 @@ export AWS_BUCKET_NAME ?= thinkhazard
 
 export ANALYTICS ?= DO-NOT-TRACK
 
+export TX_USR ?= tx_usr
+export TX_PWD ?= tx_pwd
+
 export BROKER_URL ?= redis://redis:6379/0
 
 
