@@ -1,5 +1,6 @@
 import importlib
 import os
+import subprocess
 from celery import Celery
 
 from thinkhazard.processing.harvesting import Harvester
