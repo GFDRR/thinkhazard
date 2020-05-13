@@ -20,6 +20,14 @@ RUN apt-get update && apt-get install -y \
     && apt-get update && apt-get install -y postgresql-client-12 \
     && rm -rf /var/lib/apt/lists/*
 
+ENV GEONODE_API_KEY=tbd \
+    HOME=/home/user \
+    INI_FILE=c2c://production.ini \
+    NODE_PATH=/opt/thinkhazard/node_modules \
+    USE_CACHE=FALSE
+
+RUN mkdir -p /home/user/.local/share/pyppeteer/ && chmod -R 777 /home/user
+
 # install dependencies
 COPY ./requirements.txt /app/requirements.txt
 RUN pip install -r /app/requirements.txt && pyppeteer-install
@@ -39,13 +47,6 @@ VOLUME /tmp/geonode_api
 # PostgreSQL backups
 RUN mkdir /tmp/backups && chmod 777 /tmp/backups
 VOLUME /tmp/backups
-
-RUN mkdir -p /home/user && chmod 777 /home/user
-
-ENV INI_FILE=c2c://production.ini \
-    GEONODE_API_KEY=tbd \
-    HOME=/home/user \
-    USE_CACHE=FALSE
 
 
 ########################
@@ -72,13 +73,10 @@ RUN \
 
 COPY package.json /opt/thinkhazard/
 RUN cd /opt/thinkhazard/ && npm install
-ENV PATH=${PATH}:/opt/thinkhazard/node_modules/.bin/
+ENV PATH=${PATH}:${NODE_PATH}/.bin/
 
 COPY ./requirements-dev.txt /app/requirements-dev.txt
 RUN pip install -r /app/requirements-dev.txt
-
-ENV NODE_PATH=/opt/thinkhazard/node_modules \
-    HOME=/tmp
 
 WORKDIR /app
 COPY . /app/
@@ -101,7 +99,6 @@ CMD ["sh", "-c", "pserve ${INI_FILE} -n main"]
 FROM base as app
 
 COPY --from=builder /opt/thinkhazard/ /opt/thinkhazard/
-ENV NODE_PATH=/opt/thinkhazard/node_modules
 
 WORKDIR /app
 COPY --from=builder /app/ /app/
