@@ -31,14 +31,24 @@ def publish():
 @app.task
 def transifex_fetch():
     print("start transifex_fetch")
-    os.system("/app/thinkhazard/scripts/tx-pull-db")
+    subprocess.run(
+        [
+            "/app/thinkhazard/scripts/tx-pull-db"
+        ],
+        check=True
+    )
     print("end transifex_fetch")
 
 
 @app.task
 def transifex_push():
     print("start transifex_push")
-    os.system("/app/thinkhazard/scripts/tx-push-db")
+    subprocess.run(
+        [
+            "/app/thinkhazard/scripts/tx-push-db"
+        ],
+        check=True
+    )
     print("end transifex_push")
 
 
