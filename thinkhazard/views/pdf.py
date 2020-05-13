@@ -133,9 +133,10 @@ async def create_and_upload_pdf(file_name: str, pages: List[str], object_name: s
         reader = PdfFileReader(chunk)
         for index in range(reader.numPages):
             writer.addPage(reader.getPage(index))
-    output = open(file_name, "wb")
-    writer.write(output)
-    output.close()
+
+    with open(file_name, "wb") as output:
+        writer.write(output)
+
     s3_helper.upload_file(file_name, object_name)
 
 
