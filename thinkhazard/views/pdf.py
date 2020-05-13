@@ -146,13 +146,12 @@ def create_pdf_report(request):
     locale = request.locale_name
     division_code = request.matchdict.get("divisioncode")
 
-    object_name = "{:%Y-%m-%d}-{:s}-{:s}.pdf".format(publication_date, locale, division_code)
-    file_name = os.path.join(
-        tempfile.gettempdir(), object_name
-    )
+    filename = "{:%Y-%m-%d}-{:s}-{:s}.pdf".format(publication_date, locale, division_code)
+    s3_path = "reports/{}".format(filename)
+    local_path = os.path.join(tempfile.gettempdir(), filename)
 
     s3_helper = _create_s3_helper(request)
-    if not s3_helper.download_file(object_name, file_name):
+    if not s3_helper.download_file(s3_path, local_path):
         categories = (
             request.dbsession.query(HazardCategory)
             .options(joinedload(HazardCategory.hazardtype))
@@ -176,9 +175,9 @@ def create_pdf_report(request):
                     **query_args,
                 )
             )
-        run(create_and_upload_pdf(file_name, pages, object_name, s3_helper))
+        run(create_and_upload_pdf(local_path, pages, s3_path, s3_helper))
 
-    response = FileResponse(file_name, request=request, content_type="application/pdf")
+    response = FileResponse(local_path, request=request, content_type="application/pdf")
     response.headers["Content-Disposition"] = (
         'attachment; filename="ThinkHazard.pdf"'
     )
