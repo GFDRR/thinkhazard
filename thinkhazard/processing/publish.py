@@ -28,7 +28,7 @@ from pyramid.settings import asbool
 from thinkhazard.models import Publication
 from thinkhazard.processing import BaseProcessor
 from thinkhazard.session import get_session_factory
-from thinkhazard.scripts.s3helper import S3Helper
+from thinkhazard.lib.s3helper import S3Helper
 
 LOG = logging.getLogger(__name__)
 LOCAL_BACKUP_PATH = '/tmp/backups/thinkhazard.backup'
@@ -38,11 +38,6 @@ class Publisher(BaseProcessor):
 
     def do_execute(self):
         self.use_cache = asbool(os.environ.get("USE_CACHE", False))
-
-        # TODO: adapt to new infra?
-        # print("Lock public application in maintenance mode")
-        # with open(lock_file, "w") as f:
-        #     f.write("This file sets the public application in maintenance mode.")
 
         # Create new publication in admin database
         LOG.info("Log event to publication table in admin database")
@@ -69,11 +64,7 @@ class Publisher(BaseProcessor):
             )
 
         LOG.info("Load backup to S3 bucket")
-        s3_helper = S3Helper(
-            self.settings["aws_bucket_name"],
-            aws_access_key_id=self.settings["aws_access_key_id"],
-            aws_secret_access_key=self.settings["aws_secret_access_key"]
-        )
+        s3_helper = S3Helper(self.settings)
         s3_helper.upload_file(
             LOCAL_BACKUP_PATH,
             "backups/thinkhazard.{}.backup".format(datetime.utcnow().isoformat())
@@ -102,10 +93,3 @@ class Publisher(BaseProcessor):
         if not self.use_cache:
             LOG.info("Delete backup file from filesystem")
             os.remove(LOCAL_BACKUP_PATH)
-
-        # TODO: adapt to new infra in tween
-        # print("Restarting Apache to clear cached data")
-        # call(["sudo", "apache2ctl", "graceful"])
-
-        # print("Unlock public application from maintenance mode")
-        # os.unlink(lock_file)

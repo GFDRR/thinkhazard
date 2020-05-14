@@ -17,13 +17,11 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
 import pytz
 from pyramid.response import Response
 from pyramid.renderers import render
 from pyramid.httpexceptions import HTTPNotModified
 
-from . import lock_file
 from .models import Publication
 
 
@@ -39,7 +37,7 @@ def notmodified_tween_factory(handler, registry):
 
             publication_date = gmt.localize(Publication.last(request.dbsession).date)
 
-            if os.path.isfile(lock_file):
+            if False:
                 response = Response(render("templates/maintenance.jinja2", {}, request))
                 response.status_code = 503
                 return response

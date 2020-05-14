@@ -20,6 +20,7 @@ export PGPASSWORD_ADMIN ?= thinkhazard
 
 export GEONODE_API_KEY ?= geonode
 
+export AWS_ENDPOINT_URL ?= http://minio:9000/
 export AWS_ACCESS_KEY_ID ?= minioadmin
 export AWS_SECRET_ACCESS_KEY ?= minioadmin
 export AWS_BUCKET_NAME ?= thinkhazard

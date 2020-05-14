@@ -54,7 +54,7 @@ from sqlalchemy.orm import joinedload
 
 from geoalchemy2.functions import ST_Centroid
 
-from thinkhazard.scripts.s3helper import S3Helper
+from thinkhazard.lib.s3helper import S3Helper
 
 REPORT_ID_REGEX = re.compile("\d{4}_\d{2}_\w{8}(-\w{4}){3}-\w{12}?")
 
@@ -152,8 +152,7 @@ def create_pdf_report(request):
     s3_path = "reports/{}".format(filename)
     local_path = os.path.join(tempfile.gettempdir(), filename)
 
-    s3_helper = _create_s3_helper(request)
-    if not s3_helper.download_file(s3_path, local_path):
+    if not request.s3_helper.download_file(s3_path, local_path):
         categories = (
             request.dbsession.query(HazardCategory)
             .options(joinedload(HazardCategory.hazardtype))
@@ -177,19 +176,10 @@ def create_pdf_report(request):
                     **query_args,
                 )
             )
-        run(create_and_upload_pdf(local_path, pages, s3_path, s3_helper))
+        run(create_and_upload_pdf(local_path, pages, s3_path, request.s3_helper))
 
     response = FileResponse(local_path, request=request, content_type="application/pdf")
     response.headers["Content-Disposition"] = (
         'attachment; filename="ThinkHazard.pdf"'
     )
     return response
-
-
-def _create_s3_helper(request):
-    settings = request.registry.settings
-    return S3Helper(
-        settings["aws_bucket_name"],
-        aws_access_key_id=settings["aws_access_key_id"],
-        aws_secret_access_key=settings["aws_secret_access_key"]
-    )

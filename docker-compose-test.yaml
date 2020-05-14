@@ -27,6 +27,7 @@ services:
       - PGUSER_ADMIN=thinkhazard
       - PGPASSWORD_ADMIN=thinkhazard
       - PGDATABASE_ADMIN=thinkhazard_test
+      - AWS_ENDPOINT_URL
       - AWS_ACCESS_KEY_ID=minioadmin
       - AWS_SECRET_ACCESS_KEY=minioadmin
       - AWS_BUCKET_NAME=thinkhazard
