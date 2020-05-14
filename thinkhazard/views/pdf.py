@@ -143,19 +143,20 @@ async def create_and_upload_pdf(file_name: str, pages: List[str], object_name: s
     s3_helper.upload_file(file_name, object_name)
 
 
-@view_config(route_name="create_pdf_report", request_method="POST")
+@view_config(route_name="create_pdf_report")
 def create_pdf_report(request):
     """View to create an asynchronous print job.
     """
     publication_date = request.publication_date
     locale = request.locale_name
     division_code = request.matchdict.get("divisioncode")
+    force = "force" in request.params
 
     filename = "{:%Y-%m-%d}-{:s}-{:s}.pdf".format(publication_date, locale, division_code)
     s3_path = "reports/{}".format(filename)
     local_path = os.path.join(tempfile.gettempdir(), filename)
 
-    if not request.s3_helper.download_file(s3_path, local_path):
+    if force or not request.s3_helper.download_file(s3_path, local_path):
         categories = (
             request.dbsession.query(HazardCategory)
             .options(joinedload(HazardCategory.hazardtype))
