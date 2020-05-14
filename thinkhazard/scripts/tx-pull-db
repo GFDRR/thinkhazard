@@ -2,6 +2,6 @@
 
 $(dirname $0)/tx-init
 
-tx pull -s -r gfdrr-thinkhazard.database
+tx pull -s -r gfdrr-thinkhazard.database ${TX_BRANCH:+-b "$TX_BRANCH"}
 
 import_l10n -v

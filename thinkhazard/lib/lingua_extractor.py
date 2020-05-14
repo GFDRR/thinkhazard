@@ -68,7 +68,7 @@ class DatabaseExtractor(Extractor):
     def __call__(self, filename, options):
 
         # FIXME find a better way to load settings
-        settings = load_full_settings("development.ini")
+        settings = load_full_settings("c2c://development.ini")
 
         engine = engine_from_config(settings, "sqlalchemy.")
         dbsession = get_session_factory(engine)()

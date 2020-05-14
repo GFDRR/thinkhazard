@@ -1,6 +1,6 @@
 import importlib
 import os
-import time
+import subprocess
 from celery import Celery
 
 from thinkhazard.processing.harvesting import Harvester
@@ -15,11 +15,6 @@ INI_FILE = os.environ["INI_FILE"]
 
 app = Celery()
 app.conf.broker_url = os.environ["BROKER_URL"]
-app.conf.result_backend = "s3"
-app.conf.s3_access_key_id = os.environ["AWS_ACCESS_KEY_ID"]
-app.conf.s3_secret_access_key = os.environ["AWS_SECRET_ACCESS_KEY"]
-app.conf.s3_bucket = os.environ["AWS_BUCKET_NAME"]
-app.conf.s3_region = "eu-west-1"
 
 
 @app.task
@@ -32,9 +27,25 @@ def publish():
 @app.task
 def transifex_fetch():
     print("start transifex_fetch")
-    # FIXME plug to real task
-    time.sleep(10)
+    subprocess.run(
+        [
+            "/app/thinkhazard/scripts/tx-pull-db"
+        ],
+        check=True
+    )
     print("end transifex_fetch")
+
+
+@app.task
+def transifex_push():
+    print("start transifex_push")
+    subprocess.run(
+        [
+            "/app/thinkhazard/scripts/tx-push-db"
+        ],
+        check=True
+    )
+    print("end transifex_push")
 
 
 @app.task

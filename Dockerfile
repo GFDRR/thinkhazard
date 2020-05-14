@@ -24,7 +24,8 @@ ENV GEONODE_API_KEY=tbd \
     HOME=/home/user \
     INI_FILE=c2c://production.ini \
     NODE_PATH=/opt/thinkhazard/node_modules \
-    USE_CACHE=FALSE
+    USE_CACHE=FALSE \
+    TX_BRANCH=test
 
 RUN mkdir -p /home/user/.local/share/pyppeteer/ && chmod -R 777 /home/user
 
