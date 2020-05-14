@@ -115,7 +115,13 @@ def report(request):
                 [
                     func.ST_Translate(
                         func.ST_Shift_Longitude(
-                            func.ST_Translate(AdministrativeDivision.geom, 180, 0)
+                            func.ST_Translate(
+                                func.ST_Envelope(
+                                    AdministrativeDivision.geom
+                                ),
+                                180,
+                                0
+                            )
                         ),
                         -180,
                         0,
