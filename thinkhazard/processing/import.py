@@ -193,7 +193,14 @@ WITH new_values (
             NULL,
             fre,
             esp,
-            geom
+            geom,
+            geom_simplified = ST_Simplify(
+                ST_Transform(geom, 3857),
+                ST_DistanceSphere(
+                    ST_Point(ST_XMin(geom), ST_YMin(geom)),
+                    ST_Point(ST_XMax(geom), ST_YMax(geom))
+                ) / 250
+            )
         FROM adm{level}_th
 )
 INSERT INTO datamart.administrativedivision (
@@ -202,7 +209,8 @@ INSERT INTO datamart.administrativedivision (
         name,
         name_fr,
         name_es,
-        geom
+        geom,
+        geom_simplified
     )
     SELECT
         code,
@@ -210,7 +218,8 @@ INSERT INTO datamart.administrativedivision (
         name,
         name_fr,
         name_es,
-        geom
+        geom,
+        geom_simplified
     FROM new_values
 ON CONFLICT (code)
 DO
@@ -218,7 +227,8 @@ DO
         SET name = EXCLUDED.name,
             name_fr = EXCLUDED.name_fr,
             name_es = EXCLUDED.name_es,
-            geom = EXCLUDED.geom
+            geom = EXCLUDED.geom,
+            geom_simplified = EXCLUDED.geom_simplified
 ;
 """.format(level=level, levelplus1=level + 1)
 

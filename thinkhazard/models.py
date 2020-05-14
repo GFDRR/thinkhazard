@@ -296,6 +296,7 @@ class AdministrativeDivision(Base):
         ),
     )
     geom = deferred(Column(Geometry("MULTIPOLYGON", 4326)))
+    geom_simplified = deferred(Column(Geometry("MULTIPOLYGON", 3857)))
 
     leveltype = relationship(AdminLevelType)
     parent = relationship(
