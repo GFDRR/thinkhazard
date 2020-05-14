@@ -65,7 +65,6 @@ def index(request):
     return {
         "publication_date": Publication.last(request.dbsession).date,
         "running": tasks,
-        "running_keys": list(map(lambda t: t["name"], tasks)),
     }
 
 
