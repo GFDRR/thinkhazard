@@ -27,7 +27,7 @@ from pyramid.httpexceptions import HTTPBadRequest, HTTPFound, HTTPNotFound
 
 from sqlalchemy.orm import aliased, joinedload, contains_eager
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy import and_, or_, select
+from sqlalchemy import select
 from sqlalchemy.sql import func
 from sqlalchemy.sql.expression import literal_column
 from shapely.geometry.polygon import Polygon
@@ -116,9 +116,7 @@ def report(request):
                     func.ST_Translate(
                         func.ST_Shift_Longitude(
                             func.ST_Translate(
-                                func.ST_Envelope(
-                                    AdministrativeDivision.geom
-                                ),
+                                func.ST_Transform(AdministrativeDivision.geom_simplified, 4326),
                                 180,
                                 0
                             )
@@ -183,16 +181,10 @@ def report_geojson(request):
 
     hazard_type = request.matchdict.get("hazardtype", None)
 
-    _filter = or_(
-        AdministrativeDivision.code == division_code,
-        AdministrativeDivision.parent_code == division_code,
-    )
-
     if hazard_type is not None:
-        divisions = (
+        base_query = (
             request.dbsession.query(AdministrativeDivision)
             .add_columns(
-                AdministrativeDivision.geom_simplified,
                 HazardLevel.mnemonic,
                 HazardLevel.title,
             )
@@ -200,18 +192,29 @@ def report_geojson(request):
             .join(HazardCategory)
             .join(HazardType)
             .join(HazardLevel)
-            .filter(and_(_filter, HazardType.mnemonic == hazard_type))
+            .filter(HazardType.mnemonic == hazard_type)
         )
     else:
-        divisions = (
+        base_query = (
             request.dbsession.query(AdministrativeDivision)
             .add_columns(
-                AdministrativeDivision.geom_simplified,
                 literal_column("'None'"),
                 literal_column("'blah'"),
             )
-            .filter(_filter)
         )
+
+    divisions = (
+        [
+            base_query
+            .filter(AdministrativeDivision.code == division_code)
+            .add_columns(AdministrativeDivision.geom_simplified)
+            .one()
+        ]
+        + base_query
+        .filter(AdministrativeDivision.parent_code == division_code)
+        .add_columns(AdministrativeDivision.geom_simplified_for_parent)
+        .all()
+    )
 
     return [
         {
@@ -225,7 +228,7 @@ def report_geojson(request):
                 "hazardLevelTitle": hazardlevel_title,
             },
         }
-        for division, geom_simplified, hazardlevel_mnemonic, hazardlevel_title in divisions
+        for division, hazardlevel_mnemonic, hazardlevel_title, geom_simplified in divisions
     ]
 
 
