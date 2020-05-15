@@ -13,6 +13,7 @@ jinja2
 lingua
 markdown
 papyrus
+passlib
 paste
 psycopg2
 pyppeteer

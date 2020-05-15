@@ -2,13 +2,16 @@ import os
 import subprocess
 
 from pyramid.config import Configurator
-from pyramid.httpexceptions import HTTPFound
+from pyramid.httpexceptions import HTTPFound, HTTPUnauthorized
+from pyramid.authentication import BasicAuthAuthenticationPolicy
+from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.tweens import MAIN
 from papyrus.renderers import GeoJSON
 
 from thinkhazard.settings import load_processing_settings, load_local_settings
 from thinkhazard.lib.s3helper import S3Helper
-
+from thinkhazard.resources import Root
+from thinkhazard.security import groupfinder
 
 try:
     version = subprocess.check_output(
@@ -26,7 +29,22 @@ def main(global_config, **settings):
     load_local_settings(settings, settings["appname"])
     settings.update({"version": version})
 
-    config = Configurator(settings=settings)
+    config = Configurator(root_factory=Root, settings=settings)
+    config.set_authorization_policy(
+        ACLAuthorizationPolicy()
+    )
+    config.set_authentication_policy(
+        BasicAuthAuthenticationPolicy(
+            check=groupfinder,
+        )
+    )
+
+    # set forbidden view to basic auth
+    def forbidden_view(request):
+        resp = HTTPUnauthorized()
+        resp.www_authenticate = 'Basic realm="Thinkhazard"'
+        return resp
+    config.add_forbidden_view(forbidden_view)
 
     config.include("pyramid_jinja2")
     config.include("papyrus")
@@ -50,6 +68,8 @@ def main(global_config, **settings):
         # Celery
         from thinkhazard.celery import app as celery_app
         config.add_request_method(lambda x: celery_app, "celery_app", reify=True)
+
+        config.set_default_permission("admin")
 
         config.include(add_public_routes, route_prefix="preview")
 

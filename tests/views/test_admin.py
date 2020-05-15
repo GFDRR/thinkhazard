@@ -33,6 +33,11 @@ class TestAdminFunction(BaseTestCase):
 
     app_name = "admin"
 
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.testapp.authorization = ('Basic', ('admin', 'admin'))
+
     def test_index(self):
         resp = self.testapp.get("/", status=200)
         published = resp.html.select(".panel-primary .panel-heading")
