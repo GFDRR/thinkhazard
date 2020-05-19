@@ -21,14 +21,13 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import datetime
-import math
 
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest, HTTPFound, HTTPNotFound
 
 from sqlalchemy.orm import aliased, joinedload, contains_eager
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy import and_, or_, select
+from sqlalchemy import select
 from sqlalchemy.sql import func
 from sqlalchemy.sql.expression import literal_column
 from shapely.geometry.polygon import Polygon
@@ -116,7 +115,11 @@ def report(request):
                 [
                     func.ST_Translate(
                         func.ST_Shift_Longitude(
-                            func.ST_Translate(AdministrativeDivision.geom, 180, 0)
+                            func.ST_Translate(
+                                func.ST_Transform(AdministrativeDivision.geom_simplified, 4326),
+                                180,
+                                0
+                            )
                         ),
                         -180,
                         0,
@@ -176,60 +179,42 @@ def report_geojson(request):
 
     division_code = request.matchdict.get("divisioncode")
 
-    try:
-        resolution = float(request.params.get("resolution"))
-    except:
-        raise HTTPBadRequest(detail='invalid value for parameter "resolution"')
-
     hazard_type = request.matchdict.get("hazardtype", None)
 
-    """
-    Here we want to address the "small islands" issue.
-    We first check how big the polygons are compared to map resolution.
-    """
-    area = (
-        request.dbsession.query(
-            func.ST_Area(func.ST_Transform(AdministrativeDivision.geom, 3857))
-        )
-        .filter(AdministrativeDivision.code == division_code)
-        .scalar()
-    )
-
-    if area < math.pow(resolution, 2) * 1000:
-        # Simplify a bit first to prevent buffer to be too expensive
-        # Here '1000000' is an empiric value. It works for Maldives without
-        # generating empty geometries
-        first_simplify = func.ST_Simplify(
-            func.ST_Transform(AdministrativeDivision.geom, 3857), area / 1000000
-        )
-
-        # make the polygons a bit bigger
-        geom = func.ST_Buffer(first_simplify, resolution * 2)
-    else:
-        geom = func.ST_Transform(AdministrativeDivision.geom, 3857)
-    simplify = func.ST_Simplify(geom, resolution / 2)
-
-    _filter = or_(
-        AdministrativeDivision.code == division_code,
-        AdministrativeDivision.parent_code == division_code,
-    )
-
     if hazard_type is not None:
-        divisions = (
+        base_query = (
             request.dbsession.query(AdministrativeDivision)
-            .add_columns(simplify, HazardLevel.mnemonic, HazardLevel.title)
+            .add_columns(
+                HazardLevel.mnemonic,
+                HazardLevel.title,
+            )
             .outerjoin(AdministrativeDivision.hazardcategories)
             .join(HazardCategory)
             .join(HazardType)
             .join(HazardLevel)
-            .filter(and_(_filter, HazardType.mnemonic == hazard_type))
+            .filter(HazardType.mnemonic == hazard_type)
         )
     else:
-        divisions = (
+        base_query = (
             request.dbsession.query(AdministrativeDivision)
-            .add_columns(simplify, literal_column("'None'"), literal_column("'blah'"))
-            .filter(_filter)
+            .add_columns(
+                literal_column("'None'"),
+                literal_column("'blah'"),
+            )
         )
+
+    divisions = (
+        [
+            base_query
+            .filter(AdministrativeDivision.code == division_code)
+            .add_columns(AdministrativeDivision.geom_simplified)
+            .one()
+        ]
+        + base_query
+        .filter(AdministrativeDivision.parent_code == division_code)
+        .add_columns(AdministrativeDivision.geom_simplified_for_parent)
+        .all()
+    )
 
     return [
         {
@@ -243,7 +228,7 @@ def report_geojson(request):
                 "hazardLevelTitle": hazardlevel_title,
             },
         }
-        for division, geom_simplified, hazardlevel_mnemonic, hazardlevel_title in divisions
+        for division, hazardlevel_mnemonic, hazardlevel_title, geom_simplified in divisions
     ]
 
 
@@ -453,12 +438,6 @@ def report_neighbours_geojson(request):
         raise HTTPBadRequest(detail="incorrect value for parameter " '"divisioncode"')
 
     try:
-        resolution = float(request.params.get("resolution"))
-    except:
-        raise HTTPBadRequest(detail='invalid value for parameter "resolution"')
-
-    try:
-
         bbox = request.params.get("bbox")
         box = [float(x) for x in bbox.split(",")]
         bbox = Polygon(
@@ -474,15 +453,11 @@ def report_neighbours_geojson(request):
     except:
         raise HTTPBadRequest(detail='invalid value for parameter "bbox"')
 
-    simplify = func.ST_Simplify(
-        func.ST_Transform(AdministrativeDivision.geom, 3857), resolution
-    )
-
     division = get_division(request, division_code)
 
     divisions = (
         request.dbsession.query(AdministrativeDivision)
-        .add_columns(simplify)
+        .add_columns(AdministrativeDivision.geom_simplified)
         .filter(func.ST_DWITHIN(AdministrativeDivision.geom, bbox, 0))
         .filter(AdministrativeDivision.leveltype_id == division.leveltype_id)
     )

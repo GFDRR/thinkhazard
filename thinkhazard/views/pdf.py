@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
+import asyncio
 import datetime
 import logging
 import re
@@ -108,8 +109,6 @@ def pdf_cover(request):
 async def create_and_upload_pdf(file_name: str, pages: List[str], object_name: str, s3_helper: S3Helper):
     """Create a PDF file with the given pages using pyppeteer.
     """
-    chunks = []
-
     # --no-sandbox is required to make Chrome/Chromium run under root.
     browser = await launch(
         handleSIGINT=False,
@@ -117,13 +116,17 @@ async def create_and_upload_pdf(file_name: str, pages: List[str], object_name: s
         handleSIGHUP=False,
         args=["--no-sandbox"],
     )
-    page = await browser.newPage()
-    for url in pages:
+
+    async def render_page(url):
+        page = await browser.newPage()
         logger.info("Getting: {}".format(url))
         await page.goto(url, {"waitUntil": "networkidle0"})
-        chunks.append(
-            BytesIO(await page.pdf({"format": "A4", "printBackground": True}))
-        )
+        return BytesIO(await page.pdf({"format": "A4", "printBackground": True}))
+
+    chunks = await asyncio.gather(*[
+        render_page(url) for url in pages
+    ])
+
     await browser.close()
 
     # merge all pages
@@ -140,19 +143,20 @@ async def create_and_upload_pdf(file_name: str, pages: List[str], object_name: s
     s3_helper.upload_file(file_name, object_name)
 
 
-@view_config(route_name="create_pdf_report", request_method="POST")
+@view_config(route_name="create_pdf_report")
 def create_pdf_report(request):
     """View to create an asynchronous print job.
     """
     publication_date = request.publication_date
     locale = request.locale_name
     division_code = request.matchdict.get("divisioncode")
+    force = "force" in request.params
 
     filename = "{:%Y-%m-%d}-{:s}-{:s}.pdf".format(publication_date, locale, division_code)
     s3_path = "reports/{}".format(filename)
     local_path = os.path.join(tempfile.gettempdir(), filename)
 
-    if not request.s3_helper.download_file(s3_path, local_path):
+    if force or not request.s3_helper.download_file(s3_path, local_path):
         categories = (
             request.dbsession.query(HazardCategory)
             .options(joinedload(HazardCategory.hazardtype))

@@ -23,6 +23,8 @@ import subprocess
 import logging
 import requests
 
+import sqlalchemy
+from pkg_resources import resource_string
 from pyramid.settings import asbool
 
 from thinkhazard.processing import BaseProcessor
@@ -113,6 +115,11 @@ SELECT SETVAL(
 
             connection.execute("DROP TABLE IF EXISTS adm{}_th;".format(level))
 
+        LOG.info("Updating simplified geometries")
+        connection.execute(sqlalchemy.text(
+            resource_string("thinkhazard", "scripts/simplify.sql").decode("utf8")
+        ))
+
         # Remove climate change recommendations that are not linked to divisions
         # that don't exist anymore
         connection.execute("""
@@ -176,6 +183,10 @@ DELETE from datamart.rel_climatechangerecommendation_administrativedivision
                 os.unlink(path)
 
     def update_query(self, level):
+        parent_code = "NULL"
+        if level != 0:
+            parent_code = "ADM{}_CODE".format(level - 1)
+
         return """
 WITH new_values (
         code,
@@ -190,7 +201,7 @@ WITH new_values (
             adm{level}_code::integer,
             {levelplus1},
             adm{level}_name,
-            NULL,
+            {parent_code}::integer,
             fre,
             esp,
             geom
@@ -200,6 +211,7 @@ INSERT INTO datamart.administrativedivision (
         code,
         leveltype_id,
         name,
+        parent_code,
         name_fr,
         name_es,
         geom
@@ -208,6 +220,7 @@ INSERT INTO datamart.administrativedivision (
         code,
         leveltype_id,
         name,
+        parent_code,
         name_fr,
         name_es,
         geom
@@ -215,12 +228,14 @@ INSERT INTO datamart.administrativedivision (
 ON CONFLICT (code)
 DO
     UPDATE
-        SET name = EXCLUDED.name,
+        SET leveltype_id = EXCLUDED.leveltype_id,
+            name = EXCLUDED.name,
+            parent_code = EXCLUDED.parent_code,
             name_fr = EXCLUDED.name_fr,
             name_es = EXCLUDED.name_es,
             geom = EXCLUDED.geom
 ;
-""".format(level=level, levelplus1=level + 1)
+""".format(level=level, levelplus1=level + 1, parent_code=parent_code)
 
 
 class RecommendationsImporter(BaseProcessor):
