@@ -35,6 +35,7 @@ services:
       - GEONODE_API_KEY
       - ANALYTICS
       - BROKER_URL
+      - HTPASSWORDS
     ports:
       - 8080:8080
 

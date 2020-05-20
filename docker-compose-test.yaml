@@ -34,6 +34,7 @@ services:
       - GEONODE_API_KEY
       - ANALYTICS
       - BROKER_URL
+      - HTPASSWORDS
 
   taskrunner:
     image: camptocamp/thinkhazard

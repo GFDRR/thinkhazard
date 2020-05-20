@@ -32,6 +32,7 @@ export TX_PWD ?= tx_pwd
 
 export BROKER_URL ?= redis://redis:6379/0
 
+export HTPASSWORDS ?= admin:admin
 
 .PHONY: help_old
 help_old:

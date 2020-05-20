@@ -29,9 +29,35 @@ from thinkhazard.models import (
 from .. import DBSession
 
 
+class TestAdminNoAuth(BaseTestCase):
+
+    app_name = "admin"
+
+    def test_index(self):
+        self.testapp.get("/", status=401)
+
+
+class TestAdminBadAuth(BaseTestCase):
+
+    app_name = "admin"
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.testapp.authorization = ('Basic', ('admin', 'bad password'))
+
+    def test_index(self):
+        self.testapp.get("/", status=401)
+
+
 class TestAdminFunction(BaseTestCase):
 
     app_name = "admin"
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.testapp.authorization = ('Basic', ('admin', 'admin'))
 
     def test_index(self):
         resp = self.testapp.get("/", status=200)
@@ -104,3 +130,8 @@ class TestAdminFunction(BaseTestCase):
         )
         form["associations"] = [admindiv.id for admindiv in admindivs]
         form.submit(status=302)
+
+    def test_preview(self):
+        resp = self.testapp.get("/preview/", status=302)
+        assert resp.location == "http://localhost/preview/en/"
+        self.testapp.get("/preview/en/", status=200)

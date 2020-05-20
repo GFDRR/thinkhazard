@@ -2,13 +2,16 @@ import os
 import subprocess
 
 from pyramid.config import Configurator
-from pyramid.httpexceptions import HTTPFound
+from pyramid.httpexceptions import HTTPFound, HTTPUnauthorized
+from pyramid.authentication import BasicAuthAuthenticationPolicy
+from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.tweens import MAIN
 from papyrus.renderers import GeoJSON
 
 from thinkhazard.settings import load_processing_settings, load_local_settings
 from thinkhazard.lib.s3helper import S3Helper
-
+from thinkhazard.resources import Root
+from thinkhazard.security import groupfinder
 
 try:
     version = subprocess.check_output(
@@ -26,7 +29,22 @@ def main(global_config, **settings):
     load_local_settings(settings, settings["appname"])
     settings.update({"version": version})
 
-    config = Configurator(settings=settings)
+    config = Configurator(root_factory=Root, settings=settings)
+    config.set_authorization_policy(
+        ACLAuthorizationPolicy()
+    )
+    config.set_authentication_policy(
+        BasicAuthAuthenticationPolicy(
+            check=groupfinder,
+        )
+    )
+
+    # set forbidden view to basic auth
+    def forbidden_view(request):
+        resp = HTTPUnauthorized()
+        resp.www_authenticate = 'Basic realm="Thinkhazard"'
+        return resp
+    config.add_forbidden_view(forbidden_view)
 
     config.include("pyramid_jinja2")
     config.include("papyrus")
@@ -50,6 +68,8 @@ def main(global_config, **settings):
         # Celery
         from thinkhazard.celery import app as celery_app
         config.add_request_method(lambda x: celery_app, "celery_app", reify=True)
+
+        config.set_default_permission("admin")
 
         config.include(add_public_routes, route_prefix="preview")
 
@@ -186,6 +206,8 @@ def add_public_routes(config):
     add_localized_route(config, "data_source", "/data_source/{hazardset}")
     config.add_route("data_map", "/data_map")
 
+    config.add_route_predicate('languages', LanguagesPredicate)
+
     add_localized_route(
         config,
         "api_admindiv_hazardsets_hazardtype",
@@ -212,7 +234,38 @@ def redirect_to_default_language_factory(route_prefix=None):
     return redirect_to_default_language
 
 
-def add_localized_route(config, name, pattern, factory=None, pregenerator=None, **kw):
+class LanguagesPredicate():
+
+    def __init__(self, val, config):
+        self.val = val
+
+    def text(self):
+        return 'languages = %s' % (self.val,)
+
+    phash = text
+
+    def __call__(self, context, request):
+        lang = context['match']['lang']
+        if lang not in self.val:
+            # Redirect to default language
+            raise HTTPFound(
+                request.route_url(
+                    context['route'].name,
+                    **{
+                        **context['match'],
+                        "lang": request.registry.settings["default_locale_name"],
+                    }
+                )
+            )
+
+        request.response.set_cookie(
+            "_LOCALE_", value=lang, max_age=20 * 7 * 24 * 60 * 60
+        )
+        request.locale_name = lang
+        return True
+
+
+def add_localized_route(config, name, pattern, pregenerator=None, **kw):
     """
     Create path language aware routing paths.
 
@@ -222,28 +275,6 @@ def add_localized_route(config, name, pattern, factory=None, pregenerator=None, 
     without language path component to the URL with the language path
     component.
     """
-    orig_factory = factory
-
-    def wrapper_factory(request):
-        lang = request.matchdict["lang"]
-        # determine if this is a supported lang and convert it to a locale,
-        # likely defaulting to your default language if the requested one is
-        # not supported by your app
-        if lang not in request.registry.settings["available_languages"].split():
-            raise HTTPFound(
-                request.current_route_url(
-                    lang=request.registry.settings["default_locale_name"]
-                )
-            )
-
-        request.response.set_cookie(
-            "_LOCALE_", value=lang, max_age=20 * 7 * 24 * 60 * 60
-        )
-        request.locale_name = lang
-
-        if orig_factory:
-            return orig_factory(request)
-
     orig_pregenerator = pregenerator
 
     def wrapper_pregenerator(request, elements, kw):
@@ -266,8 +297,8 @@ def add_localized_route(config, name, pattern, factory=None, pregenerator=None, 
     config.add_route(
         name,
         new_pattern,
-        factory=wrapper_factory,
         pregenerator=wrapper_pregenerator,
+        languages=config.registry.settings["available_languages"].split(),
         **kw
     )
 
