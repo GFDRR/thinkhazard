@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
 import unittest
 from datetime import datetime, timedelta
 from mock import Mock, patch, mock_open
@@ -147,6 +148,8 @@ class TestHarvesting(BaseTestCase):
         hazardset = DBSession.query(HazardSet).one()
         hazardset.complete = True
         hazardset.processed = datetime.now()
+        with open("/tmp/hazardsets/test.tif", "a"):
+            os.utime("/tmp/hazardsets/test.tif")
 
         self.harvester().harvest_layers()
 

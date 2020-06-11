@@ -666,7 +666,9 @@ class Harvester(BaseProcessor):
                 hazardset.processed = None
                 # Remove file from cache
                 layer.download_url = download_url
-                os.unlink(self.layer_path(layer))
+                path = self.layer_path(layer)
+                if os.path.isfile(path):
+                    os.unlink(path)
 
             # Some hazardset fields are calculated during completing
             if (
