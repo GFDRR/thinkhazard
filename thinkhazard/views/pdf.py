@@ -121,6 +121,7 @@ async def create_and_upload_pdf(file_name: str, pages: List[str], object_name: s
         page = await browser.newPage()
         logger.info("Getting: {}".format(url))
         await page.goto(url, {"waitUntil": "networkidle0"})
+        logger.info("Got: {}".format(url))
         return BytesIO(await page.pdf({"format": "A4", "printBackground": True}))
 
     chunks = await asyncio.gather(*[
