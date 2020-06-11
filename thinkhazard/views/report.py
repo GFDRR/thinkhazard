@@ -17,10 +17,8 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
-import urllib.error
-import urllib.parse
-import urllib.request
 import datetime
+import urllib.parse
 
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest, HTTPFound, HTTPNotFound
@@ -33,7 +31,7 @@ from sqlalchemy.sql.expression import literal_column
 from shapely.geometry.polygon import Polygon
 
 from geoalchemy2.shape import to_shape, from_shape
-from urllib.parse import urlunsplit
+from urllib.parse import urlsplit, urlunsplit
 
 from thinkhazard.models import (
     AdministrativeDivision,
@@ -375,6 +373,7 @@ def get_info_for_hazard_type(request, hazard, division):
 
     further_resources = []
     geonode = request.registry.settings["geonode"]
+    parsed = urlsplit(geonode['url'])
     for frq in further_resources_query:
         fr = frq.furtherresource
         further_resources.append(
@@ -382,8 +381,8 @@ def get_info_for_hazard_type(request, hazard, division):
                 "text": fr.text,
                 "url": urlunsplit(
                     (
-                        geonode["scheme"],
-                        geonode["netloc"],
+                        parsed.scheme,
+                        parsed.netloc,
                         "documents/{}".format(fr.id),
                         "",
                         "",

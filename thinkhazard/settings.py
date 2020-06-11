@@ -18,7 +18,6 @@ def load_full_settings(config_uri, name="admin", options={}):
     )
     load_local_settings(settings, name)
     load_processing_settings(settings)
-    settings["geonode"]["api_key"] = os.environ["GEONODE_API_KEY"]
     return settings
 
 
@@ -28,6 +27,11 @@ def load_processing_settings(settings):
     processing_settings_path = settings["processing_settings_path"]
     with open(processing_settings_path, "r") as f:
         settings.update(yaml.load(f.read(), Loader=yaml.FullLoader))
+    settings["geonode"] = {
+        "url": os.environ["GEONODE_URL"],
+        "username": os.environ["GEONODE_USERNAME"],
+        "api_key": os.environ["GEONODE_API_KEY"]
+    }
 
 
 def load_local_settings(settings, name):

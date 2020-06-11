@@ -99,80 +99,48 @@ class TestHarvesting(BaseTestCase):
         harvester.force = True
         harvester.execute()
 
-    @patch.object(
-        Harvester,
-        "fetch",
-        return_value=[{"id": 1, "name_en": "Test region", "level": 3}],
-    )
+    @patch.object(Harvester, "fetch", side_effect=[
+        [{"id": 1, "name_en": "Test region", "level": 3}],
+    ])
     def test_valid_region(self, fetch_mock):
         """Valid region must be added to database"""
         fetch_mock
         self.harvester().harvest_regions()
         self.assertEqual(DBSession.query(Region).count(), 2)
 
-    @patch.object(Harvester, "fetch", return_value=layers())
-    @patch.object(
-        httplib2.Http, "request", return_value=(Mock(status=200), json.dumps(layer()))
-    )
-    def test_valid_layer(self, request_mock, fetch_mock):
+    @patch.object(Harvester, "fetch", side_effect=[
+        layers(),
+        layer(),
+    ])
+    def test_valid_layer(self, fetch_mock):
         """Valid layer must be added to database"""
         self.harvester().harvest_layers()
         self.assertEqual(DBSession.query(Layer).count(), 1)
 
-    @patch.object(
-        Harvester,
-        "fetch",
-        return_value=[
-            {"id": 1, "title": "Test document", "supplemental_information": ""}
-        ],
-    )
-    @patch.object(
-        httplib2.Http,
-        "request",
-        return_value=(
-            Mock(status=200),
-            json.dumps(
-                {
-                    "id": 1,
-                    "csw_type": "document",
-                    "hazard_type": "earthquake",
-                    "regions": [],
-                    "supplemental_information": "",
-                    "title": "Test document",
-                }
-            ),
-        ),
-    )
-    def test_valid_document(self, request_mock, fetch_mock):
+    @patch.object(Harvester, "fetch", side_effect=[
+        [{"id": 1, "title": "Test document", "supplemental_information": ""}],
+        {
+            "id": 1,
+            "csw_type": "document",
+            "hazard_type": "earthquake",
+            "regions": [],
+            "supplemental_information": "",
+            "title": "Test document",
+        },
+    ])
+    def test_valid_document(self, fetch_mock):
         """Valid document must be added to database"""
         self.harvester().harvest_documents()
         self.assertEqual(DBSession.query(FurtherResource).count(), 1)
 
-    @patch.object(Harvester, "fetch", return_value=layers())
-    @patch.object(
-        httplib2.Http,
-        "request",
-        side_effect=[
-            (
-                Mock(status=200),
-                json.dumps(
-                    layer(
-                        {
-                            "data_update_date": (
-                                datetime.utcnow() - timedelta(days=1)
-                            ).isoformat()
-                        }
-                    )
-                ),
-            ),
-            (
-                Mock(status=200),
-                json.dumps(layer({"data_update_date": datetime.utcnow().isoformat()})),
-            ),
-        ],
-    )
+    @patch.object(Harvester, "fetch", side_effect=[
+        layers(),
+        layer({"data_update_date": (datetime.utcnow() - timedelta(days=1)).isoformat()}),
+        layers(),
+        layer({"data_update_date": datetime.utcnow().isoformat()}),
+    ])
     @patch("thinkhazard.processing.harvesting.os.unlink")
-    def test_data_update_date_change(self, unlink_mock, request_mock, fetch_mock):
+    def test_data_update_date_change(self, unlink_mock, fetch_mock):
         """New data_update_date must reset hazarset.complete and processed"""
         self.harvester().harvest_layers()
 
@@ -187,32 +155,17 @@ class TestHarvesting(BaseTestCase):
         self.assertEqual(hazardset.processed, None)
         unlink_mock.assert_called_once_with("/tmp/hazardsets/test.tif")
 
-    @patch.object(Harvester, "fetch", return_value=layers())
-    @patch.object(
-        httplib2.Http,
-        "request",
-        side_effect=[
-            (
-                Mock(status=200),
-                json.dumps(
-                    layer(
-                        {
-                            "metadata_update_date": (
-                                datetime.utcnow() - timedelta(days=1)
-                            ).isoformat()
-                        }
-                    )
-                ),
-            ),
-            (
-                Mock(status=200),
-                json.dumps(
-                    layer({"metadata_update_date": datetime.utcnow().isoformat()})
-                ),
-            ),
-        ],
-    )
-    def test_metadata_update_date_change(self, request_mock, fetch_mock):
+    @patch.object(Harvester, "fetch", side_effect=[
+        layers(),
+        layer({
+            "metadata_update_date": (
+                datetime.utcnow() - timedelta(days=1)
+            ).isoformat()
+        }),
+        layers(),
+        layer({"metadata_update_date": datetime.utcnow().isoformat()}),
+    ])
+    def test_metadata_update_date_change(self, fetch_mock):
         """New metadata_update_date must reset hazardset.complete"""
         self.harvester().harvest_layers()
 
@@ -225,16 +178,13 @@ class TestHarvesting(BaseTestCase):
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete, False)
 
-    @patch.object(Harvester, "fetch", return_value=layers())
-    @patch.object(
-        httplib2.Http,
-        "request",
-        side_effect=[
-            (Mock(status=200), json.dumps(layer({"calculation_method_quality": 1}))),
-            (Mock(status=200), json.dumps(layer({"calculation_method_quality": 2}))),
-        ],
-    )
-    def test_calculation_method_quality_change(self, request_mock, fetch_mock):
+    @patch.object(Harvester, "fetch", side_effect=[
+        layers(),
+        layer({"calculation_method_quality": 1}),
+        layers(),
+        layer({"calculation_method_quality": 2}),
+    ])
+    def test_calculation_method_quality_change(self, fetch_mock):
         """New calculation_method_quality must reset hazardset.complete"""
         self.harvester().harvest_layers()
 
@@ -247,16 +197,13 @@ class TestHarvesting(BaseTestCase):
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete, False)
 
-    @patch.object(Harvester, "fetch", return_value=layers())
-    @patch.object(
-        httplib2.Http,
-        "request",
-        side_effect=[
-            (Mock(status=200), json.dumps(layer({"scientific_quality": 1}))),
-            (Mock(status=200), json.dumps(layer({"scientific_quality": 2}))),
-        ],
-    )
-    def test_scientific_quality_change(self, request_mock, fetch_mock):
+    @patch.object(Harvester, "fetch", side_effect=[
+        layers(),
+        layer({"scientific_quality": 1}),
+        layers(),
+        layer({"scientific_quality": 2}),
+    ])
+    def test_scientific_quality_change(self, fetch_mock):
         """New scientific_quality must reset hazardset.complete"""
         self.harvester().harvest_layers()
 
@@ -269,15 +216,12 @@ class TestHarvesting(BaseTestCase):
         hazardset = DBSession.query(HazardSet).one()
         self.assertEqual(hazardset.complete, False)
 
-    @patch.object(Harvester, "fetch", side_effect=[layers(), layers([])])
-    @patch.object(
-        httplib2.Http,
-        "request",
-        side_effect=[
-            (Mock(status=200), json.dumps(layer()))
-        ]
-    )
-    def test_hazardset_removed(self, request_mock, fetch_mock):
+    @patch.object(Harvester, "fetch", side_effect=[
+        layers(),
+        layer(),
+        layers([]),
+    ])
+    def test_hazardset_removed(self, fetch_mock):
         """Empty hazardsets should be removed from database"""
         self.harvester().harvest_layers()
         self.assertEqual(DBSession.query(Layer).count(), 1)
@@ -287,31 +231,23 @@ class TestHarvesting(BaseTestCase):
         self.assertEqual(DBSession.query(Layer).count(), 0)
         self.assertEqual(DBSession.query(HazardSet).count(), 0)
 
-    @patch.object(Harvester, "fetch", return_value=layers())
-    @patch.object(
-        httplib2.Http,
-        "request",
-        side_effect=[
-            (Mock(status=200), json.dumps(layer({"id": 1, "hazard_period": 0})))
-        ]
-    )
-    def test_hazardlevel_mismatch(self, request_mock, fetch_mock):
+    @patch.object(Harvester, "fetch", side_effect=[
+        layers(),
+        layer({"id": 1, "hazard_period": 0}),
+    ])
+    def test_hazardlevel_mismatch(self, fetch_mock):
         """Layers without hazardlevel (invalid hazard_period) should not be harvested"""
         self.harvester().harvest_layers()
         self.assertEqual(DBSession.query(Layer).count(), 0)
         self.assertEqual(DBSession.query(HazardSet).count(), 0)
 
-    @patch.object(Harvester, "fetch", return_value=layers([{}, {}, {}]))
-    @patch.object(
-        httplib2.Http,
-        "request",
-        side_effect=[
-            (Mock(status=200), json.dumps(layer({"id": 1, "hazard_period": 15}))),
-            (Mock(status=200), json.dumps(layer({"id": 2, "hazard_period": 10}))),
-            (Mock(status=200), json.dumps(layer({"id": 3, "hazard_period": 20}))),
-        ]
-    )
-    def test_superseeded_layer(self, request_mock, fetch_mock):
+    @patch.object(Harvester, "fetch", side_effect=[
+        layers([{}, {}, {}]),
+        layer({"id": 1, "hazard_period": 15}),
+        layer({"id": 2, "hazard_period": 10}),
+        layer({"id": 3, "hazard_period": 20}),
+    ])
+    def test_superseeded_layer(self, fetch_mock):
         """Should retain no superseeded layer"""
         self.harvester().harvest_layers()
         self.assertEqual(DBSession.query(Layer).count(), 1)
@@ -319,18 +255,12 @@ class TestHarvesting(BaseTestCase):
 
     @patch.object(Harvester, "fetch", side_effect=[
         layers([{"id": 1}]),
+        layer({"id": 1, "hazard_period": 15}),
         layers([{"id": 1}, {"id": 2}]),
+        layer({"id": 1, "hazard_period": 15}),
+        layer({"id": 2, "hazard_period": 10}),
     ])
-    @patch.object(
-        httplib2.Http,
-        "request",
-        side_effect=[
-            (Mock(status=200), json.dumps(layer({"id": 1, "hazard_period": 15}))),
-            (Mock(status=200), json.dumps(layer({"id": 1, "hazard_period": 15}))),
-            (Mock(status=200), json.dumps(layer({"id": 2, "hazard_period": 10}))),
-        ]
-    )
-    def test_superseeded_layer_accross_harvestings(self, request_mock, fetch_mock):
+    def test_superseeded_layer_accross_harvestings(self, fetch_mock):
         """Should retain no superseeded layer accross harvestings"""
         self.harvester().harvest_layers()
         self.assertEqual(DBSession.query(Layer).count(), 1)
@@ -340,24 +270,14 @@ class TestHarvesting(BaseTestCase):
         self.assertEqual(DBSession.query(Layer).count(), 1)
         self.assertEqual(DBSession.query(HazardSet).count(), 1)
 
-    @patch.object(
-        Harvester,
-        "fetch",
-        side_effect=[
-            layers([{"id": 1}, {"id": 2}]),
-            layers([{"id": 1}])
-        ]
-    )
-    @patch.object(
-        httplib2.Http,
-        "request",
-        side_effect=[
-            (Mock(status=200), json.dumps(layer({"id": 1, "hazard_period": 10}))),
-            (Mock(status=200), json.dumps(layer({"id": 2, "hazard_period": 50}))),
-            (Mock(status=200), json.dumps(layer({"id": 1, "hazard_period": 10}))),
-        ]
-    )
-    def test_layer_removed(self, request_mock, fetch_mock):
+    @patch.object(Harvester, "fetch", side_effect=[
+        layers([{"id": 1}, {"id": 2}]),
+        layer({"id": 1, "hazard_period": 10}),
+        layer({"id": 2, "hazard_period": 50}),
+        layers([{"id": 1}]),
+        layer({"id": 1, "hazard_period": 10}),
+    ])
+    def test_layer_removed(self, fetch_mock):
         """Layer removed from geonode should be removed from database"""
         self.harvester().harvest_layers()
         self.assertEqual(DBSession.query(Layer).count(), 2)
@@ -374,25 +294,15 @@ class TestHarvesting(BaseTestCase):
         self.assertFalse(hazardset.completed)
         self.assertIsNone(hazardset.processed)
 
-    @patch.object(
-        Harvester,
-        "fetch",
-        side_effect=[
-            layers([{"id": 1}, {"id": 2}]),
-            layers([{"id": 1}, {"id": 2}])
-        ]
-    )
-    @patch.object(
-        httplib2.Http,
-        "request",
-        side_effect=[
-            (Mock(status=200), json.dumps(layer({"id": 1, "hazard_period": 15}))),
-            (Mock(status=200), json.dumps(layer({"id": 2, "hazard_period": 10}))),
-            (Mock(status=200), json.dumps(layer({"id": 1, "hazard_period": 15}))),
-            (Mock(status=200), json.dumps(layer({"id": 2, "hazard_period": 10}))),
-        ]
-    )
-    def test_no_useless_process_invalidate(self, request_mock, fetch_mock):
+    @patch.object(Harvester, "fetch", side_effect=[
+        layers([{"id": 1}, {"id": 2}]),
+        layer({"id": 1, "hazard_period": 15}),
+        layer({"id": 2, "hazard_period": 10}),
+        layers([{"id": 1}, {"id": 2}]),
+        layer({"id": 1, "hazard_period": 15}),
+        layer({"id": 2, "hazard_period": 10}),
+    ])
+    def test_no_useless_process_invalidate(self, fetch_mock):
         """Multiple layers matching same level should not invalidate processing uselessly"""
         self.harvester().harvest_layers()
         self.assertEqual(DBSession.query(Layer).count(), 1)
@@ -410,18 +320,14 @@ class TestHarvesting(BaseTestCase):
         self.assertTrue(hazardset.completed)
         self.assertIsNotNone(hazardset.processed)
 
-    @patch.object(
-        httplib2.Http,
-        "request",
-        side_effect=[
-            (
-                Mock(status=200),
-                json.dumps(layer({"typename": "hazard:adm2_fu_raster_v3"})),
-            ),
-            (Mock(status=500), json.dumps({"error_message": "Some error."})),
-        ],
-    )
-    def test_layers_api_500(self, request_mock):
+    @patch.object(Harvester, "fetch", side_effect=[
+        layer({"typename": "hazard:adm2_fu_raster_v3"}),
+        Exception(u'Geonode returned status {}: {}'.format(
+            500,
+            '{"error_message": "Some error."}'),
+        )
+    ])
+    def test_layers_api_500(self, fetch_mock):
         """Geonode API status 500 must not corrupt data"""
         self.harvester().harvest_layer(layers()[0])
 

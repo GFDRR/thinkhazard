@@ -20,13 +20,8 @@ RUN apt-get update && apt-get install -y \
     && apt-get update && apt-get install -y postgresql-client-12 \
     && rm -rf /var/lib/apt/lists/*
 
-ENV GEONODE_API_KEY=tbd \
-    HOME=/home/user \
-    INI_FILE=c2c://production.ini \
-    NODE_PATH=/opt/thinkhazard/node_modules \
-    USE_CACHE=FALSE \
-    TX_BRANCH=test \
-    AWS_ENDPOINT_URL=
+ENV HOME=/home/user \
+    NODE_PATH=/opt/thinkhazard/node_modules
 
 RUN mkdir -p /home/user/.local/share/pyppeteer/ && chmod -R 777 /home/user
 
@@ -52,6 +47,16 @@ VOLUME /tmp/geonode_api
 RUN mkdir /tmp/backups && chmod 777 /tmp/backups
 VOLUME /tmp/backups
 
+ENV AWS_ENDPOINT_URL= \
+    GEONODE_URL=tbd \
+    GEONODE_USERNAME=tbd \
+    GEONODE_API_KEY=tbd \
+    INI_FILE=c2c://production.ini \
+    LOG_LEVEL_ROOT=WARN \
+    LOG_LEVEL_THINKHAZARD=WARN \
+    LOG_LEVEL_SQLALCHEMY=WARN \
+    USE_CACHE=FALSE \
+    TX_BRANCH=test
 
 ########################
 # Build and test image #

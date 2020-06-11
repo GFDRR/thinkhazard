@@ -28,6 +28,7 @@ import json
 import csv
 from datetime import datetime
 from time import sleep
+from urllib.parse import urlsplit
 
 from pyramid.settings import asbool
 
@@ -163,18 +164,22 @@ class Harvester(BaseProcessor):
 
         return response, content
 
-    def fetch(self, category, params={}, order_by="title"):
+    def fetch(self, path, params={}, order_by="title"):
         geonode = self.settings["geonode"]
+
+        parsed = urlsplit(geonode["url"])
+
         # add credentials
         params["username"] = geonode["username"]
         params["api_key"] = geonode["api_key"]
         # get all entries (geonode default limit is 200)
         params["limit"] = 0
+
         url = urlunsplit(
             (
-                geonode["scheme"],
-                geonode["netloc"],
-                "api/{}/".format(category),
+                parsed.scheme,
+                parsed.netloc,
+                path,
                 urlencode(params),
                 "",
             )
@@ -185,7 +190,9 @@ class Harvester(BaseProcessor):
             raise Exception(u'Geonode returned status {}: {}'.
                             format(response.status, content))
         o = json.loads(content)
-        return sorted(o["objects"], key=lambda object: object[order_by])
+        if "objects" in o:
+            return sorted(o["objects"], key=lambda object: object[order_by])
+        return o
 
     def hazardtype_from_geonode(self, geonode_name):
         for mnemonic, type_settings in self.settings["hazard_types"].items():
@@ -244,7 +251,7 @@ class Harvester(BaseProcessor):
         self.dbsession.flush()
 
     def harvest_regions(self):
-        regions = self.fetch("regions", order_by="name")
+        regions = self.fetch("api/regions/", order_by="name")
         for region in regions:
             try:
                 with self.dbsession.begin_nested():
@@ -280,7 +287,7 @@ class Harvester(BaseProcessor):
         self.dbsession.flush()
 
     def harvest_documents(self):
-        documents = self.fetch("documents")
+        documents = self.fetch("api/documents/")
         for doc in documents:
             try:
                 with self.dbsession.begin_nested():
@@ -301,25 +308,7 @@ class Harvester(BaseProcessor):
         # we need to retrieve more information on this document
         # since the regions array is not advertised by the main
         # regions listing from GeoNode
-        geonode = self.settings["geonode"]
-        doc_url = urlunsplit(
-            (
-                geonode["scheme"],
-                geonode["netloc"],
-                "api/documents/{}/".format(id),
-                urlencode(
-                    {"username": geonode["username"], "api_key": geonode["api_key"]}
-                ),
-                "",
-            )
-        )
-        logger.info("  Retrieving {}".format(doc_url))
-        response, content = self.request(doc_url)
-        if response.status != 200:
-            raise Exception(u'Geonode returned status {}: {}'.
-                            format(response.status, content))
-
-        o = json.loads(content)
+        o = self.fetch("api/documents/{}/".format(id))
 
         if 'regions' not in list(o.keys()):
             warning(o, 'Attribute "regions" is missing')
@@ -428,7 +417,7 @@ class Harvester(BaseProcessor):
         else:
             params["hazard_type__isnull"] = "False"
 
-        layers = self.fetch("layers", params)
+        layers = self.fetch("api/layers/", params)
         for layer in layers:
             try:
                 with self.dbsession.begin_nested():
@@ -531,25 +520,7 @@ class Harvester(BaseProcessor):
         # we need to retrieve more information on this layer
         # since the regions array is not advertised by the main
         # regions listing from GeoNode
-        geonode = self.settings["geonode"]
-        layer_url = urlunsplit(
-            (
-                geonode["scheme"],
-                geonode["netloc"],
-                "api/layers/{id}/".format(**object),
-                urlencode(
-                    {"username": geonode["username"], "api_key": geonode["api_key"]}
-                ),
-                "",
-            )
-        )
-        logger.info("  Retrieving {}".format(layer_url))
-        response, content = self.request(layer_url)
-        if response.status != 200:
-            raise Exception(u'Geonode returned status {}: {}'.
-                            format(response.status, content))
-
-        o = json.loads(content)
+        o = self.fetch("api/layers/{id}/".format(**object))
 
         if "regions" not in list(o.keys()):
             warning(object, 'Attribute "regions" is missing')
@@ -666,7 +637,7 @@ class Harvester(BaseProcessor):
 
         # get detail_url and owner_organization from last updated layer
         geonode = self.settings["geonode"]
-        geonode_base_url = "%s://%s" % (geonode["scheme"], geonode["netloc"])
+        geonode_base_url = geonode["url"]
 
         if o['detail_url'] and not mask:
             hazardset.detail_url = geonode_base_url + o['detail_url']
