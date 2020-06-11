@@ -127,7 +127,7 @@ def main(global_config, **settings):
         reify=True,
     )
 
-    scan_ignore = ["thinkhazard.tests"]
+    scan_ignore = []
     if settings["appname"] != "public":
         scan_ignore.append("thinkhazard.views.sitemap")
     if settings["appname"] != "admin":
