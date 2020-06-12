@@ -32,7 +32,9 @@ RUN mkdir -p /home/user/.local/share/pyppeteer/ && chmod -R 777 /home/user
 
 # install dependencies
 COPY ./requirements.txt /app/requirements.txt
-RUN pip install -r /app/requirements.txt && pyppeteer-install
+RUN pip install --no-cache-dir -r /app/requirements.txt \
+    && rm --recursive --force /tmp/* /var/tmp/* $HOME/.cache/* \
+    && pyppeteer-install
 
 # Administrative divisions cache
 RUN mkdir /tmp/admindivs && chmod 777 /tmp/admindivs
@@ -78,7 +80,8 @@ RUN cd /opt/thinkhazard/ && npm install
 ENV PATH=${PATH}:${NODE_PATH}/.bin/
 
 COPY ./requirements-dev.txt /app/requirements-dev.txt
-RUN pip install -r /app/requirements-dev.txt
+RUN pip install --no-cache-dir -r /app/requirements-dev.txt \
+    && rm --recursive --force /tmp/pip* /var/tmp/* $HOME/.cache/*
 
 WORKDIR /app
 COPY . /app/
