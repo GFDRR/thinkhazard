@@ -115,6 +115,24 @@ SELECT SETVAL(
 
             connection.execute("DROP TABLE IF EXISTS adm{}_th;".format(level))
 
+        LOG.info("Cut geometries around antemeridian")
+        polygon = (
+            "SRID=4326;POLYGON(("
+            "179.99995 90,"
+            "180.00005 90,"
+            "180.00005 0,"
+            "180.00005 -90,"
+            "179.99995 -90,"
+            "179.99995 0,"
+            "179.99995 90"
+            "))"
+        )
+        connection.execute(sqlalchemy.text("""
+UPDATE datamart.administrativedivision
+SET geom = ST_Multi(ST_Difference(ST_MakeValid(geom), ST_GeomFromEWKT('{}')))
+WHERE code IN (204, 2501, 25042)
+""".format(polygon)))
+
         LOG.info("Updating simplified geometries")
         connection.execute(sqlalchemy.text(
             resource_string("thinkhazard", "scripts/simplify.sql").decode("utf8")
