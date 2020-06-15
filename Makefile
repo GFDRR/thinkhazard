@@ -18,6 +18,8 @@ export PGDATABASE_ADMIN ?= thinkhazard_admin
 export PGUSER_ADMIN ?= thinkhazard
 export PGPASSWORD_ADMIN ?= thinkhazard
 
+export GEONODE_URL ?= https://www.geonode-gfdrrlab.org
+export GEONODE_USERNAME ?= geonode
 export GEONODE_API_KEY ?= geonode
 
 export AWS_ENDPOINT_URL ?= http://minio:9000/

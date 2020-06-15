@@ -1,9 +1,3 @@
-geonode:
-  scheme: https
-  netloc: www.geonode-gfdrrlab.org
-  username: thinkhazard
-  api_key: xxxxxxxxxxxxxxxxxxxxxxxxxx
-
 hazard_types:
   FL_void:
     hazard_type: river_flood_void-retain-for-record

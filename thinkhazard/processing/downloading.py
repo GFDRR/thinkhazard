@@ -20,7 +20,7 @@
 import logging
 import os
 from datetime import datetime
-from urllib.parse import urlunsplit
+from urllib.parse import urlsplit, urlunsplit
 import requests
 
 from thinkhazard.models import Layer
@@ -116,8 +116,9 @@ class Downloader(BaseProcessor):
         # If file not in cache, download it
         if not os.path.isfile(path):
             geonode = self.settings["geonode"]
+            parsed = urlsplit(geonode["url"])
             url = urlunsplit(
-                (geonode["scheme"], geonode["netloc"], layer.download_url, "", "")
+                (parsed.scheme, parsed.netloc, layer.download_url, "", "")
             )
 
             # FIXME: temporary override
