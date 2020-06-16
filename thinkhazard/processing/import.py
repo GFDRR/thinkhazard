@@ -130,7 +130,10 @@ SELECT SETVAL(
         connection.execute(sqlalchemy.text("""
 UPDATE datamart.administrativedivision
 SET geom = ST_Multi(ST_Difference(ST_MakeValid(geom), ST_GeomFromEWKT('{}')))
-WHERE code IN (204, 2501, 25042)
+WHERE code IN (
+    204, 2501, 25042,  -- russian-federation-chukotskiy-okrug
+    83, 40189, 40201 -- fiji-northern-cakaudrove
+);
 """.format(polygon)))
 
         LOG.info("Updating simplified geometries")
