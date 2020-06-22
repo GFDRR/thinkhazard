@@ -153,8 +153,8 @@ def create_pdf_report(request):
     division_code = request.matchdict.get("divisioncode")
     force = "force" in request.params
 
-    filename = "{:%Y-%m-%d}-{:s}-{:s}.pdf".format(publication_date, locale, division_code)
-    s3_path = "reports/{}".format(filename)
+    filename = "{:s}-{:s}.pdf".format(division_code, locale)
+    s3_path = "reports/{:%Y-%m-%d}/{}".format(publication_date, filename)
     local_path = os.path.join(tempfile.gettempdir(), filename)
 
     if force or not request.s3_helper.download_file(s3_path, local_path):

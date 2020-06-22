@@ -56,7 +56,7 @@ services:
     image: minio/minio
     ports:
       - "9000:9000"
-    command: 'server start'
+    command: 'minio server /data'
 
   redis:
     image: redis
@@ -67,17 +67,11 @@ services:
     image: minio/mc
     depends_on:
       - minio
+    volumes:
+      - ./docker/minio-client/docker-entrypoint:/docker-entrypoint
     environment:
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
       - AWS_BUCKET_NAME
-    entrypoint: >
-      /bin/sh -c "
-      while ! nc -z minio 9000; do echo 'Wait minio to startup...' && sleep 0.1; done;
-      sleep 5;
-      /usr/bin/mc config host add localminio http://minio:9000 ${AWS_ACCESS_KEY_ID} ${AWS_SECRET_ACCESS_KEY};
-      /usr/bin/mc rm -r --force localminio/${AWS_BUCKET_NAME};
-      /usr/bin/mc mb localminio/${AWS_BUCKET_NAME};
-      /usr/bin/mc policy download localminio/${AWS_BUCKET_NAME};
-      exit 0;
-      "
+    entrypoint: /docker-entrypoint
+    command: ["exit", "0"]
