@@ -91,7 +91,7 @@ class TestHarvesting(BaseTestCase):
     def test_cli(self, mock):
         """Test harvester cli"""
         Harvester.run(["harvest", "--config_uri", "c2c://tests.ini"])
-        mock.assert_called_with(hazard_type=None, use_cache=False)
+        mock.assert_called_with(resources="regions,layers,documents", hazard_type=None, use_cache=False)
 
     @patch.object(Harvester, "fetch", return_value=[])
     def test_force(self, fetch_mock):

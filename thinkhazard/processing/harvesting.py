@@ -95,6 +95,13 @@ class Harvester(BaseProcessor):
     def argument_parser():
         parser = BaseProcessor.argument_parser()
         parser.add_argument(
+            "--resources",
+            dest="resources",
+            action="store",
+            default="regions,layers,documents",
+            help="The resources to harvest, default to regions,layers,documents",
+        )
+        parser.add_argument(
             "--hazard-type",
             dest="hazard_type",
             action="store",
@@ -110,26 +117,31 @@ class Harvester(BaseProcessor):
         )
         return parser
 
-    def do_execute(self, hazard_type=None, use_cache=False):
+    def do_execute(self, resources="regions,layers,documents", hazard_type=None, use_cache=False):
         self.use_cache = use_cache or asbool(os.environ.get("USE_CACHE", False))
 
-        try:
-            self.harvest_regions()
-            self.create_region_admindiv_associations()
-        except Exception:
-            logger.error(traceback.format_exc())
-            logger.info("Continue with layers")
+        resources = resources.split(",")
 
-        try:
-            self.harvest_layers(hazard_type)
-        except Exception:
-            logger.error(traceback.format_exc())
-            logger.info("Continue with documents")
+        if "regions" in resources:
+            try:
+                self.harvest_regions()
+                self.create_region_admindiv_associations()
+            except Exception:
+                logger.error(traceback.format_exc())
+                logger.info("Continue with layers")
 
-        try:
-            self.harvest_documents()
-        except Exception:
-            logger.error(traceback.format_exc())
+        if "layers" in resources:
+            try:
+                self.harvest_layers(hazard_type)
+            except Exception:
+                logger.error(traceback.format_exc())
+                logger.info("Continue with documents")
+
+        if "documents" in resources:
+            try:
+                self.harvest_documents()
+            except Exception:
+                logger.error(traceback.format_exc())
 
         Harvesting.new(self.dbsession, complete=(self.force is True and hazard_type is None))
 
