@@ -126,6 +126,12 @@ class Downloader(BaseProcessor):
                 url = ("https://drive.google.com/uc?export=download"
                        "&id=18ilYOnMikhBZ708uole4jpeghRd4soD7")
 
+            # FIXME: temporary override
+            if layer.hazardset_id == "FL-GLOBAL-FATHOM":
+                url = urlunsplit(
+                    (parsed.scheme, parsed.netloc, "/uploaded/layers/adm2_fu_v3_4bit.tif", "", "")
+                )
+
             logger.info("  Retrieving {}".format(url))
             try:
                 r = requests.get(url, stream=True)

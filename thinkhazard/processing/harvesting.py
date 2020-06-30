@@ -95,6 +95,13 @@ class Harvester(BaseProcessor):
     def argument_parser():
         parser = BaseProcessor.argument_parser()
         parser.add_argument(
+            "--resources",
+            dest="resources",
+            action="store",
+            default="regions,layers,documents",
+            help="The resources to harvest, default to regions,layers,documents",
+        )
+        parser.add_argument(
             "--hazard-type",
             dest="hazard_type",
             action="store",
@@ -110,26 +117,31 @@ class Harvester(BaseProcessor):
         )
         return parser
 
-    def do_execute(self, hazard_type=None, use_cache=False):
+    def do_execute(self, resources="regions,layers,documents", hazard_type=None, use_cache=False):
         self.use_cache = use_cache or asbool(os.environ.get("USE_CACHE", False))
 
-        try:
-            self.harvest_regions()
-            self.create_region_admindiv_associations()
-        except Exception:
-            logger.error(traceback.format_exc())
-            logger.info("Continue with layers")
+        resources = resources.split(",")
 
-        try:
-            self.harvest_layers(hazard_type)
-        except Exception:
-            logger.error(traceback.format_exc())
-            logger.info("Continue with documents")
+        if "regions" in resources:
+            try:
+                self.harvest_regions()
+                self.create_region_admindiv_associations()
+            except Exception:
+                logger.error(traceback.format_exc())
+                logger.info("Continue with layers")
 
-        try:
-            self.harvest_documents()
-        except Exception:
-            logger.error(traceback.format_exc())
+        if "layers" in resources:
+            try:
+                self.harvest_layers(hazard_type)
+            except Exception:
+                logger.error(traceback.format_exc())
+                logger.info("Continue with documents")
+
+        if "documents" in resources:
+            try:
+                self.harvest_documents()
+            except Exception:
+                logger.error(traceback.format_exc())
 
         Harvesting.new(self.dbsession, complete=(self.force is True and hazard_type is None))
 
@@ -406,7 +418,14 @@ class Harvester(BaseProcessor):
             self.dbsession.query(HazardSet).delete()
             self.dbsession.flush()
 
-        layers_db = self.dbsession.query(Layer).all()
+        layers_db = self.dbsession.query(Layer)
+        if hazard_type is not None:
+            layers_db = (
+                layers_db
+                .join(HazardSet)
+                .filter(HazardSet.hazardtype_id == self.hazardtype_from_geonode(hazard_type).id)
+            )
+        layers_db = layers_db.all()
         for layer in layers_db:
             layer.set_harvested(False)
 
