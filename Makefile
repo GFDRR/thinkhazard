@@ -237,6 +237,66 @@ import_contacts: ## Import contacts
 	docker-compose run --rm thinkhazard import_contacts -v
 
 
+#############################
+# Backup / restore database #
+#############################
+
+export LOCAL_BACKUP_FOLDER ?= /tmp
+export BACKUP ?= thinkhazard_admin.`date "+%Y-%m-%d"`.backup
+
+psql-admin:  # Run psql on int/prod admin databases, example: make -f config/prod.mk psql
+	docker run --rm -ti --entrypoint "" \
+		-e PGHOST=$(PGHOST_SLAVE) \
+		-e PGPORT=$(PGPORT_SLAVE) \
+		-e PGUSER=$(PGUSER_ADMIN) \
+		-e PGPASSWORD=$(PGPASSWORD_ADMIN) \
+		camptocamp/postgres:12 \
+		psql -d $(PGDATABASE_ADMIN)
+
+backup:  ## Backup int/prod databases on local filesystem, example: make -f config/prod.mk backup
+	docker run --rm -i --entrypoint "" \
+		-e PGHOST=$(PGHOST_SLAVE) \
+		-e PGPORT=$(PGPORT_SLAVE) \
+		-e PGUSER=$(PGUSER_ADMIN) \
+		-e PGPASSWORD=$(PGPASSWORD_ADMIN) \
+		camptocamp/postgres:12 \
+		pg_dump -Fc $(PGDATABASE_ADMIN) \
+		> $(LOCAL_BACKUP_FOLDER)/${BACKUP}
+
+restore:  # Restore database backup in local database
+	docker-compose up -d db
+
+	# Drop and restore schemas datamart and processing
+	docker-compose exec --user postgres db psql -d $(PGDATABASE_ADMIN) \
+		-c "DROP SCHEMA IF EXISTS datamart CASCADE; CREATE SCHEMA datamart AUTHORIZATION $(PGUSER_ADMIN);"
+	docker-compose exec --user postgres db psql -d $(PGDATABASE_ADMIN) \
+		-c "DROP SCHEMA IF EXISTS processing CASCADE; CREATE SCHEMA processing AUTHORIZATION $(PGUSER_ADMIN);"
+	cat $(LOCAL_BACKUP_FOLDER)/${BACKUP} | \
+		docker exec -i \
+			-e PGHOST=localhost \
+			-e PGPORT=$(PGPORT_SLAVE) \
+			-e PGUSER=$(PGUSER_ADMIN) \
+			-e PGPASSWORD=$(PGPASSWORD_ADMIN) \
+			thinkhazard_db_1 \
+		pg_restore \
+			--no-owner \
+			-d $(PGDATABASE_ADMIN) -n datamart -n processing
+
+	# Drop and restore table alembic_version
+	docker-compose exec --user postgres db psql -d $(PGDATABASE_ADMIN) \
+		-c "DROP TABLE IF EXISTS alembic_version;"
+	cat $(LOCAL_BACKUP_FOLDER)/${BACKUP} | \
+		docker exec -i \
+			-e PGHOST=localhost \
+			-e PGPORT=$(PGPORT_SLAVE) \
+			-e PGUSER=$(PGUSER_ADMIN) \
+			-e PGPASSWORD=$(PGPASSWORD_ADMIN) \
+			thinkhazard_db_1 \
+		pg_restore \
+			--no-owner \
+			-d $(PGDATABASE_ADMIN) -n public -t alembic_version
+
+
 .PHONY: routes
 routes:
 	.build/venv/bin/proutes $(INI_FILE)
