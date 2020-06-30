@@ -418,7 +418,14 @@ class Harvester(BaseProcessor):
             self.dbsession.query(HazardSet).delete()
             self.dbsession.flush()
 
-        layers_db = self.dbsession.query(Layer).all()
+        layers_db = self.dbsession.query(Layer)
+        if hazard_type is not None:
+            layers_db = (
+                layers_db
+                .join(HazardSet)
+                .filter(HazardSet.hazardtype_id == self.hazardtype_from_geonode(hazard_type).id)
+            )
+        layers_db = layers_db.all()
         for layer in layers_db:
             layer.set_harvested(False)
 
