@@ -1,0 +1,267 @@
+ADM0_CODE;ADM0_NAME;ISO3166_a2;ISO3166_a3
+1;Afghanistan;AF;AFG
+3;Albania;AL;ALB
+4;Algeria;DZ;DZA
+5;American Samoa (U.S.);AS;ASM
+6;Sudan;SD;SDN
+7;Andorra;AD;AND
+8;Angola;AO;AGO
+9;Anguilla (U.K.);AI;AIA
+11;Antigua and Barbuda;AG;ATG
+12;Argentina;AR;ARG
+13;Armenia;AM;ARM
+14;Aruba (Neth.);AW;ABW
+16;Ashmore and Cartier Islands (Aus.);;
+17;Australia;AU;AUS
+18;Austria;AT;AUT
+19;Azerbaijan;AZ;AZE
+20;The Bahamas;BS;BHS
+21;Bahrain;BH;BHR
+22;Baker Island (U.S.);;
+23;Bangladesh;BD;BGD
+24;Barbados;BB;BRB
+26;Belarus;BY;BLR
+27;Belgium;BE;BEL
+28;Belize;BZ;BLZ
+29;Benin;BJ;BEN
+30;Bermuda (U.K.);BM;BMU
+31;Bhutan;BT;BTN
+33;Bolivia;BO;BOL
+34;Bosnia and Herzegovina;BA;BIH
+35;Botswana;BW;BWA
+36;Bouvet Island (Nor.);;BVT
+37;Brazil;BR;BRA
+38;British Indian Ocean Territory (U.K.);;IOT
+39;British Virgin Islands (U.K.);;VGB
+40;Brunei Darussalam;BN;BRN
+41;Bulgaria;BG;BGR
+42;Burkina Faso;BF;BFA
+43;Burundi;BI;BDI
+44;Cambodia;KH;KHM
+45;Cameroon;CM;CMR
+46;Canada;CA;CAN
+47;Cape Verde;CV;CPV
+48;Cayman Islands (U.K.);KY;CYM
+49;Central African Republic;CF;CAF
+50;Chad;TD;TCD
+51;Chile;CL;CHL
+54;Christmas Island (Aus.);;CXR
+55;Clipperton Island (Fr.);;
+56;Cocos (Keeling) Islands (Aus.);;CCK
+57;Colombia;CO;COL
+58;Comoros;KM;COM
+59;Congo;CG;COG
+60;Cook Islands (N.Z.);;COK
+61;Costa Rica;CR;CRI
+62;Croatia;HR;HRV
+63;Cuba;CU;CUB
+64;Cyprus;CY;CYP
+65;Czech Republic;CZ;CZE
+66;C├┤te d'Ivoire;CI;CIV
+67;D. P. R. of Korea;KP;PRK
+68;Democratic Republic of Congo;ZR;COD
+69;Denmark;DK;DNK
+70;Djibouti;DJ;DJI
+71;Dominica;DM;DMA
+72;Dominican Republic;DO;DOM
+73;Ecuador;EC;ECU
+74;South Sudan;SS;SSD
+75;El Salvador;SV;SLV
+76;Equatorial Guinea;GQ;GNQ
+77;Eritrea;ER;ERI
+78;Estonia;EE;EST
+79;Ethiopia;ET;ETH
+81;Falkland Islands (Malvinas);;FLK
+82;Faroe Islands (Den.);FO;FRO
+83;Fiji;FJ;FJI
+84;Finland;FI;FIN
+85;France;;FRA
+86;French Guiana;;GUF
+87;French Polynesia (Fr.);PF;PYF
+88;French Southern and Antarctic Lands (Fr.);;ATF
+89;Gabon;GA;GAB
+90;The Gambia;GM;GMB
+91;West Bank and Gaza;GZ;PSE
+92;Georgia;GE;GEO
+93;Germany;DE;DEU
+94;Ghana;GH;GHA
+95;Gibraltar (U.K.);GI;GIB
+97;Greece;GR;GRC
+98;Greenland (Den.);GL;GRL
+99;Grenada;GD;GRD
+100;Guadeloupe;;GLP
+101;Guam (U.S.);GU;GUM
+102;Abyei;;
+103;Guatemala;GT;GTM
+104;Guernsey (U.K.);;GGY
+105;Guinea-Bissau;GW;GNB
+106;Guinea;GN;GIN
+107;Guyana;GY;GUY
+108;Haiti;HT;HTI
+109;Heard Island and McDonald Islands (Aus.);;HMD
+110;Vatican City;;VAT
+111;Honduras;HN;HND
+112;Howland Island (U.S.);;
+113;Hungary;HU;HUN
+114;Iceland;IS;ISL
+115;India;IN;IND
+116;Indonesia;ID;IDN
+117;Islamic Republic of Iran;IR;IRN
+118;Iraq;IQ;IRQ
+119;Ireland;IE;IRL
+120;Isle of Man (U.K.);IM;IMN
+121;Israel;IL;ISR
+122;Italy;IT;ITA
+123;Jamaica;JM;JAM
+126;Japan;JP;JPN
+127;Jarvis Island (U.S.);;
+128;Jersey (U.K.);;JEY
+129;Johnston Atoll (U.S.);;
+130;Jordan;JO;JOR
+132;Kazakhstan;KZ;KAZ
+133;Kenya;KE;KEN
+134;Kingman Reef (U.S.);;
+135;Kiribati;KI;KIR
+136;Kuril islands;;
+137;Kuwait;KW;KWT
+138;Kyrgyz Republic;KG;KGZ
+139;Lao People's Democratic Republic;LA;LAO
+140;Latvia;LV;LVA
+141;Lebanon;LB;LBN
+142;Lesotho;LS;LSO
+144;Liberia;LR;LBR
+145;Libya;LY;LBY
+146;Liechtenstein;LI;LIE
+147;Lithuania;LT;LTU
+148;Luxembourg;LU;LUX
+149;Macau, SAR;MO;MAC
+150;Madagascar;MG;MDG
+151;Madeira Islands (Por.);;
+152;Malawi;MW;MWI
+153;Malaysia;MY;MYS
+154;Maldives;MV;MDV
+155;Mali;ML;MLI
+156;Malta;MT;MLT
+157;Marshall Islands;MH;MHL
+158;Martinique;;MTQ
+159;Mauritania;MR;MRT
+160;Mauritius;MU;MUS
+161;Mayotte;;MYT
+162;Mexico;MX;MEX
+163;Federated States of Micronesia;FM;FSM
+164;Midway Island (U.S.);;
+165;Moldova;MD;MDA
+166;Monaco;MC;MCO
+167;Mongolia;MN;MNG
+168;Montserrat (U.K.);;MSR
+169;Morocco;MA;MAR
+170;Mozambique;MZ;MOZ
+171;Myanmar;MM;MMR
+172;Namibia;NA;NAM
+173;Nauru;;NRU
+174;Navassa Island (U.S.);;
+175;Nepal;NP;NPL
+177;Netherlands;NL;NLD
+178;New Caledonia (Fr.);NC;NCL
+179;New Zealand;NZ;NZL
+179;New Zealand;;
+180;Nicaragua;NI;NIC
+181;Niger;NE;NER
+182;Nigeria;NG;NGA
+183;Niue (N.Z.);;NIU
+184;Norfolk Island (Aus.);;NFK
+185;Northern Mariana Islands (U.S.);MP;MNP
+186;Norway;NO;NOR
+187;Oman;OM;OMN
+188;Pakistan;PK;PAK
+189;Palau;PW;PLW
+190;Palmyra Atoll (U.S.);;
+191;Panama;PA;PAN
+192;Papua New Guinea;PG;PNG
+194;Paraguay;PY;PRY
+195;Peru;PE;PER
+196;Philippines;PH;PHL
+197;Pitcairn Islands (U.K.);;PCN
+198;Poland;PL;POL
+199;Portugal;PT;PRT
+200;Puerto Rico (U.S.);PR;PRI
+201;Qatar;QA;QAT
+202;Republic of Korea;KR;KOR
+203;Romania;RO;ROU
+204;Russian Federation;RU;RUS
+205;Rwanda;RW;RWA
+206;R├®union;;REU
+207;Saint Helena, Ascension and Tristan da Cunha (U.K.);;SHN
+208;Saint Kitts and Nevis;KN;KNA
+209;Saint Lucia;LC;LCA
+210;Saint-Pierre-et-Miquelon (Fr.);;SPM
+211;Saint Vincent and the Grenadines;VC;VCT
+212;Samoa;WS;WSM
+213;San Marino;SM;SMR
+214;S├úo Tom├® and Pr├¡ncipe;ST;STP
+215;Saudi Arabia;SA;SAU
+217;Senegal;SN;SEN
+220;Seychelles;SC;SYC
+221;Sierra Leone;SL;SLE
+222;Singapore;SG;SGP
+223;Slovak Republic;SK;SVK
+224;Slovenia;SI;SVN
+225;Solomon Islands;SB;SLB
+226;Somalia;SO;SOM
+227;South Africa;ZA;ZAF
+228;South Georgia and the South Sandwich Islands (U.K.);;SGS
+229;Spain;ES;ESP
+231;Sri Lanka;LK;LKA
+233;Suriname;SR;SUR
+234;Svalbard and Jan Mayen (Nor.);;SJM
+235;Swaziland;SZ;SWZ
+236;Sweden;SE;SWE
+237;Switzerland;CH;CHE
+238;Syrian Arab Republic;SY;SYR
+239;Tajikistan;TJ;TJK
+240;Thailand;TH;THA
+241;FYR of Macedonia;MK;MKD
+242;Timor-Leste;TP;TLS
+243;Togo;TG;TGO
+244;Tokelau (N.Z.);;TKL
+245;Tonga;TO;TON
+246;Trinidad and Tobago;TT;TTO
+247;Tromelin Island;;
+248;Tunisia;TN;TUN
+249;Turkey;TR;TUR
+250;Turkmenistan;TM;TKM
+251;Turks and Caicos Islands (U.K.);TC;TCA
+252;Tuvalu;TV;TUV
+253;Uganda;UG;UGA
+254;Ukraine;UA;UKR
+255;United Arab Emirates;AE;ARE
+256;United Kingdom;GB;GBR
+257;Tanzania;TZ;TZA
+258;United States Virgin Islands (U.S.);VI;VIR
+259;United States of America;US;USA
+260;Uruguay;UY;URY
+261;Uzbekistan;UZ;UZB
+262;Vanuatu;VU;VUT
+263;R. B. de Venezuela;VE;VEN
+264;Vietnam;VN;VNM
+265;Wake Island (U.S.);;
+266;Wallis and Futuna (Fr.);;WLF
+268;Western Sahara;;ESH
+269;Republic of Yemen;RY;YEM
+270;Zambia;ZM;ZMB
+271;Zimbabwe;ZW;ZWE
+2647;Montenegro;ME;MNE
+2648;Serbia;YF;SRB
+33364;Hong Kong, SAR;HK;HKG
+40765;Arab Republic of Egypt;EG;EGY
+74578;Azores Islands (Por.);;
+75001;Bonaire (Neth.);;BES
+75002;Cura├ºao (Neth.);CW;CUW
+75003;Saba (Neth.);;
+75004;Sint Eustatius (Neth.);;BES
+75005;Sint Maarten (Neth.);SX;SXM
+75006;Saint-Barth├®lemy (Fr.);;BLM
+75007;Saint-Martin (Fr.);MF;MAF
+75008;Kosovo;XK;KSV
+147295;China;CN;CHN
+147296;Taiwan;TW;TWN

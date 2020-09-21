@@ -1,0 +1,3412 @@
+﻿ADM1_CODE;ADM1_NAME;ADM0_CODE;ADM0_NAME
+272;Badakhshan;1;Afghanistan
+273;Badghis;1;Afghanistan
+274;Baghlan;1;Afghanistan
+275;Balkh;1;Afghanistan
+276;Bamyan;1;Afghanistan
+277;Farah;1;Afghanistan
+278;Faryab;1;Afghanistan
+279;Ghazni;1;Afghanistan
+280;Ghor;1;Afghanistan
+281;Hilmand;1;Afghanistan
+282;Hirat;1;Afghanistan
+283;Jawzjan;1;Afghanistan
+284;Kabul;1;Afghanistan
+285;Kandahar;1;Afghanistan
+286;Kapisa;1;Afghanistan
+287;Khost;1;Afghanistan
+288;Kunar;1;Afghanistan
+289;Kunduz;1;Afghanistan
+290;Laghman;1;Afghanistan
+291;Logar;1;Afghanistan
+292;Nangarhar;1;Afghanistan
+293;Nimroz;1;Afghanistan
+294;Nuristan;1;Afghanistan
+295;Paktika;1;Afghanistan
+296;Paktya;1;Afghanistan
+298;Samangan;1;Afghanistan
+299;Sar-e-Pul;1;Afghanistan
+300;Takhar;1;Afghanistan
+302;Wardak;1;Afghanistan
+303;Zabul;1;Afghanistan
+305;Berat;3;Albania
+306;Bulqize;3;Albania
+307;Delvine;3;Albania
+308;Devoll;3;Albania
+309;Diber;3;Albania
+310;Durres;3;Albania
+311;Elbasan;3;Albania
+312;Fier;3;Albania
+313;Gjirokaster;3;Albania
+314;Gramsh;3;Albania
+315;Has;3;Albania
+316;Kavaje;3;Albania
+317;Kolonje;3;Albania
+318;Korce;3;Albania
+319;Kruje;3;Albania
+320;Kucove;3;Albania
+321;Kukes;3;Albania
+322;Kurbin;3;Albania
+323;Lezhe;3;Albania
+324;Librazhd;3;Albania
+325;Lushnje;3;Albania
+326;Malesi E Madhe;3;Albania
+327;Mallakaster;3;Albania
+328;Mat;3;Albania
+329;Mirdite;3;Albania
+330;Peqin;3;Albania
+331;Permet;3;Albania
+332;Pogradec;3;Albania
+333;Puke;3;Albania
+334;Sarande;3;Albania
+335;Shkoder;3;Albania
+336;Skrapar;3;Albania
+337;Tepelene;3;Albania
+338;Tirane;3;Albania
+339;Tropoje;3;Albania
+340;Vlore;3;Albania
+341;Adrar;4;Algeria
+342;Ain-Defla;4;Algeria
+343;Ain-Temouchent;4;Algeria
+344;Alger;4;Algeria
+345;Annaba;4;Algeria
+346;Batna;4;Algeria
+347;Bechar;4;Algeria
+348;Bejaia;4;Algeria
+349;Biskra;4;Algeria
+350;Blida;4;Algeria
+351;Bordj Bou Arrer;4;Algeria
+352;Bouira;4;Algeria
+353;Boumerdes;4;Algeria
+354;Chlef;4;Algeria
+355;Constantine;4;Algeria
+356;Djelfa;4;Algeria
+357;El Bayadh;4;Algeria
+358;El Oued;4;Algeria
+359;El-Tarf;4;Algeria
+360;Ghardaia;4;Algeria
+361;Guelma;4;Algeria
+362;Illizi;4;Algeria
+363;Jijel;4;Algeria
+364;Khenchela;4;Algeria
+365;Laghouat;4;Algeria
+366;Mascara;4;Algeria
+367;Medea;4;Algeria
+368;Mila;4;Algeria
+369;Mostaganem;4;Algeria
+370;M'Sila;4;Algeria
+371;Naama;4;Algeria
+372;Oran;4;Algeria
+373;Ouargla;4;Algeria
+374;Oum El Bouaghi;4;Algeria
+375;Relizane;4;Algeria
+376;Saida;4;Algeria
+377;Setif;4;Algeria
+378;Sidi Bel Abbes;4;Algeria
+379;Skikda;4;Algeria
+380;Souk-Ahras;4;Algeria
+381;Tamanrasset;4;Algeria
+382;Tebessa;4;Algeria
+383;Tindouf;4;Algeria
+384;Tiaret;4;Algeria
+385;Tipaza;4;Algeria
+386;Tissemsilt;4;Algeria
+387;Tizi Ouzou;4;Algeria
+388;Tlemcen;4;Algeria
+389;Administrative unit not available;5;American Samoa (U.S.)
+391;Andorra La Vella;7;Andorra
+392;Canillo;7;Andorra
+393;Encamp;7;Andorra
+394;Escaldes-engordany;7;Andorra
+395;La Massana;7;Andorra
+396;Ordino;7;Andorra
+397;Sant Julia De Loria;7;Andorra
+398;Bengo;8;Angola
+399;Benguela;8;Angola
+400;Bie;8;Angola
+401;Cabinda;8;Angola
+402;Cuando Cubango;8;Angola
+403;Cuanza Sul;8;Angola
+404;Cunene;8;Angola
+405;Huambo;8;Angola
+406;Huila;8;Angola
+407;Kuanza Norte;8;Angola
+408;Luanda;8;Angola
+409;Lunda Norte;8;Angola
+410;Lunda Sul;8;Angola
+411;Malanje;8;Angola
+412;Moxico;8;Angola
+413;Namibe;8;Angola
+414;Uige;8;Angola
+415;Zaire;8;Angola
+416;Name Unknown;9;Anguilla (U.K.)
+417;Name Unknown;9;Anguilla (U.K.)
+418;Name Unknown;9;Anguilla (U.K.)
+419;Name Unknown;9;Anguilla (U.K.)
+420;Name Unknown;9;Anguilla (U.K.)
+421;Name Unknown;9;Anguilla (U.K.)
+422;Name Unknown;9;Anguilla (U.K.)
+423;Name Unknown;9;Anguilla (U.K.)
+424;Name Unknown;9;Anguilla (U.K.)
+425;Name Unknown;9;Anguilla (U.K.)
+429;Buenos Aires;12;Argentina
+430;Buenos Aires D.f.;12;Argentina
+431;Catamarca;12;Argentina
+432;Chaco;12;Argentina
+433;Chubut;12;Argentina
+434;Cordoba;12;Argentina
+435;Corrientes;12;Argentina
+436;Entre Rios;12;Argentina
+437;Formosa;12;Argentina
+438;Jujuy;12;Argentina
+439;La Pampa;12;Argentina
+440;La Rioja;12;Argentina
+441;Mendoza;12;Argentina
+442;Misiones;12;Argentina
+443;Neuquen;12;Argentina
+444;Rio Negro;12;Argentina
+445;Salta;12;Argentina
+446;San Juan;12;Argentina
+447;San Luis;12;Argentina
+448;Santa Cruz;12;Argentina
+449;Santa Fe;12;Argentina
+450;Santiago Del Estero;12;Argentina
+451;Tierra Del Fuego;12;Argentina
+452;Tucuman;12;Argentina
+453;Aragatsotn;13;Armenia
+454;Ararat;13;Armenia
+455;Armavir;13;Armenia
+456;Gergharkunik;13;Armenia
+457;Kotayk;13;Armenia
+458;Lori;13;Armenia
+460;Shirak;13;Armenia
+461;Syunik;13;Armenia
+462;Tavush;13;Armenia
+463;Vayots Dzor;13;Armenia
+464;Yerevan;13;Armenia
+465;Administrative unit not available;14;Aruba (Neth.)
+467;Administrative unit not available;16;Ashmore and Cartier Islands (Aus.)
+468;Australian Capital Territory;17;Australia
+469;Coral Sea Islands Territory;17;Australia
+470;New South Wales;17;Australia
+471;Northern Territory;17;Australia
+472;Other Territories;17;Australia
+473;Queensland;17;Australia
+474;South Australia;17;Australia
+475;Tasmania;17;Australia
+476;Victoria;17;Australia
+477;Western Australia;17;Australia
+478;Burgenland;18;Austria
+479;Karnten;18;Austria
+480;Niederosterreich;18;Austria
+481;Oberosterreich;18;Austria
+482;Salzburg;18;Austria
+483;Steiermark;18;Austria
+484;Tirol;18;Austria
+485;Vorarlberg;18;Austria
+486;Wien;18;Austria
+561;Administrative unit not available;20;The Bahamas
+562;Central Region;21;Bahrain
+563;Hamad Town;21;Bahrain
+564;Hawar Island;21;Bahrain
+565;Hidd;21;Bahrain
+566;Isa Town;21;Bahrain
+567;Jidhafs;21;Bahrain
+568;Manama;21;Bahrain
+569;Muharraq;21;Bahrain
+570;Northern Region;21;Bahrain
+571;Riffa;21;Bahrain
+572;Sitra;21;Bahrain
+573;Western Region;21;Bahrain
+574;Administrative unit not available;22;Baker Island (U.S.)
+575;Barisal;23;Bangladesh
+576;Chittagong;23;Bangladesh
+577;Dhaka;23;Bangladesh
+578;Khulna;23;Bangladesh
+580;Sylhet;23;Bangladesh
+581;Christ Church;24;Barbados
+582;St. Andrew;24;Barbados
+583;St. George;24;Barbados
+584;St. James;24;Barbados
+585;St. John;24;Barbados
+586;St. Joseph;24;Barbados
+587;St. Lucy;24;Barbados
+588;St. Michael;24;Barbados
+589;St. Peter;24;Barbados
+590;St. Phillip;24;Barbados
+591;St. Tomas;24;Barbados
+592;Administrative unit not available;88;French Southern and Antarctic Lands (Fr.)
+593;Brest;26;Belarus
+594;Gomel;26;Belarus
+595;Grodno;26;Belarus
+596;Minsk;26;Belarus
+597;Minsk City;26;Belarus
+598;Mogilev;26;Belarus
+599;Vitebsk;26;Belarus
+600;Region de Bruxelles-Capitale / Brussels Hoofdstedelijk Gewes;27;Belgium
+601;Vlaams Gewest;27;Belgium
+602;Region wallonne;27;Belgium
+603;Belize;28;Belize
+604;Cayo;28;Belize
+605;Corozal;28;Belize
+606;Orange Walk;28;Belize
+607;Stann Creek;28;Belize
+608;Toledo;28;Belize
+609;Alibori;29;Benin
+610;Atakora;29;Benin
+611;Atlantique;29;Benin
+612;Borgou;29;Benin
+613;Collines;29;Benin
+614;Couffo;29;Benin
+615;Donga;29;Benin
+616;Littoral;29;Benin
+617;Mono;29;Benin
+618;Oueme;29;Benin
+619;Plateau;29;Benin
+620;Zou;29;Benin
+621;Administrative unit not available;30;Bermuda (U.K.)
+622;Bumthang;31;Bhutan
+623;Chhukha;31;Bhutan
+625;Gasa;31;Bhutan
+627;Lhuentse;31;Bhutan
+628;Monggar;31;Bhutan
+629;Paro;31;Bhutan
+631;Punakha;31;Bhutan
+635;Thimphu;31;Bhutan
+636;Trashiyangtse;31;Bhutan
+637;Trashigang;31;Bhutan
+638;Trongsa;31;Bhutan
+639;Tsirang;31;Bhutan
+640;Wangduephodrang;31;Bhutan
+648;Pando;33;Bolivia
+652;Federacija Bosne I Hercegovine;34;Bosnia and Herzegovina
+653;Republika Srpska;34;Bosnia and Herzegovina
+654;Central;35;Botswana
+655;Chobe;35;Botswana
+656;Ghanzi;35;Botswana
+657;Kgalagadi;35;Botswana
+658;Kgatleng;35;Botswana
+659;Kweneng;35;Botswana
+660;Ngamiland;35;Botswana
+661;North East;35;Botswana
+662;South-East;35;Botswana
+663;Southern;35;Botswana
+664;Administrative unit not available;36;Bouvet Island (Nor.)
+665;Acre;37;Brazil
+666;Alagoas;37;Brazil
+667;Amapa;37;Brazil
+668;Amazonas;37;Brazil
+669;Bahia;37;Brazil
+670;Ceara;37;Brazil
+671;Distrito Federal;37;Brazil
+672;Espirito Santo;37;Brazil
+673;Goias;37;Brazil
+674;Maranhao;37;Brazil
+675;Mato Grosso;37;Brazil
+676;Mato Grosso Do Sul;37;Brazil
+677;Minas Gerais;37;Brazil
+678;Para;37;Brazil
+679;Paraiba;37;Brazil
+680;Parana;37;Brazil
+681;Pernambuco;37;Brazil
+682;Piaui;37;Brazil
+683;Rio De Janeiro;37;Brazil
+684;Rio Grande Do Norte;37;Brazil
+685;Rio Grande Do Sul;37;Brazil
+686;Rondonia;37;Brazil
+687;Roraima;37;Brazil
+688;Santa Catarina;37;Brazil
+689;Sao Paulo;37;Brazil
+690;Sergipe;37;Brazil
+691;Tocantins;37;Brazil
+692;Name Unknown;37;Brazil
+693;Name Unknown;37;Brazil
+694;Name Unknown;37;Brazil
+695;Name Unknown;37;Brazil
+696;Administrative unit not available;38;British Indian Ocean Territory (U.K.)
+698;Belait;40;Brunei Darussalam
+699;Brunei and Muara;40;Brunei Darussalam
+700;Temburong;40;Brunei Darussalam
+701;Tutong;40;Brunei Darussalam
+702;Blagoevgrad;41;Bulgaria
+703;Burgas;41;Bulgaria
+704;Dobrich;41;Bulgaria
+705;Gabrovo;41;Bulgaria
+706;Haskovo;41;Bulgaria
+707;Jambol;41;Bulgaria
+708;Kardzhali;41;Bulgaria
+709;Kustendil;41;Bulgaria
+710;Lovech;41;Bulgaria
+711;Montana;41;Bulgaria
+712;Pazardzhik;41;Bulgaria
+713;Pernik;41;Bulgaria
+714;Pleven;41;Bulgaria
+715;Plovdiv;41;Bulgaria
+716;Razgrad;41;Bulgaria
+717;Ruse;41;Bulgaria
+718;Shumen;41;Bulgaria
+719;Silistra;41;Bulgaria
+720;Sliven;41;Bulgaria
+721;Smoljan;41;Bulgaria
+722;Sofia;41;Bulgaria
+723;Sofia-city;41;Bulgaria
+724;Stara Zagora;41;Bulgaria
+725;Targovishte;41;Bulgaria
+726;Varna;41;Bulgaria
+727;Veliko Tarnovo;41;Bulgaria
+728;Vidin;41;Bulgaria
+729;Vratca;41;Bulgaria
+743;Abim;253;Uganda
+744;Amudat;253;Uganda
+745;Amuru;253;Uganda
+746;Apac;253;Uganda
+747;Budaka;253;Uganda
+748;Bugiri;253;Uganda
+749;Buikwe;253;Uganda
+750;Bukomansimbi;253;Uganda
+751;Bukwo;253;Uganda
+752;Bulambuli;253;Uganda
+753;Buliisa;253;Uganda
+754;Bundibugyo;253;Uganda
+755;Bushenyi;253;Uganda
+756;Buyende;253;Uganda
+757;Butambala;253;Uganda
+758;Iganga;253;Uganda
+759;Kalungu;253;Uganda
+760;Kamuli;253;Uganda
+761;Kapchorwa;253;Uganda
+762;Sheema;253;Uganda
+763;Kitgum;253;Uganda
+764;Kole;253;Uganda
+765;Kotido;253;Uganda
+766;Kween;253;Uganda
+767;Lamwo;253;Uganda
+768;Luuka;253;Uganda
+769;Manafwa;253;Uganda
+770;Masaka;253;Uganda
+771;Masindi;253;Uganda
+772;Moroto;253;Uganda
+773;Nakapiripirit;253;Uganda
+774;Namutumba;253;Uganda
+775;Napak;253;Uganda
+776;Nebbi;253;Uganda
+777;Ngora;253;Uganda
+778;Buhweju;253;Uganda
+779;Ntoroko;253;Uganda
+780;Maracha;253;Uganda
+781;Otuke;253;Uganda
+782;Oyam;253;Uganda
+783;Pader;253;Uganda
+784;Rubirizi;253;Uganda
+785;Sironko;253;Uganda
+786;Soroti;253;Uganda
+787;Zombo;253;Uganda
+788;Bukedea;253;Uganda
+789;Dokolo;253;Uganda
+790;Agago;253;Uganda
+791;Banteay Meanchey;44;Cambodia
+792;Battambang;44;Cambodia
+793;Kampong Cham;44;Cambodia
+794;Kampong Chhnang;44;Cambodia
+795;Kampong Speu;44;Cambodia
+796;Kampong Thom;44;Cambodia
+797;Kampot;44;Cambodia
+798;Kandal;44;Cambodia
+799;Koh Kong;44;Cambodia
+800;Kep;44;Cambodia
+801;Kratie;44;Cambodia
+802;Preah Sihanouk;44;Cambodia
+803;Mondul Kiri;44;Cambodia
+804;Otdar Meanchey;44;Cambodia
+805;Pailin;44;Cambodia
+806;Phnom Penh;44;Cambodia
+807;Preah Vihear;44;Cambodia
+808;Prey Veng;44;Cambodia
+809;Pursat;44;Cambodia
+810;Ratanak Kiri;44;Cambodia
+811;Siem Reap;44;Cambodia
+812;Stung Treng;44;Cambodia
+813;Svay Rieng;44;Cambodia
+814;Takeo;44;Cambodia
+815;Adamaoua;45;Cameroon
+816;Centre;45;Cameroon
+817;Est;45;Cameroon
+818;Extr├¬me - Nord;45;Cameroon
+819;Littoral;45;Cameroon
+820;Nord;45;Cameroon
+821;Nord - Ouest;45;Cameroon
+822;Ouest;45;Cameroon
+823;Sud;45;Cameroon
+824;Sud - Ouest;45;Cameroon
+825;Alberta;46;Canada
+826;British Columbia / Colombie-Britannique;46;Canada
+827;Manitoba;46;Canada
+828;New Brunswick / Nouveau-Brunswick;46;Canada
+829;Newfoundland and Labrador / Terre-Neuve-et-Labrador;46;Canada
+830;Northwest Territories / Territoires du Nord-Ouest;46;Canada
+831;Nova Scotia / Nouvelle-├ëcosse;46;Canada
+832;Nunavut;46;Canada
+833;Ontario;46;Canada
+834;Prince Edward Island / ├Äle-du-Prince-├ëdouard;46;Canada
+835;Quebec / Qu├®bec;46;Canada
+836;Saskatchewan;46;Canada
+837;Yukon;46;Canada
+838;Boa Vista;47;Cape Verde
+839;Brava;47;Cape Verde
+840;Cima;47;Cape Verde
+841;Fogo;47;Cape Verde
+842;Ilheu Branco;47;Cape Verde
+843;Ilheu Raso;47;Cape Verde
+844;Maio;47;Cape Verde
+845;Rombo;47;Cape Verde
+846;Sal;47;Cape Verde
+847;Santa Luzia;47;Cape Verde
+848;Santiago;47;Cape Verde
+849;Santo Antao;47;Cape Verde
+850;Sao Nicolau;47;Cape Verde
+851;Sao Vicente;47;Cape Verde
+852;Alebtong;253;Uganda
+853;Bamingui-Bangoran;49;Central African Republic
+854;Basse-Kotto;49;Central African Republic
+855;Haut-Mbomou;49;Central African Republic
+856;Haute-Kotto;49;Central African Republic
+857;K├®mo;49;Central African Republic
+858;Lobaye;49;Central African Republic
+859;Mamb├®r├®-Kad├®├»;49;Central African Republic
+860;Mbomou;49;Central African Republic
+861;Nana-Gribizi;49;Central African Republic
+862;Nana-Mamb├®r├®;49;Central African Republic
+863;Ombella M'Poko;49;Central African Republic
+864;Ouaka;49;Central African Republic
+865;Ouham;49;Central African Republic
+866;Ouham Pend├®;49;Central African Republic
+867;Sangha-Mba├®r├®;49;Central African Republic
+868;Vakaga;49;Central African Republic
+870;Biltine;50;Chad
+873;Guera;50;Chad
+875;Lac;50;Chad
+876;Logone Occidental;50;Chad
+881;Salamat;50;Chad
+883;Antofagasta;51;Chile
+884;Araucania;51;Chile
+885;Atacama;51;Chile
+886;Aisen del Gral. Carlos Iba├▒ez del Campo;51;Chile
+887;Biobio;51;Chile
+888;Coquimbo;51;Chile
+889;Libertador Gral. Bernardo O'Higgins;51;Chile
+891;Magallanes y Antartica chilena;51;Chile
+892;Maule;51;Chile
+893;Metropolitana;51;Chile
+898;Anhui Sheng;147295;China
+899;Beijing Shi;147295;China
+900;Chongqing Shi;147295;China
+901;Fujian Sheng;147295;China
+902;Gansu Sheng;147295;China
+903;Guangdong Sheng;147295;China
+904;Guangxi Zhuangzu Zizhiqu;147295;China
+905;Guizhou Sheng;147295;China
+906;Hainan Sheng;147295;China
+907;Hebei Sheng;147295;China
+908;Heilongjiang Sheng;147295;China
+909;Henan Sheng;147295;China
+910;Administrative unit not available;33364;Hong Kong, SAR
+911;Hubei Sheng;147295;China
+912;Hunan Sheng;147295;China
+913;Jiangsu Sheng;147295;China
+914;Jiangxi Sheng;147295;China
+915;Jilin Sheng;147295;China
+916;Liaoning Sheng;147295;China
+917;Nei Mongol Zizhiqu;147295;China
+918;Ningxia Huizu Zizhiqu;147295;China
+919;Qinghai Sheng;147295;China
+920;Shaanxi Sheng;147295;China
+921;Shandong Sheng;147295;China
+922;Shanghai Shi;147295;China
+923;Shanxi Sheng;147295;China
+924;Sichuan Sheng;147295;China
+925;Taiwan Sheng;147296;Taiwan
+926;Tianjin Shi;147295;China
+927;Xinjiang Uygur Zizhiqu;147295;China
+928;Xizang Zizhiqu;147295;China
+929;Yunnan Sheng;147295;China
+930;Zhejiang Sheng;147295;China
+931;Administrative unit not available;54;Christmas Island (Aus.)
+932;Administrative unit not available;55;Clipperton Island (Fr.)
+933;Administrative unit not available;56;Cocos (Keeling) Islands (Aus.)
+934;Amazonas;57;Colombia
+935;Antioquia;57;Colombia
+936;Arauca;57;Colombia
+937;Atlantico;57;Colombia
+938;Bolivar;57;Colombia
+939;Boyaca;57;Colombia
+940;Buenaventura;57;Colombia
+941;Caldas;57;Colombia
+942;Caqueta;57;Colombia
+943;Casanare;57;Colombia
+944;Cauca;57;Colombia
+945;Cesar;57;Colombia
+946;Choco;57;Colombia
+947;Cordoba;57;Colombia
+948;Cundinamarca;57;Colombia
+949;Guainia;57;Colombia
+950;Guajira;57;Colombia
+951;Guaviare;57;Colombia
+952;Huila;57;Colombia
+953;Magdalena;57;Colombia
+954;Meta;57;Colombia
+955;Narino;57;Colombia
+956;Norte De Santander;57;Colombia
+957;Putumayo;57;Colombia
+958;Quindio;57;Colombia
+959;Risaralda;57;Colombia
+960;San Andres Y Providencia;57;Colombia
+961;Santander;57;Colombia
+962;Sucre;57;Colombia
+963;Tolima;57;Colombia
+964;Valle Del Cauca;57;Colombia
+965;Vaupes;57;Colombia
+966;Vichada;57;Colombia
+967;Anjouan;58;Comoros
+968;Moheli;58;Comoros
+969;Ngazidja;58;Comoros
+970;Bouenza;59;Congo
+971;Cuvette;59;Congo
+972;Cuvette-Ouest;59;Congo
+974;Lekoumou;59;Congo
+975;Likouala;59;Congo
+976;Niari;59;Congo
+977;Plateaux;59;Congo
+979;Sangha;59;Congo
+980;Administrative unit not available;60;Cook Islands (N.Z.)
+981;Alajuela;61;Costa Rica
+982;Cartago;61;Costa Rica
+983;Guanacaste;61;Costa Rica
+984;Heredia;61;Costa Rica
+985;Limon;61;Costa Rica
+986;Puntarenas;61;Costa Rica
+987;San Jose;61;Costa Rica
+988;Bjelovar-bilogora;62;Croatia
+989;Dubrovnik-neretva;62;Croatia
+990;Grad Zagreb;62;Croatia
+991;Istra;62;Croatia
+992;Karlovac;62;Croatia
+993;Koprivnica-krizevci;62;Croatia
+994;Krapina-zagorje;62;Croatia
+995;Lika-senj;62;Croatia
+996;Medimurje;62;Croatia
+997;Osijek-baranja;62;Croatia
+998;Pozega-slavonija;62;Croatia
+999;Primorje-gorski Kota;62;Croatia
+1000;Sibenik;62;Croatia
+1001;Sisak-moslavina;62;Croatia
+1002;Slavonski Brod-posav;62;Croatia
+1003;Split-dalmatija;62;Croatia
+1004;Varazdin;62;Croatia
+1005;Virovitica-podravina;62;Croatia
+1006;Vukovar-srijem;62;Croatia
+1007;Zadar-knin;62;Croatia
+1008;Zagreb;62;Croatia
+1009;Camaguey;63;Cuba
+1010;Ciego De Avila;63;Cuba
+1011;Cienfuegos;63;Cuba
+1012;Ciudad De La Habana;63;Cuba
+1013;Granma;63;Cuba
+1014;Guantanamo;63;Cuba
+1015;Holguin;63;Cuba
+1016;Isla De La Juventud;63;Cuba
+1017;La Habana;63;Cuba
+1018;Las Tunas;63;Cuba
+1019;Matanzas;63;Cuba
+1020;Pinar Del Rio;63;Cuba
+1021;Sancti Spiritus;63;Cuba
+1022;Santiago De Cuba;63;Cuba
+1023;Villa Clara;63;Cuba
+1030;Jihocesky;65;Czech Republic
+1031;Jihomoravsky;65;Czech Republic
+1032;Praha;65;Czech Republic
+1033;Severocesky;65;Czech Republic
+1034;Severomoravsky;65;Czech Republic
+1035;Stredocesky;65;Czech Republic
+1036;Vychodocesky;65;Czech Republic
+1037;Zapadocesky;65;Czech Republic
+1041;Denguele;66;C├┤te d'Ivoire
+1048;Savanes;66;C├┤te d'Ivoire
+1051;Vallee Du Bandama;66;C├┤te d'Ivoire
+1053;Zanzan;66;C├┤te d'Ivoire
+1054;Chagang-do;67;D. P. R. of Korea
+1055;Kaesong-si;67;D. P. R. of Korea
+1056;Kangwon-do;67;D. P. R. of Korea
+1057;Arua;253;Uganda
+1058;Hamgyong-bukto;67;D. P. R. of Korea
+1059;Hwanghae-bukto;67;D. P. R. of Korea
+1060;P'yongan-bukto;67;D. P. R. of Korea
+1061;P'yongyang-si;67;D. P. R. of Korea
+1062;Hamgyong-namdo;67;D. P. R. of Korea
+1063;Hwanghae-namdo;67;D. P. R. of Korea
+1064;P'yongan-namdo;67;D. P. R. of Korea
+1065;Yanggang-do;67;D. P. R. of Korea
+1066;Bandundu;68;Democratic Republic of Congo
+1067;Bas-Congo;68;Democratic Republic of Congo
+1068;Equateur;68;Democratic Republic of Congo
+1069;Kasai Occidental;68;Democratic Republic of Congo
+1070;Kasai Oriental;68;Democratic Republic of Congo
+1071;Katanga;68;Democratic Republic of Congo
+1072;Kinshasa;68;Democratic Republic of Congo
+1073;Maniema;68;Democratic Republic of Congo
+1074;Nord-Kivu;68;Democratic Republic of Congo
+1075;Orientale;68;Democratic Republic of Congo
+1076;Sud-Kivu;68;Democratic Republic of Congo
+1077;Aarhus;69;Denmark
+1078;Bornholm;69;Denmark
+1079;Frederiksberg;69;Denmark
+1080;Bududa;253;Uganda
+1081;Fyn;69;Denmark
+1082;Buvuma;253;Uganda
+1083;Nordjylland;69;Denmark
+1084;Ribe;69;Denmark
+1085;Ringkoebing;69;Denmark
+1086;Gomba;253;Uganda
+1087;Soenderjylland;69;Denmark
+1088;Storstroem;69;Denmark
+1089;Gulu;253;Uganda
+1090;Vejle;69;Denmark
+1091;Vestsjaelland;69;Denmark
+1092;Viborg;69;Denmark
+1093;Ali Sabieh;70;Djibouti
+1094;Dikhil;70;Djibouti
+1095;Djibouti;70;Djibouti
+1096;Obock;70;Djibouti
+1097;Tadjourah;70;Djibouti
+1098;St. Andrew;71;Dominica
+1099;St. David;71;Dominica
+1100;St. George;71;Dominica
+1101;St. John;71;Dominica
+1102;St. Joseph;71;Dominica
+1103;St. Luke;71;Dominica
+1104;St. Mark;71;Dominica
+1105;St. Patrick;71;Dominica
+1106;St. Paul;71;Dominica
+1107;St. Peter;71;Dominica
+1108;Azua;72;Dominican Republic
+1109;Baoruco;72;Dominican Republic
+1110;Barahona;72;Dominican Republic
+1111;Dajabon;72;Dominican Republic
+1112;Santo Domingo;72;Dominican Republic
+1113;Duarte;72;Dominican Republic
+1114;El Seibo;72;Dominican Republic
+1115;Espaillat;72;Dominican Republic
+1116;Independencia;72;Dominican Republic
+1117;La Altagracia;72;Dominican Republic
+1118;Elias Pina;72;Dominican Republic
+1119;La Romana;72;Dominican Republic
+1120;La Vega;72;Dominican Republic
+1121;Maria Trinidad Sanches;72;Dominican Republic
+1122;Monte Cristi;72;Dominican Republic
+1123;Pedernales;72;Dominican Republic
+1124;Peravia;72;Dominican Republic
+1125;Puerto Plata;72;Dominican Republic
+1126;Salcedo;72;Dominican Republic
+1127;Samana;72;Dominican Republic
+1128;San Cristobal;72;Dominican Republic
+1129;San Juan;72;Dominican Republic
+1130;San Pedro de Macoris;72;Dominican Republic
+1131;Sanchez Ramirez;72;Dominican Republic
+1132;Santiago;72;Dominican Republic
+1133;Santiago Rodriguez;72;Dominican Republic
+1134;Valverde;72;Dominican Republic
+1135;Azuay;73;Ecuador
+1136;Bolivar;73;Ecuador
+1137;Canar;73;Ecuador
+1138;Carchi;73;Ecuador
+1139;Chimborazo;73;Ecuador
+1140;Cotopaxi;73;Ecuador
+1141;El Oro;73;Ecuador
+1142;Esmeraldas;73;Ecuador
+1143;Galapagos;73;Ecuador
+1145;Imbabura;73;Ecuador
+1146;Loja;73;Ecuador
+1147;Los Rios;73;Ecuador
+1148;Manabi;73;Ecuador
+1149;Morona Santiago;73;Ecuador
+1150;Napo;73;Ecuador
+1151;Orellana;73;Ecuador
+1152;Pastaza;73;Ecuador
+1154;Sucumbios;73;Ecuador
+1155;Tungurahua;73;Ecuador
+1156;Zamora Chinchipe;73;Ecuador
+1157;Zona No Delimitada;73;Ecuador
+1184;Ahuachapan;75;El Salvador
+1185;Cabanas;75;El Salvador
+1186;Chalatenango;75;El Salvador
+1187;Cuscatlan;75;El Salvador
+1188;La Libertad;75;El Salvador
+1189;La Paz;75;El Salvador
+1190;La Union;75;El Salvador
+1191;Morazan;75;El Salvador
+1192;San Miguel;75;El Salvador
+1193;San Salvador;75;El Salvador
+1194;San Vicente;75;El Salvador
+1195;Santa Ana;75;El Salvador
+1196;Sonsonate;75;El Salvador
+1197;Usulutan;75;El Salvador
+1198;Annobon;76;Equatorial Guinea
+1199;Bioko Norte;76;Equatorial Guinea
+1200;Bioko Sur;76;Equatorial Guinea
+1201;Centro Sur;76;Equatorial Guinea
+1202;Kientem;76;Equatorial Guinea
+1203;Litoral;76;Equatorial Guinea
+1204;Welenzas;76;Equatorial Guinea
+1205;Anseba;77;Eritrea
+1206;Archipelagos;77;Eritrea
+1207;Debub;77;Eritrea
+1208;Debubawi Keih Bahri;77;Eritrea
+1209;Gash Barka;77;Eritrea
+1210;Maekel;77;Eritrea
+1211;Semenawi Keih Bahri;77;Eritrea
+1212;Harju maakond;78;Estonia
+1213;Hiiu maakond;78;Estonia
+1214;Ida-Viru maakond;78;Estonia
+1215;J├ñrva maakond;78;Estonia
+1216;J├Ágeva maakond;78;Estonia
+1217;L├ñ├ñne-Viru maakond;78;Estonia
+1218;L├ñ├ñne maakond;78;Estonia
+1219;P├ñrnu maakond;78;Estonia
+1220;P├Álva maakond;78;Estonia
+1221;Rapla maakond;78;Estonia
+1222;Saare maakond;78;Estonia
+1223;Tartu maakond;78;Estonia
+1224;Valga maakond;78;Estonia
+1225;Viljandi maakond;78;Estonia
+1226;V├Áru maakond;78;Estonia
+1227;Addis Ababa;79;Ethiopia
+1228;Afar;79;Ethiopia
+1229;Amhara;79;Ethiopia
+1230;Beneshangul Gumu;79;Ethiopia
+1231;Dire Dawa;79;Ethiopia
+1232;Gambela;79;Ethiopia
+1233;Hareri;79;Ethiopia
+1234;Kiboga;253;Uganda
+1235;Kibuku;253;Uganda
+1236;SNNPR;79;Ethiopia
+1237;Tigray;79;Ethiopia
+1238;Administrative unit not available;88;French Southern and Antarctic Lands (Fr.)
+1240;Administrative unit not available;82;Faroe Islands (Den.)
+1241;Kiryandongo;253;Uganda
+1242;Aaland;84;Finland
+1243;Eastern Finland;84;Finland
+1244;Lapland;84;Finland
+1245;Oulu;84;Finland
+1246;Southern Finland;84;Finland
+1247;Western Finland;84;Finland
+1248;Alsace;85;France
+1249;Aquitaine;85;France
+1250;Auvergne;85;France
+1251;Basse-Normandie;85;France
+1252;Bourgogne;85;France
+1253;Bretagne;85;France
+1254;Centre;85;France
+1255;Champagne-Ardenne;85;France
+1256;Corse;85;France
+1257;Franche-Comte;85;France
+1258;Haute-Normandie;85;France
+1259;Ile-de-France;85;France
+1260;Languedoc-Rousillon;85;France
+1261;Kumi;253;Uganda
+1262;Limousin;85;France
+1263;Lorraine;85;France
+1264;Midi-Pyrenees;85;France
+1265;Nord-Pas-de-Calais;85;France
+1266;Pays-de-la-Loire;85;France
+1267;Picardie;85;France
+1268;Poitou-Charentes;85;France
+1269;Provence-Alpes-Cote-d'Azur;85;France
+1270;Rhone-Alpes;85;France
+1271;Cayenne;86;French Guiana
+1272;Saint-laurent-du-maroni;86;French Guiana
+1273;Administrative unit not available;87;French Polynesia (Fr.)
+1274;Administrative unit not available;88;French Southern and Antarctic Lands (Fr.)
+1275;Estuaire;89;Gabon
+1276;Haut-Ogooue;89;Gabon
+1277;Moyen-Ogooue;89;Gabon
+1278;Ngounie;89;Gabon
+1279;Nyanga;89;Gabon
+1280;Ogooue-Ivindo;89;Gabon
+1281;Ogooue-lolo;89;Gabon
+1282;Ogooue-Maritime;89;Gabon
+1283;Woleu-Ntem;89;Gabon
+1285;Central River;90;The Gambia
+1287;Lower River;90;The Gambia
+1288;North Bank;90;The Gambia
+1289;Upper River;90;The Gambia
+1290;West Coast;90;The Gambia
+1291;Deir al Balah;91;West Bank and Gaza
+1292;Gaza;91;West Bank and Gaza
+1293;Jabalya;91;West Bank and Gaza
+1294;Khan Yunis;91;West Bank and Gaza
+1295;Rafah;91;West Bank and Gaza
+1296;Abkhazia Aut. Rep.;92;Georgia
+1297;Adjara Aut. Rep.;92;Georgia
+1298;Guria;92;Georgia
+1299;Imereti;92;Georgia
+1300;Kakheti;92;Georgia
+1301;Kvemo Kartli;92;Georgia
+1302;Mtskheta-Mtianeti;92;Georgia
+1303;Racha-Lechkhumi and Kvemo (lower) Svaneti;92;Georgia
+1304;Samergelo and Zemo (upper) Svaneti;92;Georgia
+1305;Samtskhe-Javakheti;92;Georgia
+1306;Shida Kartli;92;Georgia
+1307;Tbilisi;92;Georgia
+1308;Baden-Wuerttemberg;93;Germany
+1309;Bayern;93;Germany
+1310;Berlin;93;Germany
+1311;Brandenburg;93;Germany
+1312;Bremen;93;Germany
+1313;Hamburg;93;Germany
+1314;Hessen;93;Germany
+1315;Mecklenburg-Vorpommern;93;Germany
+1316;Niedersachsen;93;Germany
+1317;Nordrhein-Westfalen;93;Germany
+1318;Rheinland-Pfalz;93;Germany
+1319;Saarland;93;Germany
+1320;Sachsen;93;Germany
+1321;Sachsen-Anhalt;93;Germany
+1322;Schleswig-Holstein;93;Germany
+1323;Thueringen;93;Germany
+1324;Ashanti;94;Ghana
+1325;Brong Ahafo;94;Ghana
+1326;Central;94;Ghana
+1327;Eastern;94;Ghana
+1328;Greater Accra;94;Ghana
+1329;Northern;94;Ghana
+1330;Upper East;94;Ghana
+1331;Upper West;94;Ghana
+1332;Volta;94;Ghana
+1333;Western;94;Ghana
+1334;Administrative unit not available;95;Gibraltar (U.K.)
+1335;Administrative unit not available;88;French Southern and Antarctic Lands (Fr.)
+1336;Anatoliki Makedonia Kai Thraki;97;Greece
+1337;Attiki;97;Greece
+1338;Dytiki Ellada;97;Greece
+1339;Dytiki Makedonia;97;Greece
+1340;Ionioi Nisoi;97;Greece
+1341;Ipeiros;97;Greece
+1342;Kentriki Makedonia;97;Greece
+1343;Kriti;97;Greece
+1344;Kyankwanzi;253;Uganda
+1345;Peloponnisos;97;Greece
+1346;Sterea Ellada;97;Greece
+1347;Thessalia;97;Greece
+1348;Voreio Aigaio;97;Greece
+1349;Nordgronland;98;Greenland (Den.)
+1350;Ostgronland;98;Greenland (Den.)
+1351;Vestgronland;98;Greenland (Den.)
+1352;Name Unknown;99;Grenada
+1353;St. Andrew's;99;Grenada
+1354;St. George's;99;Grenada
+1355;St. John's;99;Grenada
+1356;St. Mark's;99;Grenada
+1357;St. Patrick's;99;Grenada
+1358;Administrative unit not available;100;Guadalupe
+1359;Administrative unit not available;101;Guam (U.S.)
+1360;Mitooma;253;Uganda
+1361;Kyegegwa;253;Uganda
+1362;Kyenjojo;253;Uganda
+1363;Mpigi;253;Uganda
+1364;Nwoya;253;Uganda
+1365;Serere;253;Uganda
+1366;Lwengo;253;Uganda
+1367;Mukono;253;Uganda
+1368;Namayingo;253;Uganda
+1369;Pallisa;253;Uganda
+1370;Lira;253;Uganda
+1371;Rakai;253;Uganda
+1372;Lyantonde;253;Uganda
+1373;Kaolack;217;Senegal
+1374;Kedougou;217;Senegal
+1375;Kolda;217;Senegal
+1376;Sedhiou;217;Senegal
+1377;Tambacounda;217;Senegal
+1378;Kaffrine;217;Senegal
+1385;Bafata;105;Guinea-Bissau
+1386;Biombo;105;Guinea-Bissau
+1387;Bolama/bijagos;105;Guinea-Bissau
+1388;Cacheu;105;Guinea-Bissau
+1389;Gabu;105;Guinea-Bissau
+1390;Oio;105;Guinea-Bissau
+1391;Quinara;105;Guinea-Bissau
+1392;Sector Autonomo De Bissau;105;Guinea-Bissau
+1393;Tombali;105;Guinea-Bissau
+1398;Barima Waini (region N┬░1);107;Guyana
+1399;Cuyuni/mazaruni (region N┬░7);107;Guyana
+1400;Demerara Mahaica (region N┬░4);107;Guyana
+1401;East Berbice/corentyne (region N┬░6);107;Guyana
+1402;Essequibo Islands/west Demerara (region N┬░3);107;Guyana
+1403;Mahaica Berbice (region N┬░5);107;Guyana
+1404;Pomeroon/supenaam (region N┬░2;107;Guyana
+1405;Potaro/siparuni (region N┬░8);107;Guyana
+1406;Upper Demerara/berbice (region N┬░10);107;Guyana
+1407;Upper Takutu/upper Essequibo (region N┬░9);107;Guyana
+1409;Artibonite;108;Haiti
+1410;Centre;108;Haiti
+1412;Nord;108;Haiti
+1413;Nord Est;108;Haiti
+1414;Nord Ouest;108;Haiti
+1415;Ouest;108;Haiti
+1416;Sud;108;Haiti
+1417;Sud Est;108;Haiti
+1418;Administrative unit not available;109;Heard Island and McDonald Islands (Aus.)
+1419;Administrative unit not available;110;Vatican City
+1420;Atlantida;111;Honduras
+1421;Choluteca;111;Honduras
+1422;Colon;111;Honduras
+1423;Comayagua;111;Honduras
+1424;Copan;111;Honduras
+1425;Cortes;111;Honduras
+1426;Francisco Morazan;111;Honduras
+1427;Gracias A Dios;111;Honduras
+1428;Intibuca;111;Honduras
+1429;Islas De Bahia;111;Honduras
+1430;La Paz;111;Honduras
+1431;Lempira;111;Honduras
+1432;Name Unknown;111;Honduras
+1433;Ocotepeque;111;Honduras
+1434;Olancho;111;Honduras
+1435;Paraiso;111;Honduras
+1436;Santa Barbara;111;Honduras
+1437;Valle;111;Honduras
+1438;Yoro;111;Honduras
+1439;Administrative unit not available;112;Howland Island (U.S.)
+1440;Bacs-kiskun;113;Hungary
+1441;Baranya;113;Hungary
+1442;Bekes;113;Hungary
+1443;Borsod-abauj-zemplen;113;Hungary
+1444;Budapest;113;Hungary
+1445;Csongrad;113;Hungary
+1446;Fejer;113;Hungary
+1447;Gyor-moson-sopron;113;Hungary
+1448;Hajdu-bihar;113;Hungary
+1449;Heves;113;Hungary
+1450;Jasz-nagykun-szolnok;113;Hungary
+1451;Komarom-esztergom;113;Hungary
+1452;Nograd;113;Hungary
+1453;Pest;113;Hungary
+1454;Somogy;113;Hungary
+1455;Szabolcs-szatmar-bereg;113;Hungary
+1456;Tolna;113;Hungary
+1457;Vas;113;Hungary
+1458;Veszprem;113;Hungary
+1459;Zala;113;Hungary
+1460;Arnes;114;Iceland
+1461;Austur-baroastrandar;114;Iceland
+1462;Austur-hunavatns;114;Iceland
+1463;Austur-skaftafells;114;Iceland
+1464;Borgarfjaroar;114;Iceland
+1465;Dala;114;Iceland
+1466;Eyjafjaroar;114;Iceland
+1467;Gullbringu;114;Iceland
+1468;Kjosar;114;Iceland
+1469;Myra;114;Iceland
+1470;Nordhurland Eystra;114;Iceland
+1471;Norour-isafjaroar;114;Iceland
+1472;Norour-m├╣la;114;Iceland
+1473;Norour-pingeyjar;114;Iceland
+1474;Rang├írvalla;114;Iceland
+1475;Skagafjaroar;114;Iceland
+1476;Snaefellsnes- Og Hna;114;Iceland
+1477;Stranda;114;Iceland
+1478;Suour-m├╣la;114;Iceland
+1479;Suour-pingeyjar;114;Iceland
+1480;Vestur-baroastrandar;114;Iceland
+1481;Vestur-hunavatns;114;Iceland
+1482;Vestur-isafjaroar;114;Iceland
+1483;Vestur-skaftafells;114;Iceland
+1484;Andaman and Nicobar;115;India
+1485;Andhra Pradesh;115;India
+1487;Assam;115;India
+1489;Delhi;115;India
+1490;Goa;115;India
+1491;Gujarat;115;India
+1492;Haryana;115;India
+1493;Himachal Pradesh;115;India
+1494;Karnataka;115;India
+1495;Kerala;115;India
+1496;Lakshadweep;115;India
+1498;Maharashtra;115;India
+1500;Manipur;115;India
+1501;Meghalaya;115;India
+1502;Mizoram;115;India
+1503;Nagaland;115;India
+1504;Orissa;115;India
+1505;Punjab;115;India
+1506;Rajasthan;115;India
+1507;Sikkim;115;India
+1508;Tamil Nadu;115;India
+1509;Tripura;115;India
+1511;West Bengal;115;India
+1512;Nangroe Aceh Darussalam;116;Indonesia
+1513;Bali;116;Indonesia
+1514;Bengkulu;116;Indonesia
+1515;Daerah Istimewa Yogyakarta;116;Indonesia
+1516;Dki Jakarta;116;Indonesia
+1518;Jambi;116;Indonesia
+1520;Jawa Tengah;116;Indonesia
+1521;Jawa Timur;116;Indonesia
+1522;Kalimantan Barat;116;Indonesia
+1523;Kalimantan Selatan;116;Indonesia
+1524;Kalimantan Tengah;116;Indonesia
+1525;Kalimantan Timur;116;Indonesia
+1526;Lampung;116;Indonesia
+1528;Nusatenggara Barat;116;Indonesia
+1529;Nusatenggara Timur;116;Indonesia
+1532;Sulawesi Tengah;116;Indonesia
+1533;Sulawesi Tenggara;116;Indonesia
+1535;Sumatera Barat;116;Indonesia
+1537;Sumatera Utara;116;Indonesia
+1539;Kermanshah;117;Islamic Republic of Iran
+1540;Bushehr;117;Islamic Republic of Iran
+1541;Chaharmahal-o bakhtiyar;117;Islamic Republic of Iran
+1542;East Azarbayejan;117;Islamic Republic of Iran
+1543;Esfahan;117;Islamic Republic of Iran
+1544;Fars;117;Islamic Republic of Iran
+1545;Gilan;117;Islamic Republic of Iran
+1546;Hamedan;117;Islamic Republic of Iran
+1547;Khorasan;117;Islamic Republic of Iran
+1548;Hormozgan;117;Islamic Republic of Iran
+1549;Ilam;117;Islamic Republic of Iran
+1550;Kerman;117;Islamic Republic of Iran
+1551;Khuzestan;117;Islamic Republic of Iran
+1552;Kohgiluyeh va boyerahma;117;Islamic Republic of Iran
+1553;Kordestan;117;Islamic Republic of Iran
+1554;Administrative unit not available;117;Islamic Republic of Iran
+1555;Lorestan;117;Islamic Republic of Iran
+1556;Markazi;117;Islamic Republic of Iran
+1557;Mazandaran;117;Islamic Republic of Iran
+1558;Semnan;117;Islamic Republic of Iran
+1559;Sistan-o baluchestan;117;Islamic Republic of Iran
+1560;Tehran;117;Islamic Republic of Iran
+1561;West Azarbayejan;117;Islamic Republic of Iran
+1562;Yazd;117;Islamic Republic of Iran
+1563;Zanjan;117;Islamic Republic of Iran
+1564;Anbar;118;Iraq
+1565;Basrah;118;Iraq
+1566;Muthanna;118;Iraq
+1567;Qadissiya;118;Iraq
+1568;Najaf;118;Iraq
+1569;Erbil;118;Iraq
+1570;Kirkuk;118;Iraq
+1571;Babil;118;Iraq
+1572;Baghdad;118;Iraq
+1573;Thi-Qar;118;Iraq
+1574;Dahuk;118;Iraq
+1575;Diyala;118;Iraq
+1576;Kerbala;118;Iraq
+1577;Missan;118;Iraq
+1578;Ninewa;118;Iraq
+1579;Salah al-Din;118;Iraq
+1580;Sulaymaniyah;118;Iraq
+1581;Wassit;118;Iraq
+1582;Carlow;119;Ireland
+1583;Cavan;119;Ireland
+1584;Clare;119;Ireland
+1585;Cork;119;Ireland
+1586;Donegal;119;Ireland
+1587;Dublin;119;Ireland
+1588;Galway;119;Ireland
+1589;Kerry;119;Ireland
+1590;Kildare;119;Ireland
+1591;Kilkenny;119;Ireland
+1592;Laois;119;Ireland
+1593;Leitrim;119;Ireland
+1594;Limerick;119;Ireland
+1595;Longford;119;Ireland
+1596;Louth;119;Ireland
+1597;Mayo;119;Ireland
+1598;Meath;119;Ireland
+1599;Monaghan;119;Ireland
+1600;Munster;119;Ireland
+1601;Offaly;119;Ireland
+1602;Roscommon;119;Ireland
+1603;Sligo;119;Ireland
+1604;Tipperary;119;Ireland
+1605;Waterford;119;Ireland
+1606;Westmeath;119;Ireland
+1607;Wexford;119;Ireland
+1608;Wicklow;119;Ireland
+1610;Central District;121;Israel
+1611;Haifa;121;Israel
+1612;Jerusalem;121;Israel
+1613;Northern;121;Israel
+1614;Southern District;121;Israel
+1615;Tel Aviv;121;Israel
+1616;Abruzzi;122;Italy
+1617;Basilicata;122;Italy
+1618;Calabria;122;Italy
+1619;Campania;122;Italy
+1620;Emilia-romagna;122;Italy
+1621;Friuli-venezia Giulia;122;Italy
+1622;Lazio;122;Italy
+1623;Liguria;122;Italy
+1624;Lombardia;122;Italy
+1625;Marche;122;Italy
+1626;Molise;122;Italy
+1627;Piemonte;122;Italy
+1628;Puglia;122;Italy
+1629;Sardegna;122;Italy
+1630;Sicilia;122;Italy
+1631;Toscana;122;Italy
+1632;Trentino-alto Adige;122;Italy
+1633;Umbria;122;Italy
+1634;Valle D'aosta;122;Italy
+1635;Veneto;122;Italy
+1636;Clarendon;123;Jamaica
+1637;Hanover;123;Jamaica
+1638;Manchester;123;Jamaica
+1639;Portland;123;Jamaica
+1640;Saint Andrew And Kingston;123;Jamaica
+1641;Saint Ann;123;Jamaica
+1642;Saint Catherine;123;Jamaica
+1643;Saint Elizabeth;123;Jamaica
+1644;Saint James;123;Jamaica
+1645;Saint Mary;123;Jamaica
+1646;Saint Thomas;123;Jamaica
+1647;Trelawny;123;Jamaica
+1648;Westmoreland;123;Jamaica
+1651;Aiti;126;Japan
+1652;Akita;126;Japan
+1653;Aomori;126;Japan
+1654;Ehime;126;Japan
+1655;Hukui;126;Japan
+1656;Hukuoka;126;Japan
+1657;Hukusima;126;Japan
+1658;Gifu;126;Japan
+1659;Gunma;126;Japan
+1660;Hirosima;126;Japan
+1661;Hokkaidoo;126;Japan
+1662;Hyoogo;126;Japan
+1663;Ibaraki;126;Japan
+1664;Isikawa;126;Japan
+1665;Iwate;126;Japan
+1666;Kagawa;126;Japan
+1667;Kagosima;126;Japan
+1668;Kanagawa;126;Japan
+1669;Kooti;126;Japan
+1670;Kumamoto;126;Japan
+1671;Kyooto;126;Japan
+1672;Mie;126;Japan
+1673;Miyagi;126;Japan
+1674;Miyazaki;126;Japan
+1675;Nagano;126;Japan
+1676;Nagasaki;126;Japan
+1677;Nara;126;Japan
+1678;Niigata;126;Japan
+1679;Ooita;126;Japan
+1680;Okayama;126;Japan
+1681;Okinawa;126;Japan
+1682;Oosaka;126;Japan
+1683;Saga;126;Japan
+1684;Saitama;126;Japan
+1685;Siga;126;Japan
+1686;Simane;126;Japan
+1687;Sizuoka;126;Japan
+1688;Totigi;126;Japan
+1689;Tokusima;126;Japan
+1690;Tokyo;126;Japan
+1691;Tottori;126;Japan
+1692;Toyama;126;Japan
+1693;Chiba;126;Japan
+1694;Wakayama;126;Japan
+1695;Yamagata;126;Japan
+1696;Yamaguti;126;Japan
+1697;Yamanasi;126;Japan
+1698;Administrative unit not available;127;Jarvis Island (U.S.)
+1700;Administrative unit not available;129;Johnston Atoll (U.S.)
+1701;Ajloon;130;Jordan
+1702;Balqa;130;Jordan
+1703;Aqaba;130;Jordan
+1704;Karak;130;Jordan
+1705;Amman;130;Jordan
+1706;Tafiela;130;Jordan
+1707;Irbid;130;Jordan
+1708;Jarash;130;Jordan
+1709;Ma'an;130;Jordan
+1710;Madaba;130;Jordan
+1711;Mafraq;130;Jordan
+1712;Zarqa;130;Jordan
+1713;Administrative unit not available;88;French Southern and Antarctic Lands (Fr.)
+1714;Akmolinskaya;132;Kazakhstan
+1715;Aktyubinskaya;132;Kazakhstan
+1716;Almatinskaya;132;Kazakhstan
+1717;Atyrauskaya;132;Kazakhstan
+1718;Jambylslkaya;132;Kazakhstan
+1719;Karagandinskaya;132;Kazakhstan
+1720;Kustanayskaya;132;Kazakhstan
+1721;Kyzylordinskaya;132;Kazakhstan
+1723;Administrative unit not available;132;Kazakhstan
+1724;Mangistauskaya;132;Kazakhstan
+1725;Pavlodarskaya;132;Kazakhstan
+1726;Severo-kazachstanskaya;132;Kazakhstan
+1727;Vostochno-kazachstanskaya;132;Kazakhstan
+1728;Yujno-kazachstanskaya;132;Kazakhstan
+1729;Zapadno-kazachstanskaya;132;Kazakhstan
+1738;Administrative unit not available;134;Kingman Reef (U.S.)
+1739;Administrative unit not available;135;Kiribati
+1741;Al Farwaniyah;137;Kuwait
+1742;Al Ahmadi;137;Kuwait
+1743;Al Jahrah;137;Kuwait
+1744;Al Kuwayt;137;Kuwait
+1745;Hawalli;137;Kuwait
+1746;Batken;138;Kyrgyz Republic
+1748;Jalal-Abad;138;Kyrgyz Republic
+1749;Naryn;138;Kyrgyz Republic
+1750;Osh;138;Kyrgyz Republic
+1751;Talas;138;Kyrgyz Republic
+1752;Ysyk-Kol;138;Kyrgyz Republic
+1753;Attapu;139;Lao People's Democratic Republic
+1754;Bokeo;139;Lao People's Democratic Republic
+1755;Bolikhamxai;139;Lao People's Democratic Republic
+1756;Champasak;139;Lao People's Democratic Republic
+1757;Houaphan;139;Lao People's Democratic Republic
+1758;Khammouan;139;Lao People's Democratic Republic
+1759;Louangphabang;139;Lao People's Democratic Republic
+1760;Louang-Namtha;139;Lao People's Democratic Republic
+1761;Oudomxai;139;Lao People's Democratic Republic
+1762;Phongsali;139;Lao People's Democratic Republic
+1763;Salavan;139;Lao People's Democratic Republic
+1764;Savannakhet;139;Lao People's Democratic Republic
+1765;Xaignabouli;139;Lao People's Democratic Republic
+1766;Xekong;139;Lao People's Democratic Republic
+1768;Vientiane capital;139;Lao People's Democratic Republic
+1771;Aizkraukles;140;Latvia
+1772;Aluksnes;140;Latvia
+1773;Balvu;140;Latvia
+1774;Bauskas;140;Latvia
+1775;Cesu;140;Latvia
+1776;Daugavpils;140;Latvia
+1777;Dobeles;140;Latvia
+1778;Gulbenes;140;Latvia
+1779;Jekabpils;140;Latvia
+1780;Jelgavas;140;Latvia
+1781;Kraslavas;140;Latvia
+1782;Kuldigas;140;Latvia
+1783;Liepajas;140;Latvia
+1784;Limbazu;140;Latvia
+1785;Ludzas;140;Latvia
+1786;Madonas;140;Latvia
+1787;Ogres;140;Latvia
+1788;Preilu;140;Latvia
+1789;Rezeknes;140;Latvia
+1790;Rigas;140;Latvia
+1791;Saldus;140;Latvia
+1792;Talsu;140;Latvia
+1793;Tukuma;140;Latvia
+1794;Valkas;140;Latvia
+1795;Valmieras;140;Latvia
+1796;Ventspils;140;Latvia
+1797;Bekaa;141;Lebanon
+1798;Beirut;141;Lebanon
+1799;North;141;Lebanon
+1800;South;141;Lebanon
+1801;Mount Lebanon;141;Lebanon
+1802;Nabatiye;141;Lebanon
+1803;Berea;142;Lesotho
+1804;Butha Buthe;142;Lesotho
+1805;Leribe;142;Lesotho
+1806;Mafeteng;142;Lesotho
+1807;Maseru;142;Lesotho
+1808;Mohale's Hoek;142;Lesotho
+1809;Mokhotlong;142;Lesotho
+1810;Qacha's Nek;142;Lesotho
+1811;Quthing;142;Lesotho
+1812;Thaba Tseka;142;Lesotho
+1814;Bomi;144;Liberia
+1815;Bong;144;Liberia
+1816;Gbarpolu;144;Liberia
+1817;Grand Bassa;144;Liberia
+1818;Grand Cape Mount;144;Liberia
+1819;Grand Gedeh;144;Liberia
+1820;Grand Kru;144;Liberia
+1821;Lofa;144;Liberia
+1822;Margibi;144;Liberia
+1823;Maryland;144;Liberia
+1824;Montserrado;144;Liberia
+1825;Nimba;144;Liberia
+1826;Rivercess;144;Liberia
+1827;River Gee;144;Liberia
+1828;Sinoe;144;Liberia
+1829;Ajdabiya (agedabia);145;Libya
+1830;Al Aziziyah;145;Libya
+1831;Al Fatah;145;Libya
+1832;Al Jabal Al Akhdar;145;Libya
+1833;Al Jufrah;145;Libya
+1834;Al Khoms;145;Libya
+1835;Al Kufrah;145;Libya
+1836;Ash Shati;145;Libya
+1837;Awbari (ubari);145;Libya
+1838;Az Zawia (azzawiya);145;Libya
+1839;Banghazi;145;Libya
+1840;Darnah;145;Libya
+1841;Ghadamis;145;Libya
+1842;Gharyan;145;Libya
+1843;Misurata;145;Libya
+1844;Murzuq;145;Libya
+1845;Nuqat Al Khams;145;Libya
+1846;Sabha;145;Libya
+1847;Sawfajjin (sofuljeen);145;Libya
+1848;Surt (sirte);145;Libya
+1849;Tarhunah;145;Libya
+1850;Tripoli (tarabulus);145;Libya
+1851;Tubruq (tobruk);145;Libya
+1852;Yafran (yefren);145;Libya
+1853;Zeleitin (zliten);145;Libya
+1854;Balzers;146;Liechtenstein
+1855;Eschen;146;Liechtenstein
+1856;Gamprin;146;Liechtenstein
+1857;Mauren;146;Liechtenstein
+1859;Planken;146;Liechtenstein
+1860;Ruggell;146;Liechtenstein
+1861;Schaan;146;Liechtenstein
+1862;Schellenberg;146;Liechtenstein
+1863;Triesen;146;Liechtenstein
+1864;Triesenberg;146;Liechtenstein
+1865;Vaduz;146;Liechtenstein
+1866;Alytaus;147;Lithuania
+1867;Kauno;147;Lithuania
+1868;Klaipedos;147;Lithuania
+1869;Marijampoles;147;Lithuania
+1870;Panevezio;147;Lithuania
+1871;Siauliu;147;Lithuania
+1872;Taurages;147;Lithuania
+1873;Telsiu;147;Lithuania
+1874;Utenos;147;Lithuania
+1875;Vilniaus;147;Lithuania
+1876;Diekirch;148;Luxembourg
+1877;Grevenmacher;148;Luxembourg
+1878;Luxembourg;148;Luxembourg
+1879;Administrative unit not available;149;Macau, SAR
+1886;Ilha Da Madeira (madeira);151;Madeira Islands (Por.)
+1887;Ilha De Porto Santo (madeira);151;Madeira Islands (Por.)
+1888;Central Region;152;Malawi
+1889;Northern Region;152;Malawi
+1890;Southern Region;152;Malawi
+1891;Johor;153;Malaysia
+1892;Kedah;153;Malaysia
+1893;Kelantan;153;Malaysia
+1894;Kuala Lumpur;153;Malaysia
+1895;Melaka;153;Malaysia
+1896;Negeri Sembilan;153;Malaysia
+1897;Pahang;153;Malaysia
+1898;Perak;153;Malaysia
+1899;Perlis;153;Malaysia
+1900;Pulau Pinang;153;Malaysia
+1901;Sabah;153;Malaysia
+1902;Sarawak;153;Malaysia
+1903;Selangor;153;Malaysia
+1904;Terengganu;153;Malaysia
+1905;Alifu Alifu;154;Maldives
+1906;Alifu Dhaalu;154;Maldives
+1907;Baa;154;Maldives
+1908;Dhaalu;154;Maldives
+1909;Faafu;154;Maldives
+1910;Gaafu Alifu;154;Maldives
+1911;Gaafu Dhaalu;154;Maldives
+1913;Haa Alifu;154;Maldives
+1914;Haa Dhaalu;154;Maldives
+1915;Kaafu;154;Maldives
+1916;Laamu;154;Maldives
+1917;Lhaviyani;154;Maldives
+1918;Male';154;Maldives
+1919;Meemu;154;Maldives
+1920;Noonu;154;Maldives
+1921;Raa;154;Maldives
+1922;Seenu;154;Maldives
+1923;Shaviyani;154;Maldives
+1924;Thaa;154;Maldives
+1925;Vaavu;154;Maldives
+1926;Bamako;155;Mali
+1927;Gao;155;Mali
+1928;Kayes;155;Mali
+1929;Kidal;155;Mali
+1930;Koulikoro;155;Mali
+1931;Mopti;155;Mali
+1932;Segou;155;Mali
+1933;Sikasso;155;Mali
+1934;Tombouctou;155;Mali
+1935;Attard;156;Malta
+1936;Balzan;156;Malta
+1937;Birgu;156;Malta
+1938;Birkirkara;156;Malta
+1939;Birzebbugia;156;Malta
+1940;Bormla;156;Malta
+1941;Dingli;156;Malta
+1942;Fgura;156;Malta
+1943;Floriana;156;Malta
+1944;Fontana;156;Malta
+1945;Ghajnsielem;156;Malta
+1946;Gharb;156;Malta
+1947;Gharghur;156;Malta
+1948;Ghasri;156;Malta
+1949;Ghaxaq;156;Malta
+1950;Gudja;156;Malta
+1951;Gzira;156;Malta
+1952;Hamrun;156;Malta
+1953;Iklin;156;Malta
+1954;Isla;156;Malta
+1955;Kalkara;156;Malta
+1956;Kercem;156;Malta
+1957;Kirkop;156;Malta
+1958;Lija;156;Malta
+1959;Luqa;156;Malta
+1960;Marsa;156;Malta
+1961;Marsascala;156;Malta
+1962;Marsaxlokk;156;Malta
+1963;Mdina;156;Malta
+1964;Mellieha;156;Malta
+1965;Mgarr;156;Malta
+1966;Mosta;156;Malta
+1967;Mqabba;156;Malta
+1968;Msida;156;Malta
+1969;Munxar;156;Malta
+1970;Nadur;156;Malta
+1971;Naxxar;156;Malta
+1972;Paola;156;Malta
+1973;Pembroke;156;Malta
+1974;Pieta;156;Malta
+1975;Qala;156;Malta
+1976;Qormi;156;Malta
+1977;Qrendi;156;Malta
+1978;Rabat (malta);156;Malta
+1979;Rabat (victoria);156;Malta
+1980;Safi;156;Malta
+1981;San Giljan;156;Malta
+1982;San Gwann;156;Malta
+1983;San Lawrenz;156;Malta
+1984;San Pawl Ii-bahar;156;Malta
+1985;Sannat;156;Malta
+1986;Santa Lucija;156;Malta
+1987;Santa Venera;156;Malta
+1988;Siggiewi;156;Malta
+1989;Sliema;156;Malta
+1990;Swieqi;156;Malta
+1991;Ta' Xbiex;156;Malta
+1992;Tarxien;156;Malta
+1993;Valletta;156;Malta
+1994;Xaghra;156;Malta
+1995;Xewkija;156;Malta
+1996;Xghajra;156;Malta
+1997;Zabbar;156;Malta
+1998;Zebbug (gozo);156;Malta
+1999;Zebbug (malta);156;Malta
+2000;Zejtun;156;Malta
+2001;Zurrieq;156;Malta
+2002;Administrative unit not available;157;Marshall Islands
+2004;Adrar;159;Mauritania
+2005;Assaba;159;Mauritania
+2006;Brakna;159;Mauritania
+2007;Dakhlet-Nouadhibou;159;Mauritania
+2008;Gorgol;159;Mauritania
+2009;Guidimakha;159;Mauritania
+2010;Hodh Ech Chargi;159;Mauritania
+2011;Hodh El Gharbi;159;Mauritania
+2012;Inchiri;159;Mauritania
+2013;Nouakchott;159;Mauritania
+2014;Tagant;159;Mauritania
+2015;Tiris-Zemmour;159;Mauritania
+2016;Trarza;159;Mauritania
+2017;Administrative unit not available;160;Mauritius
+2018;Black River;160;Mauritius
+2019;Flacq;160;Mauritius
+2020;Grand Port;160;Mauritius
+2021;Moka;160;Mauritius
+2022;Pamplemousses;160;Mauritius
+2023;Plaines Wilhems;160;Mauritius
+2024;Port Louis;160;Mauritius
+2025;Riviere Du Rempart;160;Mauritius
+2026;Savanne;160;Mauritius
+2027;Administrative unit not available;161;Mayotte
+2028;Aguascalientes;162;Mexico
+2029;Baja California;162;Mexico
+2030;Baja California Sur;162;Mexico
+2031;Campeche;162;Mexico
+2032;Chiapas;162;Mexico
+2033;Chihuahua;162;Mexico
+2034;Coahuila;162;Mexico
+2035;Colima;162;Mexico
+2036;Distrito Federal;162;Mexico
+2037;Durango;162;Mexico
+2038;Guanajuato;162;Mexico
+2039;Guerrero;162;Mexico
+2040;Hidalgo;162;Mexico
+2041;Jalisco;162;Mexico
+2042;Mexico;162;Mexico
+2043;Michoacan;162;Mexico
+2044;Morelos;162;Mexico
+2045;Nayarit;162;Mexico
+2046;Nuevo Leon;162;Mexico
+2047;Oaxaca;162;Mexico
+2048;Puebla;162;Mexico
+2049;Queretaro;162;Mexico
+2050;Quintana Roo;162;Mexico
+2051;San Luis Potosi;162;Mexico
+2052;Sinaloa;162;Mexico
+2053;Sonora;162;Mexico
+2054;Tabasco;162;Mexico
+2055;Tamaulipas;162;Mexico
+2056;Tlaxcala;162;Mexico
+2057;Veracruz;162;Mexico
+2058;Yucatan;162;Mexico
+2059;Zacatecas;162;Mexico
+2060;Administrative unit not available;163;Federated States of Micronesia
+2061;Administrative unit not available;164;Midway Island (U.S.)
+2062;Balti;165;Moldova
+2063;Cahul;165;Moldova
+2064;Chisinau;165;Moldova
+2066;Dubasari;165;Moldova
+2067;Edinet;165;Moldova
+2068;Gagauzia;165;Moldova
+2069;Lapusna;165;Moldova
+2070;Orhei;165;Moldova
+2071;Soroca;165;Moldova
+2072;Tighina;165;Moldova
+2073;Ungheni;165;Moldova
+2074;Administrative unit not available;166;Monaco
+2075;Arxangai;167;Mongolia
+2076;Bayan-O'lgii;167;Mongolia
+2077;Bayanxongor;167;Mongolia
+2078;Bulgan;167;Mongolia
+2079;Darxan-Uul;167;Mongolia
+2081;Dornod;167;Mongolia
+2082;Dornogovi;167;Mongolia
+2083;Dundgovi;167;Mongolia
+2084;Govisu'mber;167;Mongolia
+2085;Govi-Altai;167;Mongolia
+2086;Xentii;167;Mongolia
+2087;Xovd;167;Mongolia
+2088;Xo'vsgol;167;Mongolia
+2089;O'mnogovi;167;Mongolia
+2090;Orxon;167;Mongolia
+2091;O'vorxangai;167;Mongolia
+2092;Selenge;167;Mongolia
+2093;Su'xbaatar;167;Mongolia
+2094;To'v;167;Mongolia
+2095;Ulaanbaatar;167;Mongolia
+2096;Uvs;167;Mongolia
+2097;Zavxan;167;Mongolia
+2098;Brodericks;168;Montserrat (U.K.)
+2099;Central;168;Montserrat (U.K.)
+2100;East;168;Montserrat (U.K.)
+2101;North;168;Montserrat (U.K.)
+2102;Plymouth;168;Montserrat (U.K.)
+2103;Salem;168;Montserrat (U.K.)
+2104;South;168;Montserrat (U.K.)
+2107;Mekn├¿s - Tafilalet;169;Morocco
+2109;Oriental;169;Morocco
+2112;Cabo Delgado;170;Mozambique
+2113;Gaza;170;Mozambique
+2114;Inhambane;170;Mozambique
+2115;Manica;170;Mozambique
+2118;Nampula;170;Mozambique
+2119;Niassa;170;Mozambique
+2120;Sofala;170;Mozambique
+2121;Tete;170;Mozambique
+2122;Zambezia;170;Mozambique
+2123;Rakhine;171;Myanmar
+2125;Chin;171;Myanmar
+2126;Ayeyawaddy;171;Myanmar
+2127;Kachin;171;Myanmar
+2128;Kayin;171;Myanmar
+2129;Kayar;171;Myanmar
+2130;Magway;171;Myanmar
+2131;Mandalay;171;Myanmar
+2132;Mon;171;Myanmar
+2133;Sagaing;171;Myanmar
+2135;Taninthayi;171;Myanmar
+2136;Yangon;171;Myanmar
+2137;Caprivi;172;Namibia
+2138;Erongo;172;Namibia
+2139;Hardap;172;Namibia
+2140;Karas;172;Namibia
+2141;Kavango;172;Namibia
+2142;Khomas;172;Namibia
+2143;Kunene;172;Namibia
+2144;Ohangwena;172;Namibia
+2145;Omaheke;172;Namibia
+2146;Omusati;172;Namibia
+2147;Oshana;172;Namibia
+2148;Oshikoto;172;Namibia
+2149;Otjozondjupa;172;Namibia
+2150;Administrative unit not available;173;Nauru
+2151;Administrative unit not available;174;Navassa Island (U.S.)
+2152;Central;175;Nepal
+2153;Eastern;175;Nepal
+2154;Far Western;175;Nepal
+2155;Mid Western;175;Nepal
+2156;Western;175;Nepal
+2158;Drenthe;177;Netherlands
+2159;Flevoland;177;Netherlands
+2160;Friesland;177;Netherlands
+2161;Gelderland;177;Netherlands
+2162;Groningen;177;Netherlands
+2163;Limburg;177;Netherlands
+2164;Noord-brabant;177;Netherlands
+2165;Noord-holland;177;Netherlands
+2166;Overijssel;177;Netherlands
+2167;Utrecht;177;Netherlands
+2168;Zeeland;177;Netherlands
+2169;Zuid-holland;177;Netherlands
+2170;Administrative unit not available;178;New Caledonia (Fr.)
+2171;Auckland;179;New Zealand
+2172;Bay Of Plenty;179;New Zealand
+2173;Canterbury;179;New Zealand
+2174;East Cape;179;New Zealand
+2175;Hawke's Bay;179;New Zealand
+2176;Nelson-marlborough;179;New Zealand
+2177;Northland;179;New Zealand
+2178;Otago;179;New Zealand
+2179;Southland;179;New Zealand
+2180;Taranaki;179;New Zealand
+2181;Waikato;179;New Zealand
+2182;Wanganui-manawatu;179;New Zealand
+2183;Wellington;179;New Zealand
+2184;Westland;179;New Zealand
+2185;Atlantico Norte;180;Nicaragua
+2186;Atlantico Sur;180;Nicaragua
+2187;Boaco;180;Nicaragua
+2188;Carazo;180;Nicaragua
+2189;Chinandega;180;Nicaragua
+2190;Chontales;180;Nicaragua
+2191;Esteli;180;Nicaragua
+2192;Granada;180;Nicaragua
+2193;Jinotega;180;Nicaragua
+2194;Leon;180;Nicaragua
+2195;Madriz;180;Nicaragua
+2196;Managua;180;Nicaragua
+2197;Masaya;180;Nicaragua
+2198;Matagalpa;180;Nicaragua
+2199;Nueva Segovia;180;Nicaragua
+2200;Rio San Juan;180;Nicaragua
+2201;Rivas;180;Nicaragua
+2202;Agadez;181;Niger
+2203;Diffa;181;Niger
+2204;Dosso;181;Niger
+2205;Maradi;181;Niger
+2206;Niamey;181;Niger
+2207;Tahoua;181;Niger
+2208;Tillaberi;181;Niger
+2209;Zinder;181;Niger
+2211;Adamawa;182;Nigeria
+2212;Akwa Ibom;182;Nigeria
+2213;Anambra;182;Nigeria
+2215;Benue;182;Nigeria
+2216;Borno;182;Nigeria
+2217;Cross River;182;Nigeria
+2218;Delta;182;Nigeria
+2219;Edo;182;Nigeria
+2221;Abuja;182;Nigeria
+2222;Imo;182;Nigeria
+2223;Jigawa;182;Nigeria
+2224;Kaduna;182;Nigeria
+2225;Kano;182;Nigeria
+2226;Katsina;182;Nigeria
+2227;Kebbi;182;Nigeria
+2228;Kogi;182;Nigeria
+2229;Kwara;182;Nigeria
+2230;Lagos;182;Nigeria
+2231;Niger;182;Nigeria
+2232;Ogun;182;Nigeria
+2234;Osun;182;Nigeria
+2235;Oyo;182;Nigeria
+2239;Taraba;182;Nigeria
+2240;Yobe;182;Nigeria
+2241;Administrative unit not available;183;Niue (N.Z.)
+2242;Administrative unit not available;184;Norfolk Island (Aus.)
+2243;Administrative unit not available;185;Northern Mariana Islands (U.S.)
+2244;Akershus;186;Norway
+2245;Aust-agder;186;Norway
+2246;Buskerud;186;Norway
+2247;Finnmark;186;Norway
+2248;Hedmark;186;Norway
+2249;Hordaland;186;Norway
+2250;Moere Og Romsdal;186;Norway
+2251;Nord-troendelag;186;Norway
+2252;Nordland;186;Norway
+2253;Oestfold;186;Norway
+2254;Oppland;186;Norway
+2255;Oslo;186;Norway
+2256;Rogaland;186;Norway
+2257;Soer-Troendelag;186;Norway
+2258;Sogn og Fjordane;186;Norway
+2259;Telemark;186;Norway
+2260;Troms;186;Norway
+2261;Vest-Agder;186;Norway
+2262;Vestfold;186;Norway
+2263;A Dakhliya;187;Oman
+2264;A Sharqiya;187;Oman
+2265;Al Batnah;187;Oman
+2266;Al Dhahira;187;Oman
+2267;Al Wusta;187;Oman
+2268;Dhofar;187;Oman
+2269;Musandam;187;Oman
+2270;Muscat;187;Oman
+2271;Name Unknown;187;Oman
+2272;Balochistan;188;Pakistan
+2273;Federally Administered Tribal Areas;188;Pakistan
+2274;Islamabad;188;Pakistan
+2275;North-West Frontier;188;Pakistan
+2276;Punjab;188;Pakistan
+2277;Sindh;188;Pakistan
+2278;Administrative unit not available;189;Palau
+2279;Administrative unit not available;190;Palmyra Atoll (U.S.)
+2282;Cocl├®;191;Panama
+2283;Col├│n;191;Panama
+2284;Kuna Yala;191;Panama
+2286;Herrera;191;Panama
+2287;Los Santos;191;Panama
+2288;Panam├í;191;Panama
+2290;Central;192;Papua New Guinea
+2291;Chimbu;192;Papua New Guinea
+2292;East New Britain;192;Papua New Guinea
+2293;East Sepik;192;Papua New Guinea
+2294;Eastern Highlands;192;Papua New Guinea
+2295;Enga;192;Papua New Guinea
+2296;Gulf;192;Papua New Guinea
+2297;Madang;192;Papua New Guinea
+2298;Manus;192;Papua New Guinea
+2299;Milne Bay;192;Papua New Guinea
+2300;Morobe;192;Papua New Guinea
+2301;National Capital District;192;Papua New Guinea
+2302;New Ireland;192;Papua New Guinea
+2303;Northern;192;Papua New Guinea
+2304;Northern Solomons;192;Papua New Guinea
+2305;Southern Highlands;192;Papua New Guinea
+2306;West New Britain;192;Papua New Guinea
+2307;West Sepik;192;Papua New Guinea
+2308;Western;192;Papua New Guinea
+2309;Western Highlands;192;Papua New Guinea
+2311;Alto Paraguay;194;Paraguay
+2312;Alto Parana;194;Paraguay
+2313;Amambay;194;Paraguay
+2314;Boqueron;194;Paraguay
+2315;Caaguazu;194;Paraguay
+2316;Caazapa;194;Paraguay
+2317;Canindeyu;194;Paraguay
+2318;Central;194;Paraguay
+2319;Concepcion;194;Paraguay
+2320;Cordillera;194;Paraguay
+2321;Guaira;194;Paraguay
+2322;Itapua;194;Paraguay
+2323;Misiones;194;Paraguay
+2324;Neembucu;194;Paraguay
+2325;Paraguari;194;Paraguay
+2326;Presidente Hayes;194;Paraguay
+2327;San Pedro;194;Paraguay
+2328;Amazonas;195;Peru
+2329;Ancash;195;Peru
+2330;Apur├¡mac;195;Peru
+2331;Arequipa;195;Peru
+2332;Ayacucho;195;Peru
+2333;Cajamarca;195;Peru
+2334;Callao;195;Peru
+2335;Cusco;195;Peru
+2336;Huancavelica;195;Peru
+2337;Hu├ínuco;195;Peru
+2338;Ica;195;Peru
+2339;Jun├¡n;195;Peru
+2340;La Libertad;195;Peru
+2341;Lambayeque;195;Peru
+2342;Lima;195;Peru
+2343;Loreto;195;Peru
+2344;Madre de Dios;195;Peru
+2345;Moquegua;195;Peru
+2346;Pasco;195;Peru
+2347;Piura;195;Peru
+2348;Puno;195;Peru
+2349;San Mart├¡n;195;Peru
+2350;Tacna;195;Peru
+2351;Tumbes;195;Peru
+2352;Ucayali;195;Peru
+2354;Cordillera Administrative region (CAR);196;Philippines
+2355;National Capital region (NCR);196;Philippines
+2356;Region I (Ilocos region);196;Philippines
+2357;Region II (Cagayan Valley);196;Philippines
+2361;Region V (Bicol region);196;Philippines
+2362;Region VI (Western Visayas);196;Philippines
+2363;Region VII (Central Visayas);196;Philippines
+2364;Region VIII (Eastern Visayas);196;Philippines
+2368;Region XIII (Caraga);196;Philippines
+2369;Administrative unit not available;197;Pitcairn Islands (U.K.)
+2370;Dolnoslaskie;198;Poland
+2371;Kujawsko-Pomorskie;198;Poland
+2372;Lodzkie;198;Poland
+2373;Lubeiskie;198;Poland
+2374;Lubuskie;198;Poland
+2375;Malopolske;198;Poland
+2376;Mazowieckie;198;Poland
+2377;Opolskie;198;Poland
+2378;Podkarpackie;198;Poland
+2379;Podlaskie;198;Poland
+2380;Pomorskie;198;Poland
+2381;Slaskie;198;Poland
+2382;Swietokrzyskie;198;Poland
+2383;Warminsko-Mazurskie;198;Poland
+2384;Wielkopolskie;198;Poland
+2385;Zachodnio-Pomorskie;198;Poland
+2386;Aveiro;199;Portugal
+2387;Beja;199;Portugal
+2388;Braga;199;Portugal
+2389;Braganca;199;Portugal
+2390;Castelo Branco;199;Portugal
+2391;Coimbra;199;Portugal
+2392;Evora;199;Portugal
+2393;Faro;199;Portugal
+2394;Guarda;199;Portugal
+2395;Ilha Da Graciosa (acores);74578;Azores Islands (Por.)
+2397;Ilha Das Flores (acores);74578;Azores Islands (Por.)
+2398;Ilha De Santa Maria (acores);74578;Azores Islands (Por.)
+2399;Ilha De Sao Jorge (acores);74578;Azores Islands (Por.)
+2400;Ilha De Sao Miguel (acores);74578;Azores Islands (Por.)
+2401;Ilha Do Corvo (acores);74578;Azores Islands (Por.)
+2402;Ilha Do Faial (acores);74578;Azores Islands (Por.)
+2403;Ilha Do Pico (acores);74578;Azores Islands (Por.)
+2404;Ilha Terceira (acores);74578;Azores Islands (Por.)
+2405;Leiria;199;Portugal
+2406;Lisboa;199;Portugal
+2407;Portalegre;199;Portugal
+2408;Porto;199;Portugal
+2409;Santarem;199;Portugal
+2410;Setubal;199;Portugal
+2411;Viana Do Castelo;199;Portugal
+2412;Vila Real;199;Portugal
+2413;Viseu;199;Portugal
+2414;Aguadilla;200;Puerto Rico (U.S.)
+2415;Arecibo;200;Puerto Rico (U.S.)
+2416;Bayamon;200;Puerto Rico (U.S.)
+2417;Guayama;200;Puerto Rico (U.S.)
+2418;Humacao;200;Puerto Rico (U.S.)
+2419;Mayaguez;200;Puerto Rico (U.S.)
+2420;Ponce;200;Puerto Rico (U.S.)
+2421;San Juan;200;Puerto Rico (U.S.)
+2422;Ad Dawhah;201;Qatar
+2423;Al Ghuwayriyah;201;Qatar
+2424;Al Jumayliyah;201;Qatar
+2425;Al Khawr;201;Qatar
+2426;Al-wakrah;201;Qatar
+2427;Ar Rayyan;201;Qatar
+2428;Ash Shamal;201;Qatar
+2429;Jarayan Al Batnah;201;Qatar
+2430;Umm Salal;201;Qatar
+2431;Cheju-do;202;Republic of Korea
+2432;Chollabuk-do;202;Republic of Korea
+2433;Chollanam-do;202;Republic of Korea
+2434;Chungchongbuk-do;202;Republic of Korea
+2435;Chungchongnam-do;202;Republic of Korea
+2436;Inchon;202;Republic of Korea
+2437;Kang-won-do;202;Republic of Korea
+2438;Kwangju;202;Republic of Korea
+2439;Kyonggi-do;202;Republic of Korea
+2440;Kyongsangbuk-do;202;Republic of Korea
+2441;Kyongsangnam-do;202;Republic of Korea
+2442;Pusan;202;Republic of Korea
+2443;Seoul;202;Republic of Korea
+2444;Taegu;202;Republic of Korea
+2445;Taejon;202;Republic of Korea
+2446;Alba;203;Romania
+2447;Arad;203;Romania
+2448;Arges;203;Romania
+2449;Bacau;203;Romania
+2450;Bihor;203;Romania
+2451;Bistrita-nasaud;203;Romania
+2452;Botosani;203;Romania
+2453;Braila;203;Romania
+2454;Brasov;203;Romania
+2455;Bucuresti;203;Romania
+2456;Buzau;203;Romania
+2457;Calarasi;203;Romania
+2458;Caras-severin;203;Romania
+2459;Cluj;203;Romania
+2460;Constanta;203;Romania
+2461;Covasna;203;Romania
+2462;Dimbovita;203;Romania
+2463;Dolj;203;Romania
+2464;Galati;203;Romania
+2465;Giurgiu;203;Romania
+2466;Gorj;203;Romania
+2467;Harghita;203;Romania
+2468;Hunedoara;203;Romania
+2469;Ialomita;203;Romania
+2470;Iasi;203;Romania
+2471;Maramures;203;Romania
+2472;Mehedinti;203;Romania
+2473;Mures;203;Romania
+2474;Neamt;203;Romania
+2475;Olt;203;Romania
+2476;Prahova;203;Romania
+2477;Salaj;203;Romania
+2478;Satu Mare;203;Romania
+2479;Sibiu;203;Romania
+2480;Suceava;203;Romania
+2481;Teleorman;203;Romania
+2482;Timis;203;Romania
+2483;Tulcea;203;Romania
+2484;Vaslui;203;Romania
+2485;Vilcea;203;Romania
+2486;Vrancea;203;Romania
+2487;Adygeya Rep.;204;Russian Federation
+2488;Aginskiy Buryatskiy A. Okrug;204;Russian Federation
+2489;Altay Rep.;204;Russian Federation
+2490;Altayskiy Kray;204;Russian Federation
+2491;Amurskaya Oblast;204;Russian Federation
+2492;Arkhangelskaya Oblast;204;Russian Federation
+2493;Astrakhanskaya Oblast;204;Russian Federation
+2494;Bashkortostan Rep.;204;Russian Federation
+2495;Belgorodskaya Oblast;204;Russian Federation
+2496;Bryanskaya Oblast;204;Russian Federation
+2497;Buryatiya Rep.;204;Russian Federation
+2498;Chechnya Rep.;204;Russian Federation
+2499;Chelyabinskaya Oblast;204;Russian Federation
+2500;Chitinskaya Oblast;204;Russian Federation
+2501;Chukotskiy Okrug;204;Russian Federation
+2502;Chuvashiya Rep.;204;Russian Federation
+2503;Dagestan Rep.;204;Russian Federation
+2504;Evenkiyskiy Okrug;204;Russian Federation
+2505;Ingushetiya Rep.;204;Russian Federation
+2506;Irkutskaya Oblast;204;Russian Federation
+2507;Ivanovskaya Oblast;204;Russian Federation
+2508;Kabardino-balkariya Rep.;204;Russian Federation
+2509;Kaliningradskaya Oblast;204;Russian Federation
+2510;Kalmykiya Rep.;204;Russian Federation
+2511;Kaluzhskaya Oblast;204;Russian Federation
+2512;Kamchatskaya Oblast;204;Russian Federation
+2513;Karatchayevo-cherkesiya Rep.;204;Russian Federation
+2514;Karelya Rep.;204;Russian Federation
+2515;Kemerovskaya Oblast;204;Russian Federation
+2516;Khabarovskiy Kray;204;Russian Federation
+2517;Khakasiya Rep.;204;Russian Federation
+2518;Khanty-mansyiskiy Okrug;204;Russian Federation
+2519;Kirovskaya Oblast;204;Russian Federation
+2520;Komi Rep.;204;Russian Federation
+2521;Komi-permyatskiy Okrug;204;Russian Federation
+2522;Koryakskiy Okrug;204;Russian Federation
+2523;Kostromskaya Oblast;204;Russian Federation
+2524;Krasnodarskiy Kray;204;Russian Federation
+2525;Krasnoyarskiy Kray;204;Russian Federation
+2526;Kurganskaya Oblast;204;Russian Federation
+2527;Kurskaya Oblast;204;Russian Federation
+2528;Administrative unit not available;204;Russian Federation
+2529;Leningradskaya Oblast;204;Russian Federation
+2530;Lipetskaya Oblast;204;Russian Federation
+2531;Magadanskaya Oblast;204;Russian Federation
+2532;Mariy-el Rep.;204;Russian Federation
+2533;Mordoviya Rep.;204;Russian Federation
+2534;Moskovskaya Oblast;204;Russian Federation
+2535;Moskva;204;Russian Federation
+2536;Murmanskaya Oblast;204;Russian Federation
+2537;Name Unknown;204;Russian Federation
+2538;Nenetskiy Okrug;204;Russian Federation
+2539;Nizhegorodskaya Oblast;204;Russian Federation
+2540;Novgorodskaya Oblast;204;Russian Federation
+2541;Novosibirskaya Oblast;204;Russian Federation
+2542;Omskaya Oblast;204;Russian Federation
+2543;Orenburgskaya Oblast;204;Russian Federation
+2544;Orlovskaya Oblast;204;Russian Federation
+2545;Penzenskaya Oblast;204;Russian Federation
+2546;Permskaya Oblast;204;Russian Federation
+2547;Primorskiy Kray;204;Russian Federation
+2548;Pskovskaya Oblast;204;Russian Federation
+2549;Rostovskaya Oblast;204;Russian Federation
+2550;Ryazanskaya Oblast;204;Russian Federation
+2551;Sakha Rep.;204;Russian Federation
+2552;Sakhalinskaya Oblast;204;Russian Federation
+2553;Samarskaya Oblast;204;Russian Federation
+2554;Sankt-peterburg;204;Russian Federation
+2555;Saratovskaya Oblast;204;Russian Federation
+2556;Severnaya Osetiya-alaniya Rep.;204;Russian Federation
+2557;Smolenskaya Oblast;204;Russian Federation
+2558;Stavropolskiy Kray;204;Russian Federation
+2559;Sverdlovskaya Oblast;204;Russian Federation
+2560;Tambovskaya Oblast;204;Russian Federation
+2561;Tatarstan Rep.;204;Russian Federation
+2562;Taymyrskiy Okrug;204;Russian Federation
+2563;Tomskaya Oblast;204;Russian Federation
+2564;Tulskaya Oblast;204;Russian Federation
+2565;Tverskaya Oblast;204;Russian Federation
+2566;Tyumenskaya Oblast;204;Russian Federation
+2567;Tyva Rep.;204;Russian Federation
+2568;Udmurtiya Rep.;204;Russian Federation
+2569;Ulyanovskaya Oblast;204;Russian Federation
+2570;Ustordynskiy Buryatskiy Okrug;204;Russian Federation
+2571;Vladimirskaya Oblast;204;Russian Federation
+2572;Volgogradskaya Oblast;204;Russian Federation
+2573;Vologodskaya Oblast;204;Russian Federation
+2574;Voronezhskaya Oblast;204;Russian Federation
+2575;Yamalo-nenetskiy Okrug;204;Russian Federation
+2576;Yaroslavskaya Oblast;204;Russian Federation
+2577;Yevreyskaya A. Oblast;204;Russian Federation
+2590;Arrondissement_du_vent;206;R├®union
+2591;Arrondissement_souse_le_vent;206;R├®union
+2593;Christ Church Nichola Town;208;Saint Kitts and Nevis
+2594;Saint Anne Sandy Point;208;Saint Kitts and Nevis
+2595;Saint George Basseterre;208;Saint Kitts and Nevis
+2596;Saint George Gingerland;208;Saint Kitts and Nevis
+2597;Saint James Windward;208;Saint Kitts and Nevis
+2598;Saint John Capisterre;208;Saint Kitts and Nevis
+2599;Saint John Figtree;208;Saint Kitts and Nevis
+2600;Saint Mary Cayon;208;Saint Kitts and Nevis
+2601;Saint Paul Capisterre;208;Saint Kitts and Nevis
+2602;Saint Paul Charlestown;208;Saint Kitts and Nevis
+2603;Saint Peter Basseterre;208;Saint Kitts and Nevis
+2604;Saint Thomas Lowland;208;Saint Kitts and Nevis
+2605;Saint Thomas Middle Island;208;Saint Kitts and Nevis
+2606;Trinity Palmetto Point;208;Saint Kitts and Nevis
+2607;Area Under National Administra;209;Saint Lucia
+2608;Region Number 1;209;Saint Lucia
+2609;Region Number 2;209;Saint Lucia
+2610;Region Number 3;209;Saint Lucia
+2611;Region Number 4;209;Saint Lucia
+2612;Region Number 5;209;Saint Lucia
+2613;Region Number 6;209;Saint Lucia
+2614;Region Number 7;209;Saint Lucia
+2615;Region Number 8;209;Saint Lucia
+2618;Administrative unit not available;212;Samoa
+2619;Administrative unit not available;213;San Marino
+2620;Principe;214;S├úo Tom├® and Pr├¡ncipe
+2621;Sao Tome;214;S├úo Tom├® and Pr├¡ncipe
+2622;Asir;215;Saudi Arabia
+2623;Baha;215;Saudi Arabia
+2624;Eastern Province;215;Saudi Arabia
+2625;Hail;215;Saudi Arabia
+2626;Jawf;215;Saudi Arabia
+2627;Jizan;215;Saudi Arabia
+2628;Madinah;215;Saudi Arabia
+2629;Makkah;215;Saudi Arabia
+2630;Najran;215;Saudi Arabia
+2631;Northern Frontier;215;Saudi Arabia
+2632;Quassim;215;Saudi Arabia
+2633;Riyad;215;Saudi Arabia
+2634;Tabuk;215;Saudi Arabia
+2636;Dakar;217;Senegal
+2644;Thies;217;Senegal
+2645;Ziguinchor;217;Senegal
+2654;Eastern;221;Sierra Leone
+2655;Northern;221;Sierra Leone
+2656;Southern;221;Sierra Leone
+2657;Western Area;221;Sierra Leone
+2658;Ang Mo Kio-cheng San;222;Singapore
+2659;Bukit Timah;222;Singapore
+2660;Central Singapore;222;Singapore
+2661;Hougang;222;Singapore
+2662;Marine Parade;222;Singapore
+2663;Northeast;222;Singapore
+2664;Potong Pasir;222;Singapore
+2665;Sembawang-hong Kah;222;Singapore
+2666;Tanjong Pagar;222;Singapore
+2667;Banska Bystrica;223;Slovak Republic
+2668;Bratislava;223;Slovak Republic
+2669;Kosice;223;Slovak Republic
+2670;Nitra;223;Slovak Republic
+2671;Presov;223;Slovak Republic
+2672;Trencin;223;Slovak Republic
+2673;Trnava;223;Slovak Republic
+2674;Zilna;223;Slovak Republic
+2675;Gorenjska;224;Slovenia
+2676;Goriska;224;Slovenia
+2677;Jugovzodna Slovenija;224;Slovenia
+2678;Koroska;224;Slovenia
+2679;Notranjsko-kraska;224;Slovenia
+2680;Obalno-kraska;224;Slovenia
+2681;Osrednjeslovenska;224;Slovenia
+2682;Podravska;224;Slovenia
+2683;Pomurska;224;Slovenia
+2684;Savinjska;224;Slovenia
+2685;Spodnjeposavska;224;Slovenia
+2686;Zasavska;224;Slovenia
+2687;Administrative unit not available;225;Solomon Islands
+2688;Awdal;226;Somalia
+2689;Bakool;226;Somalia
+2690;Bari;226;Somalia
+2691;Bay;226;Somalia
+2692;Banadir;226;Somalia
+2693;Galgaduud;226;Somalia
+2694;Gedo;226;Somalia
+2695;Hiraan;226;Somalia
+2696;Juba Hoose;226;Somalia
+2697;Shabelle Hoose;226;Somalia
+2698;Juba Dhexe;226;Somalia
+2699;Shabelle Dhexe;226;Somalia
+2700;Mudug;226;Somalia
+2701;Nugaal;226;Somalia
+2702;Sanaag;226;Somalia
+2703;Sool;226;Somalia
+2704;Togdheer;226;Somalia
+2705;Woqooyi Galbeed;226;Somalia
+2707;Free State;227;South Africa
+2708;Gauteng;227;South Africa
+2714;Western Cape;227;South Africa
+2715;Administrative unit not available;228;South Georgia and the South Sandwich Islands (U.K.)
+2716;Andaluc├¡a;229;Spain
+2717;Arag├│n;229;Spain
+2718;Principado de Asturias;229;Spain
+2719;Illes Balears;229;Spain
+2720;Canarias;229;Spain
+2721;Cantabria;229;Spain
+2722;Castilla y Le├│n;229;Spain
+2723;Castilla-La Mancha;229;Spain
+2724;Catalu├▒a/Catalunya;229;Spain
+2725;Ciudad Aut├│noma de Ceuta;229;Spain
+2726;Comunitat Valenciana;229;Spain
+2727;Extremadura;229;Spain
+2728;Galicia;229;Spain
+2729;Comunidad de Madrid;229;Spain
+2730;Ciudad Aut├│noma de Melilla;229;Spain
+2731;Regi├│n de Murcia;229;Spain
+2732;Comunidad Foral de Navarra;229;Spain
+2733;Pa├¡s Vasco/Euskadi;229;Spain
+2734;La Rioja;229;Spain
+2736;Central;231;Sri Lanka
+2737;Eastern;231;Sri Lanka
+2738;North Central;231;Sri Lanka
+2739;North Western;231;Sri Lanka
+2740;Northern;231;Sri Lanka
+2741;Sabaragamuwa;231;Sri Lanka
+2742;Southern;231;Sri Lanka
+2743;Uva;231;Sri Lanka
+2744;Western;231;Sri Lanka
+2745;Al Jazeera;6;Sudan
+2746;El Buheyrat;74;South Sudan
+2747;Unity;74;South Sudan
+2748;Central Equatoria;74;South Sudan
+2749;Blue Nile;6;Sudan
+2750;Eastern Equatoria;74;South Sudan
+2751;Jonglei;74;South Sudan
+2753;Khartoum;6;Sudan
+2754;Northern Bahr El Ghazal;74;South Sudan
+2755;Northern;6;Sudan
+2757;Northern Darfur;6;Sudan
+2761;Nile;6;Sudan
+2762;Sennar;6;Sudan
+2764;Southern Darfur;6;Sudan
+2765;Warab;74;South Sudan
+2766;Western Bahr El Ghazal;74;South Sudan
+2768;Western Equatoria;74;South Sudan
+2769;Western Darfur;6;Sudan
+2770;White Nile;6;Sudan
+2771;Brokopondo;233;Suriname
+2772;Commewijne;233;Suriname
+2773;Coronie;233;Suriname
+2774;Marowijne;233;Suriname
+2775;Nickerie;233;Suriname
+2776;Para;233;Suriname
+2777;Paramaribo;233;Suriname
+2778;Saramacca;233;Suriname
+2779;Sipaliwini;233;Suriname
+2780;Wanica;233;Suriname
+2781;Administrative unit not available;234;Svalbard and Jan Mayen (Nor.)
+2782;Hhohho;235;Swaziland
+2783;Lubombo;235;Swaziland
+2784;Manzini;235;Swaziland
+2785;Shiselweni;235;Swaziland
+2786;Blekinge Laen;236;Sweden
+2787;Dalarnas Laen;236;Sweden
+2788;Gaevleborgs Laen;236;Sweden
+2789;Gotlands Laen;236;Sweden
+2790;Hallands Laen;236;Sweden
+2791;Jaemtlands Laen;236;Sweden
+2792;Joenkoepings Laen;236;Sweden
+2793;Kalmar Laen;236;Sweden
+2794;Kronobergs Laen;236;Sweden
+2795;Norrbottens Laen;236;Sweden
+2796;Oerebro Laen;236;Sweden
+2797;Oestergoetlands Laen;236;Sweden
+2798;Skaane Laen;236;Sweden
+2799;Soedermanlands Laen;236;Sweden
+2800;Stockholms Laen;236;Sweden
+2801;Uppsala Laen;236;Sweden
+2802;Vaermlands Laen;236;Sweden
+2803;Vaesterbottens Laen;236;Sweden
+2804;Vaesternorrlands Laen;236;Sweden
+2805;Vaestmanlands Laen;236;Sweden
+2806;Vaestra Goetalands Laen;236;Sweden
+2807;Aargau;237;Switzerland
+2808;Appenzell Ausser-rhoden;237;Switzerland
+2809;Appenzell Inner-rhoden;237;Switzerland
+2810;Basel-landschaft;237;Switzerland
+2811;Basel-stadt;237;Switzerland
+2812;Bern;237;Switzerland
+2813;Fribourg;237;Switzerland
+2814;Geneve;237;Switzerland
+2815;Glarus;237;Switzerland
+2816;Graubunden;237;Switzerland
+2817;Jura;237;Switzerland
+2818;Luzern;237;Switzerland
+2819;Neuchatel;237;Switzerland
+2820;Nidwalden;237;Switzerland
+2821;Obwalden;237;Switzerland
+2822;Sankt Gallen;237;Switzerland
+2823;Schaffhausen;237;Switzerland
+2824;Schwyz;237;Switzerland
+2825;Solothurn;237;Switzerland
+2826;Thurgau;237;Switzerland
+2827;Ticino;237;Switzerland
+2828;Uri;237;Switzerland
+2829;Valais;237;Switzerland
+2830;Vaud;237;Switzerland
+2831;Zug;237;Switzerland
+2832;Zurich;237;Switzerland
+2833;Al_Qunaytirah;238;Syrian Arab Republic
+2834;Aleppo;238;Syrian Arab Republic
+2835;As_Suweida;238;Syrian Arab Republic
+2836;City_Damascus;238;Syrian Arab Republic
+2837;Damascus;238;Syrian Arab Republic
+2838;Dara;238;Syrian Arab Republic
+2839;Dayr_Az_Zor;238;Syrian Arab Republic
+2840;Hama;238;Syrian Arab Republic
+2841;Hassakeh;238;Syrian Arab Republic
+2842;Homs;238;Syrian Arab Republic
+2843;Idleb;238;Syrian Arab Republic
+2844;Lattakia;238;Syrian Arab Republic
+2845;Raqqa;238;Syrian Arab Republic
+2846;Tartous;238;Syrian Arab Republic
+2847;Badakhshoni Kuni;239;Tajikistan
+2848;Khatlon;239;Tajikistan
+2849;Sogd;239;Tajikistan
+2850;Tadzhikistan Territories;239;Tajikistan
+2851;Amnat Charoen;240;Thailand
+2852;Ang Thong;240;Thailand
+2853;Bangkok;240;Thailand
+2854;Buriram;240;Thailand
+2855;Chachoengsao;240;Thailand
+2856;Chainat;240;Thailand
+2857;Chaiyaphum;240;Thailand
+2858;Chanthaburi;240;Thailand
+2859;Chiang Mai;240;Thailand
+2860;Chiang Rai;240;Thailand
+2861;Chonburi;240;Thailand
+2862;Chumphon;240;Thailand
+2863;Kalasin;240;Thailand
+2864;Kampaeng Phet;240;Thailand
+2865;Kanchanaburi;240;Thailand
+2866;Khon Kaen;240;Thailand
+2867;Krabi;240;Thailand
+2868;Lampang;240;Thailand
+2869;Lamphun;240;Thailand
+2870;Loei;240;Thailand
+2871;Lopburi;240;Thailand
+2872;Mae Hong Son;240;Thailand
+2873;Maha Sarakham;240;Thailand
+2874;Mukdahan;240;Thailand
+2875;Nakhon Nayok;240;Thailand
+2876;Nakhon Pathom;240;Thailand
+2877;Nakhon Phanom;240;Thailand
+2878;Nakhon Ratchasima;240;Thailand
+2879;Nakhon Sawan;240;Thailand
+2880;Nakhon Si Thammarat;240;Thailand
+2881;Nan;240;Thailand
+2882;Narathiwat;240;Thailand
+2883;Nong Bua Lamphu;240;Thailand
+2884;Nong Khai;240;Thailand
+2885;Nonthaburi;240;Thailand
+2886;Pathum Thani;240;Thailand
+2887;Pattani;240;Thailand
+2888;Phachinburi;240;Thailand
+2889;Phangnga;240;Thailand
+2890;Phatthalung;240;Thailand
+2891;Phayao;240;Thailand
+2892;Phetchabun;240;Thailand
+2893;Phetchaburi;240;Thailand
+2894;Phichit;240;Thailand
+2895;Phitsanulok;240;Thailand
+2896;Phra Nakhon Si Ayudhya;240;Thailand
+2897;Phrae;240;Thailand
+2898;Phuket;240;Thailand
+2899;Prachuap Khilikhan;240;Thailand
+2900;Ranong;240;Thailand
+2901;Ratchaburi;240;Thailand
+2902;Rayong;240;Thailand
+2903;Roi Et;240;Thailand
+2904;Sa Kaeo;240;Thailand
+2905;Sakon Nakhon;240;Thailand
+2906;Samut Prakarn;240;Thailand
+2907;Samut Sakhon;240;Thailand
+2908;Samut Songkham;240;Thailand
+2909;Saraburi;240;Thailand
+2910;Satun;240;Thailand
+2911;Si Saket;240;Thailand
+2912;Singburi;240;Thailand
+2913;Songkhla;240;Thailand
+2914;Sukhothai;240;Thailand
+2915;Suphanburi;240;Thailand
+2916;Surat Thani;240;Thailand
+2917;Surin;240;Thailand
+2918;Tak;240;Thailand
+2919;Trad;240;Thailand
+2920;Trang;240;Thailand
+2921;Ubon Ratchathani;240;Thailand
+2922;Udon Thani;240;Thailand
+2923;Uthai Thani;240;Thailand
+2924;Uttaradit;240;Thailand
+2925;Yala;240;Thailand
+2926;Yasothon;240;Thailand
+2927;Berovo;241;FYR of Macedonia
+2928;Bitola;241;FYR of Macedonia
+2929;Brod;241;FYR of Macedonia
+2930;Debar;241;FYR of Macedonia
+2931;Delcevo;241;FYR of Macedonia
+2932;Demir Hisar;241;FYR of Macedonia
+2933;Gevgelija;241;FYR of Macedonia
+2934;Gostivar;241;FYR of Macedonia
+2935;Kavadarci;241;FYR of Macedonia
+2936;Kicevo;241;FYR of Macedonia
+2937;Kocani;241;FYR of Macedonia
+2938;Kratovo;241;FYR of Macedonia
+2939;Kriva Palanka;241;FYR of Macedonia
+2940;Krusevo;241;FYR of Macedonia
+2941;Kumanovo;241;FYR of Macedonia
+2942;Negotino;241;FYR of Macedonia
+2943;Ohrid;241;FYR of Macedonia
+2944;Prilep;241;FYR of Macedonia
+2945;Probistip;241;FYR of Macedonia
+2946;Radovic;241;FYR of Macedonia
+2947;Resen;241;FYR of Macedonia
+2948;Skopje;241;FYR of Macedonia
+2949;Stip;241;FYR of Macedonia
+2950;Struga;241;FYR of Macedonia
+2951;Strumica;241;FYR of Macedonia
+2952;Sveti Nikole;241;FYR of Macedonia
+2953;Tetovo;241;FYR of Macedonia
+2954;Valandovo;241;FYR of Macedonia
+2955;Veles;241;FYR of Macedonia
+2956;Vinica;241;FYR of Macedonia
+2957;Aileu;242;Timor-Leste
+2958;Ainaro;242;Timor-Leste
+2959;Baucau;242;Timor-Leste
+2960;Bobonaro;242;Timor-Leste
+2961;Covalima;242;Timor-Leste
+2962;Dili;242;Timor-Leste
+2963;Ermera;242;Timor-Leste
+2964;Lautem;242;Timor-Leste
+2965;Liquica;242;Timor-Leste
+2966;Manatuto;242;Timor-Leste
+2967;Manufahi;242;Timor-Leste
+2968;Oecussi;242;Timor-Leste
+2969;Viqueque;242;Timor-Leste
+2970;Centrale;243;Togo
+2971;Kara;243;Togo
+2972;Maritime;243;Togo
+2973;Plateaux;243;Togo
+2974;Savanes;243;Togo
+2975;Administrative unit not available;244;Tokelau (N.Z.)
+2976;Administrative unit not available;245;Tonga
+2977;Arima;246;Trinidad and Tobago
+2978;Chaguanas;246;Trinidad and Tobago
+2979;Couva/Tabaquite/Talparo;246;Trinidad and Tobago
+2980;Diego Martin;246;Trinidad and Tobago
+2981;Penal/Debe;246;Trinidad and Tobago
+2982;Point Fortin;246;Trinidad and Tobago
+2983;Port Of Spain;246;Trinidad and Tobago
+2984;Princes Town;246;Trinidad and Tobago
+2985;Rio Claro/Mayaro;246;Trinidad and Tobago
+2986;San Fernando;246;Trinidad and Tobago
+2987;San Juan/Laventille;246;Trinidad and Tobago
+2988;Sangre Grande;246;Trinidad and Tobago
+2989;Siparia;246;Trinidad and Tobago
+2990;Tobago;246;Trinidad and Tobago
+2991;Tunapuna/Piarco;246;Trinidad and Tobago
+2992;Administrative unit not available;247;Tromelin Island
+2993;Ariana;248;Tunisia
+2994;Ben Arous;248;Tunisia
+2995;Bizerte;248;Tunisia
+2996;Beja;248;Tunisia
+2997;Gabes;248;Tunisia
+2998;Gafsa;248;Tunisia
+2999;Jendouba;248;Tunisia
+3000;Kairouan;248;Tunisia
+3001;Kasserine;248;Tunisia
+3002;Kebili;248;Tunisia
+3003;Le Kef;248;Tunisia
+3004;Mahdia;248;Tunisia
+3005;Manouba;248;Tunisia
+3006;Monastir;248;Tunisia
+3007;Medenine;248;Tunisia
+3008;Nabeul;248;Tunisia
+3009;Sfax;248;Tunisia
+3010;Sidi Bouz;248;Tunisia
+3011;Siliana;248;Tunisia
+3012;Sousse;248;Tunisia
+3013;Tataouine;248;Tunisia
+3014;Tozeur;248;Tunisia
+3015;Tunis;248;Tunisia
+3016;Zaghouan;248;Tunisia
+3017;Adana;249;Turkey
+3018;Adiyaman;249;Turkey
+3019;Afyon;249;Turkey
+3020;Agri;249;Turkey
+3021;Aksaray;249;Turkey
+3022;Amasya;249;Turkey
+3023;Ankara;249;Turkey
+3024;Antalya;249;Turkey
+3025;Ardahan;249;Turkey
+3026;Artvin;249;Turkey
+3027;Aydin;249;Turkey
+3028;Balikesir;249;Turkey
+3029;Bartin;249;Turkey
+3030;Batman;249;Turkey
+3031;Bayburt;249;Turkey
+3032;Bilecik;249;Turkey
+3033;Bingol;249;Turkey
+3034;Bitlis;249;Turkey
+3035;Bolu;249;Turkey
+3036;Burdur;249;Turkey
+3037;Bursa;249;Turkey
+3038;Canakkale;249;Turkey
+3039;Cankiri;249;Turkey
+3040;Corum;249;Turkey
+3041;Denizli;249;Turkey
+3042;Diyarbakir;249;Turkey
+3043;Edirne;249;Turkey
+3044;Elazig;249;Turkey
+3045;Erzincan;249;Turkey
+3046;Erzurum;249;Turkey
+3047;Eskisehir;249;Turkey
+3048;Gaziantep;249;Turkey
+3049;Giresun;249;Turkey
+3050;Gumushane;249;Turkey
+3051;Hakkari;249;Turkey
+3052;Hatay;249;Turkey
+3053;Icel;249;Turkey
+3054;Igdir;249;Turkey
+3055;Isparta;249;Turkey
+3056;Istanbul;249;Turkey
+3057;Izmir;249;Turkey
+3058;K.maras;249;Turkey
+3059;Karabuk;249;Turkey
+3060;Karaman;249;Turkey
+3061;Kars;249;Turkey
+3062;Kastamonu;249;Turkey
+3063;Kayseri;249;Turkey
+3064;Kilis;249;Turkey
+3065;Kirikkale;249;Turkey
+3066;Kirklareli;249;Turkey
+3067;Kirsehir;249;Turkey
+3068;Kocaeli;249;Turkey
+3069;Konya;249;Turkey
+3070;Kutahya;249;Turkey
+3071;Malatya;249;Turkey
+3072;Manisa;249;Turkey
+3073;Mardin;249;Turkey
+3074;Mugla;249;Turkey
+3075;Mus;249;Turkey
+3076;Nevsehir;249;Turkey
+3077;Nigde;249;Turkey
+3078;Ordu;249;Turkey
+3079;Osmaniye;249;Turkey
+3080;Rize;249;Turkey
+3081;Sakarya;249;Turkey
+3082;Samsun;249;Turkey
+3083;Sanliurfa;249;Turkey
+3084;Siirt;249;Turkey
+3085;Sinop;249;Turkey
+3086;Sirnak;249;Turkey
+3087;Sivas;249;Turkey
+3088;Tekirdag;249;Turkey
+3089;Tokat;249;Turkey
+3090;Trabzon;249;Turkey
+3091;Tunceli;249;Turkey
+3092;Usak;249;Turkey
+3093;Van;249;Turkey
+3094;Yalova;249;Turkey
+3095;Yozgat;249;Turkey
+3096;Zonguldak;249;Turkey
+3097;Chardzhou;250;Turkmenistan
+3098;Administrative unit not available;250;Turkmenistan
+3099;Mary;250;Turkmenistan
+3100;Tashauz;250;Turkmenistan
+3103;Administrative unit not available;252;Tuvalu
+3104;Adjumani;253;Uganda
+3110;Busia;253;Uganda
+3112;Hoima;253;Uganda
+3114;Jinja;253;Uganda
+3115;Kabale;253;Uganda
+3117;Kalangala;253;Uganda
+3121;Kasese;253;Uganda
+3123;Kibaale;253;Uganda
+3125;Kisoro;253;Uganda
+3136;Moyo;253;Uganda
+3141;Ntungamo;253;Uganda
+3145;Ssembabule;253;Uganda
+3148;Cherkas'ka;254;Ukraine
+3149;Chernihivs'ka;254;Ukraine
+3150;Chernivets'ka;254;Ukraine
+3151;Dnipropetrovs'ka;254;Ukraine
+3152;Donets'ka;254;Ukraine
+3153;Ivano-frankivs'ka;254;Ukraine
+3154;Kharkivs'ka;254;Ukraine
+3155;Khersons'ka;254;Ukraine
+3156;Khmel'nyts'ka;254;Ukraine
+3157;Kirovohrads'ka;254;Ukraine
+3158;Krym;254;Ukraine
+3159;Kyyivs'ka;254;Ukraine
+3160;L'vivs'ka;254;Ukraine
+3161;Luhans'ka;254;Ukraine
+3162;Mykolayivs'ka;254;Ukraine
+3163;Odes'ka;254;Ukraine
+3164;Poltavs'ka;254;Ukraine
+3165;Rivnens'ka;254;Ukraine
+3166;Sums'ka;254;Ukraine
+3167;Ternopil's'ka;254;Ukraine
+3168;Vinnyts'ka;254;Ukraine
+3169;Volyns'ka;254;Ukraine
+3170;Zakarpats'ka;254;Ukraine
+3171;Zaporiz'ka;254;Ukraine
+3172;Zhytomyrs'ka;254;Ukraine
+3173;Abu Dhabi;255;United Arab Emirates
+3177;Dubai;255;United Arab Emirates
+3179;Ras Al Khaimah;255;United Arab Emirates
+3180;Sharjah;255;United Arab Emirates
+3181;Umm AL Quwain;255;United Arab Emirates
+3182;England;256;United Kingdom
+3183;Northern Ireland;256;United Kingdom
+3184;Scotland;256;United Kingdom
+3186;Wales;256;United Kingdom
+3214;Alabama;259;United States of America
+3215;Alaska;259;United States of America
+3216;Arizona;259;United States of America
+3217;Arkansas;259;United States of America
+3218;California;259;United States of America
+3219;Colorado;259;United States of America
+3220;Connecticut;259;United States of America
+3221;Delaware;259;United States of America
+3222;District of Columbia;259;United States of America
+3223;Florida;259;United States of America
+3224;Georgia;259;United States of America
+3225;Hawaii;259;United States of America
+3226;Idaho;259;United States of America
+3227;Illinois;259;United States of America
+3228;Indiana;259;United States of America
+3229;Iowa;259;United States of America
+3230;Kansas;259;United States of America
+3231;Kentucky;259;United States of America
+3232;Louisiana;259;United States of America
+3233;Maine;259;United States of America
+3234;Maryland;259;United States of America
+3235;Massachusetts;259;United States of America
+3236;Michigan;259;United States of America
+3237;Minnesota;259;United States of America
+3238;Mississippi;259;United States of America
+3239;Missouri;259;United States of America
+3240;Montana;259;United States of America
+3241;Nebraska;259;United States of America
+3242;Nevada;259;United States of America
+3243;New Hampshire;259;United States of America
+3244;New Jersey;259;United States of America
+3245;New Mexico;259;United States of America
+3246;New York;259;United States of America
+3247;North Carolina;259;United States of America
+3248;North Dakota;259;United States of America
+3249;Ohio;259;United States of America
+3250;Oklahoma;259;United States of America
+3251;Oregon;259;United States of America
+3252;Pennsylvania;259;United States of America
+3253;Rhode Island;259;United States of America
+3254;South Carolina;259;United States of America
+3255;South Dakota;259;United States of America
+3256;Tennessee;259;United States of America
+3257;Texas;259;United States of America
+3258;Utah;259;United States of America
+3259;Vermont;259;United States of America
+3260;Virginia;259;United States of America
+3261;Washington;259;United States of America
+3262;West Virginia;259;United States of America
+3263;Wisconsin;259;United States of America
+3264;Wyoming;259;United States of America
+3265;Artigas;260;Uruguay
+3266;Canelones;260;Uruguay
+3267;Cerro Largo;260;Uruguay
+3268;Colonia;260;Uruguay
+3269;Durazno;260;Uruguay
+3270;Flores;260;Uruguay
+3271;Florida;260;Uruguay
+3272;Lavalleja;260;Uruguay
+3273;Maldonado;260;Uruguay
+3274;Montevideo;260;Uruguay
+3275;Paysandu;260;Uruguay
+3276;Rio Negro;260;Uruguay
+3277;Rivera;260;Uruguay
+3278;Rocha;260;Uruguay
+3279;Salto;260;Uruguay
+3280;San Jose;260;Uruguay
+3281;Soriano;260;Uruguay
+3282;Tacuarembo;260;Uruguay
+3283;Treinta Y Tres;260;Uruguay
+3284;Andijan;261;Uzbekistan
+3285;Bukhara;261;Uzbekistan
+3286;Fergana;261;Uzbekistan
+3287;Karakalpakstan;261;Uzbekistan
+3288;Kashkadarya;261;Uzbekistan
+3289;Khorezm;261;Uzbekistan
+3291;Namangan;261;Uzbekistan
+3292;Samarkand;261;Uzbekistan
+3293;Surkhandarya;261;Uzbekistan
+3294;Sirdarya;261;Uzbekistan
+3295;Tashkent;261;Uzbekistan
+3296;Malampa;262;Vanuatu
+3297;Penama;262;Vanuatu
+3298;Sanma;262;Vanuatu
+3299;Shefa;262;Vanuatu
+3300;Tafea;262;Vanuatu
+3301;Torba;262;Vanuatu
+3302;Amazonas;263;R. B. de Venezuela
+3303;Anzoategui;263;R. B. de Venezuela
+3304;Apure;263;R. B. de Venezuela
+3305;Aragua;263;R. B. de Venezuela
+3306;Barinas;263;R. B. de Venezuela
+3307;Bolivar;263;R. B. de Venezuela
+3308;Carabobo;263;R. B. de Venezuela
+3309;Cojedes;263;R. B. de Venezuela
+3310;Delta Amacuro;263;R. B. de Venezuela
+3311;Dependencias Federales;263;R. B. de Venezuela
+3313;Falcon;263;R. B. de Venezuela
+3314;Guarico;263;R. B. de Venezuela
+3315;Lara;263;R. B. de Venezuela
+3316;Merida;263;R. B. de Venezuela
+3317;Miranda;263;R. B. de Venezuela
+3318;Monagas;263;R. B. de Venezuela
+3319;Nueva Esparta;263;R. B. de Venezuela
+3320;Portuguesa;263;R. B. de Venezuela
+3321;Sucre;263;R. B. de Venezuela
+3322;Tachira;263;R. B. de Venezuela
+3323;Trujillo;263;R. B. de Venezuela
+3324;Yaracuy;263;R. B. de Venezuela
+3325;Zulia;263;R. B. de Venezuela
+3326;An Giang;264;Vietnam
+3327;Ba Ria-Vung Tau;264;Vietnam
+3328;Bac Kan;264;Vietnam
+3329;Bac Giang;264;Vietnam
+3330;Bac Lieu;264;Vietnam
+3331;Bac Ninh;264;Vietnam
+3332;Ben Tre;264;Vietnam
+3333;Binh Dinh;264;Vietnam
+3334;Binh Duong;264;Vietnam
+3335;Binh Phuoc;264;Vietnam
+3336;Binh Thuan;264;Vietnam
+3338;Cao Bang;264;Vietnam
+3339;Ca Mau;264;Vietnam
+3340;Da Nang City;264;Vietnam
+3342;Dong Nai;264;Vietnam
+3343;Dong Thap;264;Vietnam
+3344;Gia Lai;264;Vietnam
+3345;Ha Giang;264;Vietnam
+3346;Ha Nam;264;Vietnam
+3347;Ha Noi City;264;Vietnam
+3348;Ha Tay;264;Vietnam
+3349;Ha Tinh;264;Vietnam
+3350;Hai Duong;264;Vietnam
+3351;Hai Phong City;264;Vietnam
+3352;Ho Chi Minh City;264;Vietnam
+3353;Hoa Binh;264;Vietnam
+3354;Hung Yen;264;Vietnam
+3355;Khanh Hoa;264;Vietnam
+3356;Kien Giang;264;Vietnam
+3357;Kon Tum;264;Vietnam
+3359;Lam Dong;264;Vietnam
+3360;Lang Son;264;Vietnam
+3362;Long An;264;Vietnam
+3364;Nam Dinh;264;Vietnam
+3366;Nghe An;264;Vietnam
+3367;Ninh Binh;264;Vietnam
+3368;Ninh Thuan;264;Vietnam
+3369;Phu Tho;264;Vietnam
+3370;Phu Yen;264;Vietnam
+3371;Quang Binh;264;Vietnam
+3372;Quang Nam;264;Vietnam
+3374;Quang Ngai;264;Vietnam
+3375;Quang Ninh;264;Vietnam
+3376;Quang Tri;264;Vietnam
+3377;Soc Trang;264;Vietnam
+3378;Son La;264;Vietnam
+3379;Tay Ninh;264;Vietnam
+3380;Thai Binh;264;Vietnam
+3381;Thai Nguyen;264;Vietnam
+3382;Thanh Hoa;264;Vietnam
+3383;Thua Thien - Hue;264;Vietnam
+3384;Tien Giang;264;Vietnam
+3386;Tra Vinh;264;Vietnam
+3387;Tuyen Quang;264;Vietnam
+3388;Vinh Long;264;Vietnam
+3389;Vinh Phuc;264;Vietnam
+3390;Yen Bai;264;Vietnam
+3391;Administrative unit not available;265;Wake Island (U.S.)
+3392;Administrative unit not available;266;Wallis and Futuna (Fr.)
+3394;Al Khalil (Hebron);91;West Bank and Gaza
+3395;Al Quds (Jerusalem);91;West Bank and Gaza
+3396;Ariha (Jericho);91;West Bank and Gaza
+3397;Bethlehem;91;West Bank and Gaza
+3398;Jenin;91;West Bank and Gaza
+3399;Nablus;91;West Bank and Gaza
+3400;Qalqiliya;91;West Bank and Gaza
+3401;Ramallah;91;West Bank and Gaza
+3402;Salfit;91;West Bank and Gaza
+3403;Tubas;91;West Bank and Gaza
+3404;Tulkarm;91;West Bank and Gaza
+3407;Abyan;269;Republic of Yemen
+3408;Al Dhale'e;269;Republic of Yemen
+3410;Al Bayda;269;Republic of Yemen
+3411;Al Hudaydah;269;Republic of Yemen
+3412;Al Jawf;269;Republic of Yemen
+3413;Al Maharah;269;Republic of Yemen
+3414;Al Mahwit;269;Republic of Yemen
+3415;Amran;269;Republic of Yemen
+3416;Dhamar;269;Republic of Yemen
+3418;Hajjah;269;Republic of Yemen
+3419;Ibb;269;Republic of Yemen
+3420;Lahj;269;Republic of Yemen
+3421;Marib;269;Republic of Yemen
+3422;Sa'ada;269;Republic of Yemen
+3424;Shabwah;269;Republic of Yemen
+3425;Taizz;269;Republic of Yemen
+3426;Central;270;Zambia
+3427;Copperbelt;270;Zambia
+3428;Eastern;270;Zambia
+3429;Luapula;270;Zambia
+3430;Lusaka;270;Zambia
+3431;North-Western;270;Zambia
+3432;Northern;270;Zambia
+3433;Southern;270;Zambia
+3434;Western;270;Zambia
+3435;Bulawayo;271;Zimbabwe
+3436;Harare;271;Zimbabwe
+3437;Manicaland;271;Zimbabwe
+3438;Mashonaland Central;271;Zimbabwe
+3440;Mashonaland West;271;Zimbabwe
+3441;Masvingo;271;Zimbabwe
+3443;Matabeleland South;271;Zimbabwe
+3444;Midlands;271;Zimbabwe
+4150;Southern Kordofan;6;Sudan
+12904;Batha Est;50;Chad
+12905;Batha Ouest;50;Chad
+12907;Borkou;50;Chad
+12908;Ennedi;50;Chad
+12909;Tibesti;50;Chad
+12910;Baguirmi;50;Chad
+12911;Daraba;50;Chad
+12912;Hadjer Lamis;50;Chad
+12914;Barl El Gazal;50;Chad
+12915;Kanem;50;Chad
+12918;Logone Oriental;50;Chad
+12919;Mont De Lam;50;Chad
+12920;Kabia;50;Chad
+12921;Mayo-Boneye;50;Chad
+12922;Mayo-Dala;50;Chad
+12923;Barh Koh;50;Chad
+12924;Lac Iro;50;Chad
+12925;Mandoul;50;Chad
+12926;Assongha;50;Chad
+12927;Ouaddai;50;Chad
+12928;Sila;50;Chad
+12930;Tandjile Est;50;Chad
+12931;Tandjile Ouest;50;Chad
+16837;Comoe;66;C├┤te d'Ivoire
+16838;District autonome de Abidjan;66;C├┤te d'Ivoire
+16839;District autonome de Yamoussoukro;66;C├┤te d'Ivoire
+16840;G├┤h-Djiboua;66;C├┤te d'Ivoire
+16841;Lacs;66;C├┤te d'Ivoire
+16842;Lagunes;66;C├┤te d'Ivoire
+16843;Montagnes;66;C├┤te d'Ivoire
+16844;Sassandra-Marahoue;66;C├┤te d'Ivoire
+16845;Woroba;66;C├┤te d'Ivoire
+21969;East/Iburasirazuba;205;Rwanda
+21970;Kigali City/Umujyi wa Kigali;205;Rwanda
+21971;North/Amajyaruguru;205;Rwanda
+21972;South/Amajyepfo;205;Rwanda
+21973;West/Iburengerazuba;205;Rwanda
+22005;Guayas;73;Ecuador
+22006;Pichincha;73;Ecuador
+22007;Santa Elena;73;Ecuador
+22008;Santo Domingo de los Tsachilas;73;Ecuador
+25350;Andrijevica;2647;Montenegro
+25351;Bar;2647;Montenegro
+25352;Berane;2647;Montenegro
+25353;Bijelo Polje;2647;Montenegro
+25354;Budva;2647;Montenegro
+25355;Cetinje;2647;Montenegro
+25356;Danilovgrad;2647;Montenegro
+25357;Herceg Novi;2647;Montenegro
+25358;Kolasin;2647;Montenegro
+25359;Kotor;2647;Montenegro
+25360;Mojkovac;2647;Montenegro
+25361;Niksic;2647;Montenegro
+25362;Plav;2647;Montenegro
+25363;Pljevlja;2647;Montenegro
+25364;Pluzine;2647;Montenegro
+25365;Podgorica;2647;Montenegro
+25366;Rozaj;2647;Montenegro
+25367;Savnik;2647;Montenegro
+25368;Tivat;2647;Montenegro
+25369;Ulcinj;2647;Montenegro
+25370;Zabljak;2647;Montenegro
+25371;Borski;2648;Serbia
+25372;Branicevski;2648;Serbia
+25373;Grad Beograd;2648;Serbia
+25374;Jablanicki;2648;Serbia
+25375;Juzno-backi;2648;Serbia
+25376;Juzno-banatski;2648;Serbia
+25377;Kolubarski;2648;Serbia
+25381;Macvanski;2648;Serbia
+25382;Moravicki;2648;Serbia
+25383;Nisavski;2648;Serbia
+25384;Pcinjski;2648;Serbia
+25386;Pirotski;2648;Serbia
+25387;Podunavski;2648;Serbia
+25388;Pomoravski;2648;Serbia
+25390;Rasinski;2648;Serbia
+25391;Raski;2648;Serbia
+25392;Severno-backi;2648;Serbia
+25393;Severno-banatski;2648;Serbia
+25394;Srednje-banatski;2648;Serbia
+25395;Sremski;2648;Serbia
+25396;Sumadijski;2648;Serbia
+25397;Toplicki;2648;Serbia
+25398;Zajecarski;2648;Serbia
+25399;Zapadno-backi;2648;Serbia
+25400;Zlatiborski;2648;Serbia
+33110;Ardebil;117;Islamic Republic of Iran
+33111;Golestan;117;Islamic Republic of Iran
+33112;Ghazvin;117;Islamic Republic of Iran
+33113;Ghom;117;Islamic Republic of Iran
+36854;Hato Mayor;72;Dominican Republic
+36855;Monsenor Nouel;72;Dominican Republic
+36856;Monte Plata;72;Dominican Republic
+36857;San Jos├® de Ocoa;72;Dominican Republic
+36858;Distrito Nacional;72;Dominican Republic
+37021;Upper Nile;74;South Sudan
+37157;Almaty City area;132;Kazakhstan
+37336;Labuan;153;Malaysia
+39497;Grand Turk;251;Turks and Caicos Islands (U.K.)
+39498;Middle Caicos;251;Turks and Caicos Islands (U.K.)
+39499;North Caicos;251;Turks and Caicos Islands (U.K.)
+39500;Providenciales and West Caicos;251;Turks and Caicos Islands (U.K.)
+39501;Salt City;251;Turks and Caicos Islands (U.K.)
+39502;South and East Caicos;251;Turks and Caicos Islands (U.K.)
+39503;Anegada;39;British Virgin Islands (U.K.)
+39504;Jost van Dyke;39;British Virgin Islands (U.K.)
+39505;Other Islands;39;British Virgin Islands (U.K.)
+39506;Tortola;39;British Virgin Islands (U.K.)
+39507;Virgin Gorda;39;British Virgin Islands (U.K.)
+39508;Saint Croix (County Equivalent);258;United States Virgin Islands (U.S.)
+39509;Saint John (County Equivalent);258;United States Virgin Islands (U.S.)
+39510;Saint Thomas (County Equivalent);258;United States Virgin Islands (U.S.)
+39511;Miquelon-Langlade;210;Saint-Pierre-et-Miquelon (Fr.)
+39512;Saint-Pierre;210;Saint-Pierre-et-Miquelon (Fr.)
+39696;Jizzakh;261;Uzbekistan
+39697;Navoiy;261;Uzbekistan
+39698;Tashkent city;261;Uzbekistan
+40187;Central;83;Fiji
+40188;Eastern;83;Fiji
+40189;Northern;83;Fiji
+40190;Western;83;Fiji
+40206;Barbuda;11;Antigua and Barbuda
+40207;Name Unknown;11;Antigua and Barbuda
+40208;St. George;11;Antigua and Barbuda
+40209;St. John;11;Antigua and Barbuda
+40210;St. Mary;11;Antigua and Barbuda
+40211;St. Paul;11;Antigua and Barbuda
+40212;St. Peter;11;Antigua and Barbuda
+40213;St. Philip;11;Antigua and Barbuda
+40222;Alderney;104;Guernsey (U.K.)
+40223;Castel;104;Guernsey (U.K.)
+40224;Forest;104;Guernsey (U.K.)
+40225;Herm;104;Guernsey (U.K.)
+40226;Saint Andrew;104;Guernsey (U.K.)
+40227;Saint Martin;104;Guernsey (U.K.)
+40228;Saint Peter;104;Guernsey (U.K.)
+40229;Saint Peter Port;104;Guernsey (U.K.)
+40230;Saint Sampson;104;Guernsey (U.K.)
+40231;Saint Saviour;104;Guernsey (U.K.)
+40232;Sark;104;Guernsey (U.K.)
+40233;Torteval;104;Guernsey (U.K.)
+40234;Vale;104;Guernsey (U.K.)
+40235;Brelade;128;Jersey (U.K.)
+40236;Grouville;128;Jersey (U.K.)
+40237;Saint Helier;128;Jersey (U.K.)
+40238;Saint John;128;Jersey (U.K.)
+40239;Saint Lawrence;128;Jersey (U.K.)
+40240;Saint Martin;128;Jersey (U.K.)
+40241;Saint Mary;128;Jersey (U.K.)
+40242;Saint Ouen;128;Jersey (U.K.)
+40243;Saint Peter;128;Jersey (U.K.)
+40244;Saint Saviour;128;Jersey (U.K.)
+40245;Trinity;128;Jersey (U.K.)
+40274;Saint Clement;128;Jersey (U.K.)
+40276;Boucle Du Mouhoun;42;Burkina Faso
+40277;Cascades;42;Burkina Faso
+40278;Centre;42;Burkina Faso
+40279;Centre-est;42;Burkina Faso
+40280;Centre-nord;42;Burkina Faso
+40281;Centre-ouest;42;Burkina Faso
+40282;Centre-sud;42;Burkina Faso
+40283;Est;42;Burkina Faso
+40284;Hauts-bassins;42;Burkina Faso
+40285;Nord;42;Burkina Faso
+40286;Plateau Central;42;Burkina Faso
+40287;Sahel;42;Burkina Faso
+40288;Sud-ouest;42;Burkina Faso
+40408;Administrative unit not available;188;Pakistan
+40409;Administrative unit not available;188;Pakistan
+40422;Administrative unit not available;115;India
+40423;Administrative unit not available;115;India
+40424;Administrative unit not available;115;India
+40425;Administrative unit not available;115;India
+40426;Administrative unit not available;115;India
+40427;Administrative unit not available;115;India
+40428;Administrative unit not available;115;India
+40429;Administrative unit not available;115;India
+40430;Administrative unit not available;115;India
+40431;Administrative unit not available;115;India
+40443;Beni;33;Bolivia
+40444;Chuquisaca;33;Bolivia
+40445;Cochabamba;33;Bolivia
+40446;La Paz;33;Bolivia
+40447;Oruro;33;Bolivia
+40448;Potosi;33;Bolivia
+40449;Santa Cruz;33;Bolivia
+40450;Tarija;33;Bolivia
+40542;Bubanza;43;Burundi
+40543;Bujumbura Mairie;43;Burundi
+40544;Bujumbura Rural;43;Burundi
+40545;Bururi;43;Burundi
+40546;Cankuzo;43;Burundi
+40547;Cibitoke;43;Burundi
+40548;Gitega;43;Burundi
+40549;Karuzi;43;Burundi
+40550;Kayanza;43;Burundi
+40551;Kirundo;43;Burundi
+40552;Makamba;43;Burundi
+40553;Muramvya;43;Burundi
+40554;Muyinga;43;Burundi
+40555;Mwaro;43;Burundi
+40556;Ngozi;43;Burundi
+40557;Rutana;43;Burundi
+40558;Ruyigi;43;Burundi
+40700;Boke;106;Guinea
+40701;Conakry;106;Guinea
+40702;Faranah;106;Guinea
+40703;Kankan;106;Guinea
+40704;Kindia;106;Guinea
+40705;Labe;106;Guinea
+40706;Mamou;106;Guinea
+40707;Nzerekore;106;Guinea
+40766;Notio Aigaio;97;Greece
+40772;Red Sea;6;Sudan
+40856;Frederiksborg;69;Denmark
+40857;Koebenhavn;69;Denmark
+40858;Roskilde;69;Denmark
+41308;Dagana;31;Bhutan
+41309;Haa;31;Bhutan
+41310;Pemagatshel;31;Bhutan
+41311;Samdrupjongkhar;31;Bhutan
+41312;Samtse;31;Bhutan
+41313;Sarpang;31;Bhutan
+41314;Zhemgang;31;Bhutan
+41373;Maputo;170;Mozambique
+41750;Alaotra Mangoro;150;Madagascar
+41751;Amoron I Mania;150;Madagascar
+41752;Analamanga;150;Madagascar
+41753;Analanjirofo;150;Madagascar
+41754;Androy;150;Madagascar
+41755;Anosy;150;Madagascar
+41756;Atsimo Andrefana;150;Madagascar
+41757;Atsimo Atsinanana;150;Madagascar
+41758;Atsinanana;150;Madagascar
+41759;Betsiboka;150;Madagascar
+41760;Boeny;150;Madagascar
+41761;Bongolava;150;Madagascar
+41762;Diana;150;Madagascar
+41763;Haute Matsiatra;150;Madagascar
+41764;Ihorombe;150;Madagascar
+41765;Itasy;150;Madagascar
+41766;Melaky;150;Madagascar
+41767;Menabe;150;Madagascar
+41768;Sava;150;Madagascar
+41769;Sofia;150;Madagascar
+41770;Vakinankaratra;150;Madagascar
+41771;Vatovavy Fitovinany;150;Madagascar
+41772;Bago (E);171;Myanmar
+41773;Bago (W);171;Myanmar
+41774;Shan (E);171;Myanmar
+41775;Shan (N);171;Myanmar
+41776;Shan (S);171;Myanmar
+42180;Kabarole;253;Uganda
+42181;Kaberamaido;253;Uganda
+42182;Kampala;253;Uganda
+42183;Kamwenge;253;Uganda
+42184;Kanungu;253;Uganda
+42185;Kayunga;253;Uganda
+42189;Mayuge;253;Uganda
+42195;Nakasongola;253;Uganda
+42197;Rukungiri;253;Uganda
+42200;Wakiso;253;Uganda
+42201;Yumbe;253;Uganda
+47067;Amolatar;253;Uganda
+47068;Amuria;253;Uganda
+47071;Butaleja;253;Uganda
+47072;Ibanda;253;Uganda
+47073;Isingiro;253;Uganda
+47074;Kaabong;253;Uganda
+47075;Kaliro;253;Uganda
+47078;Katakwi;253;Uganda
+47079;Kiruhura;253;Uganda
+47080;Koboko;253;Uganda
+47083;Luwero;253;Uganda
+47085;Mbale;253;Uganda
+47086;Mbarara;253;Uganda
+47087;Mityana;253;Uganda
+47088;Mubende;253;Uganda
+47089;Nakaseke;253;Uganda
+47090;Tororo;253;Uganda
+47585;Diourbel;217;Senegal
+47586;Fatick;217;Senegal
+47587;Louga;217;Senegal
+47588;Matam;217;Senegal
+47589;Saint louis;217;Senegal
+47678;Oromia;79;Ethiopia
+47679;Somali;79;Ethiopia
+48357;Arusha;257;Tanzania
+48358;Dar-es-salaam;257;Tanzania
+48359;Dodoma;257;Tanzania
+48362;Kigoma;257;Tanzania
+48363;Kilimanjaro;257;Tanzania
+48364;Lindi;257;Tanzania
+48365;Manyara;257;Tanzania
+48366;Mara;257;Tanzania
+48367;Mbeya;257;Tanzania
+48368;Morogoro;257;Tanzania
+48369;Mtwara;257;Tanzania
+48371;Kaskazini Pemba;257;Tanzania
+48372;Kaskazini Unguja;257;Tanzania
+48373;Pwani;257;Tanzania
+48375;Ruvuma;257;Tanzania
+48377;Singida;257;Tanzania
+48378;Kusini Pemba;257;Tanzania
+48379;Kusini Unguja;257;Tanzania
+48380;Tabora;257;Tanzania
+48381;Tanga;257;Tanzania
+48382;Mjini Magharibi;257;Tanzania
+51325;Central;133;Kenya
+51326;Coast;133;Kenya
+51327;Eastern;133;Kenya
+51328;Nairobi;133;Kenya
+51329;North Eastern;133;Kenya
+51330;Nyanza;133;Kenya
+51331;Rift Valley;133;Kenya
+51332;Western;133;Kenya
+61135;Aldabra;220;Seychelles
+61136;Alphonse;220;Seychelles
+61137;Anse Aux Pins;220;Seychelles
+61138;Anse Boileau;220;Seychelles
+61139;Anse Etoile;220;Seychelles
+61140;Anse Royale;220;Seychelles
+61141;Aride;220;Seychelles
+61142;Assumption;220;Seychelles
+61143;Astove;220;Seychelles
+61144;Au Cap;220;Seychelles
+61145;Baie Lazare;220;Seychelles
+61146;Beau Vallon;220;Seychelles
+61147;Bel Air;220;Seychelles
+61148;Belombre;220;Seychelles
+61149;Bijoutier;220;Seychelles
+61150;Bird;220;Seychelles
+61153;Cascade;220;Seychelles
+61154;Cerf Island;220;Seychelles
+61155;Conception;220;Seychelles
+61156;Cosmoledo;220;Seychelles
+61157;Cousin;220;Seychelles
+61158;Cousine;220;Seychelles
+61159;Curieuse;220;Seychelles
+61160;Darros;220;Seychelles
+61161;Denis;220;Seychelles
+61162;Desnoeufs;220;Seychelles
+61163;Desroches;220;Seychelles
+61164;English River;220;Seychelles
+61165;Farquhar;220;Seychelles
+61166;Felicite;220;Seychelles
+61167;Fregate;220;Seychelles
+61168;Glacis;220;Seychelles
+61169;Grand Anse Mahe;220;Seychelles
+61170;Grande Soeur;220;Seychelles
+61174;Ile du Sud;220;Seychelles
+61178;La Digue;220;Seychelles
+61179;Les Mamelles;220;Seychelles
+61182;Marie-Louise;220;Seychelles
+61183;Mont Buxton;220;Seychelles
+61184;Mont Fleuri;220;Seychelles
+61186;North Island;220;Seychelles
+61187;Petite Soeur;220;Seychelles
+61188;Plaisance;220;Seychelles
+61189;Platte;220;Seychelles
+61190;Pointe Larue;220;Seychelles
+61191;Poivre;220;Seychelles
+61192;Port Glaud;220;Seychelles
+61193;Praslin;220;Seychelles
+61194;Providence;220;Seychelles
+61195;Remire;220;Seychelles
+61196;Roche Caiman;220;Seychelles
+61199;Silhouette;220;Seychelles
+61200;St Louis;220;Seychelles
+61201;St. Francois;220;Seychelles
+61202;St. Joseph Atoll;220;Seychelles
+61203;St. Pierre;220;Seychelles
+61204;Ste Anne;220;Seychelles
+61205;Takamaka;220;Seychelles
+61206;Therese;220;Seychelles
+61207;Coetivy;220;Seychelles
+61285;Grenadines;211;Saint Vincent and the Grenadines
+61286;Charlotte;211;Saint Vincent and the Grenadines
+61287;Saint Andrew;211;Saint Vincent and the Grenadines
+61288;Saint David;211;Saint Vincent and the Grenadines
+61289;Saint George;211;Saint Vincent and the Grenadines
+61290;Saint Patrick;211;Saint Vincent and the Grenadines
+61297;Fort-de-France;158;Martinique
+61298;La Trinite;158;Martinique
+61299;Le Marin;158;Martinique
+61300;Saint-Pierre;158;Martinique
+61305;Andreas;120;Isle of Man (U.K.)
+61306;Arbory;120;Isle of Man (U.K.)
+61307;Ballaugh;120;Isle of Man (U.K.)
+61308;Braddan;120;Isle of Man (U.K.)
+61309;Bride;120;Isle of Man (U.K.)
+61310;Castletown;120;Isle of Man (U.K.)
+61311;Douglas;120;Isle of Man (U.K.)
+61312;German;120;Isle of Man (U.K.)
+61313;Jurby;120;Isle of Man (U.K.)
+61314;Laxey;120;Isle of Man (U.K.)
+61315;Lezayre;120;Isle of Man (U.K.)
+61316;Lonan;120;Isle of Man (U.K.)
+61317;Malew;120;Isle of Man (U.K.)
+61318;Marown;120;Isle of Man (U.K.)
+61319;Maughold;120;Isle of Man (U.K.)
+61320;Michael;120;Isle of Man (U.K.)
+61321;Onchan;120;Isle of Man (U.K.)
+61322;Patrick;120;Isle of Man (U.K.)
+61323;Peel;120;Isle of Man (U.K.)
+61324;Port Erin;120;Isle of Man (U.K.)
+61325;Port St.Mary;120;Isle of Man (U.K.)
+61326;Ramsey;120;Isle of Man (U.K.)
+61327;Rushen;120;Isle of Man (U.K.)
+61328;Santan;120;Isle of Man (U.K.)
+61362;Rajshahi;23;Bangladesh
+61363;Rangpur;23;Bangladesh
+61510;Alexandria;40765;Arab Republic of Egypt
+61511;Assiut;40765;Arab Republic of Egypt
+61512;Aswan;40765;Arab Republic of Egypt
+61513;Behera;40765;Arab Republic of Egypt
+61514;Beni Suef;40765;Arab Republic of Egypt
+61515;Cairo;40765;Arab Republic of Egypt
+61516;Dakahlia;40765;Arab Republic of Egypt
+61517;Damietta;40765;Arab Republic of Egypt
+61518;Fayoum;40765;Arab Republic of Egypt
+61519;Gharbia;40765;Arab Republic of Egypt
+61520;Giza;40765;Arab Republic of Egypt
+61521;Ismailia;40765;Arab Republic of Egypt
+61522;Kafr El-Shikh;40765;Arab Republic of Egypt
+61523;Kalyoubia;40765;Arab Republic of Egypt
+61524;Luxor;40765;Arab Republic of Egypt
+61525;Matrouh;40765;Arab Republic of Egypt
+61526;Menia;40765;Arab Republic of Egypt
+61527;Menoufia;40765;Arab Republic of Egypt
+61528;New Valley;40765;Arab Republic of Egypt
+61529;North Sinai;40765;Arab Republic of Egypt
+61530;Port Said;40765;Arab Republic of Egypt
+61531;Qena;40765;Arab Republic of Egypt
+61532;Red Sea;40765;Arab Republic of Egypt
+61533;Shrkia;40765;Arab Republic of Egypt
+61534;South Sinai;40765;Arab Republic of Egypt
+61535;Suez;40765;Arab Republic of Egypt
+61536;Suhag;40765;Arab Republic of Egypt
+64821;Guatemala;103;Guatemala
+64822;El Progreso;103;Guatemala
+64823;Sacatep├®quez;103;Guatemala
+64824;Chimaltenango;103;Guatemala
+64825;Escuintla;103;Guatemala
+64826;Santa Rosa;103;Guatemala
+64827;Solol├í;103;Guatemala
+64828;Totonicap├ín;103;Guatemala
+64829;Quetzaltenango;103;Guatemala
+64830;Suchitep├®quez;103;Guatemala
+64831;Retalhuleu;103;Guatemala
+64832;San Marcos;103;Guatemala
+64833;Huehuetenango;103;Guatemala
+64834;Quich├®;103;Guatemala
+64835;Baja Verapaz;103;Guatemala
+64836;Alta Verapaz;103;Guatemala
+64837;Pet├®n;103;Guatemala
+64838;Izabal;103;Guatemala
+64839;Zacapa;103;Guatemala
+64840;Chiquimula;103;Guatemala
+64841;Jalapa;103;Guatemala
+64842;Jutiapa;103;Guatemala
+65246;Lago niassa;170;Mozambique
+65268;Area under National Administration;152;Malawi
+65289;Area under National Administration 2;44;Cambodia
+65290;Area under National Administration 1;44;Cambodia
+65698;Abia;182;Nigeria
+65699;Bauchi;182;Nigeria
+65700;Bayelsa;182;Nigeria
+65701;Ebonyi;182;Nigeria
+65702;Ekiti;182;Nigeria
+65703;Enugu;182;Nigeria
+65704;Gombe;182;Nigeria
+65705;Nassarawa;182;Nigeria
+65706;Ondo;182;Nigeria
+65707;Plateau;182;Nigeria
+65708;Rivers;182;Nigeria
+65709;Sokoto;182;Nigeria
+65710;Zamfara;182;Nigeria
+67152;Vargas;263;R. B. de Venezuela
+67153;Distrito Capital;263;R. B. de Venezuela
+67154;Bangui;49;Central African Republic
+67156;Autonomous region in Muslim Mindanao (ARMM);196;Philippines
+67159;Region IX (Zamboanga Peninsula);196;Philippines
+67160;Region X (Northern Mindanao);196;Philippines
+67161;Region XI (Davao Region);196;Philippines
+67162;Region XII (Soccsksargen);196;Philippines
+67165;Region III (Central Luzon);196;Philippines
+67166;Region IV-A (Calabarzon);196;Philippines
+67167;Region IV (Southern Tagalog);196;Philippines
+68742;Grand Cayman;48;Cayman Islands (U.K.)
+68743;Cayman Brac;48;Cayman Islands (U.K.)
+68744;Little Cayman;48;Cayman Islands (U.K.)
+68766;Administrative unit not available;91;West Bank and Gaza
+68772;Ascension;207;Saint Helena, Ascension and Tristan da Cunha (U.K.)
+68773;Saint Helena;207;Saint Helena, Ascension and Tristan da Cunha (U.K.)
+68774;Tristan Da Cunha;207;Saint Helena, Ascension and Tristan da Cunha (U.K.)
+68783;Kassala;6;Sudan
+68784;Northern Kordofan;6;Sudan
+68805;Gadaref;6;Sudan
+69549;Matabeleland North;271;Zimbabwe
+69550;Mashonaland East;271;Zimbabwe
+70072;Arunachal Pradesh;115;India
+70073;Bihar;115;India
+70074;Chandigarh;115;India
+70075;Chhattisgarh;115;India
+70076;Dadra and Nagar Haveli;115;India
+70077;Daman and Diu;115;India
+70078;Jharkhand;115;India
+70079;Madhya Pradesh;115;India
+70080;Puducherry;115;India
+70081;Uttar Pradesh;115;India
+70082;Uttarakhand;115;India
+72911;Grande Anse;108;Haiti
+72912;Nippes;108;Haiti
+73609;Bangka Belitung;116;Indonesia
+73610;Banten;116;Indonesia
+73611;Gorontalo;116;Indonesia
+73612;Papua Barat;116;Indonesia
+73613;Jawa Barat;116;Indonesia
+73614;Kepulauan-riau;116;Indonesia
+73615;Maluku;116;Indonesia
+73616;Maluku Utara;116;Indonesia
+73617;Papua;116;Indonesia
+73618;Riau;116;Indonesia
+73619;Sulawesi Barat;116;Indonesia
+73620;Sulawesi Selatan;116;Indonesia
+73621;Sulawesi Utara;116;Indonesia
+73622;Sumatera Selatan;116;Indonesia
+73933;Can Tho city;264;Vietnam
+73934;Dak Lak;264;Vietnam
+73935;Dak Nong;264;Vietnam
+73936;Dien Bien;264;Vietnam
+73937;Hau Giang;264;Vietnam
+73938;Lai Chau;264;Vietnam
+73939;Lao Cai;264;Vietnam
+74346;Vientiane;139;Lao People's Democratic Republic
+74347;Xiangkhouang;139;Lao People's Democratic Republic
+75101;Administrative unit not available;75001;Bonaire (Neth.)
+75102;Administrative unit not available;75002;Cura├ºao (Neth.)
+75103;Administrative unit not available;75003;Saba (Neth.)
+75104;Administrative unit not available;75004;Sint Eustatius (Neth.)
+75105;Administrative unit not available;75005;Sint Maarten (Neth.)
+75106;Administrative unit not available;75006;Saint-Barth├®lemy (Fr.)
+75107;Administrative unit not available;75007;Saint-Martin (Fr.)
+75108;Kosovski;75008;Kosovo
+75109;Kosovsko-mitrovatski;75008;Kosovo
+75110;Kosovsko-pomoravski;75008;Kosovo
+75111;Pecki;75008;Kosovo
+75112;Prizremski;75008;Kosovo
+75401;Girne (Kyrenia);64;Cyprus
+75403;Famagusta;64;Cyprus
+75404;Larnaca;64;Cyprus
+75405;Limassol;64;Cyprus
+75406;Nicosia;64;Cyprus
+75407;Paphos;64;Cyprus
+75408;Sovereign Base Areas of Akrotiri and Dhekelia (U.K.);64;Cyprus
+75500;Carriacou and Petite Martinique;99;Grenada
+77310;Eastern Cape;227;South Africa
+77311;KwaZulu-Natal;227;South Africa
+77312;Limpopo;227;South Africa
+77313;Mpumalanga;227;South Africa
+77314;North West;227;South Africa
+77315;Northern Cape;227;South Africa
+91501;Los Lagos;51;Chile
+91502;Tarapaca;51;Chile
+91503;Arica y Painacota;51;Chile
+91504;Los Rios;51;Chile
+93668;Bocas del Toro;191;Panama
+93669;Chiriqu├¡;191;Panama
+93670;Dari├®n;191;Panama
+93671;Ember├í;191;Panama
+93672;Ng├Âbe Bugl├®;191;Panama
+93673;Veraguas;191;Panama
+99878;Daykundi;1;Afghanistan
+99879;Panjsher;1;Afghanistan
+99880;Parwan;1;Afghanistan
+99881;Uruzgan;1;Afghanistan
+112869;Kanifing Municipal Council;90;The Gambia
+115002;Geita;257;Tanzania
+115003;Iringa;257;Tanzania
+115004;Kagera;257;Tanzania
+115005;Katavi;257;Tanzania
+115006;Mwanza;257;Tanzania
+115007;Njombe;257;Tanzania
+115008;Rukwa;257;Tanzania
+115009;Shinyanga;257;Tanzania
+115010;Simiyu;257;Tanzania
+144969;Amanat Al Asimah;269;Republic of Yemen
+144970;Hadramaut;269;Republic of Yemen
+144971;Raymah;269;Republic of Yemen
+144972;Sana'a;269;Republic of Yemen
+144973;Aden;269;Republic of Yemen
+147293;Bishkek;138;Kyrgyz Republic
+147294;Chuy;138;Kyrgyz Republic
+147297;Absheron;19;Azerbaijan
+147298;Aran;19;Azerbaijan
+147299;Daghlig Shirvan;19;Azerbaijan
+147300;Ganja-Gazakh;19;Azerbaijan
+147301;Guba-Khachmaz;19;Azerbaijan
+147302;Kalbajar-Lachin;19;Azerbaijan
+147303;Lankaran;19;Azerbaijan
+147304;Nakhchivan;19;Azerbaijan
+147305;Shaki-Zaqatala;19;Azerbaijan
+147306;Yukhari Garabakh;19;Azerbaijan
+147307;Administrative unit not available;19;Azerbaijan
+147322;Balkan;250;Turkmenistan
+147323;Ahal;250;Turkmenistan
+147326;Chaouia - Ouardigha;169;Morocco
+147327;Doukkala - Abda;169;Morocco
+147328;F├¿s - Boulemane;169;Morocco
+147329;Gharb - Chrarda - B├®ni Hssen;169;Morocco
+147330;Grand Casablanca;169;Morocco
+147331;Guelmim - Es-Semara;169;Morocco
+147332;La├óyoune - Boujdour - Sakia El Hamra;169;Morocco
+147333;Marrakech - Tensift - Al Haouz;169;Morocco
+147334;Rabat - Sal├® - Zemmour - Zaer;169;Morocco
+147335;Souss - Massa - Dra├ó;169;Morocco
+147336;Tadla - Azilal;169;Morocco
+147337;Tanger - T├®touan;169;Morocco
+147338;Taza - Al Hoceima - Taounate;169;Morocco
+149626;Ajman;255;United Arab Emirates
+149627;Fujairah;255;United Arab Emirates
+149630;Valparaiso;51;Chile
+149727;Administrative unit not available;78;Estonia
+190430;Bas Sassandra;66;C├┤te d'Ivoire
+190431;Pool;59;Congo
+190432;Brazzaville;59;Congo
+190433;Kouilou;59;Congo
+190434;Point-Noire;59;Congo
