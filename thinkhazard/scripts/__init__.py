@@ -17,20 +17,23 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
 import time
 from sqlalchemy.sql import text
+
+logger = logging.getLogger(__name__)
 
 
 def wait_for_db(connection):
     sleep_time = 1
     max_sleep = 30
-    while sleep_time < max_sleep:
+    while True:
         try:
             connection.execute(text("SELECT 1;"))
             return
         except Exception as e:
-            print(str(e))
-            print("Waiting for the DataBase server to be reachable")
+            logger.warning(f"Waiting for the DataBase server to be reachable: {e}")
             time.sleep(sleep_time)
             sleep_time *= 2
-    exit(1)
+            if sleep_time > max_sleep:
+                raise e
