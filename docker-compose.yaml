@@ -2,11 +2,18 @@ version: '3'
 
 volumes:
   hazardsets:
+  postgresql_data:
 
 services:
 
   db:
     image: camptocamp/thinkhazard-testdb
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: ${PGPASSWORD_PUBLIC}
+      POSTGRES_DB: ${PGDATABASE_PUBLIC}
+      POSTGRES_USER: ${PGUSER_PUBLIC}
 
   thinkhazard:
     image: camptocamp/thinkhazard
@@ -70,6 +77,8 @@ services:
     volumes:
       - ./docker/minio-client/docker-entrypoint:/docker-entrypoint
     environment:
+      - AWS_HOST=minio
+      - AWS_PORT=9000
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
       - AWS_BUCKET_NAME
