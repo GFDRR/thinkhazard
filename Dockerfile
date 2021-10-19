@@ -2,7 +2,7 @@
 # Common base for build/test and runtime #
 ##########################################
 
-FROM python:3.8-slim as base
+FROM python:3.8-slim-buster as base
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
