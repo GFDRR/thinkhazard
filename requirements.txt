@@ -19,7 +19,7 @@ psycopg2
 pyppeteer
 pyproj
 pyquery
-pyramid
+pyramid<2
 pyramid_debugtoolbar
 pyramid_jinja2
 pyramid_tm
@@ -30,6 +30,7 @@ rasterio
 redis
 requests
 requests_futures
+secure<1,>=0.3
 shapely
 shapely
 simplejson
