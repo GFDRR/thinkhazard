@@ -13,23 +13,23 @@ build: buildcss compile_catalog
 
 .PHONY: buildcss
 buildcss: \
-		thinkhazard/static/build/index.css \
-		thinkhazard/static/build/index.min.css \
-		thinkhazard/static/build/report.css \
-		thinkhazard/static/build/report.min.css \
-		thinkhazard/static/build/report_print.css \
-		thinkhazard/static/build/report_print.min.css \
-		thinkhazard/static/build/common.css \
-		thinkhazard/static/build/common.min.css \
-		thinkhazard/static/build/admin.css \
-		thinkhazard/static/build/admin.min.css \
-		$(addprefix thinkhazard/static/fonts/fontawesome-webfont., eot ttf woff woff2)
+		/opt/thinkhazard/thinkhazard/static/build/index.css \
+		/opt/thinkhazard/thinkhazard/static/build/index.min.css \
+		/opt/thinkhazard/thinkhazard/static/build/report.css \
+		/opt/thinkhazard/thinkhazard/static/build/report.min.css \
+		/opt/thinkhazard/thinkhazard/static/build/report_print.css \
+		/opt/thinkhazard/thinkhazard/static/build/report_print.min.css \
+		/opt/thinkhazard/thinkhazard/static/build/common.css \
+		/opt/thinkhazard/thinkhazard/static/build/common.min.css \
+		/opt/thinkhazard/thinkhazard/static/build/admin.css \
+		/opt/thinkhazard/thinkhazard/static/build/admin.min.css \
+		$(addprefix /opt/thinkhazard/thinkhazard/static/fonts/fontawesome-webfont., eot ttf woff woff2)
 
-thinkhazard/static/build/%.min.css: $(LESS_FILES)
+/opt/thinkhazard/thinkhazard/static/build/%.min.css: $(LESS_FILES)
 	mkdir -p $(dir $@)
 	lessc --include-path=${NODE_PATH} --clean-css thinkhazard/static/less/$*.less $@
 
-thinkhazard/static/build/%.css: $(LESS_FILES)
+/opt/thinkhazard/thinkhazard/static/build/%.css: $(LESS_FILES)
 	mkdir -p $(dir $@)
 	lessc --include-path=${NODE_PATH} thinkhazard/static/less/$*.less $@
 
@@ -37,17 +37,18 @@ thinkhazard/static/build/%.css: $(LESS_FILES)
 ${NODE_PATH}/font-awesome/fonts/fontawesome-webfont.%:
 	touch -c $@
 
-thinkhazard/static/fonts/fontawesome-webfont.%: ${NODE_PATH}/font-awesome/fonts/fontawesome-webfont.%
+/opt/thinkhazard/thinkhazard/static/fonts/fontawesome-webfont.%: ${NODE_PATH}/font-awesome/fonts/fontawesome-webfont.%
 	mkdir -p $(dir $@)
 	cp $< $@
 
 
 .PHONY: compile_catalog
 compile_catalog: \
-	thinkhazard/locale/fr/LC_MESSAGES/thinkhazard.mo \
-	thinkhazard/locale/es/LC_MESSAGES/thinkhazard.mo
+	/opt/thinkhazard/thinkhazard/locale/fr/LC_MESSAGES/thinkhazard.mo \
+	/opt/thinkhazard/thinkhazard/locale/es/LC_MESSAGES/thinkhazard.mo
 
-thinkhazard/locale/%/LC_MESSAGES/thinkhazard.mo: thinkhazard/locale/%/LC_MESSAGES/thinkhazard.po
+/opt/thinkhazard/thinkhazard/locale/%/LC_MESSAGES/thinkhazard.mo: thinkhazard/locale/%/LC_MESSAGES/thinkhazard.po
+	mkdir -p $(dir $@)
 	msgfmt -o $@ $<
 
 thinkhazard/locale/%/LC_MESSAGES/thinkhazard.po: $(HOME)/.transifexrc
