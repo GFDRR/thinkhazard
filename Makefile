@@ -111,13 +111,15 @@ clean:
 	rm -rf thinkhazard/static/fonts
 	rm -rf `find thinkhazard/locale -name *.po 2> /dev/null`
 	rm -rf `find thinkhazard/locale -name *.mo 2> /dev/null`
-	docker-compose down -v --remove-orphans
+	docker-compose down --remove-orphans
 
 .PHONY: cleanall
 cleanall: clean
+	docker-compose down -v --remove-orphans
 	docker rmi -f \
 		camptocamp/thinkhazard \
-		camptocamp/thinkhazard-builder
+		camptocamp/thinkhazard-builder \
+		camptocamp/thinkhazard-testdb
 
 .PHONY: .env
 .env:
