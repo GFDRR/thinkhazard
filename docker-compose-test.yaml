@@ -1,25 +1,25 @@
 version: '3'
 
-volumes:
-  hazardsets:
-
 services:
-  db:
+  testdb:
     image: camptocamp/thinkhazard-testdb
+    environment:
+      POSTGRES_PASSWORD: thinkhazard
+      POSTGRES_DB: thinkhazard_test
+      POSTGRES_USER: thinkhazard
 
   test:
     image: camptocamp/thinkhazard-builder
     depends_on:
-      - db
-      - redis
-      - minio-client
-      - taskrunner
+      - testdb
+      - testredis
+      - testminio-client
     volumes:
       - '${PWD}/thinkhazard:/app/thinkhazard'
       - '${PWD}/tests:/app/tests'
     environment: &env
       - INI_FILE
-      - PGHOST=db
+      - PGHOST=testdb
       - PGPORT=5432
       - PGUSER_PUBLIC=thinkhazard
       - PGPASSWORD_PUBLIC=thinkhazard
@@ -27,52 +27,33 @@ services:
       - PGUSER_ADMIN=thinkhazard
       - PGPASSWORD_ADMIN=thinkhazard
       - PGDATABASE_ADMIN=thinkhazard_test
-      - AWS_ENDPOINT_URL
+      - AWS_ENDPOINT_URL=http://testminio:9000/
       - AWS_ACCESS_KEY_ID=minioadmin
       - AWS_SECRET_ACCESS_KEY=minioadmin
       - AWS_BUCKET_NAME=thinkhazard
       - GEONODE_API_KEY
       - ANALYTICS
-      - BROKER_URL
+      - BROKER_URL=redis://testredis:6379/0
       - HTPASSWORDS
 
-  taskrunner:
-    image: camptocamp/thinkhazard
-    user: www-data
-    restart: unless-stopped
-    depends_on:
-      - db
-    volumes:
-      - hazardsets:/tmp/hazardsets
-    environment: *env
-    command: 'celery -A thinkhazard.celery worker -l info'
-
-  minio:
+  testminio:
     image: minio/minio
-    ports:
-      - "9000:9000"
-    command: 'server start'
+    command: 'minio server /data'
 
-  redis:
+  testredis:
     image: redis
-    ports:
-      - "6379:6379"
 
-  minio-client:
+  testminio-client:
     image: minio/mc
     depends_on:
-      - minio
+      - testminio
+    volumes:
+      - ./docker/minio-client/docker-entrypoint:/docker-entrypoint
     environment:
+      - AWS_HOST=testminio
+      - AWS_PORT=9000
       - AWS_ACCESS_KEY_ID=minioadmin
       - AWS_SECRET_ACCESS_KEY=minioadmin
       - AWS_BUCKET_NAME=thinkhazard
-    entrypoint: >
-      /bin/sh -c "
-      while ! nc -z minio 9000; do echo 'Wait minio to startup...' && sleep 0.1; done;
-      sleep 5;
-      /usr/bin/mc config host add localminio http://minio:9000 ${AWS_ACCESS_KEY_ID} ${AWS_SECRET_ACCESS_KEY};
-      /usr/bin/mc rm -r --force localminio/${AWS_BUCKET_NAME};
-      /usr/bin/mc mb localminio/${AWS_BUCKET_NAME};
-      /usr/bin/mc policy download localminio/${AWS_BUCKET_NAME};
-      exit 0;
-      "
+    entrypoint: /docker-entrypoint
+    command: ["exit", "0"]

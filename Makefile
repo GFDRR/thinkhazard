@@ -101,6 +101,9 @@ test: ## Run automated tests
 test-bash: ## Open bash in a test container
 	$(DOCKER_CMD) bash
 
+.PHONY: test-psql
+test-psql: ## Run psql in local thinkhazard_test database
+	docker-compose -f docker-compose-test.yaml exec testdb psql -U thinkhazard -d thinkhazard_test
 
 .PHONY: clean
 clean:
@@ -108,13 +111,15 @@ clean:
 	rm -rf thinkhazard/static/fonts
 	rm -rf `find thinkhazard/locale -name *.po 2> /dev/null`
 	rm -rf `find thinkhazard/locale -name *.mo 2> /dev/null`
-	docker-compose down -v --remove-orphans
+	docker-compose down --remove-orphans
 
 .PHONY: cleanall
 cleanall: clean
+	docker-compose down -v --remove-orphans
 	docker rmi -f \
 		camptocamp/thinkhazard \
-		camptocamp/thinkhazard-builder
+		camptocamp/thinkhazard-builder \
+		camptocamp/thinkhazard-testdb
 
 .PHONY: .env
 .env:
@@ -218,6 +223,10 @@ initdb_force:
 .PHONY: reinit_all
 reinit_all: ## Completely clear and re-init database. Only for developement purpose
 reinit_all: initdb_force import_admindivs import_recommendations import_contacts harvest download complete process decisiontree
+
+.PHONY: psql
+psql: ## Run psql in local thinkhazard database
+	docker-compose exec db psql -U thinkhazard -d thinkhazard
 
 .PHONY: bash
 bash: ## Open bash in an app container

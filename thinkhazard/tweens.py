@@ -18,11 +18,68 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 import pytz
+from functools import partial
+import secure
 from pyramid.response import Response
 from pyramid.renderers import render
 from pyramid.httpexceptions import HTTPNotModified
 
 from .models import Publication
+
+
+def set_secure_headers(handler, registry):
+    """
+    Returns tween which add security headers to responses.
+    """
+
+    def tween(request, secure_headers):
+        response = handler(request)
+        secure_headers.framework.pyramid(response)
+        return response
+
+    csp = (
+        secure.ContentSecurityPolicy()
+        .default_src("'self'")
+        .script_src(
+            "'self'",
+            "'unsafe-inline'",
+            "https://www.google-analytics.com",
+            "https://cdnjs.cloudflare.com",
+        )
+        .style_src("'self'", "https://fonts.googleapis.com")
+        .font_src("'self'", "https://fonts.gstatic.com")
+        .img_src(
+            "'self'",
+            "data:",
+            "https://www.gfdrr.org",
+            "http://www.geonode-gfdrrlab.org",
+            "https://api.mapbox.com",
+        )
+        .connect_src("'self'", "https://www.google-analytics.com")
+    )
+
+    hsts = secure.StrictTransportSecurity().max_age(31536000).include_subdomains()
+
+    if registry.settings["appname"] == "public":
+        return partial(
+            tween,
+            secure_headers=secure.Secure(
+                cache=secure.CacheControl().public(),
+                csp=csp,
+                hsts=hsts,
+            )
+        )
+
+    else:
+        return partial(
+            tween,
+            secure_headers=secure.Secure(
+                csp=csp,
+                hsts=hsts,
+            )
+        )
+
+    return tween
 
 
 def notmodified_tween_factory(handler, registry):

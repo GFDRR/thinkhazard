@@ -50,9 +50,14 @@ def main(global_config, **settings):
     config.include("papyrus")
     config.include("thinkhazard.session")
 
+    config.add_tween("thinkhazard.tweens.set_secure_headers", over=MAIN)
     config.add_tween("thinkhazard.tweens.notmodified_tween_factory", over=MAIN)
 
-    config.add_static_view("static", "static", cache_max_age=3600)
+    config.add_static_view("static", "thinkhazard:static", cache_max_age=3600)
+    config.override_asset(
+        to_override="thinkhazard:static/",
+        override_with="/opt/thinkhazard/thinkhazard/static",
+    )
     config.add_static_view("lib", settings.get("node_modules"), cache_max_age=86000)
 
     config.add_translation_dirs("thinkhazard:locale")

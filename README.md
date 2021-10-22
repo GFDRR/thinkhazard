@@ -21,7 +21,7 @@ Run the composition:
     $ docker-compose up -d
     $ make initdb
 
-Now point your browser to <http://localhost:6543>.
+Now point your browser to <http://localhost:8080>.
 
 Run checks and automated tests:
 

@@ -220,6 +220,7 @@ def technical_rec_process(request, obj):
         obj.detail = request.POST.get("detail")
         if inspect(obj).transient:
             request.dbsession.add(obj)
+            request.dbsession.flush()
 
         associations = request.POST.getall("associations")
         records = obj.hazardcategory_associations

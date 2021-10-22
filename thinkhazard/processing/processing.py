@@ -42,7 +42,7 @@ from thinkhazard.processing import BaseProcessor
 logger = logging.getLogger(__name__)
 
 
-class ProcessException(Exception):
+class ProcessError(Exception):
     def __init__(self, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
 
@@ -80,7 +80,7 @@ class Processor(BaseProcessor):
     def process_hazardset(self, hazardset_id):
         hazardset = self.dbsession.query(HazardSet).get(hazardset_id)
         if hazardset is None:
-            raise ProcessException("Hazardset {} does not exist.".format(hazardset_id))
+            raise ProcessError("Hazardset {} does not exist.".format(hazardset_id))
 
         chrono = datetime.datetime.now()
 
@@ -88,7 +88,7 @@ class Processor(BaseProcessor):
             if self.force:
                 hazardset.processed = None
             else:
-                raise ProcessException(
+                raise ProcessError(
                     "Hazardset {} has already been processed.".format(hazardset.id)
                 )
 
@@ -432,7 +432,7 @@ class Processor(BaseProcessor):
             elif unit in list(mysettings.keys()):
                 mysettings = mysettings[unit]
             else:
-                raise ProcessException(
+                raise ProcessError(
                     "No threshold found for {} {} {} {}".format(
                         hazardtype, "local" if local else "global", level, unit
                     )
