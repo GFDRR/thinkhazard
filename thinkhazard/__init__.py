@@ -60,7 +60,7 @@ def main(global_config, **settings):
     )
     config.add_static_view("lib", settings.get("node_modules"), cache_max_age=86000)
 
-    config.add_translation_dirs("thinkhazard:locale")
+    config.add_translation_dirs("/opt/thinkhazard/thinkhazard/locale")
     config.set_locale_negotiator("thinkhazard.i18n.custom_locale_negotiator")
 
     config.add_route("healthcheck", "/healthcheck")
