@@ -11,8 +11,7 @@
   // Main
   //
   var sources = [
-    'https://api.mapbox.com/styles/v1/stufraser1/cjftf111617x32spjhncapgm2/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoic3R1ZnJhc2VyMSIsImEiOiJQdnhvZTlnIn0.SEC9tGQDtw9yPQssVyF-8Q',
-    'https://api.mapbox.com/styles/v1/gsdpm/civtq56ch000z2klqcuvgmzdw/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZ3NkcG0iLCJhIjoiY2lqbmN5eG9mMDBndHVmbTU5Mmg1djF6MiJ9.QqFCD7tcmccysN8GUClW8w'
+    'https://api.mapbox.com/styles/v1/camptocamp/ckyoiaovl9zey15pwxnzg3uqj/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY2FtcHRvY2FtcCIsImEiOiJCcmZzU1RBIn0.rVR2B9tbO_pmdm8Z17FAOA',
   ].map(function(url) {
     return new ol.source.XYZ({ url: url });
   });
