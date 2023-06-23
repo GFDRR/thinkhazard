@@ -52,16 +52,15 @@ compile_catalog: \
 	msgfmt -o $@ $<
 
 thinkhazard/locale/%/LC_MESSAGES/thinkhazard.po: $(HOME)/.transifexrc
-	tx pull -r gfdrr-thinkhazard.ui
+	tx pull --translations --languages=$* --resources=gfdrr-thinkhazard.ui --force
 	touch `find thinkhazard/locale/ -name '*.po' 2> /dev/null`
 
 .INTERMEDIATE: $(HOME)/.transifexrc
 $(HOME)/.transifexrc:
 	echo "[https://www.transifex.com]" > $@
-	echo "hostname = https://www.transifex.com" >> $@
-	echo "username = $(TX_USR)" >> $@
-	@echo "password = $(TX_PWD)" >> $@
-	echo "token =" >> $@
+	echo "rest_hostname = https://rest.api.transifex.com" >> $@
+	@echo "token = $(TX_TOKEN)" >> $@
+	cat $@
 
 
 check: flake8 jshint

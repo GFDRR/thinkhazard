@@ -35,7 +35,6 @@ shapely
 shapely
 simplejson
 transaction
-transifex-client
 waitress
 zope.sqlalchemy
 celery

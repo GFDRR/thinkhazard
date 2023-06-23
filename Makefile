@@ -133,15 +133,13 @@ cleanall: clean
 .PHONY: docker_build_thinkhazard
 docker_build_thinkhazard:
 	docker build \
-		--build-arg TX_USR=${TX_USR} \
-		--build-arg TX_PWD=${TX_PWD} \
+		--build-arg TX_TOKEN=${TX_TOKEN} \
 		--target app -t camptocamp/thinkhazard .
 
 .PHONY: docker_build_builder
 docker_build_builder:
 	docker build \
-		--build-arg TX_USR=${TX_USR} \
-		--build-arg TX_PWD=${TX_PWD} \
+		--build-arg TX_TOKEN=${TX_TOKEN} \
 		--target builder -t camptocamp/thinkhazard-builder .
 
 .PHONY: docker_build_testdb
