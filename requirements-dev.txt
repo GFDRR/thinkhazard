@@ -7,4 +7,6 @@ mock
 nose
 pep8-naming
 pydevd
+pytest
+pytest-cov
 WebTest

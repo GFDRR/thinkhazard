@@ -95,7 +95,8 @@ compile_catalog:
 
 .PHONY: test
 test: ## Run automated tests
-	$(DOCKER_CMD) nosetests -v
+	# $(DOCKER_CMD) nosetests -v
+	$(DOCKER_CMD) pytest -vv --cov=thinkhazard tests
 
 .PHONY: bash
 test-bash: ## Open bash in a test container
