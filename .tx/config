@@ -12,3 +12,9 @@ type = PO
 source_file = /tmp/thinkhazard-database.pot
 source_lang = en
 file_filter = /tmp/thinkhazard-database-<lang>.po
+
+[o:gfdrr-labs:p:gfdrr-thinkhazard:r:test--database]
+type = PO
+source_file = /tmp/thinkhazard-database.pot
+source_lang = en
+file_filter = /tmp/thinkhazard-database-<lang>.po

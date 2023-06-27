@@ -5,6 +5,7 @@ SQLAlchemy<2
 alembic
 asyncio
 boto3
+chameleon  # needed by lingua
 colorlog
 geoalchemy2
 gunicorn

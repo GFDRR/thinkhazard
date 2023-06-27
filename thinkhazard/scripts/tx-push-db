@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/bash -e
 
 $(dirname $0)/tx-init
 
 pot-create -c lingua.cfg -o /tmp/thinkhazard-database.pot thinkhazard/dont_remove_me.db-i18n
 
-tx push -s -r gfdrr-thinkhazard.database ${TX_BRANCH:+-b "$TX_BRANCH"}
+tx push --source --resources=gfdrr-thinkhazard.database

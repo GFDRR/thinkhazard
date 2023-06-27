@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/bash -e
 
 $(dirname $0)/tx-init
 
-tx pull -s -r gfdrr-thinkhazard.database ${TX_BRANCH:+-b "$TX_BRANCH"}
+tx pull --translations --languages=es,fr --resources=gfdrr-thinkhazard.database --force
 
 import_l10n -v
