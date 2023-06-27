@@ -12,13 +12,18 @@ ENV PYTHONUNBUFFERED 1
 RUN apt-get update && apt-get install -y \
     # Install postgis for shp2pgsql as ogr2ogr from distrib is not compatible with PostgreSQL 12
     postgis \
-    git python-numpy gdal-bin libgdal-dev tidy gnupg2 unzip \
+    curl git python-numpy gdal-bin libgdal-dev tidy gnupg2 unzip \
     # pyppeteer dependencies (cf https://github.com/puppeteer/puppeteer/issues/1345)
     gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget \
     && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
     && echo "deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main" >  /etc/apt/sources.list.d/pgdg.list \
     && apt-get update && apt-get install -y postgresql-client-12 \
     && rm -rf /var/lib/apt/lists/*
+
+RUN curl -L -o /tmp/tx-linux-amd64.tar.gz https://github.com/transifex/cli/releases/download/v1.6.7/tx-linux-amd64.tar.gz \
+    && tar -C /usr/local/bin -xf /tmp/tx-linux-amd64.tar.gz tx \
+    && chmod +x /usr/local/bin/tx \
+    && rm -f /tmp/tx-linux-amd64.tar.gz
 
 ENV HOME=/home/user \
     NODE_PATH=/opt/thinkhazard/node_modules
@@ -91,10 +96,8 @@ RUN pip install --no-cache-dir -r /app/requirements-dev.txt \
 WORKDIR /app
 COPY . /app/
 
-ARG TX_USR
-ARG TX_PWD
-RUN TX_USR=$TX_USR \
-    TX_PWD=$TX_PWD \
+ARG TX_TOKEN
+RUN TX_TOKEN=$TX_TOKEN \
     make -f docker.mk build
 
 RUN pip install --no-deps -e .

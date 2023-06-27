@@ -25,8 +25,7 @@ services:
       - hazardsets:/tmp/hazardsets
     environment: &env
       - INI_FILE
-      - TX_USR
-      - TX_PWD
+      - TX_TOKEN
       - PGHOST
       - PGPORT
       - PGUSER_PUBLIC

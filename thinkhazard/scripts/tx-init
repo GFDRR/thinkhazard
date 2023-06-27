@@ -2,8 +2,6 @@
 
 cat <<EOF > ${HOME}/.transifexrc
 [https://www.transifex.com]
-hostname = https://www.transifex.com
-username = ${TX_USR}
-password = ${TX_PWD}
-token =
+rest_hostname = https://rest.api.transifex.com
+token = ${TX_TOKEN}
 EOF

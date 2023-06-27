@@ -1,17 +1,19 @@
 APScheduler
 Babel
 PyPDF2
-SQLAlchemy
+SQLAlchemy<2
 alembic
 asyncio
 boto3
+chameleon  # needed by lingua
 colorlog
 geoalchemy2
 gunicorn
 httplib2
-jinja2
+jinja2<3.1
 lingua
 markdown
+numpy<1.24  # for compatibility with rasterio 1.3.7
 papyrus
 passlib
 paste
@@ -35,7 +37,6 @@ shapely
 shapely
 simplejson
 transaction
-transifex-client
 waitress
 zope.sqlalchemy
 celery
