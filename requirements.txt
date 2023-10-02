@@ -1,6 +1,6 @@
 APScheduler
 Babel
-PyPDF2
+PyPDF2<2
 SQLAlchemy<2
 alembic
 asyncio
