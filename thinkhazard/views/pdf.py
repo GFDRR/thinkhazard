@@ -124,11 +124,12 @@ async def create_and_upload_pdf(file_name: str, pages: List[str], object_name: s
         logger.info("Got: {}".format(url))
         return BytesIO(await page.pdf({"format": "A4", "printBackground": True}))
 
-    chunks = await asyncio.gather(*[
-        render_page(url) for url in pages
-    ])
-
-    await browser.close()
+    try:
+        chunks = await asyncio.gather(*[
+            render_page(url) for url in pages
+        ])
+    finally:
+        await browser.close()
 
     # merge all pages
     writer = PdfFileWriter()
