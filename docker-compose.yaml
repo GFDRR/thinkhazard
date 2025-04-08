@@ -1,4 +1,4 @@
-version: '3'
+---
 
 volumes:
   hazardsets:
@@ -7,8 +7,9 @@ volumes:
 services:
 
   db:
-    image: camptocamp/thinkhazard-testdb
+    image: camptocamp/postgres:13-postgis-3
     volumes:
+      - ./docker/testdb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
       - postgresql_data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: ${PGPASSWORD_PUBLIC}
@@ -17,6 +18,11 @@ services:
 
   thinkhazard:
     image: camptocamp/thinkhazard
+    build: &build
+      context: .
+      target: app
+      args:
+        TX_TOKEN: ${TX_TOKEN}
     user: www-data
     restart: unless-stopped
     depends_on:
@@ -49,6 +55,7 @@ services:
 
   taskrunner:
     image: camptocamp/thinkhazard
+    build: *build
     user: www-data
     restart: unless-stopped
     depends_on:

@@ -2,23 +2,24 @@
 # Common base for build/test and runtime #
 ##########################################
 
-FROM python:3.8-slim-buster as base
+FROM python:3.8-slim-bullseye AS base
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # install middleware
-RUN apt-get update && apt-get install -y \
+RUN --mount=type=cache,target=/var/lib/apt/lists \
+    --mount=type=cache,target=/var/cache,sharing=locked \
+    apt-get update && apt-get install -y \
     # Install postgis for shp2pgsql as ogr2ogr from distrib is not compatible with PostgreSQL 12
     postgis \
-    curl git python-numpy gdal-bin libgdal-dev tidy gnupg2 unzip \
+    curl git python3-numpy gdal-bin libgdal-dev tidy gnupg2 unzip \
     # pyppeteer dependencies (cf https://github.com/puppeteer/puppeteer/issues/1345)
     gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget \
-    && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
-    && echo "deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main" >  /etc/apt/sources.list.d/pgdg.list \
-    && apt-get update && apt-get install -y postgresql-client-12 \
-    && rm -rf /var/lib/apt/lists/*
+    && apt install -y postgresql-common gnupg \
+    && /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y \
+    && apt-get update && apt-get install -y postgresql-client-13
 
 RUN curl -L -o /tmp/tx-linux-amd64.tar.gz https://github.com/transifex/cli/releases/download/v1.6.7/tx-linux-amd64.tar.gz \
     && tar -C /usr/local/bin -xf /tmp/tx-linux-amd64.tar.gz tx \
@@ -32,8 +33,8 @@ RUN mkdir -p /home/user/.local/share/pyppeteer/ && chmod -R 777 /home/user
 
 # install dependencies
 COPY ./requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r /app/requirements.txt \
-    && rm --recursive --force /tmp/* /var/tmp/* $HOME/.cache/* \
+RUN --mount=type=cache,target=/root/.cache \
+    pip install -r /app/requirements.txt \
     && pyppeteer-install
 
 # Administrative divisions cache
@@ -66,20 +67,22 @@ ENV AWS_ENDPOINT_URL= \
 ########################
 # Build and test image #
 ########################
-FROM base as builder
+FROM base AS builder
 
-RUN apt-get update && apt-get install -y \
+RUN --mount=type=cache,target=/var/lib/apt/lists \
+    --mount=type=cache,target=/var/cache,sharing=locked \
+    apt-get update && apt-get install -y \
     gettext \
     make \
     curl
 
 RUN \
   . /etc/os-release && \
-  echo "deb https://deb.nodesource.com/node_12.x ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/nodesource.list && \
+  echo "deb https://deb.nodesource.com/node_18.x ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/nodesource.list && \
   curl --silent https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
   apt-get update && \
   apt-get install --assume-yes --no-install-recommends \
-    'nodejs=12.*' \
+    'nodejs=18.*' \
     && \
   echo "Keep apt cache for now"
   #apt-get clean && \
@@ -90,8 +93,8 @@ RUN cd /opt/thinkhazard/ && npm install
 ENV PATH=${PATH}:${NODE_PATH}/.bin/
 
 COPY ./requirements-dev.txt /app/requirements-dev.txt
-RUN pip install --no-cache-dir -r /app/requirements-dev.txt \
-    && rm --recursive --force /tmp/pip* /var/tmp/* $HOME/.cache/*
+RUN --mount=type=cache,target=/root/.cache \
+    pip install -r /app/requirements-dev.txt
 
 WORKDIR /app
 COPY . /app/
@@ -109,7 +112,7 @@ CMD ["sh", "-c", "pserve ${INI_FILE} -n main"]
 #################
 # Runtime image #
 #################
-FROM base as app
+FROM base AS app
 
 COPY --from=builder /opt/thinkhazard/ /opt/thinkhazard/
 

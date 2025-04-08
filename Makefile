@@ -70,13 +70,14 @@ help: ## Display this help message
 # Entry points #
 ################
 
-DOCKER_CMD=docker-compose -f docker-compose-test.yaml run --rm --user `id -u` test
+DOCKER_CMD=docker compose -f docker-compose-test.yaml run --rm --user `id -u` test
 
 DOCKER_MAKE_CMD=$(DOCKER_CMD) make -f docker.mk
 
 .PHONY: build
 build: ## Build docker images
-build: docker_build_testdb docker_build_builder docker_build_thinkhazard
+build:
+	docker compose build
 
 .PHONY: check
 check: ## Check the code with flake8, jshint and bootlint
@@ -104,7 +105,7 @@ test-bash: ## Open bash in a test container
 
 .PHONY: test-psql
 test-psql: ## Run psql in local thinkhazard_test database
-	docker-compose -f docker-compose-test.yaml exec testdb psql -U thinkhazard -d thinkhazard_test
+	docker compose -f docker-compose-test.yaml exec testdb psql -U thinkhazard -d thinkhazard_test
 
 .PHONY: clean
 clean:
@@ -112,11 +113,11 @@ clean:
 	rm -rf thinkhazard/static/fonts
 	rm -rf `find thinkhazard/locale -name *.po 2> /dev/null`
 	rm -rf `find thinkhazard/locale -name *.mo 2> /dev/null`
-	docker-compose down --remove-orphans
+	docker compose down --remove-orphans
 
 .PHONY: cleanall
 cleanall: clean
-	docker-compose down -v --remove-orphans
+	docker compose down -v --remove-orphans
 	docker rmi -f \
 		camptocamp/thinkhazard \
 		camptocamp/thinkhazard-builder \
@@ -134,19 +135,12 @@ cleanall: clean
 .PHONY: docker_build_thinkhazard
 docker_build_thinkhazard:
 	docker build \
+		--no-cache \
+		--progress plain \
 		--build-arg TX_TOKEN=${TX_TOKEN} \
-		--target app -t camptocamp/thinkhazard .
-
-.PHONY: docker_build_builder
-docker_build_builder:
-	docker build \
-		--build-arg TX_TOKEN=${TX_TOKEN} \
-		--target builder -t camptocamp/thinkhazard-builder .
-
-.PHONY: docker_build_testdb
-docker_build_testdb:
-	docker build -t camptocamp/thinkhazard-testdb docker/testdb
-
+		--target app \
+		-t camptocamp/thinkhazard \
+		.
 
 ####################################
 # Push to docker hub and transifex #
@@ -159,15 +153,15 @@ docker-push: ## Push images to docker hub
 .PHONY: transifex-push-ui
 transifex-push-ui: ## Push UI strings to transifex
 transifex-push-ui: initdb
-	docker-compose run --rm thinkhazard /app/thinkhazard/scripts/tx-push-ui
+	docker compose run --rm thinkhazard /app/thinkhazard/scripts/tx-push-ui
 
 .PHONY: transifex-push-db
 transifex-push-db: ## Push database strings to transifex
-	docker-compose run --rm thinkhazard /app/thinkhazard/scripts/tx-push-db
+	docker compose run --rm thinkhazard /app/thinkhazard/scripts/tx-push-db
 
 .PHONY: transifex-pull-db
 transifex-pull-db: ## Pull database strings from transifex
-	docker-compose run --rm thinkhazard /app/thinkhazard/scripts/tx-pull-db
+	docker compose run --rm thinkhazard /app/thinkhazard/scripts/tx-pull-db
 
 
 ##############
@@ -176,27 +170,27 @@ transifex-pull-db: ## Pull database strings from transifex
 
 .PHONY: harvest
 harvest: ## Harvest GeoNode layers metadata
-	docker-compose run --rm thinkhazard harvest -v
+	docker compose run --rm thinkhazard harvest -v
 
 .PHONY: download
 download: ## Download raster data from GeoNode
-	docker-compose run --rm thinkhazard download -v
+	docker compose run --rm thinkhazard download -v
 
 .PHONY: complete
 complete: ## Mark complete hazardsets as such
-	docker-compose run --rm thinkhazard complete -v
+	docker compose run --rm thinkhazard complete -v -f
 
 .PHONY: process
 process: ## Compute hazard levels from hazardsets for administrative divisions level 2
-	docker-compose run --rm thinkhazard process -v
+	docker compose run --rm thinkhazard process -v
 
 .PHONY: decisiontree
 decisiontree: ## Run the decision tree and perform upscaling
-	docker-compose run --rm thinkhazard decision_tree -v
+	docker compose run --rm thinkhazard decision_tree -v
 
 .PHONY: publish
 publish: ## Publish validated data on public web site (for prod: make -f prod.mk publish)
-	docker-compose run --rm thinkhazard publish -v
+	docker compose run --rm thinkhazard publish -v
 
 
 #######################
@@ -209,15 +203,15 @@ populatedb: initdb import_admindivs import_recommendations import_contacts
 
 .PHONY: initdb
 initdb: ## Initialize database model
-	docker-compose run --rm thinkhazard initialize_thinkhazard_db "$(INI_FILE)#admin"
+	docker compose run --rm thinkhazard initialize_thinkhazard_db "$(INI_FILE)#admin"
 
 .PHONY: alembic_upgrade
 alembic_upgrade: ## Upgrade database model
-	docker-compose run --rm thinkhazard alembic -n admin -n public upgrade head
+	docker compose run --rm thinkhazard alembic -n admin -n public upgrade head
 
 .PHONY: initdb_force
 initdb_force:
-	docker-compose run --rm thinkhazard initialize_thinkhazard_db "$(INI_FILE)#admin" --force=1
+	docker compose run --rm thinkhazard initialize_thinkhazard_db "$(INI_FILE)#admin" --force=1
 
 .PHONY: reinit_all
 reinit_all: ## Completely clear and re-init database. Only for developement purpose
@@ -225,24 +219,24 @@ reinit_all: initdb_force import_admindivs import_recommendations import_contacts
 
 .PHONY: psql
 psql: ## Run psql in local thinkhazard database
-	docker-compose exec db psql -U thinkhazard -d thinkhazard
+	docker compose exec db psql -U thinkhazard -d thinkhazard
 
 .PHONY: bash
 bash: ## Open bash in an app container
-	docker-compose run --rm thinkhazard bash
+	docker compose run --rm thinkhazard bash
 
 .PHONY: import_admindivs
 import_admindivs: ## Import administrative divisions. Use DATA=turkey or DATA=indonesia if you want to work with a sample data set
 import_admindivs:
-	docker-compose run --rm thinkhazard import_admindivs -v
+	docker compose run --rm thinkhazard import_admindivs -v
 
 .PHONY: import_recommendations
 import_recommendations: ## Import recommendations
-	docker-compose run --rm thinkhazard import_recommendations -v
+	docker compose run --rm thinkhazard import_recommendations -v
 
 .PHONY: import_contacts
 import_contacts: ## Import contacts
-	docker-compose run --rm thinkhazard import_contacts -v
+	docker compose run --rm thinkhazard import_contacts -v
 
 
 #############################
@@ -261,23 +255,13 @@ psql-admin:  # Run psql on int/prod admin databases, example: make -f config/pro
 		camptocamp/postgres:12 \
 		psql -d $(PGDATABASE_ADMIN)
 
-backup:  ## Backup int/prod databases on local filesystem, example: make -f config/prod.mk backup
-	docker run --rm -i --entrypoint "" \
-		-e PGHOST=$(PGHOST_SLAVE) \
-		-e PGPORT=$(PGPORT_SLAVE) \
-		-e PGUSER=$(PGUSER_ADMIN) \
-		-e PGPASSWORD=$(PGPASSWORD_ADMIN) \
-		camptocamp/postgres:12 \
-		pg_dump -Fc $(PGDATABASE_ADMIN) \
-		> $(LOCAL_BACKUP_FOLDER)/${BACKUP}
-
 restore:  # Restore database backup in local database
-	docker-compose up -d db
+	docker compose up -d db
 
 	# Drop and restore schemas datamart and processing
-	docker-compose exec --user postgres db psql -d $(PGDATABASE_ADMIN) \
+	docker compose exec --user postgres db psql -d $(PGDATABASE_ADMIN) \
 		-c "DROP SCHEMA IF EXISTS datamart CASCADE; CREATE SCHEMA datamart AUTHORIZATION $(PGUSER_ADMIN);"
-	docker-compose exec --user postgres db psql -d $(PGDATABASE_ADMIN) \
+	docker compose exec --user postgres db psql -d $(PGDATABASE_ADMIN) \
 		-c "DROP SCHEMA IF EXISTS processing CASCADE; CREATE SCHEMA processing AUTHORIZATION $(PGUSER_ADMIN);"
 	cat $(LOCAL_BACKUP_FOLDER)/${BACKUP} | \
 		docker exec -i \
@@ -291,7 +275,7 @@ restore:  # Restore database backup in local database
 			-d $(PGDATABASE_ADMIN) -n datamart -n processing
 
 	# Drop and restore table alembic_version
-	docker-compose exec --user postgres db psql -d $(PGDATABASE_ADMIN) \
+	docker compose exec --user postgres db psql -d $(PGDATABASE_ADMIN) \
 		-c "DROP TABLE IF EXISTS alembic_version;"
 	cat $(LOCAL_BACKUP_FOLDER)/${BACKUP} | \
 		docker exec -i \

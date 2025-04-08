@@ -1,8 +1,10 @@
-version: '3'
+---
 
 services:
   testdb:
-    image: camptocamp/thinkhazard-testdb
+    image: camptocamp/postgres:13-postgis-3
+    volumes:
+      - ./docker/testdb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     environment:
       POSTGRES_PASSWORD: thinkhazard
       POSTGRES_DB: thinkhazard_test
@@ -10,6 +12,11 @@ services:
 
   test:
     image: camptocamp/thinkhazard-builder
+    build: &build
+      context: .
+      target: builder
+      args:
+        TX_TOKEN: ${TX_TOKEN}
     depends_on:
       - testdb
       - testredis
