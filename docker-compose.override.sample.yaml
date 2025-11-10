@@ -7,6 +7,7 @@ services:
       target: builder
     environment:
       USE_CACHE: 'TRUE'
+      # PUPPETEER_URL: 'http://localhost:3000'
     volumes:
       - '${PWD}/development.ini:/app/development.ini'
       - '${PWD}/thinkhazard:/app/thinkhazard'
@@ -20,3 +21,16 @@ services:
     volumes:
       - '${PWD}/development.ini:/app/development.ini'
       - '${PWD}/thinkhazard:/app/thinkhazard'
+
+  puppeteer:
+    build:
+      args:
+        NODE_ENV: development
+    volumes:
+      - ./docker/puppeteer/server.js:/app/server.js
+    environment:
+      - NODE_ENV=development
+    command: npx nodemon --inspect=0.0.0.0:9229 server.js
+    ports:
+      - "8081:8080"
+      - "9229:9229"

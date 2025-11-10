@@ -1,0 +1,21 @@
+{
+  "name": "html-to-pdf-service",
+  "version": "1.0.0",
+  "description": "Service de conversion HTML vers PDF avec Puppeteer",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "debug": "node --inspect server.js",
+    "debug-brk": "node --inspect-brk server.js",
+    "debug-docker": "node --inspect=0.0.0.0:9229 server.js",
+    "dev": "PORT=3000 nodemon --inspect server.js",
+    "generate": "node generate-pdf.js"
+  },
+  "dependencies": {
+    "express": "^4.18.4",
+    "puppeteer": "^23.5.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}

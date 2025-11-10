@@ -37,6 +37,9 @@ export BROKER_URL ?= redis://redis:6379/0
 
 export HTPASSWORDS ?= admin:admin
 
+export PUPPETEER_URL ?= http://puppeteer:8080
+
+
 .PHONY: help_old
 help_old:
 	@echo "Usage: make <target>"

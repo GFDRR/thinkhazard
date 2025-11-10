@@ -18,7 +18,6 @@ papyrus
 passlib
 paste
 psycopg2
-pyppeteer
 pyproj
 pyquery
 pyramid<2
@@ -42,3 +41,4 @@ zope.sqlalchemy
 celery
 celery[s3]
 celery[redis]
+httpx
