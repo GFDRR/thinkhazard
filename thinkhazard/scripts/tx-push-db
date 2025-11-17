@@ -2,6 +2,6 @@
 
 $(dirname $0)/tx-init
 
-pot-create -c lingua.cfg -o /tmp/thinkhazard-database.pot thinkhazard/dont_remove_me.db-i18n
+pot-create -c lingva.cfg -o /tmp/thinkhazard-database.pot thinkhazard/dont_remove_me.db-i18n
 
-tx push --source --resources=gfdrr-thinkhazard.database
+tx push --source --resources=gfdrr-thinkhazard.${TX_BRANCH//./-}-database

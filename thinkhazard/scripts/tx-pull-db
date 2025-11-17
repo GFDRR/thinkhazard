@@ -2,6 +2,6 @@
 
 $(dirname $0)/tx-init
 
-tx pull --translations --languages=es,fr --resources=gfdrr-thinkhazard.database --force
+tx pull --translations --languages=es,fr --resources=gfdrr-thinkhazard.${TX_BRANCH//./-}-database --force
 
-import_l10n -v
+python3 -m thinkhazard.processing.import_l10n -v
