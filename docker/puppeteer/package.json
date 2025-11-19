@@ -2,6 +2,7 @@
   "name": "html-to-pdf-service",
   "version": "1.0.0",
   "description": "Service de conversion HTML vers PDF avec Puppeteer",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

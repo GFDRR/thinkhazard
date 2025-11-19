@@ -29,7 +29,7 @@ COPY package.json package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm \
     npm install --verbose
 
-COPY server.js .
+COPY src/ ./
 
 USER appuser
 
