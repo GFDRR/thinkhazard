@@ -3,6 +3,8 @@ version: '3'
 services:
   thinkhazard:
     image: camptocamp/thinkhazard-builder
+    build: &build
+      target: builder
     environment:
       USE_CACHE: 'TRUE'
     volumes:
@@ -12,6 +14,7 @@ services:
 
   taskrunner:
     image: camptocamp/thinkhazard-builder
+    build: *build
     environment:
       USE_CACHE: 'TRUE'
     volumes:
