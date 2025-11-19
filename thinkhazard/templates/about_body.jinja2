@@ -168,29 +168,3 @@
   </div>
 </div>
 
-<br>
-<hr>
-<div class="row">
-  <div class="col-md-12">
-    <p>
-    {{gettext('The tool code is open source, to encourage other users to adapt the tool to their needs. The code can be found on %(github_link)s.', github_link='<a href="https://github.com/GFDRR/thinkhazard" target="_blank">Github</a>') | markdown}}
-    {{gettext('Current instance version is %(version)s', version=request.registry.settings['version'])}}.
-    {{gettext('Source of Administrative boundaries: The Global Administrative Unit Layers (GAUL) dataset, implemented by FAO within the CountrySTAT and Agricultural Market Information System (AMIS) projects.') | markdown}}
-    </p>
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-12">
-    <p>
-      {{licence()}}
-    </p>
-  </div>
-</div>
-<hr>
-<div class="row">
-  <div class="col-md-12">
-    <p>
-    {{gettext('The data was published for the last time on *%(date)s*.', date=publication_date)|markdown}}
-    </p>
-  </div>
-</div>
