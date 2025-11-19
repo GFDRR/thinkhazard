@@ -23,6 +23,7 @@ services:
       target: app
       args:
         TX_TOKEN: ${TX_TOKEN}
+        TX_BRANCH: ${TX_BRANCH}
     user: www-data
     restart: unless-stopped
     depends_on:

@@ -17,8 +17,8 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
-from lingua.extractors import Extractor
-from lingua.extractors import Message
+from lingva.extractors import Extractor
+from lingva.extractors import Message
 
 from sqlalchemy import engine_from_config
 from thinkhazard.settings import load_full_settings

@@ -61,8 +61,7 @@ ENV AWS_ENDPOINT_URL= \
     LOG_LEVEL_ROOT=WARN \
     LOG_LEVEL_THINKHAZARD=WARN \
     LOG_LEVEL_SQLALCHEMY=WARN \
-    USE_CACHE=FALSE \
-    TX_BRANCH=test
+    USE_CACHE=FALSE
 
 ########################
 # Build and test image #
@@ -92,6 +91,14 @@ COPY package.json /opt/thinkhazard/
 RUN cd /opt/thinkhazard/ && npm install
 ENV PATH=${PATH}:${NODE_PATH}/.bin/
 
+# Install OpenLayers from release, not source.
+RUN mkdir --parent /opt/thinkhazard/node_modules/openlayers/dist \
+    && cd /opt/thinkhazard/node_modules/openlayers/dist \
+    && curl -J -L -o v4.5.0-dist.zip \
+        "https://github.com/openlayers/openlayers/releases/download/v4.5.0/v4.5.0-dist.zip" \
+    && unzip v4.5.0-dist.zip && rm -f v4.5.0-dist.zip \
+    && mv v4.5.0-dist/* . && rm -rf v4.5.0-dist
+
 COPY ./requirements-dev.txt /app/requirements-dev.txt
 RUN --mount=type=cache,target=/root/.cache \
     pip install -r /app/requirements-dev.txt
@@ -100,12 +107,17 @@ WORKDIR /app
 COPY . /app/
 
 ARG TX_TOKEN
-RUN TX_TOKEN=$TX_TOKEN \
-    make -f docker.mk build
+ARG TX_BRANCH
+RUN TX_TOKEN=$TX_TOKEN TX_BRANCH=$TX_BRANCH \
+    && make -f docker.mk build
 
 RUN pip install --no-deps -e .
 
 RUN chmod 777 /app
+
+ARG TX_BRANCH
+ENV TX_BRANCH=$TX_BRANCH
+
 USER www-data
 CMD ["sh", "-c", "pserve ${INI_FILE} -n main"]
 
@@ -119,6 +131,9 @@ COPY --from=builder /opt/thinkhazard/ /opt/thinkhazard/
 WORKDIR /app
 COPY --from=builder /app/ /app/
 RUN pip install --no-deps -e .
+
+ARG TX_BRANCH
+ENV TX_BRANCH=$TX_BRANCH
 
 USER www-data
 CMD ["sh", "-c", "pserve ${INI_FILE} -n main"]

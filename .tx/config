@@ -1,19 +1,22 @@
 [main]
 host = https://www.transifex.com
 
-[o:gfdrr-labs:p:gfdrr-thinkhazard:r:ui]
+[o:gfdrr-labs:p:gfdrr-thinkhazard:r:3-0-ui]
+resource_name = 3.0 ui
 type = PO
 source_file = /tmp/thinkhazard.pot
 source_lang = en
 file_filter = thinkhazard/locale/<lang>/LC_MESSAGES/thinkhazard.po
 
-[o:gfdrr-labs:p:gfdrr-thinkhazard:r:database]
+[o:gfdrr-labs:p:gfdrr-thinkhazard:r:3-0-database]
+resource_name = 3.0 database
 type = PO
 source_file = /tmp/thinkhazard-database.pot
 source_lang = en
 file_filter = /tmp/thinkhazard-database-<lang>.po
 
-[o:gfdrr-labs:p:gfdrr-thinkhazard:r:test--database]
+[o:gfdrr-labs:p:gfdrr-thinkhazard:r:test-database]
+resource_name = test database
 type = PO
 source_file = /tmp/thinkhazard-database.pot
 source_lang = en

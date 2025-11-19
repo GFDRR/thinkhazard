@@ -1,3 +1,4 @@
+export TX_BRANCH = 3.0
 
 AUTHUSERFILE ?= /var/www/vhosts/wb-thinkhazard/conf/.htpasswd
 DATA ?= world
@@ -76,7 +77,7 @@ DOCKER_MAKE_CMD=$(DOCKER_CMD) make -f docker.mk
 
 .PHONY: build
 build: ## Build docker images
-build:
+build: .env
 	docker compose build
 
 .PHONY: check
@@ -203,7 +204,7 @@ populatedb: initdb import_admindivs import_recommendations import_contacts
 
 .PHONY: initdb
 initdb: ## Initialize database model
-	docker compose run --rm thinkhazard initialize_thinkhazard_db "$(INI_FILE)#admin"
+	docker compose run --rm thinkhazard python -m thinkhazard.scripts.initializedb "$(INI_FILE)#admin"
 
 .PHONY: alembic_upgrade
 alembic_upgrade: ## Upgrade database model
@@ -223,7 +224,7 @@ psql: ## Run psql in local thinkhazard database
 
 .PHONY: bash
 bash: ## Open bash in an app container
-	docker compose run --rm thinkhazard bash
+	docker compose run --rm --user `id -u` thinkhazard bash
 
 .PHONY: import_admindivs
 import_admindivs: ## Import administrative divisions. Use DATA=turkey or DATA=indonesia if you want to work with a sample data set

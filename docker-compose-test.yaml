@@ -17,6 +17,7 @@ services:
       target: builder
       args:
         TX_TOKEN: ${TX_TOKEN}
+        TX_BRANCH: ${TX_BRANCH}
     depends_on:
       - testdb
       - testredis
