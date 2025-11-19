@@ -7,7 +7,7 @@
 # done
 sleep 5
 
-/usr/bin/mc config host add localminio http://${AWS_HOST}:${AWS_PORT} "${AWS_ACCESS_KEY_ID}" "${AWS_SECRET_ACCESS_KEY}" --api "s3v4"
+/usr/bin/mc alias set localminio http://${AWS_HOST}:${AWS_PORT} "${AWS_ACCESS_KEY_ID}" "${AWS_SECRET_ACCESS_KEY}" --api "s3v4"
 /usr/bin/mc mb --ignore-existing "localminio/${AWS_BUCKET_NAME}"
 
 exec "$@"
