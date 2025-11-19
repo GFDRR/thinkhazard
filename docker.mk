@@ -51,8 +51,10 @@ compile_catalog: \
 	mkdir -p $(dir $@)
 	msgfmt -o $@ $<
 
+TX_BRANCH_DASHED := $(subst .,-,$(TX_BRANCH))
+
 thinkhazard/locale/%/LC_MESSAGES/thinkhazard.po: $(HOME)/.transifexrc
-	tx pull --translations --languages=$* --resources=gfdrr-thinkhazard.ui --force
+	tx pull --translations --languages=$* --resources=gfdrr-thinkhazard.$(TX_BRANCH_DASHED)-ui --force
 	touch `find thinkhazard/locale/ -name '*.po' 2> /dev/null`
 
 .INTERMEDIATE: $(HOME)/.transifexrc

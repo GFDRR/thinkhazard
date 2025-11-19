@@ -65,7 +65,7 @@ setup(
             "decision_tree = thinkhazard.processing.decisiontree:DecisionMaker.run",
             "publish = thinkhazard.processing.publish:Publisher.run",
         ],
-        "lingua.extractors": [
+        "lingva.extractors": [
             "database = thinkhazard.lib.lingua_extractor:DatabaseExtractor",
             "enum = thinkhazard.lib.lingua_extractor:EnumExtractor",
         ],
