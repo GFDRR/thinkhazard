@@ -1,4 +1,4 @@
-export TX_BRANCH = 2.1
+export TX_BRANCH = 3.0
 
 AUTHUSERFILE ?= /var/www/vhosts/wb-thinkhazard/conf/.htpasswd
 DATA ?= world
