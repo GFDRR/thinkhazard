@@ -92,6 +92,14 @@ COPY package.json /opt/thinkhazard/
 RUN cd /opt/thinkhazard/ && npm install
 ENV PATH=${PATH}:${NODE_PATH}/.bin/
 
+# Install OpenLayers from release, not source.
+RUN mkdir --parent /opt/thinkhazard/node_modules/openlayers/dist \
+    && cd /opt/thinkhazard/node_modules/openlayers/dist \
+    && curl -J -L -o v4.5.0-dist.zip \
+        "https://github.com/openlayers/openlayers/releases/download/v4.5.0/v4.5.0-dist.zip" \
+    && unzip v4.5.0-dist.zip && rm -f v4.5.0-dist.zip \
+    && mv v4.5.0-dist/* . && rm -rf v4.5.0-dist
+
 COPY ./requirements-dev.txt /app/requirements-dev.txt
 RUN --mount=type=cache,target=/root/.cache \
     pip install -r /app/requirements-dev.txt
