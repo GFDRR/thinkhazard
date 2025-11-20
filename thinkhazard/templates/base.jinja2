@@ -88,13 +88,13 @@
       });
 
 
-      if (document.referrer.indexOf('{{'index'|route_url}}') == -1) {
+      {#if (document.referrer.indexOf('{{'index'|route_url}}') == -1) {
         var disclaimerUrl = '{{'disclaimer'|route_url}}';
         $('#myModal').modal({
           backdrop: 'static',
           keyboard: false
         }).modal('show').load(disclaimerUrl);
-      }
+      }#}
     </script>
     {% block scripts %}
     {% endblock scripts %}
