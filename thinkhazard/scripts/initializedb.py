@@ -164,3 +164,7 @@ def populate_datamart(dbsession):
                 hazardtype.mnemonic, hazardlevel.mnemonic
             )
             dbsession.add(r)
+
+
+if __name__ == "__main__":
+    main()
