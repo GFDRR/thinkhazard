@@ -112,11 +112,13 @@ def report(request):
             select(
                 [
                     func.ST_Translate(
-                        func.ST_Shift_Longitude(
+                        func.ST_ShiftLongitude(
                             func.ST_Translate(
-                                func.ST_Transform(AdministrativeDivision.geom_simplified, 4326),
+                                func.ST_Transform(
+                                    AdministrativeDivision.geom_simplified, 4326
+                                ),
                                 180,
-                                0
+                                0,
                             )
                         ),
                         -180,
