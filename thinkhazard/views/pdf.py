@@ -26,6 +26,7 @@ import os
 
 from typing import List
 
+import httpx
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest
 from pyramid.response import FileResponse
@@ -33,7 +34,6 @@ from pyramid.response import FileResponse
 from io import BytesIO
 from PyPDF2 import PdfFileReader, PdfFileWriter
 from asyncio import run
-from pyppeteer import launch
 
 from .report import (
     _hazardlevel_nodata,
@@ -54,8 +54,6 @@ from sqlalchemy import func
 from sqlalchemy.orm import joinedload
 
 from geoalchemy2.functions import ST_Centroid
-
-from thinkhazard.lib.s3helper import S3Helper
 
 REPORT_ID_REGEX = re.compile("\d{4}_\d{2}_\w{8}(-\w{4}){3}-\w{12}?")
 
@@ -106,30 +104,37 @@ def pdf_cover(request):
 """pdf_about: see index.py"""
 
 
-async def create_and_upload_pdf(file_name: str, pages: List[str], object_name: str, s3_helper: S3Helper):
+async def create_and_upload_pdf(request, file_name: str, pages: List[str], object_name: str):
     """Create a PDF file with the given pages using pyppeteer.
     """
-    # --no-sandbox is required to make Chrome/Chromium run under root.
-    browser = await launch(
-        handleSIGINT=False,
-        handleSIGTERM=False,
-        handleSIGHUP=False,
-        args=["--no-sandbox"],
-    )
+    async def render_page(page):
+        puppeteer_url = request.registry.settings["puppeteer_url"]
 
-    async def render_page(url):
-        page = await browser.newPage()
-        logger.info("Getting: {}".format(url))
-        await page.goto(url, {"waitUntil": "networkidle0"})
-        logger.info("Got: {}".format(url))
-        return BytesIO(await page.pdf({"format": "A4", "printBackground": True}))
+        timeout = httpx.Timeout(
+            connect=30.0,
+            read=60.0,
+            write=30.0,
+            pool=30.0
+        )
 
-    try:
-        chunks = await asyncio.gather(*[
-            render_page(url) for url in pages
-        ])
-    finally:
-        await browser.close()
+        limits = httpx.Limits(max_keepalive_connections=5, max_connections=10)
+
+        async with httpx.AsyncClient(timeout=timeout, limits=limits) as client:
+            try:
+                logger.info("Starting PDF generation for PAGE: %s", page)
+                r = await client.get(f"{puppeteer_url}/generate-pdf", params={"path": page})
+                logger.info("PDF generation completed for PAGE: %s", page)
+                r.raise_for_status()
+                return BytesIO(r.content)
+            except Exception as e:
+                logger.error("Error when requesting PAGE: %s - %s", page, str(e))
+                raise
+
+        return BytesIO(r.content)
+
+    chunks = await asyncio.gather(*[
+        render_page(page) for page in pages
+    ])
 
     # merge all pages
     writer = PdfFileWriter()
@@ -142,7 +147,7 @@ async def create_and_upload_pdf(file_name: str, pages: List[str], object_name: s
     with open(file_name, "wb") as output:
         writer.write(output)
 
-    s3_helper.upload_file(file_name, object_name)
+    request.s3_helper.upload_file(file_name, object_name)
 
 
 @view_config(route_name="create_pdf_report")
@@ -170,19 +175,19 @@ def create_pdf_report(request):
         )
         query_args = {"_query": {"_LOCALE_": request.locale_name}}
         pages = [
-            request.route_url("pdf_cover", divisioncode=division_code, **query_args),
-            request.route_url("pdf_about", **query_args),
+            request.route_path("pdf_cover", divisioncode=division_code, **query_args),
+            request.route_path("pdf_about", **query_args),
         ]
         for cat in categories:
             pages.append(
-                request.route_url(
+                request.route_path(
                     "report_print",
                     divisioncode=division_code,
                     hazardtype=cat.hazardtype.mnemonic,
                     **query_args,
                 )
             )
-        run(create_and_upload_pdf(local_path, pages, s3_path, request.s3_helper))
+        run(create_and_upload_pdf(request, local_path, pages, s3_path))
 
     response = FileResponse(local_path, request=request, content_type="application/pdf")
     response.headers["Content-Disposition"] = (

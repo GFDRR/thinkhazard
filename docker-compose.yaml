@@ -51,6 +51,7 @@ services:
       - ANALYTICS
       - BROKER_URL
       - HTPASSWORDS
+      - PUPPETEER_URL
     ports:
       - 8080:8080
 
@@ -91,3 +92,9 @@ services:
       - AWS_BUCKET_NAME
     entrypoint: /docker-entrypoint
     command: ["exit", "0"]
+
+  puppeteer:
+    image: camptocamp/thinkhazard-puppeteer
+    build: ./docker/puppeteer
+    environment:
+      - BASE_URL=http://thinkhazard:8080

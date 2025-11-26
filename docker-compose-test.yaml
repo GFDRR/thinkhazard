@@ -43,6 +43,7 @@ services:
       - ANALYTICS
       - BROKER_URL=redis://testredis:6379/0
       - HTPASSWORDS
+      - PUPPETEER_URL
 
   testminio:
     image: minio/minio

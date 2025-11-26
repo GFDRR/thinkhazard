@@ -15,8 +15,6 @@ RUN --mount=type=cache,target=/var/lib/apt/lists \
     # Install postgis for shp2pgsql as ogr2ogr from distrib is not compatible with PostgreSQL 12
     postgis \
     curl git python3-numpy gdal-bin libgdal-dev tidy gnupg2 unzip \
-    # pyppeteer dependencies (cf https://github.com/puppeteer/puppeteer/issues/1345)
-    gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget \
     && apt install -y postgresql-common gnupg \
     && /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y \
     && apt-get update && apt-get install -y postgresql-client-13
@@ -29,13 +27,10 @@ RUN curl -L -o /tmp/tx-linux-amd64.tar.gz https://github.com/transifex/cli/relea
 ENV HOME=/home/user \
     NODE_PATH=/opt/thinkhazard/node_modules
 
-RUN mkdir -p /home/user/.local/share/pyppeteer/ && chmod -R 777 /home/user
-
 # install dependencies
 COPY ./requirements.txt /app/requirements.txt
 RUN --mount=type=cache,target=/root/.cache \
-    pip install -r /app/requirements.txt \
-    && pyppeteer-install
+    pip install -r /app/requirements.txt
 
 # Administrative divisions cache
 RUN mkdir /tmp/admindivs && chmod 777 /tmp/admindivs
