@@ -48,6 +48,8 @@ VOLUME /tmp/geonode_api
 RUN mkdir /tmp/backups && chmod 777 /tmp/backups
 VOLUME /tmp/backups
 
+RUN mkdir -p /home/user && chmod 777 /home/user
+
 ENV AWS_ENDPOINT_URL= \
     GEONODE_URL=tbd \
     GEONODE_USERNAME=tbd \
