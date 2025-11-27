@@ -55,6 +55,7 @@ def admindivs():
     imp.AdministrativeDivisionsImporter.run((INI_FILE, "-v"))
     print("end admindivis")
 
+
 @app.task
 def admindivs_gpkg(geopackage_path):
     print("start admindivs_gpkg")

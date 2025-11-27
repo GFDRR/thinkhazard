@@ -19,18 +19,13 @@
 
 import os
 import logging
-
 import geopandas as gpd
-
 from thinkhazard.processing import BaseProcessor
 
 LOG = logging.getLogger(__name__)
 
 
 class GeopackageImporter(BaseProcessor):
-    """
-    This script imports administrative divisions from a geopackage file.
-    """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -50,38 +45,68 @@ class GeopackageImporter(BaseProcessor):
         return parser
 
     def do_execute(self, geopackage_path=None):
-        LOG.info("Starting GeopackageImporter.do_execute()")
-        
         if geopackage_path is None:
-            LOG.error("Geopackage path is None!")
             raise ValueError("Geopackage path is required")
-        
-        self.geopackage_path = geopackage_path
-        
-        LOG.info(f"Checking if file exists: {self.geopackage_path}")
-        if not os.path.isfile(self.geopackage_path):
-            LOG.error(f"File not found: {self.geopackage_path}")
-            raise FileNotFoundError(f"Geopackage file not found: {self.geopackage_path}")
-        
-        LOG.info(f"File exists! Reading geopackage file: {self.geopackage_path}")
-        
-        try:
-            gdf = gpd.read_file(self.geopackage_path, engine="pyogrio")
-            
-            LOG.info(f"Successfully read geopackage file")
-            LOG.info(f"Number of features: {len(gdf)}")
-            LOG.info(f"Columns: {list(gdf.columns)}")
-            LOG.info(f"CRS: {gdf.crs}")
-            LOG.info(f"Geometry types: {gdf.geometry.geom_type.unique()}")
 
-            LOG.info(f"Deleting temporary file: {self.geopackage_path}")
-            os.unlink(self.geopackage_path)
-            
-            return gdf
-            
+        self.geopackage_path = geopackage_path
+
+        if not os.path.isfile(self.geopackage_path):
+            raise FileNotFoundError(
+                f"Geopackage file not found: {self.geopackage_path}"
+            )
+
+        try:
+            LOG.info("Reading ADM2 source: %s", self.geopackage_path)
+            gdf_adm2 = gpd.read_file(self.geopackage_path, engine="pyogrio")
+
+            LOG.info("Extracting ADM1 boundaries...")
+
+            adm1_cols = [
+                'ISO_A3', 'ISO_A2', 'WB_A3', 'WB_REGION', 'WB_STATUS',
+                'NAM_0', 'NAM_1', 'ADM1CD_c'
+            ]
+
+            hazard_score_cols = [
+                'LS_Hazard_score', 'EQ_Hazard_score', 'TC_Hazard_score',
+                'VO_Hazard_score', 'EH_Hazard_score', 'TS_Hazard_score',
+                'WF_Hazard_score'
+            ]
+
+            aggfunc = {
+                col: 'max'
+                for col in hazard_score_cols
+                if col in gdf_adm2.columns
+            }
+
+            gdf_adm1 = gdf_adm2.dissolve(
+                by=adm1_cols, aggfunc=aggfunc, as_index=False
+            )
+
+            gdf_adm1['geometry'] = gdf_adm1.geometry.buffer(0)
+
+            LOG.info("Extracting ADM0 boundaries...")
+
+            adm0_cols = [
+                'ISO_A3', 'ISO_A2', 'WB_A3', 'WB_REGION', 'WB_STATUS',
+                'NAM_0'
+            ]
+
+            gdf_adm0 = gdf_adm2.dissolve(
+                by=adm0_cols, aggfunc=aggfunc, as_index=False
+            )
+            gdf_adm0['geometry'] = gdf_adm0.geometry.buffer(0)
+
+            LOG.info("Processing Complete.")
+            LOG.info("ADM2 Count: %d", len(gdf_adm2))
+            LOG.info("ADM1 Count: %d", len(gdf_adm1))
+            LOG.info("ADM0 Count: %d", len(gdf_adm0))
+
+            return {
+                "adm2": gdf_adm2,
+                "adm1": gdf_adm1,
+                "adm0": gdf_adm0
+            }
+
         except Exception as e:
-            LOG.error(f"Error reading geopackage file: {str(e)}")
-            if os.path.isfile(self.geopackage_path):
-                LOG.info(f"Deleting temporary file after error: {self.geopackage_path}")
-                os.unlink(self.geopackage_path)
+            LOG.error("Error processing geopackage: %s", str(e))
             raise

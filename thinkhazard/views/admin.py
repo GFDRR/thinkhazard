@@ -83,10 +83,10 @@ def upload_geopackage(request):
         return HTTPFound(request.route_url("admin_index"))
 
     file_path = f"/tmp/hazardsets/{geopackage_file.filename}"
-    
+
     with open(file_path, "wb") as f:
         f.write(geopackage_file.file.read())
-    
+
     celery_tasks.admindivs_gpkg.delay(file_path)
     return HTTPFound(request.route_url("admin_index"))
 
