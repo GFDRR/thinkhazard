@@ -3,6 +3,7 @@
 volumes:
   hazardsets:
   postgresql_data:
+  puppeteer_tmp:
 
 services:
 
@@ -96,5 +97,9 @@ services:
   puppeteer:
     image: camptocamp/thinkhazard-puppeteer
     build: ./docker/puppeteer
+    user: 1000:1000
+    read_only: true
     environment:
       - BASE_URL=http://thinkhazard:8080
+    volumes:
+      - puppeteer_tmp:/tmp
