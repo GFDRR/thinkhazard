@@ -48,6 +48,7 @@ TASKS_LABELS = {
     "transifex_fetch": "Import from Transifex",
     "transifex_push": "Push to Transifex",
     "admindivs": "Import administrative division from GeoNode",
+    "admindivs_gpkg": "Import administrative division from GeoPackage",
     "process": "Harvest & process Geonode datasets",
 }
 
@@ -72,6 +73,21 @@ def index(request):
 def add_task(request):
     task = request.params.get("task")
     getattr(celery_tasks, task).delay()
+    return HTTPFound(request.route_url("admin_index"))
+
+
+@view_config(route_name="admin_upload_geopackage")
+def upload_geopackage(request):
+    geopackage_file = request.POST.get("geopackage_file")
+    if not hasattr(geopackage_file, 'filename'):
+        return HTTPFound(request.route_url("admin_index"))
+
+    file_path = f"/tmp/hazardsets/{geopackage_file.filename}"
+    
+    with open(file_path, "wb") as f:
+        f.write(geopackage_file.file.read())
+    
+    celery_tasks.admindivs_gpkg.delay(file_path)
     return HTTPFound(request.route_url("admin_index"))
 
 

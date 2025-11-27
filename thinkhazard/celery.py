@@ -9,6 +9,7 @@ from thinkhazard.processing.completing import Completer
 from thinkhazard.processing.processing import Processor
 from thinkhazard.processing.decisiontree import DecisionMaker
 from thinkhazard.processing.publish import Publisher
+from thinkhazard.processing.import_geopackage import GeopackageImporter
 imp = importlib.import_module("thinkhazard.processing.import")
 
 INI_FILE = os.environ["INI_FILE"]
@@ -53,6 +54,12 @@ def admindivs():
     print("start admindivis")
     imp.AdministrativeDivisionsImporter.run((INI_FILE, "-v"))
     print("end admindivis")
+
+@app.task
+def admindivs_gpkg(geopackage_path):
+    print("start admindivs_gpkg")
+    GeopackageImporter.run((INI_FILE, "-v", "--geopackage-path", geopackage_path))
+    print("end admindivs_gpkg")
 
 
 @app.task

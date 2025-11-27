@@ -47,6 +47,36 @@
                 Import from Geonode
               </a>
             </p>
+            <p>
+              Import administrative divisions from a GeoPackage file.
+            </p>
+            <form method="post" action="{{request.route_url('admin_upload_geopackage')}}" enctype="multipart/form-data">
+              <div class="form-group">
+                <input 
+                  type="file" 
+                  name="geopackage_file" 
+                  id="geopackage_file"
+                  accept=".gpkg"
+                  class="form-control"
+                  {% if running|length > 0 %}
+                  disabled="disabled"
+                  {% endif %}
+                />
+              </div>
+              <p class="text-right">
+                <button 
+                  type="submit" 
+                  id="geopackage_submit"
+                  class="btn btn-info"
+                  disabled="disabled"
+                  {% if running|length > 0 %}
+                  data-task-running="true"
+                  {% endif %}
+                >
+                  <span class="glyphicon glyphicon-upload"></span> Import from GeoPackage
+                </button>
+              </p>
+            </form>
             <hr>
             <h4>Processing</h4>
             <p>
@@ -128,6 +158,19 @@
     $('a[disabled]').on('click', function(e) {
       alert('There is already a task running')
       return false;
+    })
+    
+    // Enable/disable GeoPackage submit button based on file selection
+    $('#geopackage_file').on('change', function() {
+      var submitBtn = $('#geopackage_submit');
+      var hasFile = this.files && this.files.length > 0;
+      var taskRunning = submitBtn.attr('data-task-running') === 'true';
+      
+      if (hasFile && !taskRunning) {
+        submitBtn.prop('disabled', false);
+      } else {
+        submitBtn.prop('disabled', true);
+      }
     })
   })
   </script>

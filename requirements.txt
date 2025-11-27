@@ -42,3 +42,5 @@ celery
 celery[s3]
 celery[redis]
 httpx
+geopandas
+pyogrio
