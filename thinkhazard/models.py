@@ -280,7 +280,7 @@ class AdministrativeDivision(Base):
     __tablename__ = "administrativedivision"
 
     id = Column(Integer, primary_key=True)
-    code = Column(Integer, index=True, unique=True, nullable=False)
+    code = Column(String, index=True, unique=True, nullable=False)
     leveltype_id = Column(
         Integer, ForeignKey(AdminLevelType.id), nullable=False, index=True
     )
@@ -288,7 +288,7 @@ class AdministrativeDivision(Base):
     name_fr = Column(Unicode)
     name_es = Column(Unicode)
     parent_code = Column(
-        Integer,
+        String,
         ForeignKey(
             "administrativedivision.code",
             use_alter=True,
