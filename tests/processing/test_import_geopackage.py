@@ -45,9 +45,9 @@ class TestGeopackageImporter(BaseTestCase):
 
     @patch.object(GeopackageImporter, "do_execute")
     def test_cli(self, mock):
-        """Test downloader cli"""
-        GeopackageImporter.run(["complete", "--config_uri", "c2c://tests.ini"])
-        mock.assert_called_with(hazardset_id=None, clear_cache=False)
+        """Test geopackage importer cli"""
+        GeopackageImporter.run(["import_geopackage", "--config_uri", "c2c://tests.ini"])
+        mock.assert_called_with(geopackage_path=None)
 
     def test_import_adm2(self):
         self.importer().execute(geopackage_path=ADM2_PATH, verbose=True)

@@ -108,28 +108,28 @@ def populate_db():
 
     # admin_div_10 is a country (division level 1)
     admin_div_10 = AdministrativeDivision(
-        **{"code": 10, "leveltype_id": 1, "name": "Division level 1"}
+        **{"code": "10", "leveltype_id": 1, "name": "Division level 1"}
     )
     admin_div_10.geom = geometry
     DBSession.add(admin_div_10)
 
     # admin_div_11 is another country (division level 1)
     admin_div_11 = AdministrativeDivision(
-        **{"code": 11, "leveltype_id": 1, "name": "Division level 1 2"}
+        **{"code": "11", "leveltype_id": 1, "name": "Division level 1 2"}
     )
     admin_div_11.geom = geometry
     DBSession.add(admin_div_11)
 
     # admin_div_12 is another country (division level 1)
     admin_div_12 = AdministrativeDivision(
-        **{"code": 12, "leveltype_id": 1, "name": "Division level 1 3"}
+        **{"code": "12", "leveltype_id": 1, "name": "Division level 1 3"}
     )
     admin_div_12.geom = geometry
     DBSession.add(admin_div_12)
 
     # admin_div_13 is another country (division level 1)
     admin_div_13 = AdministrativeDivision(
-        **{"code": 13, "leveltype_id": 1, "name": "Division level 1 4"}
+        **{"code": "13", "leveltype_id": 1, "name": "Division level 1 4"}
     )
     admin_div_13.geom = geometry
     DBSession.add(admin_div_13)
@@ -137,7 +137,7 @@ def populate_db():
     # admin_div_20 is a province (division level 2)
     # its parent is admin_div_10
     admin_div_20 = AdministrativeDivision(
-        **{"code": 20, "leveltype_id": 2, "name": "Division level 2"}
+        **{"code": "20", "leveltype_id": 2, "name": "Division level 2"}
     )
     admin_div_20.parent_code = admin_div_10.code
     admin_div_20.geom = geometry
@@ -149,7 +149,7 @@ def populate_db():
     # admin_div_31 is a region (division level 3)
     # its parent is admin_div_20
     admin_div_31 = AdministrativeDivision(
-        **{"code": 31, "leveltype_id": 3, "name": "Division level 3 - 1"}
+        **{"code": "31", "leveltype_id": 3, "name": "Division level 3 - 1"}
     )
     admin_div_31.parent_code = admin_div_20.code
     admin_div_31.geom = geometry
@@ -161,7 +161,7 @@ def populate_db():
     # admin_div_32 is a region (division level 3)
     # its parent is also admin_div_20
     admin_div_32 = AdministrativeDivision(
-        **{"code": 32, "leveltype_id": 3, "name": "Division level 3 - 2"}
+        **{"code": "32", "leveltype_id": 3, "name": "Division level 3 - 2"}
     )
     admin_div_32.parent_code = admin_div_20.code
     admin_div_32.geom = geometry
