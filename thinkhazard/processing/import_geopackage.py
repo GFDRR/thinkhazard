@@ -30,14 +30,14 @@ LOG = logging.getLogger(__name__)
 
 ADMDIV_MAPPINGS = {
     "COU": {
-        "WB_A3": "code",
+        "ISO_A3": "code",
         "NAM_0": "name",
         "geometry": "geom",
     },
     "PRO": {
         "ADM1CD_c": "code",
         "NAM_1": "name",
-        "WB_A3": "parent_code",
+        "ISO_A3": "parent_code",
         "geometry": "geom",
     },
     "REG": {
@@ -118,8 +118,8 @@ class GeopackageImporter(BaseProcessor):
                     raise Exception(msg)
                 LOG.warning(msg)
 
-        analyse_unicity("WB_A3", "NAM_0")
-        analyse_unicity("ADM1CD_c", "WB_A3", True)
+        analyse_unicity("ISO_A3", "NAM_0")
+        analyse_unicity("ADM1CD_c", "ISO_A3", True)
         analyse_unicity("ADM1CD_c", "NAM_1")
         # analyse_unicity("ADM2CD_c", "ADM1CD_c", True)
 
@@ -136,7 +136,7 @@ class GeopackageImporter(BaseProcessor):
 
         LOG.info("Extracting ADM1 boundaries...")
         self.gdf_adm1 = self.gdf_adm2.dissolve(
-            by=["WB_A3", "ADM1CD_c"],
+            by=["ISO_A3", "ADM1CD_c"],
             aggfunc={
                 "NAM_0": lambda x: list(x.mode()),
                 "NAM_1": lambda x: list(x.mode()),
@@ -148,7 +148,7 @@ class GeopackageImporter(BaseProcessor):
 
         LOG.info("Extracting ADM0 boundaries...")
         self.gdf_adm0 = self.gdf_adm1.dissolve(
-            by='WB_A3',
+            by='ISO_A3',
             aggfunc={
                 "NAM_0": lambda x: list(x.mode()),
                 **{col: "max" for col in hazard_score_cols}
