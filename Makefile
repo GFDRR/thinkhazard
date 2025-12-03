@@ -39,6 +39,8 @@ export HTPASSWORDS ?= admin:admin
 
 export PUPPETEER_URL ?= http://puppeteer:8080
 
+TEST ?= tests
+
 
 .PHONY: help_old
 help_old:
@@ -74,7 +76,7 @@ help: ## Display this help message
 # Entry points #
 ################
 
-DOCKER_CMD=docker compose -f docker-compose-test.yaml run --rm --user `id -u` test
+DOCKER_CMD=docker compose -f docker-compose-test.yaml run --rm --user `id -u` -p '5680:5680' test
 
 DOCKER_MAKE_CMD=$(DOCKER_CMD) make -f docker.mk
 
@@ -101,7 +103,13 @@ compile_catalog:
 .PHONY: test
 test: ## Run automated tests
 	# $(DOCKER_CMD) nosetests -v
-	$(DOCKER_CMD) pytest -vv --cov=thinkhazard tests
+	$(DOCKER_CMD) pytest -vv --cov=thinkhazard $(TEST)
+
+.PHONY: test-debug
+test-debug: ## Run automated tests
+	$(DOCKER_CMD) python3 \
+	-m debugpy --listen "0.0.0.0:5680" --wait-for-client \
+	-m pytest -vv $(TEST)
 
 .PHONY: bash
 test-bash: ## Open bash in a test container
