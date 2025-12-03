@@ -47,7 +47,7 @@ notpreprocessed_unit = "m"
 def global_reader(value=None):
     array = np.ma.masked_array(
         np.empty(shape=(360, 720), dtype=np.float32, order="C"),
-        np.empty(shape=(360, 720), dtype=np.bool, order="C"),
+        np.empty(shape=(360, 720), dtype=bool, order="C"),
     )
     if value is None:
         array.mask.fill(True)

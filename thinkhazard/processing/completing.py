@@ -66,7 +66,7 @@ class Completer(BaseProcessor):
                 complete = self.complete_hazardset(id[0])
                 with self.dbsession.begin_nested():
                     if complete is not True:
-                        hazardset = self.dbsession.query(HazardSet).get(id)
+                        hazardset = self.dbsession.get(HazardSet, id)
                         hazardset.complete_error = complete
                         logger.warning(
                             "Hazardset {} incomplete: {}".format(hazardset.id, complete)
@@ -78,7 +78,7 @@ class Completer(BaseProcessor):
 
     def complete_hazardset(self, hazardset_id, dry_run=False):
         logger.info("Completing hazardset {}".format(hazardset_id))
-        hazardset = self.dbsession.query(HazardSet).get(hazardset_id)
+        hazardset = self.dbsession.get(HazardSet, hazardset_id)
         if hazardset is None:
             raise Exception("Hazardset {} does not exist.".format(hazardset_id))
 

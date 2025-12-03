@@ -83,8 +83,8 @@ def main(global_config, **settings):
 
         config.add_route("admin_technical_rec", "/technical_rec")
         config.add_route("admin_technical_rec_new", "/technical_rec/new")
-        config.add_route("admin_technical_rec_edit", "/technical_rec/{id:\d+}")
-        config.add_route("admin_technical_rec_delete", "/technical_rec/{id:\d+}/delete")
+        config.add_route("admin_technical_rec_edit", r"/technical_rec/{id:\d+}")
+        config.add_route("admin_technical_rec_delete", r"/technical_rec/{id:\d+}/delete")
 
         config.add_route("admin_admindiv_hazardsets", "/admindiv_hazardsets")
         config.add_route(
@@ -92,7 +92,7 @@ def main(global_config, **settings):
         )
         config.add_route(
             "admin_admindiv_hazardsets_hazardtype",
-            "/admindiv_hazardsets/{hazardtype:([A-Z]{2})}",
+            r"/admindiv_hazardsets/{hazardtype:([A-Z]{2})}",
         )
 
         config.add_route("admin_climate_rec", "/climate_rec")
@@ -102,8 +102,8 @@ def main(global_config, **settings):
         config.add_route(
             "admin_climate_rec_new", "/climate_rec/{hazard_type:([A-Z]{2})}/new"
         )
-        config.add_route("admin_climate_rec_edit", "/climate_rec/{id:\d+}")
-        config.add_route("admin_climate_rec_delete", "/climate_rec/{id:\d+}/delete")
+        config.add_route("admin_climate_rec_edit", r"/climate_rec/{id:\d+}")
+        config.add_route("admin_climate_rec_delete", r"/climate_rec/{id:\d+}/delete")
 
         config.add_route("admin_hazardcategories", "/hazardcategories")
         config.add_route(
@@ -116,8 +116,8 @@ def main(global_config, **settings):
 
         config.add_route("admin_contacts", "/contacts")
         config.add_route("admin_contact_new", "/contact/new")
-        config.add_route("admin_contact_edit", "/contact/{id:\d+}")
-        config.add_route("admin_contact_delete", "/contact/{id:\d+}/delete")
+        config.add_route("admin_contact_edit", r"/contact/{id:\d+}")
+        config.add_route("admin_contact_delete", r"/contact/{id:\d+}/delete")
         config.add_route(
             "admin_contact_admindiv_hazardtype_association", "/contact/CAdHt_form"
         )
@@ -158,55 +158,55 @@ def add_public_routes(config):
     add_localized_route(
         config,
         "report",
-        "/report/{divisioncode:\d+}{slug:.*}" "/{hazardtype:([A-Z]{2})}",
+        r"/report/{divisioncode:\d+}{slug:.*}" "/{hazardtype:([A-Z]{2})}",
         pregenerator=pregenerator,
     )
     add_localized_route(
         config,
         "report_print",
-        "/report/print/{divisioncode:\d+}/" "{hazardtype:([A-Z]{2})}",
+        r"/report/print/{divisioncode:\d+}/" "{hazardtype:([A-Z]{2})}",
     )
     add_localized_route(
         config,
         "report_geojson",
-        "/report/{divisioncode:\d+}/{hazardtype:([A-Z]{2})}.geojson",
+        r"/report/{divisioncode:\d+}/{hazardtype:([A-Z]{2})}.geojson",
     )
     add_localized_route(
         config,
         "report_neighbours_geojson",
-        "/report/{divisioncode:\d+}/neighbours.geojson",
+        r"/report/{divisioncode:\d+}/neighbours.geojson",
     )
     add_localized_route(
-        config, "create_pdf_report", "/report/create/{divisioncode:\d+}"
+        config, "create_pdf_report", r"/report/create/{divisioncode:\d+}"
     )
 
     add_localized_route(
         config,
         "report_json",
-        "/report/{divisioncode:\d+}{slug:.*}/{hazardtype:([A-Z]{2})}.json",
+        r"/report/{divisioncode:\d+}{slug:.*}/{hazardtype:([A-Z]{2})}.json",
     )
     add_localized_route(
-        config, "report_overview_json", "/report/{divisioncode:\d+}{slug:[^.]*}.json"
+        config, "report_overview_json", r"/report/{divisioncode:\d+}{slug:[^.]*}.json"
     )
     add_localized_route(
-        config, "report_overview_geojson", "/report/{divisioncode:\d+}.geojson"
+        config, "report_overview_geojson", r"/report/{divisioncode:\d+}.geojson"
     )
     add_localized_route(
         config,
         "report_overview",
-        "/report/{divisioncode:\d+}{slug:.*}",
+        r"/report/{divisioncode:\d+}{slug:.*}",
         pregenerator=pregenerator,
     )
     add_localized_route(
         config,
         "report_overview_slash",
-        "/report/{divisioncode:\d+}{slug:.*}/",
+        r"/report/{divisioncode:\d+}{slug:.*}/",
         pregenerator=pregenerator,
     )
 
     add_localized_route(config, "administrativedivision", "/administrativedivision")
 
-    add_localized_route(config, "pdf_cover", "/pdf_cover/{divisioncode:\d+}")
+    add_localized_route(config, "pdf_cover", r"/pdf_cover/{divisioncode:\d+}")
     add_localized_route(config, "pdf_about", "/pdf_about")
     add_localized_route(config, "data_source", "/data_source/{hazardset}")
     config.add_route("data_map", "/data_map")

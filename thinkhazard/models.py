@@ -20,8 +20,9 @@
 import threading
 import datetime
 import pytz
-from slugify import slugify
 
+from geoalchemy2 import Geometry
+from slugify import slugify
 from sqlalchemy import (
     Boolean,
     Column,
@@ -35,17 +36,10 @@ from sqlalchemy import (
     Index,
     select,
 )
-from sqlalchemy.schema import MetaData
-
-from sqlalchemy.ext.declarative import declarative_base
-
-from sqlalchemy.orm import backref, relationship, deferred
-
-from sqlalchemy.sql.expression import true
-
 from sqlalchemy.event import listens_for
-
-from geoalchemy2 import Geometry
+from sqlalchemy.orm import backref, declarative_base, relationship, deferred
+from sqlalchemy.schema import MetaData
+from sqlalchemy.sql.expression import true
 
 Base = declarative_base(metadata=MetaData(schema="datamart"))
 
@@ -214,7 +208,10 @@ class HazardCategoryTechnicalRecommendationAssociation(Base):
             order_by="HazardCategoryTechnicalRecommendationAssociation.order",
         ),
     )
-    technicalrecommendation = relationship("TechnicalRecommendation")
+    technicalrecommendation = relationship(
+        "TechnicalRecommendation",
+        back_populates="hazardcategory_associations",
+    )
 
     # Explicitely choose index names to avoid truncation
     __table_args__ = (
@@ -273,7 +270,11 @@ class HazardTypeFurtherResourceAssociation(Base):
 
     hazardtype = relationship("HazardType")
     region = relationship("Region")
-    furtherresource = relationship("FurtherResource", lazy="joined")
+    furtherresource = relationship(
+        "FurtherResource",
+        lazy="joined",
+        back_populates="hazardtype_associations"
+    )
 
 
 class AdministrativeDivision(Base):
@@ -467,6 +468,7 @@ class TechnicalRecommendation(Base):
         lazy="joined",
         cascade="all, delete-orphan",
         passive_deletes=True,
+        back_populates="technicalrecommendation",
     )
 
     def translated_text(self, lang):
@@ -512,7 +514,9 @@ class FurtherResource(Base):
     text = Column(Unicode, nullable=False)
 
     hazardtype_associations = relationship(
-        "HazardTypeFurtherResourceAssociation", lazy="joined"
+        "HazardTypeFurtherResourceAssociation",
+        lazy="joined",
+        back_populates="furtherresource"
     )
 
 
@@ -661,7 +665,7 @@ class Layer(Base):
     downloaded = Column(Boolean, nullable=False, default=False)
 
     hazardlevel_order = deferred(
-        select([HazardLevel.order]).where(HazardLevel.id == hazardlevel_id)
+        select(HazardLevel.order).where(HazardLevel.id == hazardlevel_id).scalar_subquery()
     )
     hazardset = relationship(
         "HazardSet",
