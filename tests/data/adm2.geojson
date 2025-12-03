@@ -1,0 +1,39 @@
+{
+  "type": "FeatureCollection",
+  "name": "adm2",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "ISO_A3": "TST",
+        "ISO_A2": "TS",
+        "WB_A3": "TST",
+        "WB_REGION": "Test Region",
+        "WB_STATUS": "Test Status",
+        "NAM_0": "Test Country",
+        "NAM_1": "Test Province",
+        "ADM1CD_c": "TST001",
+        "GEOM_SRCE": "Test Data",
+        "NAM_2": "Test District",
+        "ADM2CD_c": "TST001001",
+        "LS_Hazard_score": 2,
+        "EQ_Hazard_score": 3,
+        "TC_Hazard_score": 3,
+        "VO_Hazard_score": 1,
+        "EH_Hazard_score": 1,
+        "TS_Hazard_score": -1,
+        "WF_Hazard_score": 0
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [ [ [ [ 131.186, 32.972 ], [ 131.185, 32.983 ], [ 131.181, 32.996 ], [ 131.160, 33.013 ], [ 131.152, 33.024 ], [ 131.165, 33.039 ], [ 131.197, 33.071 ], [ 131.225, 33.019 ], [ 131.242, 33.000 ], [ 131.262, 32.978 ], [ 131.256, 32.964 ], [ 131.228, 32.960 ], [ 131.215, 32.972 ], [ 131.186, 32.972 ] ] ] ]
+      }
+    }
+  ]
+}

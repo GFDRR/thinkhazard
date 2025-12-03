@@ -126,7 +126,7 @@ class TestAdminFunction(BaseTestCase):
             DBSession.query(AdministrativeDivision)
             .join(AdminLevelType)
             .filter(AdminLevelType.mnemonic == "COU")
-            .filter(AdministrativeDivision.code == 11)
+            .filter(AdministrativeDivision.code == "11")
         )
         form["associations"] = [admindiv.id for admindiv in admindivs]
         form.submit(status=302)
