@@ -55,7 +55,7 @@ from sqlalchemy.orm import joinedload
 
 from geoalchemy2.functions import ST_Centroid
 
-REPORT_ID_REGEX = re.compile("\d{4}_\d{2}_\w{8}(-\w{4}){3}-\w{12}?")
+REPORT_ID_REGEX = re.compile(r"\d{4}_\d{2}_\w{8}(-\w{4}){3}-\w{12}?")
 
 logger = logging.getLogger(__name__)
 

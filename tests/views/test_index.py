@@ -28,8 +28,8 @@ class TestIndexFunction(BaseTestCase):
 
     def test_index__check_lang(self):
         resp = self.testapp.get("/fr/", status=200)
-        print(resp.html.findAll("html")[0]["lang"])
-        self.assertEqual(resp.html.findAll("html")[0]["lang"], "fr")
+        print(resp.html.find_all("html")[0]["lang"])
+        self.assertEqual(resp.html.find_all("html")[0]["lang"], "fr")
 
     def test_index__redirect_lang_not_available(self):
         self.testapp.get("/xx/", status=302)

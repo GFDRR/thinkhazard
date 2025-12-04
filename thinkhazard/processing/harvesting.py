@@ -644,7 +644,7 @@ class Harvester(BaseProcessor):
             warning(o, 'download_url is empty')
             return False
 
-        hazardset = self.dbsession.query(HazardSet).get(hazardset_id)
+        hazardset = self.dbsession.get(HazardSet, hazardset_id)
 
         # Create hazardset before layer
         if hazardset is None:
@@ -665,7 +665,7 @@ class Harvester(BaseProcessor):
         if not mask:
             hazardset.regions = regions
 
-        layer = self.dbsession.query(Layer).get(o['id'])
+        layer = self.dbsession.get(Layer, o['id'])
         if layer is None:
             logger.info("  Create new Layer {}".format(title))
             layer = Layer()

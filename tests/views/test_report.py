@@ -150,8 +150,7 @@ class TestReportFunction(BaseTestCase):
     @patch('thinkhazard.views.pdf.create_and_upload_pdf')
     def test_create_pdf_report(self, mock):
         # thanks to https://stackoverflow.com/a/29905620
-        @asyncio.coroutine
-        def create(request, file_name, pages, object_name):
+        async def create(request, file_name, pages, object_name):
             with open(file_name, "w") as file:
                 file.write("The pdf file")
 
