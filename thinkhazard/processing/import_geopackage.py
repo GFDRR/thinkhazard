@@ -24,7 +24,12 @@ import geopandas as gpd
 from shapely.geometry import MultiPolygon, Polygon
 
 from thinkhazard.processing import BaseProcessor
-from thinkhazard.models import AdminLevelType, AdministrativeDivision
+from thinkhazard.models import (
+    AdminLevelType,
+    AdministrativeDivision,
+    HazardCategory,
+    HazardCategoryAdministrativeDivisionAssociation,
+)
 
 LOG = logging.getLogger(__name__)
 
@@ -46,6 +51,29 @@ ADMDIV_MAPPINGS = {
         "ADM1CD_c": "parent_code",
         "geometry": "geom",
     },
+}
+
+SCORE_TO_LEVEL = {
+    0: "VLO",
+    1: "LOW",
+    2: "MED",
+    3: "HIG",
+}
+
+HAZARD_SCORE_COLUMNS = {
+    "LS_Hazard_score": "LS",
+    "EQ_Hazard_score": "EQ",
+    "TC_Hazard_score": "CY",  # TC in GeoPackage = CY in DB
+    "VO_Hazard_score": "VA",  # VO in GeoPackage = VA in DB
+    "EH_Hazard_score": "EH",
+    "TS_Hazard_score": "TS",
+    "WF_Hazard_score": "WF",
+}
+
+CODE_COLUMNS = {
+    "COU": "ISO_A3",
+    "PRO": "ADM1CD_c",
+    "REG": "ADM2CD_c",
 }
 
 
@@ -84,6 +112,7 @@ class GeopackageImporter(BaseProcessor):
         self.validate()
         self.dissolve()
         self.import_admindivs()
+        self.import_hazard_scores()
 
     def read_adm2(self, geopackage_path):
         if geopackage_path is None:
@@ -107,13 +136,15 @@ class GeopackageImporter(BaseProcessor):
 
         def analyse_unicity(key_column, value_column, raise_error=False):
             """Log warning if we have multiple value for the same key"""
-            counts = self.gdf_adm2.groupby(key_column)[value_column].agg(lambda x: set(x))
+            counts = self.gdf_adm2.groupby(key_column)[value_column].agg(
+                lambda x: set(x)
+            )
             violations = counts[counts.apply(len) > 1]
             if not violations.empty:
                 msg = f"We found multiple {value_column} for the same {key_column}:"
                 for key, values in violations.items():
                     msg = msg + "\n" + f"{key}: {list(values)}"
-                msg = msg + 'We will keep only the most used one.'
+                msg = msg + "We will keep only the most used one."
                 if raise_error:
                     raise Exception(msg)
                 LOG.warning(msg)
@@ -123,15 +154,21 @@ class GeopackageImporter(BaseProcessor):
         analyse_unicity("ADM1CD_c", "NAM_1")
         # analyse_unicity("ADM2CD_c", "ADM1CD_c", True)
 
-        if self.gdf_adm2['NAM_2'].isnull().any():
-            LOG.warning("Column NAM_2 contains null values, those lines will be ignored.")
-            self.gdf_adm2 = self.gdf_adm2[self.gdf_adm2['NAM_2'].notnull()]
+        if self.gdf_adm2["NAM_2"].isnull().any():
+            LOG.warning(
+                "Column NAM_2 contains null values, those lines will be ignored."
+            )
+            self.gdf_adm2 = self.gdf_adm2[self.gdf_adm2["NAM_2"].notnull()]
 
     def dissolve(self):
         hazard_score_cols = [
-            'LS_Hazard_score', 'EQ_Hazard_score', 'TC_Hazard_score',
-            'VO_Hazard_score', 'EH_Hazard_score', 'TS_Hazard_score',
-            'WF_Hazard_score'
+            "LS_Hazard_score",
+            "EQ_Hazard_score",
+            "TC_Hazard_score",
+            "VO_Hazard_score",
+            "EH_Hazard_score",
+            "TS_Hazard_score",
+            "WF_Hazard_score",
         ]
 
         LOG.info("Extracting ADM1 boundaries...")
@@ -140,22 +177,22 @@ class GeopackageImporter(BaseProcessor):
             aggfunc={
                 "NAM_0": lambda x: list(x.mode()),
                 "NAM_1": lambda x: list(x.mode()),
-                **{col: "max" for col in hazard_score_cols}
-            },
-            as_index=False
-        )
-        self.gdf_adm1['geometry'] = self.gdf_adm1.geometry.buffer(0)
-
-        LOG.info("Extracting ADM0 boundaries...")
-        self.gdf_adm0 = self.gdf_adm1.dissolve(
-            by='ISO_A3',
-            aggfunc={
-                "NAM_0": lambda x: list(x.mode()),
-                **{col: "max" for col in hazard_score_cols}
+                **{col: "max" for col in hazard_score_cols},
             },
             as_index=False,
         )
-        self.gdf_adm0['geometry'] = self.gdf_adm0.geometry.buffer(0)
+        self.gdf_adm1["geometry"] = self.gdf_adm1.geometry.buffer(0)
+
+        LOG.info("Extracting ADM0 boundaries...")
+        self.gdf_adm0 = self.gdf_adm1.dissolve(
+            by="ISO_A3",
+            aggfunc={
+                "NAM_0": lambda x: list(x.mode()),
+                **{col: "max" for col in hazard_score_cols},
+            },
+            as_index=False,
+        )
+        self.gdf_adm0["geometry"] = self.gdf_adm0.geometry.buffer(0)
 
         LOG.info("Processing Complete.")
         LOG.info("ADM2 Count: %d", len(self.gdf_adm2))
@@ -190,7 +227,7 @@ class GeopackageImporter(BaseProcessor):
             name=AdministrativeDivision.__table__.name,
             con=self.dbsession.connection(),
             if_exists="append",
-            index=False
+            index=False,
         )
 
         # from geoalchemy2.shape import from_shape
@@ -208,3 +245,88 @@ class GeopackageImporter(BaseProcessor):
         #     )
         #     for _, row in gdf.iterrows()
         # ])
+
+    def import_hazard_scores(self):
+        LOG.info("Importing hazard scores for ADM0")
+        self.import_hazard_scores_level("COU", self.gdf_adm0)
+        LOG.info("Importing hazard scores for ADM1")
+        self.import_hazard_scores_level("PRO", self.gdf_adm1)
+        LOG.info("Importing hazard scores for ADM2")
+        self.import_hazard_scores_level("REG", self.gdf_adm2)
+
+    def import_hazard_scores_level(
+        self, admin_level_mnemonic: str, gdf: gpd.GeoDataFrame
+    ):
+        code_column = CODE_COLUMNS[admin_level_mnemonic]
+
+        expected_columns = {code_column, *HAZARD_SCORE_COLUMNS.keys()}
+        missing_columns = expected_columns - set(gdf.columns)
+        if missing_columns:
+            LOG.warning(
+                "Missing columns for %s: %s; skipping",
+                admin_level_mnemonic,
+                ", ".join(sorted(missing_columns)),
+            )
+            return
+
+        level = AdminLevelType.get(self.dbsession, admin_level_mnemonic)
+        admin_ids_by_code = {
+            ad.code: ad.id
+            for ad in self.dbsession.query(AdministrativeDivision).filter(
+                AdministrativeDivision.leveltype_id == level.id
+            )
+        }
+
+        hazard_category_cache: dict[tuple[str, str], HazardCategory | None] = {}
+        hazard_associations: list[HazardCategoryAdministrativeDivisionAssociation] = []
+        missing_admin_codes: set[str] = set()
+
+        for row in gdf.itertuples(index=False):
+            admin_code = getattr(row, code_column)
+            admin_id = admin_ids_by_code.get(admin_code)
+            if admin_id is None:
+                missing_admin_codes.add(admin_code)
+                continue
+
+            for gpkg_col, hazard_mnemonic in HAZARD_SCORE_COLUMNS.items():
+                score = getattr(row, gpkg_col)
+                hazard_level_mnemonic = SCORE_TO_LEVEL.get(score)
+                if hazard_level_mnemonic is None:
+                    continue
+
+                cache_key = (hazard_mnemonic, hazard_level_mnemonic)
+                if cache_key not in hazard_category_cache:
+                    hazard_category_cache[cache_key] = HazardCategory.get(
+                        self.dbsession, hazard_mnemonic, hazard_level_mnemonic
+                    )
+                hazard_category = hazard_category_cache[cache_key]
+                if hazard_category is None:
+                    LOG.warning(
+                        "HazardCategory not found: %s/%s",
+                        hazard_mnemonic,
+                        hazard_level_mnemonic,
+                    )
+                    continue
+
+                hazard_associations.append(
+                    HazardCategoryAdministrativeDivisionAssociation(
+                        administrativedivision_id=admin_id,
+                        hazardcategory_id=hazard_category.id,
+                    )
+                )
+
+        if hazard_associations:
+            self.dbsession.bulk_save_objects(hazard_associations, return_defaults=False)
+
+        if missing_admin_codes:
+            LOG.warning(
+                "Admin divisions not found for %s codes: %s",
+                admin_level_mnemonic,
+                ", ".join(sorted(missing_admin_codes)),
+            )
+
+        LOG.info(
+            "Created %d hazard associations for %s",
+            len(hazard_associations),
+            admin_level_mnemonic,
+        )
