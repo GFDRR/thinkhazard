@@ -21,6 +21,7 @@ import os
 
 from mock import patch
 
+from thinkhazard.models import AdministrativeDivision
 from thinkhazard.processing.import_geopackage import GeopackageImporter
 
 from .. import DBSession, engine, settings, DATA_FOLDER
@@ -31,10 +32,6 @@ ADM2_PATH = os.path.join(DATA_FOLDER, "adm2.geojson")
 
 
 class TestGeopackageImporter(BaseTestCase):
-
-    @classmethod
-    def setUpClass(cls):
-        pass
 
     def importer(self):
         importer = GeopackageImporter()
@@ -51,6 +48,11 @@ class TestGeopackageImporter(BaseTestCase):
 
     def test_import_adm2(self):
         self.importer().execute(geopackage_path=ADM2_PATH, verbose=True)
+
+    def test_dry_run(self):
+        assert DBSession.query(AdministrativeDivision).count() == 3
+        self.importer().execute(geopackage_path=ADM2_PATH, verbose=True, dry_run=True)
+        assert DBSession.query(AdministrativeDivision).count() == 3
 
     # def test_force(self):
     #     """Test downloader in force mode"""
