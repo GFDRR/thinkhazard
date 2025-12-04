@@ -110,6 +110,7 @@ def populate_datamart(dbsession):
         ("COU", "Country", "Administrative division of level 0"),
         ("PRO", "Province", "Administrative division of level 1"),
         ("REG", "Region", "Administrative division of level 2"),
+        ("URB", "Urban area", "Urban aera"),
     ]:
         if AdminLevelType.get(dbsession, i[0]):
             continue
