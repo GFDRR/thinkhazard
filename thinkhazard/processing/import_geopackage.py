@@ -21,6 +21,7 @@ import os
 import logging
 
 import geopandas as gpd
+import sqlalchemy
 from shapely.geometry import MultiPolygon, Polygon
 
 from thinkhazard.processing import BaseProcessor
@@ -111,8 +112,15 @@ class GeopackageImporter(BaseProcessor):
         self.read_adm2(geopackage_path)
         self.validate()
         self.dissolve()
+
+        self.drop_foreign_keys()
+
+        self.clear_all_data()
+
         self.import_admindivs()
         self.import_hazard_scores()
+
+        self.recreate_foreign_keys()
 
     def read_adm2(self, geopackage_path):
         if geopackage_path is None:
@@ -198,6 +206,124 @@ class GeopackageImporter(BaseProcessor):
         LOG.info("ADM2 Count: %d", len(self.gdf_adm2))
         LOG.info("ADM1 Count: %d", len(self.gdf_adm1))
         LOG.info("ADM0 Count: %d", len(self.gdf_adm0))
+
+    def drop_foreign_keys(self):
+        """Drop FK constraints temporarily for fast bulk import."""
+        LOG.info("Dropping foreign key constraints...")
+        connection = self.dbsession.connection()
+
+        # All FKs that reference administrativedivision (from models.py):
+        # 1. administrativedivision.parent_code -> administrativedivision.code
+        # 2. rel_hazardcategory_administrativedivision.administrativedivision_id
+        # 3. rel_region_administrativedivision.administrativedivision_id
+        # 4. rel_climatechangerecommendation_administrativedivision.administrativedivision_id
+        # 5. rel_contact_administrativedivision_hazardtype.administrativedivision_id
+        # 6. processing.output.admin_id
+
+        connection.execute(
+            sqlalchemy.text(
+                "ALTER TABLE datamart.administrativedivision "
+                "DROP CONSTRAINT IF EXISTS administrativedivision_parent_code_fkey"
+            )
+        )
+        connection.execute(
+            sqlalchemy.text(
+                "ALTER TABLE datamart.rel_hazardcategory_administrativedivision "
+                "DROP CONSTRAINT IF EXISTS rel_hazardcategory_administrativ_administrativedivision_id_fkey"
+            )
+        )
+        connection.execute(
+            sqlalchemy.text(
+                "ALTER TABLE datamart.rel_region_administrativedivision "
+                "DROP CONSTRAINT IF EXISTS rel_region_administrativedivisi_administrativedivision_id_fkey"
+            )
+        )
+        connection.execute(
+            sqlalchemy.text(
+                "ALTER TABLE datamart.rel_climatechangerecommendation_administrativedivision "
+                "DROP CONSTRAINT IF EXISTS rel_climatechangerecommendation_administrativedivision_id_fkey"
+            )
+        )
+        connection.execute(
+            sqlalchemy.text(
+                "ALTER TABLE datamart.rel_contact_administrativedivision_hazardtype "
+                "DROP CONSTRAINT IF EXISTS rel_contact_administrativedivisi_administrativedivision_id_fkey"
+            )
+        )
+        connection.execute(
+            sqlalchemy.text(
+                "ALTER TABLE processing.output "
+                "DROP CONSTRAINT IF EXISTS output_admin_id_fkey"
+            )
+        )
+
+    def clear_all_data(self):
+        """Clear all existing administrative division and related data."""
+        LOG.info("Clearing existing data...")
+        connection = self.dbsession.connection()
+
+        # TRUNCATE with CASCADE automatically clears all dependent tables:
+        # - rel_hazardcategory_administrativedivision
+        # - rel_region_administrativedivision
+        # - rel_climatechangerecommendation_administrativedivision
+        # - rel_contact_administrativedivision_hazardtype
+        # - processing.output
+        connection.execute(
+            sqlalchemy.text("TRUNCATE datamart.administrativedivision CASCADE")
+        )
+
+    def recreate_foreign_keys(self):
+        """Recreate FK constraints after bulk import."""
+        LOG.info("Recreating foreign key constraints...")
+        connection = self.dbsession.connection()
+
+        connection.execute(
+            sqlalchemy.text(
+                "ALTER TABLE datamart.administrativedivision "
+                "ADD CONSTRAINT administrativedivision_parent_code_fkey "
+                "FOREIGN KEY (parent_code) REFERENCES datamart.administrativedivision(code)"
+            )
+        )
+        connection.execute(
+            sqlalchemy.text(
+                "ALTER TABLE datamart.rel_hazardcategory_administrativedivision "
+                "ADD CONSTRAINT rel_hazardcategory_administrativ_administrativedivision_id_fkey "
+                "FOREIGN KEY (administrativedivision_id) "
+                "REFERENCES datamart.administrativedivision(id) ON DELETE CASCADE"
+            )
+        )
+        connection.execute(
+            sqlalchemy.text(
+                "ALTER TABLE datamart.rel_region_administrativedivision "
+                "ADD CONSTRAINT rel_region_administrativedivisi_administrativedivision_id_fkey "
+                "FOREIGN KEY (administrativedivision_id) "
+                "REFERENCES datamart.administrativedivision(id) ON DELETE CASCADE"
+            )
+        )
+        connection.execute(
+            sqlalchemy.text(
+                "ALTER TABLE datamart.rel_climatechangerecommendation_administrativedivision "
+                "ADD CONSTRAINT rel_climatechangerecommendation_administrativedivision_id_fkey "
+                "FOREIGN KEY (administrativedivision_id) "
+                "REFERENCES datamart.administrativedivision(id) ON DELETE CASCADE"
+            )
+        )
+        connection.execute(
+            sqlalchemy.text(
+                "ALTER TABLE datamart.rel_contact_administrativedivision_hazardtype "
+                "ADD CONSTRAINT rel_contact_administrativedivisi_administrativedivision_id_fkey "
+                "FOREIGN KEY (administrativedivision_id) "
+                "REFERENCES datamart.administrativedivision(id)"
+            )
+        )
+        connection.execute(
+            sqlalchemy.text(
+                "ALTER TABLE processing.output "
+                "ADD CONSTRAINT output_admin_id_fkey "
+                "FOREIGN KEY (admin_id) "
+                "REFERENCES datamart.administrativedivision(id) ON DELETE CASCADE"
+            )
+        )
 
     def import_admindivs(self):
         LOG.info("Importing ADM0")
