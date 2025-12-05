@@ -159,55 +159,55 @@ def add_public_routes(config):
     add_localized_route(
         config,
         "report",
-        "/report/{divisioncode:\d+}{slug:.*}" "/{hazardtype:([A-Z]{2})}",
+        "/report/{divisioncode:[A-Z0-9]+}{slug:.*}" "/{hazardtype:([A-Z]{2})}",
         pregenerator=pregenerator,
     )
     add_localized_route(
         config,
         "report_print",
-        "/report/print/{divisioncode:\d+}/" "{hazardtype:([A-Z]{2})}",
+        "/report/print/{divisioncode:[A-Z0-9]+}/" "{hazardtype:([A-Z]{2})}",
     )
     add_localized_route(
         config,
         "report_geojson",
-        "/report/{divisioncode:\d+}/{hazardtype:([A-Z]{2})}.geojson",
+        "/report/{divisioncode:[A-Z0-9]+}/{hazardtype:([A-Z]{2})}.geojson",
     )
     add_localized_route(
         config,
         "report_neighbours_geojson",
-        "/report/{divisioncode:\d+}/neighbours.geojson",
+        "/report/{divisioncode:[A-Z0-9]+}/neighbours.geojson",
     )
     add_localized_route(
-        config, "create_pdf_report", "/report/create/{divisioncode:\d+}"
+        config, "create_pdf_report", "/report/create/{divisioncode:[A-Z0-9]+}"
     )
 
     add_localized_route(
         config,
         "report_json",
-        "/report/{divisioncode:\d+}{slug:.*}/{hazardtype:([A-Z]{2})}.json",
+        "/report/{divisioncode:[A-Z0-9]+}{slug:.*}/{hazardtype:([A-Z]{2})}.json",
     )
     add_localized_route(
-        config, "report_overview_json", "/report/{divisioncode:\d+}{slug:[^.]*}.json"
+        config, "report_overview_json", "/report/{divisioncode:[A-Z0-9]+}{slug:[^.]*}.json"
     )
     add_localized_route(
-        config, "report_overview_geojson", "/report/{divisioncode:\d+}.geojson"
+        config, "report_overview_geojson", "/report/{divisioncode:[A-Z0-9]+}.geojson"
     )
     add_localized_route(
         config,
         "report_overview",
-        "/report/{divisioncode:\d+}{slug:.*}",
+        "/report/{divisioncode:[A-Z0-9]+}{slug:.*}",
         pregenerator=pregenerator,
     )
     add_localized_route(
         config,
         "report_overview_slash",
-        "/report/{divisioncode:\d+}{slug:.*}/",
+        "/report/{divisioncode:[A-Z0-9]+}{slug:.*}/",
         pregenerator=pregenerator,
     )
 
     add_localized_route(config, "administrativedivision", "/administrativedivision")
 
-    add_localized_route(config, "pdf_cover", "/pdf_cover/{divisioncode:\d+}")
+    add_localized_route(config, "pdf_cover", "/pdf_cover/{divisioncode:[A-Z0-9]+}")
     add_localized_route(config, "pdf_about", "/pdf_about")
     add_localized_route(config, "data_source", "/data_source/{hazardset}")
     config.add_route("data_map", "/data_map")
