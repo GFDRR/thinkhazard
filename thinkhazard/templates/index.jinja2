@@ -13,7 +13,7 @@
   </nav>
   <div class="container">
     <header class="text-center">
-      {{ thinkhazard_logo('hidden-xs') }}
+      {{ thinkhazard_logo() }}
       <div class="text-muted">
         {{gettext('Identify natural hazards in your project area<br>and understand how to reduce their impact') | replace('<br>','<span class=newline></span>')}}
       </div>
@@ -41,7 +41,4 @@
       </div>
     </div>
   </div>
-  <footer class="text-center">
-    <a href="//www.gfdrr.org/" class="logo-gfdrr logo-gfdrr-md" title="Logo GFDRR" alt="Logo GFDRR"><img src="{{'thinkhazard:static/images/logo-gfdrr-world-bank.svg'|static_url}}"></a>
-  </footer>
 {% endblock %}
