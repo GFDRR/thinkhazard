@@ -1,6 +1,6 @@
-{% macro navbar(request, feedback_form_url, includes={"home": False, "search": False}, show_logo=True) %}
+{% macro navbar(request, feedback_form_url, includes={"home": True, "search": False}) %}
       <div class="navbar-header">
-        {% if show_logo %}
+        {% if includes.home %}
         <a href="//www.gfdrr.org/" class="navbar-brand logo-gfdrr logo-gfdrr-sm" title="Logo GFDRR" alt="Logo GFDRR">
           <img src="{{'thinkhazard:static/images/logo-gfdrr-world-bank.svg'|static_url}}" alt="GFDRR">
         </a>
