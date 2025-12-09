@@ -1,0 +1,102 @@
+{
+  "type": "FeatureCollection",
+  "name": "TH_ADM2_sample",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 1,
+        "ISO_A3": "TST",
+        "ISO_A2": "TS",
+        "WB_REGION": "TEST",
+        "WB_STATUS": "Member State",
+        "NAM_0": "Testland",
+        "NAM_1": "Sample Province",
+        "GEOM_SRCE": "Unit Test",
+        "NAM_2": "Sample District",
+        "COD_1": "TST001",
+        "COD_2": "TST001001",
+        "GAUL_0": 999999,
+        "SOVEREIGN": "TST",
+        "LS_Hazard_score": 1,
+        "EQ_Hazard_score": 2,
+        "TC_Hazard_score": 0,
+        "VO_Hazard_score": -1,
+        "EH_Hazard_score": 3,
+        "TS_Hazard_score": -1,
+        "WF_Hazard_score": 1,
+        "NAM_0_EN": "Testland",
+        "NAM_0_ES": "Testlandia",
+        "NAM_0_FR": "Testlande",
+        "NAM_1_EN": "Sample Province",
+        "NAM_1_ES": "Provincia Ejemplo",
+        "NAM_1_FR": "Province Exemple"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [0.0, 0.0],
+              [0.0, 1.0],
+              [1.0, 1.0],
+              [1.0, 0.0],
+              [0.0, 0.0]
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 2,
+        "ISO_A3": "TRT",
+        "ISO_A2": "TT",
+        "WB_REGION": "TEST",
+        "WB_STATUS": "Territory",
+        "NAM_0": "Testland Overseas",
+        "NAM_1": "Overseas Province",
+        "GEOM_SRCE": "Unit Test",
+        "NAM_2": "Overseas District",
+        "COD_1": "TRT001",
+        "COD_2": "TRT001001",
+        "GAUL_0": 999998,
+        "SOVEREIGN": "TST",
+        "LS_Hazard_score": 0,
+        "EQ_Hazard_score": 1,
+        "TC_Hazard_score": 2,
+        "VO_Hazard_score": -1,
+        "EH_Hazard_score": 2,
+        "TS_Hazard_score": -1,
+        "WF_Hazard_score": 0,
+        "NAM_0_EN": "Testland Overseas",
+        "NAM_0_ES": "Testlandia Ultramar",
+        "NAM_0_FR": "Testlande Outre-Mer",
+        "NAM_1_EN": "Overseas Province",
+        "NAM_1_ES": "Provincia Ultramar",
+        "NAM_1_FR": "Province d'Outre-Mer"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [2.0, 0.0],
+              [2.0, 0.4],
+              [2.4, 0.4],
+              [2.4, 0.0],
+              [2.0, 0.0]
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}
