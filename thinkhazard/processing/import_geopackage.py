@@ -224,6 +224,50 @@ class GeopackageImporter(BaseProcessor):
                 )
                 self.gdf_urban = self.gdf_urban[self.gdf_urban["NAM_URB"].notnull()]
 
+        # Find ISO_A3 codes where ALL rows are territories (WB_STATUS="Territory")
+        # These will never produce an ADM0, so their SOVEREIGN parent won't exist
+        territory_only_iso = self.gdf_adm2.groupby("ISO_A3")["WB_STATUS"].apply(
+            lambda x: (x == "Territory").all()
+        )
+        territory_only_codes = set(territory_only_iso[territory_only_iso].index)
+        if territory_only_codes:
+            # Check if their SOVEREIGN is also territory-only (orphan)
+            orphan_sovereigns = set()
+            for code in territory_only_codes:
+                sovereign = self.gdf_adm2.loc[
+                    self.gdf_adm2["ISO_A3"] == code, "SOVEREIGN"
+                ].iloc[0]
+                # If sovereign is also territory-only or doesn't exist, it's orphan
+                if sovereign in territory_only_codes or sovereign not in set(
+                    self.gdf_adm2["ISO_A3"]
+                ):
+                    orphan_sovereigns.add(code)
+
+            if orphan_sovereigns:
+                LOG.warning(
+                    "Dropping ISO_A3 codes that are territory-only with no valid "
+                    "sovereign parent:"
+                )
+                for code in sorted(orphan_sovereigns):
+                    sovereign = self.gdf_adm2.loc[
+                        self.gdf_adm2["ISO_A3"] == code, "SOVEREIGN"
+                    ].iloc[0]
+                    LOG.warning("  - %s (SOVEREIGN=%s)", code, sovereign)
+
+                orphan_mask = self.gdf_adm2["ISO_A3"].isin(orphan_sovereigns)
+                removed_adm2_codes = set(self.gdf_adm2.loc[orphan_mask, "COD_2"])
+                self.gdf_adm2 = self.gdf_adm2[~orphan_mask]
+
+                # Also filter Urban records referencing removed ADM2
+                if self.gdf_urban is not None:
+                    urban_orphan_mask = self.gdf_urban["COD_2"].isin(removed_adm2_codes)
+                    if urban_orphan_mask.any():
+                        LOG.warning(
+                            "Dropping %d Urban records in orphan territories",
+                            urban_orphan_mask.sum(),
+                        )
+                        self.gdf_urban = self.gdf_urban[~urban_orphan_mask]
+
     def dissolve(self):
         hazard_score_cols = [
             "LS_Hazard_score",
@@ -245,14 +289,22 @@ class GeopackageImporter(BaseProcessor):
                 "NAM_1": lambda x: list(x.mode()),
                 "NAM_1_FR": lambda x: list(x.mode()),
                 "NAM_1_ES": lambda x: list(x.mode()),
+                "SOVEREIGN": "first",
+                "WB_STATUS": "first",
                 **{col: "max" for col in hazard_score_cols},
             },
             as_index=False,
         )
         self.gdf_adm1["geometry"] = self.gdf_adm1.geometry.buffer(0)
 
+        territory_mask = self.gdf_adm1["WB_STATUS"] == "Territory"
+        self.gdf_adm1.loc[territory_mask, "ISO_A3"] = self.gdf_adm1.loc[
+            territory_mask, "SOVEREIGN"
+        ]
+
         LOG.info("Extracting ADM0 boundaries...")
-        self.gdf_adm0 = self.gdf_adm1.dissolve(
+        gdf_adm1_sovereign = self.gdf_adm1[self.gdf_adm1["WB_STATUS"] != "Territory"]
+        self.gdf_adm0 = gdf_adm1_sovereign.dissolve(
             by="ISO_A3",
             aggfunc={
                 "NAM_0": lambda x: list(x.mode()),
