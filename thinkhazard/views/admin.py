@@ -24,6 +24,7 @@ from sqlalchemy.orm import contains_eager, joinedload
 import json
 from datetime import datetime
 
+from thinkhazard.lib.s3helper import S3Helper
 from thinkhazard.models import (
     AdminLevelType,
     AdministrativeDivision,
@@ -82,12 +83,12 @@ def upload_geopackage(request):
     if not hasattr(geopackage_file, 'filename'):
         return HTTPFound(request.route_url("admin_index"))
 
-    file_path = f"/tmp/hazardsets/{geopackage_file.filename}"
+    s3_helper = S3Helper(request.registry.settings)
+    object_name = f"tmp/{geopackage_file.filename}"
+    s3_helper.upload_fileobj(geopackage_file.file, object_name)
+    s3_url = s3_helper.get_object_url(object_name)
 
-    with open(file_path, "wb") as f:
-        f.write(geopackage_file.file.read())
-
-    celery_tasks.admindivs_gpkg.delay(file_path)
+    celery_tasks.admindivs_gpkg.delay(s3_url)
     return HTTPFound(request.route_url("admin_index"))
 
 
