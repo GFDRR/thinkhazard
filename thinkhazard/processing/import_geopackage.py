@@ -17,8 +17,9 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
+import importlib
 import logging
+import os
 
 import geopandas as gpd
 import sqlalchemy
@@ -113,14 +114,15 @@ class GeopackageImporter(BaseProcessor):
         self.validate()
         self.dissolve()
 
-        self.drop_foreign_keys()
-
         self.clear_all_data()
+        self.drop_foreign_keys()
 
         self.import_admindivs()
         self.import_hazard_scores()
 
         self.recreate_foreign_keys()
+
+        self.finish()
 
     def read_adm2(self, geopackage_path):
         if geopackage_path is None:
@@ -183,8 +185,8 @@ class GeopackageImporter(BaseProcessor):
         self.gdf_adm1 = self.gdf_adm2.dissolve(
             by=["ISO_A3", "ADM1CD_c"],
             aggfunc={
-                "NAM_0": lambda x: list(x.mode()),
-                "NAM_1": lambda x: list(x.mode()),
+                "NAM_0": lambda x: x.mode()[0] if not x.mode().empty else None,
+                "NAM_1": lambda x: x.mode()[0] if not x.mode().empty else None,
                 **{col: "max" for col in hazard_score_cols},
             },
             as_index=False,
@@ -195,7 +197,7 @@ class GeopackageImporter(BaseProcessor):
         self.gdf_adm0 = self.gdf_adm1.dissolve(
             by="ISO_A3",
             aggfunc={
-                "NAM_0": lambda x: list(x.mode()),
+                "NAM_0": lambda x: x.mode()[0] if not x.mode().empty else None,
                 **{col: "max" for col in hazard_score_cols},
             },
             as_index=False,
@@ -456,3 +458,14 @@ class GeopackageImporter(BaseProcessor):
             len(hazard_associations),
             admin_level_mnemonic,
         )
+
+    def finish(self):
+        self.dbsession.connection().execute(sqlalchemy.text("""
+UPDATE datamart.administrativedivision
+SET name_fr = coalesce(name_fr, name),
+    name_es = coalesce(name_es, name);
+"""))
+
+        LOG.info("Simplifying geometries")
+        sql = importlib.resources.read_text("thinkhazard.scripts", "simplify.sql")
+        self.dbsession.connection().execute(sqlalchemy.text(sql))
