@@ -17,8 +17,9 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
+import importlib
 import logging
+import os
 
 import geopandas as gpd
 import sqlalchemy
@@ -132,14 +133,15 @@ class GeopackageImporter(BaseProcessor):
         self.validate()
         self.dissolve()
 
-        self.drop_foreign_keys()
-
         self.clear_all_data()
+        self.drop_foreign_keys()
 
         self.import_admindivs()
         self.import_hazard_scores()
 
         self.recreate_foreign_keys()
+
+        self.finish()
 
     def read_adm2(self):
         if not os.path.isfile(self.geopackage_path):
@@ -283,12 +285,12 @@ class GeopackageImporter(BaseProcessor):
         self.gdf_adm1 = self.gdf_adm2.dissolve(
             by=["ISO_A3", "COD_1"],
             aggfunc={
-                "NAM_0": lambda x: list(x.mode()),
-                "NAM_0_FR": lambda x: list(x.mode()),
-                "NAM_0_ES": lambda x: list(x.mode()),
-                "NAM_1": lambda x: list(x.mode()),
-                "NAM_1_FR": lambda x: list(x.mode()),
-                "NAM_1_ES": lambda x: list(x.mode()),
+                "NAM_0": lambda x: x.mode()[0] if not x.mode().empty else None,
+                "NAM_0_FR": lambda x: x.mode()[0] if not x.mode().empty else None,
+                "NAM_0_ES": lambda x: x.mode()[0] if not x.mode().empty else None,
+                "NAM_1": lambda x: x.mode()[0] if not x.mode().empty else None,
+                "NAM_1_FR": lambda x: x.mode()[0] if not x.mode().empty else None,
+                "NAM_1_ES": lambda x: x.mode()[0] if not x.mode().empty else None,
                 "SOVEREIGN": "first",
                 "WB_STATUS": "first",
                 **{col: "max" for col in hazard_score_cols},
@@ -307,9 +309,9 @@ class GeopackageImporter(BaseProcessor):
         self.gdf_adm0 = gdf_adm1_sovereign.dissolve(
             by="ISO_A3",
             aggfunc={
-                "NAM_0": lambda x: list(x.mode()),
-                "NAM_0_FR": lambda x: list(x.mode()),
-                "NAM_0_ES": lambda x: list(x.mode()),
+                "NAM_0": lambda x: x.mode()[0] if not x.mode().empty else None,
+                "NAM_0_FR": lambda x: x.mode()[0] if not x.mode().empty else None,
+                "NAM_0_ES": lambda x: x.mode()[0] if not x.mode().empty else None,
                 **{col: "max" for col in hazard_score_cols},
             },
             as_index=False,
@@ -575,3 +577,18 @@ class GeopackageImporter(BaseProcessor):
             len(hazard_associations),
             admin_level_mnemonic,
         )
+
+    def finish(self):
+        self.dbsession.connection().execute(
+            sqlalchemy.text(
+                """
+UPDATE datamart.administrativedivision
+SET name_fr = coalesce(name_fr, name),
+    name_es = coalesce(name_es, name);
+"""
+            )
+        )
+
+        LOG.info("Simplifying geometries")
+        sql = importlib.resources.read_text("thinkhazard.scripts", "simplify.sql")
+        self.dbsession.connection().execute(sqlalchemy.text(sql))
