@@ -39,18 +39,30 @@ ADMDIV_MAPPINGS = {
     "COU": {
         "ISO_A3": "code",
         "NAM_0": "name",
+        "NAM_0_FR": "name_fr",
+        "NAM_0_ES": "name_es",
         "geometry": "geom",
     },
     "PRO": {
-        "ADM1CD_c": "code",
+        "COD_1": "code",
         "NAM_1": "name",
         "ISO_A3": "parent_code",
+        "NAM_1_FR": "name_fr",
+        "NAM_1_ES": "name_es",
         "geometry": "geom",
     },
     "REG": {
-        "ADM2CD_c": "code",
+        "COD_2": "code",
         "NAM_2": "name",
-        "ADM1CD_c": "parent_code",
+        "COD_1": "parent_code",
+        "geometry": "geom",
+    },
+    "URB": {
+        "COD_URB": "code",
+        "NAM_URB": "name",
+        "COD_2": "parent_code",
+        "NAM_URB_FR": "name_fr",
+        "NAM_URB_ES": "name_es",
         "geometry": "geom",
     },
 }
@@ -74,8 +86,9 @@ HAZARD_SCORE_COLUMNS = {
 
 CODE_COLUMNS = {
     "COU": "ISO_A3",
-    "PRO": "ADM1CD_c",
-    "REG": "ADM2CD_c",
+    "PRO": "COD_1",
+    "REG": "COD_2",
+    "URB": "COD_URB",
 }
 
 
@@ -95,6 +108,7 @@ class GeopackageImporter(BaseProcessor):
         self.gdf_adm2: gpd.GeoDataFrame | None = None
         self.gdf_adm1: gpd.GeoDataFrame | None = None
         self.gdf_adm0: gpd.GeoDataFrame | None = None
+        self.gdf_urban: gpd.GeoDataFrame | None = None
 
     @staticmethod
     def argument_parser():
@@ -110,7 +124,12 @@ class GeopackageImporter(BaseProcessor):
         return parser
 
     def do_execute(self, geopackage_path):
-        self.read_adm2(geopackage_path)
+        if geopackage_path is None:
+            raise ValueError("Geopackage path is required")
+        self.geopackage_path = geopackage_path
+
+        self.read_adm2()
+        self.read_urban()
         self.validate()
         self.dissolve()
 
@@ -124,23 +143,28 @@ class GeopackageImporter(BaseProcessor):
 
         self.finish()
 
-    def read_adm2(self, geopackage_path):
-        if geopackage_path is None:
-            raise ValueError("Geopackage path is required")
-
-        self.geopackage_path = geopackage_path
-
+    def read_adm2(self):
         if not os.path.isfile(self.geopackage_path):
             raise FileNotFoundError(
                 f"Geopackage file not found: {self.geopackage_path}"
             )
 
         LOG.info("Reading ADM2 source: %s", self.geopackage_path)
-        gdf_adm2 = gpd.read_file(self.geopackage_path, engine="pyogrio")
+        gdf_adm2 = gpd.read_file(self.geopackage_path, layer="ADM2", engine="pyogrio")
 
         LOG.info("Existing columns: %s", list(gdf_adm2.columns))
 
         self.gdf_adm2 = gdf_adm2
+
+    def read_urban(self):
+        LOG.info("Reading Urban source: %s", self.geopackage_path)
+        gdf_urban = gpd.read_file(self.geopackage_path, layer="URB", engine="pyogrio")
+
+        gdf_urban["COD_URB"] = gdf_urban["COD_URB"].astype(str)
+
+        LOG.info("Existing columns: %s", list(gdf_urban.columns))
+        LOG.info("Urban Count: %d", len(gdf_urban))
+        self.gdf_urban = gdf_urban
 
     def validate(self):
 
@@ -160,15 +184,91 @@ class GeopackageImporter(BaseProcessor):
                 LOG.warning(msg)
 
         analyse_unicity("ISO_A3", "NAM_0")
-        analyse_unicity("ADM1CD_c", "ISO_A3", True)
-        analyse_unicity("ADM1CD_c", "NAM_1")
+        analyse_unicity("COD_1", "ISO_A3", True)
+        analyse_unicity("COD_1", "NAM_1")
         # analyse_unicity("ADM2CD_c", "ADM1CD_c", True)
 
-        if self.gdf_adm2["NAM_2"].isnull().any():
+        null_mask = self.gdf_adm2["NAM_2"].isnull()
+        null_codes = set(self.gdf_adm2.loc[null_mask, "COD_2"])
+        if null_codes:
+            null_iso = sorted(self.gdf_adm2.loc[null_mask, "ISO_A3"].dropna().unique())
             LOG.warning(
-                "Column NAM_2 contains null values, those lines will be ignored."
+                "Column NAM_2 contains null values; dropping %d rows (ISO_A3: %s)",
+                len(null_codes),
+                ", ".join(null_iso) if null_iso else "unknown",
             )
-            self.gdf_adm2 = self.gdf_adm2[self.gdf_adm2["NAM_2"].notnull()]
+            self.gdf_adm2 = self.gdf_adm2[~null_mask]
+
+            if self.gdf_urban is not None:
+                before = len(self.gdf_urban)
+                self.gdf_urban = self.gdf_urban[
+                    ~self.gdf_urban["COD_2"].isin(null_codes)
+                ]
+                LOG.info(
+                    "Dropped %d urban rows referencing removed ADM2 codes",
+                    before - len(self.gdf_urban),
+                )
+
+        if self.gdf_urban is not None:
+            if not self.gdf_urban["COD_URB"].is_unique:
+                duplicates = self.gdf_urban[
+                    self.gdf_urban["COD_URB"].duplicated(keep=False)
+                ]
+                dup_list = duplicates["COD_URB"].tolist()
+                raise Exception(f"COD_URB must be unique. Duplicates: {dup_list}")
+
+            if (
+                "NAM_URB" in self.gdf_urban.columns
+                and self.gdf_urban["NAM_URB"].isnull().any()
+            ):
+                LOG.warning(
+                    "Column NAM_URB contains null values, those lines will be ignored."
+                )
+                self.gdf_urban = self.gdf_urban[self.gdf_urban["NAM_URB"].notnull()]
+
+        # Find ISO_A3 codes where ALL rows are territories (WB_STATUS="Territory")
+        # These will never produce an ADM0, so their SOVEREIGN parent won't exist
+        territory_only_iso = self.gdf_adm2.groupby("ISO_A3")["WB_STATUS"].apply(
+            lambda x: (x == "Territory").all()
+        )
+        territory_only_codes = set(territory_only_iso[territory_only_iso].index)
+        if territory_only_codes:
+            # Check if their SOVEREIGN is also territory-only (orphan)
+            orphan_sovereigns = set()
+            for code in territory_only_codes:
+                sovereign = self.gdf_adm2.loc[
+                    self.gdf_adm2["ISO_A3"] == code, "SOVEREIGN"
+                ].iloc[0]
+                # If sovereign is also territory-only or doesn't exist, it's orphan
+                if sovereign in territory_only_codes or sovereign not in set(
+                    self.gdf_adm2["ISO_A3"]
+                ):
+                    orphan_sovereigns.add(code)
+
+            if orphan_sovereigns:
+                LOG.warning(
+                    "Dropping ISO_A3 codes that are territory-only with no valid "
+                    "sovereign parent:"
+                )
+                for code in sorted(orphan_sovereigns):
+                    sovereign = self.gdf_adm2.loc[
+                        self.gdf_adm2["ISO_A3"] == code, "SOVEREIGN"
+                    ].iloc[0]
+                    LOG.warning("  - %s (SOVEREIGN=%s)", code, sovereign)
+
+                orphan_mask = self.gdf_adm2["ISO_A3"].isin(orphan_sovereigns)
+                removed_adm2_codes = set(self.gdf_adm2.loc[orphan_mask, "COD_2"])
+                self.gdf_adm2 = self.gdf_adm2[~orphan_mask]
+
+                # Also filter Urban records referencing removed ADM2
+                if self.gdf_urban is not None:
+                    urban_orphan_mask = self.gdf_urban["COD_2"].isin(removed_adm2_codes)
+                    if urban_orphan_mask.any():
+                        LOG.warning(
+                            "Dropping %d Urban records in orphan territories",
+                            urban_orphan_mask.sum(),
+                        )
+                        self.gdf_urban = self.gdf_urban[~urban_orphan_mask]
 
     def dissolve(self):
         hazard_score_cols = [
@@ -183,21 +283,35 @@ class GeopackageImporter(BaseProcessor):
 
         LOG.info("Extracting ADM1 boundaries...")
         self.gdf_adm1 = self.gdf_adm2.dissolve(
-            by=["ISO_A3", "ADM1CD_c"],
+            by=["ISO_A3", "COD_1"],
             aggfunc={
                 "NAM_0": lambda x: x.mode()[0] if not x.mode().empty else None,
+                "NAM_0_FR": lambda x: x.mode()[0] if not x.mode().empty else None,
+                "NAM_0_ES": lambda x: x.mode()[0] if not x.mode().empty else None,
                 "NAM_1": lambda x: x.mode()[0] if not x.mode().empty else None,
+                "NAM_1_FR": lambda x: x.mode()[0] if not x.mode().empty else None,
+                "NAM_1_ES": lambda x: x.mode()[0] if not x.mode().empty else None,
+                "SOVEREIGN": "first",
+                "WB_STATUS": "first",
                 **{col: "max" for col in hazard_score_cols},
             },
             as_index=False,
         )
         self.gdf_adm1["geometry"] = self.gdf_adm1.geometry.buffer(0)
 
+        territory_mask = self.gdf_adm1["WB_STATUS"] == "Territory"
+        self.gdf_adm1.loc[territory_mask, "ISO_A3"] = self.gdf_adm1.loc[
+            territory_mask, "SOVEREIGN"
+        ]
+
         LOG.info("Extracting ADM0 boundaries...")
-        self.gdf_adm0 = self.gdf_adm1.dissolve(
+        gdf_adm1_sovereign = self.gdf_adm1[self.gdf_adm1["WB_STATUS"] != "Territory"]
+        self.gdf_adm0 = gdf_adm1_sovereign.dissolve(
             by="ISO_A3",
             aggfunc={
                 "NAM_0": lambda x: x.mode()[0] if not x.mode().empty else None,
+                "NAM_0_FR": lambda x: x.mode()[0] if not x.mode().empty else None,
+                "NAM_0_ES": lambda x: x.mode()[0] if not x.mode().empty else None,
                 **{col: "max" for col in hazard_score_cols},
             },
             as_index=False,
@@ -337,6 +451,9 @@ class GeopackageImporter(BaseProcessor):
         LOG.info("Importing ADM2")
         self.import_admdiv_level("REG", self.gdf_adm2)
 
+        LOG.info("Importing Urban")
+        self.import_admdiv_level("URB", self.gdf_urban)
+
     def import_admdiv_level(self, level_mnemonic: str, gdf: gpd.GeoDataFrame):
         level = AdminLevelType.get(self.dbsession, level_mnemonic)
 
@@ -381,6 +498,8 @@ class GeopackageImporter(BaseProcessor):
         self.import_hazard_scores_level("PRO", self.gdf_adm1)
         LOG.info("Importing hazard scores for ADM2")
         self.import_hazard_scores_level("REG", self.gdf_adm2)
+        LOG.info("Importing hazard scores for Urban")
+        self.import_hazard_scores_level("URB", self.gdf_urban)
 
     def import_hazard_scores_level(
         self, admin_level_mnemonic: str, gdf: gpd.GeoDataFrame
@@ -460,11 +579,15 @@ class GeopackageImporter(BaseProcessor):
         )
 
     def finish(self):
-        self.dbsession.connection().execute(sqlalchemy.text("""
+        self.dbsession.connection().execute(
+            sqlalchemy.text(
+                """
 UPDATE datamart.administrativedivision
 SET name_fr = coalesce(name_fr, name),
     name_es = coalesce(name_es, name);
-"""))
+"""
+            )
+        )
 
         LOG.info("Simplifying geometries")
         sql = importlib.resources.read_text("thinkhazard.scripts", "simplify.sql")

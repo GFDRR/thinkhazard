@@ -19,6 +19,7 @@
 
 import os
 
+import geopandas as gpd
 from mock import patch
 
 from thinkhazard.models import AdministrativeDivision
@@ -28,7 +29,21 @@ from .. import DBSession, engine, settings, DATA_FOLDER
 from . import BaseTestCase
 
 # ADM2_PATH = os.path.join(DATA_FOLDER, "TH_scores_ADM2_2025.gpkg")
-ADM2_PATH = os.path.join(DATA_FOLDER, "adm2.geojson")
+ADM2_PATH = os.path.join(DATA_FOLDER, "ADM2.geojson")
+URBAN_PATH = os.path.join(DATA_FOLDER, "URB.geojson")
+
+
+# Save reference to real read_file BEFORE any patching
+_real_read_file = gpd.read_file
+
+
+def mock_read_file(path, layer=None, **kwargs):
+    if layer == "ADM2":
+        return _real_read_file(ADM2_PATH, engine="pyogrio")
+    if layer == "URB":
+        return _real_read_file(URBAN_PATH, engine="pyogrio")
+    else:
+        raise ValueError(f"Unknown layer: {layer}")
 
 
 class TestGeopackageImporter(BaseTestCase):
@@ -46,14 +61,18 @@ class TestGeopackageImporter(BaseTestCase):
         GeopackageImporter.run(["import_geopackage", "--config_uri", "c2c://tests.ini"])
         mock.assert_called_with(geopackage_path=None)
 
-    def test_import_adm2(self):
+    @patch(
+        "thinkhazard.processing.import_geopackage.gpd.read_file",
+        side_effect=mock_read_file,
+    )
+    def test_import_adm2(self, mock_read):
         self.importer().execute(geopackage_path=ADM2_PATH, verbose=True)
 
-    def test_dry_run(self):
+    @patch(
+        "thinkhazard.processing.import_geopackage.gpd.read_file",
+        side_effect=mock_read_file,
+    )
+    def test_dry_run(self, mock_read):
         assert DBSession.query(AdministrativeDivision).count() == 3
         self.importer().execute(geopackage_path=ADM2_PATH, verbose=True, dry_run=True)
         assert DBSession.query(AdministrativeDivision).count() == 3
-
-    # def test_force(self):
-    #     """Test downloader in force mode"""
-    #     self.downloader().execute(force=True)
