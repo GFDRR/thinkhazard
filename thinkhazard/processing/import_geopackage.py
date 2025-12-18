@@ -618,6 +618,9 @@ SET name_fr = coalesce(name_fr, name),
             )
         )
 
+        # Without this, the execution time of simplify can explode.
+        self.dbsession.connection().execute(sqlalchemy.text("ANALYZE;"))
+
         LOG.info("Simplifying geometries")
         sql = importlib.resources.read_text("thinkhazard.scripts", "simplify.sql")
         self.dbsession.connection().execute(sqlalchemy.text(sql))
