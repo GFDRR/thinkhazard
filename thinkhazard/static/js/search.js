@@ -77,6 +77,9 @@
     if (s.admin2) {
       tokens.unshift(s.admin2);
     }
+    if (s.admin3) {
+      tokens.unshift(s.admin3);
+    }
     return tokens;
   }
 
