@@ -163,7 +163,10 @@ def create_pdf_report(request):
     s3_path = "reports/{:%Y-%m-%d}/{}".format(publication_date, filename)
     local_path = os.path.join(tempfile.gettempdir(), filename)
 
-    if force or not request.s3_helper.download_file(s3_path, local_path):
+    if not force and request.s3_helper.object_exists(s3_path):
+        request.s3_helper.download_file(s3_path, local_path)
+
+    if force or not os.path.isfile(local_path):
         categories = (
             request.dbsession.query(HazardCategory)
             .options(joinedload(HazardCategory.hazardtype))

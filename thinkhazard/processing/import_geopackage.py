@@ -25,13 +25,14 @@ import geopandas as gpd
 import sqlalchemy
 from shapely.geometry import MultiPolygon, Polygon
 
-from thinkhazard.processing import BaseProcessor
+from thinkhazard.lib.s3helper import S3Helper
 from thinkhazard.models import (
     AdminLevelType,
     AdministrativeDivision,
     HazardCategory,
     HazardCategoryAdministrativeDivisionAssociation,
 )
+from thinkhazard.processing import BaseProcessor
 
 LOG = logging.getLogger(__name__)
 
@@ -126,10 +127,16 @@ class GeopackageImporter(BaseProcessor):
     def do_execute(self, geopackage_path):
         if geopackage_path is None:
             raise ValueError("Geopackage path is required")
-        self.geopackage_path = geopackage_path
+
+        if geopackage_path.startswith("s3://"):
+            LOG.info(f"S3 URL detected: {geopackage_path}")
+            self.geopackage_path = self.download_from_s3(geopackage_path)
+        else:
+            self.geopackage_path = geopackage_path
 
         self.read_adm2()
         self.read_urban()
+
         self.validate()
         self.dissolve()
 
@@ -142,6 +149,28 @@ class GeopackageImporter(BaseProcessor):
         self.recreate_foreign_keys()
 
         self.finish()
+
+    def download_from_s3(self, s3_url):
+        """Download geopackage from S3 URL and return local path."""
+        LOG.info(f"Downloading geopackage from S3: {s3_url}")
+
+        if not s3_url.startswith("s3://"):
+            raise ValueError(f"Invalid S3 URL format: {s3_url}")
+
+        path_part = s3_url[5:]  # Remove 's3://'
+        bucket, object_name = path_part.split("/", 1)
+
+        s3_helper = S3Helper(self.settings)
+        local_path = "/tmp/hazardsets/admindivs.gpkg"
+
+        os.makedirs(os.path.dirname(local_path), exist_ok=True)
+        if os.path.exists(local_path):
+            os.unlink(local_path)
+
+        s3_helper.download_file(object_name, local_path)
+
+        LOG.info(f"Successfully downloaded geopackage to: {local_path}")
+        return local_path
 
     def read_adm2(self):
         if not os.path.isfile(self.geopackage_path):
