@@ -358,7 +358,7 @@ def get_info_for_hazard_type(request, hazard, division):
         request.dbsession.query(Region.id)
         .join(Region.administrativedivisions)
         .filter(AdministrativeDivision.code == code)
-        .subquery()
+        .scalar_subquery()
     )
     further_resources_query = (
         request.dbsession.query(HazardTypeFurtherResourceAssociation)

@@ -84,8 +84,8 @@ def main(global_config, **settings):
 
         config.add_route("admin_technical_rec", "/technical_rec")
         config.add_route("admin_technical_rec_new", "/technical_rec/new")
-        config.add_route("admin_technical_rec_edit", "/technical_rec/{id:\d+}")
-        config.add_route("admin_technical_rec_delete", "/technical_rec/{id:\d+}/delete")
+        config.add_route("admin_technical_rec_edit", r"/technical_rec/{id:\d+}")
+        config.add_route("admin_technical_rec_delete", r"/technical_rec/{id:\d+}/delete")
 
         config.add_route("admin_admindiv_hazardsets", "/admindiv_hazardsets")
         config.add_route(
@@ -93,7 +93,7 @@ def main(global_config, **settings):
         )
         config.add_route(
             "admin_admindiv_hazardsets_hazardtype",
-            "/admindiv_hazardsets/{hazardtype:([A-Z]{2})}",
+            r"/admindiv_hazardsets/{hazardtype:([A-Z]{2})}",
         )
 
         config.add_route("admin_climate_rec", "/climate_rec")
@@ -103,8 +103,8 @@ def main(global_config, **settings):
         config.add_route(
             "admin_climate_rec_new", "/climate_rec/{hazard_type:([A-Z]{2})}/new"
         )
-        config.add_route("admin_climate_rec_edit", "/climate_rec/{id:\d+}")
-        config.add_route("admin_climate_rec_delete", "/climate_rec/{id:\d+}/delete")
+        config.add_route("admin_climate_rec_edit", r"/climate_rec/{id:\d+}")
+        config.add_route("admin_climate_rec_delete", r"/climate_rec/{id:\d+}/delete")
 
         config.add_route("admin_hazardcategories", "/hazardcategories")
         config.add_route(
@@ -117,8 +117,8 @@ def main(global_config, **settings):
 
         config.add_route("admin_contacts", "/contacts")
         config.add_route("admin_contact_new", "/contact/new")
-        config.add_route("admin_contact_edit", "/contact/{id:\d+}")
-        config.add_route("admin_contact_delete", "/contact/{id:\d+}/delete")
+        config.add_route("admin_contact_edit", r"/contact/{id:\d+}")
+        config.add_route("admin_contact_delete", r"/contact/{id:\d+}/delete")
         config.add_route(
             "admin_contact_admindiv_hazardtype_association", "/contact/CAdHt_form"
         )

@@ -21,7 +21,7 @@ import os
 import sys
 import urllib
 
-from sqlalchemy import engine_from_config
+from sqlalchemy import engine_from_config, text
 from pyramid.paster import setup_logging
 from pyramid.scripts.common import parse_vars
 from alembic.config import Config
@@ -74,15 +74,15 @@ def main(argv=sys.argv):
 def initdb(connection, drop_all=False):
     if drop_all:
         if schema_exists(connection, "processing"):
-            connection.execute("DROP SCHEMA processing CASCADE;")
+            connection.execute(text("DROP SCHEMA processing CASCADE;"))
         if schema_exists(connection, "datamart"):
-            connection.execute("DROP SCHEMA datamart CASCADE;")
+            connection.execute(text("DROP SCHEMA datamart CASCADE;"))
 
     if not schema_exists(connection, "datamart"):
-        connection.execute("CREATE SCHEMA datamart;")
+        connection.execute(text("CREATE SCHEMA datamart;"))
 
     if not schema_exists(connection, "processing"):
-        connection.execute("CREATE SCHEMA processing;")
+        connection.execute(text("CREATE SCHEMA processing;"))
 
     Base.metadata.create_all(connection)
 
@@ -99,7 +99,7 @@ WHERE schema_name = '{}';
 """.format(
         schema_name
     )
-    result = connection.execute(sql)
+    result = connection.execute(text(sql))
     row = result.first()
     return row[0] == 1
 

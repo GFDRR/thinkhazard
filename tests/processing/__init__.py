@@ -68,10 +68,11 @@ def populate_datamart():
             "name": "Administrative division level 1",
         }
     )
+    DBSession.add(country)
+
     region = Region(id=random.randint(0, 0xFFFFFF), name=uuid.uuid4(), level=3)
     DBSession.add(region)
     country.regions = [region]
-    DBSession.add(country)
 
     province = AdministrativeDivision(
         **{

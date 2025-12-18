@@ -24,12 +24,13 @@ from sqlalchemy.sql import text
 logger = logging.getLogger(__name__)
 
 
-def wait_for_db(connection):
+def wait_for_db(engine):
     sleep_time = 1
     max_sleep = 30
     while True:
         try:
-            connection.execute(text("SELECT 1;"))
+            with engine.connect() as conn:
+                conn.execute(text("SELECT 1;"))
             return
         except Exception as e:
             logger.warning(f"Waiting for the DataBase server to be reachable: {e}")
