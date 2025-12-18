@@ -152,7 +152,7 @@ Think Hazard - {{ division.translated_name(request.locale_name)}}
       app.neighboursUrl = '{{ 'report_neighbours_geojson'|route_url(divisioncode=division.code)}}';
 
       {%- if division %}
-      app.divisionCode = {{division.code}};
+      app.divisionCode = '{{division.code}}';
       {%- else %}
       app.divisionCode = undefined;
       {%- endif %}
