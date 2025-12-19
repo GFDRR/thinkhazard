@@ -17,13 +17,10 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
-import unittest
-import os
+
 from datetime import datetime
 
-from pyramid import testing
-from pyramid.paster import bootstrap
-from webtest import TestApp
+import pytest
 
 from thinkhazard.models import (
     AdministrativeDivision,
@@ -48,51 +45,26 @@ from thinkhazard.models import (
 from shapely.geometry import MultiPolygon, Polygon
 from geoalchemy2.shape import from_shape
 
-from .. import DBSession, settings
 
+@pytest.fixture(scope="class")
+def populate(dbsession, transact):
+    dbsession.query(Output).delete()
+    dbsession.query(Layer).delete()
+    dbsession.query(HazardSet).delete()
 
-class BaseTestCase(unittest.TestCase):
-
-    app_name = "public"
-
-    @classmethod
-    def setUpClass(cls):
-        populate_db()
-        env = bootstrap('c2c://tests.ini#{}'.format(cls.app_name))
-        config = testing.setUp(registry=env["registry"])
-        config.add_request_method(lambda request: DBSession, "dbsession", reify=True)
-        app = config.make_wsgi_app()
-        cls.testapp = TestApp(app)
-
-    @classmethod
-    def tearDownClass(cls):
-        del cls.testapp
-
-    def setUp(self):  # NOQA
-        self.t = DBSession.begin_nested()
-
-    def tearDown(self):  # NOQA
-        self.t.rollback()
-
-
-def populate_db():
-    DBSession.query(Output).delete()
-    DBSession.query(Layer).delete()
-    DBSession.query(HazardSet).delete()
-
-    DBSession.query(HazardTypeFurtherResourceAssociation).delete()
-    DBSession.query(FurtherResource).delete()
-    DBSession.query(HazardCategoryTechnicalRecommendationAssociation).delete()
-    DBSession.query(TechnicalRecommendation).delete()
-    DBSession.query(ClimateChangeRecommendation).delete()
-    DBSession.query(HazardCategoryAdministrativeDivisionAssociation).delete()
-    DBSession.query(CAdHt).delete()
-    DBSession.query(Contact).delete()
-    DBSession.query(Region).delete()
-    DBSession.query(AdministrativeDivision).delete()
+    dbsession.query(HazardTypeFurtherResourceAssociation).delete()
+    dbsession.query(FurtherResource).delete()
+    dbsession.query(HazardCategoryTechnicalRecommendationAssociation).delete()
+    dbsession.query(TechnicalRecommendation).delete()
+    dbsession.query(ClimateChangeRecommendation).delete()
+    dbsession.query(HazardCategoryAdministrativeDivisionAssociation).delete()
+    dbsession.query(CAdHt).delete()
+    dbsession.query(Contact).delete()
+    dbsession.query(Region).delete()
+    dbsession.query(AdministrativeDivision).delete()
 
     hazardtype_eq = (
-        DBSession.query(HazardType).filter(HazardType.mnemonic == "EQ").one()
+        dbsession.query(HazardType).filter(HazardType.mnemonic == "EQ").one()
     )
     hazardset1 = HazardSet()
     hazardset1.id = "hazardset1"
@@ -101,7 +73,7 @@ def populate_db():
     hazardset1.metadata_lastupdated_date = datetime.now()
     hazardset1.detail_url = "http://domain.com/path/"
     hazardset1.owner_organization = "data_provider"
-    DBSession.add(hazardset1)
+    dbsession.add(hazardset1)
 
     shape = MultiPolygon([Polygon([(0, 0), (0, 1), (1, 1), (1, 0), (0, 0)])])
     geometry = from_shape(shape, 4326)
@@ -111,28 +83,28 @@ def populate_db():
         **{"code": "10", "leveltype_id": 1, "name": "Division level 1"}
     )
     admin_div_10.geom = geometry
-    DBSession.add(admin_div_10)
+    dbsession.add(admin_div_10)
 
     # admin_div_11 is another country (division level 1)
     admin_div_11 = AdministrativeDivision(
         **{"code": "11", "leveltype_id": 1, "name": "Division level 1 2"}
     )
     admin_div_11.geom = geometry
-    DBSession.add(admin_div_11)
+    dbsession.add(admin_div_11)
 
     # admin_div_12 is another country (division level 1)
     admin_div_12 = AdministrativeDivision(
         **{"code": "12", "leveltype_id": 1, "name": "Division level 1 3"}
     )
     admin_div_12.geom = geometry
-    DBSession.add(admin_div_12)
+    dbsession.add(admin_div_12)
 
     # admin_div_13 is another country (division level 1)
     admin_div_13 = AdministrativeDivision(
         **{"code": "13", "leveltype_id": 1, "name": "Division level 1 4"}
     )
     admin_div_13.geom = geometry
-    DBSession.add(admin_div_13)
+    dbsession.add(admin_div_13)
 
     # admin_div_20 is a province (division level 2)
     # its parent is admin_div_10
@@ -141,7 +113,7 @@ def populate_db():
     )
     admin_div_20.parent_code = admin_div_10.code
     admin_div_20.geom = geometry
-    DBSession.add(admin_div_20)
+    dbsession.add(admin_div_20)
 
     shape = MultiPolygon([Polygon([(0, 0), (0, 1), (0.5, 1), (0.5, 0), (0, 0)])])
     geometry = from_shape(shape, 4326)
@@ -207,10 +179,10 @@ def populate_db():
     #
     # region_3 = admin_div_12
 
-    category_eq_hig = HazardCategory.get(DBSession, "EQ", "HIG")
+    category_eq_hig = HazardCategory.get(dbsession, "EQ", "HIG")
     category_eq_hig.general_recommendation = "General recommendation for EQ HIG"
 
-    category_fl_hig = HazardCategory.get(DBSession, "FL", "HIG")
+    category_fl_hig = HazardCategory.get(dbsession, "FL", "HIG")
 
     # admin_div_31 has (EQ, HIGH)
     association = HazardCategoryAdministrativeDivisionAssociation(
@@ -256,20 +228,20 @@ def populate_db():
     )
 
     climate_rec = ClimateChangeRecommendation(
-        text="Climate change recommendation", hazardtype=HazardType.get(DBSession, "EQ")
+        text="Climate change recommendation", hazardtype=HazardType.get(dbsession, "EQ")
     )
     climate_rec.associations.append(
-        CcrAd(administrativedivision=admin_div_10, hazardtype=HazardType.get(DBSession, "EQ"))
+        CcrAd(administrativedivision=admin_div_10, hazardtype=HazardType.get(dbsession, "EQ"))
     )
-    DBSession.add(climate_rec)
+    dbsession.add(climate_rec)
 
     climate_rec = ClimateChangeRecommendation(
-        text="Climate change recommendation 2", hazardtype=HazardType.get(DBSession, "EQ")
+        text="Climate change recommendation 2", hazardtype=HazardType.get(dbsession, "EQ")
     )
     climate_rec.associations.append(
-        CcrAd(administrativedivision=admin_div_11, hazardtype=HazardType.get(DBSession, "EQ"))
+        CcrAd(administrativedivision=admin_div_11, hazardtype=HazardType.get(dbsession, "EQ"))
     )
-    DBSession.add(climate_rec)
+    dbsession.add(climate_rec)
 
     technical_rec = TechnicalRecommendation(
         **{
@@ -280,7 +252,7 @@ def populate_db():
     association = HazardCategoryTechnicalRecommendationAssociation(order=1)
     association.hazardcategory = category_eq_hig
     technical_rec.hazardcategory_associations.append(association)
-    DBSession.add(technical_rec)
+    dbsession.add(technical_rec)
 
     technical_rec = TechnicalRecommendation(
         **{"text": "Educational web resources on earthquakes and" " seismic hazard"}
@@ -288,9 +260,9 @@ def populate_db():
     association = HazardCategoryTechnicalRecommendationAssociation(order=1)
     association.hazardcategory = category_eq_hig
     technical_rec.hazardcategory_associations.append(association)
-    DBSession.add(technical_rec)
+    dbsession.add(technical_rec)
 
-    category_fl_med = HazardCategory.get(DBSession, "FL", "MED")
+    category_fl_med = HazardCategory.get(dbsession, "FL", "MED")
     category_fl_med.general_recommendation = "General recommendation for FL MED"
 
     admin_div_31.hazardcategories.append(
@@ -298,13 +270,13 @@ def populate_db():
             **{"hazardcategory": category_fl_med}
         )
     )
-    DBSession.add(admin_div_31)
+    dbsession.add(admin_div_31)
     admin_div_32.hazardcategories.append(
         HazardCategoryAdministrativeDivisionAssociation(
             **{"hazardcategory": category_fl_med}
         )
     )
-    DBSession.add(admin_div_32)
+    dbsession.add(admin_div_32)
 
     # generic further resource for EQ:
     # it should be found on every EQ report page
@@ -319,7 +291,7 @@ def populate_db():
     association.hazardtype = hazardtype_eq
     association.region = global_region
     further_resource.hazardtype_associations.append(association)
-    DBSession.add(further_resource)
+    dbsession.add(further_resource)
 
     # further resource for EQ & region 1:
     # it should be found only on region 1 (and sub-divisions) page
@@ -330,7 +302,7 @@ def populate_db():
     association.hazardtype = hazardtype_eq
     association.region = region_1
     further_resource.hazardtype_associations.append(association)
-    DBSession.add(further_resource)
+    dbsession.add(further_resource)
 
     # contact for EQ & admin_div_11:
     contact1 = Contact(
@@ -341,12 +313,12 @@ def populate_db():
             "email": "mail@domain.com",
         }
     )
-    DBSession.add(contact1)
+    dbsession.add(contact1)
     association = CAdHt()
     association.hazardtype = hazardtype_eq
     association.administrativedivision = admin_div_10
     association.contact = contact1
-    DBSession.add(association)
+    dbsession.add(association)
 
     # contact for EQ & admin_div_11:
     contact2 = Contact(
@@ -357,13 +329,13 @@ def populate_db():
             "email": "mail@domain.com",
         }
     )
-    DBSession.add(contact1)
+    dbsession.add(contact1)
     association = CAdHt()
     association.hazardtype = hazardtype_eq
     association.administrativedivision = admin_div_10
     association.contact = contact2
-    DBSession.add(association)
+    dbsession.add(association)
 
-    Publication.new(DBSession)
+    Publication.new(dbsession)
 
-    DBSession.flush()
+    dbsession.flush()

@@ -22,12 +22,11 @@ import uuid
 import unittest
 import transaction
 
+import pytest
 from shapely.geometry import MultiPolygon, Polygon
 from geoalchemy2.shape import from_shape
 
 from thinkhazard.models import AdminLevelType, AdministrativeDivision, Region
-
-from .. import DBSession, settings
 
 
 class BaseTestCase(unittest.TestCase):
@@ -50,13 +49,14 @@ class BaseTestCase(unittest.TestCase):
         pass
 
 
-def populate_datamart():
+@pytest.fixture(scope="class")
+def populate_datamart(dbsession):
     print("populate datamart")
-    DBSession.query(AdministrativeDivision).delete()
+    dbsession.query(AdministrativeDivision).delete()
 
-    adminlevel_cou = AdminLevelType.get(DBSession, "COU")
-    adminlevel_pro = AdminLevelType.get(DBSession, "PRO")
-    adminlevel_reg = AdminLevelType.get(DBSession, "REG")
+    adminlevel_cou = AdminLevelType.get(dbsession, "COU")
+    adminlevel_pro = AdminLevelType.get(dbsession, "PRO")
+    adminlevel_reg = AdminLevelType.get(dbsession, "REG")
 
     shape = MultiPolygon([Polygon([(0, 0), (0, 1), (1, 1), (1, 0), (0, 0)])])
     geometry = from_shape(shape, 4326)
@@ -68,10 +68,10 @@ def populate_datamart():
             "name": "Administrative division level 1",
         }
     )
-    DBSession.add(country)
+    dbsession.add(country)
 
     region = Region(id=random.randint(0, 0xFFFFFF), name=uuid.uuid4(), level=3)
-    DBSession.add(region)
+    dbsession.add(region)
     country.regions = [region]
 
     province = AdministrativeDivision(
@@ -82,7 +82,7 @@ def populate_datamart():
         }
     )
     province.parent = country
-    DBSession.add(province)
+    dbsession.add(province)
 
     div = AdministrativeDivision(
         **{
@@ -95,6 +95,6 @@ def populate_datamart():
     div.hazardcategories = []
     div.parent = province
 
-    DBSession.add(div)
+    dbsession.add(div)
 
-    DBSession.flush()
+    dbsession.flush()

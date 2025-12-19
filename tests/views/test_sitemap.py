@@ -17,11 +17,8 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
-from . import BaseTestCase
 
-
-class TestSitemapFunction(BaseTestCase):
-    def test_sitemap(self):
-        resp = self.testapp.get("/sitemap.xml", status=200)
-        urls = resp.xml.findall("{http://www.sitemaps.org/schemas/sitemap/0.9}url")
-        self.assertEqual(len(urls), 7)
+def test_sitemap(public_testapp, populate):
+    resp = public_testapp.get("/sitemap.xml", status=200)
+    urls = resp.xml.findall("{http://www.sitemaps.org/schemas/sitemap/0.9}url")
+    assert len(urls) == 7
