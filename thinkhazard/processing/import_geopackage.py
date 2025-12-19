@@ -29,6 +29,8 @@ from thinkhazard.lib.s3helper import S3Helper
 from thinkhazard.models import (
     AdminLevelType,
     AdministrativeDivision,
+    ClimateChangeRecAdministrativeDivisionAssociation,
+    ContactAdministrativeDivisionHazardTypeAssociation,
     HazardCategory,
     HazardCategoryAdministrativeDivisionAssociation,
 )
@@ -39,6 +41,7 @@ LOG = logging.getLogger(__name__)
 ADMDIV_MAPPINGS = {
     "COU": {
         "ISO_A3": "code",
+        "GAUL_0": "gaul",
         "NAM_0": "name",
         "NAM_0_FR": "name_fr",
         "NAM_0_ES": "name_es",
@@ -102,6 +105,39 @@ def to_multipolygon(geom):
 
 
 class GeopackageImporter(BaseProcessor):
+    """
+    Imports administrative divisions and their hazard scores from a GeoPackage.
+
+    This class handles complete administrative data import following a structured workflow
+    for optimal performance and data consistency.
+
+    **Process Overview:**
+    1. **Data Source Preparation:** Download from S3 or use local GeoPackage file
+    2. **Data Reading:** Load ADM2 and Urban layers from GeoPackage
+    3. **Data Validation:** Verify uniqueness, handle null values, remove orphaned territories
+    4. **Boundary Dissolution:** Generate ADM1 and ADM0 levels from ADM2 data
+    5. **Database Optimization:** Drop foreign key constraints for bulk operations
+    6. **Data Clearing:** Remove existing relationships (hazard scores, regions, processing outputs)
+    7. **Administrative Import:** Bulk insert new divisions with upsert strategy
+    8. **Hazard Score Import:** Create hazard-division associations with score mapping
+    9. **Constraint Recreation:** Restore foreign keys and clean orphaned relationships
+    10. **Finalization:** Update missing translations and compute simplified geometries
+
+    *S3 Support:*
+    - Automatic download from s3:// URLs to local temporary storage
+
+    *Data Validation:*
+    - Code uniqueness verification across all administrative levels
+    - Parent-child relationship validation
+    - Detection and removal of orphaned territories (territories without valid sovereign)
+    - Automatic cleanup of null values in required fields
+
+    *Boundary Dissolution:*
+    - ADM2: Direct source data from GeoPackage layers
+    - ADM1: Dissolved from ADM2 by (ISO_A3, COD_1) groups with aggregated maximum hazard scores
+    - ADM0: Dissolved from ADM1 by ISO_A3 with aggregated maximum hazard scores
+    - Special territory handling: WB_STATUS="Territory" uses SOVEREIGN for parent relationships
+    """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -138,15 +174,15 @@ class GeopackageImporter(BaseProcessor):
         self.read_urban()
 
         self.validate()
+
         self.dissolve()
 
         self.clear_all_data()
         self.drop_foreign_keys()
-
         self.import_admindivs()
-        self.import_hazard_scores()
-
         self.recreate_foreign_keys()
+
+        self.import_hazard_scores()
 
         self.finish()
 
@@ -193,11 +229,14 @@ class GeopackageImporter(BaseProcessor):
 
         LOG.info("Existing columns: %s", list(gdf_urban.columns))
         LOG.info("Urban Count: %d", len(gdf_urban))
+
+        # gdf_urban = gdf_urban.head(100)
+
         self.gdf_urban = gdf_urban
 
     def validate(self):
 
-        def analyse_unicity(key_column, value_column, raise_error=False):
+        def analyse_unicity(key_column, value_column, action_msg=None, raise_error=False):
             """Log warning if we have multiple value for the same key"""
             counts = self.gdf_adm2.groupby(key_column)[value_column].agg(
                 lambda x: set(x)
@@ -206,13 +245,18 @@ class GeopackageImporter(BaseProcessor):
             if not violations.empty:
                 msg = f"We found multiple {value_column} for the same {key_column}:"
                 for key, values in violations.items():
-                    msg = msg + "\n" + f"{key}: {list(values)}"
-                msg = msg + "We will keep only the most used one."
+                    msg = msg + f"\n{key}: {list(values)}"
+                if action_msg is None:
+                    action_msg = "We will keep only the most used one."
+                if action_msg != "":
+                    msg = msg + f"\n{action_msg}"
                 if raise_error:
                     raise Exception(msg)
                 LOG.warning(msg)
 
         analyse_unicity("ISO_A3", "NAM_0")
+        analyse_unicity("ISO_A3", "GAUL_0")
+        analyse_unicity("GAUL_0", "ISO_A3", action_msg="")
         analyse_unicity("COD_1", "ISO_A3", True)
         analyse_unicity("COD_1", "NAM_1")
         # analyse_unicity("ADM2CD_c", "ADM1CD_c", True)
@@ -314,6 +358,7 @@ class GeopackageImporter(BaseProcessor):
         self.gdf_adm1 = self.gdf_adm2.dissolve(
             by=["ISO_A3", "COD_1"],
             aggfunc={
+                "GAUL_0": lambda x: x.mode()[0] if not x.mode().empty else None,
                 "NAM_0": lambda x: x.mode()[0] if not x.mode().empty else None,
                 "NAM_0_FR": lambda x: x.mode()[0] if not x.mode().empty else None,
                 "NAM_0_ES": lambda x: x.mode()[0] if not x.mode().empty else None,
@@ -338,6 +383,7 @@ class GeopackageImporter(BaseProcessor):
         self.gdf_adm0 = gdf_adm1_sovereign.dissolve(
             by="ISO_A3",
             aggfunc={
+                "GAUL_0": lambda x: x.mode()[0] if not x.mode().empty else None,
                 "NAM_0": lambda x: x.mode()[0] if not x.mode().empty else None,
                 "NAM_0_FR": lambda x: x.mode()[0] if not x.mode().empty else None,
                 "NAM_0_ES": lambda x: x.mode()[0] if not x.mode().empty else None,
@@ -346,7 +392,6 @@ class GeopackageImporter(BaseProcessor):
             as_index=False,
         )
         self.gdf_adm0["geometry"] = self.gdf_adm0.geometry.buffer(0)
-
         LOG.info("Processing Complete.")
         LOG.info("ADM2 Count: %d", len(self.gdf_adm2))
         LOG.info("ADM1 Count: %d", len(self.gdf_adm1))
@@ -371,18 +416,18 @@ class GeopackageImporter(BaseProcessor):
                 "DROP CONSTRAINT IF EXISTS administrativedivision_parent_code_fkey"
             )
         )
-        connection.execute(
-            sqlalchemy.text(
-                "ALTER TABLE datamart.rel_hazardcategory_administrativedivision "
-                "DROP CONSTRAINT IF EXISTS rel_hazardcategory_administrativ_administrativedivision_id_fkey"
-            )
-        )
-        connection.execute(
-            sqlalchemy.text(
-                "ALTER TABLE datamart.rel_region_administrativedivision "
-                "DROP CONSTRAINT IF EXISTS rel_region_administrativedivisi_administrativedivision_id_fkey"
-            )
-        )
+        # connection.execute(
+        #     sqlalchemy.text(
+        #         "ALTER TABLE datamart.rel_hazardcategory_administrativedivision "
+        #         "DROP CONSTRAINT IF EXISTS rel_hazardcategory_administrativ_administrativedivision_id_fkey"
+        #     )
+        # )
+        # connection.execute(
+        #     sqlalchemy.text(
+        #         "ALTER TABLE datamart.rel_region_administrativedivision "
+        #         "DROP CONSTRAINT IF EXISTS rel_region_administrativedivisi_administrativedivision_id_fkey"
+        #     )
+        # )
         connection.execute(
             sqlalchemy.text(
                 "ALTER TABLE datamart.rel_climatechangerecommendation_administrativedivision "
@@ -395,12 +440,12 @@ class GeopackageImporter(BaseProcessor):
                 "DROP CONSTRAINT IF EXISTS rel_contact_administrativedivisi_administrativedivision_id_fkey"
             )
         )
-        connection.execute(
-            sqlalchemy.text(
-                "ALTER TABLE processing.output "
-                "DROP CONSTRAINT IF EXISTS output_admin_id_fkey"
-            )
-        )
+        # connection.execute(
+        #     sqlalchemy.text(
+        #         "ALTER TABLE processing.output "
+        #         "DROP CONSTRAINT IF EXISTS output_admin_id_fkey"
+        #     )
+        # )
 
     def clear_all_data(self):
         """Clear all existing administrative division and related data."""
@@ -413,9 +458,51 @@ class GeopackageImporter(BaseProcessor):
         # - rel_climatechangerecommendation_administrativedivision
         # - rel_contact_administrativedivision_hazardtype
         # - processing.output
+
         connection.execute(
-            sqlalchemy.text("TRUNCATE datamart.administrativedivision CASCADE")
+            sqlalchemy.text("DELETE FROM datamart.rel_region_administrativedivision")
         )
+        connection.execute(
+            sqlalchemy.text("DELETE FROM datamart.rel_hazardcategory_administrativedivision")
+        )
+        connection.execute(
+            sqlalchemy.text("DELETE FROM processing.output")
+        )
+        # connection.execute(
+        #     sqlalchemy.text("DELETE FROM datamart.administrativedivision")
+        # )
+
+    def delete_orphans(self, child_class):
+        from sqlalchemy import select, func, exists, delete
+
+        condition = ~exists().where(
+            child_class.administrativedivision_id
+            == AdministrativeDivision.id
+        )
+
+        total = self.dbsession.scalars(
+            select(func.count())
+            .select_from(child_class)
+        ).one()
+
+        orphans = self.dbsession.scalars(
+            select(func.count())
+            .select_from(child_class)
+            .where(condition)
+        ).one()
+
+        if orphans > 0:
+            LOG.warning(
+                "%s / %s orphan %s will be lost.",
+                orphans,
+                total,
+                child_class.__name__,
+            )
+
+            self.dbsession.execute(
+                delete(child_class).where(condition)
+                .execution_options(synchronize_session=False)
+            )
 
     def recreate_foreign_keys(self):
         """Recreate FK constraints after bulk import."""
@@ -429,22 +516,26 @@ class GeopackageImporter(BaseProcessor):
                 "FOREIGN KEY (parent_code) REFERENCES datamart.administrativedivision(code)"
             )
         )
-        connection.execute(
-            sqlalchemy.text(
-                "ALTER TABLE datamart.rel_hazardcategory_administrativedivision "
-                "ADD CONSTRAINT rel_hazardcategory_administrativ_administrativedivision_id_fkey "
-                "FOREIGN KEY (administrativedivision_id) "
-                "REFERENCES datamart.administrativedivision(id) ON DELETE CASCADE"
-            )
-        )
-        connection.execute(
-            sqlalchemy.text(
-                "ALTER TABLE datamart.rel_region_administrativedivision "
-                "ADD CONSTRAINT rel_region_administrativedivisi_administrativedivision_id_fkey "
-                "FOREIGN KEY (administrativedivision_id) "
-                "REFERENCES datamart.administrativedivision(id) ON DELETE CASCADE"
-            )
-        )
+
+        # connection.execute(
+        #     sqlalchemy.text(
+        #         "ALTER TABLE datamart.rel_hazardcategory_administrativedivision "
+        #         "ADD CONSTRAINT rel_hazardcategory_administrativ_administrativedivision_id_fkey "
+        #         "FOREIGN KEY (administrativedivision_id) "
+        #         "REFERENCES datamart.administrativedivision(id) ON DELETE CASCADE"
+        #     )
+        # )
+
+        # connection.execute(
+        #     sqlalchemy.text(
+        #         "ALTER TABLE datamart.rel_region_administrativedivision "
+        #         "ADD CONSTRAINT rel_region_administrativedivisi_administrativedivision_id_fkey "
+        #         "FOREIGN KEY (administrativedivision_id) "
+        #         "REFERENCES datamart.administrativedivision(id) ON DELETE CASCADE"
+        #     )
+        # )
+
+        self.delete_orphans(ClimateChangeRecAdministrativeDivisionAssociation)
         connection.execute(
             sqlalchemy.text(
                 "ALTER TABLE datamart.rel_climatechangerecommendation_administrativedivision "
@@ -453,6 +544,8 @@ class GeopackageImporter(BaseProcessor):
                 "REFERENCES datamart.administrativedivision(id) ON DELETE CASCADE"
             )
         )
+
+        self.delete_orphans(ContactAdministrativeDivisionHazardTypeAssociation)
         connection.execute(
             sqlalchemy.text(
                 "ALTER TABLE datamart.rel_contact_administrativedivision_hazardtype "
@@ -461,16 +554,41 @@ class GeopackageImporter(BaseProcessor):
                 "REFERENCES datamart.administrativedivision(id)"
             )
         )
+
+        # connection.execute(
+        #     sqlalchemy.text(
+        #         "ALTER TABLE processing.output "
+        #         "ADD CONSTRAINT output_admin_id_fkey "
+        #         "FOREIGN KEY (admin_id) "
+        #         "REFERENCES datamart.administrativedivision(id) ON DELETE CASCADE"
+        #     )
+        # )
+
+    def import_admindivs(self):
+        connection = self.dbsession.connection()
+
+        # Create temporary schema
+        # because geopandas.to_postgis does not support append in pg_temp
         connection.execute(
             sqlalchemy.text(
-                "ALTER TABLE processing.output "
-                "ADD CONSTRAINT output_admin_id_fkey "
-                "FOREIGN KEY (admin_id) "
-                "REFERENCES datamart.administrativedivision(id) ON DELETE CASCADE"
+                """
+                CREATE SCHEMA IF NOT EXISTS temp;
+                CREATE TABLE temp.administrativedivision (
+                    code character varying NOT NULL PRIMARY KEY,
+                    gaul integer,
+                    leveltype_id integer NOT NULL,
+                    name character varying NOT NULL,
+                    parent_code character varying,
+                    geom public.geometry(MultiPolygon,4326),
+                    name_fr character varying,
+                    name_es character varying,
+                    geom_simplified public.geometry(MultiPolygon,3857),
+                    geom_simplified_for_parent public.geometry(MultiPolygon,3857)
+                );
+                """
             )
         )
 
-    def import_admindivs(self):
         LOG.info("Importing ADM0")
         self.import_admdiv_level("COU", self.gdf_adm0)
 
@@ -483,7 +601,26 @@ class GeopackageImporter(BaseProcessor):
         LOG.info("Importing Urban")
         self.import_admdiv_level("URB", self.gdf_urban)
 
+        LOG.info("Handling GAUL")
+        self.handle_gaul()
+
+        LOG.info("Updating table datamart.administrativedivision")
+        self.upsert_admindiv()
+
+        LOG.info("Cleaning table datamart.administrativedivision")
+        self.clean_admindivs()
+
+        connection.execute(
+            sqlalchemy.text(
+                """
+                DROP SCHEMA temp CASCADE;
+                """
+            )
+        )
+
     def import_admdiv_level(self, level_mnemonic: str, gdf: gpd.GeoDataFrame):
+        """Import one level of new administrative divisions in temporary table."""
+
         level = AdminLevelType.get(self.dbsession, level_mnemonic)
 
         mapping = ADMDIV_MAPPINGS[level_mnemonic]
@@ -497,7 +634,7 @@ class GeopackageImporter(BaseProcessor):
         gdf["geom"] = gdf["geom"].apply(to_multipolygon)
 
         gdf.to_postgis(
-            schema=AdministrativeDivision.__table__.schema,
+            schema="temp",
             name=AdministrativeDivision.__table__.name,
             con=self.dbsession.connection(),
             if_exists="append",
@@ -519,6 +656,130 @@ class GeopackageImporter(BaseProcessor):
         #     )
         #     for _, row in gdf.iterrows()
         # ])
+
+    def handle_gaul(self):
+        """
+        Update code using GAUL on admin0
+        Should be useful only on first import
+        Could be removed at sometime
+        """
+        self.dbsession.connection().execute(
+            sqlalchemy.text(
+                """
+UPDATE datamart.administrativedivision dest
+SET code = src.code
+FROM temp.administrativedivision src
+WHERE dest.code = src.gaul::text
+    AND src.leveltype_id = 1
+    AND dest.leveltype_id = 1
+                """
+            )
+        )
+
+    def upsert_admindiv(self):
+        """
+        Make an upsert of new administrative divisions based on code field.
+        """
+        self.dbsession.connection().execute(
+            sqlalchemy.text(
+                """
+INSERT INTO datamart.administrativedivision (
+        code,
+        gaul,
+        leveltype_id,
+        name,
+        parent_code,
+        name_fr,
+        name_es,
+        geom
+    )
+    SELECT
+        code,
+        gaul,
+        leveltype_id,
+        name,
+        parent_code,
+        name_fr,
+        name_es,
+        geom
+    FROM temp.administrativedivision
+ON CONFLICT (code)
+DO
+    UPDATE
+        SET gaul = EXCLUDED.gaul,
+            leveltype_id = EXCLUDED.leveltype_id,
+            name = EXCLUDED.name,
+            parent_code = EXCLUDED.parent_code,
+            name_fr = EXCLUDED.name_fr,
+            name_es = EXCLUDED.name_es,
+            geom = EXCLUDED.geom
+;
+                """
+            )
+        )
+
+#     def handle_gaul(self):
+#         """
+#         Update relations when migrating from GAUL to new administrative divisions.
+#         Should be useful only once.
+#         Could be removed after first import.
+#         """
+#         connection = self.dbsession.connection()
+#         connection.execute(
+#             sqlalchemy.text(
+#                 """
+# -- Handle GAUL
+# UPDATE datamart.rel_climatechangerecommendation_administrativedivision rel
+# SET administrativedivision_id = new_id
+# FROM (
+#     SELECT
+#         old.id AS old_id,
+#         new.id AS new_id
+#     FROM datamart.administrativedivision old
+#     LEFT JOIN datamart.administrativedivision new
+#         ON old.code = new.gaul::text
+#     WHERE old.leveltype_id = 1
+#     AND new.leveltype_id = 1
+# ) AS map
+# WHERE map.old_id = rel.administrativedivision_id;
+
+# UPDATE datamart.rel_contact_administrativedivision_hazardtype rel
+# SET administrativedivision_id = new_id
+# FROM (
+#     SELECT
+#         old.id AS old_id,
+#         new.id AS new_id
+#     FROM datamart.administrativedivision old
+#     LEFT JOIN datamart.administrativedivision new
+#         ON old.code = new.gaul::text
+#     WHERE old.leveltype_id = 1
+#     AND new.leveltype_id = 1
+# ) AS map
+# WHERE map.old_id = rel.administrativedivision_id;
+#                 """
+#             )
+#         )
+
+    def clean_admindivs(self):
+        """
+        Delete administrative divisions which are not in new dataset.
+        """
+        connection = self.dbsession.connection()
+        connection.execute(
+            sqlalchemy.text(
+                """
+ANALYZE datamart.administrativedivision;
+ANALYZE temp.administrativedivision;
+
+DELETE FROM datamart.administrativedivision dest
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM temp.administrativedivision src
+    WHERE src.code = dest.code
+);
+                """
+            )
+        )
 
     def import_hazard_scores(self):
         LOG.info("Importing hazard scores for ADM0")
