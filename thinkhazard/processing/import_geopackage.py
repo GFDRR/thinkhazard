@@ -81,7 +81,7 @@ SCORE_TO_LEVEL = {
 HAZARD_SCORE_COLUMNS = {
     "LS_Hazard_score": "LS",
     "EQ_Hazard_score": "EQ",
-    "TC_Hazard_score": "CY",  # TC in GeoPackage = CY in DB
+    "TC_Hazard_score": "TC",
     "VO_Hazard_score": "VA",  # VO in GeoPackage = VA in DB
     "EH_Hazard_score": "EH",
     "TS_Hazard_score": "TS",
