@@ -282,6 +282,7 @@ class AdministrativeDivision(Base):
 
     id = Column(Integer, primary_key=True)
     code = Column(String, index=True, unique=True, nullable=False)
+    gaul = Column(Integer, index=True)
     leveltype_id = Column(
         Integer, ForeignKey(AdminLevelType.id), nullable=False, index=True
     )

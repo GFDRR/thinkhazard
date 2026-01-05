@@ -1,6 +1,6 @@
 {
   "type": "FeatureCollection",
-  "name": "TH_URB_sample",
+  "name": "URB",
   "crs": {
     "type": "name",
     "properties": {

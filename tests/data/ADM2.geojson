@@ -1,6 +1,6 @@
 {
   "type": "FeatureCollection",
-  "name": "TH_ADM2_sample",
+  "name": "ADM2",
   "crs": {
     "type": "name",
     "properties": {
