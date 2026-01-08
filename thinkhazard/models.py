@@ -287,6 +287,7 @@ class AdministrativeDivision(Base):
         Integer, ForeignKey(AdminLevelType.id), nullable=False, index=True
     )
     name = Column(Unicode, nullable=False)
+    name_en = Column(Unicode)
     name_fr = Column(Unicode)
     name_es = Column(Unicode)
     parent_code = Column(
@@ -315,36 +316,37 @@ class AdministrativeDivision(Base):
     )
 
     def __json__(self, request):
-        lang = request.locale_name
-        attr = "name" if lang == "en" else "name_" + lang
+        lang = self._matched_lang
+        attr = "name" if lang is None else "name_" + lang
         if self.leveltype_id == 1:
             return {
                 "code": self.code,
-                "admin0": getattr(self, attr),
+                "admin0": getattr(self, attr) or self.name,
                 "url": request.route_url("report_overview", division=self),
             }
         if self.leveltype_id == 2:
             return {
                 "code": self.code,
-                "admin0": getattr(self.parent, attr),
-                "admin1": getattr(self, attr),
+                "admin0": getattr(self.parent, attr) or self.parent.name,
+                "admin1": getattr(self, attr) or self.name,
                 "url": request.route_url("report_overview", division=self),
             }
         if self.leveltype_id == 3:
             return {
                 "code": self.code,
-                "admin0": getattr(self.parent.parent, attr),
-                "admin1": getattr(self.parent, attr),
-                "admin2": getattr(self, attr),
+                "admin0": getattr(self.parent.parent, attr) or self.parent.parent.name,
+                "admin1": getattr(self.parent, attr) or self.parent.name,
+                "admin2": getattr(self, attr) or self.name,
                 "url": request.route_url("report_overview", division=self),
             }
         if self.leveltype_id == 4:
             return {
                 "code": self.code,
-                "admin0": getattr(self.parent.parent.parent, attr),
-                "admin1": getattr(self.parent.parent, attr),
-                "admin2": getattr(self.parent, attr),
-                "admin3": getattr(self, attr),
+                "admin0": getattr(self.parent.parent.parent, attr)
+                or self.parent.parent.parent.name,
+                "admin1": getattr(self.parent.parent, attr) or self.parent.parent.name,
+                "admin2": getattr(self.parent, attr) or self.parent.name,
+                "admin3": getattr(self, attr) or self.name,
                 "url": request.route_url("report_overview", division=self),
             }
 
