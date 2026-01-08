@@ -45,6 +45,7 @@ ADMDIV_MAPPINGS = {
         "NAM_0": "name",
         "NAM_0_FR": "name_fr",
         "NAM_0_ES": "name_es",
+        "NAM_0_EN": "name_en",
         "geometry": "geom",
     },
     "PRO": {
@@ -53,6 +54,7 @@ ADMDIV_MAPPINGS = {
         "ISO_A3": "parent_code",
         "NAM_1_FR": "name_fr",
         "NAM_1_ES": "name_es",
+        "NAM_1_EN": "name_en",
         "geometry": "geom",
     },
     "REG": {
@@ -67,6 +69,7 @@ ADMDIV_MAPPINGS = {
         "COD_2": "parent_code",
         "NAM_URB_FR": "name_fr",
         "NAM_URB_ES": "name_es",
+        "NAM_URB_EN": "name_en",
         "geometry": "geom",
     },
 }
@@ -362,9 +365,11 @@ class GeopackageImporter(BaseProcessor):
                 "NAM_0": lambda x: x.mode()[0] if not x.mode().empty else None,
                 "NAM_0_FR": lambda x: x.mode()[0] if not x.mode().empty else None,
                 "NAM_0_ES": lambda x: x.mode()[0] if not x.mode().empty else None,
+                "NAM_0_EN": lambda x: x.mode()[0] if not x.mode().empty else None,
                 "NAM_1": lambda x: x.mode()[0] if not x.mode().empty else None,
                 "NAM_1_FR": lambda x: x.mode()[0] if not x.mode().empty else None,
                 "NAM_1_ES": lambda x: x.mode()[0] if not x.mode().empty else None,
+                "NAM_1_EN": lambda x: x.mode()[0] if not x.mode().empty else None,
                 "SOVEREIGN": "first",
                 "WB_STATUS": "first",
                 **{col: "max" for col in hazard_score_cols},
@@ -387,6 +392,7 @@ class GeopackageImporter(BaseProcessor):
                 "NAM_0": lambda x: x.mode()[0] if not x.mode().empty else None,
                 "NAM_0_FR": lambda x: x.mode()[0] if not x.mode().empty else None,
                 "NAM_0_ES": lambda x: x.mode()[0] if not x.mode().empty else None,
+                "NAM_0_EN": lambda x: x.mode()[0] if not x.mode().empty else None,
                 **{col: "max" for col in hazard_score_cols},
             },
             as_index=False,
@@ -582,6 +588,7 @@ class GeopackageImporter(BaseProcessor):
                     geom public.geometry(MultiPolygon,4326),
                     name_fr character varying,
                     name_es character varying,
+                    name_en character varying,
                     geom_simplified public.geometry(MultiPolygon,3857),
                     geom_simplified_for_parent public.geometry(MultiPolygon,3857)
                 );
@@ -691,6 +698,7 @@ INSERT INTO datamart.administrativedivision (
         parent_code,
         name_fr,
         name_es,
+        name_en,
         geom
     )
     SELECT
@@ -701,6 +709,7 @@ INSERT INTO datamart.administrativedivision (
         parent_code,
         name_fr,
         name_es,
+        name_en,
         geom
     FROM temp.administrativedivision
 ON CONFLICT (code)
@@ -712,6 +721,7 @@ DO
             parent_code = EXCLUDED.parent_code,
             name_fr = EXCLUDED.name_fr,
             name_es = EXCLUDED.name_es,
+            name_en = EXCLUDED.name_en,
             geom = EXCLUDED.geom
 ;
                 """
