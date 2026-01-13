@@ -323,6 +323,7 @@ class AdministrativeDivision(Base):
                 "code": self.code,
                 "admin0": getattr(self, attr) or self.name,
                 "url": request.route_url("report_overview", division=self),
+                "mnemonic": self.leveltype.mnemonic,
             }
         if self.leveltype_id == 2:
             return {
@@ -330,6 +331,7 @@ class AdministrativeDivision(Base):
                 "admin0": getattr(self.parent, attr) or self.parent.name,
                 "admin1": getattr(self, attr) or self.name,
                 "url": request.route_url("report_overview", division=self),
+                "mnemonic": self.leveltype.mnemonic,
             }
         if self.leveltype_id == 3:
             return {
@@ -338,6 +340,7 @@ class AdministrativeDivision(Base):
                 "admin1": getattr(self.parent, attr) or self.parent.name,
                 "admin2": getattr(self, attr) or self.name,
                 "url": request.route_url("report_overview", division=self),
+                "mnemonic": self.leveltype.mnemonic,
             }
         if self.leveltype_id == 4:
             return {
@@ -348,6 +351,7 @@ class AdministrativeDivision(Base):
                 "admin2": getattr(self.parent, attr) or self.parent.name,
                 "admin3": getattr(self, attr) or self.name,
                 "url": request.route_url("report_overview", division=self),
+                "mnemonic": self.leveltype.mnemonic,
             }
 
     def slug(self):
