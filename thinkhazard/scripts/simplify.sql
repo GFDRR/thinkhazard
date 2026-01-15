@@ -126,6 +126,16 @@ SET geom_simplified_for_parent = datamart.simplify(
 FROM datamart.administrativedivision AS parent
 WHERE parent.code = admindiv.parent_code;
 
+-- Simplify disputed areas geometries
+UPDATE datamart.disputedarea
+SET geom_simplified = ST_Multi(
+        ST_Simplify(
+            ST_Transform(geom, 3857),
+            datamart.resolution(geom) / 2
+        )
+    )
+WHERE geom IS NOT NULL;
+
 -- Remove functions to avoid errors with different users.
 DROP FUNCTION datamart.resolution(
     geom geometry

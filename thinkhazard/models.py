@@ -827,3 +827,12 @@ class ContactAdministrativeDivisionHazardTypeAssociation(Base):
     contact = relationship(Contact, backref="associations")
     administrativedivision = relationship(AdministrativeDivision)
     hazardtype = relationship(HazardType)
+
+
+class DisputedArea(Base):
+    __tablename__ = "disputedarea"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(Unicode)
+    geom = deferred(Column(Geometry("MULTIPOLYGON", 4326)))
+    geom_simplified = deferred(Column(Geometry("MULTIPOLYGON", 3857)))
