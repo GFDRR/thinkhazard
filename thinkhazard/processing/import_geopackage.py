@@ -33,6 +33,7 @@ from thinkhazard.models import (
     ContactAdministrativeDivisionHazardTypeAssociation,
     HazardCategory,
     HazardCategoryAdministrativeDivisionAssociation,
+    DisputedArea,
 )
 from thinkhazard.processing import BaseProcessor
 
@@ -98,6 +99,11 @@ CODE_COLUMNS = {
     "URB": "COD_URB",
 }
 
+DISPUTED_AREA_MAPPING = {
+    "NAM_0": "name",
+    "geometry": "geom",
+}
+
 
 def to_multipolygon(geom):
     if geom is None:
@@ -116,7 +122,7 @@ class GeopackageImporter(BaseProcessor):
 
     **Process Overview:**
     1. **Data Source Preparation:** Download from S3 or use local GeoPackage file
-    2. **Data Reading:** Load ADM2 and Urban layers from GeoPackage
+    2. **Data Reading:** Load ADM2, Urban, and disputed area layers from GeoPackage
     3. **Data Validation:** Verify uniqueness, handle null values, remove orphaned territories
     4. **Boundary Dissolution:** Generate ADM1 and ADM0 levels from ADM2 data
     5. **Database Optimization:** Drop foreign key constraints for bulk operations
@@ -149,6 +155,7 @@ class GeopackageImporter(BaseProcessor):
         self.gdf_adm1: gpd.GeoDataFrame | None = None
         self.gdf_adm0: gpd.GeoDataFrame | None = None
         self.gdf_urban: gpd.GeoDataFrame | None = None
+        self.gdf_disputed_area: gpd.GeoDataFrame | None = None
 
     @staticmethod
     def argument_parser():
@@ -175,6 +182,7 @@ class GeopackageImporter(BaseProcessor):
 
         self.read_adm2()
         self.read_urban()
+        self.read_disputed_area()
 
         self.validate()
 
@@ -186,6 +194,7 @@ class GeopackageImporter(BaseProcessor):
         self.recreate_foreign_keys()
 
         self.import_hazard_scores()
+        self.import_disputed_areas()
 
         self.finish()
 
@@ -236,6 +245,22 @@ class GeopackageImporter(BaseProcessor):
         # gdf_urban = gdf_urban.head(100)
 
         self.gdf_urban = gdf_urban
+
+    def read_disputed_area(self):
+        LOG.info("Reading disputed area (NDLSA) source: %s", self.geopackage_path)
+        try:
+            gdf_disputed_area = gpd.read_file(
+                self.geopackage_path, layer="NDLSA", engine="pyogrio"
+            )
+        except Exception as e:
+            LOG.warning("NDLSA layer not found in GeoPackage: %s", e)
+            self.gdf_disputed_area = None
+            return
+
+        LOG.info("Existing columns: %s", list(gdf_disputed_area.columns))
+        LOG.info("Disputed area count: %d", len(gdf_disputed_area))
+
+        self.gdf_disputed_area = gdf_disputed_area
 
     def validate(self):
 
@@ -877,6 +902,33 @@ WHERE NOT EXISTS (
             len(hazard_associations),
             admin_level_mnemonic,
         )
+
+    def import_disputed_areas(self):
+        if self.gdf_disputed_area is None or len(self.gdf_disputed_area) == 0:
+            LOG.info("No disputed area data to import")
+            return
+
+        LOG.info("Importing disputed areas - %d features", len(self.gdf_disputed_area))
+        connection = self.dbsession.connection()
+
+        LOG.info("Truncating disputedarea table")
+        connection.execute(
+            sqlalchemy.text("TRUNCATE TABLE datamart.disputedarea RESTART IDENTITY")
+        )
+
+        gdf = self.gdf_disputed_area[DISPUTED_AREA_MAPPING.keys()]
+        gdf = gdf.rename(columns=DISPUTED_AREA_MAPPING)
+        gdf = gdf.set_geometry("geom")
+        gdf["geom"] = gdf["geom"].apply(to_multipolygon)
+        gdf.to_postgis(
+            schema="datamart",
+            name=DisputedArea.__table__.name,
+            con=connection,
+            if_exists="append",
+            index=False,
+        )
+
+        LOG.info("Successfully imported %d disputed areas", len(gdf))
 
     def finish(self):
         self.dbsession.connection().execute(
