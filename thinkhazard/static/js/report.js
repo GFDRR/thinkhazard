@@ -195,7 +195,7 @@
     map.addLayer(layer);
     source.on('addfeature', function() {
       map.on('postcompose', function(event) {
-        if (window.status === 'finished') { return; }
+        if (window.mapRenderingComplete === true) { return; }
         vectorLoaded = true;
         checkFinished();
       });
@@ -460,7 +460,8 @@
 
   function checkFinished() {
     if (vectorLoaded && tilesLoaded) {
-      window.status = 'finished';
+
+      window.mapRenderingComplete = true;
       $('#map').addClass('finished');
     }
   }

@@ -56,8 +56,18 @@ await cluster.task(async ({ page, data: url }) => {
         throw new Error(`Page load failed for URL ${url} with status: ${statusCode}`)
     }
 
-    // Wait for CSS to be applied
-    await new Promise(resolve => setTimeout(resolve, 200));
+    // Wait for map to finish rendering (window.mapRenderingComplete is set by report.js)
+    // This ensures all map tiles and vector layers are fully rendered
+    try {
+        await page.waitForFunction(
+            () => window.mapRenderingComplete === true,
+            { timeout: 15000 }
+        );
+    } catch (e) {
+        console.log(`Map rendering timeout for ${url}, continuing with PDF generation`);
+    }
+
+
 
     // Emulate print media for @media print CSS
     await page.emulateMediaType('print');
