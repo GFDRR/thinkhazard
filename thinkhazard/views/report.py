@@ -210,8 +210,10 @@ def report_geojson(request):
             .add_columns(AdministrativeDivision.geom_simplified)
             .one()
         ]
+        # Direct children except urban areas
         + base_query
         .filter(AdministrativeDivision.parent_code == division_code)
+        .filter(AdministrativeDivision.leveltype_id != 4)
         .add_columns(AdministrativeDivision.geom_simplified_for_parent)
         .all()
     )
@@ -261,8 +263,10 @@ def get_parents(division):
     parents = []
     if division.leveltype_id >= 2:
         parents.append(division.parent)
-    if division.leveltype_id == 3:
+    if division.leveltype_id >= 3:
         parents.append(division.parent.parent)
+    if division.leveltype_id >= 4:
+        parents.append(division.parent.parent.parent)
     return parents
 
 

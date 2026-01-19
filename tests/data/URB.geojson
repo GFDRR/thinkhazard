@@ -1,0 +1,61 @@
+{
+  "type": "FeatureCollection",
+  "name": "URB",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "fid": 1,
+        "COD_URB": "URB001",
+        "GC_POP_TOT_2025": 12345.6,
+        "TC_Hazard_score": 0,
+        "TC_Hazard_label": "VLO",
+        "EQ_Hazard_score": 2,
+        "EQ_Hazard_label": "MED",
+        "EH_Hazard_score": 3,
+        "EH_Hazard_label": "HIG",
+        "LS_Hazard_score": 1,
+        "LS_Hazard_label": "LOW",
+        "TS_Hazard_score": -1,
+        "TS_Hazard_label": null,
+        "VO_Hazard_score": -1,
+        "VO_Hazard_label": null,
+        "WF_Hazard_score": 1,
+        "WF_Hazard_label": "LOW",
+        "ISO_A3": "TST",
+        "NAM_1": "Sample Province",
+        "COD_1": "TST001",
+        "NAM_2": "Sample District",
+        "COD_2": "TST001001",
+        "NAM_URB": "Test City",
+        "GC_CNT_GAD_2025": "Testland",
+        "GC_UCA_KM2_2025": 42,
+        "GC_DEV_WIG_2025": "Unit Test Income",
+        "GC_DEV_USR_2025": "Unit Test Region",
+        "NAM_URB_EN": "Test City",
+        "NAM_URB_ES": "Ciudad Prueba",
+        "NAM_URB_FR": "Ville Test"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [0.2, 0.2],
+              [0.2, 0.6],
+              [0.6, 0.6],
+              [0.6, 0.2],
+              [0.2, 0.2]
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

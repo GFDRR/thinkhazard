@@ -1,5 +1,4 @@
 import boto3
-import logging
 from botocore.client import Config
 from botocore.exceptions import ClientError
 
@@ -23,22 +22,31 @@ class S3Helper:
         # If S3 object_name was not specified, use file_name
         if object_name is None:
             object_name = file_name
+        self.s3_client.upload_file(file_name, self.bucket, object_name)
 
-        try:
-            self.s3_client.upload_file(file_name, self.bucket, object_name)
-        except ClientError as e:
-            logging.error(e)
-            return False
-        return True
+    def upload_fileobj(self, data, object_name):
+        self.s3_client.upload_fileobj(data, self.bucket, object_name)
 
     def download_file(self, object_name, file_name=None):
         # If S3 file_name was not specified, use object_name
         if file_name is None:
             file_name = object_name
+        self.s3_client.download_file(self.bucket, object_name, file_name)
 
+    def delete_object(self, object_name):
+        self.s3_client.delete_object(Bucket=self.bucket, Key=object_name)
+
+    def get_object_url(self, object_name):
+        """Generate S3 URL for an object."""
+        return f"s3://{self.bucket}/{object_name}"
+
+    def object_exists(self, object_name):
         try:
-            self.s3_client.download_file(self.bucket, object_name, file_name)
+            self.s3_client.head_object(Bucket=self.bucket, Key=object_name)
+            return True
         except ClientError as e:
-            logging.error(e)
-            return False
-        return True
+            error_code = e.response['Error']['Code']
+            if error_code == '404':
+                # File doesn't exist
+                return False
+            raise

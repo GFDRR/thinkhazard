@@ -24,6 +24,7 @@ from sqlalchemy.orm import contains_eager, joinedload
 import json
 from datetime import datetime
 
+from thinkhazard.lib.s3helper import S3Helper
 from thinkhazard.models import (
     AdminLevelType,
     AdministrativeDivision,
@@ -48,6 +49,7 @@ TASKS_LABELS = {
     "transifex_fetch": "Import from Transifex",
     "transifex_push": "Push to Transifex",
     "admindivs": "Import administrative division from GeoNode",
+    "admindivs_gpkg": "Import administrative division from GeoPackage",
     "process": "Harvest & process Geonode datasets",
 }
 
@@ -72,6 +74,21 @@ def index(request):
 def add_task(request):
     task = request.params.get("task")
     getattr(celery_tasks, task).delay()
+    return HTTPFound(request.route_url("admin_index"))
+
+
+@view_config(route_name="admin_upload_geopackage")
+def upload_geopackage(request):
+    geopackage_file = request.POST.get("geopackage_file")
+    if not hasattr(geopackage_file, 'filename'):
+        return HTTPFound(request.route_url("admin_index"))
+
+    s3_helper = S3Helper(request.registry.settings)
+    object_name = f"tmp/{geopackage_file.filename}"
+    s3_helper.upload_fileobj(geopackage_file.file, object_name)
+    s3_url = s3_helper.get_object_url(object_name)
+
+    celery_tasks.admindivs_gpkg.delay(s3_url)
     return HTTPFound(request.route_url("admin_index"))
 
 

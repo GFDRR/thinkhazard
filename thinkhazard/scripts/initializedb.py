@@ -110,6 +110,7 @@ def populate_datamart(dbsession):
         ("COU", "Country", "Administrative division of level 0"),
         ("PRO", "Province", "Administrative division of level 1"),
         ("REG", "Region", "Administrative division of level 2"),
+        ("URB", "Urban area", "Urban aera"),
     ]:
         if AdminLevelType.get(dbsession, i[0]):
             continue
@@ -133,13 +134,13 @@ def populate_datamart(dbsession):
     # HazardType
     for i in [
         ("FL", "River flood", 1),
-        ("UF", "Urban flood", 2),
+        ("PF", "Pluvial flood", 2),
         ("CF", "Coastal flood", 3),
         ("EQ", "Earthquake", 4),
         ("LS", "Landslide", 5),
         ("TS", "Tsunami", 6),
         ("VA", "Volcano", 7),
-        ("CY", "Cyclone", 8),
+        ("TC", "Tropical cyclone", 8),
         ("DG", "Water scarcity", 9),
         ("EH", "Extreme heat", 10),
         ("WF", "Wildfire", 11),

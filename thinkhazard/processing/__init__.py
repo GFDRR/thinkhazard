@@ -138,7 +138,7 @@ class BaseProcessor:
 
         if dry_run:
             logger.info("Dry run : rolling back transaction")
-            t.abort()
+            t.rollback()
 
     def layer_path(self, layer):
         return os.path.join(self.settings["data_path"], "hazardsets", layer.filename())

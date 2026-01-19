@@ -54,6 +54,7 @@ setup(
         "console_scripts": [
             "initialize_thinkhazard_db = thinkhazard.scripts.initializedb:main",
             "import_admindivs = thinkhazard.processing.import:AdministrativeDivisionsImporter.run",
+            "import_geopackage = thinkhazard.processing.import_geopackage:GeopackageImporter.run",
             "import_recommendations = thinkhazard.processing.import:RecommendationsImporter.run",
             "import_further_resources = thinkhazard.scripts.import_further_resources:main",
             "import_contacts = thinkhazard.processing.import:ContactsImporter.run",

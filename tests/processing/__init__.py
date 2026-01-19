@@ -63,7 +63,7 @@ def populate_datamart():
 
     country = AdministrativeDivision(
         **{
-            "code": 10,
+            "code": "10",
             "leveltype_id": adminlevel_cou.id,
             "name": "Administrative division level 1",
         }
@@ -76,7 +76,7 @@ def populate_datamart():
 
     province = AdministrativeDivision(
         **{
-            "code": 20,
+            "code": "20",
             "leveltype_id": adminlevel_pro.id,
             "name": "Administrative division level 2",
         }
@@ -86,7 +86,7 @@ def populate_datamart():
 
     div = AdministrativeDivision(
         **{
-            "code": 30,
+            "code": "30",
             "leveltype_id": adminlevel_reg.id,
             "name": "Administrative division level 3",
         }

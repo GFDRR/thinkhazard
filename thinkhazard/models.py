@@ -281,7 +281,8 @@ class AdministrativeDivision(Base):
     __tablename__ = "administrativedivision"
 
     id = Column(Integer, primary_key=True)
-    code = Column(Integer, index=True, unique=True, nullable=False)
+    code = Column(String, index=True, unique=True, nullable=False)
+    gaul = Column(Integer, index=True)
     leveltype_id = Column(
         Integer, ForeignKey(AdminLevelType.id), nullable=False, index=True
     )
@@ -289,7 +290,7 @@ class AdministrativeDivision(Base):
     name_fr = Column(Unicode)
     name_es = Column(Unicode)
     parent_code = Column(
-        Integer,
+        String,
         ForeignKey(
             "administrativedivision.code",
             use_alter=True,
@@ -326,15 +327,24 @@ class AdministrativeDivision(Base):
             return {
                 "code": self.code,
                 "admin0": getattr(self.parent, attr),
-                "admin1": self.name,
+                "admin1": getattr(self, attr),
                 "url": request.route_url("report_overview", division=self),
             }
         if self.leveltype_id == 3:
             return {
                 "code": self.code,
                 "admin0": getattr(self.parent.parent, attr),
-                "admin1": self.parent.name,
-                "admin2": self.name,
+                "admin1": getattr(self.parent, attr),
+                "admin2": getattr(self, attr),
+                "url": request.route_url("report_overview", division=self),
+            }
+        if self.leveltype_id == 4:
+            return {
+                "code": self.code,
+                "admin0": getattr(self.parent.parent.parent, attr),
+                "admin1": getattr(self.parent.parent, attr),
+                "admin2": getattr(self.parent, attr),
+                "admin3": getattr(self, attr),
                 "url": request.route_url("report_overview", division=self),
             }
 

@@ -17,12 +17,15 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
+
 import transaction
 from thinkhazard.session import get_engine, get_session_factory, get_tm_session
 from thinkhazard.settings import load_full_settings
 from thinkhazard.scripts import wait_for_db
 from thinkhazard.scripts.initializedb import initdb
 
+DATA_FOLDER = os.path.join(os.path.dirname(__file__), 'data')
 
 settings = load_full_settings("c2c://tests.ini", name="admin")
 engine = get_engine(settings)
