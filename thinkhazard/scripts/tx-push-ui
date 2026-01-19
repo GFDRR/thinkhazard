@@ -5,6 +5,11 @@ set -e
 $(dirname $0)/tx-init
 
 # pot-create -c lingva.cfg --list-extractors
-pot-create -c lingva.cfg -o /tmp/thinkhazard.pot thinkhazard/templates thinkhazard/dont_remove_me.enum-i18n
+pot-create \
+    -c lingva.cfg \
+    -o /tmp/thinkhazard.pot \
+    thinkhazard/models.py \
+    thinkhazard/templates \
+    thinkhazard/dont_remove_me.enum-i18n
 
 tx push -s -r gfdrr-thinkhazard.${TX_BRANCH//./-}-ui
