@@ -20,6 +20,8 @@
 import importlib
 import logging
 import os
+from itertools import islice
+from typing import Iterator
 
 import geopandas as gpd
 import sqlalchemy
@@ -625,20 +627,21 @@ class GeopackageImporter(BaseProcessor):
 
         mapping = ADMDIV_MAPPINGS[level_mnemonic]
 
-        gdf = gdf[mapping.keys()]
-        gdf = gdf.rename(columns=mapping)
-        gdf = gdf.set_geometry("geom")
+        gdf_work = gdf[mapping.keys()].copy()
+        gdf_work.rename(columns=mapping, inplace=True)
+        gdf_work.set_geometry("geom", inplace=True)
 
-        gdf["leveltype_id"] = level.id
+        gdf_work["leveltype_id"] = level.id
 
-        gdf["geom"] = gdf["geom"].apply(to_multipolygon)
+        gdf_work["geom"] = gdf_work["geom"].apply(to_multipolygon)
 
-        gdf.to_postgis(
+        gdf_work.to_postgis(
             schema="temp",
             name=AdministrativeDivision.__table__.name,
             con=self.dbsession.connection(),
             if_exists="append",
             index=False,
+            chunksize=1000,
         )
 
         # from geoalchemy2.shape import from_shape
@@ -808,52 +811,61 @@ WHERE NOT EXISTS (
 
         level = AdminLevelType.get(self.dbsession, admin_level_mnemonic)
         admin_ids_by_code = {
-            ad.code: ad.id
-            for ad in self.dbsession.query(AdministrativeDivision).filter(
+            code: id
+            for id, code in self.dbsession.query(
+                AdministrativeDivision.id,
+                AdministrativeDivision.code,
+            ).filter(
                 AdministrativeDivision.leveltype_id == level.id
             )
         }
 
         hazard_category_cache: dict[tuple[str, str], HazardCategory | None] = {}
-        hazard_associations: list[HazardCategoryAdministrativeDivisionAssociation] = []
         missing_admin_codes: set[str] = set()
 
-        for row in gdf.itertuples(index=False):
-            admin_code = getattr(row, code_column)
-            admin_id = admin_ids_by_code.get(admin_code)
-            if admin_id is None:
-                missing_admin_codes.add(admin_code)
-                continue
-
-            for gpkg_col, hazard_mnemonic in HAZARD_SCORE_COLUMNS.items():
-                score = getattr(row, gpkg_col)
-                hazard_level_mnemonic = SCORE_TO_LEVEL.get(score)
-                if hazard_level_mnemonic is None:
+        def generate_associations() -> Iterator[HazardCategoryAdministrativeDivisionAssociation]:
+            for row in gdf.itertuples(index=False):
+                admin_code = getattr(row, code_column)
+                admin_id = admin_ids_by_code.get(admin_code)
+                if admin_id is None:
+                    missing_admin_codes.add(admin_code)
                     continue
 
-                cache_key = (hazard_mnemonic, hazard_level_mnemonic)
-                if cache_key not in hazard_category_cache:
-                    hazard_category_cache[cache_key] = HazardCategory.get(
-                        self.dbsession, hazard_mnemonic, hazard_level_mnemonic
-                    )
-                hazard_category = hazard_category_cache[cache_key]
-                if hazard_category is None:
-                    LOG.warning(
-                        "HazardCategory not found: %s/%s",
-                        hazard_mnemonic,
-                        hazard_level_mnemonic,
-                    )
-                    continue
+                for gpkg_col, hazard_mnemonic in HAZARD_SCORE_COLUMNS.items():
+                    score = getattr(row, gpkg_col)
+                    hazard_level_mnemonic = SCORE_TO_LEVEL.get(score)
+                    if hazard_level_mnemonic is None:
+                        continue
 
-                hazard_associations.append(
-                    HazardCategoryAdministrativeDivisionAssociation(
+                    cache_key = (hazard_mnemonic, hazard_level_mnemonic)
+                    if cache_key not in hazard_category_cache:
+                        hazard_category_cache[cache_key] = HazardCategory.get(
+                            self.dbsession, hazard_mnemonic, hazard_level_mnemonic
+                        )
+                    hazard_category = hazard_category_cache[cache_key]
+                    if hazard_category is None:
+                        LOG.warning(
+                            "HazardCategory not found: %s/%s",
+                            hazard_mnemonic,
+                            hazard_level_mnemonic,
+                        )
+                        continue
+
+                    yield HazardCategoryAdministrativeDivisionAssociation(
                         administrativedivision_id=admin_id,
                         hazardcategory_id=hazard_category.id,
                     )
-                )
 
-        if hazard_associations:
-            self.dbsession.bulk_save_objects(hazard_associations, return_defaults=False)
+        chunk_size = 5000
+        generator = generate_associations()
+        created = 0
+        while True:
+            chunk = list(islice(generator, chunk_size))
+            if not chunk:
+                break
+            self.dbsession.bulk_save_objects(chunk, return_defaults=False)
+            self.dbsession.flush()
+            created = created + len(chunk)
 
         if missing_admin_codes:
             LOG.warning(
@@ -864,7 +876,7 @@ WHERE NOT EXISTS (
 
         LOG.info(
             "Created %d hazard associations for %s",
-            len(hazard_associations),
+            created,
             admin_level_mnemonic,
         )
 

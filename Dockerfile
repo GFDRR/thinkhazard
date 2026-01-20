@@ -60,6 +60,37 @@ ENV AWS_ENDPOINT_URL= \
     LOG_LEVEL_SQLALCHEMY=WARN \
     USE_CACHE=FALSE
 
+
+########################
+# Build frontend files #
+########################
+FROM node:18-alpine AS node
+
+WORKDIR /app/thinkhazard/
+COPY package.json ./
+RUN --mount=type=cache,target=/root/.npm \
+    npm install
+
+COPY thinkhazard/static/ ./thinkhazard/static/
+
+RUN mkdir -p thinkhazard/static/build && \
+    npx lessc --include-path=node_modules --clean-css thinkhazard/static/less/index.less thinkhazard/static/build/index.min.css && \
+    npx lessc --include-path=node_modules thinkhazard/static/less/index.less thinkhazard/static/build/index.css && \
+    npx lessc --include-path=node_modules --clean-css thinkhazard/static/less/report.less thinkhazard/static/build/report.min.css && \
+    npx lessc --include-path=node_modules thinkhazard/static/less/report.less thinkhazard/static/build/report.css && \
+    npx lessc --include-path=node_modules --clean-css thinkhazard/static/less/report_print.less thinkhazard/static/build/report_print.min.css && \
+    npx lessc --include-path=node_modules thinkhazard/static/less/report_print.less thinkhazard/static/build/report_print.css && \
+    npx lessc --include-path=node_modules --clean-css thinkhazard/static/less/common.less thinkhazard/static/build/common.min.css && \
+    npx lessc --include-path=node_modules thinkhazard/static/less/common.less thinkhazard/static/build/common.css && \
+    npx lessc --include-path=node_modules --clean-css thinkhazard/static/less/admin.less thinkhazard/static/build/admin.min.css && \
+    npx lessc --include-path=node_modules thinkhazard/static/less/admin.less thinkhazard/static/build/admin.css
+
+RUN mkdir -p thinkhazard/static/fonts && \
+    cp node_modules/font-awesome/fonts/fontawesome-webfont.* thinkhazard/static/fonts/
+
+RUN npx jshint thinkhazard/static/js/**/*.js
+
+
 ########################
 # Build and test image #
 ########################
@@ -72,21 +103,8 @@ RUN --mount=type=cache,target=/var/lib/apt/lists \
     make \
     curl
 
-RUN \
-  . /etc/os-release && \
-  echo "deb https://deb.nodesource.com/node_18.x ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/nodesource.list && \
-  curl --silent https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
-  apt-get update && \
-  apt-get install --assume-yes --no-install-recommends \
-    'nodejs=18.*' \
-    && \
-  echo "Keep apt cache for now"
-  #apt-get clean && \
-  #rm --recursive --force /var/lib/apt/lists/*
-
-COPY package.json /opt/thinkhazard/
-RUN cd /opt/thinkhazard/ && npm install
-ENV PATH=${PATH}:${NODE_PATH}/.bin/
+COPY --from=node /app/thinkhazard/node_modules /opt/thinkhazard/node_modules
+COPY --from=node /app/thinkhazard/thinkhazard/static/build /opt/thinkhazard/thinkhazard/static/build
 
 # Install OpenLayers from release, not source.
 RUN mkdir --parent /opt/thinkhazard/node_modules/openlayers/dist \
