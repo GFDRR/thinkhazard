@@ -79,7 +79,7 @@ class Publisher(BaseProcessor):
 
         LOG.info("Restore backup into public database")
         run(
-            "pg_restore --exit-on-error --no-owner -t public.alembic_version -n datamart -n processing -f - '{backup}'"
+            "pg_restore --exit-on-error --no-owner -n datamart -n processing -f - '{backup}'"
             " | {reset_schemas} 'datamart processing'"
             " | psql --single-transaction -d {database}".format(
                 backup=LOCAL_BACKUP_PATH,

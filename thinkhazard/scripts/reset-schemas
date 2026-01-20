@@ -7,7 +7,6 @@ SCHEMAS="$1"
 for schema in ${SCHEMAS}
 do
 cat <<EOF
-DROP TABLE IF EXISTS public.alembic_version;
 DROP SCHEMA IF EXISTS ${schema} CASCADE;
 CREATE SCHEMA ${schema};
 EOF
