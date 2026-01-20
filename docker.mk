@@ -9,38 +9,7 @@ PY_FILES = $(shell find thinkhazard -type f -name '*.py' 2> /dev/null)
 #########################
 
 .PHONY: build
-build: buildcss compile_catalog
-
-.PHONY: buildcss
-buildcss: \
-		/opt/thinkhazard/thinkhazard/static/build/index.css \
-		/opt/thinkhazard/thinkhazard/static/build/index.min.css \
-		/opt/thinkhazard/thinkhazard/static/build/report.css \
-		/opt/thinkhazard/thinkhazard/static/build/report.min.css \
-		/opt/thinkhazard/thinkhazard/static/build/report_print.css \
-		/opt/thinkhazard/thinkhazard/static/build/report_print.min.css \
-		/opt/thinkhazard/thinkhazard/static/build/common.css \
-		/opt/thinkhazard/thinkhazard/static/build/common.min.css \
-		/opt/thinkhazard/thinkhazard/static/build/admin.css \
-		/opt/thinkhazard/thinkhazard/static/build/admin.min.css \
-		$(addprefix /opt/thinkhazard/thinkhazard/static/fonts/fontawesome-webfont., eot ttf woff woff2)
-
-/opt/thinkhazard/thinkhazard/static/build/%.min.css: $(LESS_FILES)
-	mkdir -p $(dir $@)
-	lessc --include-path=${NODE_PATH} --clean-css thinkhazard/static/less/$*.less $@
-
-/opt/thinkhazard/thinkhazard/static/build/%.css: $(LESS_FILES)
-	mkdir -p $(dir $@)
-	lessc --include-path=${NODE_PATH} thinkhazard/static/less/$*.less $@
-
-.PRECIOUS: ${NODE_PATH}/font-awesome/fonts/fontawesome-webfont.%
-${NODE_PATH}/font-awesome/fonts/fontawesome-webfont.%:
-	touch -c $@
-
-/opt/thinkhazard/thinkhazard/static/fonts/fontawesome-webfont.%: ${NODE_PATH}/font-awesome/fonts/fontawesome-webfont.%
-	mkdir -p $(dir $@)
-	cp $< $@
-
+build: compile_catalog
 
 .PHONY: compile_catalog
 compile_catalog: \
@@ -64,13 +33,8 @@ $(HOME)/.transifexrc:
 	@echo "token = $(TX_TOKEN)" >> $@
 	cat $@
 
-
-check: flake8 jshint
+check: flake8
 
 .PHONY: flake8
 flake8:
 	flake8 $(PY_FILES)
-
-.PHONY: jshint
-jshint:
-	jshint --verbose $(JS_FILES)
