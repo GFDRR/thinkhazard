@@ -43,6 +43,11 @@
   }
   var adminLayer = addAdminLayer(map, app.mapUrl);
 
+  var disputedAreaLayer;
+  if (app.disputedAreaUrl) {
+    disputedAreaLayer = addDisputedAreaLayer(map, app.disputedAreaUrl);
+  }
+
   addSelectInteraction(map, [adminLayer, neighboursLayer]);
 
   var tooltipEl = $('#map .map-tooltip');
@@ -245,12 +250,93 @@
     return layer;
   }
 
+  /**
+   * Create a canvas pattern for hatched fill
+   * @return {CanvasPattern}
+   */
+  function createHatchPattern() {
+    var canvas = document.createElement('canvas');
+    var context = canvas.getContext('2d');
+    var size = 6;
+    canvas.width = size;
+    canvas.height = size;
+
+    context.fillStyle = 'rgba(140, 140, 140, 0.6)';
+    context.fillRect(0, 0, size, size);
+
+    context.strokeStyle = 'rgba(60, 60, 60, 1)';
+    context.lineWidth = 1.5;
+
+    context.beginPath();
+    context.moveTo(size, 0);
+    context.lineTo(0, size);
+    context.stroke();
+
+    context.beginPath();
+    context.moveTo(size * 2, 0);
+    context.lineTo(0, size * 2);
+    context.stroke();
+
+    context.beginPath();
+    context.moveTo(0, 0);
+    context.lineTo(-size, size);
+    context.stroke();
+
+    return context.createPattern(canvas, 'repeat');
+  }
+
+
+  /**
+   * Add disputed area overlay layer.
+   * These areas are displayed with a hatched pattern and are non-clickable.
+   * @param {ol.Map} map
+   * @param {string} url
+   * @return {ol.layer.Vector}
+   */
+  function addDisputedAreaLayer(map, url) {
+    var hatchPattern = createHatchPattern();
+
+    var styleFn = function(feature) {
+      var styles = [
+        new ol.style.Style({
+          fill: new ol.style.Fill({
+            color: hatchPattern
+          }),
+          stroke: new ol.style.Stroke({
+            color: 'rgba(50, 50, 50, 1)',
+            width: 1.5
+          })
+        })
+      ];
+      return styles;
+    };
+
+    var source = new ol.source.Vector({
+      url: url,
+      format: new ol.format.GeoJSON({
+        defaultDataProjection: 'EPSG:3857'
+      })
+    });
+
+    var layer = new ol.layer.Vector({
+      style: styleFn,
+      source: source,
+      zIndex: 1000
+    });
+
+    map.addLayer(layer);
+    return layer;
+  }
+
 
   /**
    * @param {ol.Feature} feature
    * @return {?ol.Feature}
    */
   function filterFn(feature) {
+    if (feature.get('disputed')) {
+      return null;
+    }
     if (isSubDivision(feature)) {
       return feature;
     }

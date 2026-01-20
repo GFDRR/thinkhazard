@@ -37,7 +37,12 @@
         var tokens = getSortedTokens(data);
         tokens[0] += '<small><em>';
         tokens[tokens.length - 1] += '</em></small>';
-        return '<div>' + tokens.join(', ') + '</div>';
+        var content = tokens.join(', ');
+        var tag = '';
+        if (data.mnemonic === 'URB') {
+          tag = ' <span class="urban-tag">URBAN</span>';
+        }
+        return '<div>' + content + tag + '</div>';
       }
     }
   });

@@ -18,6 +18,7 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 from . import BaseTestCase
+from .. import DBSession
 
 
 class TestSearchFunction(BaseTestCase):
@@ -26,3 +27,34 @@ class TestSearchFunction(BaseTestCase):
             "/en/administrativedivision", dict(q="Division"), status=200
         )
         self.assertEqual(len(resp.json["data"]), 7)
+
+    def test_search_multilingual(self):
+        """Test search finds results in any language and returns matched language name."""
+        from thinkhazard.models import AdministrativeDivision
+
+        div = DBSession.query(AdministrativeDivision).filter_by(code="10").one()
+        div.name = "TestCountry"
+        div.name_en = "TestCountry"
+        div.name_fr = "PaysDuTest"
+        div.name_es = "PaisDePrueba"
+        DBSession.flush()
+
+        resp = self.testapp.get(
+            "/en/administrativedivision", dict(q="TestCountry"), status=200
+        )
+        self.assertEqual(resp.json["data"][0]["admin0"], "TestCountry")
+
+        resp = self.testapp.get(
+            "/en/administrativedivision", dict(q="PaysDuTest"), status=200
+        )
+        self.assertEqual(resp.json["data"][0]["admin0"], "PaysDuTest")
+
+        resp = self.testapp.get(
+            "/fr/administrativedivision", dict(q="PaisDePrueba"), status=200
+        )
+        self.assertEqual(resp.json["data"][0]["admin0"], "PaisDePrueba")
+
+        resp = self.testapp.get(
+            "/fr/administrativedivision", dict(q="PaysDuTest"), status=200
+        )
+        self.assertEqual(resp.json["data"][0]["admin0"], "PaysDuTest")

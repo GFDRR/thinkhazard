@@ -161,6 +161,7 @@
       var app = {};
       app.mapUrl = '{{ 'report_geojson'|route_url(divisioncode=division.code, hazardtype=hazard_category.hazardtype.mnemonic)}}';
       app.neighboursUrl = '{{ 'report_neighbours_geojson'|route_url(divisioncode=division.code)}}';
+      app.disputedAreaUrl = '{{ 'report_disputed_area_geojson'|route_url()}}';
       app.divisionCode = '{{division.code}}';
       app.divisionBounds = {{bounds}};
       {% if hazard_category %}

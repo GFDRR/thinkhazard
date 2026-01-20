@@ -17,12 +17,25 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
+import unicodedata
+
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest
 
 from thinkhazard.models import AdministrativeDivision as AdDiv, AdminLevelType
 
-from sqlalchemy import func, or_, and_
+from sqlalchemy import func, or_
+
+
+def _normalize(text):
+    if not text:
+        return ""
+    return (
+        unicodedata.normalize("NFD", text)
+        .encode("ascii", "ignore")
+        .decode("utf-8")
+        .lower()
+    )
 
 
 @view_config(route_name="administrativedivision", renderer="json")
@@ -33,17 +46,14 @@ def administrativedivision(request):
 
     term = request.params["q"]
 
-    filter_lang = None
-
-    if request.locale_name != "en":
-        attribute = getattr(AdDiv, "name_" + request.locale_name)
-        filter_lang = func.unaccent(attribute).ilike(func.unaccent("%{}%".format(term)))
-        filter_lang = and_(filter_lang, AdminLevelType.mnemonic == "COU")
-
-    filter = func.unaccent(AdDiv.name).ilike(func.unaccent("%{}%".format(term)))
-
-    if filter_lang is not None:
-        filter = or_(filter_lang, filter)
+    # Search in all language fields
+    term_pattern = "%{}%".format(term)
+    filter = or_(
+        func.unaccent(AdDiv.name).ilike(func.unaccent(term_pattern)),
+        func.unaccent(AdDiv.name_en).ilike(func.unaccent(term_pattern)),
+        func.unaccent(AdDiv.name_fr).ilike(func.unaccent(term_pattern)),
+        func.unaccent(AdDiv.name_es).ilike(func.unaccent(term_pattern)),
+    )
 
     query = (
         request.dbsession.query(AdDiv)
@@ -51,12 +61,32 @@ def administrativedivision(request):
         .join(AdminLevelType)
         .order_by(
             AdDiv.name.ilike(term).desc(),
+            AdDiv.name_en.ilike(term).desc(),
+            AdDiv.name_fr.ilike(term).desc(),
+            AdDiv.name_es.ilike(term).desc(),
             AdDiv.name.ilike("{}%".format(term)).desc(),
+            AdDiv.name_en.ilike("{}%".format(term)).desc(),
+            AdDiv.name_fr.ilike("{}%".format(term)).desc(),
+            AdDiv.name_es.ilike("{}%".format(term)).desc(),
             AdDiv.leveltype_id,
             AdDiv.name,
         )
         .limit(10)
     )
+
+    def get_matched_lang(div):
+        n_term = _normalize(term)
+        if div.name and n_term in _normalize(div.name):
+            return None
+        for lang in [request.locale_name, "en", "fr", "es"]:
+            attr = "name_" + lang
+            val = getattr(div, attr, None)
+            if val and n_term in _normalize(val):
+                return lang
+        return request.locale_name
+
     data = query.all()
+    for div in data:
+        div._matched_lang = get_matched_lang(div)
 
     return {"data": data}

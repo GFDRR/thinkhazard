@@ -178,6 +178,11 @@ def add_public_routes(config):
         "/report/{divisioncode:[A-Z0-9]+}/neighbours.geojson",
     )
     add_localized_route(
+        config,
+        "report_disputed_area_geojson",
+        "/report/disputed_area.geojson",
+    )
+    add_localized_route(
         config, "create_pdf_report", "/report/create/{divisioncode:[A-Z0-9]+}"
     )
 

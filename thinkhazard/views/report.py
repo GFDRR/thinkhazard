@@ -48,6 +48,7 @@ from thinkhazard.models import (
     HazardCategoryAdministrativeDivisionAssociation,
     Contact,
     ContactAdministrativeDivisionHazardTypeAssociation as CAdHt,
+    DisputedArea,
 )
 from ..analytics import GoogleAnalytics
 
@@ -478,4 +479,29 @@ def report_neighbours_geojson(request):
             },
         }
         for div, geom_simplified in divisions
+    ]
+
+
+@view_config(route_name="report_disputed_area_geojson", renderer="geojson")
+def report_disputed_area_geojson(request):
+    """
+    Return GeoJSON for all disputed areas.
+    These are disputed territories that should be displayed as an overlay on the map.
+    """
+    disputed_areas = request.dbsession.query(DisputedArea).add_columns(
+        DisputedArea.geom_simplified
+    )
+
+    return [
+        {
+            "type": "Feature",
+            "geometry": (
+                to_shape(geom_simplified) if geom_simplified is not None else None
+            ),
+            "properties": {
+                "name": area.name,
+                "disputed": True,
+            },
+        }
+        for area, geom_simplified in disputed_areas
     ]
