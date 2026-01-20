@@ -10,3 +10,4 @@ pydevd
 pytest
 pytest-cov
 WebTest
+debugpy
