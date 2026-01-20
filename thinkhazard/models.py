@@ -41,8 +41,9 @@ from sqlalchemy.orm import backref, declarative_base, relationship, deferred
 from sqlalchemy.schema import MetaData
 from sqlalchemy.sql.expression import true
 
-Base = declarative_base(metadata=MetaData(schema="datamart"))
+from thinkhazard import _
 
+Base = declarative_base(metadata=MetaData(schema="datamart"))
 
 adminleveltypes = threading.local().__dict__
 hazardlevels = threading.local().__dict__
@@ -140,6 +141,68 @@ class HazardType(Base):
 
     def __json__(self, request):
         return {"mnemonic": self.mnemonic, "hazardtype": self.title}
+
+    @property
+    def data_owner_info(self):
+        info = {
+            "FL": _(
+                "Based on the global river flood hazard maps produced by "
+                "Fathom (v3). Data are not publicly disclosed due to "
+                "license terms."
+            ),
+            "PF": _(
+                "Based on the global pluvial flood hazard maps produced by "
+                "Fathom (v3). Data are not publicly disclosed due to "
+                "license terms."
+            ),
+            "CF": _(
+                "Based on the global coastal flood hazard maps produced by "
+                "Fathom (v3). Data are not publicly disclosed due to "
+                "license terms."
+            ),
+            "DG": _(
+                "Based on the global water stress (baseline) hazard maps "
+                "produced by [Aqueduct](https://www.wri.org/aqueduct) (v4)."
+            ),
+            "LS": _(
+                "Based on the global landslide susceptibility index "
+                "published by [UNEP/GIRI](https://giri.unepgrid.ch) (2025). "
+                "Available for [download](https://jkan.riskdatalibrary.org/datasets/CDRI_LS/) "
+                "at Risk Data Library."
+            ),
+            "EQ": _(
+                "Based on the global earthquake hazard maps published by "
+                "[GAR](https://risk.preventionweb.net) (2017)."
+            ),
+            "TC": _(
+                "Based on the global STORM (v4) wind hazard maps published by "
+                "[N. Bloemendaal]("
+                "https://data.4tu.nl/datasets/0ea98bdd-5772-4da8-ae97-99735e891aff/4) "
+                "(2023). Available for [download](https://jkan.riskdatalibrary.org/datasets/STORM/) "
+                "at Risk Data Library."
+            ),
+            "VA": _(
+                "Based on the global volcanic eruption database published by "
+                "[NOAA](https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?"
+                "id=gov.noaa.ngdc.mgg.hazards:G10147) (2025)."
+            ),
+            "EH": _(
+                "Based on the global extreme heat maps published by "
+                "[GFDRR](https://www.gfdrr.org/en)-"
+                "[VITO](https://destinationearth.marvintest.vito.be) (2025). "
+                "Available for [download](https://jkan.riskdatalibrary.org/datasets/rdls_hzd-VITO_WBGT/) "
+                "at Risk Data Library."
+            ),
+            "TS": _(
+                "Based on the global tsunami model published by "
+                "[GTM network](https://www.globaltsunamimodel.org/) (2017)."
+            ),
+            "WF": _(
+                "Based on the global wildfire hazard maps published by "
+                "[CEMS](https://www.nature.com/articles/s41597-020-0554-z) (2020)."
+            )
+        }
+        return info.get(self.mnemonic, "")
 
 
 hazardcategory_administrativedivision_hazardset_table = Table(

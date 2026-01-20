@@ -145,6 +145,12 @@
         </tr>
       </table>
     </div>
+    {% if hazard_category.hazardtype.data_owner_info %}
+    <div class="data-owner-info">
+      <img src="{{ 'thinkhazard:static/images/icon-info.svg' | static_url }}" alt="Info" />
+      {{ hazard_category.hazardtype.data_owner_info | markdown }}
+    </div>
+    {% endif %}
     <div id="data-source-legend" class="legend hidden row">
       <div class="col-xs-3">
         {% for hazardset in sources %}

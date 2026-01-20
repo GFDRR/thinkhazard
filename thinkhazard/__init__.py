@@ -5,6 +5,7 @@ from pyramid.config import Configurator
 from pyramid.httpexceptions import HTTPFound, HTTPUnauthorized
 from pyramid.authentication import BasicAuthAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
+from pyramid.i18n import TranslationStringFactory
 from pyramid.tweens import MAIN
 from papyrus.renderers import GeoJSON
 
@@ -19,6 +20,8 @@ try:
     )
 except Exception:
     version = ""
+
+_ = TranslationStringFactory('thinkhazard')
 
 
 def main(global_config, **settings):

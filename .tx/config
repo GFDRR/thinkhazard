@@ -15,6 +15,20 @@ source_file = /tmp/thinkhazard-database.pot
 source_lang = en
 file_filter = /tmp/thinkhazard-database-<lang>.po
 
+[o:gfdrr-labs:p:gfdrr-thinkhazard:r:dev-ui]
+resource_name = dev ui
+type = PO
+source_file = /tmp/thinkhazard.pot
+source_lang = en
+file_filter = thinkhazard/locale/<lang>/LC_MESSAGES/thinkhazard.po
+
+[o:gfdrr-labs:p:gfdrr-thinkhazard:r:dev-database]
+resource_name = dev database
+type = PO
+source_file = /tmp/thinkhazard-database.pot
+source_lang = en
+file_filter = /tmp/thinkhazard-database-<lang>.po
+
 [o:gfdrr-labs:p:gfdrr-thinkhazard:r:test-database]
 resource_name = test database
 type = PO
