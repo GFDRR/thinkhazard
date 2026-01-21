@@ -11,7 +11,9 @@ services:
     volumes:
       - '${PWD}/development.ini:/app/development.ini'
       - '${PWD}/thinkhazard:/app/thinkhazard'
-    command: 'pserve --reload c2c://development.ini'
+    command: 'python3 -m debugpy --listen "0.0.0.0:5678" /usr/local/bin/pserve --reload c2c://development.ini'
+    ports:
+        - 5678:5678
 
   taskrunner:
     image: camptocamp/thinkhazard-builder
@@ -21,6 +23,9 @@ services:
     volumes:
       - '${PWD}/development.ini:/app/development.ini'
       - '${PWD}/thinkhazard:/app/thinkhazard'
+    command: 'python3 -m debugpy --listen "0.0.0.0:5679" /usr/local/bin/celery -A thinkhazard.celery worker -l info --concurrency=1'
+    ports:
+      - 5679:5679
 
   puppeteer:
     build:
