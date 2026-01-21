@@ -5,6 +5,7 @@ import logging
 import traceback
 import os
 import subprocess
+from contextlib import ContextDecorator
 from datetime import datetime
 from celery import Celery
 
@@ -25,48 +26,60 @@ app = Celery()
 app.conf.broker_url = os.environ["BROKER_URL"]
 
 
-def capture_task_logs(task_name, func, *args, **kwargs):
-    """Capture logs during task execution and upload to S3."""
-    settings = load_full_settings(INI_FILE, name="admin")
+class CaptureTaskLogs(ContextDecorator):
+    """Context manager and decorator for capturing task logs and uploading to S3."""
 
-    bytes_log = io.BytesIO()
-    stream_writer = codecs.getwriter("utf-8")
-    str_log = stream_writer(bytes_log)
-    log_handler = logging.StreamHandler(str_log)
-    log_handler.setLevel(logging.DEBUG)
-    formatter = logging.Formatter("%(asctime)s %(levelname)-8s %(message)s")
-    log_handler.setFormatter(formatter)
+    def __init__(self, task_name):
+        self.task_name = task_name
+        self.bytes_log = None
+        self.log_handler = None
+        self.root_logger = None
 
-    root_logger = logging.getLogger()
-    root_logger.addHandler(log_handler)
+    def __enter__(self):
+        self.settings = load_full_settings(INI_FILE, name="admin")
 
-    try:
-        result = func(*args, **kwargs)
-        return result
-    except Exception as e:
-        root_logger.error(f"Task {task_name} failed with error: {e}")
-        root_logger.error(traceback.format_exc())
-        raise
-    finally:
-        root_logger.removeHandler(log_handler)
-        bytes_log.seek(0)
+        self.bytes_log = io.BytesIO()
+        stream_writer = codecs.getwriter("utf-8")
+        str_log = stream_writer(self.bytes_log)
+        self.log_handler = logging.StreamHandler(str_log)
+        self.log_handler.setLevel(logging.DEBUG)
+        formatter = logging.Formatter("%(asctime)s %(levelname)-8s %(message)s")
+        self.log_handler.setFormatter(formatter)
+
+        self.root_logger = logging.getLogger()
+        self.root_logger.addHandler(self.log_handler)
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if exc_type is not None:
+            self.root_logger.error(f"Task {self.task_name} failed with error: {exc_val}")
+            self.root_logger.error(traceback.format_exc())
+
+        self.root_logger.removeHandler(self.log_handler)
+        self.bytes_log.seek(0)
 
         try:
-            s3_helper = S3Helper(settings)
+            s3_helper = S3Helper(self.settings)
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            object_name = f"logs/{task_name}_{timestamp}.txt"
-            s3_helper.upload_fileobj(bytes_log, object_name)
+            object_name = f"logs/{self.task_name}_{timestamp}.txt"
+            s3_helper.upload_fileobj(self.bytes_log, object_name)
         except Exception as e:
             print(f"Failed to upload log to S3: {e}")
 
+        return False
 
-def _run_publish():
+
+@app.task
+@CaptureTaskLogs("publish")
+def publish():
     print("start publish")
     Publisher.run((INI_FILE, "-v"))
     print("end publish")
 
 
-def _run_transifex_fetch():
+@app.task
+@CaptureTaskLogs("transifex_fetch")
+def transifex_fetch():
     print("start transifex_fetch")
     subprocess.run(
         [
@@ -77,7 +90,9 @@ def _run_transifex_fetch():
     print("end transifex_fetch")
 
 
-def _run_transifex_push():
+@app.task
+@CaptureTaskLogs("transifex_push")
+def transifex_push():
     print("start transifex_push")
     subprocess.run(
         [
@@ -88,19 +103,25 @@ def _run_transifex_push():
     print("end transifex_push")
 
 
-def _run_admindivs():
+@app.task
+@CaptureTaskLogs("admindivs")
+def admindivs():
     print("start admindivis")
     imp.AdministrativeDivisionsImporter.run((INI_FILE, "-v"))
     print("end admindivis")
 
 
-def _run_admindivs_gpkg(geopackage_path):
+@app.task
+@CaptureTaskLogs("admindivs_gpkg")
+def admindivs_gpkg(geopackage_path):
     print("start admindivs_gpkg")
     GeopackageImporter.run((INI_FILE, "-v", "--geopackage-path", geopackage_path))
     print("end admindivs_gpkg")
 
 
-def _run_process():
+@app.task
+@CaptureTaskLogs("process")
+def process():
     print("start processing")
     Harvester.run((INI_FILE, "-v"))
     Downloader.run((INI_FILE, "-v"))
@@ -108,33 +129,3 @@ def _run_process():
     Processor.run((INI_FILE, "-v"))
     DecisionMaker.run((INI_FILE, "-v"))
     print("end processing")
-
-
-@app.task
-def publish():
-    capture_task_logs("publish", _run_publish)
-
-
-@app.task
-def transifex_fetch():
-    capture_task_logs("transifex_fetch", _run_transifex_fetch)
-
-
-@app.task
-def transifex_push():
-    capture_task_logs("transifex_push", _run_transifex_push)
-
-
-@app.task
-def admindivs():
-    capture_task_logs("admindivs", _run_admindivs)
-
-
-@app.task
-def admindivs_gpkg(geopackage_path):
-    capture_task_logs("admindivs_gpkg", _run_admindivs_gpkg, geopackage_path)
-
-
-@app.task
-def process():
-    capture_task_logs("process", _run_process)

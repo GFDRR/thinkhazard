@@ -23,6 +23,9 @@ from sqlalchemy import func, inspect, Integer
 from sqlalchemy.orm import contains_eager, joinedload
 import json
 from datetime import datetime
+import os
+import tempfile
+from pyramid.response import FileResponse
 
 from thinkhazard.lib.s3helper import S3Helper
 from thinkhazard.models import (
@@ -96,9 +99,6 @@ def add_task(request):
 @view_config(route_name="admin_processing_log_download")
 def processing_log_download(request):
     """Download log file from S3 and serve to browser."""
-    import os
-    import tempfile
-    from pyramid.response import FileResponse
 
     log_name = request.matchdict["log_name"]
     object_name = f"logs/{log_name}"
