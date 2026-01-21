@@ -61,6 +61,7 @@ class Publisher(BaseProcessor):
                 "pg_dump --no-owner -Fc -f '{}'".format(LOCAL_BACKUP_PATH),
                 env=admin_env,
                 shell=True,
+                check=True,
             )
 
         LOG.info("Load backup to S3 bucket")
@@ -88,6 +89,7 @@ class Publisher(BaseProcessor):
             ),
             env=public_env,
             shell=True,
+            check=True,
         )
 
         if not self.use_cache:
