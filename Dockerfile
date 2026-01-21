@@ -17,7 +17,7 @@ RUN --mount=type=cache,target=/var/lib/apt/lists \
     curl git python3-numpy gdal-bin libgdal-dev tidy gnupg2 unzip \
     && apt install -y postgresql-common gnupg \
     && /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y \
-    && apt-get update && apt-get install -y postgresql-client-13
+    && apt-get update && apt-get install -y postgresql-client-17
 
 RUN curl -L -o /tmp/tx-linux-amd64.tar.gz https://github.com/transifex/cli/releases/download/v1.6.7/tx-linux-amd64.tar.gz \
     && tar -C /usr/local/bin -xf /tmp/tx-linux-amd64.tar.gz tx \
