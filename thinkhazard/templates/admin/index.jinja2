@@ -149,6 +149,51 @@
         </div>
       </div>
     </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">Processing Logs</div>
+          <div class="panel-body">
+            {% if logs|length > 0 %}
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>Log File</th>
+                  <th>Date/Time</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for log in logs %}
+                <tr{% if loop.index > 20 %} class="log-hidden" style="display:none"{% endif %}>
+                  <td>{{log.filename}}</td>
+                  <td>{{log.last_modified}}</td>
+                  <td>
+                    <a 
+                      href="{{request.route_url('admin_processing_log_download', log_name=log.filename)}}" 
+                      class="btn btn-sm btn-primary"
+                      target="_blank"
+                    >
+                      <span class="glyphicon glyphicon-download-alt"></span> Download
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            {% if logs|length > 20 %}
+            <p class="text-muted">
+              Showing <span id="log-count">20</span> of {{logs|length}} logs (newest first)
+              <a href="#" id="toggle-logs" class="btn btn-xs btn-default">Show all</a>
+            </p>
+            {% endif %}
+            {% else %}
+            <p class="text-muted">No processing logs available. Logs will appear here after running a task.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 {% endblock %}
 
@@ -169,6 +214,21 @@
         submitBtn.prop('disabled', false);
       } else {
         submitBtn.prop('disabled', true);
+      }
+    })
+
+    var logsExpanded = false;
+    $('#toggle-logs').on('click', function(e) {
+      e.preventDefault();
+      logsExpanded = !logsExpanded;
+      if (logsExpanded) {
+        $('.log-hidden').show();
+        $(this).text('Show less');
+        $('#log-count').text('{{logs|length}}');
+      } else {
+        $('.log-hidden').hide();
+        $(this).text('Show all');
+        $('#log-count').text('20');
       }
     })
   })

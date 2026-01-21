@@ -50,3 +50,25 @@ class S3Helper:
                 # File doesn't exist
                 return False
             raise
+
+    def list_objects(self, prefix=""):
+        """List objects in the bucket with a given prefix.
+
+        Returns a list of dicts with 'Key', 'LastModified', and 'Size'.
+        """
+        try:
+            response = self.s3_client.list_objects_v2(
+                Bucket=self.bucket,
+                Prefix=prefix
+            )
+            objects = response.get('Contents', [])
+            return [
+                {
+                    'Key': obj['Key'],
+                    'LastModified': obj['LastModified'],
+                    'Size': obj['Size']
+                }
+                for obj in objects
+            ]
+        except ClientError:
+            return []

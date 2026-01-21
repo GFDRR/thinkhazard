@@ -64,9 +64,25 @@ def index(request):
         )
         t["name"] = t["name"].split(".").pop()
         t["label"] = TASKS_LABELS[t["name"]]
+
+    s3_helper = request.s3_helper
+    log_objects = s3_helper.list_objects("logs/")
+    logs = []
+    for obj in log_objects:
+        key = obj['Key']
+        filename = key.replace('logs/', '')
+        if filename:
+            logs.append({
+                'filename': filename,
+                'last_modified': obj['LastModified'].strftime("%Y-%m-%d %H:%M:%S"),
+                'size': obj['Size'],
+            })
+    logs.sort(key=lambda x: x['last_modified'], reverse=True)
+
     return {
         "publication_date": Publication.last(request.dbsession).date,
         "running": tasks,
+        "logs": logs,
     }
 
 
@@ -75,6 +91,32 @@ def add_task(request):
     task = request.params.get("task")
     getattr(celery_tasks, task).delay()
     return HTTPFound(request.route_url("admin_index"))
+
+
+@view_config(route_name="admin_processing_log_download")
+def processing_log_download(request):
+    """Download log file from S3 and serve to browser."""
+    import os
+    import tempfile
+    from pyramid.response import FileResponse
+
+    log_name = request.matchdict["log_name"]
+    object_name = f"logs/{log_name}"
+    s3_helper = request.s3_helper
+
+    if not s3_helper.object_exists(object_name):
+        return HTTPNotFound()
+
+    local_path = os.path.join(tempfile.gettempdir(), log_name)
+    s3_helper.download_file(object_name, local_path)
+
+    response = FileResponse(
+        local_path,
+        request=request,
+        content_type='text/plain'
+    )
+    response.headers["Content-Disposition"] = f'attachment; filename="{log_name}"'
+    return response
 
 
 @view_config(route_name="admin_upload_geopackage")
