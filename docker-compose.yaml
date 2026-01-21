@@ -8,7 +8,7 @@ volumes:
 services:
 
   db:
-    image: camptocamp/postgres:13-postgis-3
+    image: camptocamp/postgres:17-postgis-3
     volumes:
       - ./docker/testdb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
       - postgresql_data:/var/lib/postgresql/data
