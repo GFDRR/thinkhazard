@@ -19,7 +19,7 @@ paste
 psycopg2
 pyproj>=3.7.2
 pyquery
-pyramid
+pyramid<2
 pyramid_debugtoolbar
 pyramid_jinja2
 pyramid_tm

@@ -78,7 +78,7 @@ class Processor(BaseProcessor):
                 logger.error(traceback.format_exc())
 
     def process_hazardset(self, hazardset_id):
-        hazardset = self.dbsession.query(HazardSet).get(hazardset_id)
+        hazardset = self.dbsession.get(HazardSet, hazardset_id)
         if hazardset is None:
             raise ProcessError("Hazardset {} does not exist.".format(hazardset_id))
 

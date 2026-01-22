@@ -18,7 +18,7 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 from unittest.mock import patch, mock_open
 
 from thinkhazard.models import FurtherResource, HazardSet, Layer, Region
@@ -28,7 +28,7 @@ from .. import DBSession, settings
 from . import BaseTestCase
 
 
-date_str = datetime.utcnow().isoformat()
+date_str = datetime.now(UTC).replace(tzinfo=None).isoformat()
 
 
 layers_defaults = {
@@ -133,9 +133,9 @@ class TestHarvesting(BaseTestCase):
 
     @patch.object(Harvester, "fetch", side_effect=[
         layers(),
-        layer({"data_update_date": (datetime.utcnow() - timedelta(days=1)).isoformat()}),
+        layer({"data_update_date": (datetime.now(UTC) - timedelta(days=1)).replace(tzinfo=None).isoformat()}),
         layers(),
-        layer({"data_update_date": datetime.utcnow().isoformat()}),
+        layer({"data_update_date": datetime.now(UTC).replace(tzinfo=None).isoformat()}),
     ])
     @patch("thinkhazard.processing.harvesting.os.unlink")
     def test_data_update_date_change(self, unlink_mock, fetch_mock):
@@ -159,11 +159,11 @@ class TestHarvesting(BaseTestCase):
         layers(),
         layer({
             "metadata_update_date": (
-                datetime.utcnow() - timedelta(days=1)
-            ).isoformat()
+                datetime.now(UTC) - timedelta(days=1)
+            ).replace(tzinfo=None).isoformat()
         }),
         layers(),
-        layer({"metadata_update_date": datetime.utcnow().isoformat()}),
+        layer({"metadata_update_date": datetime.now(UTC).replace(tzinfo=None).isoformat()}),
     ])
     def test_metadata_update_date_change(self, fetch_mock):
         """New metadata_update_date must reset hazardset.complete"""

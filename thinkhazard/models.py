@@ -18,8 +18,7 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 import threading
-import datetime
-import pytz
+from datetime import datetime, UTC
 
 from geoalchemy2 import Geometry
 from slugify import slugify
@@ -467,12 +466,13 @@ class HazardCategory(Base):
         if not isinstance(hazardlevel, HazardLevel):
             hazardlevel = HazardLevel.get(dbsession, str(hazardlevel))
 
-        return (
-            dbsession.query(cls)
-            .filter(cls.hazardtype == hazardtype)
-            .filter(cls.hazardlevel == hazardlevel)
-            .one_or_none()
-        )
+        with dbsession.no_autoflush:
+            return (
+                dbsession.query(cls)
+                .filter(cls.hazardtype == hazardtype)
+                .filter(cls.hazardlevel == hazardlevel)
+                .one_or_none()
+            )
 
     def __json__(self, request):
         return {
@@ -809,7 +809,7 @@ class UserFeedback(Base):
 
     id = Column(Integer, primary_key=True)
     description = Column(Unicode, nullable=False)
-    submissiondate = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+    submissiondate = Column(DateTime, nullable=False, default=datetime.utcnow)
     useremailaddress = Column(String(254))
     url = Column(Unicode, nullable=False)
     feedbackstatus_id = Column(Integer, ForeignKey(FeedbackStatus.id), nullable=False)
@@ -829,7 +829,7 @@ class Publication(Base):
 
     @classmethod
     def new(cls, dbsession):
-        new = cls(date=datetime.datetime.now())
+        new = cls(date=datetime.now())
         dbsession.add(new)
         return new
 
@@ -856,7 +856,7 @@ class Harvesting(Base):
     @classmethod
     def new(cls, dbsession, complete):
         new = cls(
-            date=datetime.datetime.utcnow().replace(tzinfo=pytz.utc), complete=complete
+            date=datetime.now(UTC), complete=complete
         )
         dbsession.add(new)
         return new

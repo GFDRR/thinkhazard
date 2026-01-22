@@ -175,136 +175,142 @@ def populate_db():
     # admin_div_12
     # admin_div_13
 
-    # GeoNode Regions
-    # global_region contains all countries, **except admin_div_12**
-    global_region = Region(**{"id": 1, "level": 0, "name": "Global region"})
-    global_region.administrativedivisions.append(admin_div_10)
-    global_region.administrativedivisions.append(admin_div_11)
-    global_region.administrativedivisions.append(admin_div_13)
+    # Use no_autoflush to prevent SQLAlchemy 2.x warnings during fixture setup
+    with DBSession.no_autoflush:
+        # GeoNode Regions
+        # global_region contains all countries, **except admin_div_12**
+        global_region = Region(**{"id": 1, "level": 0, "name": "Global region"})
+        DBSession.add(global_region)
+        global_region.administrativedivisions.append(admin_div_10)
+        global_region.administrativedivisions.append(admin_div_11)
+        global_region.administrativedivisions.append(admin_div_13)
 
-    # region_1 is a country
-    # it matches GAULS's admin_div_10
-    region_1 = Region(**{"id": 2, "level": 3, "name": "Country 1"})
-    region_1.administrativedivisions.append(admin_div_10)
+        # region_1 is a country
+        # it matches GAULS's admin_div_10
+        region_1 = Region(**{"id": 2, "level": 3, "name": "Country 1"})
+        DBSession.add(region_1)
+        region_1.administrativedivisions.append(admin_div_10)
 
-    # region_2 is another country
-    # it matches GAULS's admin_div_11
-    region_2 = Region(**{"id": 3, "level": 3, "name": "Country 2"})
-    region_2.administrativedivisions.append(admin_div_11)
+        # region_2 is another country
+        # it matches GAULS's admin_div_11
+        region_2 = Region(**{"id": 3, "level": 3, "name": "Country 2"})
+        DBSession.add(region_2)
+        region_2.administrativedivisions.append(admin_div_11)
 
-    # region_3 is another country
-    # it matches GAULS's admin_div_12
-    region_3 = Region(**{"id": 4, "level": 3, "name": "Country 3"})
-    region_3.administrativedivisions.append(admin_div_12)
+        # region_3 is another country
+        # it matches GAULS's admin_div_12
+        region_3 = Region(**{"id": 4, "level": 3, "name": "Country 3"})
+        DBSession.add(region_3)
+        region_3.administrativedivisions.append(admin_div_12)
 
-    # Here's a quick, graphical recap:
-    #
-    # global_region  -> admin_div_10 (region_1) -> admin_div_20 -> admin_div_31
-    #            `                                             `-> admin_div_32
-    #             `
-    #              ` -> admin_div_11 (region_2)
-    #               `-> admin_div_13
-    #
-    # region_3 = admin_div_12
+        # Here's a quick, graphical recap:
+        #
+        # global_region  -> admin_div_10 (region_1) -> admin_div_20 -> admin_div_31
+        #            `                                             `-> admin_div_32
+        #             `
+        #              ` -> admin_div_11 (region_2)
+        #               `-> admin_div_13
+        #
+        # region_3 = admin_div_12
 
-    category_eq_hig = HazardCategory.get(DBSession, "EQ", "HIG")
-    category_eq_hig.general_recommendation = "General recommendation for EQ HIG"
+        category_eq_hig = HazardCategory.get(DBSession, "EQ", "HIG")
+        category_eq_hig.general_recommendation = "General recommendation for EQ HIG"
 
-    category_fl_hig = HazardCategory.get(DBSession, "FL", "HIG")
+        category_fl_hig = HazardCategory.get(DBSession, "FL", "HIG")
 
-    # admin_div_31 has (EQ, HIGH)
-    association = HazardCategoryAdministrativeDivisionAssociation(
-        **{"hazardcategory": category_eq_hig}
-    )
-    association.hazardsets.append(hazardset1)
-    admin_div_31.hazardcategories.append(association)
-
-    # admin_div_31 has (RF, HIGH)
-    admin_div_32.hazardcategories.append(
-        HazardCategoryAdministrativeDivisionAssociation(
-            **{"hazardcategory": category_fl_hig}
-        )
-    )
-
-    # admin_div_32 has (EQ, HIGH)
-    admin_div_32.hazardcategories.append(
-        HazardCategoryAdministrativeDivisionAssociation(
+        # admin_div_31 has (EQ, HIGH)
+        association = HazardCategoryAdministrativeDivisionAssociation(
             **{"hazardcategory": category_eq_hig}
         )
-    )
+        association.hazardsets.append(hazardset1)
+        admin_div_31.hazardcategories.append(association)
 
-    # admin_div_10 has (EQ, HIGH)
-    admin_div_10.hazardcategories.append(
-        HazardCategoryAdministrativeDivisionAssociation(
-            **{"hazardcategory": category_eq_hig}
+        # admin_div_31 has (RF, HIGH)
+        admin_div_32.hazardcategories.append(
+            HazardCategoryAdministrativeDivisionAssociation(
+                **{"hazardcategory": category_fl_hig}
+            )
         )
-    )
 
-    # admin_div_11 has no category (this is tested)
-    # admin_div_12 has (EQ, HIGH)
-    admin_div_12.hazardcategories.append(
-        HazardCategoryAdministrativeDivisionAssociation(
-            **{"hazardcategory": category_eq_hig}
+        # admin_div_32 has (EQ, HIGH)
+        admin_div_32.hazardcategories.append(
+            HazardCategoryAdministrativeDivisionAssociation(
+                **{"hazardcategory": category_eq_hig}
+            )
         )
-    )
 
-    # admin_div_13 has (EQ, HIGH)
-    admin_div_13.hazardcategories.append(
-        HazardCategoryAdministrativeDivisionAssociation(
-            **{"hazardcategory": category_eq_hig}
+        # admin_div_10 has (EQ, HIGH)
+        admin_div_10.hazardcategories.append(
+            HazardCategoryAdministrativeDivisionAssociation(
+                **{"hazardcategory": category_eq_hig}
+            )
         )
-    )
 
-    climate_rec = ClimateChangeRecommendation(
-        text="Climate change recommendation", hazardtype=HazardType.get(DBSession, "EQ")
-    )
-    climate_rec.associations.append(
-        CcrAd(administrativedivision=admin_div_10, hazardtype=HazardType.get(DBSession, "EQ"))
-    )
-    DBSession.add(climate_rec)
-
-    climate_rec = ClimateChangeRecommendation(
-        text="Climate change recommendation 2", hazardtype=HazardType.get(DBSession, "EQ")
-    )
-    climate_rec.associations.append(
-        CcrAd(administrativedivision=admin_div_11, hazardtype=HazardType.get(DBSession, "EQ"))
-    )
-    DBSession.add(climate_rec)
-
-    technical_rec = TechnicalRecommendation(
-        **{
-            "text": "Recommendation #1 for earthquake, applied to"
-            " hazard categories HIG, MED and LOW"
-        }
-    )
-    association = HazardCategoryTechnicalRecommendationAssociation(order=1)
-    association.hazardcategory = category_eq_hig
-    technical_rec.hazardcategory_associations.append(association)
-    DBSession.add(technical_rec)
-
-    technical_rec = TechnicalRecommendation(
-        **{"text": "Educational web resources on earthquakes and" " seismic hazard"}
-    )
-    association = HazardCategoryTechnicalRecommendationAssociation(order=1)
-    association.hazardcategory = category_eq_hig
-    technical_rec.hazardcategory_associations.append(association)
-    DBSession.add(technical_rec)
-
-    category_fl_med = HazardCategory.get(DBSession, "FL", "MED")
-    category_fl_med.general_recommendation = "General recommendation for FL MED"
-
-    admin_div_31.hazardcategories.append(
-        HazardCategoryAdministrativeDivisionAssociation(
-            **{"hazardcategory": category_fl_med}
+        # admin_div_11 has no category (this is tested)
+        # admin_div_12 has (EQ, HIGH)
+        admin_div_12.hazardcategories.append(
+            HazardCategoryAdministrativeDivisionAssociation(
+                **{"hazardcategory": category_eq_hig}
+            )
         )
-    )
-    DBSession.add(admin_div_31)
-    admin_div_32.hazardcategories.append(
-        HazardCategoryAdministrativeDivisionAssociation(
-            **{"hazardcategory": category_fl_med}
+
+        # admin_div_13 has (EQ, HIGH)
+        admin_div_13.hazardcategories.append(
+            HazardCategoryAdministrativeDivisionAssociation(
+                **{"hazardcategory": category_eq_hig}
+            )
         )
-    )
-    DBSession.add(admin_div_32)
+
+        climate_rec = ClimateChangeRecommendation(
+            text="Climate change recommendation", hazardtype=HazardType.get(DBSession, "EQ")
+        )
+        climate_rec.associations.append(
+            CcrAd(administrativedivision=admin_div_10, hazardtype=HazardType.get(DBSession, "EQ"))
+        )
+        DBSession.add(climate_rec)
+
+        climate_rec = ClimateChangeRecommendation(
+            text="Climate change recommendation 2", hazardtype=HazardType.get(DBSession, "EQ")
+        )
+        climate_rec.associations.append(
+            CcrAd(administrativedivision=admin_div_11, hazardtype=HazardType.get(DBSession, "EQ"))
+        )
+        DBSession.add(climate_rec)
+
+        technical_rec = TechnicalRecommendation(
+            **{
+                "text": "Recommendation #1 for earthquake, applied to"
+                " hazard categories HIG, MED and LOW"
+            }
+        )
+        association = HazardCategoryTechnicalRecommendationAssociation(order=1)
+        association.hazardcategory = category_eq_hig
+        technical_rec.hazardcategory_associations.append(association)
+        DBSession.add(technical_rec)
+
+        technical_rec = TechnicalRecommendation(
+            **{"text": "Educational web resources on earthquakes and" " seismic hazard"}
+        )
+        association = HazardCategoryTechnicalRecommendationAssociation(order=1)
+        association.hazardcategory = category_eq_hig
+        technical_rec.hazardcategory_associations.append(association)
+        DBSession.add(technical_rec)
+
+        category_fl_med = HazardCategory.get(DBSession, "FL", "MED")
+        category_fl_med.general_recommendation = "General recommendation for FL MED"
+
+        admin_div_31.hazardcategories.append(
+            HazardCategoryAdministrativeDivisionAssociation(
+                **{"hazardcategory": category_fl_med}
+            )
+        )
+        DBSession.add(admin_div_31)
+        admin_div_32.hazardcategories.append(
+            HazardCategoryAdministrativeDivisionAssociation(
+                **{"hazardcategory": category_fl_med}
+            )
+        )
+        DBSession.add(admin_div_32)
 
     # generic further resource for EQ:
     # it should be found on every EQ report page

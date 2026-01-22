@@ -141,9 +141,7 @@ def hazardcategory(request):
         }
 
     if request.method == "POST":
-        hazard_category = request.dbsession.query(HazardCategory).get(
-            request.POST.get("id")
-        )
+        hazard_category = request.dbsession.get(HazardCategory, request.POST.get("id"))
         if hazard_category is None:
             raise HTTPNotFound()
 
@@ -155,7 +153,7 @@ def hazardcategory(request):
         order = 0
         for association_id in associations:
             order += 1
-            association = request.dbsession.query(HcTr).get(association_id)
+            association = request.dbsession.get(HcTr, association_id)
             association.order = order
         return HTTPFound(
             request.route_url(
@@ -201,7 +199,7 @@ def technical_rec_new(request):
 )
 def technical_rec_edit(request):
     id = request.matchdict["id"]
-    obj = request.dbsession.query(TechnicalRecommendation).get(id)
+    obj = request.dbsession.get(TechnicalRecommendation, id)
     if obj is None:
         raise HTTPNotFound()
     return technical_rec_process(request, obj)
@@ -210,7 +208,7 @@ def technical_rec_edit(request):
 @view_config(route_name="admin_technical_rec_delete")
 def technical_rec_delete(request):
     id = request.matchdict["id"]
-    obj = request.dbsession.query(TechnicalRecommendation).get(id)
+    obj = request.dbsession.get(TechnicalRecommendation, id)
     request.dbsession.delete(obj)
     return HTTPFound(request.route_url("admin_technical_rec"))
 
@@ -284,7 +282,8 @@ def hazardset(request):
     hazardset = (
         request.dbsession.query(HazardSet)
         .options(joinedload(HazardSet.layers).joinedload(Layer.hazardlevel))
-        .get(id)
+        .filter(HazardSet.id == id)
+        .first()
     )
     return {"hazardset": hazardset}
 
@@ -411,7 +410,7 @@ def climate_rec_new(request):
 )
 def climate_rec_edit(request):
     id = request.matchdict["id"]
-    obj = request.dbsession.query(ClimateChangeRecommendation).get(id)
+    obj = request.dbsession.get(ClimateChangeRecommendation, id)
     if obj is None:
         raise HTTPNotFound()
     return climate_rec_process(request, obj)
@@ -420,7 +419,7 @@ def climate_rec_edit(request):
 @view_config(route_name="admin_climate_rec_delete")
 def climate_rec_delete(request):
     id = request.matchdict["id"]
-    obj = request.dbsession.query(ClimateChangeRecommendation).get(id)
+    obj = request.dbsession.get(ClimateChangeRecommendation, id)
     request.dbsession.delete(obj)
     return HTTPFound(
         request.route_url(
@@ -488,9 +487,7 @@ def climate_rec_process(request, obj):
 
         # Add new ones
         for admindiv_id in admindiv_ids:
-            association = request.dbsession.query(CcrAd).get(
-                (admindiv_id, obj.hazardtype.id)
-            )
+            association = request.dbsession.get(CcrAd, (admindiv_id, obj.hazardtype.id))
             if association is None:
                 association = CcrAd(
                     administrativedivision_id=admindiv_id, hazardtype=obj.hazardtype
@@ -525,7 +522,7 @@ def contact_new(request):
 )
 def contact_edit(request):
     id = request.matchdict["id"]
-    obj = request.dbsession.query(Contact).get(id)
+    obj = request.dbsession.get(Contact, id)
     if obj is None:
         raise HTTPNotFound()
     return contact_process(request, obj)
@@ -534,7 +531,7 @@ def contact_edit(request):
 @view_config(route_name="admin_contact_delete")
 def contact_delete(request):
     id = request.matchdict["id"]
-    obj = request.dbsession.query(Contact).get(id)
+    obj = request.dbsession.get(Contact, id)
     if obj is None:
         raise HTTPNotFound()
     for association in obj.associations:
