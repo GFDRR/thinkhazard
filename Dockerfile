@@ -2,7 +2,7 @@
 # Common base for build/test and runtime #
 ##########################################
 
-FROM python:3.8-slim-bullseye AS base
+FROM python:3.14-slim-bookworm AS base
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1

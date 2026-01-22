@@ -22,7 +22,7 @@ sudo -u postgres psql -d thinkhazard -c 'CREATE SCHEMA datamart;'
 sudo -u postgres psql -d thinkhazard -c 'GRANT ALL ON SCHEMA datamart TO "www-data";'
 echo "initialize"
 .build/venv/bin/initialize_thinkhazard_db development.ini
-.build/venv/bin/nosetests
+.build/venv/bin/pytest
 
 cd /tmp
 sudo -u postgres postgresql_autodoc -d thinkhazard

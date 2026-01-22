@@ -18,17 +18,14 @@
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import unittest
 from datetime import datetime, timedelta
-from mock import Mock, patch, mock_open
-import httplib2
-import json
+from unittest.mock import patch, mock_open
 
 from thinkhazard.models import FurtherResource, HazardSet, Layer, Region
 from thinkhazard.processing.harvesting import Harvester
 
 from .. import DBSession, settings
-from . import BaseTestCase, populate_datamart
+from . import BaseTestCase
 
 
 date_str = datetime.utcnow().isoformat()

@@ -672,6 +672,7 @@ class Harvester(BaseProcessor):
             layer.geonode_id = o['id']
             layer.hazardset = hazardset
             layer.mask = False
+            self.dbsession.add(layer)
 
         else:
             # If data has changed

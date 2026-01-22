@@ -20,7 +20,7 @@ import os
 import shutil
 import asyncio
 import tempfile
-from mock.mock import patch, Mock
+from unittest.mock import patch, Mock
 
 from . import BaseTestCase
 

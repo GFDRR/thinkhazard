@@ -17,10 +17,9 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
-import unittest
 from datetime import datetime
 import numpy as np
-from mock import Mock, patch
+from unittest.mock import Mock, patch
 from rasterio.io import DatasetReader
 from affine import Affine
 

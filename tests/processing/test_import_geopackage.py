@@ -20,7 +20,7 @@
 import os
 
 import geopandas as gpd
-from mock import patch
+from unittest.mock import patch
 
 from thinkhazard.models import (
     AdministrativeDivision,
