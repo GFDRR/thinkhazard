@@ -21,32 +21,3 @@ button[aria-label*="theme"],
   padding: 3rem 2rem;
   margin-top: 4rem;
 }
-
-/* Hazard icon shadow effect - Override .article img rules */
-.article img.hazard-icon,
-.article img[src*="eq.png"],
-.article img[src*="ts.png"],
-.article img[src*="va.png"],
-.article img[src*="fl.png"],
-.article img[src*="ls.png"],
-.article img[src*="ss.png"],
-.article img[src*="sw.png"],
-.article img[src*="ws.png"],
-.article img[src*="et.png"],
-.article img[src*="wf.png"],
-.hazard-icon,
-img.hazard-icon,
-img[src*="eq.png"],
-img[src*="ts.png"],
-img[src*="va.png"],
-img[src*="fl.png"],
-img[src*="ls.png"],
-img[src*="ss.png"],
-img[src*="sw.png"],
-img[src*="ws.png"],
-img[src*="et.png"],
-img[src*="wf.png"] {
-  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2) !important;
-  border-radius: 50% !important;
-  display: inline-block !important;
-}

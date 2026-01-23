@@ -86,7 +86,6 @@ All hazard classification uses two fundamental thresholds:
 Below are the specific classification methods and thresholds for each of the 11 hazards covered by ThinkHazard!.
 
 ::::{grid} 1
-:gutter: 3
 
 :::{grid-item-card}
 
@@ -137,7 +136,7 @@ Below are the specific classification methods and thresholds for each of the 11 
 :align: center
 :class: hazard-icon
 ```
-**Data Source**: [Tropical Cyclone / Strong Winds](data-references.md#tropical-cyclone--strong-winds) (STORM v4, Bloemendaal N. 2023)
+**Data Source**: [Tropical Cyclone / Strong Winds](data-references.md#tropical-cyclone-strong-winds) (STORM v4, Bloemendaal N. 2023)
 
 **Return Periods**: RP50, RP100, RP1000, RP10000
 
@@ -407,7 +406,7 @@ Below are the specific classification methods and thresholds for each of the 11 
 :class: hazard-icon
 ```
 
-**Data Source**: [Water Scarcity / Drought](data-references.md#water-scarcity--drought) (RWI Baseline Water Stress)
+**Data Source**: [Water Scarcity / Drought](data-references.md#water-scarcity-drought) (RWI Baseline Water Stress)
 
 **Data Type**: Baseline Water Stress (BWS) index [-1, 4]
 
