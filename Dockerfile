@@ -104,7 +104,7 @@ RUN --mount=type=cache,target=/var/lib/apt/lists \
     curl
 
 COPY --from=node /app/thinkhazard/node_modules /opt/thinkhazard/node_modules
-COPY --from=node /app/thinkhazard/thinkhazard/static/build /opt/thinkhazard/thinkhazard/static/build
+COPY --from=node /app/thinkhazard/thinkhazard/static /opt/thinkhazard/thinkhazard/static
 
 # Install OpenLayers from release, not source.
 RUN mkdir --parent /opt/thinkhazard/node_modules/openlayers/dist \
