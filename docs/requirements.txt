@@ -1,0 +1,7 @@
+# JupyterBook dependencies
+jupyter-book>=0.15.1
+matplotlib>=3.5.0
+numpy>=1.21.0
+sphinx>=4.5.0
+sphinx-design>=0.3.0
+myst-nb>=0.17.0
