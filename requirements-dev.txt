@@ -3,8 +3,6 @@
 #
 coverage
 flake8
-mock
-nose
 pep8-naming
 pydevd
 pytest

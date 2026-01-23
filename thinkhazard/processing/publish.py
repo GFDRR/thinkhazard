@@ -19,7 +19,7 @@
 
 import logging
 import os
-from datetime import datetime
+from datetime import datetime, UTC
 from pkg_resources import resource_filename
 from subprocess import run
 
@@ -68,7 +68,7 @@ class Publisher(BaseProcessor):
         s3_helper = S3Helper(self.settings)
         s3_helper.upload_file(
             LOCAL_BACKUP_PATH,
-            "backups/thinkhazard.{}.backup".format(datetime.utcnow().isoformat())
+            "backups/thinkhazard.{}.backup".format(datetime.now(UTC).replace(tzinfo=None).isoformat())
         )
 
         public_env = {

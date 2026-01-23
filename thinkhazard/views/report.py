@@ -90,7 +90,7 @@ def report(request):
 
     # Get the geometry for division and compute its extent
     cte = (
-        select([func.box2d(AdministrativeDivision.geom).label("box2d")])
+        select(func.box2d(AdministrativeDivision.geom).label("box2d"))
         .where(AdministrativeDivision.code == division_code)
         .cte("bounds")
     )
@@ -111,21 +111,19 @@ def report(request):
         # compute a 0-360 version of the extent
         cte = (
             select(
-                [
-                    func.ST_Translate(
-                        func.ST_ShiftLongitude(
-                            func.ST_Translate(
-                                func.ST_Transform(
-                                    AdministrativeDivision.geom_simplified, 4326
-                                ),
-                                180,
-                                0,
-                            )
-                        ),
-                        -180,
-                        0,
-                    ).label("shift")
-                ]
+                func.ST_Translate(
+                    func.ST_ShiftLongitude(
+                        func.ST_Translate(
+                            func.ST_Transform(
+                                AdministrativeDivision.geom_simplified, 4326
+                            ),
+                            180,
+                            0,
+                        )
+                    ),
+                    -180,
+                    0,
+                ).label("shift")
             )
             .where(AdministrativeDivision.code == division_code)
             .cte("bounds")

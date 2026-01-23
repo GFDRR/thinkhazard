@@ -32,7 +32,7 @@ from pyramid.httpexceptions import HTTPBadRequest
 from pyramid.response import FileResponse
 
 from io import BytesIO
-from PyPDF2 import PdfFileReader, PdfFileWriter
+from pypdf import PdfReader, PdfWriter
 from asyncio import run
 
 from .report import (
@@ -137,12 +137,11 @@ async def create_and_upload_pdf(request, file_name: str, pages: List[str], objec
     ])
 
     # merge all pages
-    writer = PdfFileWriter()
-    # for page in pages:
+    writer = PdfWriter()
     for chunk in chunks:
-        reader = PdfFileReader(chunk)
-        for index in range(reader.numPages):
-            writer.addPage(reader.getPage(index))
+        reader = PdfReader(chunk)
+        for page in reader.pages:
+            writer.add_page(page)
 
     with open(file_name, "wb") as output:
         writer.write(output)
