@@ -125,6 +125,9 @@ def main(global_config, **settings):
         config.add_route(
             "admin_contact_admindiv_hazardtype_association", "/contact/CAdHt_form"
         )
+        config.add_route(
+            "admin_processing_log_download", "/processing_logs/{log_name}"
+        )
 
     config.add_renderer("geojson", GeoJSON())
     config.add_renderer("csv", "thinkhazard.renderers.CSVRenderer")
