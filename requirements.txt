@@ -28,7 +28,7 @@ python-slugify>=8.0.4
 pytz
 pyyaml
 rasterio>=1.5
-redis
+redis<6  # Temporary: avoid SSL issue with {cachename}.privatelink.redis.cache.windows.net
 requests
 requests_futures
 secure<1,>=0.3
