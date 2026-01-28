@@ -14,14 +14,16 @@
 
 <hr>
 <div class="row">
-  <div class="col-md-12 text-center">
+  <div class="col-md-6 text-center">
+    <p>
+    {{gettext('Sponsored by') | markdown}}
+    </p>
+    <a href="https://www.gatesfoundation.org/" class="logo-gfdrr-md" title="Logo Gates Foundation" alt="Gates Foundation"><img src="{{'thinkhazard:static/images/logo-gates-foundation.svg'|static_url}}"></a>
+  </div>
+  <div class="col-md-6 text-center">
     <p>
     {{gettext('Developed by') | markdown}}
     </p>
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-12 text-center">
     <a href="//www.gfdrr.org/" class="logo-gfdrr-md" title="Logo GFDRR" alt="GFDRR"><img src="{{'thinkhazard:static/images/logo-gfdrr-world-bank.svg'|static_url}}"></a>
   </div>
 </div>
