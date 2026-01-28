@@ -151,6 +151,13 @@
       {{ hazard_category.hazardtype.data_owner_info | markdown }}
     </div>
     {% endif %}
+    {% if division.leveltype.mnemonic == 'URB' %}
+    <div class="data-owner-info">
+        <p>
+          {{ gettext('Urban areas perimeters are obtained from %(link)s.', link='[GHS Urban Centre Database 2025](https://human-settlement.emergency.copernicus.eu/ghs_ucdb_2024.php)') | markdown }}
+        </p>
+    </div>
+    {% endif %}
     <div id="data-source-legend" class="legend hidden row">
       <div class="col-xs-3">
         {% for hazardset in sources %}
