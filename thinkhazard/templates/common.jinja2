@@ -1,8 +1,13 @@
-{% macro navbar(request, feedback_form_url, includes={"home": True, "search": False}) %}
+{% macro navbar(request, feedback_form_url, includes={"home": True, "search": False, "thinkhazard_logo": False}) %}
       <div class="navbar-header">
         {% if includes.home %}
         <a href="//www.gfdrr.org/" class="navbar-brand logo-gfdrr logo-gfdrr-sm" title="Logo GFDRR" alt="Logo GFDRR">
           <img src="{{'thinkhazard:static/images/logo-gfdrr-world-bank.svg'|static_url}}" alt="GFDRR">
+        </a>
+        {% endif %}
+        {% if includes.thinkhazard_logo %}
+        <a class="navbar-center-logo logo" href="{{'index'|route_url}}" title="{{gettext('Go to homepage')}}">
+          <span class="logo-think">Think</span><span class="logo-hazard">Hazard</span><span class="logo-think">!</span>
         </a>
         {% endif %}
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
