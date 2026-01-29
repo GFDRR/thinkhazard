@@ -149,3 +149,33 @@ footer {
     }
   }
 }
+
+.news-ticker {
+  width: 100%;
+  background: #2980b9;
+  overflow: hidden;
+  padding: 8px 0;
+}
+
+.ticker-track {
+  display: flex;
+  width: 200%;
+  animation: ticker-scroll 20s linear infinite;
+}
+
+.ticker-text {
+  width: 50%;
+  text-align: center;
+  color: #fff;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+@keyframes ticker-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}

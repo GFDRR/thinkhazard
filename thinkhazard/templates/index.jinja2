@@ -6,6 +6,13 @@
 {% block name %}index{% endblock %}
 
 {% block content %}
+  {% set ticker_message = "NEWS TICKER - NEW VERSION UPDATE — Content coming soon!" %}
+  <div class="news-ticker">
+    <div class="ticker-track">
+      <span class="ticker-text">{{ ticker_message }}</span>
+      <span class="ticker-text">{{ ticker_message }}</span>
+    </div>
+  </div>
   <nav class="navbar navbar-default">
     <div class="container">
       {{ navbar(request, feedback_form_url) }}
