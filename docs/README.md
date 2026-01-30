@@ -21,23 +21,44 @@ pip install -r requirements.txt
 To build the HTML version of the book:
 
 ```bash
+# 1. Generate JSON files from CSV data
+python convert_csv_to_json.py
+
+# 2. Build the documentation
 jupyter-book build .
+
+# 3. Copy query builder and JSON files to build output
+bash copy_static_files.sh
 ```
 
-The built HTML files will be in `_build/html/`. You can open `_build/html/index.html` in your web browser to view the documentation.
+The built HTML files will be in `_build/html/`.
+
+### Inspecting the book
+
+To preview the documentation locally:
+
+```bash
+# Start a simple HTTP server
+cd _build/html
+python -m http.server 3100
+```
+
+Then open http://localhost:3100 in your browser.
+
+**Note:** Don't use `jupyter book start` - it doesn't properly serve the JSON files and query builder. Use the Python HTTP server instead.
 
 ### Cleaning build files
 
 To remove previously built files:
 
 ```bash
-jupyter-book clean .
+jupyter book clean
 ```
 
 To remove all build files including cached notebooks:
 
 ```bash
-jupyter-book clean . --all
+jupyter book clean --all
 ```
 
 ## Documentation Structure
@@ -52,6 +73,27 @@ The documentation is organized as follows:
 - [`hazard-methods.md`](hazard-methods.md) - Hazard-specific classification methods
 - [`api.md`](api.md) - API documentation
 - [`data-references.md`](data-references.md) - Data sources and licenses
+
+## Query Builder
+
+The documentation includes an interactive query builder tool for finding administrative division and urban area codes:
+
+- **Source files:**
+  - `query_builder.html` - Interactive search interface (in `docs/` root)
+  - `_static/TH_ADM2.csv` - Administrative divisions source data
+  - `_static/TH_URB.csv` - Urban areas source data
+  - `_static/divisions_flat.json` - 43,202 divisions (generated, committed)
+  - `_static/urban_areas.json` - 2,919 urban areas (generated, committed)
+  - `_static/countries.json` - 245 countries (generated, committed)
+
+- **Data generation:**
+  ```bash
+  python convert_csv_to_json.py
+  ```
+  This reads the CSV files from `_static/` and generates JSON files in `_static/`.
+
+- **Deployment:**
+  The `copy_static_files.sh` script copies JSON files from `_static/` and the query builder to `_build/html/` for deployment.
 
 ## Publishing
 
