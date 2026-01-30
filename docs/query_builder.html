@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ThinkHazard! API Query Builder</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      opacity: 0.9;
+      font-size: 14px;
+    }
+
+    .content {
+      padding: 30px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #e0e0e0;
+    }
+
+    .tab {
+      padding: 12px 24px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-size: 16px;
+      font-weight: 500;
+      color: #666;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+    }
+
+    .tab:hover {
+      color: #667eea;
+    }
+
+    .tab.active {
+      color: #667eea;
+      border-bottom-color: #667eea;
+    }
+
+    .search-section {
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    #search-box {
+      width: 100%;
+      padding: 12px 16px;
+      font-size: 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      transition: border-color 0.3s;
+    }
+
+    #search-box:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    #results {
+      max-height: 400px;
+      overflow-y: auto;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    .result {
+      padding: 12px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid #f0f0f0;
+      transition: background-color 0.2s;
+    }
+
+    .result:last-child {
+      border-bottom: none;
+    }
+
+    .result:hover {
+      background: #f8f9fa;
+    }
+
+    .result strong {
+      color: #333;
+      font-size: 16px;
+    }
+
+    .result-code {
+      display: inline-block;
+      background: #667eea;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      margin-left: 8px;
+      font-family: monospace;
+    }
+
+    .result-level {
+      display: inline-block;
+      background: #e0e0e0;
+      color: #666;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      margin-left: 4px;
+    }
+
+    .full-path {
+      color: #666;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .no-results {
+      padding: 20px;
+      text-align: center;
+      color: #999;
+    }
+
+    .selected-info {
+      background: #f8f9fa;
+      border: 2px solid #667eea;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 30px;
+    }
+
+    .selected-info h3 {
+      color: #667eea;
+      margin-bottom: 15px;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+    }
+
+    .info-label {
+      font-weight: 600;
+      color: #666;
+    }
+
+    .info-value {
+      color: #333;
+      font-family: monospace;
+    }
+
+    .api-urls {
+      margin-top: 20px;
+    }
+
+    .api-url {
+      background: white;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      border: 1px solid #e0e0e0;
+    }
+
+    .api-url-label {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 4px;
+    }
+
+    .api-url-link {
+      color: #667eea;
+      text-decoration: none;
+      word-break: break-all;
+      font-size: 13px;
+      font-family: monospace;
+    }
+
+    .api-url-link:hover {
+      text-decoration: underline;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+    }
+
+    .stats {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>ThinkHazard! API Query Builder</h1>
+      <p>Search for administrative divisions or urban areas to get API endpoints</p>
+    </div>
+
+    <div class="content">
+      <div class="stats" id="stats">
+        Loading data...
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('divisions')" id="tab-divisions">
+          Administrative Divisions
+        </button>
+        <button class="tab" onclick="switchTab('urban')" id="tab-urban">
+          Urban Areas
+        </button>
+      </div>
+
+      <div class="search-section">
+        <label for="search-box" id="search-label">Search Administrative Divisions</label>
+        <input
+          type="text"
+          id="search-box"
+          placeholder="Type to search (e.g., Pakistan, Sindh, Karachi)..."
+          autocomplete="off"
+        />
+        <div id="results"></div>
+      </div>
+
+      <div id="selected-info"></div>
+    </div>
+  </div>
+
+  <script>
+    let divisions = [];
+    let urbanAreas = [];
+    let currentData = [];
+    let currentTab = 'divisions';
+    let selectedItem = null;
+
+    // Try multiple paths to find JSON files
+    async function loadJSON(filename) {
+      const possiblePaths = [];
+
+      // Auto-discover for GitHub Pages
+      if (window.location.hostname.includes('github.io')) {
+        const repoPath = window.location.pathname.split('/').slice(0, 2).join('/');
+        possiblePaths.push(`${repoPath}/${filename}`);
+      }
+
+      // Standard paths (Jupyter Book and MyST)
+      possiblePaths.push(
+        `/${filename}`,                    // Root
+        `./${filename}`,                   // Same directory
+        `/_static/${filename}`,            // Static files directory
+        `../${filename}`,                  // Parent directory
+        filename,                          // Relative
+      );
+
+      // GitHub raw content as final fallback
+      possiblePaths.push(`https://raw.githubusercontent.com/GFDRR/thinkhazard/master/docs/public/${filename}`);
+
+      for (const path of possiblePaths) {
+        try {
+          console.log(`Trying to load: ${path}`);
+          const response = await fetch(path);
+          if (response.ok) {
+            console.log(`✓ Successfully loaded from: ${path}`);
+            return await response.json();
+          }
+        } catch (error) {
+          console.log(`Failed to load from ${path}:`, error.message);
+        }
+      }
+
+      throw new Error(`Could not load ${filename} from any path`);
+    }
+
+    // Load all data
+    Promise.all([
+      loadJSON('divisions_flat.json'),
+      loadJSON('urban_areas.json')
+    ])
+      .then(([divisionsData, urbanData]) => {
+        if (!divisionsData || !divisionsData.divisions) {
+          throw new Error('Invalid divisions data format');
+        }
+        if (!urbanData || !urbanData.urban_areas) {
+          throw new Error('Invalid urban areas data format');
+        }
+
+        divisions = divisionsData.divisions;
+        urbanAreas = urbanData.urban_areas;
+        currentData = divisions;
+
+        // Update stats
+        const stats = document.getElementById('stats');
+        stats.innerHTML = `
+          <strong>Database loaded:</strong>
+          ${divisionsData.total_count.toLocaleString()} administrative divisions
+          (${divisions.filter(d => d.level === 'ADM0').length} countries,
+          ${divisions.filter(d => d.level === 'ADM1').length.toLocaleString()} states/provinces,
+          ${divisions.filter(d => d.level === 'ADM2').length.toLocaleString()} districts)
+          + ${urbanData.total_count.toLocaleString()} urban areas
+        `;
+      })
+      .catch(error => {
+        console.error('Error loading data:', error);
+        const stats = document.getElementById('stats');
+        stats.innerHTML = `
+          <strong style="color: #d32f2f;">Error loading data</strong><br>
+          <span style="font-size: 12px;">
+            This file must be served via HTTP (not opened directly as file://).<br>
+            <strong>Solutions:</strong><br>
+            1. Use a local web server: <code>python -m http.server 8000</code><br>
+            2. Or place this file and JSON files in a web-accessible directory<br>
+            3. Ensure JSON files are in the same directory as this HTML file
+          </span>
+        `;
+      });
+
+    // Tab switching
+    function switchTab(tab) {
+      currentTab = tab;
+      const tabDivisions = document.getElementById('tab-divisions');
+      const tabUrban = document.getElementById('tab-urban');
+      const searchLabel = document.getElementById('search-label');
+      const searchBox = document.getElementById('search-box');
+      const results = document.getElementById('results');
+      const selectedInfo = document.getElementById('selected-info');
+
+      if (tab === 'divisions') {
+        currentData = divisions;
+        tabDivisions.classList.add('active');
+        tabUrban.classList.remove('active');
+        searchLabel.textContent = 'Search Administrative Divisions';
+        searchBox.placeholder = 'Type to search (e.g., Pakistan, Sindh, Karachi)...';
+      } else {
+        currentData = urbanAreas;
+        tabDivisions.classList.remove('active');
+        tabUrban.classList.add('active');
+        searchLabel.textContent = 'Search Urban Areas';
+        searchBox.placeholder = 'Type to search (e.g., Papeete, Victoria, Ahuachapan)...';
+      }
+
+      // Clear search and selection
+      searchBox.value = '';
+      results.innerHTML = '';
+      selectedInfo.innerHTML = '';
+      selectedItem = null;
+    }
+
+    // Search function
+    document.getElementById('search-box').addEventListener('input', function(e) {
+      const query = e.target.value.toLowerCase().trim();
+      const resultsDiv = document.getElementById('results');
+
+      if (query.length < 2) {
+        resultsDiv.innerHTML = '';
+        return;
+      }
+
+      // Filter current data
+      const matches = currentData.filter(item =>
+        item.name.toLowerCase().includes(query) ||
+        item.code.toLowerCase().includes(query) ||
+        item.full_path.toLowerCase().includes(query)
+      ).slice(0, 50); // Limit to 50 results
+
+      // Display results
+      if (matches.length === 0) {
+        resultsDiv.innerHTML = '<div class="no-results">No results found matching your search.</div>';
+      } else {
+        resultsDiv.innerHTML = matches.map(item => `
+          <div class="result" onclick='selectItem(${JSON.stringify(item)})'>
+            <div>
+              <strong>${escapeHtml(item.name)}</strong>
+              <span class="result-code">${escapeHtml(item.code)}</span>
+              <span class="result-level">${escapeHtml(item.level)}</span>
+            </div>
+            <div class="full-path">${escapeHtml(item.full_path)}</div>
+          </div>
+        `).join('');
+      }
+    });
+
+    function selectItem(item) {
+      selectedItem = item;
+      const infoDiv = document.getElementById('selected-info');
+
+      infoDiv.innerHTML = `
+        <h3>Selected ${item.level === 'URB' ? 'Urban Area' : 'Division'}</h3>
+        <div class="info-row">
+          <span class="info-label">Name:</span>
+          <span class="info-value">${escapeHtml(item.name)}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Code:</span>
+          <span class="info-value">${escapeHtml(item.code)}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Level:</span>
+          <span class="info-value">${escapeHtml(item.level)}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Country:</span>
+          <span class="info-value">${escapeHtml(item.country_name)}</span>
+        </div>
+        ${item.parent_name ? `
+          <div class="info-row">
+            <span class="info-label">Parent:</span>
+            <span class="info-value">${escapeHtml(item.parent_name)}</span>
+          </div>
+        ` : ''}
+        <div class="info-row">
+          <span class="info-label">Full Path:</span>
+          <span class="info-value">${escapeHtml(item.full_path)}</span>
+        </div>
+
+        <div class="api-urls">
+          <div class="api-url">
+            <div class="api-url-label">Get Hazard Summary:</div>
+            <a href="http://thinkhazard.org/en/report/${item.code}.json" target="_blank" class="api-url-link">
+              http://thinkhazard.org/en/report/${item.code}.json
+            </a>
+          </div>
+          <div class="api-url">
+            <div class="api-url-label">Get Complete Flood Report:</div>
+            <a href="http://thinkhazard.org/en/report/${item.code}/FL.json" target="_blank" class="api-url-link">
+              http://thinkhazard.org/en/report/${item.code}/FL.json
+            </a>
+          </div>
+          <div class="api-url">
+            <div class="api-url-label">Get Complete Earthquake Report:</div>
+            <a href="http://thinkhazard.org/en/report/${item.code}/EQ.json" target="_blank" class="api-url-link">
+              http://thinkhazard.org/en/report/${item.code}/EQ.json
+            </a>
+          </div>
+        </div>
+      `;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>

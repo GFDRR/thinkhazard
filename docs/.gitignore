@@ -2,6 +2,11 @@
 _build/
 .jupyter_cache/
 
+# Generated JSON files (regenerated from CSV via convert_csv_to_json.py)
+divisions_flat.json
+urban_areas.json
+countries.json
+
 # Python
 __pycache__/
 *.py[cod]
