@@ -418,20 +418,26 @@
       if (matches.length === 0) {
         resultsDiv.innerHTML = '<div class="no-results">No results found matching your search.</div>';
       } else {
-        resultsDiv.innerHTML = matches.map(item => `
-          <div class="result" onclick='selectItem(${JSON.stringify(item)})'>
-            <div>
-              <strong>${escapeHtml(item.name)}</strong>
-              <span class="result-code">${escapeHtml(item.code)}</span>
-              <span class="result-level">${escapeHtml(item.level)}</span>
+        resultsDiv.innerHTML = matches.map((item, index) => {
+          // Store item in a data attribute using index
+          const itemJson = JSON.stringify(item).replace(/'/g, '&apos;').replace(/"/g, '&quot;');
+          return `
+            <div class="result" data-item='${itemJson}' onclick='selectItem(this.dataset.item)'>
+              <div>
+                <strong>${escapeHtml(item.name)}</strong>
+                <span class="result-code">${escapeHtml(item.code)}</span>
+                <span class="result-level">${escapeHtml(item.level)}</span>
+              </div>
+              <div class="full-path">${escapeHtml(item.full_path)}</div>
             </div>
-            <div class="full-path">${escapeHtml(item.full_path)}</div>
-          </div>
-        `).join('');
+          `;
+        }).join('');
       }
     });
 
-    function selectItem(item) {
+    function selectItem(itemJson) {
+      // Parse the JSON string back to object
+      const item = JSON.parse(itemJson);
       selectedItem = item;
       const infoDiv = document.getElementById('selected-info');
 
