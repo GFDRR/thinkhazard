@@ -25,7 +25,7 @@ To build the HTML version of the book:
 python convert_csv_to_json.py
 
 # 2. Build the documentation
-jupyter-book build .
+jupyter book build --html .
 
 # 3. Copy query builder and JSON files to build output
 bash copy_static_files.sh
@@ -99,16 +99,27 @@ The documentation includes an interactive query builder tool for finding adminis
 
 ### GitHub Pages
 
-To publish to GitHub Pages, you can use the `ghp-import` package:
+**Recommended: Use the Jupyter Book built-in GitHub Actions setup:**
+
+```bash
+cd docs
+jupyter book init --gh-pages
+```
+
+This will generate a `.github/workflows/deploy.yml` file. You'll need to customize it to include our JSON generation and copy steps. See [DEPLOYMENT.md](DEPLOYMENT.md) for complete instructions.
+
+**Alternative: Manual deployment with ghp-import:**
 
 ```bash
 pip install ghp-import
+cd docs
+python convert_csv_to_json.py
+jupyter book build --html .
+bash copy_static_files.sh
 ghp-import -n -p -f _build/html
 ```
 
-This will push the built HTML to the `gh-pages` branch of your repository.
-
-Alternatively, you can set up GitHub Actions to automatically build and deploy the documentation on every commit. See the [Jupyter Book documentation](https://jupyterbook.org/publish/gh-pages.html) for more details.
+For detailed deployment instructions and GitHub Actions configuration, see [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## Configuration
 

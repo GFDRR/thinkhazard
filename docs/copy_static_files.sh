@@ -6,7 +6,7 @@
 echo "Copying files to _build/html for deployment..."
 
 if [ ! -d "_build/html" ]; then
-    echo "Error: _build/html does not exist. Run 'jupyter-book build .' first."
+    echo "Error: _build/html does not exist. Run 'jupyter book build --html .' first."
     exit 1
 fi
 
