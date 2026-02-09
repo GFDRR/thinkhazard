@@ -34,6 +34,7 @@ requests_futures
 secure<1,>=0.3
 shapely>=2.1.2
 simplejson
+setuptools<82  # As pyramid still require pkg_resources
 transaction
 waitress
 zope.sqlalchemy
