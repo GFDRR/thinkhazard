@@ -1,14 +1,15 @@
-/* Sidebar footer logo inversion and sizing */
+/* Sidebar footer spacing and logo sizing */
 .pst-sidebar-secondary img[src*="GFDRR"],
 .sidebar-footer img[src*="GFDRR"],
 aside img[src*="GFDRR"],
 img[alt="GFDRR Logo"] {
-  filter: invert(1) brightness(0) !important;
   width: 200px !important;
   max-width: 100% !important;
   height: auto !important;
   max-height: none !important;
   min-height: auto !important;
+  margin-top: 0.5rem !important;
+  display: block !important;
 }
 
 /* Hazard icon shadow effect */
