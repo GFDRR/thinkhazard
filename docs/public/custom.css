@@ -1,0 +1,54 @@
+/* Force light mode - disable dark theme */
+html[data-theme="dark"],
+body[data-theme="dark"] {
+  display: none !important;
+}
+
+html, body {
+  background-color: #faf8f5 !important;
+  color-scheme: light only !important;
+}
+
+/* Hide theme switcher */
+button[aria-label*="theme" i],
+button[title*="theme" i],
+.theme-switch,
+.theme-toggle {
+  display: none !important;
+}
+
+/* Soft background */
+body, main, article {
+  background-color: #faf8f5 !important;
+}
+
+/* Sidebar footer logo inversion and sizing */
+.pst-sidebar-secondary img[src*="GFDRR"],
+.sidebar-footer img[src*="GFDRR"],
+aside img[src*="GFDRR"],
+img[alt="GFDRR Logo"] {
+  filter: invert(1) brightness(0) !important;
+  width: 200px !important;
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: auto !important;
+}
+
+/* Hazard icon shadow effect */
+.hazard-icon,
+img.hazard-icon,
+img[src*="eq.png"],
+img[src*="ts.png"],
+img[src*="va.png"],
+img[src*="fl.png"],
+img[src*="ls.png"],
+img[src*="ss.png"],
+img[src*="sw.png"],
+img[src*="ws.png"],
+img[src*="et.png"],
+img[src*="wf.png"] {
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2) !important;
+  border-radius: 50% !important;
+  display: inline-block !important;
+}

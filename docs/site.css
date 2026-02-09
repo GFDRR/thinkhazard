@@ -1,0 +1,23 @@
+/* Disable dark mode */
+html {
+  color-scheme: light only !important;
+}
+
+body {
+  background-color: #faf8f5 !important;
+}
+
+/* Hide theme switcher button */
+button[aria-label*="Toggle theme"],
+button[aria-label*="theme"],
+[data-theme-toggle] {
+  display: none !important;
+}
+
+/* Footer styles */
+.site-footer {
+  background-color: #1f2937;
+  color: #f9fafb;
+  padding: 3rem 2rem;
+  margin-top: 4rem;
+}

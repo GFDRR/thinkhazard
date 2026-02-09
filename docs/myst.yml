@@ -1,0 +1,29 @@
+version: 1
+project:
+  title: ThinkHazard! documentation
+  github: https://github.com/GFDRR/thinkhazard
+  keywords:
+    - natural hazards
+    - risk management
+    - disaster risk reduction
+
+site:
+  template: book-theme
+  title: ThinkHazard! documentation
+  options:
+    logo: images/ThinkHazard_logo.png
+    favicon: images/favicon.ico
+    theme: light
+    hide_theme_switcher: true
+    stylesheets:
+      - site.css
+      - public/custom.css
+  parts:
+    primary_sidebar_footer: |
+      <div style="text-align: center;">
+        <p style="margin-bottom: 0.1rem;"><b>ThinkHazard!</b> project by<br>
+        <a href="https://www.gfdrr.org" target="_blank" style="text-decoration: none;">
+          <img src="https://int.thinkhazard.org/static/images/logo-gfdrr-world-bank.svg"
+               alt="GFDRR Logo">
+        </a></p>
+      </div>

@@ -1,0 +1,14 @@
+# Table of contents
+format: jb-book
+root: intro
+chapters:
+  - file: hazard-types
+    title: Hazard Types
+  - file: hazard-classification
+    title: Hazard Classification
+  - file: drr-guidance
+    title: Risk Management Guidance
+  - file: api
+    title: API
+  - file: data-references
+    title: Data Sources

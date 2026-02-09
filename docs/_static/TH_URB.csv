@@ -1,0 +1,2920 @@
+COD_URB,NAM_URB,ISO_A3,NAM_0,COD_1,NAM_1
+4,Papeete,PYF,French Polynesia [PYF],PYF001,French Polynesia (Fr.)
+6,Victoria,CAN,Canada,CAN002,British Columbia / Colombie-Britannique
+8,Ahuachapan,SLV,El Salvador,SLV001,Ahuachapan
+9,Santa Rosa,HND,Honduras,HND005,Copan
+10,Chinandega,NIC,Nicaragua,NIC003,Chinandega
+11,Belize City,BLZ,Belize,BLZ001,Belize
+12,Liberia,CRI,Costa Rica,CRI003,Guanacaste
+13,David,PAN,Panama,PAN002,Chiriquí
+15,Salinas [Santa Elena],ECU,Ecuador,ECU024,Santa Elena
+17,Pinar del Río,CUB,Cuba,CUB012,Pinar del Río
+18,Montego Bay,JAM,Jamaica,JAM010,Saint James
+19,Nassau,BHS,The Bahamas,BHS001,Administrative unit not available
+22,Jérémie,HTI,Haiti,HTI003,Grand-Anse
+23,Oranjestad,ABW,Aruba [ABW],ABW001,Administrative unit not available
+24,Santa Cruz de Barahona,DOM,Dominican Republic,DOM003,Barahona
+27,Cobija,BOL,Bolivia,BOL006,Pando
+29,San Juan,ARG,Argentina,ARG018,San Juan
+30,Port of Spain,TTO,Trinidad and Tobago,TTO015,Tunapuna/Piarco
+31,Fort-de-France,MTQ,Martinique [MTQ],MTQ001,Martinique
+32,Bridgetown,BRB,Barbados,BRB008,St. Michael
+33,Georgetown,GUY,Guyana,GUY003,Demerara Mahaica (region N°4)
+34,Paramaribo,SUR,Suriname,SUR007,Paramaribo
+35,Concepción,PRY,Paraguay,PRY009,Concepcion
+36,Salto,URY,Uruguay,URY015,Salto
+39,Dakar,SEN,Senegal,SEN001,Dakar
+40,Serrekunda,GMB,The Gambia,GMB008,West Coast
+43,Bissau,GNB,Guinea-Bissau,GNB008,Sector Autonomo De Bissau
+44,Funchal,PRT,Portugal,PRT013,Madeira
+47,Freetown,SLE,Sierra Leone,SLE005,Western Area
+48,Reykjavik,ISL,Iceland,ISL009,Kjosar
+49,Kayes,MLI,Mali,MLI003,Kayes
+50,Monrovia,LBR,Liberia,LBR011,Montserrado
+58,Bechar,DZA,Algeria,DZA007,Bechar
+68,Luxembourg,LUX,Luxembourg,LUX003,Luxembourg
+69,Geneva,CHE,Switzerland,CHE008,Geneve
+70,Torino,ITA,Italy,ITA012,Piemonte
+71,São Tomé,STP,São Tomé and Príncipe,STP002,Sao Tome
+72,Aalborg,DNK,Denmark,DNK003,North Jutland
+74,Al-Kaf,TUN,Tunisia,TUN011,Le kef
+75,Gothenburg,SWE,Sweden,SWE021,Vaestra Goetalands Laen
+76,Malabo,GNQ,Equatorial Guinea,GNQ002,Bioko Norte
+77,Port-Gentil,GAB,Gabon,GAB008,Ogooue-Maritime
+79,Plzeň,CZE,Czech Republic,CZE008,Zapadocesky
+80,Szczecin,POL,Poland,POL016,Zachodnio-Pomorskie
+81,Al Zawiyah,LBY,Libya,LBY010,Az Zawia (azzawiya)
+82,Ljubljana,SVN,Slovenia,SVN007,Osrednjeslovenska
+85,Pointe-Noire,COG,Congo,COG010,Point-Noire
+87,Valletta,MLT,Malta,MLT065,Zebbug (malta)
+89,Bratislava,SVK,Slovak Republic,SVK002,Bratislava
+91,Banja Luka,BIH,Bosnia and Herzegovina,BIH002,Republika Srpska
+93,Turku,FIN,Finland,FIN005,Western Finland
+94,Kaliningrad,RUS,Russian Federation,RUS023,Kaliningradskaya Oblast
+101,Shkoder,ALB,Albania,ALB031,Shkoder
+102,Rīga,LVA,Latvia,LVA085,Rīga
+104,Arad,ROU,Romania,ROU002,Arad
+105,Hrodna,BLR,Belarus,BLR003,Grodno
+108,Ioannina,GRC,Greece,GRC006,Ipeiros
+109,Sofia,BGR,Bulgaria,BGR022,Sofia-city
+110,Bălți,MDA,Moldova,MDA002,Balti
+112,Edirne,TUR,Türkiye,TUR027,Edirne
+113,Mongu,ZMB,Zambia,ZMB110,Western
+114,Kanye,BWA,Botswana,BWA010,Southern
+115,Marsa Matruh,EGY,Arab Republic of Egypt,EGY016,Matrouh
+116,Maseru,LSO,Lesotho,LSO005,Maseru
+117,Bulawayo,ZWE,Zimbabwe,ZWE001,Bulawayo
+118,Wau,SSD,South Sudan,SSD011,Western Bahr el Ghazal
+119,Pafos,CYP,Cyprus,CYP006,Pafos
+121,Rubavu,RWA,Rwanda,RWA005,West/Iburengerazuba
+124,Kigoma,TZA,Tanzania,TZA010,Kigoma
+127,Khan Yunis,PSE,Palestine,PSE009,Khan Yunis
+129,Latakia,SYR,Syrian Arab Republic,SYR011,Latakia
+134,Tabuk,SAU,Saudi Arabia,SAU013,Tabūk
+139,Gyumri,ARM,Armenia,ARM007,Shirak
+142,Nakhchivan,AZE,Azerbaijan,AZE048,Nakhchivan
+145,Toliara,MDG,Madagascar,MDG034,Toliara
+147,Ali Sabieh,DJI,Djibouti,DJI001,Ali Sabeh
+149,Al Jahra,KWT,Kuwait,KWT003,Al Jahrah
+151,Turkmenbashy,TKM,Turkmenistan,TKM002,Balkan
+152,Manama,BHR,Bahrain,BHR012,Western Region
+153,Doha,QAT,Qatar,QAT006,Ar Rayyan
+159,Port Louis,MUS,Mauritius,MUS007,Plaines Wilhems
+163,Kashgar,CHN,China,CHN028,Xinjiang Uygur Zizhiqu
+165,Malé,MDV,Maldives,MDV013,Male'
+169,Thakurgaon,BGD,Bangladesh,BGD007,Rangpur
+172,Banda Aceh,IDN,Indonesia,IDN001,Aceh
+173,Chiang Mai,THA,Thailand,THA009,Chiang Mai
+174,Luang Prabang,LAO,Lao People's Democratic Republic,LAO008,Louangphrabang
+176,George Town,MYS,Malaysia,MYS011,Pulau Pinang
+178,Singapore,SGP,Singapore,SGP008,Sembawang-hong Kah
+180,Sinuiju,PRK,D. P. R. of Korea,PRK008,P'yongan-bukto
+183,Bandar Seri Begawan,BRN,Brunei Darussalam,BRN002,Brunei and Muara
+186,Dili,TLS,Timor-Leste,TLS006,Dili
+187,Dunedin,NZL,New Zealand,NZL14,Otago
+189,Honiara,SLB,Solomon Islands,SLB001,Administrative unit not available
+190,Nouméa,NCL,New Caledonia [NCL],NCL001,Administrative unit not available
+191,Port Vila,VUT,Vanuatu,VUT004,Shefa
+193,Honolulu,USA,United States of America,USA012,Hawaii
+197,Sonsonate,SLV,El Salvador,SLV013,Sonsonate
+199,León,NIC,Nicaragua,NIC008,León
+202,Manta,ECU,Ecuador,ECU013,Manabi
+203,Colón,PAN,Panama,PAN004,Colón
+206,Mandeville,JAM,Jamaica,JAM004,Manchester
+208,Les Cayes,HTI,Haiti,HTI009,Sud
+209,San Juan de la Maguana,DOM,Dominican Republic,DOM026,San Juan
+210,Iquique,CHL,Chile,CHL014,Tarapaca
+211,Rio Branco,BRA,Brazil,BRA001,Acre
+212,La Paz,BOL,Bolivia,BOL004,La Paz
+213,Bayamón [San Juan],PRI,Puerto Rico [PRI],PRI008,San Juan
+214,Mendoza,ARG,Argentina,ARG013,Mendoza
+217,Asuncion,PRY,Paraguay,PRY008,Central
+218,Paysandú,URY,Uruguay,URY011,Paysandu
+220,M'bour,SEN,Senegal,SEN009,Thiès
+221,Brikama,GMB,The Gambia,GMB008,West Coast
+222,Nouakchott,MRT,Mauritania,MRT014,Nouakchott-Nord
+224,Bafatá,GNB,Guinea-Bissau,GNB001,Bafata
+228,Kakata,LBR,Liberia,LBR009,Margibi
+232,Man,CIV,Côte d'Ivoire,CIV031,Montagnes
+234,Banfora,BFA,Burkina Faso,BFA002,Cascades
+235,Belfast,GBR,United Kingdom,GBR003,Northern Ireland
+240,Natitingou,BEN,Benin,BEN002,Atacora
+244,Rotterdam [The Hague],NLD,Netherlands,NLD012,Zuid-holland
+247,Lausanne,CHE,Switzerland,CHE024,Vaud
+249,Århus,DNK,Denmark,DNK002,Central Jutland
+252,Innsbruck,AUT,Austria,AUT007,Tirol
+253,Buea,CMR,Cameroon,CMR010,Sud - Ouest
+255,Bata,GNQ,Equatorial Guinea,GNQ006,Litoral
+259,Moçâmedes,AGO,Angola,AGO016,Namibe
+263,Szombathely,HUN,Hungary,HUN018,Vas
+266,Swakopmund,NAM,Namibia,NAM002,Erongo
+269,Oulu,FIN,Finland,FIN003,Oulu
+271,Novi Sad,SRB,Serbia,SRB005,Juzno-backi
+273,Durrës,ALB,Albania,ALB006,Durres
+276,Timișoara,ROU,Romania,ROU038,Timiş
+278,Murmansk,RUS,Russian Federation,RUS049,Murmanskaya Oblast
+280,Brest,BLR,Belarus,BLR001,Brest
+285,Plovdiv,BGR,Bulgaria,BGR014,Plovdiv
+287,Çanakkale,TUR,Türkiye,TUR022,Canakkale
+289,Molepolole,BWA,Botswana,BWA006,Kweneng
+291,Alexandria,EGY,Arab Republic of Egypt,EGY004,Behera
+294,Limassol,CYP,Cyprus,CYP005,Lemesos
+295,Bujumbura,BDI,Burundi,BDI002,Mairie de Bujumbura
+296,Musanze,RWA,Rwanda,RWA003,North/Amajyaruguru
+299,Maputo,MOZ,Mozambique,MOZ006,Maputo
+300,Deir el-Balah,PSE,Palestine,PSE005,Deir al Balah
+301,Ashdod,ISR,Israel,ISR005,Southern District
+302,Sidon,LBN,Lebanon,LBN008,South
+306,Al Qurayyat,SAU,Saudi Arabia,SAU004,Al Jawf
+312,Yerevan,ARM,Armenia,ARM011,Yerevan
+315,Atyrau,KAZ,Kazakhstan,KAZ005,Atyrauskaya
+325,Abu Dhabi,ARE,United Arab Emirates,ARE001,Abu Dhabi
+334,Laksmipur,NPL,Nepal,NPL004,Sudurpashchim
+335,Puttalam,LKA,Sri Lanka,LKA004,North Western
+337,Ulaanbaatar,MNG,Mongolia,MNG011,Ulaanbaatar
+341,Lào Cai,VNM,Viet Nam,VNM038,Lao Cai
+342,Vientiane,LAO,Lao People's Democratic Republic,LAO014,Vientiane [prefecture]
+343,Alor Setar,MYS,Malaysia,MYS002,Kedah
+345,Sembawang,SGP,Singapore,SGP008,Sembawang-hong Kah
+348,Seoul,KOR,Republic of Korea,KOR009,Kyonggi-do
+349,Zhanghua City,CHN,China,TWN001,Taiwan Sheng
+351,Sapporo,JPN,Japan,JPN008,Hokkaidoo
+353,Christchurch,NZL,New Zealand,NZL13,Canterbury
+355,Suva,FJI,Fiji,FJI001,Central
+357,Ensenada,MEX,Mexico,MEX002,Baja California
+358,Vancouver,CAN,Canada,CAN002,British Columbia / Colombie-Britannique
+359,San Pedro Sacatepéquez [San Marcos],GTM,Guatemala,GTM017,San Marcos
+362,Managua,NIC,Nicaragua,NIC010,Managua
+363,San José,CRI,Costa Rica,CRI001,Alajuela
+365,Portoviejo,ECU,Ecuador,ECU013,Manabi
+367,Havana,CUB,Cuba,CUB008,La Habana
+369,May Pen,JAM,Jamaica,JAM001,Clarendon
+372,Mao,DOM,Dominican Republic,DOM032,Valverde
+373,Antofagasta,CHL,Chile,CHL002,Antofagasta
+377,San Salvador de Jujuy,ARG,Argentina,ARG010,Jujuy
+380,Tacuarembó,URY,Uruguay,URY018,Tacuarembo
+381,Thiès,SEN,Senegal,SEN009,Thiès
+382,Santa Cruz de Tenerife,ESP,Spain,ESP004,Canarias
+383,Gabu,GNB,Guinea-Bissau,GNB005,Gabu
+384,Basse Santa Su,GMB,The Gambia,GMB007,Upper River
+386,Kaédi,MRT,Mauritania,MRT005,Gorgol
+391,Bamako,MLI,Mali,MLI001,District de Bamako
+393,Guiglo,CIV,Côte d'Ivoire,CIV031,Montagnes
+394,Dublin,IRL,Ireland,IRL006,Dublin
+395,Bobo-Dioulasso,BFA,Burkina Faso,BFA009,Hauts-bassins
+397,Wa,GHA,Ghana,GHA008,Upper West
+403,Bruges,BEL,Belgium,BEL003,Vlaams Gewest
+408,Neuchâtel,CHE,Switzerland,CHE013,Neuchatel
+414,Libreville,GAB,Gabon,GAB001,Estuaire
+415,Salzburg,AUT,Austria,AUT005,Salzburg
+419,Zagreb,HRV,Croatia,HRV003,Grad Zagreb
+422,Gyor,HUN,Hungary,HUN008,Gyor-moson-sopron
+424,N'Djamena,TCD,Chad,TCD022,Ville de N'Djamena
+426,Sarajevo,BIH,Bosnia and Herzegovina,BIH001,Federacija Bosne I Hercegovine
+427,Brazzaville,COG,Congo,COG002,Brazzaville
+429,Windhoek,NAM,Namibia,NAM006,Khomas
+431,Cape Town,ZAF,South Africa,ZAF009,Western Cape
+432,Vlora,ALB,Albania,ALB036,Vlore
+435,Oradea,ROU,Romania,ROU005,Bihor
+436,Skopje,MKD,North Macedonia,MKD005,Skopje
+439,Larissa,GRC,Greece,GRC012,Thessalia
+440,Pskov,RUS,Russian Federation,RUS061,Pskovskaya Oblast
+442,Chișinău,MDA,Moldova,MDA010,Chisinau
+443,Kırklareli,TUR,Türkiye,TUR050,Kirklareli
+446,Livingstone,ZMB,Zambia,ZMB109,Southern
+447,Al Wadi,EGY,Arab Republic of Egypt,EGY001,Alexandria
+448,Gweru,ZWE,Zimbabwe,ZWE010,Midlands
+450,Strovolos [Nicosia],CYP,Cyprus,CYP001,Lefkosia
+453,Fort Portal,UGA,Uganda,UGA038,Kabarole
+456,Gaza,PSE,Palestine,PSE006,Gaza
+457,Tel Aviv,ISR,Israel,ISR006,Tel Aviv
+458,Bayrūt,LBN,Lebanon,LBN005,Mount Lebanon
+461,Lilongwe,MWI,Malawi,MWI001,Central Region
+467,Tbilisi,GEO,Georgia,GEO012,Tbilisi (City)
+468,Qaraziadin,IRN,Islamic Republic of Iran,IRN026,West Azarbayejan
+469,Ganja,AZE,Azerbaijan,AZE019,Ganja
+471,Aktau,KAZ,Kazakhstan,KAZ010,Mangistauskaya
+472,Hodeidah,YEM,Republic of Yemen,YEM005,Al Hudaydah
+474,Djibouti,DJI,Djibouti,DJI003,Djibouti
+475,Kuwait City,KWT,Kuwait,KWT002,Al Farwaniyah
+479,ICAD I,ARE,United Arab Emirates,ARE001,Abu Dhabi
+491,Sittwe,MMR,Myanmar,MMR011,Rakhine
+493,Chiang Rai,THA,Thailand,THA010,Chiang Rai
+494,Sơn La,VNM,Viet Nam,VNM052,Son La
+495,Bukit Mertajam,MYS,Malaysia,MYS011,Pulau Pinang
+498,Perth,AUS,Australia,AUS011,Western Australia
+501,Hsinchu,CHN,China,TWN001,Taiwan Sheng
+505,Wellington,NZL,New Zealand,NZL09,Wellington
+507,Tijuana,MEX,Mexico,MEX002,Baja California
+509,Retalhuleu,GTM,Guatemala,GTM015,Retalhuleu
+510,Santa Ana,SLV,El Salvador,SLV012,Santa Ana
+511,San Pedro Sula,HND,Honduras,HND006,Cortes
+512,Esteli,NIC,Nicaragua,NIC005,Estelí
+513,Cartago,CRI,Costa Rica,CRI002,Cartago
+514,Piura,PER,Peru,PER020,Piura
+516,Arraiján,PAN,Panama,PAN012,Panamá Oeste
+518,Pasto,COL,Colombia,COL023,Nariño
+522,Azua,DOM,Dominican Republic,DOM001,Azua
+524,Oruro,BOL,Bolivia,BOL005,Oruro
+525,Porto Velho,BRA,Brazil,BRA026,Rondonia
+526,Salta,ARG,Argentina,ARG017,Salta
+527,Coronel Oviedo,PRY,Paraguay,PRY005,Caaguazu
+528,Rivera,URY,Uruguay,URY013,Rivera
+542,Plymouth,GBR,United Kingdom,GBR002,England
+543,Sunyani,GHA,Ghana,GHA012,Bono
+545,Tlemcen,DZA,Algeria,DZA048,Tlemcen
+546,Kpalimé,TGO,Togo,TGO004,Plateaux
+548,Niamey,NER,Niger,NER008,Communauté Urbaine de Niamey
+551,Leiden,NLD,Netherlands,NLD012,Zuid-holland
+554,Trondheim,NOR,Norway,NOR014,Soer-Troendelag
+556,Gafsa,TUN,Tunisia,TUN006,Gafsa
+558,Malmo,SWE,Sweden,SWE013,Skaane Laen
+560,Praha,CZE,Czech Republic,CZE003,Praha
+562,Zielona Góra,POL,Poland,POL005,Lubuskie
+563,Oyem,GAB,Gabon,GAB009,Woleu-Ntem
+564,Cabinda,AGO,Angola,AGO004,Cabinda
+569,Székesfehérvár,HUN,Hungary,HUN007,Fejer
+572,Helsinki,FIN,Finland,FIN004,Southern Finland
+573,Beograd,SRB,Serbia,SRB003,Grad Beograd
+577,Satu Mare,ROU,Romania,ROU034,Satu Mare
+578,Vilnius,LTU,Lithuania,LTU010,Vilniaus
+582,Bangui,CAF,Central African Republic,CAF006,Plateaux
+585,Thessaloniki,GRC,Greece,GRC007,Kentriki Makedonia
+586,Saint Petersburg,RUS,Russian Federation,RUS042,Leningradskaya Oblast
+589,Saraf `Umrah,SDN,Sudan,SDN008,Northern Darfur
+591,Gaborone,BWA,Botswana,BWA009,South-East
+592,Solwezi,ZMB,Zambia,ZMB108,North-Western
+596,Larnaca,CYP,Cyprus,CYP004,Larnaka
+597,Kigali,RWA,Rwanda,RWA002,Kigali City/Umujyi wa Kigali
+598,Yei,SSD,South Sudan,SSD001,Central Equatoria
+599,Mbarara,UGA,Uganda,UGA077,Mbarara
+601,Haifa,ISR,Israel,ISR002,Haifa
+604,Nabatieh,LBN,Lebanon,LBN006,Nabatiye
+605,Tartus,SYR,Syrian Arab Republic,SYR014,Ţarţūs
+606,Irbid,JOR,Jordan,JOR005,Irbid
+607,Mzuzu,MWI,Malawi,MWI002,Northern Region
+611,Zakho,IRQ,Iraq,IRQ010,Duhok
+612,Keren,ERI,Eritrea,ERI001,Anseba
+614,Sheki,AZE,Azerbaijan,AZE059,Shaki
+621,Nukus,UZB,Uzbekistan,UZB005,Karakalpakstan
+628,Osh,KGZ,Kyrgyz Republic,KGZ005,Osh
+632,Colombo [Sri Jayawardenepura Kotte],LKA,Sri Lanka,LKA008,Western
+635,Lampang,THA,Thailand,THA018,Lampang
+637,Sungai Petani,MYS,Malaysia,MYS002,Kedah
+645,Dagupan [Lingayen],PHL,Philippines,PHL001,Region I (Ilocos Region)
+646,Wabag,PNG,Papua New Guinea,PNG007,Enga
+651,Quetzaltenango,GTM,Guatemala,GTM013,Quetzaltenango
+654,Masaya,NIC,Nicaragua,NIC011,Masaya
+655,Limón,CRI,Costa Rica,CRI005,Limón
+656,Tumbes,PER,Peru,PER024,Tumbes
+658,Panama City,PAN,Panama,PAN011,Panamá
+660,Buenaventura,COL,Colombia,COL031,Valle del Cauca
+661,Portmore,JAM,Jamaica,JAM008,Saint Catherine
+662,San Cristobal,VEN,Republica Bolivariana de Venezuela,VEN021,Tachira
+665,Copiapó,CHL,Chile,CHL005,Atacama
+666,Cochabamba,BOL,Bolivia,BOL003,Cochabamba
+672,Las Palmas de Gran Canaria,ESP,Spain,ESP004,Canarias
+673,Coyah,GIN,Guinea,GIN002,Conakry
+675,Kiffa,MRT,Mauritania,MRT002,Assaba
+683,Glasgow,GBR,United Kingdom,GBR004,Scotland
+685,Rennes,FRA,France,FRA007,Bretagne
+689,Ghent,BEL,Belgium,BEL003,Vlaams Gewest
+691,Dosso,NER,Niger,NER003,Dosso
+693,Essen,DEU,Germany,DEU010,Nordrhein-Westfalen
+694,Freiburg im Üechtland,CHE,Switzerland,CHE007,Fribourg
+697,Béja,TUN,Tunisia,TUN002,Beja
+698,København,DNK,Denmark,DNK001,Capital
+700,Kumba,CMR,Cameroon,CMR010,Sud - Ouest
+701,Linz,AUT,Austria,AUT004,Oberosterreich
+702,České Budějovice,CZE,Czech Republic,CZE001,Jihocesky
+704,Soyo,AGO,Angola,AGO018,Zaire
+707,Sabha,LBY,Libya,LBY018,Sabha
+708,Pécs,HUN,Hungary,HUN002,Baranya
+709,Banská Bystrica,SVK,Slovak Republic,SVK001,Banska Bystrica
+710,Osijek,HRV,Croatia,HRV010,Osijek-baranja
+711,Mao,TCD,Chad,TCD009,Kanem
+713,Jyväskylä,FIN,Finland,FIN005,Western Finland
+714,Tirana,ALB,Albania,ALB034,Tirane
+717,Pristina,XKX,Kosovo,XKX006,Prishtinë
+719,Impfondo,COG,Congo,COG007,Likouala
+720,Lviv,UKR,Ukraine,UKR013,L'vivs'ka
+721,Drobeta-Turnu Severin,ROU,Romania,ROU028,Mehedinţi
+724,Minsk,BLR,Belarus,BLR004,Minsk
+726,Burgas,BGR,Bulgaria,BGR002,Burgas
+729,Tiraspol,MDA,Moldova,MDA035,Transnistria
+736,Arua,UGA,Uganda,UGA010,Arua
+737,Malakal,SSD,South Sudan,SSD009,Upper Nile
+739,Sumbawanga,TZA,Tanzania,TZA024,Rukwa
+741,Xai-Xai,MOZ,Mozambique,MOZ003,Gaza
+743,Idlib,SYR,Syrian Arab Republic,SYR010,Idlib
+744,Al Salt,JOR,Jordan,JOR004,Balqa
+749,Medina,SAU,Saudi Arabia,SAU005,Al Madīnah
+750,Asmara,ERI,Eritrea,ERI006,Maekel
+755,Aktobe,KAZ,Kazakhstan,KAZ002,Aktyubinskaya
+761,Herat,AFG,Afghanistan,AFG012,Hirat
+764,Bishkek,KGZ,Kyrgyz Republic,KGZ002,Chuy
+767,Nepalgunj,NPL,Nepal,NPL001,Lumbini
+769,Chapainawabganj,BGD,Bangladesh,BGD006,Rajshahi
+772,Kamphaeng Phet,THA,Thailand,THA014,Kampaeng Phet
+774,Yên Bái,VNM,Viet Nam,VNM063,Yen Bai
+778,Miaoli,CHN,China,TWN001,Taiwan Sheng
+779,Asahikawa,JPN,Japan,JPN008,Hokkaidoo
+781,Hobart,AUS,Australia,AUS009,Tasmania
+782,Mount Hagen,PNG,Papua New Guinea,PNG022,Western Highlands
+787,Mazatenango,GTM,Guatemala,GTM020,Suchitepéquez
+792,Guayaquil,ECU,Ecuador,ECU009,Guayas
+795,Kingston,JAM,Jamaica,JAM006,Saint Andrew
+798,Santiago de los Caballeros,DOM,Dominican Republic,DOM029,Santiago
+800,Trinidad,BOL,Bolivia,BOL001,Beni
+802,La Rioja,ARG,Argentina,ARG012,La Rioja
+804,Montevideo,URY,Uruguay,URY010,Montevideo
+808,Makeni,SLE,Sierra Leone,SLE003,Northern
+809,Voinjama,LBR,Liberia,LBR008,Lofa
+810,Agadir,MAR,Morocco,MAR010,Souss-Massa
+812,Setúbal,PRT,Portugal,PRT017,Setubal
+813,San-Pédro,CIV,Côte d'Ivoire,CIV025,Bas-Sassandra
+815,Gaoua,BFA,Burkina Faso,BFA013,Sud-ouest
+818,Nantes,FRA,France,FRA019,Pays-de-la-Loire
+820,Lomé,TGO,Togo,TGO003,Maritime
+826,Dusseldorf,DEU,Germany,DEU010,Nordrhein-Westfalen
+828,Oslo,NOR,Norway,NOR012,Oslo
+831,Jönköping,SWE,Sweden,SWE007,Joenkoepings Laen
+832,Douala,CMR,Cameroon,CMR005,Littoral
+834,Klagenfurt,AUT,Austria,AUT002,Karnten
+838,Misrata,LBY,Libya,LBY015,Misurata
+839,Franceville,GAB,Gabon,GAB002,Haut-Ogooue
+841,Bongor,TCD,Chad,TCD014,Mayo-Kebbi Est
+846,Elbasan,ALB,Albania,ALB007,Elbasan
+850,Baia Mare,ROU,Romania,ROU027,Maramureş
+851,Bétou,COG,Congo,COG007,Likouala
+854,Athína,GRC,Greece,GRC002,Attiki
+855,Bambari,CAF,Central African Republic,CAF005,Kagas
+856,Varna,BGR,Bulgaria,BGR025,Varna
+858,Tekirdağ,TUR,Türkiye,TUR072,Tekirdag
+863,Ngozi,BDI,Burundi,BDI015,Ngozi
+865,Netanya,ISR,Israel,ISR001,Central District
+870,Tripoli,LBN,Lebanon,LBN007,North
+873,Blantyre,MWI,Malawi,MWI003,Southern Region
+874,Kakamega,KEN,Kenya,KEN011,Kakamega
+876,Duhok,IRQ,Iraq,IRQ010,Duhok
+877,`Ar`ar,SAU,Saudi Arabia,SAU003,Al Ḥudūd ash Shamāliyah
+879,Urmia,IRN,Islamic Republic of Iran,IRN026,West Azarbayejan
+882,Kismayo,SOM,Somalia,SOM010,Juba Hoose
+885,Dashoguz,TKM,Turkmenistan,TKM005,Tashauz
+894,Yining/Qulja,CHN,China,CHN028,Xinjiang Uygur Zizhiqu
+900,Phrae,THA,Thailand,THA047,Phrae
+902,Làng Giao,VNM,Viet Nam,VNM060,Tuyen Quang
+903,Battambang,KHM,Cambodia,KHM002,Battambang
+906,Taichung,CHN,China,TWN001,Taiwan Sheng
+907,Fukuoka,JPN,Japan,JPN010,Hukuoka
+915,Totonicapán,GTM,Guatemala,GTM021,Totonicapán
+916,San Salvador,SLV,El Salvador,SLV010,San Salvador
+917,Comayagua,HND,Honduras,HND004,Comayagua
+918,Granada,NIC,Nicaragua,NIC006,Granada
+921,Matanzas,CUB,Cuba,CUB010,Matanzas
+924,Jacmel,HTI,Haiti,HTI010,Sud-Est
+925,Baní,DOM,Dominican Republic,DOM020,Peravia
+926,La Serena,CHL,Chile,CHL007,Coquimbo
+927,Potosí,BOL,Bolivia,BOL007,Potosi
+930,Encarnacion,PRY,Paraguay,PRY012,Itapua
+932,Saint-Louis,SEN,Senegal,SEN015,Saint Louis
+933,Kindia,GIN,Guinea,GIN005,Kindia
+935,Gbarnga,LBR,Liberia,LBR002,Bong
+939,Vigo,ESP,Spain,ESP015,Galicia
+940,Séguéla,CIV,Côte d'Ivoire,CIV035,Woroba
+942,Ouahigouya,BFA,Burkina Faso,BFA010,Nord
+945,Oran,DZA,Algeria,DZA032,Oran
+950,Haarlem,NLD,Netherlands,NLD008,Noord-holland
+954,Busto Arsizio,ITA,Italy,ITA009,Lombardia
+958,Örebro,SWE,Sweden,SWE011,Oerebro Laen
+961,Graz,AUT,Austria,AUT006,Steiermark
+964,Budapest,HUN,Hungary,HUN005,Budapest
+967,Košice,SVK,Slovak Republic,SVK003,Kosice
+972,Cluj-Napoca,ROU,Romania,ROU014,Cluj
+976,Bria,CAF,Central African Republic,CAF003,Fertit
+986,Juba,SSD,South Sudan,SSD001,Central Equatoria
+992,Amman,JOR,Jordan,JOR002,Amman
+994,Kisumu,KEN,Kenya,KEN017,Kisumu
+1004,Kostanay,KAZ,Kazakhstan,KAZ008,Kustanayskaya
+1006,Urgench,UZB,Uzbekistan,UZB007,Khorezm
+1007,Dubai,ARE,United Arab Emirates,ARE003,Dubai
+1008,Seeb,OMN,Oman,OMN008,Muscat
+1016,Galle,LKA,Sri Lanka,LKA006,Southern
+1018,Hpakant,MMR,Myanmar,MMR004,Kachin
+1019,Uttaradit,THA,Thailand,THA074,Uttaradit
+1023,Anlong Veng,KHM,Cambodia,KHM013,Oddar Meanchey
+1026,Yuanlin City,CHN,China,TWN001,Taiwan Sheng
+1028,Baguio,PHL,Philippines,PHL014,Cordillera Administrative Region (CAR)
+1029,Adelaide,AUS,Australia,AUS008,South Australia
+1031,Hamilton,NZL,New Zealand,NZL03,Waikato
+1033,Cabo San Lucas,MEX,Mexico,MEX003,Baja California Sur
+1038,Jinotega,NIC,Nicaragua,NIC007,Jinotega
+1040,Chiclayo,PER,Peru,PER014,Lambayeque
+1045,Puerto Plata,DOM,Dominican Republic,DOM021,Puerto Plata
+1047,Sucre,BOL,Bolivia,BOL002,Chuquisaca
+1049,Boa Vista,BRA,Brazil,BRA027,Roraima
+1050,Ciudad del Este,PRY,Paraguay,PRY002,Alto Parana
+1051,Maldonado,URY,Uruguay,URY009,Maldonado
+1052,Fatick,SEN,Senegal,SEN016,Fatick
+1053,Labé,GIN,Guinea,GIN006,Labe
+1054,Bo,SLE,Sierra Leone,SLE004,Southern
+1058,Porto,PRT,Portugal,PRT015,Porto
+1059,A Coruña,ESP,Spain,ESP015,Galicia
+1060,Soubré,CIV,Côte d'Ivoire,CIV025,Bas-Sassandra
+1062,Koudougou,BFA,Burkina Faso,BFA006,Centre-ouest
+1063,Takoradi,GHA,Ghana,GHA010,Western
+1065,Sidi Bel Abbes,DZA,Algeria,DZA038,Sidi Bel Abbes
+1066,Sokodé,TGO,Togo,TGO001,Centrale
+1067,Bohicon,BEN,Benin,BEN012,Zou
+1069,Antwerp,BEL,Belgium,BEL003,Vlaams Gewest
+1073,Basel,CHE,Switzerland,CHE004,Basel-landschaft
+1074,Genova,ITA,Italy,ITA008,Liguria
+1075,Bizerte,TUN,Tunisia,TUN004,Bizerte
+1078,Linköping,SWE,Sweden,SWE012,Oestergoetlands Laen
+1079,Hradec Králové,CZE,Czech Republic,CZE007,Vychodocesky
+1081,Wien,AUT,Austria,AUT009,Wien
+1082,Luanda,AGO,Angola,AGO011,Luanda
+1083,Matadi,COD,Democratic Republic of Congo,COD002,Kongo Central
+1088,Benghazi,LBY,Libya,LBY011,Banghazi
+1090,Târgu Jiu,ROU,Romania,ROU021,Gori
+1093,Heraklion,GRC,Greece,GRC008,Kriti
+1094,Izmir,TUR,Türkiye,TUR041,Izmir
+1099,Kirundo,BDI,Burundi,BDI010,Kirundo
+1101,Rehovot,ISR,Israel,ISR001,Central District
+1102,Hebron,PSE,Palestine,PSE001,Al Khalil (Hebron)
+1103,Bukoba,TZA,Tanzania,TZA006,Kagera
+1104,Nimule,SSD,South Sudan,SSD002,Eastern Equatoria
+1107,Chimoio,MOZ,Mozambique,MOZ005,Manica
+1112,Jeddah,SAU,Saudi Arabia,SAU011,Makkah
+1118,Borama,SOM,Somalia,SOM001,Awdal
+1121,Ashgabat,TKM,Turkmenistan,TKM001,Ahal
+1124,Muscat,OMN,Oman,OMN008,Muscat
+1127,Quetta,PAK,Pakistan,PAK002,Balochistan
+1133,Dinajpur,BGD,Bangladesh,BGD007,Rangpur
+1135,Phitsanulok,THA,Thailand,THA045,Phitsanulok
+1139,Siem Reap,KHM,Cambodia,KHM020,Siemreap
+1146,Goroka,PNG,Papua New Guinea,PNG006,Eastern Highlands
+1149,La Paz,MEX,Mexico,MEX003,Baja California Sur
+1151,Cojutepeque,SLV,El Salvador,SLV004,Cuscatlan
+1155,Machala,ECU,Ecuador,ECU007,El Oro
+1156,Trujillo,PER,Peru,PER013,La Libertad
+1157,Cienfuegos,CUB,Cuba,CUB004,Cienfuegos
+1158,Cali,COL,Colombia,COL031,Valle del Cauca
+1160,Port-de-Paix,HTI,Haiti,HTI007,Nord-Ouest
+1161,La Vega,DOM,Dominican Republic,DOM014,La Vega
+1162,Valparaíso,CHL,Chile,CHL015,Valparaiso
+1163,Tarija,BOL,Bolivia,BOL009,Tarija
+1167,Ziguinchor,SEN,Senegal,SEN010,Ziguinchor
+1168,Mamou,GIN,Guinea,GIN007,Mamou
+1172,Braga,PRT,Portugal,PRT004,Braga
+1177,Yako,BFA,Burkina Faso,BFA010,Nord
+1185,Dordrecht,NLD,Netherlands,NLD012,Zuid-holland
+1186,Köln,DEU,Germany,DEU010,Nordrhein-Westfalen
+1187,Tahoua,NER,Niger,NER005,Tahoua
+1194,Brno,CZE,Czech Republic,CZE002,Jihomoravsky
+1195,Benguela,AGO,Angola,AGO002,Benguela
+1197,Kecskemét,HUN,Hungary,HUN001,Bacs-kiskun
+1198,Moundou,TCD,Chad,TCD011,Logone Occidental
+1201,Ajdabiya,LBY,Libya,LBY001,Ajdabiya (agedabia)
+1202,Lutsk,UKR,Ukraine,UKR022,Volyns'ka
+1203,Bistrița,ROU,Romania,ROU006,Bistriţa-Năsaud
+1208,Chingola,ZMB,Zambia,ZMB102,Copperbelt
+1209,Damanhur,EGY,Arab Republic of Egypt,EGY004,Behera
+1210,Masvingo,ZWE,Zimbabwe,ZWE007,Masvingo
+1220,Eldoret,KEN,Kenya,KEN044,Uasin Gishu
+1224,Massawa,ERI,Eritrea,ERI007,Semenawi Keih Bahri
+1233,Mary,TKM,Turkmenistan,TKM004,Mary
+1236,Dushanbe,TJK,Tajikistan,TJK003,Dushanbe
+1250,Chuncheon,KOR,Republic of Korea,KOR007,Kang-won-do
+1252,Nagasaki,JPN,Japan,JPN026,Nagasaki
+1255,Madang,PNG,Papua New Guinea,PNG011,Madang
+1256,Tauranga,NZL,New Zealand,NZL04,Bay of Plenty
+1260,Zacatecoluca,SLV,El Salvador,SLV006,La Paz
+1261,Choluteca,HND,Honduras,HND002,Choluteca
+1262,Calgary,CAN,Canada,CAN001,Alberta
+1263,Bilwi,NIC,Nicaragua,NIC014,Región Autónoma del Caribe Norte
+1268,Maracaibo,VEN,Republica Bolivariana de Venezuela,VEN025,Zulia
+1269,Port-au-Prince,HTI,Haiti,HTI008,Ouest
+1270,Moca,DOM,Dominican Republic,DOM009,Espaillat
+1276,Kenema,SLE,Sierra Leone,SLE001,Eastern
+1277,Faranah,GIN,Guinea,GIN003,Faranah
+1278,Safi,MAR,Morocco,MAR008,Marrakech-Safi
+1281,Ségou,MLI,Mali,MLI007,Ségou
+1283,Leo,BFA,Burkina Faso,BFA006,Centre-ouest
+1284,Kumasi,GHA,Ghana,GHA001,Ashanti
+1285,Bordeaux,FRA,France,FRA003,Aquitaine
+1289,Lagos,NGA,Nigeria,NGA028,Ogun
+1290,Bruxelles,BEL,Belgium,BEL001,Region de Bruxelles-Capitale / Brussels Hoofdstedelijk Gewes
+1293,Wuppertal,DEU,Germany,DEU010,Nordrhein-Westfalen
+1298,Västerås,SWE,Sweden,SWE020,Vaestmanlands Laen
+1301,Lubango,AGO,Angola,AGO010,Huíla
+1303,Szeged,HUN,Hungary,HUN006,Csongrad
+1304,Laï,TCD,Chad,TCD020,Tandjilé
+1308,Ivano-Frankivsk,UKR,Ukraine,UKR007,Ivano-frankivs'ka
+1309,Sibiu,ROU,Romania,ROU035,Sibiu
+1310,Vitsebsk,BLR,Belarus,BLR007,Vitebsk
+1313,Kebkabiya,SDN,Sudan,SDN008,Northern Darfur
+1319,Masindi,UGA,Uganda,UGA074,Masindi
+1325,Tete,MOZ,Mozambique,MOZ010,Tete
+1336,Kokshetau,KAZ,Kazakhstan,KAZ012,Severo-kazachstanskaya
+1338,Ras Al Khaimah,ARE,United Arab Emirates,ARE005,Ras Al Khaimah
+1339,Turkmenabat,TKM,Turkmenistan,TKM003,Chardzhou
+1340,Qala i Naw,AFG,Afghanistan,AFG002,Badghis
+1346,Ratnapura,LKA,Sri Lanka,LKA005,Sabaragamuwa
+1349,Ranong,THA,Thailand,THA050,Ranong
+1351,Ipoh,MYS,Malaysia,MYS009,Perak
+1352,Hòa Bình,VNM,Viet Nam,VNM030,Hoa Binh
+1356,Nantou City,CHN,China,TWN001,Taiwan Sheng
+1360,Port Moresby,PNG,Papua New Guinea,PNG015,National Capital District
+1362,Mexicali,MEX,Mexico,MEX002,Baja California
+1363,Sololá - Tz'olöj Ya',GTM,Guatemala,GTM019,Sololá
+1364,Usulután,SLV,El Salvador,SLV014,Usulutan
+1365,Tegucigalpa,HND,Honduras,HND007,Francisco Morazan
+1368,Cajamarca,PER,Peru,PER006,Cajamarca
+1369,Quibdó,COL,Colombia,COL014,Chocó
+1370,Santa Clara,CUB,Cuba,CUB015,Villa Clara
+1372,Gonaïves,HTI,Haiti,HTI001,Artibonite
+1373,Bonao,DOM,Dominican Republic,DOM016,Monsenor Nouel
+1375,Santa Cruz de la Sierra,BOL,Bolivia,BOL008,Santa Cruz
+1377,Manaus,BRA,Brazil,BRA004,Amazonas
+1378,Diourbel,SEN,Senegal,SEN011,Diourbel
+1386,Sapouy,BFA,Burkina Faso,BFA006,Centre-ouest
+1396,Bonn,DEU,Germany,DEU010,Nordrhein-Westfalen
+1397,Aarau,CHE,Switzerland,CHE001,Aargau
+1399,Tunis,TUN,Tunisia,TUN024,Ariana
+1400,Bamenda,CMR,Cameroon,CMR007,Nord - Ouest
+1402,Poznan,POL,Poland,POL015,Wielkopolskie
+1404,Ostrava,CZE,Czech Republic,CZE005,Severomoravsky
+1406,Miskolc,HUN,Hungary,HUN004,Borsod-abauj-zemplen
+1409,Craiova,ROU,Romania,ROU018,Dolj
+1410,Ternopil,UKR,Ukraine,UKR020,Ternopil's'ka
+1414,Smolensk,RUS,Russian Federation,RUS070,Smolenskaya Oblast
+1415,Çerkezköy,TUR,Türkiye,TUR072,Tekirdag
+1416,Kas,SDN,Sudan,SDN012,Southern Darfur
+1419,Harare,ZWE,Zimbabwe,ZWE002,Harare
+1421,Masaka,UGA,Uganda,UGA073,Masaka
+1424,Qudsayya,SYR,Syrian Arab Republic,SYR013,Rif Dimashq
+1425,At Tafila,JOR,Jordan,JOR011,Tafiela
+1432,Tabriz,IRN,Islamic Republic of Iran,IRN004,East Azarbayejan
+1444,Aksu,CHN,China,CHN028,Xinjiang Uygur Zizhiqu
+1446,Kandy,LKA,Sri Lanka,LKA001,Central
+1459,Point Cook,AUS,Australia,AUS010,Victoria
+1460,Lae,PNG,Papua New Guinea,PNG014,Morobe
+1461,San Francisco,USA,United States of America,USA005,California
+1464,San Miguel,SLV,El Salvador,SLV009,San Miguel
+1467,Barrio Codesa,ECU,Ecuador,ECU008,Esmeraldas
+1470,Sancti Spiritus,CUB,Cuba,CUB013,Sancti Spíritus
+1473,San Cristóbal,DOM,Dominican Republic,DOM024,San Cristobal
+1476,San Miguel de Tucumán,ARG,Argentina,ARG024,Tucuman
+1478,Louga,SEN,Senegal,SEN013,Louga
+1482,Daloa,CIV,Côte d'Ivoire,CIV032,Sassandra-Marahoué
+1487,Ouagadougou,BFA,Burkina Faso,BFA003,Centre
+1489,Adrar,DZA,Algeria,DZA001,Adrar
+1498,Milano,ITA,Italy,ITA009,Lombardia
+1499,Kairouan,TUN,Tunisia,TUN008,Kairouan
+1501,Uppsala,SWE,Sweden,SWE016,Uppsala Laen
+1507,Nyíregyháza,HUN,Hungary,HUN016,Szabolcs-szatmar-bereg
+1509,Târgu Mureș,ROU,Romania,ROU029,Mureş
+1511,Rivne,UKR,Ukraine,UKR018,Rivnens'ka
+1512,Darnah,LBY,Libya,LBY012,Darnah
+1513,Mahilioŭ,BLR,Belarus,BLR006,Mogilev
+1515,Manisa,TUR,Türkiye,TUR056,Manisa
+1517,Lusaka,ZMB,Zambia,ZMB105,Lusaka
+1521,Ramallah,PSE,Palestine,PSE002,Al Quds (Jerusalem)
+1522,Mityana,UGA,Uganda,UGA079,Mityana
+1525,Al Karak,JOR,Jordan,JOR007,Karak
+1526,Torit,SSD,South Sudan,SSD002,Eastern Equatoria
+1529,Nakuru,KEN,Kenya,KEN031,Nakuru
+1530,Mosul,IRQ,Iraq,IRQ015,Ninewa
+1531,Mecca,SAU,Saudi Arabia,SAU011,Makkah
+1537,Al Ain,ARE,United Arab Emirates,ARE001,Abu Dhabi
+1544,Karamay,CHN,China,CHN028,Xinjiang Uygur Zizhiqu
+1545,Pokhariya,NPL,Nepal,NPL007,Madhesh
+1562,Santa Cruz del Quiché,GTM,Guatemala,GTM014,Quiché
+1563,La Ceiba,HND,Honduras,HND001,Atlantida
+1564,Edmonton,CAN,Canada,CAN001,Alberta
+1568,Ciego de Ávila,CUB,Cuba,CUB003,Ciego de Ávila
+1569,Cabimas,VEN,Republica Bolivariana de Venezuela,VEN025,Zulia
+1571,San Francisco de Macorís,DOM,Dominican Republic,DOM006,Duarte
+1574,San Fernando del Valle de Catamarca,ARG,Argentina,ARG003,Catamarca
+1576,Kaolack,SEN,Senegal,SEN018,Kaolack
+1577,Kouroussa,GIN,Guinea,GIN004,Kankan
+1578,El Jadida,MAR,Morocco,MAR002,Casablanca-Settat
+1580,Sikasso,MLI,Mali,MLI008,Sikasso
+1584,Djibo,BFA,Burkina Faso,BFA012,Sahel
+1585,Caen,FRA,France,FRA005,Basse-Normandie
+1588,Cotonou,BEN,Benin,BEN003,Atlantique
+1589,Abeokuta,NGA,Nigeria,NGA028,Ogun
+1590,Amsterdam,NLD,Netherlands,NLD008,Noord-holland
+1592,Saarbruecken,DEU,Germany,DEU012,Saarland
+1594,Lucerne,CHE,Switzerland,CHE012,Luzern
+1596,Gabes,TUN,Tunisia,TUN005,Gabes
+1599,Wrocław,POL,Poland,POL001,Dolnoslaskie
+1603,Debrecen,HUN,Hungary,HUN009,Hajdu-bihar
+1607,Chernivtsi,UKR,Ukraine,UKR003,Chernivets'ka
+1609,Homel,BLR,Belarus,BLR002,Gomel
+1614,Dusuq,EGY,Arab Republic of Egypt,EGY013,Kafr El-Shikh
+1618,Gulu,UGA,Uganda,UGA030,Gulu
+1619,Dimashq,SYR,Syrian Arab Republic,SYR013,Rif Dimashq
+1623,Maxixe,MOZ,Mozambique,MOZ004,Inhambane
+1627,Ash Sharai,SAU,Saudi Arabia,SAU011,Makkah
+1634,Astana,KAZ,Kazakhstan,KAZ001,Akmolinskaya
+1635,Bukhara,UZB,Uzbekistan,UZB002,Bukhara
+1645,Phuket,THA,Thailand,THA048,Phuket
+1646,Medan,IDN,Indonesia,IDN002,Sumatera Utara
+1647,Thái Nguyên,VNM,Viet Nam,VNM055,Thai Nguyen
+1648,Kuala Lumpur,MYS,Malaysia,MYS014,Selangor
+1650,Kanggye,PRK,D. P. R. of Korea,PRK001,Chagang-do
+1652,Chiayi,CHN,China,TWN001,Taiwan Sheng
+1659,Juticalpa,HND,Honduras,HND015,Olancho
+1664,Camagüey,CUB,Cuba,CUB002,Camagüey
+1667,Santo Domingo,DOM,Dominican Republic,DOM031,Santo Domingo
+1668,Concepción,CHL,Chile,CHL006,Biobio
+1672,Macenta,GIN,Guinea,GIN008,Nzerekore
+1679,Kaya,BFA,Burkina Faso,BFA005,Centre-nord
+1686,Namur,BEL,Belgium,BEL002,Region wallonne
+1689,Zurich,CHE,Switzerland,CHE026,Zurich
+1691,Hammamet,TUN,Tunisia,TUN015,Nabeul
+1692,Bafoussam,CMR,Cameroon,CMR008,Ouest
+1693,Stockholm,SWE,Sweden,SWE015,Stockholms Laen
+1695,Lobito,AGO,Angola,AGO002,Benguela
+1697,Doba,TCD,Chad,TCD012,Logone Oriental
+1698,Slatina,ROU,Romania,ROU031,Olt
+1704,Tver,RUS,Russian Federation,RUS078,Tverskaya Oblast
+1707,Mutare,ZWE,Zimbabwe,ZWE003,Manicaland
+1711,Kampala,UGA,Uganda,UGA109,Wakiso
+1717,Nairobi,KEN,Kenya,KEN030,Nairobi
+1719,At Ta'if,SAU,Saudi Arabia,SAU011,Makkah
+1741,Phnom Penh,KHM,Cambodia,KHM015,Phnom Penh
+1743,Cheonan-si,KOR,Republic of Korea,KOR005,Chungchongnam-do
+1744,Tainan,CHN,China,TWN001,Taiwan Sheng
+1747,Melbourne,AUS,Australia,AUS010,Victoria
+1749,Los Mochis,MEX,Mexico,MEX025,Sinaloa
+1752,Babahoyo,ECU,Ecuador,ECU012,Los Rios
+1753,Regina,CAN,Canada,CAN012,Saskatchewan
+1754,Huaraz,PER,Peru,PER002,Ancash
+1756,Manzanillo,CUB,Cuba,CUB005,Granma
+1759,San Pedro de Macorís,DOM,Dominican Republic,DOM027,San Pedro de Macoris
+1763,Touba,SEN,Senegal,SEN011,Diourbel
+1768,Koutiala,MLI,Mali,MLI008,Sikasso
+1772,Mostaganem,DZA,Algeria,DZA030,Mostaganem
+1778,Liège,BEL,Belgium,BEL002,Region wallonne
+1779,Dortmund,DEU,Germany,DEU010,Nordrhein-Westfalen
+1782,Bergamo,ITA,Italy,ITA009,Lombardia
+1783,Sousse,TUN,Tunisia,TUN019,Sousse
+1790,Pitești,ROU,Romania,ROU003,Argeş
+1792,Khmelnytskyi,UKR,Ukraine,UKR010,Khmel'nyts'ka
+1796,Kitwe,ZMB,Zambia,ZMB102,Copperbelt
+1799,Aleppo,SYR,Syrian Arab Republic,SYR002,Aleppo
+1804,Inhambane,MOZ,Mozambique,MOZ004,Inhambane
+1808,Ha'il,SAU,Saudi Arabia,SAU009,Ḥā'il
+1812,Baidoa,SOM,Somalia,SOM005,Bay
+1814,Fujairah,ARE,United Arab Emirates,ARE004,Fujairah
+1816,Karaganda,KAZ,Kazakhstan,KAZ007,Karagandinskaya
+1818,Bokhtar,TJK,Tajikistan,TJK004,Khatlon Province
+1822,Kathmandu,NPL,Nepal,NPL006,Bagmati
+1823,Trincomalee,LKA,Sri Lanka,LKA009,Eastern
+1826,Ratchaburi,THA,Thailand,THA051,Ratchaburi
+1838,Escuintla,GTM,Guatemala,GTM006,Escuintla
+1841,Saskatoon,CAN,Canada,CAN012,Saskatchewan
+1847,La Romana,DOM,Dominican Republic,DOM013,La Romana
+1853,Marrakesh,MAR,Morocco,MAR008,Marrakech-Safi
+1856,San,MLI,Mali,MLI007,Ségou
+1859,Tenkodogo,BFA,Burkina Faso,BFA004,Centre-est
+1870,Cagliari,ITA,Italy,ITA014,Sardegna
+1874,Bydgoszcz,POL,Poland,POL002,Kujawsko-Pomorskie
+1875,Caxito,AGO,Angola,AGO001,Bengo
+1876,Kinshasa,COD,Democratic Republic of Congo,COD007,Kinshasa
+1878,Brasov,ROU,Romania,ROU009,Braşov
+1879,Zhytomyr,UKR,Ukraine,UKR025,Zhytomyrs'ka
+1883,Cherepovets,RUS,Russian Federation,RUS086,Vologodskaya Oblast
+1892,Beira,MOZ,Mozambique,MOZ009,Sofala
+1900,Hargeisa,SOM,Somalia,SOM018,Woqooyi Galbeed
+1902,Navoiy,UZB,Uzbekistan,UZB009,Navoiy
+1910,Badulla,LKA,Sri Lanka,LKA007,Uva
+1911,Gangachara,BGD,Bangladesh,BGD007,Rangpur
+1913,Suphan Buri,THA,Thailand,THA065,Suphanburi
+1919,Kaohsiung,CHN,China,TWN001,Taiwan Sheng
+1922,North Canberra [Canberra],AUS,Australia,AUS002,Australian Capital Territory
+1924,Hermosillo,MEX,Mexico,MEX026,Sonora
+1925,Chimaltenango,GTM,Guatemala,GTM003,Chimaltenango
+1927,Moyobamba,PER,Peru,PER022,San Martín
+1930,Las Tunas,CUB,Cuba,CUB009,Las Tunas
+1933,Salvaleón de Higüey,DOM,Dominican Republic,DOM012,La Altagracia
+1935,Santiago del Estero,ARG,Argentina,ARG022,Santiago Del Estero
+1938,Kankan,GIN,Guinea,GIN004,Kankan
+1943,Cardiff,GBR,United Kingdom,GBR005,Wales
+1945,Koupéla,BFA,Burkina Faso,BFA004,Centre-est
+1946,Mascara,DZA,Algeria,DZA027,Mascara
+1947,Poitiers,FRA,France,FRA021,Poitou-Charentes
+1949,Porto-Novo,BEN,Benin,BEN010,Oueme
+1950,Saki,NGA,Nigeria,NGA031,Oyo
+1951,Utrecht,NLD,Netherlands,NLD010,Utrecht
+1954,St. Gallen,CHE,Switzerland,CHE016,Sankt Gallen
+1958,Umeå,SWE,Sweden,SWE018,Vaesterbottens Laen
+1960,Sumbe,AGO,Angola,AGO007,Cuanza Sul
+1969,Kabwe,ZMB,Zambia,ZMB101,Central
+1971,Modiin-Maccabim-Reut,ISR,Israel,ISR001,Central District
+1973,Tabora,TZA,Tanzania,TZA029,Tabora
+1975,Riwoto,SSD,South Sudan,SSD002,Eastern Equatoria
+1985,Antananarivo,MDG,Madagascar,MDG029,Antananarivo
+1999,Hanoi,VNM,Viet Nam,VNM027,Hanoi
+2003,Pingtung City,CHN,China,TWN001,Taiwan Sheng
+2005,Angeles,PHL,Philippines,PHL003,Region III (Central Luzon)
+2007,Los Angeles,USA,United States of America,USA005,California
+2008,Ciudad Obregón,MEX,Mexico,MEX026,Sonora
+2009,Antigua Guatemala,GTM,Guatemala,GTM016,Sacatepéquez
+2013,Winnipeg,CAN,Canada,CAN003,Manitoba
+2015,Barinas,VEN,Republica Bolivariana de Venezuela,VEN005,Barinas
+2018,San Luis,ARG,Argentina,ARG019,San Luis
+2024,Seville,ESP,Spain,ESP002,Andalucía
+2028,Dori,BFA,Burkina Faso,BFA012,Sahel
+2029,Saida,DZA,Algeria,DZA036,Saida
+2031,Parakou,BEN,Benin,BEN004,Borgou
+2032,Magboro,NGA,Nigeria,NGA028,Ogun
+2034,Münster,DEU,Germany,DEU010,Nordrhein-Westfalen
+2043,Târgoviște,ROU,Romania,ROU017,Dâmboviţa
+2044,Vinnytsia,UKR,Ukraine,UKR021,Vinnyts'ka
+2045,Gqeberha,ZAF,South Africa,ZAF001,Eastern Cape
+2047,Nyala,SDN,Sudan,SDN012,Southern Darfur
+2048,Фосфоритный,RUS,Russian Federation,RUS010,Bryanskaya Oblast
+2052,Hama,SYR,Syrian Arab Republic,SYR008,Hama
+2053,Mwanza,TZA,Tanzania,TZA021,Mwanza
+2057,Naqamte,ETH,Ethiopia,ETH008,Oromia
+2062,Sumgayit,AZE,Azerbaijan,AZE009,Baku
+2077,Nakhon Pathom,THA,Thailand,THA026,Nakhon Pathom
+2079,Đông Anh,VNM,Viet Nam,VNM027,Hanoi
+2080,Seremban,MYS,Malaysia,MYS007,Negeri Sembilan
+2082,Cheongju-si,KOR,Republic of Korea,KOR004,Chungchongbuk-do
+2083,Yilan City,CHN,China,TWN001,Taiwan Sheng
+2089,Guatemala City,GTM,Guatemala,GTM007,Guatemala
+2090,Santo Domingo de los Tsachilas,ECU,Ecuador,ECU023,Santo Domingo de los Tsachilas
+2095,Cap-Haitien,HTI,Haiti,HTI005,Nord
+2102,Casablanca,MAR,Morocco,MAR002,Casablanca-Settat
+2103,Bouaflé,CIV,Côte d'Ivoire,CIV032,Sassandra-Marahoué
+2107,Cape Coast,GHA,Ghana,GHA003,Central
+2108,Fada N'Gourma,BFA,Burkina Faso,BFA008,Est
+2110,Rouen,FRA,France,FRA012,Haute-Normandie
+2115,Maradi,NER,Niger,NER004,Maradi
+2117,Sfax,TUN,Tunisia,TUN016,Sfax
+2118,Ebolowa,CMR,Cameroon,CMR009,Sud
+2122,Ati,TCD,Chad,TCD002,Batha
+2123,Piatra Neamț,ROU,Romania,ROU030,Neamţ
+2124,Kimberley,ZAF,South Africa,ZAF008,Northern Cape
+2125,Kyiv,UKR,Ukraine,UKR012,Kyyivs'ka
+2126,Balıkesir,TUR,Türkiye,TUR012,Balikesir
+2130,Ndola,ZMB,Zambia,ZMB102,Copperbelt
+2134,Jinja,UGA,Uganda,UGA035,Jinja
+2138,Nyeri,KEN,Kenya,KEN036,Nyeri
+2141,Buraydah,SAU,Saudi Arabia,SAU006,Al Qaṣīm
+2147,Pavlodar,KAZ,Kazakhstan,KAZ011,Pavlodarskaya
+2155,Rajshahi,BGD,Bangladesh,BGD006,Rajshahi
+2156,Magway,MMR,Myanmar,MMR007,Magway
+2157,Phetchaburi,THA,Thailand,THA043,Phetchaburi
+2160,Kota Bharu,MYS,Malaysia,MYS003,Kelantan
+2170,City of Loja,ECU,Ecuador,ECU011,Loja
+2171,Lima,PER,Peru,PER015,Lima
+2174,Hinche,HTI,Haiti,HTI002,Centre
+2180,Kolda,SEN,Senegal,SEN020,Kolda
+2181,Siguiri,GIN,Guinea,GIN004,Kankan
+2183,Korhogo,CIV,Côte d'Ivoire,CIV033,Savanes
+2186,Edinburgh,GBR,United Kingdom,GBR004,Scotland
+2189,Limoges,FRA,France,FRA015,Limousin
+2191,Ikorodu,NGA,Nigeria,NGA025,Lagos
+2198,Gdansk,POL,Poland,POL011,Pomorskie
+2200,Bandundu,COD,Democratic Republic of Congo,COD022,Kwilu
+2201,Sarh,TCD,Chad,TCD016,Moyen-Chari
+2202,Botoșani,ROU,Romania,ROU007,Botoşani
+2210,Nazareth,ISR,Israel,ISR004,Northern
+2211,Homs,SYR,Syrian Arab Republic,SYR009,Ḥimṣ
+2213,Iganga,UGA,Uganda,UGA033,Iganga
+2214,Kapoeta,SSD,South Sudan,SSD002,Eastern Equatoria
+2221,Baku,AZE,Azerbaijan,AZE009,Baku
+2224,Antsiramandroso,MDG,Madagascar,MDG033,Toamasina
+2230,Gandhidham,IND,India,IND012,Gujarat
+2232,Inaruwa,NPL,Nepal,NPL003,Koshi
+2239,Malacca City,MYS,Malaysia,MYS006,Melaka
+2241,Daejeon,KOR,Republic of Korea,KOR015,Taejon
+2242,Hualien,CHN,China,TWN001,Taiwan Sheng
+2246,Concord,USA,United States of America,USA005,California
+2249,Cuenca,ECU,Ecuador,ECU001,Azuay
+2251,Pereira,COL,Colombia,COL027,Risaralda
+2252,Holguín,CUB,Cuba,CUB007,Holguín
+2255,London,CAN,Canada,CAN009,Ontario
+2258,Cuiabá,BRA,Brazil,BRA011,Mato Grosso
+2263,Oviedo / Uviéu,ESP,Spain,ESP019,Principado de Asturias
+2266,Gao,MLI,Mali,MLI002,Gao
+2268,Toulouse,FRA,France,FRA017,Midi-Pyrenees
+2270,Iseyin,NGA,Nigeria,NGA031,Oyo
+2276,Yaoundé,CMR,Cameroon,CMR002,Centre
+2278,M'banza Congo,AGO,Angola,AGO018,Zaire
+2280,Mongo,TCD,Chad,TCD007,Guéra
+2281,Ploiești,ROU,Romania,ROU032,Prahova
+2286,Kaluga,RUS,Russian Federation,RUS025,Kaluzhskaya Oblast
+2289,Jerusalem,ISR,Israel,ISR003,Jerusalem
+2290,Daraa,SYR,Syrian Arab Republic,SYR006,Dar`ā
+2299,Abha,SAU,Saudi Arabia,SAU001,`Asīr
+2304,Qarshi,UZB,Uzbekistan,UZB006,Kashkadarya
+2306,Shymkent,KAZ,Kazakhstan,KAZ014,Yujno-kazachstanskaya
+2310,Shihezi,CHN,China,CHN028,Xinjiang Uygur Zizhiqu
+2311,Biratnagar,NPL,Nepal,NPL003,Koshi
+2314,Myitkyina,MMR,Myanmar,MMR004,Kachin
+2315,Bangkok,THA,Thailand,THA056,Samut Prakarn
+2319,Chongnam,PRK,D. P. R. of Korea,PRK009,P'yongan-namdo
+2321,Taitung,CHN,China,TWN001,Taiwan Sheng
+2323,Manila,PHL,Philippines,PHL003,Region III (Central Luzon)
+2327,Cobán,GTM,Guatemala,GTM001,Alta Verapaz
+2328,Riobamba,ECU,Ecuador,ECU006,Chimborazo
+2332,Guanare,VEN,Republica Bolivariana de Venezuela,VEN019,Portuguesa
+2334,Santiago,CHL,Chile,CHL013,Metropolitana
+2335,Cordoba,ARG,Argentina,ARG006,Cordoba
+2338,Nzérékoré,GIN,Guinea,GIN008,Nzerekore
+2359,București,ROU,Romania,ROU010,Bucureşti
+2360,Chernihiv,UKR,Ukraine,UKR002,Chernihivs'ka
+2362,Seweding,ZAF,South Africa,ZAF007,North West
+2365,Kafr al-Zaiyat,EGY,Arab Republic of Egypt,EGY010,Gharbia
+2366,Mansa,ZMB,Zambia,ZMB104,Luapula
+2369,Mbeya,TZA,Tanzania,TZA017,Mbeya
+2371,Busia,UGA,Uganda,UGA023,Busia
+2377,Khamis Mushayt,SAU,Saudi Arabia,SAU001,`Asīr
+2382,Maymana,AFG,Afghanistan,AFG008,Faryab
+2384,Kulob,TJK,Tajikistan,TJK004,Khatlon Province
+2387,Changji/Sanji,CHN,China,CHN028,Xinjiang Uygur Zizhiqu
+2389,Rangpur,BGD,Bangladesh,BGD007,Rangpur
+2391,Lop Buri,THA,Thailand,THA021,Lopburi
+2392,Pematang Siantar,IDN,Indonesia,IDN002,Sumatera Utara
+2393,Bắc Giang,VNM,Viet Nam,VNM004,Bac Giang
+2401,Culiacán,MEX,Mexico,MEX025,Sinaloa
+2403,Ambato,ECU,Ecuador,ECU018,Tungurahua
+2406,Santiago de Cuba,CUB,Cuba,CUB014,Santiago de Cuba
+2408,Kitchener,CAN,Canada,CAN009,Ontario
+2410,Neuquén,ARG,Argentina,ARG015,Neuquen
+2415,Divo,CIV,Côte d'Ivoire,CIV028,Gôh-Djiboua
+2423,'s-Hertogenbosch,NLD,Netherlands,NLD007,Noord-brabant
+2431,Mbandaka,COD,Democratic Republic of Congo,COD013,Équateur
+2433,Bacău,ROU,Romania,ROU004,Bacău
+2436,Bloemfontein,ZAF,South Africa,ZAF002,Free State
+2438,Zelenograd,RUS,Russian Federation,RUS047,Moskovskaya Oblast
+2440,Kasama,ZMB,Zambia,ZMB107,Northern
+2442,Shinyanga,TZA,Tanzania,TZA026,Shinyanga
+2443,Narus,SSD,South Sudan,SSD002,Eastern Equatoria
+2444,Mbale City,UGA,Uganda,UGA076,Mbale
+2445,Lichinga,MOZ,Mozambique,MOZ008,Niassa
+2447,Embu,KEN,Kenya,KEN006,Embu
+2448,Erbil,IRQ,Iraq,IRQ011,Erbil
+2450,Jizan,SAU,Saudi Arabia,SAU010,Jīzan
+2454,Samarqand,UZB,Uzbekistan,UZB010,Samarkand
+2457,Karachi,PAK,Pakistan,PAK007,Sindh
+2461,Sagaing,MMR,Myanmar,MMR012,Sagaing
+2462,Surat Thani,THA,Thailand,THA066,Surat Thani
+2463,Tebing Tinggi,IDN,Indonesia,IDN002,Sumatera Utara
+2465,Kuala Terengganu,MYS,Malaysia,MYS015,Terengganu
+2471,San Diego,USA,United States of America,USA005,California
+2472,Mazatlán,MEX,Mexico,MEX025,Sinaloa
+2473,Jalapa,GTM,Guatemala,GTM010,Jalapa
+2474,Latacunga,ECU,Ecuador,ECU005,Cotopaxi
+2476,Florencia,COL,Colombia,COL010,Caquetá
+2483,Tambacounda,SEN,Senegal,SEN022,Tambacounda
+2486,Yamoussoukro,CIV,Côte d'Ivoire,CIV036,Yamoussoukro
+2496,Agadez,NER,Niger,NER001,Agadez
+2504,Buzău,ROU,Romania,ROU011,Buzău
+2508,Buram,SDN,Sudan,SDN012,Southern Darfur
+2514,Bukalasi,UGA,Uganda,UGA012,Bududa
+2518,Ramadi,IRQ,Iraq,IRQ001,Al-Anbar
+2532,Phra Nakhon Si Ayutthaya,THA,Thailand,THA046,Phra Nakhon Si Ayudhya
+2537,Jeonju,KOR,Republic of Korea,KOR002,Chollabuk-do
+2543,Jutiapa,GTM,Guatemala,GTM011,Jutiapa
+2544,Quito,ECU,Ecuador,ECU017,Pichincha
+2545,Armenia,COL,Colombia,COL026,Quindio
+2546,Huánuco,PER,Peru,PER010,Huánuco
+2556,Gijón,ESP,Spain,ESP019,Principado de Asturias
+2558,Tamale,GHA,Ghana,GHA006,Northern
+2559,Tiaret,DZA,Algeria,DZA043,Tiaret
+2571,Iași,ROU,Romania,ROU025,Iaşi
+2573,Odesa,UKR,Ukraine,UKR016,Odes'ka
+2575,Al-Fashir,SDN,Sudan,SDN008,Northern Darfur
+2576,Moskva,RUS,Russian Federation,RUS048,Moskva
+2577,Kafr Al Sheikh,EGY,Arab Republic of Egypt,EGY013,Kafr El-Shikh
+2580,Musoma,TZA,Tanzania,TZA016,Mara
+2590,Shahrisabz,UZB,Uzbekistan,UZB006,Kashkadarya
+2592,Taraz,KAZ,Kazakhstan,KAZ006,Jambylslkaya
+2594,Jamnagar,IND,India,IND012,Gujarat
+2597,Mandalay,MMR,Myanmar,MMR008,Mandalay
+2598,Loei,THA,Thailand,THA020,Loei
+2604,Hakodate,JPN,Japan,JPN008,Hokkaidoo
+2609,Chiquimula,GTM,Guatemala,GTM004,Chiquimula
+2612,Cerro de Pasco,PER,Peru,PER019,Pasco
+2613,Guantanamo,CUB,Cuba,CUB006,Guantánamo
+2614,Barquisimeto,VEN,Republica Bolivariana de Venezuela,VEN014,Lara
+2616,Talca,CHL,Chile,CHL012,Maule
+2618,Campo Grande,BRA,Brazil,BRA012,Mato Grosso Do Sul
+2621,Ceuta,ESP,Spain,ESP021,Ceuta
+2623,Bolgatanga,GHA,Ghana,GHA007,Upper East
+2625,Orléans,FRA,France,FRA008,Centre
+2627,Eindhoven,NLD,Netherlands,NLD007,Noord-brabant
+2634,Kikwit,COD,Democratic Republic of Congo,COD022,Kwilu
+2635,Am Timan,TCD,Chad,TCD018,Salamat
+2636,Focșani,ROU,Romania,ROU042,Vrancea
+2655,Sheberghan,AFG,Afghanistan,AFG013,Jawzjan
+2659,Ürümqi,CHN,China,CHN028,Xinjiang Uygur Zizhiqu
+2660,Naogaon,BGD,Bangladesh,BGD006,Rajshahi
+2665,Kuantan,MYS,Malaysia,MYS008,Pahang
+2667,Gwangju,KOR,Republic of Korea,KOR003,Chollanam-do
+2671,Mission Viejo,USA,United States of America,USA005,California
+2676,Medellín,COL,Colombia,COL002,Antioquia
+2679,Hamilton,CAN,Canada,CAN009,Ontario
+2695,Garoua,CMR,Cameroon,CMR006,Nord
+2696,Elbląg,POL,Poland,POL014,Warminsko-Mazurskie
+2699,Abéché,TCD,Chad,TCD017,Ouaddaï
+2700,Galați,ROU,Romania,ROU019,Galaţi
+2701,Aydin,TUR,Türkiye,TUR011,Aydin
+2717,Wanlaweyn,SOM,Somalia,SOM015,Shabelle Hoose
+2720,Semey,KAZ,Kazakhstan,KAZ013,Vostochno-kazachstanskaya
+2726,Trang,THA,Thailand,THA070,Trang
+2732,Kumamoto,JPN,Japan,JPN020,Kumamoto
+2734,Brisbane,AUS,Australia,AUS007,Queensland
+2735,Poway,USA,United States of America,USA005,California
+2736,El Alamito,MEX,Mexico,MEX026,Sonora
+2738,Ibarra,ECU,Ecuador,ECU010,Imbabura
+2744,San Fernando,CHL,Chile,CHL008,Libertador Gral. Bernardo O'Higgins
+2747,Rabat,MAR,Morocco,MAR009,Rabat-Salé-Kénitra
+2748,Bouaké,CIV,Côte d'Ivoire,CIV034,Vallée du Bandama
+2761,Matala,AGO,Angola,AGO010,Huíla
+2763,Biltine,TCD,Chad,TCD023,Wadi Fira
+2764,Brăila,ROU,Romania,ROU008,Brăila
+2766,Cherkasy,UKR,Ukraine,UKR001,Cherkas'ka
+2771,Chipata,ZMB,Zambia,ZMB103,Eastern
+2772,As Suwayda,SYR,Syrian Arab Republic,SYR004,As Suwaydā'
+2774,Quelimane,MOZ,Mozambique,MOZ011,Zambézia
+2776,Samarra,IRQ,Iraq,IRQ016,Salah Al-Din
+2778,Ilam,IRN,Islamic Republic of Iran,IRN013,Ilam
+2781,Beledweyne,SOM,Somalia,SOM008,Hiraan
+2782,Jizzakh,UZB,Uzbekistan,UZB004,Jizzakh
+2784,Ust-Kamenogorsk,KAZ,Kazakhstan,KAZ013,Vostochno-kazachstanskaya
+2787,Korla,CHN,China,CHN028,Xinjiang Uygur Zizhiqu
+2790,Chon Buri,THA,Thailand,THA011,Chonburi
+2795,Gumi-si,KOR,Republic of Korea,KOR010,Kyongsangbuk-do
+2797,Cabanatuan,PHL,Philippines,PHL003,Region III (Central Luzon)
+2798,Gold Coast,AUS,Australia,AUS007,Queensland
+2803,Montería,COL,Colombia,COL015,Córdoba
+2805,Acarigua,VEN,Republica Bolivariana de Venezuela,VEN019,Portuguesa
+2811,Dimbokro,CIV,Côte d'Ivoire,CIV029,Lacs
+2822,Ngaoundéré,CMR,Cameroon,CMR001,Adamaoua
+2827,Constanța,ROU,Romania,ROU015,Constanţa
+2832,Vologda,RUS,Russian Federation,RUS086,Vologodskaya Oblast
+2838,Jimma,ETH,Ethiopia,ETH008,Oromia
+2839,Kirkuk,IRQ,Iraq,IRQ013,Kirkuk
+2841,Sareyn,IRN,Islamic Republic of Iran,IRN001,Ardebil
+2842,Hafar al-Batin,SAU,Saudi Arabia,SAU008,Ash Sharqīyah
+2847,Almaty,KAZ,Kazakhstan,KAZ004,Almaty City area
+2854,Tanjung Balai,IDN,Indonesia,IDN002,Sumatera Utara
+2855,Hải Dương,VNM,Viet Nam,VNM025,Hai Duong
+2863,Tepic,MEX,Mexico,MEX018,Nayarit
+2866,Manizales,COL,Colombia,COL009,Caldas
+2867,Ica,PER,Peru,PER011,Ica
+2869,Toronto,CAN,Canada,CAN009,Ontario
+2870,Rancagua,CHL,Chile,CHL008,Libertador Gral. Bernardo O'Higgins
+2871,Santa Rosa,ARG,Argentina,ARG011,La Pampa
+2878,Paris,FRA,France,FRA013,Ile-de-France
+2880,Ibadan,NGA,Nigeria,NGA031,Oyo
+2883,Zinder,NER,Niger,NER007,Zinder
+2884,Trento,ITA,Italy,ITA017,Trentino-alto Adige
+2885,Bertoua,CMR,Cameroon,CMR003,Est
+2887,N'dalatando,AGO,Angola,AGO006,Cuanza Norte
+2894,Oryol,RUS,Russian Federation,RUS057,Orlovskaya Oblast
+2898,Singida,TZA,Tanzania,TZA028,Singida
+2902,Mombasa,KEN,Kenya,KEN028,Mombasa
+2903,Sanandaj,IRN,Islamic Republic of Iran,IRN019,Kordestan
+2905,Najran,SAU,Saudi Arabia,SAU012,Najrān
+2906,Burao,SOM,Somalia,SOM017,Togdheer
+2907,Tashkent,UZB,Uzbekistan,UZB013,Tashkent
+2908,Firozkoh,AFG,Afghanistan,AFG010,Ghor
+2909,Taldykorgan,KAZ,Kazakhstan,KAZ003,Almatinskaya
+2915,Nakhon Si Thammarat,THA,Thailand,THA030,Nakhon Si Thammarat
+2917,Thanh Hoá,VNM,Viet Nam,VNM056,Thanh Hoa
+2920,Daegu,KOR,Republic of Korea,KOR014,Taegu
+2921,Hiroshima,JPN,Japan,JPN007,Hirosima
+2925,Colima,MEX,Mexico,MEX006,Colima
+2926,Puerto Barrios,GTM,Guatemala,GTM009,Izabal
+2927,Tena,ECU,Ecuador,ECU015,Napo
+2928,Neiva,COL,Colombia,COL019,Huila
+2930,San Carlos,VEN,Republica Bolivariana de Venezuela,VEN008,Cojedes
+2944,Wiesbaden,DEU,Germany,DEU007,Hessen
+2953,Kropyvnytskyi,UKR,Ukraine,UKR011,Kirovohrads'ka
+2956,Podolsk,RUS,Russian Federation,RUS047,Moskovskaya Oblast
+2959,Songea,TZA,Tanzania,TZA025,Ruvuma
+2962,Fallujah,IRQ,Iraq,IRQ001,Al-Anbar
+2963,Garissa,KEN,Kenya,KEN007,Garissa
+2964,Ardabil,IRN,Islamic Republic of Iran,IRN001,Ardebil
+2965,Hajja,YEM,Republic of Yemen,YEM012,Hajjah
+2967,Mogadishu,SOM,Somalia,SOM015,Shabelle Hoose
+2973,Hami,CHN,China,CHN028,Xinjiang Uygur Zizhiqu
+2976,Chachoengsao,THA,Thailand,THA005,Chachoengsao
+2978,Ninh Bình,VNM,Viet Nam,VNM042,Ninh Binh
+2979,Johor Bahru,MYS,Malaysia,MYS001,Johor
+2989,Huancayo,PER,Peru,PER012,Junín
+2994,Macapá,BRA,Brazil,BRA003,Amapa
+2996,Abidjan,CIV,Côte d'Ivoire,CIV024,Abidjan
+2997,Valladolid,ESP,Spain,ESP006,Castilla y León
+3000,Amiens,FRA,France,FRA020,Picardie
+3002,Oyo,NGA,Nigeria,NGA031,Oyo
+3005,Firenze,ITA,Italy,ITA016,Toscana
+3008,Katowice,POL,Poland,POL012,Slaskie
+3013,Mykolaiv,UKR,Ukraine,UKR015,Mykolayivs'ka
+3015,Ad Da'ein,SDN,Sudan,SDN012,Southern Darfur
+3017,Al Shuhada,EGY,Arab Republic of Egypt,EGY018,Menoufia
+3019,Iringa,TZA,Tanzania,TZA005,Iringa
+3026,Riyadh,SAU,Saudi Arabia,SAU007,Ar Riyāḍ
+3029,Lashkar Gah,AFG,Afghanistan,AFG011,Hilmand
+3032,Barmer,IND,India,IND029,Rajasthan
+3036,Pattaya,THA,Thailand,THA011,Chonburi
+3040,Kuching,MYS,Malaysia,MYS013,Sarawak
+3045,Escondido,USA,United States of America,USA005,California
+3049,Pucallpa,PER,Peru,PER025,Ucayali
+3052,Temuco,CHL,Chile,CHL003,Araucania
+3058,Bristol,GBR,United Kingdom,GBR002,England
+3062,Ijebu-Ode,NGA,Nigeria,NGA028,Ogun
+3063,Maastricht,NLD,Netherlands,NLD006,Limburg
+3065,Bologna,ITA,Italy,ITA005,Emilia-romagna
+3066,Diffa,NER,Niger,NER002,Diffa
+3077,Sanhur,EGY,Arab Republic of Egypt,EGY009,Fayoum
+3078,Deir Ez Zor,SYR,Syrian Arab Republic,SYR007,Dayr az Zawr
+3079,Dodoma,TZA,Tanzania,TZA003,Dodoma
+3082,Al Mushahidah,IRQ,Iraq,IRQ008,Baghdad
+3084,Kermanshah,IRN,Islamic Republic of Iran,IRN015,Kermanshah
+3086,Zahrat Laban,SAU,Saudi Arabia,SAU007,Ar Riyāḍ
+3087,Jowhar,SOM,Somalia,SOM014,Shabelle Dhexe
+3090,Dadu,PAK,Pakistan,PAK007,Sindh
+3096,Padang,IDN,Indonesia,IDN003,Sumatera Barat
+3097,Lạng Sơn,VNM,Viet Nam,VNM037,Lang Son
+3104,Bakersfield,USA,United States of America,USA005,California
+3105,Guadalajara,MEX,Mexico,MEX014,Jalisco
+3107,Ibagué,COL,Colombia,COL030,Tolima
+3109,Valencia,VEN,Republica Bolivariana de Venezuela,VEN007,Carabobo
+3112,Santa Fe,ARG,Argentina,ARG021,Santa Fe
+3115,Málaga,ESP,Spain,ESP002,Andalucía
+3120,Koléa,DZA,Algeria,DZA045,Tipaza
+3122,Arnhem,NLD,Netherlands,NLD004,Gelderland
+3128,Uíge,AGO,Angola,AGO017,Uíge
+3129,Gemena,COD,Democratic Republic of Congo,COD029,Sud-Ubangi
+3130,Bursa,TUR,Türkiye,TUR021,Bursa
+3136,Al-Hasakah,SYR,Syrian Arab Republic,SYR001,Al Ḥasakah
+3146,Gulistan,UZB,Uzbekistan,UZB011,Sirdarya
+3153,Prachin Buri,THA,Thailand,THA038,Phachinburi
+3154,Bukittinggi,IDN,Indonesia,IDN003,Sumatera Barat
+3155,Nam Định,VNM,Viet Nam,VNM040,Nam Dinh
+3158,Jeju-si,KOR,Republic of Korea,KOR001,Cheju-do
+3166,Puerto Ayacucho,VEN,Republica Bolivariana de Venezuela,VEN001,Amazonas
+3171,Kenitra,MAR,Morocco,MAR009,Rabat-Salé-Kénitra
+3175,Accra,GHA,Ghana,GHA005,Greater Accra
+3177,Medea,DZA,Algeria,DZA028,Medea
+3180,Bremen,DEU,Germany,DEU005,Bremen
+3183,Lodz,POL,Poland,POL003,Lodzkie
+3184,Ondjiva,AGO,Angola,AGO008,Cunene
+3191,Tanta,EGY,Arab Republic of Egypt,EGY010,Gharbia
+3193,Arusha,TZA,Tanzania,TZA001,Arusha
+3208,Pathein,MMR,Myanmar,MMR001,Ayeyarwady
+3209,Phatthalung,THA,Thailand,THA040,Phatthalung
+3215,Oita,JPN,Japan,JPN031,Ooita
+3220,Sahagún,COL,Colombia,COL015,Córdoba
+3221,Iquitos,PER,Peru,PER016,Loreto
+3223,Oshawa,CAN,Canada,CAN009,Ontario
+3224,Puerto Montt,CHL,Chile,CHL009,Los Lagos
+3228,Abengourou,CIV,Côte d'Ivoire,CIV026,Comoé
+3238,Maroua,CMR,Cameroon,CMR004,Extrême - Nord
+3244,Kherson,UKR,Ukraine,UKR009,Khersons'ka
+3254,Zanjan,IRN,Islamic Republic of Iran,IRN028,Zanjan
+3259,Mazar i sharif,AFG,Afghanistan,AFG004,Balkh
+3262,Lhasa,CHN,China,CHN029,Xizang Zizhiqu
+3268,Hyesan,PRK,D. P. R. of Korea,PRK011,Yanggang-do
+3269,Pohang-si,KOR,Republic of Korea,KOR010,Kyongsangbuk-do
+3273,Riverside,USA,United States of America,USA005,California
+3274,Durango,MEX,Mexico,MEX010,Durango
+3275,Cartagena,COL,Colombia,COL007,Bolívar
+3280,Resistencia,ARG,Argentina,ARG004,Chaco
+3284,Aboisso,CIV,Côte d'Ivoire,CIV026,Comoé
+3288,Blida,DZA,Algeria,DZA010,Blida
+3289,Ijebu-Igbo,NGA,Nigeria,NGA028,Ogun
+3290,Zwolle,NLD,Netherlands,NLD009,Overijssel
+3291,Karlsruhe,DEU,Germany,DEU001,Baden-Wuerttemberg
+3294,Sosnowiec,POL,Poland,POL012,Slaskie
+3299,Kryvyi Rih,UKR,Ukraine,UKR005,Dnipropetrovs'ka
+3302,Sers Al Layyan,EGY,Arab Republic of Egypt,EGY018,Menoufia
+3303,Qamishli,SYR,Syrian Arab Republic,SYR001,Al Ḥasakah
+3305,Moshi,TZA,Tanzania,TZA011,Kilimanjaro
+3306,Nampula,MOZ,Mozambique,MOZ007,Nampula
+3307,Baghdad,IRQ,Iraq,IRQ008,Baghdad
+3315,Bannu,PAK,Pakistan,PAK005,Khyber Pakhtunkhwa
+3320,Udon Thani,THA,Thailand,THA072,Udon Thani
+3324,Changwon,KOR,Republic of Korea,KOR011,Kyongsangnam-do
+3330,Sincelejo,COL,Colombia,COL029,Sucre
+3331,Ayacucho,PER,Peru,PER005,Ayacucho
+3334,Paraná,ARG,Argentina,ARG008,Entre Rios
+3335,Punta Arenas,CHL,Chile,CHL011,Magallanes y Antartica chilena
+3338,Madrid,ESP,Spain,ESP011,Comunidad de Madrid
+3340,Manchester,GBR,United Kingdom,GBR002,England
+3346,Mannheim,DEU,Germany,DEU001,Baden-Wuerttemberg
+3350,Huambo,AGO,Angola,AGO009,Huambo
+3354,Sumy,UKR,Ukraine,UKR019,Sums'ka
+3360,Morogoro,TZA,Tanzania,TZA019,Morogoro
+3370,Jacobabad,PAK,Pakistan,PAK007,Sindh
+3375,Nakhon Ratchasima,THA,Thailand,THA028,Nakhon Ratchasima
+3380,Kota Kinabalu,MYS,Malaysia,MYS012,Sabah
+3381,Kagoshima,JPN,Japan,JPN017,Kagosima
+3382,Binangonan,PHL,Philippines,PHL004,Region IV-A (CALABARZON)
+3383,Stockton,USA,United States of America,USA005,California
+3386,Cusco,PER,Peru,PER008,Cusco
+3387,Maracay,VEN,Republica Bolivariana de Venezuela,VEN004,Aragua
+3389,Corrientes,ARG,Argentina,ARG007,Corrientes
+3390,Cascavel,BRA,Brazil,BRA020,Parana
+3393,Bondoukou,CIV,Côte d'Ivoire,CIV037,Zanzan
+3395,Koforidua,GHA,Ghana,GHA004,Eastern
+3397,Algiers,DZA,Algeria,DZA004,Alger
+3400,Frankfurt,DEU,Germany,DEU007,Hessen
+3406,Muğla,TUR,Türkiye,TUR058,Mugla
+3408,Poltava,UKR,Ukraine,UKR017,Poltavs'ka
+3422,Termez,UZB,Uzbekistan,UZB012,Surkhandarya
+3429,Hat Yai,THA,Thailand,THA063,Songkhla
+3436,Batangas City,PHL,Philippines,PHL004,Region IV-A (CALABARZON)
+3437,Modesto,USA,United States of America,USA005,California
+3440,Arequipa,PER,Peru,PER004,Arequipa
+3446,Granada,ESP,Spain,ESP002,Andalucía
+3449,Lille,FRA,France,FRA018,Nord-Pas-de-Calais
+3450,Laghouat,DZA,Algeria,DZA025,Laghouat
+3451,Birnin Kebbi,NGA,Nigeria,NGA022,Kebbi
+3452,Groningen,NLD,Netherlands,NLD005,Groningen
+3464,Shibin al-Kom,EGY,Arab Republic of Egypt,EGY018,Menoufia
+3465,Gonder,ETH,Ethiopia,ETH003,Amhara
+3468,Karbala,IRQ,Iraq,IRQ012,Kerbala
+3472,Al Ahsa,SAU,Saudi Arabia,SAU008,Ash Sharqīyah
+3486,Sandakan,MYS,Malaysia,MYS012,Sabah
+3487,Fukuyama,JPN,Japan,JPN007,Hirosima
+3494,Ottawa,CAN,Canada,CAN009,Ontario
+3509,Malanje,AGO,Angola,AGO014,Malanje
+3510,Ilebo,COD,Democratic Republic of Congo,COD018,Kasaï
+3512,Johannesburg,ZAF,South Africa,ZAF003,Gauteng
+3513,Kursk,RUS,Russian Federation,RUS041,Kurskaya Oblast
+3517,Bahir Dar,ETH,Ethiopia,ETH003,Amhara
+3519,Jafar Muhammad Ali,IRQ,Iraq,IRQ008,Baghdad
+3522,Hamedan,IRN,Islamic Republic of Iran,IRN011,Hamedan
+3528,Larkana,PAK,Pakistan,PAK007,Sindh
+3534,Duri,IDN,Indonesia,IDN004,Riau
+3536,Pyŏngsŏng,PRK,D. P. R. of Korea,PRK009,P'yongan-namdo
+3538,Tawau,MYS,Malaysia,MYS012,Sabah
+3540,Lipa,PHL,Philippines,PHL004,Region IV-A (CALABARZON)
+3544,Moquegua,PER,Peru,PER018,Moquegua
+3547,Rosario,ARG,Argentina,ARG021,Santa Fe
+3555,Iwo,NGA,Nigeria,NGA030,Osun
+3562,Tshikapa,COD,Democratic Republic of Congo,COD018,Kasaï
+3563,Kocaeli,TUR,Türkiye,TUR052,Kocaeli
+3564,Evaton,ZAF,South Africa,ZAF003,Gauteng
+3570,Dar es-Salaam,TZA,Tanzania,TZA002,Dar-es-salaam
+3576,Dammam,SAU,Saudi Arabia,SAU008,Ash Sharqīyah
+3582,Lalpur,BGD,Bangladesh,BGD006,Rajshahi
+3585,Khon Kaen,THA,Thailand,THA016,Khon Kaen
+3586,Pekanbaru,IDN,Indonesia,IDN004,Riau
+3589,Gimhae,KOR,Republic of Korea,KOR011,Kyongsangnam-do
+3596,Juliaca,PER,Peru,PER021,Puno
+3605,Clermont-Ferrand,FRA,France,FRA004,Auvergne
+3610,Venezia,ITA,Italy,ITA020,Veneto
+3613,Cuito,AGO,Angola,AGO003,Bié
+3616,Lenasia,ZAF,South Africa,ZAF003,Gauteng
+3617,Tula,RUS,Russian Federation,RUS077,Tulskaya Oblast
+3618,Dnipro,UKR,Ukraine,UKR005,Dnipropetrovs'ka
+3622,Tanga,TZA,Tanzania,TZA030,Tanga
+3624,Pemba,MOZ,Mozambique,MOZ001,Cabo Delgado
+3627,Rasht,IRN,Islamic Republic of Iran,IRN009,Gilan
+3629,Galkayo,SOM,Somalia,SOM011,Mudug
+3637,Tha Chang,THA,Thailand,THA008,Chanthaburi
+3642,Matsuyama,JPN,Japan,JPN004,Ehime
+3644,San Pablo,PHL,Philippines,PHL004,Region IV-A (CALABARZON)
+3648,Puno,PER,Peru,PER021,Puno
+3649,San Juan de Los Morros,VEN,Republica Bolivariana de Venezuela,VEN013,Guarico
+3651,Formosa,ARG,Argentina,ARG009,Formosa
+3662,Krakow,POL,Poland,POL006,Malopolske
+3666,Denizli,TUR,Türkiye,TUR025,Denizli
+3668,Yaroslavl,RUS,Russian Federation,RUS089,Yaroslavskaya Oblast
+3669,Sevastopol,UKR,Ukraine,UKR004,Crimea
+3673,Zanzibar City,TZA,Tanzania,TZA018,Mjini Magharibi
+3675,Nacala,MOZ,Mozambique,MOZ007,Nampula
+3684,Morbi,IND,India,IND012,Gujarat
+3687,Pyinmana [Nay Pyi Taw],MMR,Myanmar,MMR010,Naypyidaw
+3688,Maha Sarakham,THA,Thailand,THA023,Maha Sarakham
+3689,Dumai,IDN,Indonesia,IDN004,Riau
+3698,Puerto Maldonado,PER,Peru,PER017,Madre de Dios
+3700,Montreal,CAN,Canada,CAN011,Quebec / Québec
+3709,Ogbomosho,NGA,Nigeria,NGA031,Oyo
+3712,Warszawa,POL,Poland,POL007,Mazowieckie
+3713,Menongue,AGO,Angola,AGO005,Cuando Cubango
+3723,Mtwara,TZA,Tanzania,TZA020,Mtwara
+3732,Junagadh,IND,India,IND012,Gujarat
+3736,Pattani,THA,Thailand,THA037,Pattani
+3739,P'yŏngyang,PRK,D. P. R. of Korea,PRK010,P'yongyang-si
+3746,Tacna,PER,Peru,PER023,Tacna
+3747,San Antonio de los Altos [Los Teques],VEN,Republica Bolivariana de Venezuela,VEN016,Miranda
+3756,Reims,FRA,France,FRA009,Champagne-Ardenne
+3759,Perugia,ITA,Italy,ITA018,Umbria
+3763,Uşak,TUR,Türkiye,TUR076,Usak
+3766,Zaporizhzhia,UKR,Ukraine,UKR024,Zaporiz'ka
+3770,Baqubah,IRQ,Iraq,IRQ009,Diyala
+3774,Garoowe,SOM,Somalia,SOM012,Nugaal
+3780,Xining,CHN,China,CHN021,Qinghai Sheng
+3782,Kalasin,THA,Thailand,THA013,Kalasin
+3784,Thái Bình,VNM,Viet Nam,VNM054,Thai Binh
+3792,Catia La Mar [La Guaira],VEN,Republica Bolivariana de Venezuela,VEN023,Vargas
+3801,Montpellier,FRA,France,FRA014,Languedoc-Rousillon
+3805,Kielce,POL,Poland,POL013,Swietokrzyskie
+3806,Luena,AGO,Angola,AGO015,Moxico
+3808,Bilecik,TUR,Türkiye,TUR016,Bilecik
+3809,Soshanguve,ZAF,South Africa,ZAF003,Gauteng
+3811,Kharkiv,UKR,Ukraine,UKR008,Kharkivs'ka
+3816,El Wak,KEN,Kenya,KEN024,Mandera
+3818,Khorramabad,IRN,Islamic Republic of Iran,IRN020,Lorestan
+3819,Bosaso,SOM,Somalia,SOM004,Bari
+3821,Qoqand,UZB,Uzbekistan,UZB003,Fergana
+3823,Rajkot,IND,India,IND012,Gujarat
+3827,Yala,THA,Thailand,THA075,Yala
+3829,Vinh,VNM,Viet Nam,VNM041,Nghe An
+3831,Ulsan,KOR,Republic of Korea,KOR011,Kyongsangnam-do
+3837,Caracas,VEN,Republica Bolivariana de Venezuela,VEN011,Distrito Capital
+3843,Stoke-on-Trent,GBR,United Kingdom,GBR002,England
+3844,Ho,GHA,Ghana,GHA009,Volta
+3845,Boumerdes,DZA,Algeria,DZA004,Alger
+3856,Simferopol,UKR,Ukraine,UKR004,Crimea
+3858,Al-Ubayyid,SDN,Sudan,SDN009,Northern Kordofan
+3860,Al Hillah,IRQ,Iraq,IRQ007,Babil
+3863,Famenin,IRN,Islamic Republic of Iran,IRN011,Hamedan
+3869,Bogura,BGD,Bangladesh,BGD006,Rajshahi
+3872,Buri Ram,THA,Thailand,THA004,Buriram
+3874,Hải Phòng,VNM,Viet Nam,VNM026,Haiphong
+3880,Uruapan,MEX,Mexico,MEX016,Michoacán de Ocampo
+3881,Bogota,COL,Colombia,COL006,"Bogotá, D.C."
+3886,Tangier,MAR,Morocco,MAR011,Tanger-Tétouan-Al Hoceima
+3888,Birmingham,GBR,United Kingdom,GBR002,England
+3890,Djelfa,DZA,Algeria,DZA016,Djelfa
+3896,Saurimo,AGO,Angola,AGO013,Lunda Sul
+3905,Sulaymaniyah,IRQ,Iraq,IRQ006,Al-Sulaymaniyah
+3909,Kandahar,AFG,Afghanistan,AFG015,Kandahar
+3916,Roi Et,THA,Thailand,THA053,Roi Et
+3921,Okayama,JPN,Japan,JPN029,Okayama
+3931,Melilla,ESP,Spain,ESP023,Melilla
+3938,Roma,ITA,Italy,ITA007,Lazio
+3943,Pretoria,ZAF,South Africa,ZAF003,Gauteng
+3944,Belgorod,RUS,Russian Federation,RUS009,Belgorodskaya Oblast
+3952,Samangan,AFG,Afghanistan,AFG029,Samangan
+3959,Sakon Nakhon,THA,Thailand,THA055,Sakon Nakhon
+3960,Bengkulu,IDN,Indonesia,IDN007,Bengkulu
+3968,Barranquilla,COL,Colombia,COL005,Atlántico
+3974,Bilbao,ESP,Spain,ESP018,País Vasco/Euskadi
+3978,Lyon,FRA,France,FRA023,Rhone-Alpes
+3983,Lucapa,AGO,Angola,AGO012,Lunda Norte
+3986,Centurion,ZAF,South Africa,ZAF003,Gauteng
+3987,Kostroma,RUS,Russian Federation,RUS037,Kostromskaya Oblast
+3993,Sana'a,YEM,Republic of Yemen,YEM019,San`a' [City]
+4002,Nakhon Phanom,THA,Thailand,THA027,Nakhon Phanom
+4008,Fresno,USA,United States of America,USA005,California
+4012,Quebec,CAN,Canada,CAN011,Quebec / Québec
+4013,Bahía Blanca,ARG,Argentina,ARG001,Buenos Aires
+4015,Meknes,MAR,Morocco,MAR004,Fès-Meknès
+4016,Vitoria-Gasteiz,ESP,Spain,ESP018,País Vasco/Euskadi
+4017,Bournemouth,GBR,United Kingdom,GBR002,England
+4021,Oshogbo,NGA,Nigeria,NGA030,Osun
+4022,Stuttgart,DEU,Germany,DEU001,Baden-Wuerttemberg
+4027,Sakarya,TUR,Türkiye,TUR065,Sakarya
+4031,Faiyum,EGY,Arab Republic of Egypt,EGY009,Fayoum
+4034,Al-Najaf,IRQ,Iraq,IRQ004,Al-Najaf
+4052,Chía,COL,Colombia,COL016,Cundinamarca
+4053,Guarenas,VEN,Republica Bolivariana de Venezuela,VEN016,Miranda
+4055,Halifax,CAN,Canada,CAN007,Nova Scotia / Nouvelle-Écosse
+4056,Maringá,BRA,Brazil,BRA020,Parana
+4062,Dijon,FRA,France,FRA006,Bourgogne
+4064,Hanover,DEU,Germany,DEU009,Niedersachsen
+4070,Masetjhaba View,ZAF,South Africa,ZAF003,Gauteng
+4071,Ivanovo,RUS,Russian Federation,RUS021,Ivanovskaya Oblast
+4075,Debre Markos,ETH,Ethiopia,ETH003,Amhara
+4079,Kunduz,AFG,Afghanistan,AFG019,Kunduz
+4081,Timergara,PAK,Pakistan,PAK005,Khyber Pakhtunkhwa
+4087,Hà Tĩnh,VNM,Viet Nam,VNM024,Ha Tinh
+4088,Ubon Ratchathani,THA,Thailand,THA071,Ubon Ratchathani
+4089,Songnim,PRK,D. P. R. of Korea,PRK004,Hwanghae-bukto
+4092,Sacramento,USA,United States of America,USA005,California
+4100,Logroño,ESP,Spain,ESP017,La Rioja
+4111,Chief Albert Luthuli Park,ZAF,South Africa,ZAF003,Gauteng
+4112,Vladimir,RUS,Russian Federation,RUS084,Vladimirskaya Oblast
+4118,Ta'izz,YEM,Republic of Yemen,YEM022,Ta`izz
+4123,Sri Ganganagar,IND,India,IND029,Rajasthan
+4129,Hạ Long,VNM,Viet Nam,VNM049,Quang Ninh
+4132,Lucena,PHL,Philippines,PHL004,Region IV-A (CALABARZON)
+4134,Chihuahua,MEX,Mexico,MEX008,Chihuahua
+4137,Viedma,ARG,Argentina,ARG016,Rio Negro
+4139,Tétouan,MAR,Morocco,MAR011,Tanger-Tétouan-Al Hoceima
+4150,Eskisehir,TUR,Türkiye,TUR031,Eskisehir
+4152,Ryazan,RUS,Russian Federation,RUS063,Ryazanskaya Oblast
+4155,Khartoum,SDN,Sudan,SDN005,Khartoum
+4156,Arba Minch,ETH,Ethiopia,ETH010,SNNP
+4165,Bayannur,CHN,China,CHN019,Nei Mongol Zizhiqu
+4175,Barcelona,VEN,Republica Bolivariana de Venezuela,VEN002,Anzoategui
+4181,Bouira,DZA,Algeria,DZA012,Bouira
+4182,Marseille,FRA,France,FRA022,Provence-Alpes-Cote-d'Azur
+4183,Ilorin,NGA,Nigeria,NGA024,Kwara
+4184,Hamburg,DEU,Germany,DEU006,Hamburg
+4187,Mweka,COD,Democratic Republic of Congo,COD018,Kasaï
+4199,Namangan,UZB,Uzbekistan,UZB008,Namangan
+4201,Shabqadar,PAK,Pakistan,PAK005,Khyber Pakhtunkhwa
+4212,Aguascalientes,MEX,Mexico,MEX001,Aguascalientes
+4218,Pamplona,ESP,Spain,ESP012,Comunidad Foral de Navarra
+4230,El Mahalla El Kubra,EGY,Arab Republic of Egypt,EGY010,Gharbia
+4247,Takamatsu,JPN,Japan,JPN016,Kagawa
+4257,Murcia,ESP,Spain,ESP020,Región de Murcia
+4259,Ife,NGA,Nigeria,NGA030,Osun
+4260,Grenoble,FRA,France,FRA023,Rhone-Alpes
+4265,Afyonkarahisar,TUR,Türkiye,TUR003,Afyon
+4267,Al-Santa,EGY,Arab Republic of Egypt,EGY010,Gharbia
+4274,Qazvin,IRN,Islamic Republic of Iran,IRN007,Ghazvin
+4277,Peshawar,PAK,Pakistan,PAK005,Khyber Pakhtunkhwa
+4283,Đồng Hới,VNM,Viet Nam,VNM046,Quang Binh
+4285,Himeji,JPN,Japan,JPN012,Hyoogo
+4298,Besançon,FRA,France,FRA011,Franche-Comte
+4300,Trieste,ITA,Italy,ITA006,Friuli-venezia Giulia
+4301,Białystok,POL,Poland,POL010,Podlaskie
+4303,Burdur,TUR,Türkiye,TUR020,Burdur
+4305,Banha,EGY,Arab Republic of Egypt,EGY014,Kalyoubia
+4306,Lipetsk,RUS,Russian Federation,RUS043,Lipetskaya Oblast
+4315,Shikarpur,PAK,Pakistan,PAK007,Sindh
+4316,Amritsar,IND,India,IND028,Punjab
+4317,Kushtia,BGD,Bangladesh,BGD004,Khulna
+4319,Lashio,MMR,Myanmar,MMR013,Shan
+4321,Châu Đốc,VNM,Viet Nam,VNM001,An Giang
+4323,Kanazawa,JPN,Japan,JPN014,Isikawa
+4326,Zacatecas,MEX,Mexico,MEX032,Zacatecas
+4327,Villavicencio,COL,Colombia,COL022,Meta
+4328,Cumana,VEN,Republica Bolivariana de Venezuela,VEN020,Sucre
+4332,Leeds,GBR,United Kingdom,GBR002,England
+4333,Zaragoza,ESP,Spain,ESP003,Aragón
+4334,M'Sila,DZA,Algeria,DZA026,M'Sila
+4337,Kiel,DEU,Germany,DEU015,Schleswig-Holstein
+4338,Ancona,ITA,Italy,ITA010,Marche
+4339,Lublin,POL,Poland,POL004,Lubeiskie
+4356,Lanzhou,CHN,China,CHN005,Gansu Sheng
+4362,Naga,PHL,Philippines,PHL005,Region V (Bicol Region)
+4364,Morelia,MEX,Mexico,MEX016,Michoacán de Ocampo
+4366,Porlamar,VEN,Republica Bolivariana de Venezuela,VEN018,Nueva Esparta
+4376,Palermo,ITA,Italy,ITA015,Sicilia
+4382,Voronezh,RUS,Russian Federation,RUS087,Voronezhskaya Oblast
+4383,Donetsk,UKR,Ukraine,UKR006,Donets'ka
+4387,Ibb,YEM,Republic of Yemen,YEM013,Ibb
+4389,Fergana,UZB,Uzbekistan,UZB003,Fergana
+4399,Osaka,JPN,Japan,JPN032,Oosaka
+4404,Ciudad Bolivar,VEN,Republica Bolivariana de Venezuela,VEN006,Bolivar
+4407,Fez,MAR,Morocco,MAR004,Fès-Meknès
+4408,Wakefield,GBR,United Kingdom,GBR002,England
+4412,Nancy,FRA,France,FRA016,Lorraine
+4416,Kananga,COD,Democratic Republic of Congo,COD019,Kasaï-Central
+4417,Isparta,TUR,Türkiye,TUR039,Isparta
+4424,Ad Diwaniyah,IRQ,Iraq,IRQ005,Al-Qadissiya
+4431,Pabna,BGD,Bangladesh,BGD006,Rajshahi
+4435,Rạch Giá,VNM,Viet Nam,VNM033,Kien Giang
+4436,Sariwon,PRK,D. P. R. of Korea,PRK004,Hwanghae-bukto
+4438,Iloilo City,PHL,Philippines,PHL006,Region VI (Western Visayas)
+4443,Buenos Aires,ARG,Argentina,ARG001,Buenos Aires
+4446,Newcastle upon Tyne,GBR,United Kingdom,GBR002,England
+4448,Bejaia,DZA,Algeria,DZA008,Bejaia
+4449,Ikirun,NGA,Nigeria,NGA030,Osun
+4450,Toulon,FRA,France,FRA022,Provence-Alpes-Cote-d'Azur
+4460,Kosti,SDN,Sudan,SDN015,White Nile
+4465,Taloqan,AFG,Afghanistan,AFG031,Takhar
+4478,León,MEX,Mexico,MEX011,Guanajuato
+4479,Santa Marta,COL,Colombia,COL021,Magdalena
+4480,Maturin,VEN,Republica Bolivariana de Venezuela,VEN017,Monagas
+4485,Alicante,ESP,Spain,ESP013,Comunitat Valenciana
+4490,Napoli,ITA,Italy,ITA004,Campania
+4492,Bolu,TUR,Türkiye,TUR019,Bolu
+4495,Mariupol,UKR,Ukraine,UKR006,Donets'ka
+4497,Rabak,SDN,Sudan,SDN015,White Nile
+4506,Kazipur,BGD,Bangladesh,BGD006,Rajshahi
+4509,Jambi,IDN,Indonesia,IDN005,Jambi
+4512,Naha,JPN,Japan,JPN030,Okinawa
+4519,Londrina,BRA,Brazil,BRA020,Parana
+4522,Valencia,ESP,Spain,ESP013,Comunitat Valenciana
+4527,Caserta,ITA,Italy,ITA004,Campania
+4529,Antalya,TUR,Türkiye,TUR008,Antalya
+4534,Al Managil,SDN,Sudan,SDN001,Al Jazeera
+4538,Ahwaz,IRN,Islamic Republic of Iran,IRN017,Khuzestan
+4542,Bikaner,IND,India,IND029,Rajasthan
+4552,Irapuato,MEX,Mexico,MEX011,Guanajuato
+4555,Posadas,ARG,Argentina,ARG014,Misiones
+4558,Coventry,GBR,United Kingdom,GBR002,England
+4567,Pietermaritzburg,ZAF,South Africa,ZAF004,Kwa-Zulu Natal
+4575,Arak,IRN,Islamic Republic of Iran,IRN021,Markazi
+4576,Andijon,UZB,Uzbekistan,UZB001,Andijan
+4582,Taunggyi,MMR,Myanmar,MMR013,Shan
+4587,Zamboanga City,PHL,Philippines,PHL009,Region IX (Zamboanga Peninsula)
+4591,Ciudad Guayana,VEN,Republica Bolivariana de Venezuela,VEN002,Anzoategui
+4593,Belém,BRA,Brazil,BRA018,Para
+4595,Southampton,GBR,United Kingdom,GBR002,England
+4604,Polokwane,ZAF,South Africa,ZAF005,Limpopo
+4605,Al-Qāhirah,EGY,Arab Republic of Egypt,EGY014,Kalyoubia
+4621,Long Xuyên,VNM,Viet Nam,VNM001,An Giang
+4625,Las Vegas,USA,United States of America,USA029,Nevada
+4629,Río Gallegos,ARG,Argentina,ARG020,Santa Cruz
+4634,Ilesa,NGA,Nigeria,NGA030,Osun
+4635,Setif,DZA,Algeria,DZA037,Setif
+4641,Madadeni,ZAF,South Africa,ZAF004,Kwa-Zulu Natal
+4644,Nizhny Novgorod,RUS,Russian Federation,RUS052,Nizhegorodskaya Oblast
+4647,As Samawah,IRQ,Iraq,IRQ003,Al-Muthanna
+4648,Hawrah,YEM,Republic of Yemen,YEM022,Ta`izz
+4649,Mollasani,IRN,Islamic Republic of Iran,IRN017,Khuzestan
+4655,Yinchuan,CHN,China,CHN020,Ningxia Huizu Zizhiqu
+4659,Chŏngjin,PRK,D. P. R. of Korea,PRK002,Hamgyong-bukto
+4663,Acapulco,MEX,Mexico,MEX012,Guerrero
+4666,La Plata,ARG,Argentina,ARG001,Buenos Aires
+4679,Samalut,EGY,Arab Republic of Egypt,EGY017,Menia
+4681,Tambov,RUS,Russian Federation,RUS073,Tambovskaya Oblast
+4682,Wad Madanī,SDN,Sudan,SDN001,Al Jazeera
+4684,Al-Kut,IRQ,Iraq,IRQ018,Wassit
+4685,Dhamar,YEM,Republic of Yemen,YEM010,Dhamar
+4694,Batam City,IDN,Indonesia,IDN010,Kepulauan Riau
+4698,Bacolod,PHL,Philippines,PHL006,Region VI (Western Visayas)
+4699,Phoenix,USA,United States of America,USA003,Arizona
+4701,Bucaramanga,COL,Colombia,COL028,Santander
+4702,Tucupita,VEN,Republica Bolivariana de Venezuela,VEN009,Delta Amacuro
+4705,Nador,MAR,Morocco,MAR006,L'oriental
+4706,Sheffield,GBR,United Kingdom,GBR002,England
+4725,Charikar,AFG,Afghanistan,AFG028,Parwan
+4732,Cao Lãnh,VNM,Viet Nam,VNM020,Dong Thap
+4733,Hamhung,PRK,D. P. R. of Korea,PRK003,Hamgyong-namdo
+4736,Mesa,USA,United States of America,USA003,Arizona
+4742,Derby,GBR,United Kingdom,GBR002,England
+4745,Ouargla,DZA,Algeria,DZA033,Ouargla
+4746,Nice,FRA,France,FRA022,Provence-Alpes-Cote-d'Azur
+4758,Yarim,YEM,Republic of Yemen,YEM013,Ibb
+4768,Cần Thơ,VNM,Viet Nam,VNM013,Can Tho
+4771,Legazpi,PHL,Philippines,PHL005,Region V (Bicol Region)
+4773,Torreón,MEX,Mexico,MEX005,Coahuila de Zaragoza
+4780,Ondo,NGA,Nigeria,NGA029,Ondo
+4782,Strasbourg,FRA,France,FRA002,Alsace
+4787,Durban,ZAF,South Africa,ZAF004,Kwa-Zulu Natal
+4789,Luhansk,UKR,Ukraine,UKR014,Luhans'ka
+4809,Guanajuato,MEX,Mexico,MEX011,Guanajuato
+4813,Oujda,MAR,Morocco,MAR006,L'oriental
+4817,Jijel,DZA,Algeria,DZA023,Jijel
+4818,Ajaccio,FRA,France,FRA010,Corse
+4820,Catania,ITA,Italy,ITA015,Sicilia
+4821,Kasaji,COD,Democratic Republic of Congo,COD024,Lualaba
+4822,Sincan,TUR,Türkiye,TUR007,Ankara
+4834,Batala,IND,India,IND028,Punjab
+4839,Tây Ninh,VNM,Viet Nam,VNM053,Tay Ninh
+4843,Tucson,USA,United States of America,USA003,Arizona
+4845,San José del Guaviare,COL,Colombia,COL018,Guaviare
+4851,Biskra,DZA,Algeria,DZA009,Biskra
+4865,Kabul,AFG,Afghanistan,AFG014,Kabul
+4866,Kohat,PAK,Pakistan,PAK005,Khyber Pakhtunkhwa
+4868,Sirajganj,BGD,Bangladesh,BGD006,Rajshahi
+4872,Bạc Liêu,VNM,Viet Nam,VNM005,Bac Lieu
+4874,Otsu,JPN,Japan,JPN035,Siga
+4878,Valledupar,COL,Colombia,COL013,Cesar
+4879,Mar del Plata,ARG,Argentina,ARG001,Buenos Aires
+4885,Schwerin,DEU,Germany,DEU008,Mecklenburg-Vorpommern
+4895,Al-Shatrah,IRQ,Iraq,IRQ017,Thi Qar
+4905,Huế,VNM,Viet Nam,VNM057,Thua Thien-Hue
+4907,Niigata,JPN,Japan,JPN028,Niigata
+4909,Salem,USA,United States of America,USA038,Oregon
+4911,Yopal,COL,Colombia,COL011,Casanare
+4918,Erfurt,DEU,Germany,DEU016,Thueringen
+4920,Mwene-Ditu,COD,Democratic Republic of Congo,COD023,Lomami
+4921,Ankara,TUR,Türkiye,TUR007,Ankara
+4925,Ad-Damazin,SDN,Sudan,SDN002,Blue Nile
+4937,Vinh Long,VNM,Viet Nam,VNM061,Vinh Long
+4938,Jakdo-dong,PRK,D. P. R. of Korea,PRK003,Hamgyong-namdo
+4941,Portland,USA,United States of America,USA038,Oregon
+4942,Celaya,MEX,Mexico,MEX011,Guanajuato
+4943,Cúcuta,COL,Colombia,COL024,Norte de Santander
+4945,Goiânia,BRA,Brazil,BRA009,Goias
+4952,Kasaï-Oriental,COD,Democratic Republic of Congo,COD020,Kasaï-Oriental
+4955,Kanyamazane,ZAF,South Africa,ZAF006,Mpumalanga
+4959,Nasiriyah,IRQ,Iraq,IRQ017,Thi Qar
+4961,Safadasht,IRN,Islamic Republic of Iran,IRN025,Tehran
+4968,Palembang,IDN,Indonesia,IDN006,Sumatera Selatan
+4974,Tacoma,USA,United States of America,USA048,Washington
+4975,Riohacha,COL,Colombia,COL020,La Guajira
+4978,Terrassa,ESP,Spain,ESP008,Cataluña/Catalunya
+4981,Nürnberg,DEU,Germany,DEU002,Bayern
+4987,Rostov-on-Don,RUS,Russian Federation,RUS062,Rostovskaya Oblast
+4992,Karaj,IRN,Islamic Republic of Iran,IRN025,Tehran
+4994,Takht Bhai,PAK,Pakistan,PAK005,Khyber Pakhtunkhwa
+5000,Sóc Trăng,VNM,Viet Nam,VNM051,Soc Trang
+5021,Amarah,IRQ,Iraq,IRQ014,Maysan
+5024,Mahmud-e Raqi,AFG,Afghanistan,AFG016,Kapisa
+5025,Charsadda,PAK,Pakistan,PAK005,Khyber Pakhtunkhwa
+5029,Yangon,MMR,Myanmar,MMR015,Yangon
+5035,Chilpancingo,MEX,Mexico,MEX012,Guerrero
+5036,El Paso,USA,United States of America,USA044,Texas
+5043,Augsburg,DEU,Germany,DEU002,Bayern
+5056,Sukkur,PAK,Pakistan,PAK007,Sindh
+5062,Mỹ Tho,VNM,Viet Nam,VNM058,Tien Giang
+5065,Cebu City,PHL,Philippines,PHL007,Region VII (Central Visayas)
+5070,Nottingham,GBR,United Kingdom,GBR002,England
+5071,Barcelona,ESP,Spain,ESP008,Cataluña/Catalunya
+5074,Magdeburg,DEU,Germany,DEU014,Sachsen-Anhalt
+5077,Konya,TUR,Türkiye,TUR053,Konya
+5080,Krasnodar,RUS,Russian Federation,RUS038,Krasnodarskiy Kray
+5097,Querétaro,MEX,Mexico,MEX022,Querétaro
+5098,Seattle,USA,United States of America,USA048,Washington
+5099,Arauca,COL,Colombia,COL003,Arauca
+5101,Middlesbrough,GBR,United Kingdom,GBR002,England
+5108,Kastamonu,TUR,Türkiye,TUR046,Kastamonu
+5111,Al-Qadarif,SDN,Sudan,SDN003,Gadaref
+5114,Bi'r Rubak,YEM,Republic of Yemen,YEM001,`Adan
+5118,Surendranagar,IND,India,IND012,Gujarat
+5119,Shahajadpur,BGD,Bangladesh,BGD006,Rajshahi
+5124,Haeju,PRK,D. P. R. of Korea,PRK005,Hwanghae-namdo
+5125,Nara,JPN,Japan,JPN027,Nara
+5138,Çankırı,TUR,Türkiye,TUR023,Cankiri
+5144,`Adan,YEM,Republic of Yemen,YEM001,`Adan
+5148,Pathankot,IND,India,IND028,Punjab
+5157,Ciudad Juárez,MEX,Mexico,MEX008,Chihuahua
+5161,Palma de Mallorca,ESP,Spain,ESP016,Illes Balears
+5163,Batna,DZA,Algeria,DZA006,Batna
+5167,El Mansura,EGY,Arab Republic of Egypt,EGY007,Dakahlia
+5174,Tehran,IRN,Islamic Republic of Iran,IRN025,Tehran
+5181,Bandar Lampung,IDN,Indonesia,IDN008,Lampung
+5182,Bến Tre,VNM,Viet Nam,VNM007,Ben Tre
+5194,Bari,ITA,Italy,ITA013,Puglia
+5196,Mit Ghamr,EGY,Arab Republic of Egypt,EGY007,Dakahlia
+5198,Syktyvkar,RUS,Russian Federation,RUS034,Komi Rep.
+5201,Basra,IRQ,Iraq,IRQ002,Al-Basrah
+5207,Jamalpur,BGD,Bangladesh,BGD005,Mymensingh
+5211,Trà Vinh,VNM,Viet Nam,VNM059,Tra Vinh
+5213,Nagoya,JPN,Japan,JPN001,Aiti
+5215,San Luis Potosí,MEX,Mexico,MEX024,San Luis Potosí
+5216,Boise,USA,United States of America,USA013,Idaho
+5218,Portsmouth,GBR,United Kingdom,GBR002,England
+5225,Kırşehir,TUR,Türkiye,TUR051,Kirsehir
+5230,Al Beidha,YEM,Republic of Yemen,YEM003,Al Bayda'
+5231,Qom,IRN,Islamic Republic of Iran,IRN008,Ghom
+5235,Jashore,BGD,Bangladesh,BGD004,Khulna
+5236,Baotou,CHN,China,CHN019,Nei Mongol Zizhiqu
+5237,Loikaw,MMR,Myanmar,MMR005,Kayah
+5239,Ho Chi Minh City,VNM,Viet Nam,VNM029,Ho Chi Minh
+5241,Nagano,JPN,Japan,JPN025,Nagano
+5243,Toluca,MEX,Mexico,MEX015,México
+5249,München,DEU,Germany,DEU002,Bayern
+5251,Ngandajika,COD,Democratic Republic of Congo,COD023,Lomami
+5281,Çorum,TUR,Türkiye,TUR024,Corum
+5287,Jalalabad,AFG,Afghanistan,AFG022,Nangarhar
+5288,Nawabshah,PAK,Pakistan,PAK007,Sindh
+5290,Sherpur,BGD,Bangladesh,BGD005,Mymensingh
+5294,Đà Nẵng,VNM,Viet Nam,VNM047,Quang Nam
+5303,Constantine,DZA,Algeria,DZA015,Constantine
+5304,Leipzig,DEU,Germany,DEU013,Sachsen
+5311,Qarchak,IRN,Islamic Republic of Iran,IRN025,Tehran
+5313,Khost,AFG,Afghanistan,AFG017,Khost
+5314,Mardan,PAK,Pakistan,PAK005,Khyber Pakhtunkhwa
+5315,Jodhpur,IND,India,IND029,Rajasthan
+5318,Thanlyin,MMR,Myanmar,MMR015,Yangon
+5326,Anápolis,BRA,Brazil,BRA009,Goias
+5327,Leicester,GBR,United Kingdom,GBR002,England
+5332,Al Minya,EGY,Arab Republic of Egypt,EGY017,Menia
+5344,Pegu,MMR,Myanmar,MMR002,Bago
+5351,Provo,USA,United States of America,USA045,Utah
+5359,Nevşehir,TUR,Türkiye,TUR060,Nevsehir
+5360,Saransk,RUS,Russian Federation,RUS046,Mordoviya Rep.
+5363,Pardis,IRN,Islamic Republic of Iran,IRN025,Tehran
+5369,Donghe,CHN,China,CHN019,Nei Mongol Zizhiqu
+5376,Cuernavaca,MEX,Mexico,MEX017,Morelos
+5377,Salt Lake City,USA,United States of America,USA045,Utah
+5383,Kamina,COD,Democratic Republic of Congo,COD015,Haut-Lomami
+5385,Niğde,TUR,Türkiye,TUR061,Nigde
+5386,Maykop,RUS,Russian Federation,RUS001,Adygeya Rep.
+5389,Pishva,IRN,Islamic Republic of Iran,IRN025,Tehran
+5392,Mingora,PAK,Pakistan,PAK005,Khyber Pakhtunkhwa
+5398,Cilegon,IDN,Indonesia,IDN016,Banten
+5401,Iligan,PHL,Philippines,PHL010,Region X (Northern Mindanao)
+5402,Mexico City,MEX,Mexico,MEX015,México
+5409,Kisangani,COD,Democratic Republic of Congo,COD031,Tshopo
+5423,Pandeglang,IDN,Indonesia,IDN016,Banten
+5430,Reading,GBR,United Kingdom,GBR002,England
+5432,Skikda,DZA,Algeria,DZA039,Skikda
+5433,Potsdam,DEU,Germany,DEU004,Brandenburg
+5434,Kolwezi,COD,Democratic Republic of Congo,COD024,Lualaba
+5436,Mersin,TUR,Türkiye,TUR037,Icel
+5438,Kassala,SDN,Sudan,SDN004,Kassala
+5441,Mukalla,YEM,Republic of Yemen,YEM011,Hadramawt
+5451,Tacloban,PHL,Philippines,PHL008,Region VIII (Eastern Visayas)
+5453,Albuquerque,USA,United States of America,USA032,New Mexico
+5460,شبلنجة,EGY,Arab Republic of Egypt,EGY014,Kalyoubia
+5461,Amasya,TUR,Türkiye,TUR006,Amasya
+5462,Penza,RUS,Russian Federation,RUS058,Penzenskaya Oblast
+5472,Jakarta,IDN,Indonesia,IDN012,Jawa Barat
+5483,Berlin,DEU,Germany,DEU003,Berlin
+5492,Dera Ismail Khan,PAK,Pakistan,PAK005,Khyber Pakhtunkhwa
+5497,Rangkasbitung,IDN,Indonesia,IDN016,Banten
+5500,Sendai,JPN,Japan,JPN023,Miyagi
+5507,El Oued,DZA,Algeria,DZA018,El Oued
+5511,Samsun,TUR,Türkiye,TUR066,Samsun
+5512,Cheboksary,RUS,Russian Federation,RUS016,Chuvashiya Rep.
+5515,Shahr-e Kord,IRN,Islamic Republic of Iran,IRN003,Chaharmahal-o bakhtiyar
+5523,Wonsan,PRK,D. P. R. of Korea,PRK007,Kangwon-do
+5525,Cagayan de Oro,PHL,Philippines,PHL010,Region X (Northern Mindanao)
+5528,São José do Rio Preto,BRA,Brazil,BRA029,Sao Paulo
+5530,Sokoto,NGA,Nigeria,NGA034,Sokoto
+5532,Dresden,DEU,Germany,DEU013,Sachsen
+5546,Pangkalpinang,IDN,Indonesia,IDN009,Kepulauan Bangka Belitung
+5554,Akure,NGA,Nigeria,NGA029,Ondo
+5559,Kayseri,TUR,Türkiye,TUR047,Kayseri
+5561,Port Sudan,SDN,Sudan,SDN010,Red Sea
+5564,Nowshera,PAK,Pakistan,PAK005,Khyber Pakhtunkhwa
+5579,Guelma,DZA,Algeria,DZA021,Guelma
+5583,Yoshkar-Ola,RUS,Russian Federation,RUS045,Mariy-el Rep.
+5588,Bathinda,IND,India,IND028,Punjab
+5589,Kalihati,BGD,Bangladesh,BGD003,Dhaka
+5592,Pleiku,VNM,Viet Nam,VNM021,Gia Lai
+5601,Ado Ekiti,NGA,Nigeria,NGA013,Ekiti
+5612,Tangail,BGD,Bangladesh,BGD003,Dhaka
+5614,Hpa-An,MMR,Myanmar,MMR006,Kayin
+5615,Vũng Tàu,VNM,Viet Nam,VNM002,Ba Ria-Vung Tau
+5621,Laredo,USA,United States of America,USA044,Texas
+5622,Pelotas,BRA,Brazil,BRA025,Rio Grande Do Sul
+5628,Adana,TUR,Türkiye,TUR001,Adana
+5639,Cipanas,IDN,Indonesia,IDN012,Jawa Barat
+5640,Kaesong,PRK,D. P. R. of Korea,PRK006,Kaesong-si
+5648,Annaba,DZA,Algeria,DZA005,Annaba
+5652,Kirov,RUS,Russian Federation,RUS033,Kirovskaya Oblast
+5657,Jalandhar,IND,India,IND028,Punjab
+5666,McAllen,USA,United States of America,USA044,Texas
+5669,Ikere-Ekiti,NGA,Nigeria,NGA013,Ekiti
+5678,Hyderabad,PAK,Pakistan,PAK007,Sindh
+5681,Baoshan,CHN,China,CHN030,Yunnan Sheng
+5685,Takasaki [Maebashi],JPN,Japan,JPN006,Gunma
+5688,Spokane,USA,United States of America,USA048,Washington
+5689,Ponta Grossa,BRA,Brazil,BRA020,Parana
+5695,Tokat,TUR,Türkiye,TUR073,Tokat
+5701,Mahesana,IND,India,IND012,Gujarat
+5703,Dongsheng,CHN,China,CHN019,Nei Mongol Zizhiqu
+5707,Toyohashi,JPN,Japan,JPN001,Aiti
+5716,Minya al-Qamh,EGY,Arab Republic of Egypt,EGY024,Shrkia
+5720,Isfahan,IRN,Islamic Republic of Iran,IRN005,Esfahan
+5735,Tebessa,DZA,Algeria,DZA042,Tebessa
+5736,Kindu,COD,Democratic Republic of Congo,COD008,Maniema
+5741,Sari,IRN,Islamic Republic of Iran,IRN022,Mazandaran
+5748,Bandung,IDN,Indonesia,IDN012,Jawa Barat
+5749,Isesaki,JPN,Japan,JPN006,Gunma
+5758,Beni Suef,EGY,Arab Republic of Egypt,EGY005,Beni Suef
+5769,Purwakarta,IDN,Indonesia,IDN012,Jawa Barat
+5770,Kofu,JPN,Japan,JPN047,Yamanasi
+5778,Fungurume,COD,Democratic Republic of Congo,COD024,Lualaba
+5781,Stavropol,RUS,Russian Federation,RUS071,Stavropolskiy Kray
+5793,Pachuca,MEX,Mexico,MEX013,Hidalgo
+5794,San Antonio,USA,United States of America,USA044,Texas
+5795,Caxias do Sul,BRA,Brazil,BRA025,Rio Grande Do Sul
+5811,Ota,JPN,Japan,JPN006,Gunma
+5812,General Santos,PHL,Philippines,PHL012,Region XII (SOCCSKSARGEN)
+5816,London,GBR,United Kingdom,GBR002,England
+5822,Hawassa,ETH,Ethiopia,ETH009,Sidama
+5827,Tianshui,CHN,China,CHN005,Gansu Sheng
+5828,Dawei,MMR,Myanmar,MMR014,Tanintharyi
+5830,Tarogong,IDN,Indonesia,IDN012,Jawa Barat
+5831,Hamamatsu,JPN,Japan,JPN037,Sizuoka
+5840,Sivas,TUR,Türkiye,TUR071,Sivas
+5844,Yar Hussain,PAK,Pakistan,PAK005,Khyber Pakhtunkhwa
+5847,Hohhot,CHN,China,CHN019,Nei Mongol Zizhiqu
+5849,Buôn Ma Thuột,VNM,Viet Nam,VNM016,Dac Lac
+5853,Puebla,MEX,Mexico,MEX021,Puebla
+5855,Brasilia,BRA,Brazil,BRA007,Distrito Federal
+5856,Luton,GBR,United Kingdom,GBR002,England
+5858,Kambove,COD,Democratic Republic of Congo,COD014,Haut-Katanga
+5862,Addis Ababa,ETH,Ethiopia,ETH001,Addis Ababa
+5868,Myeik,MMR,Myanmar,MMR014,Tanintharyi
+5869,Quảng Ngãi,VNM,Viet Nam,VNM048,Quang Ngai
+5871,Utsunomiya,JPN,Japan,JPN041,Totigi
+5872,Davao City,PHL,Philippines,PHL011,Region XI (Davao Region)
+5873,Saltillo,MEX,Mexico,MEX005,Coahuila de Zaragoza
+5879,Mallawi,EGY,Arab Republic of Egypt,EGY017,Menia
+5880,Osmaniye,TUR,Türkiye,TUR063,Osmaniye
+5881,Saratov,RUS,Russian Federation,RUS068,Saratovskaya Oblast
+5887,Pingliang,CHN,China,CHN005,Gansu Sheng
+5890,Hegarsari,IDN,Indonesia,IDN012,Jawa Barat
+5901,Kazan,RUS,Russian Federation,RUS074,Tatarstan Rep.
+5905,Pali,IND,India,IND029,Rajasthan
+5906,Khulna,BGD,Bangladesh,BGD004,Khulna
+5911,Panabo,PHL,Philippines,PHL011,Region XI (Davao Region)
+5913,Colorado Springs,USA,United States of America,USA006,Colorado
+5915,Brighton,GBR,United Kingdom,GBR002,England
+5917,Likasi,COD,Democratic Republic of Congo,COD014,Haut-Katanga
+5918,Al Zaqaziq,EGY,Arab Republic of Egypt,EGY024,Shrkia
+5919,İskenderun,TUR,Türkiye,TUR036,Hatay
+5922,Jalali,IRN,Islamic Republic of Iran,IRN002,Bushehr
+5928,Sumedang,IDN,Indonesia,IDN012,Jawa Barat
+5929,Tokyo,JPN,Japan,JPN034,Saitama
+5930,Tagum,PHL,Philippines,PHL011,Region XI (Davao Region)
+5931,Tlaxcala,MEX,Mexico,MEX029,Tlaxcala
+5932,Denver,USA,United States of America,USA006,Colorado
+5933,Novo Hamburgo,BRA,Brazil,BRA025,Rio Grande Do Sul
+5934,Hull,GBR,United Kingdom,GBR002,England
+5935,Benin City,NGA,Nigeria,NGA012,Edo
+5944,Faridpur,BGD,Bangladesh,BGD003,Dhaka
+5951,Austin,USA,United States of America,USA044,Texas
+5952,Valparaíso de Goiás,BRA,Brazil,BRA007,Distrito Federal
+5954,Owo,NGA,Nigeria,NGA029,Ondo
+5958,Volgograd,RUS,Russian Federation,RUS085,Volgogradskaya Oblast
+5963,Mymensingh,BGD,Bangladesh,BGD005,Mymensingh
+5971,Porto Alegre,BRA,Brazil,BRA025,Rio Grande Do Sul
+5973,Sapele,NGA,Nigeria,NGA010,Delta
+5976,Hatay,TUR,Türkiye,TUR036,Hatay
+5978,Shashamane,ETH,Ethiopia,ETH008,Oromia
+5979,Yasuj,IRN,Islamic Republic of Iran,IRN018,Kohgiluyeh va boyerahma
+5984,Phan Thiết,VNM,Viet Nam,VNM011,Binh Thuan
+5985,Tasikmalaya,IDN,Indonesia,IDN012,Jawa Barat
+5989,Bauru,BRA,Brazil,BRA029,Sao Paulo
+5993,Diyarb Nigm,EGY,Arab Republic of Egypt,EGY024,Shrkia
+6000,Savar,BGD,Bangladesh,BGD003,Dhaka
+6002,Đà Lạt,VNM,Viet Nam,VNM036,Lam Dong
+6005,Monclova,MEX,Mexico,MEX005,Coahuila de Zaragoza
+6009,Warri,NGA,Nigeria,NGA010,Delta
+6031,Ulyanovsk,RUS,Russian Federation,RUS082,Ulyanovskaya Oblast
+6038,Quy Nhơn,VNM,Viet Nam,VNM008,Binh Dinh
+6045,Ikare,NGA,Nigeria,NGA029,Ondo
+6046,Malemba-Nkulu,COD,Democratic Republic of Congo,COD015,Haut-Lomami
+6047,Dairut,EGY,Arab Republic of Egypt,EGY002,Assiut
+6054,Louhajang,BGD,Bangladesh,BGD003,Dhaka
+6066,Kahramanmaraş,TUR,Türkiye,TUR042,K.maras
+6074,Tuy Hòa,VNM,Viet Nam,VNM045,Phu Yen
+6076,Numazu,JPN,Japan,JPN037,Sizuoka
+6087,Gorgan,IRN,Islamic Republic of Iran,IRN010,Golestan
+6090,Dhaka,BGD,Bangladesh,BGD002,Chattogram
+6091,Dujiangyan,CHN,China,CHN026,Sichuan Sheng
+6092,Nha Trang,VNM,Viet Nam,VNM032,Khanh Hoa
+6106,Swabi,PAK,Pakistan,PAK005,Khyber Pakhtunkhwa
+6109,Ya'an,CHN,China,CHN026,Sichuan Sheng
+6111,Indramayu,IDN,Indonesia,IDN012,Jawa Barat
+6115,Uberlândia,BRA,Brazil,BRA013,Minas Gerais
+6120,Giresun,TUR,Türkiye,TUR033,Giresun
+6125,Sirsa,IND,India,IND013,Haryana
+6131,Monterrey,MEX,Mexico,MEX019,Nuevo León
+6141,Shiraz,IRN,Islamic Republic of Iran,IRN006,Fars
+6143,Ahmedabad,IND,India,IND012,Gujarat
+6155,Al-Wasitah,EGY,Arab Republic of Egypt,EGY005,Beni Suef
+6167,Houston,USA,United States of America,USA044,Texas
+6173,Gaziantep,TUR,Türkiye,TUR032,Gaziantep
+6178,Bhavnagar,IND,India,IND012,Gujarat
+6181,Cirebon,IDN,Indonesia,IDN012,Jawa Barat
+6183,Oaxaca de Juárez,MEX,Mexico,MEX020,Oaxaca
+6200,Orizaba,MEX,Mexico,MEX030,Veracruz de Ignacio de la Llave
+6201,Edgecliff Village,USA,United States of America,USA044,Texas
+6205,Mulongo,COD,Democratic Republic of Congo,COD015,Haut-Lomami
+6207,Malatya,TUR,Türkiye,TUR055,Malatya
+6209,Bishoftu,ETH,Ethiopia,ETH008,Oromia
+6214,Yulin,CHN,China,CHN022,Shaanxi Sheng
+6215,Kuningan,IDN,Indonesia,IDN012,Jawa Barat
+6217,Ciudad Victoria,MEX,Mexico,MEX028,Tamaulipas
+6229,Ludhiana,IND,India,IND028,Punjab
+6237,Southend-on-Sea,GBR,United Kingdom,GBR002,England
+6241,Adıyaman,TUR,Türkiye,TUR002,Adiyaman
+6252,North Richland Hills,USA,United States of America,USA044,Texas
+6257,Mit Habib,EGY,Arab Republic of Egypt,EGY024,Shrkia
+6261,Kavar,IRN,Islamic Republic of Iran,IRN006,Fars
+6269,Arlington,USA,United States of America,USA044,Texas
+6273,Kongolo,COD,Democratic Republic of Congo,COD030,Tanganyika
+6275,Trabzon,TUR,Türkiye,TUR074,Trabzon
+6276,Тимофеевка,RUS,Russian Federation,RUS066,Samarskaya Oblast
+6277,Mek'elē,ETH,Ethiopia,ETH013,Tigray
+6285,The Woodlands,USA,United States of America,USA044,Texas
+6288,Bida,NGA,Nigeria,NGA027,Niger
+6297,Kishoreganj,BGD,Bangladesh,BGD003,Dhaka
+6311,Hazro,PAK,Pakistan,PAK006,Punjab
+6320,Ughelli,NGA,Nigeria,NGA010,Delta
+6321,Lubumbashi,COD,Democratic Republic of Congo,COD014,Haut-Katanga
+6323,Erzincan,TUR,Türkiye,TUR029,Erzincan
+6339,Elazığ,TUR,Türkiye,TUR028,Elazig
+6340,Nalchik,RUS,Russian Federation,RUS022,Kabardino-balkariya Rep.
+6350,Curitiba,BRA,Brazil,BRA020,Parana
+6371,Şanlıurfa,TUR,Türkiye,TUR067,Sanliurfa
+6375,Dera Ghazi Khan,PAK,Pakistan,PAK006,Punjab
+6378,Chengdu,CHN,China,CHN026,Sichuan Sheng
+6379,Cilacap,IDN,Indonesia,IDN013,Jawa Tengah
+6394,Wenjiang,CHN,China,CHN026,Sichuan Sheng
+6396,Xalapa,MEX,Mexico,MEX030,Veracruz de Ignacio de la Llave
+6397,Dallas,USA,United States of America,USA044,Texas
+6404,Asella,ETH,Ethiopia,ETH008,Oromia
+6412,Lewisville,USA,United States of America,USA044,Texas
+6417,Rize,TUR,Türkiye,TUR064,Rize
+6418,Samara,RUS,Russian Federation,RUS066,Samarskaya Oblast
+6424,Shenmu,CHN,China,CHN022,Shaanxi Sheng
+6430,Manono,COD,Democratic Republic of Congo,COD030,Tanganyika
+6433,Izhevsk,RUS,Russian Federation,RUS081,Udmurtiya Rep.
+6441,Tampico,MEX,Mexico,MEX028,Tamaulipas
+6448,Naberezhnye Chelny,RUS,Russian Federation,RUS074,Tatarstan Rep.
+6449,Adama,ETH,Ethiopia,ETH008,Oromia
+6454,Xilinhot,CHN,China,CHN019,Nei Mongol Zizhiqu
+6463,Vladikavkaz,RUS,Russian Federation,RUS069,Severnaya Osetiya-alaniya Rep.
+6474,Okene,NGA,Nigeria,NGA023,Kogi
+6477,Diyarbakir,TUR,Türkiye,TUR026,Diyarbakir
+6478,Nazran,RUS,Russian Federation,RUS019,Ingushetiya Rep.
+6485,Tegal,IDN,Indonesia,IDN013,Jawa Tengah
+6488,Uberaba,BRA,Brazil,BRA013,Minas Gerais
+6489,Agbor,NGA,Nigeria,NGA010,Delta
+6490,Kasumbalesa,COD,Democratic Republic of Congo,COD014,Haut-Katanga
+6492,Bingöl,TUR,Türkiye,TUR017,Bingol
+6498,Shariatpur,BGD,Bangladesh,BGD003,Dhaka
+6501,Veracruz,MEX,Mexico,MEX030,Veracruz de Ignacio de la Llave
+6515,Purwokerto,IDN,Indonesia,IDN013,Jawa Tengah
+6517,Oklahoma City,USA,United States of America,USA037,Oklahoma
+6525,Sarvestan,IRN,Islamic Republic of Iran,IRN006,Fars
+6540,Kharameh,IRN,Islamic Republic of Iran,IRN006,Fars
+6544,Xichang,CHN,China,CHN026,Sichuan Sheng
+6545,Pemalang,IDN,Indonesia,IDN013,Jawa Tengah
+6556,Mirpur Khas,PAK,Pakistan,PAK007,Sindh
+6566,Bilbeis,EGY,Arab Republic of Egypt,EGY024,Shrkia
+6567,Mardin,TUR,Türkiye,TUR057,Mardin
+6568,Salekhard,RUS,Russian Federation,RUS088,Yamalo-nenetskiy Okrug
+6571,Taxila,PAK,Pakistan,PAK006,Punjab
+6577,Tulsa,USA,United States of America,USA037,Oklahoma
+6580,Kilwa,COD,Democratic Republic of Congo,COD014,Haut-Katanga
+6585,Yazd,IRN,Islamic Republic of Iran,IRN027,Yazd
+6586,Sadiqabad,PAK,Pakistan,PAK006,Punjab
+6591,Nuevo Laredo,MEX,Mexico,MEX028,Tamaulipas
+6592,Baton Rouge,USA,United States of America,USA019,Louisiana
+6593,Ribeirao Preto,BRA,Brazil,BRA029,Sao Paulo
+6597,Batman,TUR,Türkiye,TUR014,Batman
+6598,Grozny,RUS,Russian Federation,RUS012,Chechnya Rep.
+6602,Nadiad,IND,India,IND012,Gujarat
+6604,Deyang,CHN,China,CHN026,Sichuan Sheng
+6607,New Orleans,USA,United States of America,USA019,Louisiana
+6612,Muş,TUR,Türkiye,TUR059,Mus
+6620,Kebumen,IDN,Indonesia,IDN013,Jawa Tengah
+6621,Reynosa,MEX,Mexico,MEX028,Tamaulipas
+6622,Little Rock,USA,United States of America,USA004,Arkansas
+6630,Bojnurd,IRN,Islamic Republic of Iran,IRN016,Khorasan
+6635,Pekalongan,IDN,Indonesia,IDN013,Jawa Tengah
+6639,Yenagoa,NGA,Nigeria,NGA006,Bayelsa
+6641,Damietta,EGY,Arab Republic of Egypt,EGY008,Damietta
+6644,Dessie,ETH,Ethiopia,ETH003,Amhara
+6646,Rahim Yar Khan,PAK,Pakistan,PAK006,Punjab
+6648,Bajitpur,BGD,Bangladesh,BGD003,Dhaka
+6652,Lincoln,USA,United States of America,USA028,Nebraska
+6657,Siirt,TUR,Türkiye,TUR068,Siirt
+6661,Haripur,PAK,Pakistan,PAK005,Khyber Pakhtunkhwa
+6662,Anand,IND,India,IND012,Gujarat
+6663,Brahmanbaria,BGD,Bangladesh,BGD003,Dhaka
+6664,Mianyang,CHN,China,CHN026,Sichuan Sheng
+6668,Joinville,BRA,Brazil,BRA028,Santa Catarina
+6681,Coatzacoalcos,MEX,Mexico,MEX030,Veracruz de Ignacio de la Llave
+6687,Kars,TUR,Türkiye,TUR045,Kars
+6692,Udaipur,IND,India,IND029,Rajasthan
+6695,Pontianak,IDN,Indonesia,IDN020,Kalimantan Barat
+6696,Matamoros,MEX,Mexico,MEX028,Tamaulipas
+6697,Kansas City,USA,United States of America,USA026,Missouri
+6702,Ağrı,TUR,Türkiye,TUR004,Agri
+6704,Kombolcha,ETH,Ethiopia,ETH003,Amhara
+6706,Mansehra,PAK,Pakistan,PAK005,Khyber Pakhtunkhwa
+6718,Astrakhan,RUS,Russian Federation,RUS007,Astrakhanskaya Oblast
+6723,Barishal,BGD,Bangladesh,BGD001,Barishal
+6725,Wonosobo,IDN,Indonesia,IDN013,Jawa Tengah
+6726,Tuxtla Gutiérrez,MEX,Mexico,MEX007,Chiapas
+6727,Omaha,USA,United States of America,USA028,Nebraska
+6743,Franca,BRA,Brazil,BRA029,Sao Paulo
+6745,Bukavu,COD,Democratic Republic of Congo,COD011,Sud-Kivu
+6756,Tapachula,MEX,Mexico,MEX007,Chiapas
+6757,Memphis,USA,United States of America,USA043,Tennessee
+6761,Al Abbasa al Sharqiya,EGY,Arab Republic of Egypt,EGY024,Shrkia
+6766,Islamabad,PAK,Pakistan,PAK003,Federal Capital Territory
+6769,Emeishan,CHN,China,CHN026,Sichuan Sheng
+6776,Asyut,EGY,Arab Republic of Egypt,EGY002,Assiut
+6784,Panzhihua,CHN,China,CHN026,Sichuan Sheng
+6785,Semarang,IDN,Indonesia,IDN013,Jawa Tengah
+6791,Faqous,EGY,Arab Republic of Egypt,EGY024,Shrkia
+6792,Van,TUR,Türkiye,TUR077,Van
+6798,Chandpur,BGD,Bangladesh,BGD002,Chattogram
+6799,Ulanqab,CHN,China,CHN019,Nei Mongol Zizhiqu
+6801,Villahermosa,MEX,Mexico,MEX027,Tabasco
+6804,Minna,NGA,Nigeria,NGA027,Niger
+6811,Abbottabad,PAK,Pakistan,PAK005,Khyber Pakhtunkhwa
+6815,Magelang,IDN,Indonesia,IDN013,Jawa Tengah
+6817,Des Moines,USA,United States of America,USA016,Iowa
+6818,Piracicaba,BRA,Brazil,BRA029,Sao Paulo
+6826,Muzaffargarh,PAK,Pakistan,PAK006,Punjab
+6829,Longquanyi,CHN,China,CHN026,Sichuan Sheng
+6832,Montgomery,USA,United States of America,USA001,Alabama
+6833,Itajaí,BRA,Brazil,BRA028,Santa Catarina
+6837,Hakkâri,TUR,Türkiye,TUR035,Hakkari
+6841,Joharabad,PAK,Pakistan,PAK006,Punjab
+6844,Meishan,CHN,China,CHN026,Sichuan Sheng
+6845,Yogyakarta,IDN,Indonesia,IDN014,Daerah Istimewa Yogyakarta
+6850,Al-Asafra,EGY,Arab Republic of Egypt,EGY007,Dakahlia
+6861,Campeche,MEX,Mexico,MEX004,Campeche
+6867,Makhachkala,RUS,Russian Federation,RUS017,Dagestan Rep.
+6870,Khanpur,PAK,Pakistan,PAK006,Punjab
+6875,Mérida,MEX,Mexico,MEX031,Yucatán
+6876,St. Louis,USA,United States of America,USA026,Missouri
+6897,Mashhad,IRN,Islamic Republic of Iran,IRN016,Khorasan
+6903,Chetumal,MEX,Mexico,MEX023,Quintana Roo
+6904,Saint Petersburg,USA,United States of America,USA010,Florida
+6906,Gusau,NGA,Nigeria,NGA037,Zamfara
+6910,Goba,ETH,Ethiopia,ETH008,Oromia
+6911,Kerman,IRN,Islamic Republic of Iran,IRN014,Kerman
+6912,Multan,PAK,Pakistan,PAK006,Punjab
+6913,Surat,IND,India,IND012,Gujarat
+6920,Lokoja,NGA,Nigeria,NGA023,Kogi
+6921,Kalemie,COD,Democratic Republic of Congo,COD030,Tanganyika
+6934,Asaba,NGA,Nigeria,NGA010,Delta
+6935,Uvira,COD,Democratic Republic of Congo,COD011,Sud-Kivu
+6937,Ufa,RUS,Russian Federation,RUS008,Bashkortostan Rep.
+6943,Baoji,CHN,China,CHN022,Shaanxi Sheng
+6949,Goma,COD,Democratic Republic of Congo,COD009,Nord-Kivu
+6955,Hisar,IND,India,IND013,Haryana
+6958,Surakarta,IDN,Indonesia,IDN013,Jawa Tengah
+6959,Cancún,MEX,Mexico,MEX023,Quintana Roo
+6961,Florianópolis,BRA,Brazil,BRA028,Santa Catarina
+6967,Bandar Abbas,IRN,Islamic Republic of Iran,IRN012,Hormozgan
+6971,Leshan,CHN,China,CHN026,Sichuan Sheng
+6973,Cape Coral,USA,United States of America,USA010,Florida
+6974,Limeira,BRA,Brazil,BRA029,Sao Paulo
+6977,Sidfa,EGY,Arab Republic of Egypt,EGY002,Assiut
+6990,Port Said,EGY,Arab Republic of Egypt,EGY021,Port Said
+6996,Bhola,BGD,Bangladesh,BGD001,Barishal
+7003,Tima,EGY,Arab Republic of Egypt,EGY027,Suhag
+7006,Birjand,IRN,Islamic Republic of Iran,IRN016,Khorasan
+7008,Ajmer,IND,India,IND029,Rajasthan
+7012,Tampa,USA,United States of America,USA010,Florida
+7013,Americana,BRA,Brazil,BRA029,Sao Paulo
+7015,Butembo,COD,Democratic Republic of Congo,COD009,Nord-Kivu
+7016,Tahta,EGY,Arab Republic of Egypt,EGY027,Suhag
+7018,Orenburg,RUS,Russian Federation,RUS056,Orenburgskaya Oblast
+7019,جیرفت,IRN,Islamic Republic of Iran,IRN014,Kerman
+7021,Vadodara,IND,India,IND012,Gujarat
+7022,Shaistaganj,BGD,Bangladesh,BGD008,Sylhet
+7029,Al Harafsha,EGY,Arab Republic of Egypt,EGY027,Suhag
+7042,Al Ismailiya,EGY,Arab Republic of Egypt,EGY012,Ismailia
+7047,Patiala,IND,India,IND028,Punjab
+7049,Guangyuan,CHN,China,CHN026,Sichuan Sheng
+7050,Kudus,IDN,Indonesia,IDN013,Jawa Tengah
+7052,Sorocaba,BRA,Brazil,BRA029,Sao Paulo
+7054,Beni,COD,Democratic Republic of Congo,COD009,Nord-Kivu
+7057,Yekaterinburg,RUS,Russian Federation,RUS072,Sverdlovskaya Oblast
+7078,Campinas,BRA,Brazil,BRA029,Sao Paulo
+7085,Sargodha,PAK,Pakistan,PAK006,Punjab
+7086,Sikar,IND,India,IND029,Rajasthan
+7090,Nashville,USA,United States of America,USA043,Tennessee
+7092,Onitsha,NGA,Nigeria,NGA004,Anambra
+7093,Suhaj,EGY,Arab Republic of Egypt,EGY027,Suhag
+7099,Bharuch,IND,India,IND012,Gujarat
+7101,Jianyang,CHN,China,CHN026,Sichuan Sheng
+7107,Al-Manshah,EGY,Arab Republic of Egypt,EGY027,Suhag
+7110,Narmashir,IRN,Islamic Republic of Iran,IRN014,Kerman
+7118,Abonnema,NGA,Nigeria,NGA033,Rivers
+7122,Magnitogorsk,RUS,Russian Federation,RUS013,Chelyabinskaya Oblast
+7131,Owerri,NGA,Nigeria,NGA004,Anambra
+7132,Suez,EGY,Arab Republic of Egypt,EGY026,Suez
+7145,Girga,EGY,Arab Republic of Egypt,EGY027,Suhag
+7146,Bunia,COD,Democratic Republic of Congo,COD017,Ituri
+7147,Dire Dawa,ETH,Ethiopia,ETH005,Dire Dawa
+7151,Chandigarh,IND,India,IND028,Punjab
+7154,Ponorogo,IDN,Indonesia,IDN015,Jawa Timur
+7162,Zahedan,IRN,Islamic Republic of Iran,IRN024,Sistan-o baluchestan
+7163,Jhang,PAK,Pakistan,PAK006,Punjab
+7164,Ankleshwar,IND,India,IND012,Gujarat
+7167,Madiun,IDN,Indonesia,IDN015,Jawa Timur
+7168,Miami,USA,United States of America,USA010,Florida
+7170,Bugama,NGA,Nigeria,NGA033,Rivers
+7171,Balyana,EGY,Arab Republic of Egypt,EGY027,Suhag
+7173,Harar,ETH,Ethiopia,ETH007,Harari
+7174,Chelyabinsk,RUS,Russian Federation,RUS013,Chelyabinskaya Oblast
+7178,Sylhet,BGD,Bangladesh,BGD008,Sylhet
+7181,Minneapolis [Saint Paul],USA,United States of America,USA024,Minnesota
+7189,Khanewal,PAK,Pakistan,PAK006,Punjab
+7192,Chuxiong,CHN,China,CHN030,Yunnan Sheng
+7209,Port Harcourt,NGA,Nigeria,NGA033,Rivers
+7219,Atlanta,USA,United States of America,USA011,Georgia
+7222,Luxor,EGY,Arab Republic of Egypt,EGY015,Luxor
+7236,Khanty-Mansiysk,RUS,Russian Federation,RUS032,Khanty-mansyiskiy Okrug
+7239,RICCO Industrial Area,IND,India,IND029,Rajasthan
+7243,Orlando,USA,United States of America,USA010,Florida
+7246,Qena,EGY,Arab Republic of Egypt,EGY022,Qena
+7248,Tyumen,RUS,Russian Federation,RUS079,Tyumenskaya Oblast
+7252,Yan'an,CHN,China,CHN022,Shaanxi Sheng
+7255,Jundiaí,BRA,Brazil,BRA029,Sao Paulo
+7260,Bahawalpur,PAK,Pakistan,PAK006,Punjab
+7262,Moulvibazar,BGD,Bangladesh,BGD008,Sylhet
+7267,Gwagwalada,NGA,Nigeria,NGA015,Federal Capital Territory
+7268,Arish,EGY,Arab Republic of Egypt,EGY020,North Sinai
+7269,Jijiga,ETH,Ethiopia,ETH011,Somali
+7273,Golapganj,BGD,Bangladesh,BGD008,Sylhet
+7275,Tulungagung,IDN,Indonesia,IDN015,Jawa Timur
+7277,São Paulo,BRA,Brazil,BRA029,Sao Paulo
+7278,Awka,NGA,Nigeria,NGA004,Anambra
+7281,Kurgan,RUS,Russian Federation,RUS040,Kurganskaya Oblast
+7283,Navsari,IND,India,IND012,Gujarat
+7286,Nganjuk,IDN,Indonesia,IDN015,Jawa Timur
+7297,Bojonegoro,IDN,Indonesia,IDN015,Jawa Timur
+7308,Kediri,IDN,Indonesia,IDN015,Jawa Timur
+7311,Oyigbo,NGA,Nigeria,NGA033,Rivers
+7318,Ziyang,CHN,China,CHN026,Sichuan Sheng
+7322,Okrika,NGA,Nigeria,NGA033,Rivers
+7327,Kaithal,IND,India,IND013,Haryana
+7336,Omsk,RUS,Russian Federation,RUS055,Omskaya Oblast
+7338,Valsad,IND,India,IND012,Gujarat
+7343,Francisco Morato,BRA,Brazil,BRA029,Sao Paulo
+7344,Ogale,NGA,Nigeria,NGA033,Rivers
+7345,Aswan,EGY,Arab Republic of Egypt,EGY003,Aswan
+7348,Gojra,PAK,Pakistan,PAK006,Punjab
+7352,Blitar,IDN,Indonesia,IDN015,Jawa Timur
+7353,Jacksonville,USA,United States of America,USA010,Florida
+7356,Hurghada,EGY,Arab Republic of Egypt,EGY023,Red Sea
+7358,Novosibirsk,RUS,Russian Federation,RUS054,Novosibirskaya Oblast
+7361,Feni,BGD,Bangladesh,BGD002,Chattogram
+7365,São Luís,BRA,Brazil,BRA010,Maranhao
+7366,Madalla,NGA,Nigeria,NGA027,Niger
+7368,Tomsk,RUS,Russian Federation,RUS076,Tomskaya Oblast
+7379,Chiniot,PAK,Pakistan,PAK006,Punjab
+7383,Pare,IDN,Indonesia,IDN015,Jawa Timur
+7386,Bonny,NGA,Nigeria,NGA033,Rivers
+7390,Godhra,IND,India,IND012,Gujarat
+7393,Tuban,IDN,Indonesia,IDN015,Jawa Timur
+7395,Praia Grande,BRA,Brazil,BRA029,Sao Paulo
+7398,Kemerovo,RUS,Russian Federation,RUS029,Kemerovskaya Oblast
+7399,Mandi Bahauddin,PAK,Pakistan,PAK006,Punjab
+7406,Onne,NGA,Nigeria,NGA033,Rivers
+7412,Shuozhou,CHN,China,CHN025,Shanxi Sheng
+7413,Jombang,IDN,Indonesia,IDN015,Jawa Timur
+7418,Barnaul,RUS,Russian Federation,RUS004,Altayskiy Kray
+7419,Jhelum,PAK,Pakistan,PAK006,Punjab
+7424,Louisville,USA,United States of America,USA018,Kentucky
+7425,Santos,BRA,Brazil,BRA029,Sao Paulo
+7426,Aboh,NGA,Nigeria,NGA017,Imo
+7428,Faisalabad,PAK,Pakistan,PAK006,Punjab
+7429,Vapi,IND,India,IND012,Gujarat
+7430,Sandwip,BGD,Bangladesh,BGD002,Chattogram
+7438,Boisar,IND,India,IND021,Maharashtra
+7439,Chattogram,BGD,Bangladesh,BGD002,Chattogram
+7440,Datong,CHN,China,CHN025,Shanxi Sheng
+7447,Ambala,IND,India,IND013,Haryana
+7449,Hanzhong,CHN,China,CHN022,Shaanxi Sheng
+7457,Nazirhat,BGD,Bangladesh,BGD002,Chattogram
+7459,Surabaya,IDN,Indonesia,IDN015,Jawa Timur
+7460,Aurora,USA,United States of America,USA014,Illinois
+7465,Bhilwara,IND,India,IND029,Rajasthan
+7468,Malang,IDN,Indonesia,IDN015,Jawa Timur
+7470,Sao Jose dos Campos,BRA,Brazil,BRA029,Sao Paulo
+7471,Abuja,NGA,Nigeria,NGA015,Federal Capital Territory
+7472,Novokuznetsk,RUS,Russian Federation,RUS029,Kemerovskaya Oblast
+7474,Shimla,IND,India,IND014,Himachal Pradesh
+7478,Madison,USA,United States of America,USA050,Wisconsin
+7483,Jind,IND,India,IND013,Haryana
+7487,Bolingbrook,USA,United States of America,USA014,Illinois
+7489,Dere,NGA,Nigeria,NGA033,Rivers
+7493,Chandanaish,BGD,Bangladesh,BGD002,Chattogram
+7499,Krasnoyarsk,RUS,Russian Federation,RUS039,Krasnoyarskiy Kray
+7506,Taubaté,BRA,Brazil,BRA029,Sao Paulo
+7508,Rajon Swerdlowski,RUS,Russian Federation,RUS039,Krasnoyarskiy Kray
+7513,Gresik,IDN,Indonesia,IDN015,Jawa Timur
+7516,Kaduna,NGA,Nigeria,NGA019,Kaduna
+7526,Abakan,RUS,Russian Federation,RUS031,Khakasiya Rep.
+7531,Pasuruan,IDN,Indonesia,IDN015,Jawa Timur
+7532,Chicago,USA,United States of America,USA014,Illinois
+7537,Bhiwani,IND,India,IND013,Haryana
+7538,Satkania,BGD,Bangladesh,BGD002,Chattogram
+7543,Aba,NGA,Nigeria,NGA001,Abia
+7544,Shahkot,PAK,Pakistan,PAK006,Punjab
+7545,Kyzyl,RUS,Russian Federation,RUS080,Tyva Rep.
+7546,Silvassa,IND,India,IND008,Dadra and Nagar Haveli
+7559,Indianapolis,USA,United States of America,USA015,Indiana
+7562,Burewala,PAK,Pakistan,PAK006,Punjab
+7563,Vasai-Virar,IND,India,IND021,Maharashtra
+7565,Ramu,BGD,Bangladesh,BGD002,Chattogram
+7576,Probolinggo,IDN,Indonesia,IDN015,Jawa Timur
+7577,Lexington,USA,United States of America,USA018,Kentucky
+7582,Zhilkino,RUS,Russian Federation,RUS020,Irkutskaya Oblast
+7588,Nsukka,NGA,Nigeria,NGA014,Enugu
+7589,Hafizabad,PAK,Pakistan,PAK006,Punjab
+7590,Kurukshetra,IND,India,IND013,Haryana
+7591,Irkutsk,RUS,Russian Federation,RUS020,Irkutskaya Oblast
+7599,Mumbai,IND,India,IND021,Maharashtra
+7600,Ulan-Ude,RUS,Russian Federation,RUS011,Buryatiya Rep.
+7608,Yakutsk,RUS,Russian Federation,RUS064,Sakha Rep.
+7611,Milwaukee,USA,United States of America,USA050,Wisconsin
+7616,Chita,RUS,Russian Federation,RUS014,Chitinskaya Oblast
+7625,Blagoveshchensk,RUS,Russian Federation,RUS005,Amurskaya Oblast
+7626,Balung,IDN,Indonesia,IDN015,Jawa Timur
+7627,Cincinnati,USA,United States of America,USA036,Ohio
+7633,Magadan,RUS,Russian Federation,RUS044,Magadanskaya Oblast
+7638,Sahiwal,PAK,Pakistan,PAK006,Punjab
+7646,Gujrat,PAK,Pakistan,PAK006,Punjab
+7649,Khabarovsk,RUS,Russian Federation,RUS030,Khabarovskiy Kray
+7652,Teresina,BRA,Brazil,BRA022,Piaui
+7654,Jaranwala,PAK,Pakistan,PAK006,Punjab
+7658,Jember,IDN,Indonesia,IDN015,Jawa Timur
+7660,Montes Claros,BRA,Brazil,BRA013,Minas Gerais
+7670,Wazirabad,PAK,Pakistan,PAK006,Punjab
+7672,Zigong,CHN,China,CHN026,Sichuan Sheng
+7673,Vladivostok,RUS,Russian Federation,RUS060,Primorskiy Kray
+7676,Belo Horizonte,BRA,Brazil,BRA013,Minas Gerais
+7687,Jaipur,IND,India,IND029,Rajasthan
+7697,Yuzhno-Sakhalinsk,RUS,Russian Federation,RUS065,Sakhalinskaya Oblast
+7698,Sumenep,IDN,Indonesia,IDN015,Jawa Timur
+7701,Umuahia,NGA,Nigeria,NGA001,Abia
+7706,АЗС,RUS,Russian Federation,RUS026,Kamchatskaya Oblast
+7711,Rohtak,IND,India,IND013,Haryana
+7712,Suining,CHN,China,CHN026,Sichuan Sheng
+7716,Enugu,NGA,Nigeria,NGA014,Enugu
+7719,Lüliang,CHN,China,CHN025,Shanxi Sheng
+7721,Grand Rapids,USA,United States of America,USA023,Michigan
+7723,Katsina,NGA,Nigeria,NGA021,Katsina
+7725,Karnal,IND,India,IND013,Haryana
+7728,Urbancrest,USA,United States of America,USA036,Ohio
+7735,Columbus,USA,United States of America,USA036,Ohio
+7738,Gujranwala,PAK,Pakistan,PAK006,Punjab
+7739,Kalyan-Dombivli,IND,India,IND021,Maharashtra
+7748,Palangka Raya,IDN,Indonesia,IDN021,Kalimantan Tengah
+7749,Lansing,USA,United States of America,USA023,Michigan
+7750,Volta Redonda,BRA,Brazil,BRA023,Rio De Janeiro
+7751,Ado,NGA,Nigeria,NGA026,Nassarawa
+7760,Dahod,IND,India,IND012,Gujarat
+7767,Panvel,IND,India,IND021,Maharashtra
+7773,Okara,PAK,Pakistan,PAK006,Punjab
+7774,Yamunanagar,IND,India,IND013,Haryana
+7775,Xingping,CHN,China,CHN022,Shaanxi Sheng
+7776,Singaraja,IDN,Indonesia,IDN017,Bali
+7783,Denpasar,IDN,Indonesia,IDN017,Bali
+7784,Detroit,USA,United States of America,USA023,Michigan
+7788,Panipat,IND,India,IND013,Haryana
+7790,Banjarmasin,IDN,Indonesia,IDN022,Kalimantan Selatan
+7791,Raleigh,USA,United States of America,USA034,North Carolina
+7794,Lahore,PAK,Pakistan,PAK006,Punjab
+7799,Rio de Janeiro,BRA,Brazil,BRA023,Rio De Janeiro
+7806,Juiz de Fora,BRA,Brazil,BRA013,Minas Gerais
+7807,Zaria,NGA,Nigeria,NGA019,Kaduna
+7822,Pakpattan,PAK,Pakistan,PAK006,Punjab
+7829,Sialkot,PAK,Pakistan,PAK006,Punjab
+7831,Neijiang,CHN,China,CHN026,Sichuan Sheng
+7833,Cleveland,USA,United States of America,USA036,Ohio
+7836,Daska,PAK,Pakistan,PAK006,Punjab
+7847,Pittsburgh,USA,United States of America,USA039,Pennsylvania
+7849,Ikot Ekpene,NGA,Nigeria,NGA003,Akwa lbom
+7852,Zhaotong,CHN,China,CHN030,Yunnan Sheng
+7857,Kamoke,PAK,Pakistan,PAK006,Punjab
+7861,Richmond,USA,United States of America,USA047,Virginia
+7867,Mataram,IDN,Indonesia,IDN018,Nusa Tenggara Barat
+7882,Norfolk,USA,United States of America,USA047,Virginia
+7883,Ipatinga,BRA,Brazil,BRA013,Minas Gerais
+7890,Niterói,BRA,Brazil,BRA023,Rio De Janeiro
+7898,Abak,NGA,Nigeria,NGA003,Akwa lbom
+7902,Selong,IDN,Indonesia,IDN018,Nusa Tenggara Barat
+7910,Washington,USA,United States of America,USA047,Virginia
+7915,Xianyang,CHN,China,CHN022,Shaanxi Sheng
+7920,Muridke,PAK,Pakistan,PAK006,Punjab
+7929,Bazhong City,CHN,China,CHN026,Sichuan Sheng
+7943,Shunqing,CHN,China,CHN026,Sichuan Sheng
+7944,Balikpapan,IDN,Indonesia,IDN023,Kalimantan Timur
+7949,Sonipat,IND,India,IND013,Haryana
+7958,Samarinda,IDN,Indonesia,IDN023,Kalimantan Timur
+7959,Baltimore,USA,United States of America,USA021,Maryland
+7961,Uyo,NGA,Nigeria,NGA003,Akwa lbom
+7963,New Delhi,IND,India,IND034,Uttar Pradesh
+7976,Raiwind,PAK,Pakistan,PAK006,Punjab
+7979,Gunung Lingkas,IDN,Indonesia,IDN024,Kalimantan Utara
+7980,Buffalo,USA,United States of America,USA033,New York
+7981,Petrolina,BRA,Brazil,BRA021,Pernambuco
+7987,Harrisburg,USA,United States of America,USA039,Pennsylvania
+7989,Eket,NGA,Nigeria,NGA003,Akwa lbom
+7991,Saharanpur,IND,India,IND034,Uttar Pradesh
+7995,Vitória da Conquista,BRA,Brazil,BRA005,Bahia
+7999,Zhangjiakou,CHN,China,CHN010,Hebei Sheng
+8006,Xi'an,CHN,China,CHN022,Shaanxi Sheng
+8012,Nashik,IND,India,IND021,Maharashtra
+8013,Kunming,CHN,China,CHN030,Yunnan Sheng
+8025,Narowal,PAK,Pakistan,PAK006,Punjab
+8029,Philadelphia,USA,United States of America,USA039,Pennsylvania
+8035,Makassar,IDN,Indonesia,IDN027,Sulawesi Selatan
+8037,Campos dos Goytacazes,BRA,Brazil,BRA023,Rio De Janeiro
+8038,Abakaliki,NGA,Nigeria,NGA011,Ebonyi
+8039,Kasur,PAK,Pakistan,PAK006,Punjab
+8047,Rasoi,IND,India,IND010,Delhi
+8052,Otukpo,NGA,Nigeria,NGA007,Benue
+8054,Bhiwadi,IND,India,IND029,Rajasthan
+8089,Daura,NGA,Nigeria,NGA021,Katsina
+8093,Trenton,USA,United States of America,USA031,New Jersey
+8101,Oron,NGA,Nigeria,NGA003,Akwa lbom
+8102,Alwar,IND,India,IND029,Rajasthan
+8120,Dehradun,IND,India,IND035,Uttarakhand
+8124,Colina de Laranjeiras,BRA,Brazil,BRA008,Espirito Santo
+8125,Kano,NGA,Nigeria,NGA020,Kano
+8128,Palu,IDN,Indonesia,IDN026,Sulawesi Tengah
+8133,Longchang,CHN,China,CHN026,Sichuan Sheng
+8143,Calabar,NGA,Nigeria,NGA009,Cross River
+8154,Fortaleza,BRA,Brazil,BRA006,Ceara
+8156,Ratlam,IND,India,IND020,Madhya Pradesh
+8169,Yuxi,CHN,China,CHN030,Yunnan Sheng
+8190,Feira de Santana,BRA,Brazil,BRA005,Bahia
+8197,Lafia,NGA,Nigeria,NGA026,Nassarawa
+8201,Albany,USA,United States of America,USA033,New York
+8203,Makurdi,NGA,Nigeria,NGA007,Benue
+8212,Kendari,IDN,Indonesia,IDN028,Sulawesi Tenggara
+8218,Kupang,IDN,Indonesia,IDN019,Nusa Tenggara Timur
+8219,Hartford,USA,United States of America,USA007,Connecticut
+8234,Kota,IND,India,IND029,Rajasthan
+8237,Providence,USA,United States of America,USA040,Rhode Island
+8238,Salvador,BRA,Brazil,BRA005,Bahia
+8240,Roorkee,IND,India,IND035,Uttarakhand
+8242,Gorontalo,IDN,Indonesia,IDN029,Gorontalo
+8252,Muzaffarnagar,IND,India,IND034,Uttar Pradesh
+8255,Boston,USA,United States of America,USA022,Massachusetts
+8258,Pune,IND,India,IND021,Maharashtra
+8259,Xuanhua,CHN,China,CHN010,Hebei Sheng
+8263,Jos,NGA,Nigeria,NGA032,Plateau
+8268,Mossoró,BRA,Brazil,BRA024,Rio Grande Do Norte
+8284,Manado,IDN,Indonesia,IDN025,Sulawesi Utara
+8294,Haridwar,IND,India,IND035,Uttarakhand
+8304,Gboko,NGA,Nigeria,NGA007,Benue
+8305,Meerut,IND,India,IND034,Uttar Pradesh
+8313,Aracaju,BRA,Brazil,BRA030,Sergipe
+8317,Ternate,IDN,Indonesia,IDN032,Maluku Utara
+8326,Taiyuan,CHN,China,CHN025,Shanxi Sheng
+8331,Weinan,CHN,China,CHN022,Shaanxi Sheng
+8332,Ambon,IDN,Indonesia,IDN031,Maluku
+8336,Luzhou,CHN,China,CHN026,Sichuan Sheng
+8340,Greater Noida,IND,India,IND034,Uttar Pradesh
+8342,Sorong,IDN,Indonesia,IDN034,Papua Barat Daya
+8343,Caruaru,BRA,Brazil,BRA021,Pernambuco
+8345,Palwal,IND,India,IND013,Haryana
+8348,Campina Grande,BRA,Brazil,BRA019,Paraiba
+8350,Rishikesh,IND,India,IND035,Uttarakhand
+8353,Maceió,BRA,Brazil,BRA002,Alagoas
+8355,Malegaon,IND,India,IND021,Maharashtra
+8363,Natal,BRA,Brazil,BRA024,Rio Grande Do Norte
+8387,Timika,IDN,Indonesia,IDN037,Papua Tengah
+8388,Recife,BRA,Brazil,BRA021,Pernambuco
+8399,Bauchi,NGA,Nigeria,NGA005,Bauchi
+8400,Hapur,IND,India,IND034,Uttar Pradesh
+8403,João Pessoa,BRA,Brazil,BRA019,Paraiba
+8419,Guang'an,CHN,China,CHN026,Sichuan Sheng
+8422,Dhule,IND,India,IND021,Maharashtra
+8423,Hechuan,CHN,China,CHN003,Chongqing Shi
+8427,Qiqihar,CHN,China,CHN011,Heilongjiang Sheng
+8428,Merauke,IDN,Indonesia,IDN036,Papua Selatan
+8429,Hadejia,NGA,Nigeria,NGA018,Jigawa
+8435,Yongchuan,CHN,China,CHN003,Chongqing Shi
+8448,Bijnor,IND,India,IND034,Uttar Pradesh
+8466,Satara,IND,India,IND021,Maharashtra
+8467,Xuanwei,CHN,China,CHN030,Yunnan Sheng
+8471,Gashua,NGA,Nigeria,NGA036,Yobe
+8475,Najibabad,IND,India,IND034,Uttar Pradesh
+8477,Potiskum,NGA,Nigeria,NGA036,Yobe
+8480,KUNDULUN,NGA,Nigeria,NGA016,Gombe
+8481,Bulandshahr,IND,India,IND034,Uttar Pradesh
+8485,Qujing,CHN,China,CHN030,Yunnan Sheng
+8486,Titi,NGA,Nigeria,NGA016,Gombe
+8498,Jalingo,NGA,Nigeria,NGA035,Taraba
+8499,Ujjain,IND,India,IND020,Madhya Pradesh
+8506,Jinzhong,CHN,China,CHN025,Shanxi Sheng
+8512,Beibei,CHN,China,CHN003,Chongqing Shi
+8514,Khurja,IND,India,IND034,Uttar Pradesh
+8518,Zengjia,CHN,China,CHN003,Chongqing Shi
+8519,Damaturu,NGA,Nigeria,NGA036,Yobe
+8536,Dazhou,CHN,China,CHN026,Sichuan Sheng
+8543,Yola,NGA,Nigeria,NGA002,Adamawa
+8544,Bharatpur,IND,India,IND029,Rajasthan
+8556,Mathura,IND,India,IND034,Uttar Pradesh
+8557,Chongqing,CHN,China,CHN003,Chongqing Shi
+8564,Maiduguri,NGA,Nigeria,NGA008,Borno
+8565,Indore,IND,India,IND020,Madhya Pradesh
+8570,Mubi,NGA,Nigeria,NGA002,Adamawa
+8572,Zheba,CHN,China,CHN003,Chongqing Shi
+8574,Kedgaon,IND,India,IND021,Maharashtra
+8583,Panaji,IND,India,IND011,Goa
+8584,Linfen,CHN,China,CHN025,Shanxi Sheng
+8600,Gamboru,NGA,Nigeria,NGA008,Borno
+8614,Dewas,IND,India,IND020,Madhya Pradesh
+8616,Kolhapur,IND,India,IND021,Maharashtra
+8618,Amroha,IND,India,IND034,Uttar Pradesh
+8626,Aligarh,IND,India,IND034,Uttar Pradesh
+8629,Liupanshui,CHN,China,CHN008,Guizhou Sheng
+8635,Ankang,CHN,China,CHN022,Shaanxi Sheng
+8645,Bijie,CHN,China,CHN008,Guizhou Sheng
+8648,Jalgaon,IND,India,IND021,Maharashtra
+8652,Hathras,IND,India,IND034,Uttar Pradesh
+8660,Agra,IND,India,IND034,Uttar Pradesh
+8666,Moradabad,IND,India,IND034,Uttar Pradesh
+8672,Chhatrapati Sambhajinagar,IND,India,IND021,Maharashtra
+8674,Sambhal,IND,India,IND034,Uttar Pradesh
+8677,Yangquan,CHN,China,CHN025,Shanxi Sheng
+8680,Ichalkaranji,IND,India,IND021,Maharashtra
+8685,Yuncheng,CHN,China,CHN025,Shanxi Sheng
+8686,Thakurdwara,IND,India,IND035,Uttarakhand
+8694,Sangli,IND,India,IND021,Maharashtra
+8702,Dhaulpur,IND,India,IND029,Rajasthan
+8704,Bhusawal,IND,India,IND021,Maharashtra
+8728,Belagavi,IND,India,IND017,Karnataka
+8732,Chandausi,IND,India,IND034,Uttar Pradesh
+8736,Tundla,IND,India,IND034,Uttar Pradesh
+8737,Changping,CHN,China,CHN002,Beijing Shi
+8741,Huiminxiang,CHN,China,CHN003,Chongqing Shi
+8743,Baicheng,CHN,China,CHN017,Jilin Sheng
+8745,Beijing,CHN,China,CHN002,Beijing Shi
+8754,Morena,IND,India,IND020,Madhya Pradesh
+8758,Rampur,IND,India,IND034,Uttar Pradesh
+8760,Guna,IND,India,IND020,Madhya Pradesh
+8766,Firozabad,IND,India,IND034,Uttar Pradesh
+8776,Khandwa,IND,India,IND020,Madhya Pradesh
+8780,Burhanpur,IND,India,IND020,Madhya Pradesh
+8781,Nanchuan,CHN,China,CHN003,Chongqing Shi
+8783,Fangshan,CHN,China,CHN002,Beijing Shi
+8789,Shijiazhuang,CHN,China,CHN010,Hebei Sheng
+8793,Huairou,CHN,China,CHN002,Beijing Shi
+8794,Etah,IND,India,IND034,Uttar Pradesh
+8797,Chifeng,CHN,China,CHN019,Nei Mongol Zizhiqu
+8804,Jalna,IND,India,IND021,Maharashtra
+8806,Gwalior,IND,India,IND020,Madhya Pradesh
+8812,Haldwani,IND,India,IND035,Uttarakhand
+8814,Rudrapur,IND,India,IND035,Uttarakhand
+8817,Wanzhou,CHN,China,CHN003,Chongqing Shi
+8821,Miyun,CHN,China,CHN002,Beijing Shi
+8843,Ranghulu,CHN,China,CHN011,Heilongjiang Sheng
+8844,Beed,IND,India,IND021,Maharashtra
+8852,Badaun,IND,India,IND034,Uttar Pradesh
+8853,Baoding,CHN,China,CHN010,Hebei Sheng
+8860,Bareilly,IND,India,IND034,Uttar Pradesh
+8866,Dharwad,IND,India,IND017,Karnataka
+8879,Songzhuang,CHN,China,CHN010,Hebei Sheng
+8886,Bhopal,IND,India,IND020,Madhya Pradesh
+8895,Changzhi,CHN,China,CHN025,Shanxi Sheng
+8902,Udupi,IND,India,IND017,Karnataka
+8903,Chengde,CHN,China,CHN010,Hebei Sheng
+8904,Mainpuri,IND,India,IND034,Uttar Pradesh
+8905,Daqing,CHN,China,CHN011,Heilongjiang Sheng
+8909,Anshun,CHN,China,CHN008,Guizhou Sheng
+8920,Bhind,IND,India,IND020,Madhya Pradesh
+8929,Pinggu,CHN,China,CHN002,Beijing Shi
+8934,Mangaluru,IND,India,IND017,Karnataka
+8936,Pilibhit,IND,India,IND034,Uttar Pradesh
+8945,Honghuagang,CHN,China,CHN008,Guizhou Sheng
+8946,Etawah,IND,India,IND034,Uttar Pradesh
+8947,Sanhe,CHN,China,CHN010,Hebei Sheng
+8949,Gaoping,CHN,China,CHN025,Shanxi Sheng
+8950,Vijayapura,IND,India,IND017,Karnataka
+8954,Solapur,IND,India,IND021,Maharashtra
+8962,Jhansi,IND,India,IND034,Uttar Pradesh
+8975,Langfang,CHN,China,CHN010,Hebei Sheng
+8981,Jincheng,CHN,China,CHN025,Shanxi Sheng
+8999,Jiyuan,CHN,China,CHN012,Henan Sheng
+9002,Akola,IND,India,IND021,Maharashtra
+9010,Farrukhabad,IND,India,IND034,Uttar Pradesh
+9019,Guiyang,CHN,China,CHN008,Guizhou Sheng
+9023,Xingtai,CHN,China,CHN010,Hebei Sheng
+9025,Luoyang,CHN,China,CHN012,Henan Sheng
+9028,Shahjahanpur,IND,India,IND034,Uttar Pradesh
+9029,Shiyan,CHN,China,CHN013,Hubei Sheng
+9037,Renqiu,CHN,China,CHN010,Hebei Sheng
+9042,Parbhani,IND,India,IND021,Maharashtra
+9044,Latur,IND,India,IND021,Maharashtra
+9051,Bo'ai,CHN,China,CHN012,Henan Sheng
+9055,Baochi,CHN,China,CHN027,Tianjin Shi
+9064,Shivamogga,IND,India,IND017,Karnataka
+9069,Wuqing,CHN,China,CHN027,Tianjin Shi
+9091,Hejian,CHN,China,CHN010,Hebei Sheng
+9107,Handan,CHN,China,CHN010,Hebei Sheng
+9108,Kannur,IND,India,IND018,Kerala
+9109,Yanshi District,CHN,China,CHN012,Henan Sheng
+9113,Jiaozuo,CHN,China,CHN012,Henan Sheng
+9118,Orai,IND,India,IND034,Uttar Pradesh
+9127,Tianjin,CHN,China,CHN027,Tianjin Shi
+9132,Davanagere,IND,India,IND017,Karnataka
+9133,Guxian,CHN,China,CHN012,Henan Sheng
+9140,Hardoi,IND,India,IND034,Uttar Pradesh
+9141,Hengshui,CHN,China,CHN010,Hebei Sheng
+9145,Tongliao,CHN,China,CHN019,Nei Mongol Zizhiqu
+9149,Gongyi,CHN,China,CHN012,Henan Sheng
+9150,Thalassery,IND,India,IND018,Kerala
+9151,Enshi,CHN,China,CHN013,Hubei Sheng
+9152,Sagar,IND,India,IND020,Madhya Pradesh
+9159,Cixian,CHN,China,CHN010,Hebei Sheng
+9160,Amravati,IND,India,IND021,Maharashtra
+9168,Vadakara,IND,India,IND018,Kerala
+9174,Nanded,IND,India,IND021,Maharashtra
+9184,Kalaburagi,IND,India,IND017,Karnataka
+9191,Anyang,CHN,China,CHN012,Henan Sheng
+9194,Hosapete,IND,India,IND017,Karnataka
+9215,Fengrun,CHN,China,CHN010,Hebei Sheng
+9218,Lakhimpur,IND,India,IND034,Uttar Pradesh
+9227,Dengfeng,CHN,China,CHN012,Henan Sheng
+9229,Tangshan,CHN,China,CHN010,Hebei Sheng
+9230,Kozhikode,IND,India,IND018,Kerala
+9235,Zhaodong,CHN,China,CHN011,Heilongjiang Sheng
+9236,Sitapur,IND,India,IND034,Uttar Pradesh
+9241,Xinxiang,CHN,China,CHN012,Henan Sheng
+9243,Xingyang,CHN,China,CHN012,Henan Sheng
+9244,Kanpur,IND,India,IND034,Uttar Pradesh
+9250,Chhatarpur,IND,India,IND020,Madhya Pradesh
+9251,Binhai New Area,CHN,China,CHN027,Tianjin Shi
+9271,Botou,CHN,China,CHN010,Hebei Sheng
+9275,Suihua,CHN,China,CHN011,Heilongjiang Sheng
+9277,Zhengzhou,CHN,China,CHN012,Henan Sheng
+9278,Tanur,IND,India,IND018,Kerala
+9281,Cangzhou,CHN,China,CHN010,Hebei Sheng
+9284,Yavatmal,IND,India,IND021,Maharashtra
+9291,Xinmi,CHN,China,CHN012,Henan Sheng
+9295,Gulin,CHN,China,CHN027,Tianjin Shi
+9298,Ponnani,IND,India,IND018,Kerala
+9299,Chaoyang,CHN,China,CHN018,Liaoning Sheng
+9301,Chengtougu,CHN,China,CHN027,Tianjin Shi
+9310,Bidar,IND,India,IND017,Karnataka
+9314,Damoh,IND,India,IND020,Madhya Pradesh
+9329,Dengzhou,CHN,China,CHN012,Henan Sheng
+9330,Ballari,IND,India,IND017,Karnataka
+9340,Chhindwara,IND,India,IND020,Madhya Pradesh
+9346,Lucknow,IND,India,IND034,Uttar Pradesh
+9351,Dezhou,CHN,China,CHN023,Shandong Sheng
+9352,Thrissur,IND,India,IND018,Kerala
+9355,Linqing,CHN,China,CHN023,Shandong Sheng
+9361,Kaili,CHN,China,CHN008,Guizhou Sheng
+9366,Banda,IND,India,IND034,Uttar Pradesh
+9370,Wardha,IND,India,IND021,Maharashtra
+9376,Raichur,IND,India,IND017,Karnataka
+9386,Kochi,IND,India,IND018,Kerala
+9387,Nanyang,CHN,China,CHN012,Henan Sheng
+9388,Nizamabad,IND,India,IND032,Telangana
+9390,Mysuru,IND,India,IND017,Karnataka
+9397,Hulan,CHN,China,CHN011,Heilongjiang Sheng
+9399,Xinzheng,CHN,China,CHN012,Henan Sheng
+9405,Puyang,CHN,China,CHN012,Henan Sheng
+9409,Pingdingshan,CHN,China,CHN012,Henan Sheng
+9410,Nagpur,IND,India,IND021,Maharashtra
+9414,Fatehpur,IND,India,IND034,Uttar Pradesh
+9420,Alappuzha,IND,India,IND018,Kerala
+9429,Xuchang,CHN,China,CHN012,Henan Sheng
+9431,Kaifeng,CHN,China,CHN012,Henan Sheng
+9435,Fuxin,CHN,China,CHN018,Liaoning Sheng
+9444,Bahraich,IND,India,IND034,Uttar Pradesh
+9445,Harbin,CHN,China,CHN011,Heilongjiang Sheng
+9452,Palakkad,IND,India,IND018,Kerala
+9455,Xiangyang,CHN,China,CHN013,Hubei Sheng
+9462,Tumakuru,IND,India,IND017,Karnataka
+9464,Kollam,IND,India,IND018,Kerala
+9466,Jabalpur,IND,India,IND020,Madhya Pradesh
+9472,Kottayam,IND,India,IND018,Kerala
+9479,Tongren,CHN,China,CHN008,Guizhou Sheng
+9481,Liaocheng,CHN,China,CHN023,Shandong Sheng
+9489,Qinhuangdao,CHN,China,CHN010,Hebei Sheng
+9495,Yichang,CHN,China,CHN013,Hubei Sheng
+9502,Raebareli,IND,India,IND034,Uttar Pradesh
+9510,Coimbatore,IND,India,IND031,Tamil Nadu
+9514,Anantapur,IND,India,IND002,Andhra Pradesh
+9521,Jinzhou,CHN,China,CHN018,Liaoning Sheng
+9524,Hyderabad,IND,India,IND032,Telangana
+9536,Katni,IND,India,IND020,Madhya Pradesh
+9543,Huludao,CHN,China,CHN018,Liaoning Sheng
+9558,Bengaluru,IND,India,IND017,Karnataka
+9566,Kurnool,IND,India,IND002,Andhra Pradesh
+9571,Luohe,CHN,China,CHN012,Henan Sheng
+9576,Satna,IND,India,IND020,Madhya Pradesh
+9579,Heze,CHN,China,CHN023,Shandong Sheng
+9586,Attingal,IND,India,IND018,Kerala
+9588,Gonda,IND,India,IND034,Uttar Pradesh
+9591,Jinchengjiang,CHN,China,CHN007,Guangxi Zhuangzu Zizhiqu
+9602,Chandrapur,IND,India,IND021,Maharashtra
+9603,Jinan,CHN,China,CHN023,Shandong Sheng
+9612,Thiruvananthapuram,IND,India,IND018,Kerala
+9620,Tiruppur,IND,India,IND031,Tamil Nadu
+9633,Yingkou,CHN,China,CHN014,Hunan Sheng
+9637,Changchun,CHN,China,CHN017,Jilin Sheng
+9658,Faizabad,IND,India,IND034,Uttar Pradesh
+9664,Hosur,IND,India,IND031,Tamil Nadu
+9666,Karimnagar,IND,India,IND032,Telangana
+9671,Siping,CHN,China,CHN017,Jilin Sheng
+9673,Hegang,CHN,China,CHN011,Heilongjiang Sheng
+9676,Colachel,IND,India,IND031,Tamil Nadu
+9685,Zhumadian,CHN,China,CHN012,Henan Sheng
+9686,Rewa,IND,India,IND020,Madhya Pradesh
+9692,Sultanpur,IND,India,IND034,Uttar Pradesh
+9693,Binzhou,CHN,China,CHN023,Shandong Sheng
+9701,Panjin,CHN,China,CHN018,Liaoning Sheng
+9703,Zhoukou,CHN,China,CHN012,Henan Sheng
+9710,Gondia,IND,India,IND021,Maharashtra
+9714,Prayagraj,IND,India,IND034,Uttar Pradesh
+9715,Jingzhou,CHN,China,CHN013,Hubei Sheng
+9716,Erode,IND,India,IND031,Tamil Nadu
+9725,Zhangqiu,CHN,China,CHN023,Shandong Sheng
+9728,Pratapgarh,IND,India,IND034,Uttar Pradesh
+9731,Tai'an,CHN,China,CHN023,Shandong Sheng
+9757,Dongying,CHN,China,CHN023,Shandong Sheng
+9758,Domariaganj,IND,India,IND034,Uttar Pradesh
+9761,Shangqiu,CHN,China,CHN012,Henan Sheng
+9774,Jhusi,IND,India,IND034,Uttar Pradesh
+9779,Shenyang,CHN,China,CHN018,Liaoning Sheng
+9780,Nagercoil,IND,India,IND031,Tamil Nadu
+9781,Jining,CHN,China,CHN023,Shandong Sheng
+9793,Changde,CHN,China,CHN014,Hunan Sheng
+9800,Salem,IND,India,IND031,Tamil Nadu
+9801,Zibo,CHN,China,CHN023,Shandong Sheng
+9806,Tirunelveli,IND,India,IND031,Tamil Nadu
+9814,Warangal,IND,India,IND032,Telangana
+9820,Basti,IND,India,IND034,Uttar Pradesh
+9823,Jiamusi,CHN,China,CHN011,Heilongjiang Sheng
+9828,Sivakasi,IND,India,IND031,Tamil Nadu
+9831,Xinyang,CHN,China,CHN012,Henan Sheng
+9832,Meja Road,IND,India,IND034,Uttar Pradesh
+9836,Karur,IND,India,IND031,Tamil Nadu
+9840,Dindigul,IND,India,IND031,Tamil Nadu
+9843,Nanning,CHN,China,CHN007,Guangxi Zhuangzu Zizhiqu
+9845,Yingkou,CHN,China,CHN018,Liaoning Sheng
+9853,Laiwu,CHN,China,CHN023,Shandong Sheng
+9859,Linzi,CHN,China,CHN023,Shandong Sheng
+9860,Gyanpur,IND,India,IND034,Uttar Pradesh
+9861,Zoucheng,CHN,China,CHN023,Shandong Sheng
+9864,Kadapa,IND,India,IND002,Andhra Pradesh
+9873,Tianmen,CHN,China,CHN013,Hubei Sheng
+9877,Liaoyuan,CHN,China,CHN017,Jilin Sheng
+9879,Fushun,CHN,China,CHN018,Liaoning Sheng
+9880,Madurai,IND,India,IND031,Tamil Nadu
+9881,Anshan,CHN,China,CHN018,Liaoning Sheng
+9899,Liaoyang,CHN,China,CHN018,Liaoning Sheng
+9905,Haicheng,CHN,China,CHN018,Liaoning Sheng
+9908,Jaunpur,IND,India,IND034,Uttar Pradesh
+9909,Bozhou,CHN,China,CHN001,Anhui Sheng
+9911,Anlu,CHN,China,CHN013,Hubei Sheng
+9915,Dashiqiao,CHN,China,CHN018,Liaoning Sheng
+9919,Bayuquan,CHN,China,CHN018,Liaoning Sheng
+9921,Jilin City,CHN,China,CHN017,Jilin Sheng
+9926,Bhadohi,IND,India,IND034,Uttar Pradesh
+9930,Thoothukudi,IND,India,IND031,Tamil Nadu
+9934,Mirzapur,IND,India,IND034,Uttar Pradesh
+9939,Liuzhou,CHN,China,CHN007,Guangxi Zhuangzu Zizhiqu
+9959,Qingzhou,CHN,China,CHN023,Shandong Sheng
+9968,Gorakhpur,IND,India,IND034,Uttar Pradesh
+9969,Lengshuijiang,CHN,China,CHN014,Hunan Sheng
+9971,Shouguang,CHN,China,CHN023,Shandong Sheng
+9978,Tiruchirappalli,IND,India,IND031,Tamil Nadu
+9981,Tengzhou,CHN,China,CHN023,Shandong Sheng
+9984,Azamgarh,IND,India,IND034,Uttar Pradesh
+9987,Laibin,CHN,China,CHN007,Guangxi Zhuangzu Zizhiqu
+9990,Jianpur,IND,India,IND034,Uttar Pradesh
+9995,Linqu,CHN,China,CHN023,Shandong Sheng
+9996,Durg,IND,India,IND007,Chhattisgarh
+10003,Xiantao,CHN,China,CHN013,Hubei Sheng
+10006,Vellore,IND,India,IND031,Tamil Nadu
+10008,Varanasi,IND,India,IND034,Uttar Pradesh
+10010,Khammam,IND,India,IND032,Telangana
+10023,Guilin,CHN,China,CHN007,Guangxi Zhuangzu Zizhiqu
+10025,Benxi,CHN,China,CHN018,Liaoning Sheng
+10027,Yiyang,CHN,China,CHN014,Hunan Sheng
+10029,Xiaogan,CHN,China,CHN013,Hubei Sheng
+10034,Tiruvannamalai,IND,India,IND031,Tamil Nadu
+10041,Shaoyang,CHN,China,CHN014,Hunan Sheng
+10046,Tirupati,IND,India,IND002,Andhra Pradesh
+10051,Yongcheng,CHN,China,CHN012,Henan Sheng
+10053,Hanchuan,CHN,China,CHN013,Hubei Sheng
+10060,Ranipet,IND,India,IND031,Tamil Nadu
+10065,Fujin,CHN,China,CHN011,Heilongjiang Sheng
+10068,Waidhan,IND,India,IND020,Madhya Pradesh
+10069,Wafangdian,CHN,China,CHN018,Liaoning Sheng
+10073,Weifang,CHN,China,CHN023,Shandong Sheng
+10074,Raipur,IND,India,IND007,Chhattisgarh
+10093,Loudi,CHN,China,CHN014,Hunan Sheng
+10099,Fuyang,CHN,China,CHN001,Anhui Sheng
+10101,Yueyang,CHN,China,CHN014,Hunan Sheng
+10102,Deoria,IND,India,IND034,Uttar Pradesh
+10105,Changyi,CHN,China,CHN023,Shandong Sheng
+10106,Padrauna,IND,India,IND034,Uttar Pradesh
+10110,Mau,IND,India,IND034,Uttar Pradesh
+10113,Dalian,CHN,China,CHN018,Liaoning Sheng
+10125,市中区,CHN,China,CHN023,Shandong Sheng
+10127,Huaibei,CHN,China,CHN001,Anhui Sheng
+10131,Wuhan,CHN,China,CHN013,Hubei Sheng
+10132,Thanjavur,IND,India,IND031,Tamil Nadu
+10143,Xuzhou,CHN,China,CHN015,Jiangsu Sheng
+10159,Guigang,CHN,China,CHN007,Guangxi Zhuangzu Zizhiqu
+10160,Bilaspur,IND,India,IND007,Chhattisgarh
+10164,Ghazipur,IND,India,IND034,Uttar Pradesh
+10169,Anqiu,CHN,China,CHN023,Shandong Sheng
+10176,Guntur,IND,India,IND002,Andhra Pradesh
+10177,Laizhou,CHN,China,CHN023,Shandong Sheng
+10178,Nellore,IND,India,IND002,Andhra Pradesh
+10189,Miluo,CHN,China,CHN014,Hunan Sheng
+10190,Viluppuram,IND,India,IND031,Tamil Nadu
+10191,Yongzhou,CHN,China,CHN014,Hunan Sheng
+10199,Linyi,CHN,China,CHN023,Shandong Sheng
+10204,Kumbakonam,IND,India,IND031,Tamil Nadu
+10208,Kanchipuram,IND,India,IND031,Tamil Nadu
+10212,Tamkuhi Raj,IND,India,IND034,Uttar Pradesh
+10223,Beihai,CHN,China,CHN007,Guangxi Zhuangzu Zizhiqu
+10224,Vijayawada,IND,India,IND002,Andhra Pradesh
+10229,Changsha,CHN,China,CHN014,Hunan Sheng
+10232,Bhore,IND,India,IND005,Bihar
+10237,Suzhou,CHN,China,CHN001,Anhui Sheng
+10241,Guiping,CHN,China,CHN007,Guangxi Zhuangzu Zizhiqu
+10244,Vadalur,IND,India,IND031,Tamil Nadu
+10253,Pingdu,CHN,China,CHN023,Shandong Sheng
+10259,Xinxing,CHN,China,CHN011,Heilongjiang Sheng
+10267,Yuhu,CHN,China,CHN014,Hunan Sheng
+10277,Xianning,CHN,China,CHN013,Hubei Sheng
+10281,Gaomi,CHN,China,CHN023,Shandong Sheng
+10283,Zucheng,CHN,China,CHN023,Shandong Sheng
+10286,Bettiah,IND,India,IND005,Bihar
+10289,Xiangtan,CHN,China,CHN014,Hunan Sheng
+10290,Puducherry,IND,India,IND027,Puducherry
+10292,Cuddalore,IND,India,IND031,Tamil Nadu
+10300,Chennai,IND,India,IND031,Tamil Nadu
+10302,Chidambaram,IND,India,IND031,Tamil Nadu
+10305,Yitang,CHN,China,CHN015,Jiangsu Sheng
+10306,Maharajganj,IND,India,IND005,Bihar
+10316,Nautan,IND,India,IND005,Bihar
+10321,Ezhou,CHN,China,CHN013,Hubei Sheng
+10323,Zhuzhou,CHN,China,CHN014,Hunan Sheng
+10325,Yulin,CHN,China,CHN007,Guangxi Zhuangzu Zizhiqu
+10326,Korba,IND,India,IND007,Chhattisgarh
+10334,Ballia,IND,India,IND034,Uttar Pradesh
+10335,Hengyang,CHN,China,CHN014,Hunan Sheng
+10338,Siwan,IND,India,IND005,Bihar
+10343,Mudanjiang,CHN,China,CHN011,Heilongjiang Sheng
+10353,Fushan,CHN,China,CHN023,Shandong Sheng
+10361,Jiaozhou,CHN,China,CHN023,Shandong Sheng
+10368,Eluru,IND,India,IND002,Andhra Pradesh
+10371,Tonghua,CHN,China,CHN017,Jilin Sheng
+10378,Areraj,IND,India,IND005,Bihar
+10381,Laiyang,CHN,China,CHN023,Shandong Sheng
+10386,Sasaram,IND,India,IND005,Bihar
+10397,Huangshi,CHN,China,CHN013,Hubei Sheng
+10400,Turkaulia,IND,India,IND005,Bihar
+10402,Ekma,IND,India,IND005,Bihar
+10403,Tianjia‘an,CHN,China,CHN001,Anhui Sheng
+10415,Liuyang,CHN,China,CHN014,Hunan Sheng
+10423,Jixi,CHN,China,CHN011,Heilongjiang Sheng
+10432,Motihari,IND,India,IND005,Bihar
+10433,Baishan,CHN,China,CHN017,Jilin Sheng
+10437,Rizhao,CHN,China,CHN023,Shandong Sheng
+10440,Sahebganj,IND,India,IND005,Bihar
+10441,Dandong,CHN,China,CHN018,Liaoning Sheng
+10444,Marhaura,IND,India,IND005,Bihar
+10446,Dehri,IND,India,IND005,Bihar
+10447,Bengbu,CHN,China,CHN001,Anhui Sheng
+10449,Qingdao,CHN,China,CHN023,Shandong Sheng
+10453,Hezhou,CHN,China,CHN007,Guangxi Zhuangzu Zizhiqu
+10457,Suqian,CHN,China,CHN015,Jiangsu Sheng
+10462,Chhapra,IND,India,IND005,Bihar
+10463,Liling,CHN,China,CHN014,Hunan Sheng
+10469,胶南,CHN,China,CHN023,Shandong Sheng
+10470,Arrah,IND,India,IND005,Bihar
+10481,Lu'an,CHN,China,CHN001,Anhui Sheng
+10483,Huangdao District,CHN,China,CHN023,Shandong Sheng
+10484,Medininagar,IND,India,IND016,Jharkhand
+10489,Leiyang,CHN,China,CHN014,Hunan Sheng
+10493,Pukou,CHN,China,CHN014,Hunan Sheng
+10502,Dighwara,IND,India,IND005,Bihar
+10512,Mehsi,IND,India,IND005,Bihar
+10517,Cenxi,CHN,China,CHN007,Guangxi Zhuangzu Zizhiqu
+10521,Wuzhou,CHN,China,CHN007,Guangxi Zhuangzu Zizhiqu
+10524,Rajamahendravaram,IND,India,IND002,Andhra Pradesh
+10541,Leizhou,CHN,China,CHN006,Guangdong Sheng
+10543,Haizhou District,CHN,China,CHN015,Jiangsu Sheng
+10546,Kalyanpur,IND,India,IND005,Bihar
+10553,Pingxiang,CHN,China,CHN016,Jiangxi Sheng
+10563,Zhanjiang,CHN,China,CHN006,Guangdong Sheng
+10571,Danzhou City,CHN,China,CHN009,Hainan Sheng
+10573,Shuyang,CHN,China,CHN015,Jiangsu Sheng
+10576,Hajipur,IND,India,IND005,Bihar
+10580,Sitamarhi,IND,India,IND005,Bihar
+10585,Weihai,CHN,China,CHN023,Shandong Sheng
+10586,Patna,IND,India,IND005,Bihar
+10591,Xiashan,CHN,China,CHN006,Guangdong Sheng
+10592,Runisaidpur,IND,India,IND005,Bihar
+10604,Masaurhi,IND,India,IND005,Bihar
+10615,Gaozhou,CHN,China,CHN006,Guangdong Sheng
+10629,Hefei,CHN,China,CHN001,Anhui Sheng
+10636,Kakinada,IND,India,IND002,Andhra Pradesh
+10642,Gaya,IND,India,IND005,Bihar
+10645,Chenzhou,CHN,China,CHN014,Hunan Sheng
+10651,Maoming,CHN,China,CHN006,Guangdong Sheng
+10661,Wuchuan,CHN,China,CHN006,Guangdong Sheng
+10663,Yichun,CHN,China,CHN016,Jiangxi Sheng
+10674,Bakhtiyarpur,IND,India,IND005,Bihar
+10683,Sanya,CHN,China,CHN009,Hainan Sheng
+10695,Xiuying District,CHN,China,CHN009,Hainan Sheng
+10698,Rahika,IND,India,IND005,Bihar
+10704,Darbhanga,IND,India,IND005,Bihar
+10715,Huaiyin District,CHN,China,CHN015,Jiangsu Sheng
+10721,Jiujiang,CHN,China,CHN016,Jiangxi Sheng
+10728,Bihar Sharif,IND,India,IND005,Bihar
+10730,Khajauli,IND,India,IND005,Bihar
+10734,Madhubani,IND,India,IND005,Bihar
+10753,Huai'an District,CHN,China,CHN015,Jiangsu Sheng
+10754,Nawada,IND,India,IND005,Bihar
+10760,Mansurchak,IND,India,IND005,Bihar
+10766,Bibhutpur,IND,India,IND005,Bihar
+10774,Benipur,IND,India,IND005,Bihar
+10779,Xinyu,CHN,China,CHN016,Jiangxi Sheng
+10785,Gao'an,CHN,China,CHN016,Jiangxi Sheng
+10793,Chuzhou,CHN,China,CHN001,Anhui Sheng
+10805,Yanji,CHN,China,CHN017,Jilin Sheng
+10812,Kodarma,IND,India,IND016,Jharkhand
+10813,Anqing,CHN,China,CHN001,Anhui Sheng
+10814,Hazaribagh,IND,India,IND016,Jharkhand
+10816,Begusarai,IND,India,IND005,Bihar
+10826,Birpur,IND,India,IND005,Bihar
+10831,Nanchang,CHN,China,CHN016,Jiangxi Sheng
+10832,Ranchi,IND,India,IND016,Jharkhand
+10834,Vizianagaram,IND,India,IND002,Andhra Pradesh
+10835,Zhaoqing,CHN,China,CHN006,Guangdong Sheng
+10840,Rourkela,IND,India,IND026,Odisha
+10849,Sihui,CHN,China,CHN006,Guangdong Sheng
+10851,Yangjiang,CHN,China,CHN006,Guangdong Sheng
+10859,Shaoguan,CHN,China,CHN006,Guangdong Sheng
+10863,Qingyuan,CHN,China,CHN006,Guangdong Sheng
+10864,Supaul,IND,India,IND005,Bihar
+10875,Chizhou,CHN,China,CHN001,Anhui Sheng
+10879,Jianhu,CHN,China,CHN015,Jiangsu Sheng
+10880,Saharsa,IND,India,IND005,Bihar
+10887,Nanjing,CHN,China,CHN015,Jiangsu Sheng
+10891,Oucun,CHN,China,CHN006,Guangdong Sheng
+10892,Khagaria,IND,India,IND005,Bihar
+10898,Simri Bakhtiarpur,IND,India,IND005,Bihar
+10903,Enping,CHN,China,CHN006,Guangdong Sheng
+10904,Munger,IND,India,IND005,Bihar
+10909,Tongling,CHN,China,CHN001,Anhui Sheng
+10912,Madhepura,IND,India,IND005,Bihar
+10915,Ma'anshan,CHN,China,CHN001,Anhui Sheng
+10921,Gaoming,CHN,China,CHN006,Guangdong Sheng
+10925,Gaoyou,CHN,China,CHN015,Jiangsu Sheng
+10926,Maheshkhunt,IND,India,IND005,Bihar
+10927,Wuhu,CHN,China,CHN001,Anhui Sheng
+10933,Guangzhou,CHN,China,CHN006,Guangdong Sheng
+10937,Huadu,CHN,China,CHN006,Guangdong Sheng
+10941,Yancheng,CHN,China,CHN015,Jiangsu Sheng
+10949,Kaiping,CHN,China,CHN006,Guangdong Sheng
+10954,Giridih,IND,India,IND016,Jharkhand
+10970,Bokaro,IND,India,IND016,Jharkhand
+10973,Yangzhou,CHN,China,CHN015,Jiangsu Sheng
+10976,Bihpur,IND,India,IND005,Bihar
+10979,Xinghua,CHN,China,CHN015,Jiangsu Sheng
+10995,Nankang,CHN,China,CHN016,Jiangxi Sheng
+10998,Dhanbad,IND,India,IND016,Jharkhand
+11000,Amarpur,IND,India,IND005,Bihar
+11003,Ganzhou,CHN,China,CHN016,Jiangxi Sheng
+11008,Bhagalpur,IND,India,IND005,Bihar
+11011,Jingdezhen,CHN,China,CHN016,Jiangxi Sheng
+11012,Deoghar,IND,India,IND016,Jharkhand
+11015,Zhenjiang,CHN,China,CHN015,Jiangsu Sheng
+11016,Araria,IND,India,IND005,Bihar
+11018,Brahmapur,IND,India,IND026,Odisha
+11019,Fuzhou,CHN,China,CHN016,Jiangxi Sheng
+11026,Kotwali,IND,India,IND005,Bihar
+11032,Jamshedpur,IND,India,IND016,Jharkhand
+11035,Leping,CHN,China,CHN016,Jiangxi Sheng
+11037,Taizhou,CHN,China,CHN015,Jiangsu Sheng
+11040,Purulia,IND,India,IND036,West Bengal
+11044,Purnia,IND,India,IND005,Bihar
+11056,Darjeeling,IND,India,IND036,West Bengal
+11057,Danyang City,CHN,China,CHN015,Jiangsu Sheng
+11061,Xuancheng,CHN,China,CHN001,Anhui Sheng
+11067,Dongtai,CHN,China,CHN015,Jiangsu Sheng
+11078,Katihar,IND,India,IND005,Bihar
+11079,Zhuhai [Macau],CHN,China,CHN006,Guangdong Sheng
+11080,Asansol,IND,India,IND036,West Bengal
+11091,Jincheng Town,CHN,China,CHN015,Jiangsu Sheng
+11101,Taixing,CHN,China,CHN015,Jiangsu Sheng
+11105,Liyang,CHN,China,CHN015,Jiangsu Sheng
+11106,Gangtok,IND,India,IND030,Sikkim
+11110,Siliguri,IND,India,IND036,West Bengal
+11113,Changzhou,CHN,China,CHN015,Jiangsu Sheng
+11118,Cuttack,IND,India,IND026,Odisha
+11122,Bhubaneshwar,IND,India,IND026,Odisha
+11135,Huangshan,CHN,China,CHN001,Anhui Sheng
+11137,Ningguo,CHN,China,CHN001,Anhui Sheng
+11140,Bankura,IND,India,IND036,West Bengal
+11142,Rajmahal,IND,India,IND016,Jharkhand
+11148,Puri,IND,India,IND026,Odisha
+11150,Raiganj,IND,India,IND036,West Bengal
+11153,Jingjiang,CHN,China,CHN015,Jiangsu Sheng
+11155,Tuen Mun,HKG,"Hong Kong SAR, China [HKG]",HKG001,"Hong Kong SAR, China"
+11157,Jiangyin,CHN,China,CHN015,Jiangsu Sheng
+11158,Manikchak,IND,India,IND036,West Bengal
+11159,Heyuan,CHN,China,CHN006,Guangdong Sheng
+11165,Shenglicun,CHN,China,CHN006,Guangdong Sheng
+11169,Yixing,CHN,China,CHN015,Jiangsu Sheng
+11172,Jalpaiguri,IND,India,IND036,West Bengal
+11173,Huizhou,CHN,China,CHN006,Guangdong Sheng
+11174,Uttar Chandipur,IND,India,IND036,West Bengal
+11180,Siuri,IND,India,IND036,West Bengal
+11181,Fanling,HKG,"Hong Kong SAR, China [HKG]",HKG001,"Hong Kong SAR, China"
+11184,Dhulian,IND,India,IND036,West Bengal
+11195,Zhangjiagang,CHN,China,CHN015,Jiangsu Sheng
+11197,Tai Po,HKG,"Hong Kong SAR, China [HKG]",HKG001,"Hong Kong SAR, China"
+11202,Bhadrak,IND,India,IND026,Odisha
+11207,Huiyang,CHN,China,CHN006,Guangdong Sheng
+11209,Sha Tin,HKG,"Hong Kong SAR, China [HKG]",HKG001,"Hong Kong SAR, China"
+11211,Shangrao,CHN,China,CHN016,Jiangxi Sheng
+11225,Nantong,CHN,China,CHN015,Jiangsu Sheng
+11227,Changxing,CHN,China,CHN031,Zhejiang Sheng
+11229,Huidong,CHN,China,CHN006,Guangdong Sheng
+11245,Yangkou,CHN,China,CHN016,Jiangxi Sheng
+11251,Changshu,CHN,China,CHN015,Jiangsu Sheng
+11259,Huzhou,CHN,China,CHN031,Zhejiang Sheng
+11262,Kharagpur,IND,India,IND036,West Bengal
+11273,Xingning,CHN,China,CHN006,Guangdong Sheng
+11279,Quzhou,CHN,China,CHN031,Zhejiang Sheng
+11280,Berhampore,IND,India,IND036,West Bengal
+11290,Balurghat,IND,India,IND036,West Bengal
+11294,Beldanga,IND,India,IND036,West Bengal
+11295,Haimen,CHN,China,CHN015,Jiangsu Sheng
+11302,Tamluk,IND,India,IND036,West Bengal
+11310,Cooch Behar,IND,India,IND036,West Bengal
+11311,Hangzhou,CHN,China,CHN031,Zhejiang Sheng
+11317,Meizhou,CHN,China,CHN006,Guangdong Sheng
+11321,Haifeng,CHN,China,CHN006,Guangdong Sheng
+11333,Fuyang,CHN,China,CHN031,Zhejiang Sheng
+11335,Wangjiangjing,CHN,China,CHN031,Zhejiang Sheng
+11343,Shanwei,CHN,China,CHN006,Guangdong Sheng
+11345,Shanghai,CHN,China,CHN024,Shanghai Shi
+11346,Debandi,IND,India,IND036,West Bengal
+11349,Lili,CHN,China,CHN015,Jiangsu Sheng
+11352,Kolkata,IND,India,IND036,West Bengal
+11353,Lanxi,CHN,China,CHN031,Zhejiang Sheng
+11361,Tongxiang,CHN,China,CHN031,Zhejiang Sheng
+11365,Jiaxing,CHN,China,CHN031,Zhejiang Sheng
+11366,Mahishadal,IND,India,IND036,West Bengal
+11373,Lufeng,CHN,China,CHN006,Guangdong Sheng
+11374,Krishnanagar,IND,India,IND036,West Bengal
+11377,Qidong,CHN,China,CHN015,Jiangsu Sheng
+11379,Jinhua,CHN,China,CHN031,Zhejiang Sheng
+11387,Jiashan,CHN,China,CHN031,Zhejiang Sheng
+11397,Longyan,CHN,China,CHN004,Fujian Sheng
+11402,Dhubri,IND,India,IND004,Assam
+11403,Jinhe,CHN,China,CHN006,Guangdong Sheng
+11407,Shantou,CHN,China,CHN006,Guangdong Sheng
+11409,Zhuji,CHN,China,CHN031,Zhejiang Sheng
+11410,Habra,IND,India,IND036,West Bengal
+11416,Bazarati,IND,India,IND036,West Bengal
+11417,Pinghu,CHN,China,CHN031,Zhejiang Sheng
+11420,Jaynagar Majilpur,IND,India,IND036,West Bengal
+11430,Baduria,IND,India,IND036,West Bengal
+11439,Yiwu,CHN,China,CHN031,Zhejiang Sheng
+11442,Minakhan,IND,India,IND036,West Bengal
+11444,Canning,IND,India,IND036,West Bengal
+11448,Basirhat,IND,India,IND036,West Bengal
+11469,Dongyang,CHN,China,CHN031,Zhejiang Sheng
+11473,Jinshan,CHN,China,CHN024,Shanghai Shi
+11481,Huilai,CHN,China,CHN006,Guangdong Sheng
+11485,Shangyu District,CHN,China,CHN031,Zhejiang Sheng
+11487,Yongkang,CHN,China,CHN031,Zhejiang Sheng
+11489,Cixi,CHN,China,CHN031,Zhejiang Sheng
+11500,Guwahati,IND,India,IND004,Assam
+11507,Chenghai,CHN,China,CHN006,Guangdong Sheng
+11508,Shillong,IND,India,IND023,Meghalaya
+11511,Lishui,CHN,China,CHN031,Zhejiang Sheng
+11514,Moirabari,IND,India,IND004,Assam
+11517,Yuyao,CHN,China,CHN031,Zhejiang Sheng
+11518,Agartala,IND,India,IND033,Tripura
+11519,Raoping,CHN,China,CHN006,Guangdong Sheng
+11520,Tezpur,IND,India,IND004,Assam
+11524,Nagaon,IND,India,IND004,Assam
+11531,Shengzhou,CHN,China,CHN031,Zhejiang Sheng
+11537,Zhangzhou,CHN,China,CHN004,Fujian Sheng
+11540,Zakiganj,IND,India,IND004,Assam
+11556,Silchar,IND,India,IND004,Assam
+11563,Ningbo,CHN,China,CHN031,Zhejiang Sheng
+11571,Guankou,CHN,China,CHN004,Fujian Sheng
+11578,Dimapur,IND,India,IND025,Nagaland
+11580,Aizawl,IND,India,IND024,Mizoram
+11585,Tong'an,CHN,China,CHN004,Fujian Sheng
+11589,Fu'an,CHN,China,CHN004,Fujian Sheng
+11593,Xiamen City,CHN,China,CHN004,Fujian Sheng
+11599,Xianyou,CHN,China,CHN004,Fujian Sheng
+11608,Imphal,IND,India,IND022,Manipur
+11615,Beilun District,CHN,China,CHN031,Zhejiang Sheng
+11617,Ningde,CHN,China,CHN004,Fujian Sheng
+11621,Fuzhou,CHN,China,CHN004,Fujian Sheng
+11625,Ninghai County,CHN,China,CHN031,Zhejiang Sheng
+11628,Port Blair,IND,India,IND001,Andaman and Nicobar Islands
+11629,Linhai,CHN,China,CHN031,Zhejiang Sheng
+11630,Wenzhou,CHN,China,CHN031,Zhejiang Sheng
+11635,Dinghai District,CHN,China,CHN031,Zhejiang Sheng
+11636,Putian,CHN,China,CHN004,Fujian Sheng
+11637,Jieshan,CHN,China,CHN004,Fujian Sheng
+11642,Hui'an,CHN,China,CHN004,Fujian Sheng
+11644,Cangnan,CHN,China,CHN031,Zhejiang Sheng
+11648,Huangyan District,CHN,China,CHN031,Zhejiang Sheng
+11651,Longgang,CHN,China,CHN031,Zhejiang Sheng
+11653,Yueqing,CHN,China,CHN031,Zhejiang Sheng
+11655,Changle,CHN,China,CHN004,Fujian Sheng
+11660,Fuqing,CHN,China,CHN004,Fujian Sheng
+11665,Taizhou,CHN,China,CHN031,Zhejiang Sheng
+11676,Wenling,CHN,China,CHN031,Zhejiang Sheng
+11682,Yuhuan,CHN,China,CHN031,Zhejiang Sheng
