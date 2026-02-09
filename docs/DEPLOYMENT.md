@@ -146,7 +146,7 @@ If you prefer manual deployment:
 # Build everything
 cd docs
 python convert_csv_to_json.py
-jupyter book build --html .
+jupyter book build --html
 bash copy_static_files.sh
 
 # Install ghp-import if needed

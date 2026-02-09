@@ -25,7 +25,7 @@ To build the HTML version of the book:
 python convert_csv_to_json.py
 
 # 2. Build the documentation
-jupyter book build --html .
+jupyter book build --html
 
 # 3. Copy query builder and JSON files to build output
 bash copy_static_files.sh
@@ -114,7 +114,7 @@ This will generate a `.github/workflows/deploy.yml` file. You'll need to customi
 pip install ghp-import
 cd docs
 python convert_csv_to_json.py
-jupyter book build --html .
+jupyter book build --html
 bash copy_static_files.sh
 ghp-import -n -p -f _build/html
 ```

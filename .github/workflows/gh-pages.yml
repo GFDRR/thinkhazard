@@ -1,0 +1,72 @@
+# This file was created automatically with `jupyter-book init --gh-pages` 🪄 💚
+# Ensure your GitHub Pages settings for this repository are set to deploy with **GitHub Actions**.
+
+name: GitHub Pages
+
+on:
+  push:
+    paths:
+      - 'docs/**'
+
+env:
+  # `BASE_URL` determines, relative to the root of the domain, the URL that your site is served from.
+  # E.g., if your site lives at `https://mydomain.org/myproject`, set `BASE_URL=/myproject`.
+  # If, instead, your site lives at the root of the domain, at `https://mydomain.org`, set `BASE_URL=''`.
+  BASE_URL: /${{ github.event.repository.name }}
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+
+      - name: Generate JSON files from CSV
+        working-directory: docs
+        run: python convert_csv_to_json.py
+
+      - name: Install dependencies
+        working-directory: docs
+        run:  pip install -r requirements.txt
+
+      - name: Build HTML Assets
+        working-directory: docs
+        run: jupyter-book build --html
+
+      - name: Copy query builder and JSON files to build
+        working-directory: docs
+        run: bash copy_static_files.sh
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './docs/_build/html'
+
+  deploy:
+    needs: build
+
+    if: github.ref_name == 'master'
+
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
