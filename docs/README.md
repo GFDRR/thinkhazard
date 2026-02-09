@@ -1,12 +1,12 @@
 # ThinkHazard! Documentation
 
-This directory contains the methodology documentation for ThinkHazard!, built with [Jupyter Book](https://jupyterbook.org/).
+This directory contains the methodology documentation for ThinkHazard!, built with [Jupyter Book 2](https://jupyterbook.org/) (MyST-based).
 
 ## Building the Documentation
 
 ### Prerequisites
 
-You need Python 3.7+ and pip installed on your system.
+You need Python 3.9+ and pip installed on your system.
 
 ### Installation
 
@@ -24,7 +24,7 @@ To build the HTML version of the book:
 # 1. Generate JSON files from CSV data
 python convert_csv_to_json.py
 
-# 2. Build the documentation
+# 2. Build the documentation with Jupyter Book 2 (uses myst.yml)
 jupyter book build --html
 
 # 3. Copy query builder and JSON files to build output
@@ -44,8 +44,6 @@ python -m http.server 3100
 ```
 
 Then open http://localhost:3100 in your browser.
-
-**Note:** Don't use `jupyter book start` - it doesn't properly serve the JSON files and query builder. Use the Python HTTP server instead.
 
 ### Cleaning build files
 
@@ -80,50 +78,32 @@ The documentation includes an interactive query builder tool for finding adminis
 
 - **Source files:**
   - `query_builder.html` - Interactive search interface (in `docs/` root)
-  - `_static/TH_ADM2.csv` - Administrative divisions source data
-  - `_static/TH_URB.csv` - Urban areas source data
-  - `_static/divisions_flat.json` - 43,202 divisions (generated, committed)
-  - `_static/urban_areas.json` - 2,919 urban areas (generated, committed)
-  - `_static/countries.json` - 245 countries (generated, committed)
+  - `public/TH_ADM2.csv` - Administrative divisions source data
+  - `public/TH_URB.csv` - Urban areas source data
+  - `public/divisions_flat.json` - 43,202 divisions (generated, committed)
+  - `public/urban_areas.json` - 2,919 urban areas (generated, committed)
+  - `public/countries.json` - 245 countries (generated, committed)
 
 - **Data generation:**
   ```bash
   python convert_csv_to_json.py
   ```
-  This reads the CSV files from `_static/` and generates JSON files in `_static/`.
+  This reads the CSV files from `public/` and generates JSON files in `public/`.
 
 - **Deployment:**
-  The `copy_static_files.sh` script copies JSON files from `_static/` and the query builder to `_build/html/` for deployment.
+  The `copy_static_files.sh` script copies JSON files from `public/` and the query builder to `_build/html/` for deployment.
 
 ## Publishing
 
 ### GitHub Pages
 
-**Recommended: Use the Jupyter Book built-in GitHub Actions setup:**
+The project uses GitHub Actions for automatic deployment. See `.github/workflows/gh-pages.yml` for the configuration.
 
-```bash
-cd docs
-jupyter book init --gh-pages
-```
-
-This will generate a `.github/workflows/deploy.yml` file. You'll need to customize it to include our JSON generation and copy steps. See [DEPLOYMENT.md](DEPLOYMENT.md) for complete instructions.
-
-**Alternative: Manual deployment with ghp-import:**
-
-```bash
-pip install ghp-import
-cd docs
-python convert_csv_to_json.py
-jupyter book build --html
-bash copy_static_files.sh
-ghp-import -n -p -f _build/html
-```
-
-For detailed deployment instructions and GitHub Actions configuration, see [DEPLOYMENT.md](DEPLOYMENT.md).
+For detailed deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## Configuration
 
-The book's configuration is in [`_config.yml`](_config.yml) and the table of contents is defined in [`_toc.yml`](_toc.yml).
+The book's configuration is in [`myst.yml`](myst.yml) (Jupyter Book 2/MyST format) and the table of contents is defined in [`_toc.yml`](_toc.yml).
 
 ## Migrated from Slate
 

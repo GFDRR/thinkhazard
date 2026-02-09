@@ -11,10 +11,10 @@ cd docs
 python convert_csv_to_json.py
 
 # 2. Build documentation
-jupyter-book build .
+jupyter book build --html
 
 # 3. Copy query builder and JSON files to build output
-bash copy_static_files.sh
+bash copypublic_files.sh
 
 # 4. Preview locally
 cd _build/html
@@ -26,7 +26,7 @@ python -m http.server 3100
 
 ### Source Files (docs/)
 
-- **Data (in `_static/`):**
+- **Data (in `public/`):**
   - `TH_ADM2.csv` - Administrative divisions (source data, committed)
   - `TH_URB.csv` - Urban areas (source data, committed)
   - `divisions_flat.json` - 43,202 divisions (generated, committed)
@@ -34,8 +34,8 @@ python -m http.server 3100
   - `countries.json` - 245 countries (generated, committed)
 
 - **Scripts (in `docs/` root):**
-  - `convert_csv_to_json.py` - Generates JSON from CSV (outputs to `_static/`)
-  - `copy_static_files.sh` - Copies files from `_static/` to `_build/html/`
+  - `convert_csv_to_json.py` - Generates JSON from CSV (outputs to `public/`)
+  - `copypublic_files.sh` - Copies files from `public/` to `_build/html/`
 
 - **Query Builder (in `docs/` root):**
   - `query_builder.html` - Interactive search tool
@@ -83,7 +83,7 @@ The generated workflow builds the book automatically, but we need to add our cus
       # After the build step, add:
       - name: Copy query builder and JSON files to build
         working-directory: docs
-        run: bash copy_static_files.sh
+        run: bash copypublic_files.sh
 ```
 
 Your final workflow should look like:
@@ -109,7 +109,7 @@ Your final workflow should look like:
       # ADD THIS:
       - name: Copy query builder and JSON files to build
         working-directory: docs
-        run: bash copy_static_files.sh
+        run: bash copypublic_files.sh
 
       # ... (rest is auto-generated)
 ```
@@ -147,7 +147,7 @@ If you prefer manual deployment:
 cd docs
 python convert_csv_to_json.py
 jupyter book build --html
-bash copy_static_files.sh
+bash copypublic_files.sh
 
 # Install ghp-import if needed
 pip install ghp-import
@@ -162,7 +162,7 @@ Then enable GitHub Pages in repository settings to deploy from the `gh-pages` br
 
 To update the division or urban area data:
 
-1. Update the CSV files in `_static/`:
+1. Update the CSV files in `public/`:
    - `TH_ADM2.csv` - Administrative divisions
    - `TH_URB.csv` - Urban areas
 
@@ -198,9 +198,9 @@ python -m http.server 3100
 ```
 
 ### "Query builder shows 'Error loading data'"
-Make sure you've run `copy_static_files.sh` after building:
+Make sure you've run `copypublic_files.sh` after building:
 ```bash
-bash copy_static_files.sh
+bash copypublic_files.sh
 ```
 
 ### "JSON files are out of date"
@@ -218,15 +218,15 @@ The following are gitignored and should not be committed:
 
 Always commit these:
 - **Source data:**
-  - `_static/TH_ADM2.csv` - Administrative divisions source
-  - `_static/TH_URB.csv` - Urban areas source
+  - `public/TH_ADM2.csv` - Administrative divisions source
+  - `public/TH_URB.csv` - Urban areas source
 - **Generated data (committed for GitHub Pages):**
-  - `_static/divisions_flat.json` - Generated from CSV, committed
-  - `_static/urban_areas.json` - Generated from CSV, committed
-  - `_static/countries.json` - Generated from CSV, committed
+  - `public/divisions_flat.json` - Generated from CSV, committed
+  - `public/urban_areas.json` - Generated from CSV, committed
+  - `public/countries.json` - Generated from CSV, committed
 - **Tools:**
   - `query_builder.html` - Query builder interface
   - `convert_csv_to_json.py` - Data generation script
-  - `copy_static_files.sh` - Build helper script
+  - `copypublic_files.sh` - Build helper script
 - **Documentation:**
   - All `.md` files

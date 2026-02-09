@@ -21,9 +21,9 @@ For easier integration into web applications and query builders, JSON formatted 
 
 | Level | Description | JSON Reference | Size |
 |-------|-------------|----------------|------|
-| ADM0 | Countries list | [countries.json](./countries.json) | 245 countries |
-| ADM2 | Flat list with parent references | [divisions_flat.json](./divisions_flat.json) | 43,202 divisions |
-| URB | Urban areas list | [urban_areas.json](./urban_areas.json) | 2,919 urban areas |
+| ADM0 | Countries list | [countries.json](/countries.json) | 245 countries |
+| ADM2 | Flat list with parent references | [divisions_flat.json](/divisions_flat.json) | 43,202 divisions |
+| URB | Urban areas list | [urban_areas.json](/urban_areas.json) | 2,919 urban areas |
 
 **File Statistics:**
 - Total administrative divisions: 43,202
@@ -478,7 +478,7 @@ curl http://thinkhazard.org/en/hazardcategory/EQ/HIG.json
 
 To find administrative division codes or urban area codes for API requests, use the interactive Query Builder tool:
 
-**[→ Open Query Builder](./query_builder.html)**
+**[→ Open Query Builder](/query_builder.html)**
 
 The Query Builder provides:
 - **Two search modes:** Administrative Divisions and Urban Areas
@@ -490,9 +490,9 @@ The Query Builder provides:
 ### Alternative: Direct JSON Access
 
 For programmatic access, download the complete data:
-- **[divisions_flat.json](./divisions_flat.json)** - All 43,202 administrative divisions (12 MB)
-- **[urban_areas.json](./urban_areas.json)** - All 2,919 urban areas (143 KB)
-- **[countries.json](./countries.json)** - Countries only (27 KB)
+- **[divisions_flat.json](/divisions_flat.json)** - All 43,202 administrative divisions (12 MB)
+- **[urban_areas.json](/urban_areas.json)** - All 2,919 urban areas (143 KB)
+- **[countries.json](/countries.json)** - Countries only (27 KB)
 
 ## Support
 

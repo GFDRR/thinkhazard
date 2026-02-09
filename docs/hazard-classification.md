@@ -66,12 +66,10 @@ To do this, we first identify an intensity level for each hazard, above which da
 
 Frequency of a hazard intensity being exceeded can be defined in terms of average recurrence interval, or **return period**, expressed as '1 in 100 years', or the '100-year return period'. Alternatively, this can be expressed as the chance of the intensity value being exceeded on an annual basis: for the 100-year return period hazard this would be 1% chance of exceedance in any given year (1.0% = 1/100); for the 500-year return period this is 0.2% (0.2% = 1/500). Longer return periods correspond to having a smaller chance that the damaging intensity will be exceeded during the reference timeframe lifetime, hence the risk of damage is lower.
 
-```{figure} images/approach.png
----
-alt: Comparison of ThinkHazard! frequency-based approach and common intensity-based approach
-width: 80%
----
-```
+<div style="text-align: center;">
+  <img src="images/approach.png" alt="Comparison of ThinkHazard! frequency-based approach and common intensity-based approach" style="width: 80%;" class="dark:hidden" />
+  <img src="images/approach_dark.png" alt="Comparison of ThinkHazard! frequency-based approach and common intensity-based approach" style="width: 80%;" class="hidden dark:block" />
+</div>
 
 ### Key Parameters
 

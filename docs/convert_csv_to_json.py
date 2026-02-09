@@ -184,22 +184,22 @@ def main():
 
     # Determine the correct path for CSV files and output
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    static_dir = os.path.join(script_dir, '_static')
+    public_dir = os.path.join(script_dir, 'public')
 
     # CSV files location
-    adm_csv = os.path.join(static_dir, 'TH_ADM2.csv')
-    urb_csv = os.path.join(static_dir, 'TH_URB.csv')
+    adm_csv = os.path.join(public_dir, 'TH_ADM2.csv')
+    urb_csv = os.path.join(public_dir, 'TH_URB.csv')
 
-    # Output files in _static directory
-    divisions_json = os.path.join(static_dir, 'divisions_flat.json')
-    countries_json = os.path.join(static_dir, 'countries.json')
-    urban_json = os.path.join(static_dir, 'urban_areas.json')
+    # Output files in public directory
+    divisions_json = os.path.join(public_dir, 'divisions_flat.json')
+    countries_json = os.path.join(public_dir, 'countries.json')
+    urban_json = os.path.join(public_dir, 'urban_areas.json')
 
     # Process administrative divisions
     print(f'Reading {adm_csv}...')
     countries, adm1_divisions, adm2_divisions = read_csv_data(adm_csv)
 
-    print(f'\nGenerating administrative divisions JSON files in _static/...')
+    print(f'\nGenerating administrative divisions JSON files in public/...')
     generate_flat_json(countries, adm1_divisions, adm2_divisions, divisions_json)
     generate_countries_json(countries, countries_json)
 
@@ -214,7 +214,7 @@ def main():
         print(f'\nWarning: {urb_csv} not found, skipping urban areas')
 
     print(f'\n[OK] Conversion complete!')
-    print(f'\nGenerated files in _static/:')
+    print(f'\nGenerated files in public/:')
     print(f'  - divisions_flat.json: Complete flat list of administrative divisions')
     print(f'  - countries.json: Countries only (for initial dropdown)')
     if os.path.exists(urb_csv):

@@ -1,10 +1,9 @@
 # Documentation for
 
-```{figure} images/ThinkHazard.png
-:width: 511px
-:align: center
-:alt: ThinkHazard! Logo
-```
+<div style="text-align: center;">
+  <img src="images/ThinkHazard.png" alt="ThinkHazard! Logo" width="511" class="dark:hidden" />
+  <img src="images/ThinkHazard_dark.png" alt="ThinkHazard! Logo" width="511" class="hidden dark:block" />
+</div>
 
 ## Objectives
 
