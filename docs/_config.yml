@@ -45,6 +45,8 @@ sphinx:
       use_edit_page_button: false
       show_toc_level: 2
       theme_switcher: false
+    html_context:
+      default_mode: light
     html_css_files:
       - custom.css
     html_static_path:

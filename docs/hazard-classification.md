@@ -179,22 +179,15 @@ Below are the specific classification methods and thresholds for each of the 11 
 
 **Data Source**: [Floods (Fluvial, pluvial, coastal)](data-references.md#floods-fluvial-pluvial-coastal) (Fathom v3)
 
-**Return Periods**: Typically RP10, RP100, RP1000
+**Return Periods**: RP10, RP100, RP500, RP1000
 
 **Intensity Parameter**: Inundation depth (meters)
 
 ^^^
 
-**Intensity Thresholds** (RP-specific, configurable):
-- Typically 0.5-1.0 m depth per RP
-- Coastal floods may use higher thresholds (e.g., 2m for high hazard)
+**Intensity Thresholds**: 0.5 m depth
 
 **Area Threshold**: 5%
-
-**Climate Scenarios**: Flood hazard uniquely supports climate change projections:
-- **Historical baseline**: 2020
-- **Future projections**: 2030, 2050, 2080
-- **SSP scenarios**: SSP1-2.6, SSP2-4.5, SSP3-7.0, SSP5-8.5
 
 **Scoring Logic**:
 
@@ -204,7 +197,7 @@ Below are the specific classification methods and thresholds for each of the 11 
 | 1 RP | 0 | Very Low |
 | 2 RPs | 1 | Low |
 | 3 RPs | 2 | Medium |
-| 4+ RPs | 3 | High |
+| 4 RPs | 3 | High |
 
 :::
 
