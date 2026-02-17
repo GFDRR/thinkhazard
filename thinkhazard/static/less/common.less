@@ -376,10 +376,27 @@ ul.horizontal li {
           box-shadow: 0 5px 10px rgba(0,0,0,.2);
 }
 
+.tt-header {
+  display: inline-block;
+  line-height: 24px;
+  border-radius: 3px;
+  margin: 3px 10px;
+  padding: 2px 5px;
+}
+.tt-header.urban {
+  background:rgba(0, 0, 0, 0.2);
+}
+.tt-header.admindiv {
+  background:rgba(140, 0, 190, 0.2);
+}
+.tt-footer hr {
+  margin: 5px 10px;
+}
+
 .tt-suggestion {
   padding: 3px @suggestion-padding;
   font-size: 18px;
-  line-height: 24px;
+  line-height: normal;
 }
 
 .tt-suggestion:hover {

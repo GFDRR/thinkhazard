@@ -22,11 +22,17 @@ from .. import DBSession
 
 
 class TestSearchFunction(BaseTestCase):
-    def test_search(self):
+    def test_search_urban(self):
         resp = self.testapp.get(
-            "/en/administrativedivision", dict(q="Division"), status=200
+            "/en/administrativedivision?urban=true", dict(q="Division"), status=200
         )
-        self.assertEqual(len(resp.json["data"]), 7)
+        self.assertEqual(len(resp.json["data"]), 1)
+
+    def test_search_not_urban(self):
+        resp = self.testapp.get(
+            "/en/administrativedivision?urban=false", dict(q="Division"), status=200
+        )
+        self.assertEqual(len(resp.json["data"]), 5)
 
     def test_search_multilingual(self):
         """Test search finds results in any language and returns matched language name."""
@@ -40,21 +46,21 @@ class TestSearchFunction(BaseTestCase):
         DBSession.flush()
 
         resp = self.testapp.get(
-            "/en/administrativedivision", dict(q="TestCountry"), status=200
+            "/en/administrativedivision?urban=false", dict(q="TestCountry"), status=200
         )
         self.assertEqual(resp.json["data"][0]["admin0"], "TestCountry")
 
         resp = self.testapp.get(
-            "/en/administrativedivision", dict(q="PaysDuTest"), status=200
+            "/en/administrativedivision?urban=false", dict(q="PaysDuTest"), status=200
         )
         self.assertEqual(resp.json["data"][0]["admin0"], "PaysDuTest")
 
         resp = self.testapp.get(
-            "/fr/administrativedivision", dict(q="PaisDePrueba"), status=200
+            "/fr/administrativedivision?urban=false", dict(q="PaisDePrueba"), status=200
         )
         self.assertEqual(resp.json["data"][0]["admin0"], "PaisDePrueba")
 
         resp = self.testapp.get(
-            "/fr/administrativedivision", dict(q="PaysDuTest"), status=200
+            "/fr/administrativedivision?urban=false", dict(q="PaysDuTest"), status=200
         )
         self.assertEqual(resp.json["data"][0]["admin0"], "PaysDuTest")
