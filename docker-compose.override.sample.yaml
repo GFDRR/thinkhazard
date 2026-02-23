@@ -17,7 +17,6 @@ services:
 
   taskrunner:
     image: camptocamp/thinkhazard-builder
-    build: *build
     environment:
       USE_CACHE: 'TRUE'
     volumes:
