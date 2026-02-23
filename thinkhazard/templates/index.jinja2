@@ -6,12 +6,13 @@
 {% block name %}index{% endblock %}
 
 {% block content %}
-  {% set ticker_message = "Data update 2026 - New global hazard layers - Refined classification approach - Hazard classification extented to 3,000 urban areas - Please check updated documentation" %}
+  {% set ticker_message_full = "Data update 2026 - New global hazard layers - Refined classification approach - Hazard classification extented to 3,000 urban areas - Please check updated documentation" %}
+  {% set ticker_message_short = "Update 2026: new hazard layers and refined classification approach extented to 3,000 urban areas." %}
   <div class="news-ticker">
-    <div class="ticker-track">
-      <span class="ticker-text">{{ ticker_message }}</span>
-      <span class="ticker-text">{{ ticker_message }}</span>
-    </div>
+    <a target="_blank" href="https://gfdrr.github.io/thinkhazard/">
+      <span class="ticker-text ticker-text-full">{{ ticker_message_full }}</span>
+      <span class="ticker-text ticker-text-short">{{ ticker_message_short }}</span>
+    </a>
   </div>
   <nav class="navbar navbar-default">
     <div class="container">
