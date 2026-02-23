@@ -19,7 +19,7 @@ services:
 
   thinkhazard:
     image: camptocamp/thinkhazard
-    build: &build
+    build:
       context: .
       target: app
       args:
@@ -59,7 +59,6 @@ services:
 
   taskrunner:
     image: camptocamp/thinkhazard
-    build: *build
     user: www-data
     restart: unless-stopped
     depends_on:
