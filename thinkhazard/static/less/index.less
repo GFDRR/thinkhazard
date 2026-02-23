@@ -153,29 +153,26 @@ footer {
 .news-ticker {
   width: 100%;
   background: #D91F2C;
-  overflow: hidden;
   padding: 8px 0;
 }
 
-.ticker-track {
-  display: flex;
-  width: 200%;
-  animation: ticker-scroll 20s linear infinite;
-}
-
 .ticker-text {
-  width: 50%;
   text-align: center;
   color: #fff;
   font-size: 14px;
-  flex-shrink: 0;
 }
 
-@keyframes ticker-scroll {
-  0% {
-    transform: translateX(0);
+.ticker-text-short {
+  display: block;
+}
+.ticker-text-full {
+  display: none;
+}
+@media (min-width: 769px) {
+  .ticker-text-short {
+    display: none;
   }
-  100% {
-    transform: translateX(-50%);
+  .ticker-text-full {
+    display: block;
   }
 }
