@@ -24,7 +24,7 @@ from pyramid.httpexceptions import HTTPBadRequest
 
 from thinkhazard.models import AdministrativeDivision as AdDiv, AdminLevelType
 
-from sqlalchemy import func, or_
+from sqlalchemy import and_, func, or_
 
 
 def _normalize(text):
@@ -43,16 +43,27 @@ def administrativedivision(request):
 
     if "q" not in request.params:
         raise HTTPBadRequest(detail='parameter "q" is missing')
-
     term = request.params["q"]
+
+    if "urban" not in request.params:
+        raise HTTPBadRequest(detail='parameter "urban" is missing')
+    urban = request.params["urban"] == 'true'
+
+    if urban:
+        level_filter = (AdDiv.leveltype_id == 4)
+    else:
+        level_filter = (AdDiv.leveltype_id.in_((1, 2, 3)))
 
     # Search in all language fields
     term_pattern = "%{}%".format(term)
-    filter = or_(
-        func.unaccent(AdDiv.name).ilike(func.unaccent(term_pattern)),
-        func.unaccent(AdDiv.name_en).ilike(func.unaccent(term_pattern)),
-        func.unaccent(AdDiv.name_fr).ilike(func.unaccent(term_pattern)),
-        func.unaccent(AdDiv.name_es).ilike(func.unaccent(term_pattern)),
+    filter = and_(
+        or_(
+            func.unaccent(AdDiv.name).ilike(func.unaccent(term_pattern)),
+            func.unaccent(AdDiv.name_en).ilike(func.unaccent(term_pattern)),
+            func.unaccent(AdDiv.name_fr).ilike(func.unaccent(term_pattern)),
+            func.unaccent(AdDiv.name_es).ilike(func.unaccent(term_pattern)),
+        ),
+        level_filter
     )
 
     query = (
@@ -71,7 +82,7 @@ def administrativedivision(request):
             AdDiv.leveltype_id,
             AdDiv.name,
         )
-        .limit(10)
+        .limit(5)
     )
 
     def get_matched_lang(div):

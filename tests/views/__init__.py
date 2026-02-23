@@ -167,9 +167,18 @@ def populate_db():
     admin_div_32.geom = geometry
     admin_div_32.hazardcategories = []
 
+    # admin_div_41 is an urban area (division level 4)
+    # its parent is admin_div_31
+    admin_div_41 = AdministrativeDivision(
+        **{"code": "41", "leveltype_id": 4, "name": "Division level 4 - 1"}
+    )
+    admin_div_41.parent_code = admin_div_31.code
+    admin_div_41.geom = geometry
+    admin_div_41.hazardcategories = []
+
     # Here's a quick, graphical recap:
     #
-    # admin_div_10 -> admin_div_20 -> admin_div_31
+    # admin_div_10 -> admin_div_20 -> admin_div_31 -> admin_div_41
     #                             `-> admin_div_32
     # admin_div_11
     # admin_div_12
@@ -311,6 +320,8 @@ def populate_db():
             )
         )
         DBSession.add(admin_div_32)
+
+        DBSession.add(admin_div_41)
 
     # generic further resource for EQ:
     # it should be found on every EQ report page

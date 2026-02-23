@@ -35,6 +35,13 @@
     <div class="container-fluid text-center division-name">
       <h2>
         {{ division.translated_name(request.locale_name) }}
+        <small>
+        {% if division.leveltype_id == 4 %}
+        [{{gettext('Urban area')}}]
+        {% else %}
+        [{{gettext('Administrative division')}}]
+        {% endif %}
+        </small>
         <br>
         <small>
         {% for parent in parents | reverse %}

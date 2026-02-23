@@ -24,4 +24,4 @@ class TestSitemapFunction(BaseTestCase):
     def test_sitemap(self):
         resp = self.testapp.get("/sitemap.xml", status=200)
         urls = resp.xml.findall("{http://www.sitemaps.org/schemas/sitemap/0.9}url")
-        self.assertEqual(len(urls), 7)
+        self.assertEqual(len(urls), 8)
