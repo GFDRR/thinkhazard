@@ -153,7 +153,6 @@ def add_public_routes(config):
     add_localized_route(config, "index", "/")
     add_localized_route(config, "about", "/about")
     add_localized_route(config, "faq", "/faq")
-    add_localized_route(config, "disclaimer", "/disclaimer")
 
     def pregenerator(request, elements, kw):
         if "division" in kw:
