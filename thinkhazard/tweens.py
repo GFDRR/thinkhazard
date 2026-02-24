@@ -22,7 +22,6 @@ from functools import partial
 import secure
 from pyramid.response import Response
 from pyramid.renderers import render
-from pyramid.httpexceptions import HTTPNotModified
 
 from .models import Publication
 
@@ -82,13 +81,13 @@ def set_secure_headers(handler, registry):
     return tween
 
 
-def notmodified_tween_factory(handler, registry):
+def no_cache_tween_factory(handler, registry):
 
     if registry.settings["appname"] == "public":
 
         gmt = pytz.timezone("GMT")
 
-        def notmodified_tween(request):
+        def public_tween(request):
             if request.path == "/healthcheck":
                 return handler(request)
 
@@ -99,19 +98,13 @@ def notmodified_tween_factory(handler, registry):
                 response.status_code = 503
                 return response
 
-            if (
-                request.if_modified_since is not None
-                and request.if_modified_since >= publication_date.replace(microsecond=0)
-            ):
-                return HTTPNotModified()
-
             request.publication_date = publication_date
             response = handler(request)
-            response.last_modified = publication_date
+            response.cache_expires(0)
 
             return response
 
-        return notmodified_tween
+        return public_tween
 
     if registry.settings["appname"] == "admin":
 

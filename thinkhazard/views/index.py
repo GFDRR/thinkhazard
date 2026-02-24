@@ -44,18 +44,16 @@ def about(request):
     return {
         "publication_date": (
             publication_date.date.strftime("%c") if publication_date else ""
-        )
+        ),
+        "feedback_form_url": request.registry.settings["feedback_form_url"],
     }
 
 
 @view_config(route_name="faq", renderer="templates/faq.jinja2")
 def faq(request):
-    return {}
-
-
-@view_config(route_name="disclaimer", renderer="templates/disclaimer.jinja2")
-def disclaimer(request):
-    return {"feedback_form_url": request.registry.settings["feedback_form_url"]}
+    return {
+        "feedback_form_url": request.registry.settings["feedback_form_url"],
+    }
 
 
 @view_config(route_name="data_map", renderer="templates/data_map.jinja2")
