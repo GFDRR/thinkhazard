@@ -53,8 +53,8 @@ def main(global_config, **settings):
     config.include("papyrus")
     config.include("thinkhazard.session")
 
-    config.add_tween("thinkhazard.tweens.set_secure_headers", over=MAIN)
     config.add_tween("thinkhazard.tweens.no_cache_tween_factory", over=MAIN)
+    config.add_tween("thinkhazard.tweens.set_secure_headers", over=MAIN)
 
     config.add_static_view("static", "thinkhazard:static", cache_max_age=3600)
     config.override_asset(

@@ -63,7 +63,6 @@ def set_secure_headers(handler, registry):
         return partial(
             tween,
             secure_headers=secure.Secure(
-                cache=secure.CacheControl().public(),
                 csp=csp,
                 hsts=hsts,
             )
@@ -99,9 +98,9 @@ def no_cache_tween_factory(handler, registry):
                 return response
 
             request.publication_date = publication_date
+
             response = handler(request)
             response.cache_expires(0)
-
             return response
 
         return public_tween
