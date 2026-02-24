@@ -14,7 +14,7 @@ class TestAdminSecurityHeaders(BaseTestCase):
         resp = self.testapp.get("/", status=200)
 
         for key, value in (
-            ('Cache-Control', 'no-store'),
+            ('Cache-Control', 'max-age=0, must-revalidate, no-cache, no-store'),
             # ('Content-Length', '4875'),
             (
                 'Content-Security-Policy',
@@ -46,7 +46,7 @@ class TestPublicSecurityHeaders(BaseTestCase):
         resp = self.testapp.get("/en/", status=200)
 
         for key, value in (
-            ('Cache-Control', 'public'),
+            ('Cache-Control', 'max-age=0, must-revalidate, no-cache, no-store'),
             # ('Content-Length', '9455'),
             (
                 'Content-Security-Policy',
