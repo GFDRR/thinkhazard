@@ -11,9 +11,26 @@ The correct interpretation of any hazard information to determine the potential 
 
 ThinkHazard! is an analytical tool dedicated to improving knowledge and understanding of natural hazards. The primary users are development sector professionals, who need to gather hazard information while planning projects. However, the benefits of ThinkHazard! stretch beyond the development sector, into general education about global distribution of multiple hazards and how to manage them.
 
-ThinkHazard! is developed and maintained by the Global Facility for Disaster Reduction and Recovery [**(GFDRR Labs)**](http://gfdrr.org).
+```{admonition} Important: Hazard vs. Risk
+:class: warning
 
-Version 1 of ThinkHazard! was used over 140,000 times in 200 countries, and has been adopted into World Bank Operations Portal for core use in project planning.
+**ThinkHazard! provides hazard information, not risk assessments.** It is essential to understand the distinction between these concepts:
+
+- **Hazard** (as defined by UNDRR): "A process, phenomenon or human activity that may cause loss of life, injury or other health impacts, property damage, social and economic disruption or environmental degradation."
+
+- **Risk** (as defined by UNDRR): "The potential loss of life, injury, or destroyed or damaged assets which could occur to a system, society or a community in a specific period of time, determined probabilistically as a function of hazard, exposure, vulnerability and capacity."
+
+ThinkHazard! classifies the probability and intensity of natural hazards at specific locations. However, **hazard levels do not directly translate to risk levels**. A comprehensive risk evaluation must additionally account for:
+
+- **Exposure**: The presence of people, assets, infrastructure, and economic activities in hazard-prone areas
+- **Vulnerability**: The susceptibility of exposed elements to damage or harm from hazardous events
+
+For example, an area with high flood hazard but minimal population or assets would not necessarily represent high risk. Conversely, areas with moderate hazard levels may face significant risk if highly vulnerable populations or critical infrastructure are exposed.
+
+Users should consider ThinkHazard! classifications as a foundational input for risk-informed decision-making, supplemented with local exposure and vulnerability assessments for comprehensive disaster risk management.
+```
+
+ThinkHazard! is developed and maintained by the Global Facility for Disaster Reduction and Recovery [**(GFDRR Labs)**](http://gfdrr.org).
 
 ```{admonition} Getting Started
 :class: tip
