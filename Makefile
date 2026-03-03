@@ -41,27 +41,6 @@ export PUPPETEER_URL ?= http://puppeteer:8080
 
 TEST ?= tests
 
-
-.PHONY: help_old
-help_old:
-	@echo "Usage: make <target>"
-	@echo
-	@echo "Possible targets:"
-	@echo
-	@echo "- install                 Install thinkhazard"
-	@echo "- buildcss                Build CSS"
-	@echo "- check                   Check the code with flake8, jshint and bootlint"
-	@echo "- test                    Run the unit tests"
-	@echo "- dist                    Build a source distribution"
-	@echo "- routes                  Show the application routes"
-	@echo "- watch                   Run the build target when files in static dir change"
-	@echo "- extract_messages        Extract translation string and update the .pot file"
-	@echo "- transifex-push          Push translations to transifex"
-	@echo "- transifex-pull          Pull translations from transifex"
-	@echo "- transifex-import        Import po files into database"
-	@echo "- compile_catalog         Compile language files"
-	@echo
-
 default: help
 
 .PHONY: help
@@ -179,26 +158,6 @@ transifex-pull-db: ## Pull database strings from transifex
 ##############
 # Processing #
 ##############
-
-.PHONY: harvest
-harvest: ## Harvest GeoNode layers metadata
-	docker compose run --rm thinkhazard harvest -v
-
-.PHONY: download
-download: ## Download raster data from GeoNode
-	docker compose run --rm thinkhazard download -v
-
-.PHONY: complete
-complete: ## Mark complete hazardsets as such
-	docker compose run --rm thinkhazard complete -v -f
-
-.PHONY: process
-process: ## Compute hazard levels from hazardsets for administrative divisions level 2
-	docker compose run --rm thinkhazard process -v
-
-.PHONY: decisiontree
-decisiontree: ## Run the decision tree and perform upscaling
-	docker compose run --rm thinkhazard decision_tree -v
 
 .PHONY: publish
 publish: ## Publish validated data on public web site (for prod: make -f prod.mk publish)

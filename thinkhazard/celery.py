@@ -1,4 +1,3 @@
-import importlib
 import io
 import codecs
 import logging
@@ -7,18 +6,13 @@ import os
 import subprocess
 from contextlib import ContextDecorator
 from datetime import datetime
+
 from celery import Celery
 
-from thinkhazard.processing.harvesting import Harvester
-from thinkhazard.processing.downloading import Downloader
-from thinkhazard.processing.completing import Completer
-from thinkhazard.processing.processing import Processor
-from thinkhazard.processing.decisiontree import DecisionMaker
 from thinkhazard.processing.publish import Publisher
 from thinkhazard.processing.import_geopackage import GeopackageImporter
 from thinkhazard.lib.s3helper import S3Helper
 from thinkhazard.settings import load_full_settings
-imp = importlib.import_module("thinkhazard.processing.import")
 
 INI_FILE = os.environ["INI_FILE"]
 
@@ -104,28 +98,8 @@ def transifex_push():
 
 
 @app.task
-@CaptureTaskLogs("admindivs")
-def admindivs():
-    print("start admindivis")
-    imp.AdministrativeDivisionsImporter.run((INI_FILE, "-v"))
-    print("end admindivis")
-
-
-@app.task
 @CaptureTaskLogs("admindivs_gpkg")
 def admindivs_gpkg(geopackage_path):
     print("start admindivs_gpkg")
     GeopackageImporter.run((INI_FILE, "-v", "--geopackage-path", geopackage_path))
     print("end admindivs_gpkg")
-
-
-@app.task
-@CaptureTaskLogs("process")
-def process():
-    print("start processing")
-    Harvester.run((INI_FILE, "-v"))
-    Downloader.run((INI_FILE, "-v"))
-    Completer.run((INI_FILE, "-v"))
-    Processor.run((INI_FILE, "-v"))
-    DecisionMaker.run((INI_FILE, "-v"))
-    print("end processing")

@@ -9,10 +9,10 @@ from pyramid.i18n import TranslationStringFactory
 from pyramid.tweens import MAIN
 from papyrus.renderers import GeoJSON
 
-from thinkhazard.settings import load_processing_settings, load_local_settings
 from thinkhazard.lib.s3helper import S3Helper
 from thinkhazard.resources import Root
 from thinkhazard.security import groupfinder
+from thinkhazard.settings import load_processing_settings, load_local_settings
 
 try:
     version = subprocess.check_output(

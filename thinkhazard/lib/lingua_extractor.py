@@ -21,7 +21,7 @@ from lingva.extractors import Extractor
 from lingva.extractors import Message
 
 from sqlalchemy import engine_from_config
-from thinkhazard.settings import load_full_settings
+
 from thinkhazard.session import get_session_factory
 from thinkhazard.models import (
     ClimateChangeRecommendation,
@@ -30,6 +30,7 @@ from thinkhazard.models import (
     HazardType,
     TechnicalRecommendation,
 )
+from thinkhazard.settings import load_full_settings
 
 
 class EnumExtractor(Extractor):
