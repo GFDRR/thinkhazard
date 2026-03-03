@@ -29,50 +29,29 @@ Run checks and automated tests:
 make check test
 ```
 
-## Initialize a fresh database
+## Populate the admin database
 
-Install postgres `unaccent` extension database engine :
-
-```bash
-sudo apt install postgresql-contrib
-```
-
-Edit `/etc/postgresql/9.5/main/postgresql.conf`, and set `max_prepared_transactions` to 10
-
-Create a database:
+Create the required schema and tables and populate the tables in admin database:
 
 ```bash
-sudo -u postgres createdb -O www-data thinkhazard_admin
-sudo -u postgres psql -d thinkhazard_admin -c 'CREATE EXTENSION postgis;'
-sudo -u postgres psql -d thinkhazard_admin -c 'CREATE EXTENSION unaccent;'
-sudo -u postgres createdb -O www-data thinkhazard
-sudo -u postgres psql -d thinkhazard -c 'CREATE EXTENSION postgis;'
-sudo -u postgres psql -d thinkhazard -c 'CREATE EXTENSION unaccent;'
-```
-
-If you want to use a different user or different database name, you’ll have to provide your own configuration file. See “Use local.ini” section below.
-
-Create the required schema and tables and populate the enumeration tables:
-
-```bash
-make populatedb
+GPKG=path_to_geopackage_file make populatedb
 ```
 
 Note: this may take a while. If you don’t want to import all the world administrative divisions, you can import only a subset:
 
 ```bash
-make populatedb DATA=turkey
+GPKG=path_to_geopackage_file make populatedb DATA=turkey
 ```
 
 or:
 
 ```bash
-make populatedb DATA=indonesia
+GPKG=path_to_geopackage_file make populatedb DATA=indonesia
 ```
 
 ## Publication of admin database on public site
 
-Publication consist in overwriting the public database with the admin one. This can be done using :
+Publication consist in overwriting the public database with the admin one. This can be done using:
 
 ```bash
 make publish

@@ -67,13 +67,14 @@ class RecommendationsImporter(BaseProcessor):
                     .join(HazardType)
                     .filter(HazardLevel.mnemonic == row[1])
                     .filter(HazardType.mnemonic == row[0])
-                    .one()
+                    .one_or_none()
                 )
-                hazardcategory.general_recommendation = row[2]
-                self.dbsession.add(hazardcategory)
+                if hazardcategory is not None:
+                    hazardcategory.general_recommendation = row[2]
+                    self.dbsession.add(hazardcategory)
 
         categories = []
-        for type_ in ["EQ", "FL", "CY", "TS", "CF", "VA", "DG"]:
+        for type_ in ["FL", "PF", "CF", "EQ", "LS", "TS", "VA", "TC", "DG", "EH", "WF", "AP"]:
             for level in ["HIG", "MED", "LOW", "VLO"]:
                 hazardcategory = (
                     self.dbsession.query(HazardCategory)
@@ -113,7 +114,7 @@ class RecommendationsImporter(BaseProcessor):
         hazard_types = [
             ("FL", 6),
             ("EQ", 7),
-            ("CY", 8),
+            # ("CY", 8),
             ("CF", 9),
             ("DG", 10),
             ("TS", 11),
@@ -198,7 +199,7 @@ class ContactsImporter(BaseProcessor):
                     continue
                 division = (
                     self.dbsession.query(AdministrativeDivision)
-                    .filter(AdministrativeDivision.code == int(row[2]))
+                    .filter(AdministrativeDivision.code == row[2])
                     .one_or_none()
                 )
                 if division is None:

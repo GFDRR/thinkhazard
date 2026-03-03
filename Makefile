@@ -169,7 +169,7 @@ publish: ## Publish validated data on public web site (for prod: make -f prod.mk
 #######################
 
 .PHONY: populatedb
-populatedb: ## Populates database. Use DATA=turkey if you want to work with a sample data set
+populatedb: ## Populates database. Example: GPKG=path_to_geopackage_file make populatedb
 populatedb: initdb import_admindivs import_recommendations import_contacts
 
 .PHONY: initdb
@@ -185,8 +185,8 @@ initdb_force:
 	docker compose run --rm thinkhazard initialize_thinkhazard_db "$(INI_FILE)#admin" --force=1
 
 .PHONY: reinit_all
-reinit_all: ## Completely clear and re-init database. Only for developement purpose
-reinit_all: initdb_force import_admindivs import_recommendations import_contacts harvest download complete process decisiontree
+reinit_all: ## Completely clear and re-init database. Only for developement purpose. Example: GPKG=path_to_geopackage_file make reinit_all
+reinit_all: initdb_force import_admindivs import_recommendations import_contacts
 
 .PHONY: psql
 psql: ## Run psql in local thinkhazard database
@@ -197,9 +197,9 @@ bash: ## Open bash in an app container
 	docker compose run --rm --user `id -u` thinkhazard bash
 
 .PHONY: import_admindivs
-import_admindivs: ## Import administrative divisions. Use DATA=turkey or DATA=indonesia if you want to work with a sample data set
+import_admindivs: ## Import administrative divisions. Example: GPKG=path_to_geopackage_file make import_admindivs
 import_admindivs:
-	docker compose run --rm thinkhazard import_admindivs -v
+	docker compose run --rm -v $(GPKG):/tmp/file.gpkg thinkhazard import_geopackage -v --geopackage-path /tmp/file.gpkg
 
 .PHONY: import_recommendations
 import_recommendations: ## Import recommendations
