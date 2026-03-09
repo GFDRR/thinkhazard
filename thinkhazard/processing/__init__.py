@@ -23,9 +23,8 @@ import os
 import logging
 import colorlog
 
-from thinkhazard.settings import load_full_settings
 from thinkhazard.session import get_engine, get_session_factory
-
+from thinkhazard.settings import load_full_settings
 
 logger = colorlog.getLogger(__name__)
 

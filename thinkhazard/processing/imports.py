@@ -17,15 +17,8 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
 import csv
-import subprocess
 import logging
-import requests
-
-import sqlalchemy
-from pkg_resources import resource_string
-from pyramid.settings import asbool
 
 from thinkhazard.processing import BaseProcessor
 from thinkhazard.models import (
@@ -56,209 +49,6 @@ AND table_name = '{table}';
     return row[0] == 1
 
 
-class AdministrativeDivisionsImporter(BaseProcessor):
-    """
-    This script makes it so the database is populated with administrative
-    divisions.
-    """
-    TMP_PATH = "/tmp/admindivs"
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.use_cache = False
-
-    @staticmethod
-    def argument_parser():
-        parser = BaseProcessor.argument_parser()
-        parser.add_argument(
-            "--use-cache",
-            dest="use_cache",
-            action="store_const",
-            const=True,
-            default=False,
-            help="Keep files and temporary data between runs (for development)",
-        )
-        return parser
-
-    def do_execute(self, use_cache=False):
-        self.use_cache = use_cache or asbool(os.environ.get("USE_CACHE", False))
-
-        connection = self.dbsession.connection()
-
-        # FIXME: we should need this only once per database migration
-        connection.execute("""
-SELECT SETVAL(
-    'datamart.administrativedivision_id_seq',
-    COALESCE(MAX(id), 1)
-) FROM datamart.administrativedivision;
-""")
-
-        for level in (0, 1, 2):
-
-            zip_path = os.path.join(self.TMP_PATH, "adm{}_th.zip".format(level))
-            if not self.use_cache or not os.path.isfile(zip_path):
-                LOG.info("Downloading data for level {}".format(level))
-                if os.path.isfile(zip_path):
-                    os.unlink(zip_path)
-                self.download_zip(level, zip_path)
-
-            LOG.info("Decompressing data for level {}".format(level))
-            subprocess.run(["unzip", "-o", zip_path, "-d", self.TMP_PATH], check=True)
-
-            LOG.info("Importing data for level {}".format(level))
-            shp_path = os.path.join(self.TMP_PATH, "adm{}_th.shp".format(level))
-            table_name = "adm{}_th".format(level)
-            self.import_shapefile_shp2pgsql(shp_path, table_name, connection)
-
-            LOG.info("Updating administrative divisions for level {}".format(level))
-            connection.execute(self.update_query(level))
-
-            connection.execute("DROP TABLE IF EXISTS adm{}_th;".format(level))
-
-        LOG.info("Cut geometries around antemeridian")
-        polygon = (
-            "SRID=4326;POLYGON(("
-            "179.99995 90,"
-            "180.00005 90,"
-            "180.00005 0,"
-            "180.00005 -90,"
-            "179.99995 -90,"
-            "179.99995 0,"
-            "179.99995 90"
-            "))"
-        )
-        connection.execute(sqlalchemy.text("""
-UPDATE datamart.administrativedivision
-SET geom = ST_Multi(ST_Difference(ST_MakeValid(geom), ST_GeomFromEWKT('{}')))
-WHERE code IN (
-    204, 2501, 25042,  -- russian-federation-chukotskiy-okrug
-    83, 40189, 40201 -- fiji-northern-cakaudrove
-);
-""".format(polygon)))
-
-        LOG.info("Updating simplified geometries")
-        connection.execute(sqlalchemy.text(
-            resource_string("thinkhazard", "scripts/simplify.sql").decode("utf8")
-        ))
-
-        # Remove climate change recommendations that are not linked to divisions
-        # that don't exist anymore
-        connection.execute("""
-DELETE from datamart.rel_climatechangerecommendation_administrativedivision
-    WHERE administrativedivision_id NOT IN (
-          SELECT id
-          FROM datamart.administrativedivision
-    );""")
-
-        LOG.info(
-            "{} administrative divisions created".format(
-                self.dbsession.query(AdministrativeDivision).count()
-            )
-        )
-
-    def import_shapefile_ogr2ogr(self, path):
-        subprocess.run([
-            "ogr2ogr",
-            "-f", "PostgreSQL",
-            "-overwrite",
-            "-progress",
-            "-nlt", "MULTIPOLYGON",
-            "-mapFieldType", "All=String",
-            # "-skipfailures",
-            # "-limit", "1000",
-            "PG:""host=db port=5432 dbname=thinkhazard_admin user=thinkhazard password=thinkhazard""",
-            path,
-        ], check=True)
-
-    def import_shapefile_shp2pgsql(self, path, table_name, connection):
-        p1 = subprocess.Popen(
-            ["shp2pgsql", "-d", "-s", "4326", path, table_name],
-            stdout=subprocess.PIPE)
-        p2 = subprocess.Popen(
-            ["psql", "-d", str(self.dbsession.bind.url)],
-            stdin=p1.stdout)
-        p2.communicate()
-
-    def download_zip(self, level, path):
-        if not os.path.isfile(path):
-            url = ("https://www.geonode-gfdrrlab.org/geoserver/wfs"
-                   "?outputFormat=SHAPE-ZIP"
-                   "&service=WFS"
-                   "&srs=EPSG%3A4326"
-                   "&request=GetFeature"
-                   "&format_options=charset%3AUTF-8"
-                   "&typename=hazard%3Aadm{}_th"
-                   "&version=1.0.0"
-                   "&access_token=2ab5cd3e743611ea9ff302a677ac86ab"
-                   .format(level))
-            try:
-                LOG.info('  Retrieving {}'.format(url))
-                r = requests.get(url, stream=True)
-                r.raise_for_status()
-
-                LOG.info('  Saving to {}'.format(path))
-                with open(path, 'wb') as f:
-                    for chunk in r.iter_content(chunk_size=1024):
-                        f.write(chunk)
-            except:
-                os.unlink(path)
-
-    def update_query(self, level):
-        parent_code = "NULL"
-        if level != 0:
-            parent_code = "ADM{}_CODE".format(level - 1)
-
-        return """
-WITH new_values (
-        code,
-        leveltype_id,
-        name,
-        parent_code,
-        name_fr,
-        name_es,
-        geom
-    ) AS (
-        SELECT DISTINCT ON (adm{level}_code)
-            adm{level}_code::integer,
-            {levelplus1},
-            adm{level}_name,
-            {parent_code}::integer,
-            fre,
-            esp,
-            geom
-        FROM adm{level}_th
-)
-INSERT INTO datamart.administrativedivision (
-        code,
-        leveltype_id,
-        name,
-        parent_code,
-        name_fr,
-        name_es,
-        geom
-    )
-    SELECT
-        code,
-        leveltype_id,
-        name,
-        parent_code,
-        name_fr,
-        name_es,
-        geom
-    FROM new_values
-ON CONFLICT (code)
-DO
-    UPDATE
-        SET leveltype_id = EXCLUDED.leveltype_id,
-            name = EXCLUDED.name,
-            parent_code = EXCLUDED.parent_code,
-            name_fr = EXCLUDED.name_fr,
-            name_es = EXCLUDED.name_es,
-            geom = EXCLUDED.geom
-;
-""".format(level=level, levelplus1=level + 1, parent_code=parent_code)
-
-
 class RecommendationsImporter(BaseProcessor):
 
     def do_execute(self):
@@ -277,13 +67,14 @@ class RecommendationsImporter(BaseProcessor):
                     .join(HazardType)
                     .filter(HazardLevel.mnemonic == row[1])
                     .filter(HazardType.mnemonic == row[0])
-                    .one()
+                    .one_or_none()
                 )
-                hazardcategory.general_recommendation = row[2]
-                self.dbsession.add(hazardcategory)
+                if hazardcategory is not None:
+                    hazardcategory.general_recommendation = row[2]
+                    self.dbsession.add(hazardcategory)
 
         categories = []
-        for type_ in ["EQ", "FL", "CY", "TS", "CF", "VA", "DG"]:
+        for type_ in ["FL", "PF", "CF", "EQ", "LS", "TS", "VA", "TC", "DG", "EH", "WF", "AP"]:
             for level in ["HIG", "MED", "LOW", "VLO"]:
                 hazardcategory = (
                     self.dbsession.query(HazardCategory)
@@ -323,7 +114,7 @@ class RecommendationsImporter(BaseProcessor):
         hazard_types = [
             ("FL", 6),
             ("EQ", 7),
-            ("CY", 8),
+            # ("CY", 8),
             ("CF", 9),
             ("DG", 10),
             ("TS", 11),
@@ -408,7 +199,7 @@ class ContactsImporter(BaseProcessor):
                     continue
                 division = (
                     self.dbsession.query(AdministrativeDivision)
-                    .filter(AdministrativeDivision.code == int(row[2]))
+                    .filter(AdministrativeDivision.code == row[2])
                     .one_or_none()
                 )
                 if division is None:

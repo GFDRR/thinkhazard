@@ -1,6 +1,5 @@
 import os
 import configparser
-import yaml
 from pyramid.paster import get_appsettings
 
 
@@ -24,9 +23,7 @@ def load_full_settings(config_uri, name="admin", options={}):
 def load_processing_settings(settings):
     """Load processing specific settings.
     """
-    processing_settings_path = settings["processing_settings_path"]
-    with open(processing_settings_path, "r") as f:
-        settings.update(yaml.load(f.read(), Loader=yaml.FullLoader))
+    # Still needed for further resources
     settings["geonode"] = {
         "url": os.environ["GEONODE_URL"],
         "username": os.environ["GEONODE_USERNAME"],
