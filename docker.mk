@@ -22,6 +22,8 @@ compile_catalog: \
 
 TX_BRANCH_DASHED := $(subst .,-,$(TX_BRANCH))
 
+ifdef TX_TOKEN
+
 thinkhazard/locale/%/LC_MESSAGES/thinkhazard.po: $(HOME)/.transifexrc
 	tx pull --translations --languages=$* --resources=gfdrr-thinkhazard.$(TX_BRANCH_DASHED)-ui --force
 	touch `find thinkhazard/locale/ -name '*.po' 2> /dev/null`
@@ -32,6 +34,15 @@ $(HOME)/.transifexrc:
 	echo "rest_hostname = https://rest.api.transifex.com" >> $@
 	@echo "token = $(TX_TOKEN)" >> $@
 	cat $@
+
+else
+
+thinkhazard/locale/%/LC_MESSAGES/thinkhazard.po:
+	@echo "WARNING: TX_TOKEN not set, skipping Transifex pull. Using empty translations for $*."
+	mkdir -p $(dir $@)
+	@printf 'msgid ""\nmsgstr ""\n"Content-Type: text/plain; charset=UTF-8\\n"\n' > $@
+
+endif
 
 check: flake8
 
