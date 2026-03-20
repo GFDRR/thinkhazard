@@ -360,7 +360,7 @@ Below are the specific classification methods and thresholds for each of the 11 
 
 **Data Source**: [Volcanic Eruption](data-references.md#volcanic-eruption) (NOAA 2025)
 
-**Data Type**: Vector polygon data (VEI buffered zones)
+**Data Type**: Vector polygon data (VEI-proportional buffer zones)
 
 ^^^
 
@@ -430,14 +430,14 @@ Below are the specific classification methods and thresholds for each of the 11 
 |--------|---------------------|------|-------------------|
 | Earthquake | Peak Ground Acceleration | g | RP-specific: 0.12, 0.10, 0.08, 0.06 |
 | Cyclone | Wind Speed | m/s | RP-specific: 36, 36, 30, 26 |
-| River/Pluvial Flood | Inundation Depth | m | RP-specific: ~0.5-1.0 |
-| Coastal Flood | Inundation Depth | m | RP-specific: ~0.5-2.0 |
+| River/Pluvial Flood | Inundation Depth | m | 0.5 |
+| Coastal Flood | Inundation Depth | m | 0.5 |
 | Tsunami | Inundation Depth | m | RP-specific: 2.0, 1.0, 0.5 |
 | Wildfire | Fire Weather Index | FWI | 50 |
 | Extreme Heat | WBGT Temperature | °C | RP-specific: 32, 28, 25 |
 | Landslide | Susceptibility Index | class | Area-based only |
-| Volcano | VEI | index | Area-based only |
-| Water Scarcity | Water Stress | BWS | Area-based only |
+| Volcano | Volcano Explosivity Index | index | Index remap |
+| Water Scarcity | Baseline Water Stress | Index | Index remap |
 
 ### Return Periods Used
 
