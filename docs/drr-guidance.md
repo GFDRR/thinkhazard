@@ -1,22 +1,157 @@
-# Risk management guidance
+# Technical Recommendations for Disaster Risk Reduction
 
-One of the most important goals of ThinkHazard! is to help users manage disaster risk in their projects, not only to identify the hazard level. This guidance takes the form of:
+*A consolidated guide for integrating hazard considerations into project planning and development*
 
-1. recommendations on how to address the risk from each hazard;
-2. links to further resources, such as other data sources, reports on risk management options, or risk analyses relevant to that hazard and/or location; and
-3. Contacts information of organizations working on the hazard in that country.
+---
 
-## Risk management recommendations
+## Introduction
 
-ThinkHazard! displays hazard level for selected locations, not risk level (it does not estimate risk based on exposure and vulnerability to hazard). However, to maximize utility for user, technical recommendations are provided describing actions to be taken to manage risk to the project, based upon the classified hazard level. The recommendations have been developed by external experts in each hazard, consulted for this project. The recommendations are project agnostic (not specific to any project type or sector such as education, agriculture, or sanitation).
+This guide provides essential technical recommendations for reducing disaster risks across various hazard types. These recommendations are derived from international best practices and are designed to help project developers, engineers, and planners integrate risk reduction measures from the earliest stages of project development.
 
-Recommendations comprise a short summary statement, which is shown on the user interface, and a more detailed description of risk management actions, which is accessed by clicking on the 'more information' link at the end of each summary statement. The recommendations have been developed to provide guidance in non-technical language, and to provide practical actions specific to each hazard. A recommendation may be repeated for more than one hazard category, but higher hazard categories generally have a greater number of recommendations, comprising a greater number of, or the more serious, actions required to manage the highest level of hazard. Each technical recommendation comprises a short summary, which is presented on the user interface, and a more detailed section that can be accessed by clicking the hyperlinked short title. The technical recommendations cover subjects such as seeking professional guidance, considering early warning systems, or not increasing the hazard through the actions of the project. Please see the user interface for examples.
+**Key Principles:**
+- **Prevention is better than cure**: Avoiding hazard-prone areas and preventing hazard amplification saves lives and resources
+- **Expert guidance is essential**: Local and international expertise ensures context-appropriate solutions
+- **Multi-hazard thinking**: Consider interactions between different hazards
+- **Build resilience**: Design for recovery and continued operation after disasters
 
-## Further resources
+---
 
-The user interface includes a section providing further resources to the user. This comprises links to documents, analytical tools and websites that provide information relevant to the hazard and selected location. The resources may provide information on previous projects in the area, general advice on managing risk to a hazard, or provide a link to relevant agencies and tools for further analysis. All resources are stored on the same GeoNode as hazard data layers, and imported to ThinkHazard! for display. The resources are filtered by hazard and location, according to their metadata, and are displayed in chronological order in the user interface. A user downloads or accesses a link via the GeoNode record for that document.
+## 1. Risk Assessment & Planning
 
-## Contact Information
+**Start with understanding your risks.** Before committing resources, gather comprehensive hazard information specific to your project location.
 
-Contact information has been compiled for every country and hazard included in ThinkHazard!. This comprises organization name, website URL, telephone and email address, for up to three organizations per hazard and country. This list was last compiled in early 2017. It will be periodically reviewed and updated as new versions of ThinkHazard! are developed.
+### Key Actions:
+- Obtain pre-existing hazard information from local and national sources
+- Conduct site-specific risk assessments for all relevant hazards
+- Review historical hazard events and their impacts on the area
+- Verify that global datasets align with local conditions
+- Evaluate project vulnerability before finalizing location and design
 
+
+## 2. Expert Guidance & Standards
+
+**Engage qualified professionals.** Technical expertise ensures your project meets appropriate standards and addresses local conditions.
+
+### Key Actions:
+- Hire qualified engineers and hazard specialists with local experience
+- Comply with local building codes and international standards
+- Ensure designs are reviewed by professionals with relevant expertise
+- Consult government agencies responsible for hazard management
+- For critical infrastructure, require higher design standards
+
+
+## 3. Avoiding & Reducing Hazards
+
+**Do no harm.** Project construction can inadvertently increase hazards for the site and surrounding areas.
+
+### Key Actions:
+- Avoid building in high-hazard zones where relocation is feasible
+- Assess how construction will affect local hydrology, slopes, and microclimates
+- Do not increase hazard exposure for adjacent properties
+- Maintain natural drainage systems and vegetation where possible
+- Consider relocation if local assessments confirm high hazard exposure
+
+
+## 4. Hazard-Specific Mitigation
+
+**Implement targeted protection measures.** Different hazards require specific mitigation strategies.
+
+### Key Actions:
+- For floods: Consider green infrastructure, flood defenses, and drainage management
+- For water scarcity: Plan for storage, alternative sources, and efficient use
+- For extreme heat: Use appropriate building design, materials, and vegetation
+- For wildfires: Apply fuel management, site design, and ignition prevention
+- For earthquakes: Secure non-structural components and building contents
+
+
+## 5. Infrastructure & Interdependencies
+
+**Think beyond your project boundaries.** Infrastructure depends on networks that may be vulnerable to hazards.
+
+### Key Actions:
+- Identify critical infrastructure dependencies (power, water, communications, transport)
+- Assess vulnerability of the entire dependency network
+- For critical facilities, ensure functionality during and after hazard events
+- Plan for backup systems and redundancies
+- Consider cascading effects if network components fail
+
+
+## 6. Early Warning & Emergency Response
+
+**Prepare for emergencies.** Early warning and response planning can save lives and reduce losses.
+
+### Key Actions:
+- Identify and integrate with existing early warning systems
+- Ensure warnings reach all facility occupants
+- Develop and practice evacuation plans and emergency protocols
+- Incorporate emergency features (exits, signage, equipment) in design
+- Align with government emergency response policies
+- For volcanoes and tsunamis, ensure the project can act on warnings
+
+
+## 7. Multi-Hazard Considerations
+
+**Consider hazard interactions.** Multiple hazards may occur simultaneously or trigger secondary effects.
+
+### Key Actions:
+- Account for coastal flooding from cyclones and storm surge
+- Consider earthquake secondary hazards (landslides, liquefaction, tsunamis, fires)
+- Assess impacts beyond the immediate hazard source (e.g., volcanic ash, flooding upstream)
+- Evaluate effects on local populations and the environment
+
+
+## 8. Financial Protection
+
+**Transfer residual risk.** Insurance can help projects recover when mitigation is insufficient.
+
+### Key Actions:
+- Consider hazard-specific insurance for risks that cannot be fully mitigated
+- Evaluate insurance options for earthquakes, floods, cyclones, and wildfires
+- Include coverage for business interruption and recovery costs
+- For wildfires, consider indemnity against legal action
+
+---
+
+## Resources & Further Guidance
+
+### International Frameworks & Standards
+
+**United Nations Office for Disaster Risk Reduction (UNDRR)**
+- [Sendai Framework for Disaster Risk Reduction 2015-2030](https://www.undrr.org/publication/sendai-framework-disaster-risk-reduction-2015-2030) - Global blueprint for disaster risk reduction
+- [Words into Action Guidelines](https://www.undrr.org/words-into-action) - Implementation guides for disaster risk reduction
+- [Disaster Risk Reduction Terminology](https://www.undrr.org/terminology) - Standardized DRR concepts and definitions
+- [PreventionWeb](https://www.preventionweb.net/) - Knowledge platform for disaster risk reduction
+
+**Global Facility for Disaster Reduction and Recovery (GFDRR)**
+- [GFDRR Project Portfolio](https://www.gfdrr.org/en/projects) - Case studies and project examples
+- [Understanding Risk](https://www.understandrisk.org/) - Community of practice for risk assessment
+- [ThinkHazard!](http://thinkhazard.org/) - Web-based tool for hazard screening
+- [OpenDRI](https://opendri.org/) - Open data for resilience initiatives
+- [Resilient Infrastructure](https://www.gfdrr.org/en/resilient-infrastructure) - Technical guidance for infrastructure projects
+
+### Technical Guidance by Hazard Type
+
+**Earthquakes**
+- [FEMA P-1000: Safer, Stronger, Smarter - A Guide to Improving School Natural Hazard Safety](https://www.fema.gov/emergency-managers/risk-management/earthquake/safer-stronger-smarter)
+- [UNDRR: Earthquake Risk Assessment](https://www.undrr.org/quick/11449)
+
+**Floods**
+- [GFDRR: Flood Risk Management](https://www.gfdrr.org/en/flood-risk-management)
+- [World Bank: Investing in Urban Resilience](https://www.worldbank.org/en/topic/disasterriskmanagement/brief/investing-in-urban-resilience)
+
+**Cyclones & Wind**
+- [UNDRR: Tropical Cyclone Risk Management](https://www.undrr.org/quick/12668)
+- [GFDRR: Cyclone Risk Assessment](https://www.gfdrr.org/en/topics/cyclones)
+
+**Climate Hazards (Heat, Drought, Wildfires)**
+- [World Bank Climate Change Knowledge Portal](https://climateknowledgeportal.worldbank.org/)
+- [IPCC Special Reports](https://www.ipcc.ch/reports/) - Climate science and adaptation
+
+**Multi-Hazard Approaches**
+- [UNDRR: Multi-Hazard Early Warning Systems](https://www.undrr.org/quick/13674)
+- [GFDRR: Disaster Risk Financing and Insurance](https://www.gfdrr.org/en/disaster-risk-financing-insurance)
+
+### Building Codes & Standards
+- [Global Earthquake Model (GEM)](https://www.globalquakemodel.org/) - Earthquake engineering resources
+- [ISO 22301: Business Continuity Management](https://www.iso.org/iso-22301-business-continuity.html)
+- National and regional building codes (consult local authorities)
