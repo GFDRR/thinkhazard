@@ -92,6 +92,10 @@ HAZARD_SCORE_COLUMNS = {
     "EH_Hazard_score": "EH",
     "TS_Hazard_score": "TS",
     "WF_Hazard_score": "WF",
+    "DG_Hazard_score": "DG",
+    "FL_Hazard_score": "FL",
+    "PF_Hazard_score": "PF",
+    "CF_Hazard_score": "CF",
 }
 
 CODE_COLUMNS = {
