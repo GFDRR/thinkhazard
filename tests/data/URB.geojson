@@ -40,9 +40,10 @@
         "GC_DEV_USR_2025": "Unit Test Region",
         "NAM_URB_EN": "Test City",
         "NAM_URB_ES": "Ciudad Prueba",
-        "NAM_URB_FR": "Ville Test"
+        "NAM_URB_FR": "Ville Test",
+        "CAPITAL": false
       },
-      "geometry": {
+       "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
           [
