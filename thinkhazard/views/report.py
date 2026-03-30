@@ -162,7 +162,7 @@ def report(request):
         "division": division,
         "bounds": division_bounds,
         "parents": get_parents(division),
-        "parent_division": division.parent,
+        "parent_division": get_parents(division)[0] if get_parents(division) else None,
         "date": datetime.datetime.now(),
         "feedback_form_url": feedback_form_url,
         "request": request,
@@ -260,12 +260,14 @@ def report_json(request):
 
 def get_parents(division):
     parents = []
-    if division.leveltype_id >= 2:
-        parents.append(division.parent)
-    if division.leveltype_id >= 3:
+    if division.leveltype_id == 4:
         parents.append(division.parent.parent)
-    if division.leveltype_id >= 4:
         parents.append(division.parent.parent.parent)
+    else:
+        if division.leveltype_id >= 2:
+            parents.append(division.parent)
+        if division.leveltype_id >= 3:
+            parents.append(division.parent.parent)
     return parents
 
 
