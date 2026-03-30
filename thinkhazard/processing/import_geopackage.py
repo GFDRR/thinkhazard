@@ -73,6 +73,7 @@ ADMDIV_MAPPINGS = {
         "NAM_URB_FR": "name_fr",
         "NAM_URB_ES": "name_es",
         "NAM_URB_EN": "name_en",
+        "CAPITAL": "is_capital",
         "geometry": "geom",
     },
 }
@@ -620,6 +621,7 @@ class GeopackageImporter(BaseProcessor):
                     name_fr character varying,
                     name_es character varying,
                     name_en character varying,
+                    is_capital boolean,
                     geom_simplified public.geometry(MultiPolygon,3857),
                     geom_simplified_for_parent public.geometry(MultiPolygon,3857)
                 );
@@ -731,6 +733,7 @@ INSERT INTO datamart.administrativedivision (
         name_fr,
         name_es,
         name_en,
+        is_capital,
         geom
     )
     SELECT
@@ -742,6 +745,7 @@ INSERT INTO datamart.administrativedivision (
         name_fr,
         name_es,
         name_en,
+        is_capital,
         geom
     FROM temp.administrativedivision
 ON CONFLICT (code)
@@ -754,6 +758,7 @@ DO
             name_fr = EXCLUDED.name_fr,
             name_es = EXCLUDED.name_es,
             name_en = EXCLUDED.name_en,
+            is_capital = EXCLUDED.is_capital,
             geom = EXCLUDED.geom
 ;
                 """

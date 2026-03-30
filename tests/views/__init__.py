@@ -170,7 +170,7 @@ def populate_db():
     # admin_div_41 is an urban area (division level 4)
     # its parent is admin_div_31
     admin_div_41 = AdministrativeDivision(
-        **{"code": "41", "leveltype_id": 4, "name": "Division level 4 - 1"}
+        **{"code": "41", "leveltype_id": 4, "name": "Division level 4 - 1", "is_capital": True}
     )
     admin_div_41.parent_code = admin_div_31.code
     admin_div_41.geom = geometry

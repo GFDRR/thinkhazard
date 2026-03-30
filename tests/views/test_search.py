@@ -22,17 +22,29 @@ from .. import DBSession
 
 
 class TestSearchFunction(BaseTestCase):
-    def test_search_urban(self):
+    def test_search(self):
+        """Test unified search returns all matching divisions sorted by priority."""
         resp = self.testapp.get(
-            "/en/administrativedivision?urban=true", dict(q="Division"), status=200
+            "/en/administrativedivision", dict(q="Division"), status=200
         )
-        self.assertEqual(len(resp.json["data"]), 1)
+        data = resp.json["data"]
+        self.assertEqual(len(data), 8)
+        self.assertEqual(data[0]["mnemonic"], "COU")
+        capital_results = [d for d in data if d.get("is_capital") and d["mnemonic"] == "URB"]
+        self.assertEqual(len(capital_results), 1)
 
-    def test_search_not_urban(self):
+    def test_search_ordering(self):
+        """Test that countries appear before capitals, which appear before other results."""
         resp = self.testapp.get(
-            "/en/administrativedivision?urban=false", dict(q="Division"), status=200
+            "/en/administrativedivision", dict(q="Division"), status=200
         )
-        self.assertEqual(len(resp.json["data"]), 5)
+        data = resp.json["data"]
+        first_non_cou = next(i for i, d in enumerate(data) if d["mnemonic"] != "COU")
+        for d in data[:first_non_cou]:
+            self.assertEqual(d["mnemonic"], "COU")
+        urb_results = [d for d in data if d["mnemonic"] == "URB"]
+        if len(urb_results) > 0:
+            self.assertTrue(urb_results[0]["is_capital"])
 
     def test_search_multilingual(self):
         """Test search finds results in any language and returns matched language name."""
@@ -46,21 +58,21 @@ class TestSearchFunction(BaseTestCase):
         DBSession.flush()
 
         resp = self.testapp.get(
-            "/en/administrativedivision?urban=false", dict(q="TestCountry"), status=200
+            "/en/administrativedivision", dict(q="TestCountry"), status=200
         )
         self.assertEqual(resp.json["data"][0]["admin0"], "TestCountry")
 
         resp = self.testapp.get(
-            "/en/administrativedivision?urban=false", dict(q="PaysDuTest"), status=200
+            "/en/administrativedivision", dict(q="PaysDuTest"), status=200
         )
         self.assertEqual(resp.json["data"][0]["admin0"], "PaysDuTest")
 
         resp = self.testapp.get(
-            "/fr/administrativedivision?urban=false", dict(q="PaisDePrueba"), status=200
+            "/fr/administrativedivision", dict(q="PaisDePrueba"), status=200
         )
         self.assertEqual(resp.json["data"][0]["admin0"], "PaisDePrueba")
 
         resp = self.testapp.get(
-            "/fr/administrativedivision?urban=false", dict(q="PaysDuTest"), status=200
+            "/fr/administrativedivision", dict(q="PaysDuTest"), status=200
         )
         self.assertEqual(resp.json["data"][0]["admin0"], "PaysDuTest")

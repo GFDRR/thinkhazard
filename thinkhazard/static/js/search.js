@@ -1,6 +1,6 @@
 (function() {
 
-  var admDivEngine = new Bloodhound({
+  var searchEngine = new Bloodhound({
     datumTokenizer: function(d) {
       return Bloodhound.tokenizers.whitespace(
         d.admin3 || d.admin2 || d.admin1 || d.admin0);
@@ -11,31 +11,12 @@
     },
     sufficient: 11,
     remote: {
-      url: app.administrativedivisionUrl + '?urban=false&q=%QUERY',
+      url: app.administrativedivisionUrl + '?q=%QUERY',
       wildcard: '%QUERY',
       filter: function(parsedResponse) {
         return parsedResponse.data;
       }
     }
-  });
-
-  var urbanEngine = new Bloodhound({
-    datumTokenizer: function(d) {
-      return Bloodhound.tokenizers.whitespace(
-        d.admin3 || d.admin2 || d.admin1 || d.admin0);
-    },
-    queryTokenizer: Bloodhound.tokenizers.whitespace,
-    identity: function(d) {
-      return d.code;
-    },
-    sufficient: 11,
-    remote: {
-      url: app.administrativedivisionUrl + '?urban=true&q=%QUERY',
-      wildcard: '%QUERY',
-      filter: function(parsedResponse) {
-        return parsedResponse.data;
-      },
-    },
   });
 
   var $search = $('#search .search-field');
@@ -44,37 +25,22 @@
   $search.typeahead({
     highlight: true
   }, {
-    name: 'urban',
+    name: 'search-results',
     display: function(s) {
       return getSortedTokens(s).join(', ');
     },
-    source: urbanEngine,
+    source: searchEngine,
     limit: Infinity,
     templates: {
-      header: '<div class="tt-header urban">URBAN</div>',
       suggestion: function(data) {
         var tokens = getSortedTokens(data);
         tokens[0] += '<small><em>';
         tokens[tokens.length - 1] += '</em></small>';
         var content = tokens.join(', ');
-        return '<div>' + content + '</div>';
-      },
-      footer: '<div class="tt-footer"><hr/></div>',
-    }
-  }, {
-    name: 'admin-div',
-    display: function(s) {
-      return getSortedTokens(s).join(', ');
-    },
-    source: admDivEngine,
-    limit: Infinity,
-    templates: {
-      header: '<div class="tt-header admindiv">ADM DIVISION</div>',
-      suggestion: function(data) {
-        var tokens = getSortedTokens(data);
-        tokens[0] += '<small><em>';
-        tokens[tokens.length - 1] += '</em></small>';
-        var content = tokens.join(', ');
+        var tag = getResultTag(data);
+        if (tag) {
+          content += tag;
+        }
         return '<div>' + content + '</div>';
       },
     }
@@ -119,6 +85,19 @@
       tokens.unshift(s.admin3);
     }
     return tokens;
+  }
+
+  function getResultTag(data) {
+    if (data.mnemonic === 'COU') {
+      return '<span class="result-tag country">Country</span>';
+    }
+    if (data.mnemonic === 'URB' && data.is_capital) {
+      return '<span class="result-tag capital">Capital</span>';
+    }
+    if (data.mnemonic === 'URB') {
+      return '<span class="result-tag ghsl">GHSL Urban Center</span>';
+    }
+    return '<span class="result-tag admindiv">ADM DIVISION</span>';
   }
 
 })();
