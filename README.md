@@ -1,8 +1,74 @@
-# ThinkHazard
+# ThinkHazard!
 
-A natural hazard screening tool for disaster risk management project planning. ThinkHazard! is maintained by the Global Facility for Disaster Reduction and Recovery (GFDRR). Provides classified hazard level (very low to high) for any location in the world, and advice on managing disaster risk, plus useful reports and contacts, for 11 natural hazards. 
+A natural hazard screening tool for disaster risk management project planning.
+ThinkHazard! is maintained by the [Global Facility for Disaster Reduction and Recovery (GFDRR)](https://www.gfdrr.org).
 
-API instructions can be found here: https://github.com/GFDRR/thinkhazard/blob/master/API.md 
+It provides classified hazard levels (very low to high) for any location in the world, along with risk management advice, reports, and contacts for 11 natural hazards.
+
+**Live site:** [thinkhazard.org](http://thinkhazard.org/) &nbsp;|&nbsp; **API docs:** [gfdrr.github.io/thinkhazard/api](https://gfdrr.github.io/thinkhazard/api/) &nbsp;|&nbsp; **License:** GPL-3.0
+
+---
+
+## Table of contents
+
+- [Architecture](#architecture-docker-compose)
+- [Getting Started](#getting-started)
+- [Populate the admin database](#populate-the-admin-database)
+- [Publication](#publication-of-admin-database-on-public-site)
+  - [Admin username/password](#configure-admin-usernamepassword)
+  - [Analytics](#analytics)
+  - [Feedback](#feedback)
+- [Translations](#translations)
+- [Debugging with VS Code](#debugging-with-vs-code)
+
+---
+
+## Architecture (Docker Compose)
+
+All services run locally inside a Docker Compose stack:
+
+```mermaid
+flowchart TB
+    HTTP(["HTTP :8080"])
+
+    subgraph compose["Docker Compose"]
+        direction TB
+        APP["ThinkHazard\nPyramid WebApp"]
+        CELERY["Celery worker\n(taskrunner)"]
+        REDIS["Redis"]
+        PUPPETEER["Puppeteer\nPDF export"]
+
+        subgraph pg["PostgreSQL + PostGIS"]
+            PUB[("thinkhazard\n(public)")]
+            ADM[("thinkhazard_admin\n(admin)")]
+        end
+
+        subgraph s3["S3 · Minio"]
+        end
+
+        MC["Minio Client\n(init)"]
+    end
+
+    HTTP --> APP
+    APP --> pg
+    APP --> REDIS
+    APP --> PUPPETEER
+    APP --> s3
+    CELERY --> REDIS
+    CELERY --> pg
+    CELERY --> s3
+    MC --> s3
+```
+
+| Service | Role |
+|---|---|
+| **thinkhazard** | Pyramid web application — public site + admin interface, served on port 8080 |
+| **taskrunner** | Celery worker — runs async tasks: publish, geopackage import, transifex sync |
+| **db** | PostgreSQL + PostGIS — two databases: `thinkhazard` (public/live) and `thinkhazard_admin` (staging) |
+| **redis** | Celery message broker |
+| **puppeteer** | Headless Chrome service for PDF report generation |
+| **minio** | S3-compatible object store for publication backups, PDF reports, and task logs |
+| **minio-client** | Init container that creates the S3 bucket on first startup |
 
 ## Getting Started
 
@@ -37,17 +103,7 @@ Create the required schema and tables and populate the tables in admin database:
 GPKG=path_to_geopackage_file make populatedb
 ```
 
-Note: this may take a while. If you don’t want to import all the world administrative divisions, you can import only a subset:
-
-```bash
-GPKG=path_to_geopackage_file make populatedb DATA=turkey
-```
-
-or:
-
-```bash
-GPKG=path_to_geopackage_file make populatedb DATA=indonesia
-```
+Note: this may take a while.
 
 ## Publication of admin database on public site
 
@@ -104,7 +160,11 @@ environment:
 
 ### Feedback
 
-The `feedback_form_url` can be configured in the `production.ini` file.
+The `feedback_form_url` can be configured in the `production.ini` file:
+
+```ini
+feedback_form_url = https://...
+```
 
 ## Translations
 
@@ -114,27 +174,27 @@ ThinkHazard! is translated using `Transifex`.
 
 We use lingua to extract translation string from `jinja2` templates.
 
-Use the following command to update the gettext template (`.pot`):
-
-```bash
-make extract_messages
-```
-
-Note: this should be done from the production instance ONLY in order to have
+Note: the following should be done from the production instance ONLY in order to have
 the up-to-date database strings extracted!
 You will have to make sure that the `~/.transifexrc` is valid and the
 credentials correspond to the correct rights.
 
-Then you can push the translation sources to transifex.
+Push the UI translation sources to transifex:
 
 ```bash
-make transifex-push
+make transifex-push-ui
+```
+
+Push the database translation sources to transifex:
+
+```bash
+make transifex-push-db
 ```
 
 Once the translations are OK on Transifex it's possible to pull the translations:
 
 ```bash
-make transifex-pull
+make transifex-pull-db
 ```
 
 Don't forget to compile the catalog (ie. convert .po to .mo):
@@ -175,11 +235,15 @@ There are 3 different ways to translate strings in the templates:
 
 ## Debugging with VS Code
 
-Copy content of `docker-compose.override.sample.yaml` to `docker-compose.override.yaml`.
+Copy the override sample:
 
-Then here is an example `.vscode/launch.json` file:
+```bash
+cp docker-compose.override.sample.yaml docker-compose.override.yaml
+```
 
-```yaml
+Then create `.vscode/launch.json`:
+
+```json
 {
     // Use IntelliSense to learn about possible attributes.
     // Hover to view descriptions of existing attributes.
