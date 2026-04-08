@@ -414,7 +414,6 @@ class AdministrativeDivision(Base):
                 "admin0": getattr(self.parent.parent.parent, attr)
                 or self.parent.parent.parent.name,
                 "admin1": getattr(self.parent.parent, attr) or self.parent.parent.name,
-                "admin2": getattr(self.parent, attr) or self.parent.name,
                 "admin3": getattr(self, attr) or self.name,
                 "url": request.route_url("report_overview", division=self),
                 "mnemonic": self.leveltype.mnemonic,
