@@ -352,6 +352,7 @@ class AdministrativeDivision(Base):
     name_en = Column(Unicode)
     name_fr = Column(Unicode)
     name_es = Column(Unicode)
+    is_capital = Column(Boolean, default=False)
     parent_code = Column(
         String,
         ForeignKey(
@@ -386,6 +387,7 @@ class AdministrativeDivision(Base):
                 "admin0": getattr(self, attr) or self.name,
                 "url": request.route_url("report_overview", division=self),
                 "mnemonic": self.leveltype.mnemonic,
+                "is_capital": bool(self.is_capital),
             }
         if self.leveltype_id == 2:
             return {
@@ -394,6 +396,7 @@ class AdministrativeDivision(Base):
                 "admin1": getattr(self, attr) or self.name,
                 "url": request.route_url("report_overview", division=self),
                 "mnemonic": self.leveltype.mnemonic,
+                "is_capital": bool(self.is_capital),
             }
         if self.leveltype_id == 3:
             return {
@@ -403,6 +406,7 @@ class AdministrativeDivision(Base):
                 "admin2": getattr(self, attr) or self.name,
                 "url": request.route_url("report_overview", division=self),
                 "mnemonic": self.leveltype.mnemonic,
+                "is_capital": bool(self.is_capital),
             }
         if self.leveltype_id == 4:
             return {
@@ -414,6 +418,7 @@ class AdministrativeDivision(Base):
                 "admin3": getattr(self, attr) or self.name,
                 "url": request.route_url("report_overview", division=self),
                 "mnemonic": self.leveltype.mnemonic,
+                "is_capital": bool(self.is_capital),
             }
 
     def slug(self):

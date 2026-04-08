@@ -46,9 +46,6 @@ Think Hazard - {{ division.translated_name(request.locale_name)}}
           {% endfor %}
           <button class="btn btn-default disabled">
             {{ division.translated_name(request.locale_name) }}
-            {% if division.leveltype.mnemonic == 'URB' %}
-            <span class="urban-tag">URBAN</span>
-            {% endif %}
           </button>
         </div>
       </div>

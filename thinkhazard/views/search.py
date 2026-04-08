@@ -24,7 +24,7 @@ from pyramid.httpexceptions import HTTPBadRequest
 
 from thinkhazard.models import AdministrativeDivision as AdDiv, AdminLevelType
 
-from sqlalchemy import and_, func, or_
+from sqlalchemy import and_, case, func, or_
 
 
 def _normalize(text):
@@ -45,25 +45,21 @@ def administrativedivision(request):
         raise HTTPBadRequest(detail='parameter "q" is missing')
     term = request.params["q"]
 
-    if "urban" not in request.params:
-        raise HTTPBadRequest(detail='parameter "urban" is missing')
-    urban = request.params["urban"] == 'true'
-
-    if urban:
-        level_filter = (AdDiv.leveltype_id == 4)
-    else:
-        level_filter = (AdDiv.leveltype_id.in_((1, 2, 3)))
-
     # Search in all language fields
     term_pattern = "%{}%".format(term)
-    filter = and_(
-        or_(
-            func.unaccent(AdDiv.name).ilike(func.unaccent(term_pattern)),
-            func.unaccent(AdDiv.name_en).ilike(func.unaccent(term_pattern)),
-            func.unaccent(AdDiv.name_fr).ilike(func.unaccent(term_pattern)),
-            func.unaccent(AdDiv.name_es).ilike(func.unaccent(term_pattern)),
-        ),
-        level_filter
+    filter = or_(
+        func.unaccent(AdDiv.name).ilike(func.unaccent(term_pattern)),
+        func.unaccent(AdDiv.name_en).ilike(func.unaccent(term_pattern)),
+        func.unaccent(AdDiv.name_fr).ilike(func.unaccent(term_pattern)),
+        func.unaccent(AdDiv.name_es).ilike(func.unaccent(term_pattern)),
+    )
+
+    # Priority: Country > Capital > GHSL Urban Center > Other
+    type_priority = case(
+        (AdDiv.leveltype_id == 1, 1),
+        (and_(AdDiv.leveltype_id == 4, AdDiv.is_capital == True), 2),  # noqa: E712
+        (AdDiv.leveltype_id == 4, 3),
+        else_=4,
     )
 
     query = (
@@ -71,6 +67,7 @@ def administrativedivision(request):
         .filter(filter)
         .join(AdminLevelType)
         .order_by(
+            type_priority,
             AdDiv.name.ilike(term).desc(),
             AdDiv.name_en.ilike(term).desc(),
             AdDiv.name_fr.ilike(term).desc(),
@@ -82,7 +79,7 @@ def administrativedivision(request):
             AdDiv.leveltype_id,
             AdDiv.name,
         )
-        .limit(5)
+        .limit(10)
     )
 
     def get_matched_lang(div):
