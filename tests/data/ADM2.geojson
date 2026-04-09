@@ -36,7 +36,11 @@
         "NAM_0_FR": "Testlande",
         "NAM_1_EN": "Sample Province",
         "NAM_1_ES": "Provincia Ejemplo",
-        "NAM_1_FR": "Province Exemple"
+        "NAM_1_FR": "Province Exemple",
+        "CF_Hazard_score": 0,
+        "DG_Hazard_score": 0,
+        "FL_Hazard_score": 0,
+        "PF_Hazard_score": 0
       },
       "geometry": {
         "type": "MultiPolygon",
@@ -81,7 +85,11 @@
         "NAM_0_FR": "Testlande Outre-Mer",
         "NAM_1_EN": "Overseas Province",
         "NAM_1_ES": "Provincia Ultramar",
-        "NAM_1_FR": "Province d'Outre-Mer"
+        "NAM_1_FR": "Province d'Outre-Mer",
+        "CF_Hazard_score": 0,
+        "DG_Hazard_score": 0,
+        "FL_Hazard_score": 0,
+        "PF_Hazard_score": 0
       },
       "geometry": {
         "type": "MultiPolygon",

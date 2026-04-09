@@ -379,15 +379,7 @@ class GeopackageImporter(BaseProcessor):
                         self.gdf_urban = self.gdf_urban[~urban_orphan_mask]
 
     def dissolve(self):
-        hazard_score_cols = [
-            "LS_Hazard_score",
-            "EQ_Hazard_score",
-            "TC_Hazard_score",
-            "VO_Hazard_score",
-            "EH_Hazard_score",
-            "TS_Hazard_score",
-            "WF_Hazard_score",
-        ]
+        hazard_score_cols = list(HAZARD_SCORE_COLUMNS.keys())
 
         LOG.info("Extracting ADM1 boundaries...")
         self.gdf_adm1 = self.gdf_adm2.dissolve(

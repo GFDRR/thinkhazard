@@ -41,9 +41,13 @@
         "NAM_URB_EN": "Test City",
         "NAM_URB_ES": "Ciudad Prueba",
         "NAM_URB_FR": "Ville Test",
-        "CAPITAL": false
+        "CAPITAL": false,
+        "CF_Hazard_score": 0,
+        "DG_Hazard_score": 0,
+        "FL_Hazard_score": 0,
+        "PF_Hazard_score": 0
       },
-       "geometry": {
+      "geometry": {
         "type": "MultiPolygon",
         "coordinates": [
           [
