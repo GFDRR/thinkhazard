@@ -67,6 +67,7 @@ def run_migrations_offline():
         include_schemas=True,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+        version_table_schema=config.get_main_option("version_table_schema"),
     )
     with context.begin_transaction():
         context.run_migrations()
@@ -85,6 +86,7 @@ def run_migrations_online():
             target_metadata=target_metadata,
             include_object=include_object,
             include_schemas=True,
+            version_table_schema=config.get_main_option("version_table_schema"),
         )
 
         with context.begin_transaction():
