@@ -123,25 +123,24 @@ This guide provides essential technical recommendations for reducing disaster ri
 - [PreventionWeb](https://www.preventionweb.net/) - Knowledge platform for disaster risk reduction
 
 **Global Facility for Disaster Reduction and Recovery (GFDRR)**
-- [GFDRR Project Portfolio](https://www.gfdrr.org/en/projects) - Case studies and project examples
-- [Understanding Risk](https://www.understandrisk.org/) - Community of practice for risk assessment
+- [Understanding Risk](https://www.gfdrr.org/understandingrisk) - Community of practice for risk assessment
 - [ThinkHazard!](http://thinkhazard.org/) - Web-based tool for hazard screening
-- [OpenDRI](https://opendri.org/) - Open data for resilience initiatives
+- [OpenDRI](https://www.gfdrr.org/en/open-data-for-resilience-initiative) - Open data for resilience initiatives
 - [Resilient Infrastructure](https://www.gfdrr.org/en/resilient-infrastructure) - Technical guidance for infrastructure projects
 
 ### Technical Guidance by Hazard Type
 
 **Earthquakes**
-- [FEMA P-1000: Safer, Stronger, Smarter - A Guide to Improving School Natural Hazard Safety](https://www.fema.gov/emergency-managers/risk-management/earthquake/safer-stronger-smarter)
+- [FEMA: Risk Management Resources](https://www.fema.gov/emergency-managers/risk-management)
 - [UNDRR: Earthquake Risk Assessment](https://www.undrr.org/quick/11449)
 
 **Floods**
-- [GFDRR: Flood Risk Management](https://www.gfdrr.org/en/flood-risk-management)
+- [GFDRR: Cities and Flooding - Integrated Urban Flood Risk Management](https://www.gfdrr.org/en/publication/cities-and-flooding-guide-integrated-urban-flood-risk-management-21st-century)
 - [World Bank: Investing in Urban Resilience](https://www.worldbank.org/en/topic/disasterriskmanagement/brief/investing-in-urban-resilience)
 
 **Cyclones & Wind**
 - [UNDRR: Tropical Cyclone Risk Management](https://www.undrr.org/quick/12668)
-- [GFDRR: Cyclone Risk Assessment](https://www.gfdrr.org/en/topics/cyclones)
+- [GFDRR: Disaster Risk Analytics](https://www.gfdrr.org/en/disaster-risk-analytics)
 
 **Climate Hazards (Heat, Drought, Wildfires)**
 - [World Bank Climate Change Knowledge Portal](https://climateknowledgeportal.worldbank.org/)
@@ -149,9 +148,9 @@ This guide provides essential technical recommendations for reducing disaster ri
 
 **Multi-Hazard Approaches**
 - [UNDRR: Multi-Hazard Early Warning Systems](https://www.undrr.org/quick/13674)
-- [GFDRR: Disaster Risk Financing and Insurance](https://www.gfdrr.org/en/disaster-risk-financing-insurance)
+- [GFDRR: Disaster Risk Finance](https://www.gfdrr.org/en/disaster-risk-finance)
 
 ### Building Codes & Standards
 - [Global Earthquake Model (GEM)](https://www.globalquakemodel.org/) - Earthquake engineering resources
-- [ISO 22301: Business Continuity Management](https://www.iso.org/iso-22301-business-continuity.html)
+- [ISO 22301: Business Continuity Management](https://www.iso.org/standard/75106.html)
 - National and regional building codes (consult local authorities)
