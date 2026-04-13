@@ -204,7 +204,7 @@ curl http://thinkhazard.org/en/report/PAK/FL.json
 ```json
 {
   "hazard_category": {
-    "general_recommendation": "In the area you have selected name of location river flood hazard is classified as **high** according to the information that is currently available to this tool. This means that there is a chance of more than 10% that potentially damaging and life-threatening floods occur in the coming 10 years. **Project planning decisions, project design, and construction methods must take into account the level of river flood hazard**. The following is a list of recommendations that could be followed in different phases of the project to help reduce the risk to your project. Please note that these recommendations are generic and not project-specific.",
+    "general_recommendation": "In the area you have selected name of location earthquake hazard is classified as **high** according to the information that is currently available. This means that there is approximately 0.4% chance per year of potentially-damaging earthquake shaking in your project area (about 18% chance in the next 50 years). Based on this information, the impact of earthquake **must be considered** in all phases of the project, in particular during design and construction. Risk studies, project planning decisions, project design, and construction methods **must take into account** the level of earthquake hazard. Further detailed information should be obtained to adequately account for the level of hazard.",
     "hazard_level": "High",
     "hazard_type": "River flood"
   },
