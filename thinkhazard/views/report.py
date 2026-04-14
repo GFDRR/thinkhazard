@@ -56,8 +56,8 @@ from ..analytics import GoogleAnalytics
 # An object for the "no data" category type.
 _hazardlevel_nodata = HazardLevel()
 _hazardlevel_nodata.mnemonic = "no-data"
-_hazardlevel_nodata.title = "No Data"
-_hazardlevel_nodata.description = "No data for this hazard type."
+_hazardlevel_nodata.title = "No Hazard"
+_hazardlevel_nodata.description = "No hazard for this hazard type."
 _hazardlevel_nodata.order = float("inf")
 
 

@@ -24,7 +24,7 @@ Hazard levels can be described as:
 
 - **Not Affected** (Score -1): No exposure, below all thresholds, or outside hazard zone.
 
-- **No Data Available**: No dataset covering the chosen location is currently available in ThinkHazard!
+- **No Hazard Available**: No dataset covering the chosen location is currently available in ThinkHazard!
 
 ## Geographic Units
 
