@@ -91,13 +91,9 @@
     if (data.mnemonic === 'COU') {
       return '<span class="result-tag country">Country</span>';
     }
-    if (data.mnemonic === 'URB' && data.is_capital) {
-      return '<span class="result-tag capital">Capital</span>';
-    }
     if (data.mnemonic === 'URB') {
-      return '<span class="result-tag ghsl">GHSL Urban Center</span>';
+      return '<span class="result-tag ghsl">Urban Area</span>';
     }
-    return '<span class="result-tag admindiv">ADM DIVISION</span>';
   }
 
 })();
