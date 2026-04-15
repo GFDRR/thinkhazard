@@ -32,6 +32,10 @@ a.logo {
   margin-top: 10px;
 }
 
+.disclaimer {
+  page-break-before: always;
+}
+
 
 /* Styles specific to the cover page */
 .cover {
@@ -39,7 +43,7 @@ a.logo {
     margin-top: 40px;
   }
   .footer {
-    margin-top: 100px;
+    margin-top: 80px;
   }
 
   #world_map {
@@ -123,11 +127,15 @@ a.logo {
   padding: 0;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   li {
-    flex: 1;
+    width: auto;
     min-width: 5em;
+    font-size: 12px;
     text-align: center;
     padding-top: 0;
+    padding-left: 6px;
+    padding-right: 6px;
     margin-top: 1em;
     border: 0;
     .hazard-icon {
