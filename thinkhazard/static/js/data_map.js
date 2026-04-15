@@ -79,7 +79,7 @@ function initDataMap(dataUrl) {
     div.innerHTML += '<li><i style="background: ' + colors.GLO[1] + '"></i><span>' + i18n('Global') + '</span></li>';
     div.innerHTML += '<li><i style="background: ' + colors.REG[1] + '"></i><span>' + i18n('Regional') + '</span></li>';
     div.innerHTML += '<li><i style="background: ' + colors.NAT[1] + '"></i><span>' + i18n('National') + '</span></li>';
-    div.innerHTML += '<li><i style="background: #FFFFFF"></i><span>' + i18n('No Data') + '</span></li>';
+    div.innerHTML += '<li><i style="background: #FFFFFF"></i><span>' + i18n('No Hazard') + '</span></li>';
 
     return div;
   };
