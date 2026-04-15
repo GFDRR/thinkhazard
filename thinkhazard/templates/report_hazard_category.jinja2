@@ -28,6 +28,7 @@
     </p>
     {% endif %}
 
+    {#
     {% if hazard_category.tec_rec_associations %}
     <h3>{{gettext('Recommendations')}}</h3>
     <ul class="recommendations">
@@ -62,6 +63,11 @@
     {% endfor %}
     </ul>
     {% endif %}
+    #}
+
+    <p>
+      For hazard management recommendations, see <a href="https://gfdrr.github.io/thinkhazard/drr-guidance/" target="_blank">documentation</a>.
+    </p>
   {% else %}
     <aside class="hazard-level">
       {{gettext('Hazard level')}}
