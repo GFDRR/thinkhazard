@@ -1,28 +1,24 @@
 (function() {
   var mq = '(max-width: 768px)';
 
-  // Tells whether all the background layer tiles are loaded
-  var tilesLoaded = false;
-
-  // Tells whether the vector layer is displayed
-  var vectorLoaded = false;
-
   //
   // Main
   //
-  var sources = [
+  var xyzSources = [
     'https://api.mapbox.com/styles/v1/camptocamp/ckyoiaovl9zey15pwxnzg3uqj/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY2FtcHRvY2FtcCIsImEiOiJCcmZzU1RBIn0.rVR2B9tbO_pmdm8Z17FAOA',
   ].map(function(url) {
-    return new ol.source.XYZ({ url: url });
+    return new ol.source.XYZ({
+      url: url,
+      // transition: 0,
+    });
   });
-  waitForTiles();
 
   var map = new ol.Map({
     target: 'map',
     interactions: [],
     controls: [],
     layers: [ new ol.layer.Group({
-      layers: sources.map(function(source) {
+      layers: xyzSources.map(function(source) {
         return new ol.layer.Tile({ source: source });
       })
     }) ]
@@ -193,13 +189,6 @@
       source: source
     });
     map.addLayer(layer);
-    source.on('addfeature', function() {
-      map.on('postcompose', function(event) {
-        if (window.mapRenderingComplete === true) { return; }
-        vectorLoaded = true;
-        checkFinished();
-      });
-    });
     return layer;
   }
 
@@ -241,12 +230,6 @@
       source: source
     });
     map.addLayer(layer);
-    source.on('addfeature', function() {
-      map.on('postcompose', function(event) {
-        vectorLoaded = true;
-        checkFinished();
-      });
-    });
     return layer;
   }
 
@@ -432,39 +415,90 @@
     $('#download').attr('disabled', status);
   }
 
-  function waitForTiles() {
-    var tilesLoading = 0;
-    var tilesLoaded = 0;
+  function waitSourceReady(source) {
+    return new Promise((resolve) => {
+      let loading = 0;
 
-    var update = function() {
-      if (tilesLoading == tilesLoaded) {
-        onTilesLoaded();
+      // --- TILE SOURCES (XYZ / TileWMS etc.)
+      if (source.on && source.getTileLoadFunction) {
+        const inc = () => loading++;
+        const dec = () => {
+          loading = Math.max(0, loading - 1);
+          if (loading === 0) resolve();
+        };
+
+        source.on('tileloadstart', inc);
+        source.on('tileloadend', dec);
+        source.on('tileloaderror', dec);
+
+        // fallback if already loaded
+        if (source.getState && source.getState() === 'ready') {
+          console.log(`Source ready: XYZ`)
+          resolve();
+        }
+
+        return;
       }
-    };
 
-    sources.forEach(function(source) {
-      source.on('tileloadstart', function() {
-        tilesLoading++;
-      });
-      source.on('tileloadend', function() {
-        tilesLoaded++;
-        update();
-      });
+      // --- VECTOR SOURCES (GeoJSON HTTP)
+      if (source.on) {
+        const check = () => {
+          if (source.getState && source.getState() === 'ready') {
+            console.log(`Source ready: ${source.getUrl()}`)
+            resolve();
+          }
+        };
+
+        source.on('featuresloadend', check);
+        source.on('featuresloaderror', check);
+
+        // fallback if already loaded
+        check();
+        return;
+      }
+
+      resolve();
     });
   }
 
-  function onTilesLoaded() {
-    tilesLoaded = true;
-    checkFinished();
+  async function waitForMapRenderingCompleted(map) {
+    const sources = [
+      ...xyzSources,
+      levelLayer?.getSource(),
+      adminLayer.getSource(),
+      disputedAreaLayer?.getSource(),
+    ].filter(Boolean);
+
+    await Promise.all(sources.map(waitSourceReady));
+
+    // OL 4 has a hardcoded 250ms tile fade-in animation. During this animation
+    // the map continuously re-renders. We wait until no postrender event has
+    // fired for 300ms, which means the animation is fully complete.
+    await new Promise((resolve) => {
+      let timer;
+      const onPostrender = () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          map.un('postrender', onPostrender);
+          console.log('postrender stable');
+          resolve();
+        }, 500);
+      };
+      map.on('postrender', onPostrender);
+      map.renderSync();
+    });
+    map.on('postrender', () => {
+      console.log('postrender');
+    });
   }
 
-  function checkFinished() {
-    if (vectorLoaded && tilesLoaded) {
-
-      window.mapRenderingComplete = true;
-      $('#map').addClass('finished');
-    }
-  }
+  waitForMapRenderingCompleted(map).then(async () => {
+    // await new Promise(requestAnimationFrame);
+    // await new Promise(requestAnimationFrame);
+    console.log('mapRenderingComplete');
+    window.mapRenderingComplete = true;
+    $('#map').addClass('finished');
+  });
 
   $('.data-source a').on('click', function(e) {
     e.preventDefault();
