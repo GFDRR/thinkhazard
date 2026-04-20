@@ -49,9 +49,13 @@ The three page levels of thinkhazard.org. From left: homepage location search, l
 
 ## Source code
 
-ThinkHazard! uses open-source code, available at [on GitHub](https://github.com/GFDRR/thinkhazard).
+ThinkHazard! uses open-source code, available [on GitHub](https://github.com/GFDRR/thinkhazard).
 
 Forked versions can be developed using the open-source code as a basis, by including new recommendations and branding. Further, new functionality can be developed as required, and the tool linked to different data repositories. Versions specific to an organization or sector can be developed using this code to provide coverage of particular hazards, or to tailor recommendations more specifically to sector requirements. Sector-specific versions of the tool may have damage thresholds tailored to that sector, for example, using construction standards for critical facilities to determine the intensity of event that could be considered damaging.
+
+## Download scores
+
+Latest ThinkHazard! scores are available for download [on WB Data Catalog](https://datacatalog.worldbank.org/search/dataset/0060151/thinkhazard-hazard-ranking) as excel table and geopackage data.
 
 ## Feedback
 
