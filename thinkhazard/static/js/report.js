@@ -460,12 +460,18 @@
         tilesLoaded++;
         update();
       });
+      source.on('tileloaderror', function() {
+        tilesLoaded++;
+        update();
+      });
     });
   }
 
   function onTilesLoaded() {
-    tilesLoaded = true;
-    checkFinished();
+    map.once('postcompose', function() {
+      tilesLoaded = true;
+      checkFinished();
+    });
   }
 
   function checkFinished() {
