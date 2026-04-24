@@ -4,8 +4,10 @@
   // Tells whether all the background layer tiles are loaded
   var tilesLoaded = false;
 
-  // Tells whether the vector layer is displayed
-  var vectorLoaded = false;
+  // Tells whether the vector layers is displayed
+  var levelLayerLoaded = false;
+  var adminLayerLoaded = false;
+  var disputedAreaLayerLoaded = false;
 
   //
   // Main
@@ -196,7 +198,7 @@
     source.on('addfeature', function() {
       map.on('postcompose', function(event) {
         if (window.mapRenderingComplete === true) { return; }
-        vectorLoaded = true;
+        adminLayerLoaded = true;
         checkFinished();
       });
     });
@@ -243,7 +245,8 @@
     map.addLayer(layer);
     source.on('addfeature', function() {
       map.on('postcompose', function(event) {
-        vectorLoaded = true;
+        if (window.mapRenderingComplete === true) { return; }
+        levelLayerLoaded = true;
         checkFinished();
       });
     });
@@ -325,6 +328,13 @@
     });
 
     map.addLayer(layer);
+    source.on('addfeature', function() {
+      map.on('postcompose', function(event) {
+        if (window.mapRenderingComplete === true) { return; }
+        disputedAreaLayerLoaded = true;
+        checkFinished();
+      });
+    });
     return layer;
   }
 
@@ -450,16 +460,22 @@
         tilesLoaded++;
         update();
       });
+      source.on('tileloaderror', function() {
+        tilesLoaded++;
+        update();
+      });
     });
   }
 
   function onTilesLoaded() {
-    tilesLoaded = true;
-    checkFinished();
+    map.once('postcompose', function() {
+      tilesLoaded = true;
+      checkFinished();
+    });
   }
 
   function checkFinished() {
-    if (vectorLoaded && tilesLoaded) {
+    if (tilesLoaded && levelLayerLoaded && adminLayerLoaded && disputedAreaLayerLoaded) {
 
       window.mapRenderingComplete = true;
       $('#map').addClass('finished');

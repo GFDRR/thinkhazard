@@ -44,6 +44,9 @@ await cluster.task(async ({ page, data: url }) => {
     //     console.error('PAGE ERROR:', error.message);
     // });
 
+    // Emulate print media for @media print CSS
+    await page.emulateMediaType('print');
+
     // Navigate to the page
     const response = await page.goto(url, {
         waitUntil: 'networkidle0',
@@ -66,11 +69,6 @@ await cluster.task(async ({ page, data: url }) => {
     } catch (e) {
         console.log(`Map rendering timeout for ${url}, continuing with PDF generation`);
     }
-
-
-
-    // Emulate print media for @media print CSS
-    await page.emulateMediaType('print');
 
     // Generate PDF
     return page.pdf({
