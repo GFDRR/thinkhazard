@@ -106,7 +106,7 @@ Think Hazard - {{ division.translated_name(request.locale_name)}}
             {{gettext('We welcome any suggestions for improvements to the tool, including suggestions of data, recommendations, or resources to include.')}}
             <br>
             {{gettext('If you have any, please [provide feedback](%(link)s).', link=feedback_form_url)|markdown}}
-            <hr>
+            {#<hr>
             <div class="socialbutton-wrapper">
               {{gettext('Share')}}
               <a class="btn btn-info twitter" href="https://twitter.com/share?url={{request.current_route_url()}}">
@@ -115,7 +115,7 @@ Think Hazard - {{ division.translated_name(request.locale_name)}}
               <a class="btn btn-primary facebook" href="https://www.facebook.com/sharer/sharer.php?u={{request.current_route_url()}}">
                 <img src="{{'thinkhazard:static/images/icon-facebook-new.png'|static_url}}" alt="Facebook">
               </a>
-            </div>
+            </div> #}
 
           </div>
         </div>
