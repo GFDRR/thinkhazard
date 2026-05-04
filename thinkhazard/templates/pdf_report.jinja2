@@ -62,15 +62,17 @@
       </table>
     </div>
 
-{#
+    {% if hazard_category.hazardtype.data_owner_info or division.leveltype.mnemonic == 'URB' %}
     <div class="data-source text-center small">
-      {{ngettext('Data source:', 'Data sources:', sources.__len__())}}
-      {% for source in sources %}
-      {{ source.owner_organization}}
-      {% if not loop.last %},&nbsp;{% endif %}
-      {% endfor %}
+      {{ gettext('Data sources:') }}<br>
+      {% if hazard_category.hazardtype.data_owner_info %}
+      {{ hazard_category.hazardtype.data_owner_info | markdown | replace('<p>', '') | replace('</p>', '') | safe }}<br>
+      {% endif %}
+      {% if division.leveltype.mnemonic == 'URB' %}
+      {{ gettext('Urban areas perimeters are obtained from %(link)s.', link='[GHS Urban Centre Database 2025](https://human-settlement.emergency.copernicus.eu/ghs_ucdb_2024.php)') | markdown | replace('<p>', '') | replace('</p>', '') | safe }}
+      {% endif %}
     </div>
-#}
+    {% endif %}
   </div>
 </div>
 {#
@@ -91,6 +93,7 @@
 {% endif %}
 #}
 
+<br>
 <div class="row">
   <div class="col-sm-12">
     <p>
