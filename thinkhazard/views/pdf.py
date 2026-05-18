@@ -21,15 +21,13 @@ import asyncio
 import datetime
 import logging
 import re
-import tempfile
-import os
 
 from typing import List
 
 import httpx
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPBadRequest
-from pyramid.response import FileResponse
+from pyramid.response import Response
 
 from io import BytesIO
 from pypdf import PdfReader, PdfWriter
@@ -104,7 +102,7 @@ def pdf_cover(request):
 """pdf_about: see index.py"""
 
 
-async def create_and_upload_pdf(request, file_name: str, pages: List[str], object_name: str):
+async def create_pdf(request, pages: List[str]) -> BytesIO:
     """Create a PDF file with the given pages using pyppeteer.
     """
     async def render_page(page):
@@ -143,56 +141,48 @@ async def create_and_upload_pdf(request, file_name: str, pages: List[str], objec
         for page in reader.pages:
             writer.add_page(page)
 
-    with open(file_name, "wb") as output:
-        writer.write(output)
-
-    request.s3_helper.upload_file(file_name, object_name)
+    stream = BytesIO()
+    writer.write(stream)
+    return stream
 
 
 @view_config(route_name="create_pdf_report")
 def create_pdf_report(request):
     """View to create an asynchronous print job.
     """
-    publication_date = request.publication_date
-    locale = request.locale_name
     division_code = request.matchdict.get("divisioncode")
-    force = "force" in request.params
 
-    filename = "{:s}-{:s}.pdf".format(division_code, locale)
-    s3_path = "reports/{:%Y-%m-%d}/{}".format(publication_date, filename)
-    local_path = os.path.join(tempfile.gettempdir(), filename)
-
-    if not force and request.s3_helper.object_exists(s3_path):
-        request.s3_helper.download_file(s3_path, local_path)
-
-    if force or not os.path.isfile(local_path):
-        categories = (
-            request.dbsession.query(HazardCategory)
-            .options(joinedload(HazardCategory.hazardtype))
-            .join(HazardCategoryAdministrativeDivisionAssociation)
-            .join(AdministrativeDivision)
-            .join(HazardLevel)
-            .filter(AdministrativeDivision.code == division_code)
-            .order_by(HazardLevel.order)
-        )
-        query_args = {"_query": {"_LOCALE_": request.locale_name}}
-        pages = [
-            request.route_path("pdf_cover", divisioncode=division_code, **query_args),
-            request.route_path("pdf_about", **query_args),
-        ]
-        for cat in categories:
-            pages.append(
-                request.route_path(
-                    "report_print",
-                    divisioncode=division_code,
-                    hazardtype=cat.hazardtype.mnemonic,
-                    **query_args,
-                )
+    categories = (
+        request.dbsession.query(HazardCategory)
+        .options(joinedload(HazardCategory.hazardtype))
+        .join(HazardCategoryAdministrativeDivisionAssociation)
+        .join(AdministrativeDivision)
+        .join(HazardLevel)
+        .filter(AdministrativeDivision.code == division_code)
+        .order_by(HazardLevel.order)
+    )
+    query_args = {"_query": {"_LOCALE_": request.locale_name}}
+    pages = [
+        request.route_path("pdf_cover", divisioncode=division_code, **query_args),
+        request.route_path("pdf_about", **query_args),
+    ]
+    for cat in categories:
+        pages.append(
+            request.route_path(
+                "report_print",
+                divisioncode=division_code,
+                hazardtype=cat.hazardtype.mnemonic,
+                **query_args,
             )
-        run(create_and_upload_pdf(request, local_path, pages, s3_path))
+        )
+    stream = run(create_pdf(request, pages))
+    stream.seek(0)
 
-    response = FileResponse(local_path, request=request, content_type="application/pdf")
+    response = Response(
+        content_type="application/pdf",
+    )
     response.headers["Content-Disposition"] = (
         'attachment; filename="ThinkHazard.pdf"'
     )
+    response.app_iter = stream
     return response
