@@ -4,6 +4,7 @@
 *.log
 
 .build
+.venv
 node_modules
 thinkhazard/static/build
 thinkhazard/static/fonts

@@ -17,10 +17,9 @@
 # You should have received a copy of the GNU General Public License along with
 # ThinkHazard.  If not, see <http://www.gnu.org/licenses/>.
 import os
-import shutil
-import asyncio
 import tempfile
-from unittest.mock import patch, Mock
+from io import BytesIO
+from unittest.mock import patch
 
 from . import BaseTestCase
 
@@ -147,12 +146,10 @@ class TestReportFunction(BaseTestCase):
         resp = self.testapp.get("/en/report/12-slug/EQ")
         self.assertEqual(len(resp.pyquery(".contacts ul li")), 0)
 
-    @patch('thinkhazard.views.pdf.create_and_upload_pdf')
+    @patch('thinkhazard.views.pdf.create_pdf')
     def test_create_pdf_report(self, mock):
-        # thanks to https://stackoverflow.com/a/29905620
-        async def create(request, file_name, pages, object_name):
-            with open(file_name, "w") as file:
-                file.write("The pdf file")
+        async def create(request, pages):
+            return BytesIO("The pdf file".encode())
 
         mock.side_effect = create
         resp = self.testapp.post("/en/report/create/32", status=200)
