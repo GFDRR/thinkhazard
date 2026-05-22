@@ -13,7 +13,7 @@
     "generate": "node generate-pdf.js"
   },
   "dependencies": {
-    "express": "^4.22.1",
+    "express": "^4.22.2",
     "puppeteer": "^24.31.0",
     "puppeteer-cluster": "^0.25.0"
   },
