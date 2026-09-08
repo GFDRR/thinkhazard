@@ -183,7 +183,7 @@ Below are the specific classification methods and thresholds for each of the 11 
 
 **Intensity Thresholds**: 0.5 m depth
 
-**Area Threshold**: 5%
+**Area Threshold**: 3%
 
 **Scoring Logic**:
 
