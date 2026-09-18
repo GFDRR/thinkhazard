@@ -69,7 +69,7 @@ services:
     command: 'celery -A thinkhazard.celery worker -l info'
 
   minio:
-    image: minio/minio
+    image: quay.io/minio/minio
     ports:
       - "9000:9000"
     command: 'minio server /data'
@@ -80,7 +80,7 @@ services:
       - "6379:6379"
 
   minio-client:
-    image: minio/mc
+    image: quay.io/minio/mc
     depends_on:
       - minio
     volumes:
