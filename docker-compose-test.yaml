@@ -46,14 +46,14 @@ services:
       - PUPPETEER_URL
 
   testminio:
-    image: minio/minio
+    image: quay.io/minio/minio
     command: 'minio server /data'
 
   testredis:
     image: redis
 
   testminio-client:
-    image: minio/mc
+    image: quay.io/minio/mc
     depends_on:
       - testminio
     volumes:
