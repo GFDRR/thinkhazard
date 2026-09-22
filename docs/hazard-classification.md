@@ -181,9 +181,20 @@ Below are the specific classification methods and thresholds for each of the 11 
 
 ^^^
 
-**Intensity Thresholds**: 0.5 m depth
+**Intensity and Area Thresholds** (RP-specific, and different for pluvial than for river/coastal):
 
-**Area Threshold**: 3%
+| Return Period | River & Coastal — Depth | River & Coastal — Area | Pluvial — Depth | Pluvial — Area |
+|--------------|:-----------------------:|:-----------------------:|:----------------:|:---------------:|
+| RP10 | 0.2 m | 3% | 0.1 m | 0.3% |
+| RP100 | 0.2 m | 3% | 0.1 m | 0.3% |
+| RP500 | 0.5 m | 3% | 0.5 m | 3% |
+| RP1000 | 0.5 m | 3% | 0.5 m | 3% |
+
+A return period "counts" when **both** its depth and area thresholds are met; the score is the number of return periods that count (0-4), mapped to the -1..3 scale below.
+
+**Why pluvial differs from river and coastal**: a single 0.5 m / 3% screen, calibrated on river and coastal flooding, under-detects pluvial (surface-water) flooding, which is characteristically shallow and frequent rather than deep and rare. Lowering the depth and area thresholds at the frequent return periods (RP10, RP100) captures this chronic, shallow hazard. The rarer return periods (RP500, RP1000) are deliberately left at the original 0.5 m / 3% bar: relaxing them further would also re-classify naturally rare, locally intense events (e.g., desert flash floods) as chronic hazard — confirmed against a negative-control set of hyper-arid reference locations, all of which stayed correctly classified as Not Affected / Very Low under the thresholds above.
+
+**Manual Overrides**: a small number of urban areas with well-documented, frequent pluvial flooding that the automated classification still under-detects (Dhaka, Manila, Mumbai) are set to High by expert judgement rather than by the automated rule. This is recorded as a data-level exception, not a change to the scoring logic, and is expected to be revisited if a data source better suited to shallow, chronic urban flooding becomes available.
 
 **Scoring Logic**:
 
@@ -428,8 +439,9 @@ Below are the specific classification methods and thresholds for each of the 11 
 |--------|---------------------|------|-------------------|
 | Earthquake | Peak Ground Acceleration | g | RP-specific: 0.12, 0.10, 0.08, 0.06 |
 | Cyclone | Wind Speed | m/s | RP-specific: 36, 36, 30, 26 |
-| River/Pluvial Flood | Inundation Depth | m | 0.5 |
-| Coastal Flood | Inundation Depth | m | 0.5 |
+| River (Fluvial) Flood | Inundation Depth | m | RP-specific: 0.2, 0.2, 0.5, 0.5 |
+| Pluvial Flood | Inundation Depth | m | RP-specific: 0.1, 0.1, 0.5, 0.5 |
+| Coastal Flood | Inundation Depth | m | RP-specific: 0.2, 0.2, 0.5, 0.5 |
 | Tsunami | Inundation Depth | m | RP-specific: 2.0, 1.0, 0.5 |
 | Wildfire | Fire Weather Index | FWI | 50 |
 | Extreme Heat | WBGT Temperature | °C | RP-specific: 32, 28, 25 |
@@ -443,7 +455,9 @@ Below are the specific classification methods and thresholds for each of the 11 
 |--------|---------------|----------------|
 | Earthquake | 250, 475, 975, 2475 years | 5% |
 | Cyclone | 50, 100, 1000, 10000 years | 5% |
-| Flood | 10, 100, 1000 years | 5% |
+| River (Fluvial) Flood | 10, 100, 500, 1000 years | 3% |
+| Pluvial Flood | 10, 100, 500, 1000 years | RP-specific: 0.3%, 0.3%, 3%, 3% |
+| Coastal Flood | 10, 100, 500, 1000 years | 3% |
 | Tsunami | 100, 500, 2500 years | 0% |
 | Wildfire | 5, 25, 50 years | 20% |
 | Extreme Heat | 5, 20, 100 years | 30% |
