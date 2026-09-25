@@ -77,6 +77,20 @@ All hazard classification uses two fundamental thresholds:
 
 **Area Threshold**: Minimum percentage of admin unit that must be affected to trigger scoring. Used by ALL hazards to filter out negligible exposures where only a very small portion of the administrative unit is affected.
 
+### Threshold Justification
+
+Most value and area thresholds in this version carry forward the literature review conducted for the original ThinkHazard! v2 methodology (Fraser et al., 2017) — for example, earthquake intensity anchored to the EMS-98 macroseismic intensity–PGA correlation (Atkinson & Sonley, 2000), tsunami's 2.0 m threshold anchored to post-disaster building-damage surveys from the 2011 Japan tsunami (MLIT, 2012), and flood's original depth classes drawn from the RiskMap flood-damage literature (Meyer et al., 2011).
+
+For this update, a small number of thresholds were deliberately adjusted from those original values, for two distinct reasons:
+
+- **To guarantee a meaningful distribution of hazard classes.** Where a threshold inherited from the original literature review was based on a different intensity convention than the current data uses, applying it unadjusted would systematically over- or under-classify hazard. Cyclone is the clearest case: the STORM v4 dataset reports 10-minute sustained wind speed, while damaging-wind thresholds (and the Saffir-Simpson scale specifically) are conventionally expressed in 1-minute sustained wind, which is measurably higher for the same storm. Applying category thresholds unadjusted would understate wind hazard everywhere. Thresholds were converted using STORM's own documented factor (0.8821 — Bloemendaal et al., 2020) and further checked against countries with a known historical record of cyclone impact to confirm the resulting classification wasn't under-capturing real exposure (see Tropical Cyclone, below). Earthquake's refinement from the original 2-tier PGA scheme (0.2 g / 0.1 g) into today's 4-tier, RP-specific scheme (0.12 → 0.06 g) follows the same intent: it keeps the same EMS-98-anchored intensity range, but avoids "High" being awarded too easily by testing the strictest bar at the most frequent return period, the same design principle documented in the original methodology report for the 2-tier version.
+
+  Pluvial flood needed a related but distinct fix. Because flood depth increases monotonically with return period, a *flat* depth/area threshold applied at every RP tends to produce near-simultaneous pass/fail outcomes: once a location's depth clears the bar at one RP, it typically clears it at every rarer RP too, since depth only grows from there. That collapses the score distribution toward the two extremes — Not Affected/Very Low, or High — and leaves the Medium and Low classes with almost no coverage, i.e. the classes effectively overlap into a near-binary outcome. Making the depth and area thresholds *increase* with return period, rather than stay flat, breaks that near-simultaneous pattern: a location can now clear the lenient frequent-RP bar without clearing the stricter rare-RP bar, or the reverse, which spreads real variation across the full 0–4 score range. Geographically, this shows up mainly as increased coverage of the Medium and Low classes specifically, rather than a wholesale redistribution into High.
+
+- **To better match observational records on the ground.** Pluvial flood is the main case: the single depth/area screen calibrated for river and coastal flooding under-detected chronic, shallow urban flooding. Depth and area thresholds were lowered at the frequent return periods specifically to capture this, checked against documented flood history (largely EM-DAT-recorded events) for known chronic-flood megacities, and cross-checked against a negative-control set of hyper-arid reference locations to confirm rare events weren't being reclassified as chronic hazard (see Floods, below).
+
+Where thresholds could not be reconciled against ground-truth records through data alone — a small number of well-documented, frequently-flooded megacities that still scored below their known history even after threshold tuning — a manual, data-level override was applied instead of a further rule change (see Floods, below).
+
 ## Classification by Hazard
 
 Below are the specific classification methods and thresholds for each of the 11 hazards covered by ThinkHazard!.
@@ -111,6 +125,8 @@ Below are the specific classification methods and thresholds for each of the 11 
 | RP2475 | 0.06 g |
 
 **Area Threshold**: 5%
+
+**Why these thresholds**: intensity is anchored to the EMS-98 macroseismic intensity–PGA correlation (Atkinson & Sonley, 2000) used in the original ThinkHazard! methodology. The threshold decreases at rarer return periods (0.12 g at RP250 down to 0.06 g at RP2475) by design, not because rarer earthquakes are inherently more damaging at low shaking: testing the strictest bar at the most frequent return period keeps High meaningful, so it takes genuinely frequent strong shaking to earn it rather than a theoretical rare extreme. See [Threshold Justification](#threshold-justification) above.
 
 **Scoring Logic**:
 
@@ -150,6 +166,8 @@ Below are the specific classification methods and thresholds for each of the 11 
 | RP10000 | 26 m/s (~94 km/h) |
 
 **Area Threshold**: 5%
+
+**Why these thresholds**: STORM v4 reports 10-minute sustained wind speed, whereas damaging-wind convention (including the Saffir-Simpson scale) is expressed in 1-minute sustained wind, which runs measurably higher for the same storm. Applying Saffir-Simpson category cutoffs unadjusted would understate cyclone hazard everywhere. Thresholds here were converted using STORM's own documented factor (0.8821 — Bloemendaal et al., *Scientific Data*, 2020) and checked against countries with a known historical record of cyclone impact to confirm real exposure wasn't being under-captured.
 
 **Scoring Logic**:
 
@@ -194,7 +212,7 @@ A return period "counts" when **both** its depth and area thresholds are met; th
 
 **Area threshold definition (unconditioned)**: for floods, the area threshold is evaluated against the percentage of the unit with *any* inundation present, independent of the depth threshold — not, as elsewhere in ThinkHazard!, the percentage of the unit *above* the depth threshold. This is a deliberate relaxation specific to flood hazard: conditioning area on depth as well would let a unit with real but spatially patchy inundation (wet in many places, but only deep in a few) fail the area test outright, so flood instead asks the two questions separately - *is enough of the unit wet at all* (area), and separately, *when it is wet, is it deep enough to matter* (depth) - which keeps the flood score conservative rather than risking an under-count. Every other hazard in ThinkHazard! (earthquake, cyclone, extreme heat, tsunami, wildfire) conditions its area percentage on the value threshold; flood is the intentional exception.
 
-**Why pluvial differs from river and coastal**: a single 0.5 m / 3% screen, calibrated on river and coastal flooding, under-detects pluvial (surface-water) flooding, which is characteristically shallow and frequent rather than deep and rare. Lowering the depth and area thresholds at the frequent return periods (RP10, RP100) captures this chronic, shallow hazard. The rarer return periods (RP500, RP1000) are deliberately left at the original 0.5 m / 3% bar: relaxing them further would also re-classify naturally rare, locally intense events (e.g., desert flash floods) as chronic hazard — confirmed against a negative-control set of hyper-arid reference locations, all of which stayed correctly classified as Not Affected / Very Low under the thresholds above.
+**Why pluvial differs from river and coastal**: a single 0.5 m / 3% screen, calibrated on river and coastal flooding, under-detects pluvial (surface-water) flooding, which is characteristically shallow and frequent rather than deep and rare. A flat threshold also produces a near-binary score pattern (see [Threshold Justification](#threshold-justification) above): once depth clears the bar at one RP it tends to clear it at all rarer RPs too, since depth only increases with RP, leaving the Medium and Low classes nearly empty. Lowering the depth and area thresholds at the frequent return periods (RP10, RP100) breaks that pattern and captures the chronic, shallow hazard, which geographically shows up as broader Medium/Low coverage. The rarer return periods (RP500, RP1000) are deliberately left at the original 0.5 m / 3% bar: relaxing them further would also re-classify naturally rare, locally intense events (e.g., desert flash floods) as chronic hazard — confirmed against a negative-control set of hyper-arid reference locations, all of which stayed correctly classified as Not Affected / Very Low under the thresholds above.
 
 **Manual Overrides**: a small number of urban areas with well-documented, frequent pluvial flooding that the automated classification still under-detects (Dhaka, Manila, Mumbai) are set to High by expert judgement rather than by the automated rule. This is recorded as a data-level exception, not a change to the scoring logic, and is expected to be revisited if a data source better suited to shallow, chronic urban flooding becomes available.
 
