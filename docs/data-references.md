@@ -37,7 +37,7 @@ Based on global **STORM (v4)** wind hazard maps published by [**Bloemendaal N. (
 Based on global Volcanic eruption database published by [**NOAA (2025)**](https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ngdc.mgg.hazards:G10147).
 
 ### **Extreme Heat**
-Based on global extreme heat maps published by [**GFDRR-VITO (2025)**](https://destinationearth.marvintest.vito.be/). Available for download at [Risk Data Library](https://catalog.riskdatalibrary.org).
+Based on global extreme heat maps published by [**GFDRR-VITO (2017)**](https://datacatalog.worldbank.org/search/dataset/0040194/global-extreme-heat-hazard). Available for download at [Risk Data Library](https://catalog.riskdatalibrary.org).
 
 ### **Tsunami**
 Based on Global Tsunami Model published by [**GTM network (2017)**](https://www.globaltsunamimodel.org).

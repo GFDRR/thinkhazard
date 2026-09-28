@@ -10,6 +10,12 @@ alt: An earthquake hazard map for Europe (from the SHARE project). Hazard is sho
 ---
 ```
 
+```{admonition} Legacy Reference
+:class: note
+
+For the original design rationale, data sources and threshold logic behind this classification system, see the legacy [ThinkHazard! Methodology Report v2.0](https://gfdrr.github.io/thinkhazardmethods/download/thinkhazard-methodology-report_v2_0.pdf) (Fraser et al., 2017). This page describes the current (v3.0) implementation, which carries forward most of that methodology with the adjustments documented below.
+```
+
 ## Hazard Levels
 
 Hazard levels can be described as:
@@ -99,7 +105,7 @@ Below are the specific classification methods and thresholds for each of the 11 
 
 :::{grid-item-card}
 
-## Earthquake
+### Earthquake
 
 ```{image} images/eq.png
 :width: 120px
@@ -141,7 +147,7 @@ Below are the specific classification methods and thresholds for each of the 11 
 :::
 
 :::{grid-item-card}
-## Tropical Cyclone / Strong Winds
+### Tropical Cyclone / Strong Winds
 
 ```{image} images/sw.png
 :width: 120px
@@ -183,7 +189,7 @@ Below are the specific classification methods and thresholds for each of the 11 
 
 :::{grid-item-card}
 
-## Floods (River / Pluvial / Coastal)
+### Floods (River / Pluvial / Coastal)
 
 ```{image} images/fl.png
 :width: 120px
@@ -230,7 +236,7 @@ A return period "counts" when **both** its depth and area thresholds are met; th
 
 :::{grid-item-card}
 
-## Tsunami
+### Tsunami
 
 ```{image} images/ts.png
 :width: 120px
@@ -272,7 +278,7 @@ A return period "counts" when **both** its depth and area thresholds are met; th
 
 :::{grid-item-card}
 
-## Wildfire
+### Wildfire
 
 ```{image} images/wf.png
 :width: 120px
@@ -292,6 +298,8 @@ A return period "counts" when **both** its depth and area thresholds are met; th
 
 **Area Threshold**: 20% (higher than most hazards due to spatial characteristics)
 
+**Fuel Availability**: FWI is a purely meteorological index (temperature, humidity, wind, and drought/precipitation history) and does not on its own account for whether combustible vegetation is actually present — a hot, dry, windy desert can register a high FWI despite having no fuel to burn. The wildfire hazard map is masked against a global vegetation fuel-load/fuel-continuity layer ([Biogeosciences, 2016](https://bg.copernicus.org/articles/13/2061/2016/)) before classification, so that deserts and other non-vegetated land are excluded at the data level, independent of the area-threshold check below.
+
 **Special Check**: Area with FWI > 0 must exceed 20% in at least one RP to be considered affected.
 
 **Scoring Logic**:
@@ -308,7 +316,7 @@ A return period "counts" when **both** its depth and area thresholds are met; th
 
 :::{grid-item-card}
 
-## Extreme Heat
+### Extreme Heat
 
 ```{image} images/et.png
 :width: 120px
@@ -316,7 +324,7 @@ A return period "counts" when **both** its depth and area thresholds are met; th
 :class: hazard-icon
 ```
 
-**Data Source**: [Extreme Heat](data-references.md#extreme-heat) (GFDRR-VITO 2025)
+**Data Source**: [Extreme Heat](data-references.md#extreme-heat) (GFDRR-VITO 2017)
 **Return Periods**: RP5, RP20, RP100
 **Intensity Parameter**: Wet Bulb Globe Temperature (°C)
 
@@ -347,7 +355,7 @@ A return period "counts" when **both** its depth and area thresholds are met; th
 
 :::{grid-item-card}
 
-## Landslides
+### Landslides
 
 ```{image} images/ls.png
 :width: 120px
@@ -379,7 +387,7 @@ A return period "counts" when **both** its depth and area thresholds are met; th
 
 :::{grid-item-card}
 
-## Volcanic Eruption
+### Volcanic Eruption
 
 ```{image} images/va.png
 :width: 120px
@@ -418,7 +426,7 @@ A return period "counts" when **both** its depth and area thresholds are met; th
 
 :::{grid-item-card}
 
-## Water Scarcity / Drought
+### Water Scarcity / Drought
 
 ```{image} images/ws.png
 :width: 120px
