@@ -39,6 +39,8 @@ export HTPASSWORDS ?= admin:admin
 
 export PUPPETEER_URL ?= http://puppeteer:8080
 
+export PROTECT_PUBLIC_SITE ?= false
+
 TEST ?= tests
 
 default: help

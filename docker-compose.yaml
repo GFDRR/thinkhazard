@@ -53,6 +53,7 @@ services:
       - BROKER_URL
       - HTPASSWORDS
       - PUPPETEER_URL
+      - PROTECT_PUBLIC_SITE
       - TX_BRANCH=dev
     ports:
       - 8080:8080
