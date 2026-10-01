@@ -21,7 +21,7 @@ services:
     depends_on:
       - testdb
       - testredis
-      - testminio-client
+      - tests3
     volumes:
       - '${PWD}/thinkhazard:/app/thinkhazard'
       - '${PWD}/tests:/app/tests'
@@ -35,9 +35,9 @@ services:
       - PGUSER_ADMIN=thinkhazard
       - PGPASSWORD_ADMIN=thinkhazard
       - PGDATABASE_ADMIN=thinkhazard_test
-      - AWS_ENDPOINT_URL=http://testminio:9000/
-      - AWS_ACCESS_KEY_ID=minioadmin
-      - AWS_SECRET_ACCESS_KEY=minioadmin
+      - AWS_ENDPOINT_URL=http://tests3:9000/
+      - AWS_ACCESS_KEY_ID=thinkhazard
+      - AWS_SECRET_ACCESS_KEY=thinkhazard
       - AWS_BUCKET_NAME=thinkhazard
       - GEONODE_API_KEY
       - ANALYTICS
@@ -46,24 +46,17 @@ services:
       - PUPPETEER_URL
       - PROTECT_PUBLIC_SITE
 
-  testminio:
-    image: quay.io/minio/minio
-    command: 'minio server /data'
+  tests3:
+    image: andrewgaul/s3proxy
+    environment:
+      - S3PROXY_ENDPOINT=http://0.0.0.0:9000
+      - S3PROXY_AUTHORIZATION=aws-v2-or-v4
+      - S3PROXY_IDENTITY=thinkhazard
+      - S3PROXY_CREDENTIAL=thinkhazard
+      - JCLOUDS_PROVIDER=filesystem
+      - JCLOUDS_FILESYSTEM_BASEDIR=/data
+      - AWS_BUCKET_NAME=thinkhazard
+    entrypoint: ["sh", "-c", 'mkdir -p "/data/$${AWS_BUCKET_NAME}" && exec /opt/s3proxy/run-docker-container.sh']
 
   testredis:
     image: redis
-
-  testminio-client:
-    image: quay.io/minio/mc
-    depends_on:
-      - testminio
-    volumes:
-      - ./docker/minio-client/docker-entrypoint:/docker-entrypoint
-    environment:
-      - AWS_HOST=testminio
-      - AWS_PORT=9000
-      - AWS_ACCESS_KEY_ID=minioadmin
-      - AWS_SECRET_ACCESS_KEY=minioadmin
-      - AWS_BUCKET_NAME=thinkhazard
-    entrypoint: /docker-entrypoint
-    command: ["exit", "0"]

@@ -29,6 +29,7 @@ services:
     restart: unless-stopped
     depends_on:
       - db
+      - s3
     volumes:
       - hazardsets:/tmp/hazardsets
     environment: &env
@@ -64,36 +65,30 @@ services:
     restart: unless-stopped
     depends_on:
       - db
+      - s3
     volumes:
       - hazardsets:/tmp/hazardsets
     environment: *env
     command: 'celery -A thinkhazard.celery worker -l info'
 
-  minio:
-    image: quay.io/minio/minio
+  s3:
+    image: andrewgaul/s3proxy
+    environment:
+      - S3PROXY_ENDPOINT=http://0.0.0.0:9000
+      - S3PROXY_AUTHORIZATION=aws-v2-or-v4
+      - S3PROXY_IDENTITY=${AWS_ACCESS_KEY_ID}
+      - S3PROXY_CREDENTIAL=${AWS_SECRET_ACCESS_KEY}
+      - JCLOUDS_PROVIDER=filesystem
+      - JCLOUDS_FILESYSTEM_BASEDIR=/data
+      - AWS_BUCKET_NAME
+    entrypoint: ["sh", "-c", 'mkdir -p "/data/$${AWS_BUCKET_NAME}" && exec /opt/s3proxy/run-docker-container.sh']
     ports:
       - "9000:9000"
-    command: 'minio server /data'
 
   redis:
     image: redis
     ports:
       - "6379:6379"
-
-  minio-client:
-    image: quay.io/minio/mc
-    depends_on:
-      - minio
-    volumes:
-      - ./docker/minio-client/docker-entrypoint:/docker-entrypoint
-    environment:
-      - AWS_HOST=minio
-      - AWS_PORT=9000
-      - AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY
-      - AWS_BUCKET_NAME
-    entrypoint: /docker-entrypoint
-    command: ["exit", "0"]
 
   puppeteer:
     image: camptocamp/thinkhazard-puppeteer

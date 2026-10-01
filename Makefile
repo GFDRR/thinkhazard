@@ -23,9 +23,9 @@ export GEONODE_URL ?= https://www.geonode-gfdrrlab.org
 export GEONODE_USERNAME ?= geonode
 export GEONODE_API_KEY ?= geonode
 
-export AWS_ENDPOINT_URL ?= http://minio:9000/
-export AWS_ACCESS_KEY_ID ?= minioadmin
-export AWS_SECRET_ACCESS_KEY ?= minioadmin
+export AWS_ENDPOINT_URL ?= http://s3:9000/
+export AWS_ACCESS_KEY_ID ?= thinkhazard
+export AWS_SECRET_ACCESS_KEY ?= thinkhazard
 export AWS_BUCKET_NAME ?= thinkhazard
 
 export ANALYTICS ?= DO-NOT-TRACK
