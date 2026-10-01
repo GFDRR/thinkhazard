@@ -1,7 +1,7 @@
 APScheduler
 Babel
 pypdf
-SQLAlchemy
+SQLAlchemy<2.1
 alembic
 boto3
 chameleon  # needed by lingua

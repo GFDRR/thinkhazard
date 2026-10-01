@@ -6,6 +6,7 @@ from pyramid.httpexceptions import HTTPFound, HTTPUnauthorized
 from pyramid.authentication import BasicAuthAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.i18n import TranslationStringFactory
+from pyramid.settings import asbool
 from pyramid.tweens import MAIN
 from papyrus.renderers import GeoJSON
 
@@ -71,6 +72,9 @@ def main(global_config, **settings):
     if settings["appname"] == "public":
         config.include(add_public_routes)
         config.add_route("sitemap", "/sitemap.xml")
+
+        if asbool(config.registry.settings.get("protect_public_site", False)):
+            config.set_default_permission("admin")
 
     if settings["appname"] == "admin":
         # Celery

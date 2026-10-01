@@ -43,10 +43,8 @@ flowchart TB
             ADM[("thinkhazard_admin\n(admin)")]
         end
 
-        subgraph s3["S3 · Minio"]
+        subgraph s3["S3 · s3proxy"]
         end
-
-        MC["Minio Client\n(init)"]
     end
 
     HTTP --> APP
@@ -57,7 +55,6 @@ flowchart TB
     CELERY --> REDIS
     CELERY --> pg
     CELERY --> s3
-    MC --> s3
 ```
 
 | Service | Role |
@@ -67,8 +64,7 @@ flowchart TB
 | **db** | PostgreSQL + PostGIS — two databases: `thinkhazard` (public/live) and `thinkhazard_admin` (staging) |
 | **redis** | Celery message broker |
 | **puppeteer** | Headless Chrome service for PDF report generation |
-| **minio** | S3-compatible object store for publication backups, PDF reports, and task logs |
-| **minio-client** | Init container that creates the S3 bucket on first startup |
+| **s3** | S3-compatible object store ([s3proxy](https://github.com/gaul/s3proxy)) for publication backups, PDF reports, and task logs |
 
 ## Getting Started
 
