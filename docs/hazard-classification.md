@@ -201,13 +201,13 @@ Below are the specific classification methods and thresholds for each of the 11 
 
 **Return Periods**: RP10, RP100, RP500, RP1000
 
-**Intensity Parameter**: Inundation depth (meters)
+**Intensity Parameter**: Inundation depth (meters), summarised per unit as the mean depth of wet pixels and the share of the unit deeper than 0.5 m
 
 ^^^
 
 **Intensity and Area Thresholds** (RP-specific, and different for pluvial than for river/coastal):
 
-| Return Period | River & Coastal — Depth | River & Coastal — Area | Pluvial — Depth | Pluvial — Area |
+| Return Period | River & Coastal — Mean wet depth | River & Coastal — Area deeper than 0.5 m | Pluvial — Mean wet depth | Pluvial — Area deeper than 0.5 m |
 |--------------|:-----------------------:|:-----------------------:|:----------------:|:---------------:|
 | RP10 | 0.2 m | 3% | 0.1 m | 0.3% |
 | RP100 | 0.2 m | 3% | 0.1 m | 0.3% |
@@ -216,9 +216,16 @@ Below are the specific classification methods and thresholds for each of the 11 
 
 A return period "counts" when **both** its depth and area thresholds are met; the score is the number of return periods that count (0-4), mapped to the -1..3 scale below.
 
-**Area threshold definition (unconditioned)**: for floods, the area threshold is evaluated against the percentage of the unit with *any* inundation present, independent of the depth threshold — not, as elsewhere in ThinkHazard!, the percentage of the unit *above* the depth threshold. This is a deliberate relaxation specific to flood hazard: conditioning area on depth as well would let a unit with real but spatially patchy inundation (wet in many places, but only deep in a few) fail the area test outright, so flood instead asks the two questions separately - *is enough of the unit wet at all* (area), and separately, *when it is wet, is it deep enough to matter* (depth) - which keeps the flood score conservative rather than risking an under-count. Every other hazard in ThinkHazard! (earthquake, cyclone, extreme heat, tsunami, wildfire) conditions its area percentage on the value threshold; flood is the intentional exception.
+**How the flood test is computed**: unlike the other hazards, flood is not tested pixel by pixel. For each unit and return period, two statistics are extracted from the Fathom depth maps:
 
-**Why pluvial differs from river and coastal**: a single 0.5 m / 3% screen, calibrated on river and coastal flooding, under-detects pluvial (surface-water) flooding, which is characteristically shallow and frequent rather than deep and rare. A flat threshold also produces a near-binary score pattern (see [Threshold Justification](#threshold-justification) above): once depth clears the bar at one RP it tends to clear it at all rarer RPs too, since depth only increases with RP, leaving the Medium and Low classes nearly empty. Lowering the depth and area thresholds at the frequent return periods (RP10, RP100) breaks that pattern and captures the chronic, shallow hazard, which geographically shows up as broader Medium/Low coverage. The rarer return periods (RP500, RP1000) are deliberately left at the original 0.5 m / 3% bar: relaxing them further would also re-classify naturally rare, locally intense events (e.g., desert flash floods) as chronic hazard — confirmed against a negative-control set of hyper-arid reference locations, all of which stayed correctly classified as Not Affected / Very Low under the thresholds above.
+- the **mean depth of the wet pixels** (pixels with depth > 0), and
+- the **share of the unit deeper than 0.5 m**, a depth fixed at extraction for all flood types and return periods.
+
+The depth threshold in the table is tested against the mean wet depth, and the area threshold against the share of the unit deeper than 0.5 m. A return period counts when both conditions hold. Depth and extent are therefore tested separately, not as "depth ≥ threshold over ≥ x% of the unit": the area test always requires water deeper than 0.5 m, also at the return periods whose depth threshold is 0.2 m (river, coastal) or 0.1 m (pluvial), while widespread shallow water lowers the mean wet depth instead of adding to the area. A unit with some deep cells and much shallow water can pass; a unit with widespread shallow water only cannot. Pixels coded as permanent water in Fathom are counted as dry.
+
+The practical consequence is that widespread shallow flooding, typical of urban pluvial flooding, is under-counted. For example, Fathom models 15–27% of each Jakarta district as wet at RP100, but less than 1% of it is deeper than 0.5 m, so Jakarta scores Very Low for pluvial flood. A per-pixel version of the test (share of the unit at or above each return period's depth threshold) was evaluated on Indonesia: it agreed slightly better with recorded flood reports, but not by a statistically significant margin, so the current rule is retained. The extraction now also records the share of each unit at or above 1, 10, 20, 30, 50 and 100 cm, so a per-pixel rule can be adopted at the next data update.
+
+**Why pluvial differs from river and coastal**: a single 0.5 m / 3% screen, calibrated on river and coastal flooding, under-detects pluvial (surface-water) flooding, which is characteristically shallow and frequent rather than deep and rare. A flat threshold also produces a near-binary score pattern (see [Threshold Justification](#threshold-justification) above): once depth clears the bar at one RP it tends to clear it at all rarer RPs too, since depth only increases with RP, leaving the Medium and Low classes nearly empty. Lowering the depth and area thresholds at the frequent return periods (RP10, RP100) breaks that pattern and captures the chronic, shallow hazard, which geographically shows up as broader Medium/Low coverage. Because the area statistic only counts water deeper than 0.5 m (see above), the lower frequent-RP depth applies to the mean wet depth only. The rarer return periods (RP500, RP1000) are deliberately left at the original 0.5 m / 3% bar: relaxing them further would also re-classify naturally rare, locally intense events (e.g., desert flash floods) as chronic hazard — confirmed against a negative-control set of hyper-arid reference locations, all of which stayed correctly classified as Not Affected / Very Low under the thresholds above.
 
 **Manual Overrides**: a small number of urban areas with well-documented, frequent pluvial flooding that the automated classification still under-detects (Dhaka, Manila, Mumbai) are set to High by expert judgement rather than by the automated rule. This is recorded as a data-level exception, not a change to the scoring logic, and is expected to be revisited if a data source better suited to shallow, chronic urban flooding becomes available.
 
@@ -467,9 +474,9 @@ A return period "counts" when **both** its depth and area thresholds are met; th
 |--------|---------------------|------|-------------------|
 | Earthquake | Peak Ground Acceleration | g | RP-specific: 0.12, 0.10, 0.08, 0.06 |
 | Cyclone | Wind Speed | m/s | RP-specific: 36, 36, 30, 26 |
-| River (Fluvial) Flood | Inundation Depth | m | RP-specific: 0.2, 0.2, 0.5, 0.5 |
-| Pluvial Flood | Inundation Depth | m | RP-specific: 0.1, 0.1, 0.5, 0.5 |
-| Coastal Flood | Inundation Depth | m | RP-specific: 0.2, 0.2, 0.5, 0.5 |
+| River (Fluvial) Flood | Mean depth of wet pixels | m | RP-specific: 0.2, 0.2, 0.5, 0.5 |
+| Pluvial Flood | Mean depth of wet pixels | m | RP-specific: 0.1, 0.1, 0.5, 0.5 |
+| Coastal Flood | Mean depth of wet pixels | m | RP-specific: 0.2, 0.2, 0.5, 0.5 |
 | Tsunami | Inundation Depth | m | RP-specific: 2.0, 1.0, 0.5 |
 | Wildfire | Fire Weather Index | FWI | 50 |
 | Extreme Heat | WBGT Temperature | °C | RP-specific: 32, 28, 25 |
@@ -483,9 +490,9 @@ A return period "counts" when **both** its depth and area thresholds are met; th
 |--------|---------------|----------------|
 | Earthquake | 250, 475, 975, 2475 years | 5% |
 | Cyclone | 50, 100, 1000, 10000 years | 5% |
-| River (Fluvial) Flood | 10, 100, 500, 1000 years | 3% |
-| Pluvial Flood | 10, 100, 500, 1000 years | RP-specific: 0.3%, 0.3%, 3%, 3% |
-| Coastal Flood | 10, 100, 500, 1000 years | 3% |
+| River (Fluvial) Flood | 10, 100, 500, 1000 years | 3% of unit deeper than 0.5 m |
+| Pluvial Flood | 10, 100, 500, 1000 years | RP-specific: 0.3%, 0.3%, 3%, 3% of unit deeper than 0.5 m |
+| Coastal Flood | 10, 100, 500, 1000 years | 3% of unit deeper than 0.5 m |
 | Tsunami | 100, 500, 2500 years | 0% |
 | Wildfire | 5, 25, 50 years | 20% |
 | Extreme Heat | 5, 20, 100 years | 30% |

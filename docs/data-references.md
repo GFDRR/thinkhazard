@@ -19,7 +19,7 @@ Information about climate indicators is obtained from the [Climate Change Knowle
 ThinkHazard! integrates global hazard data from multiple authoritative sources:
 
 ### **Floods (Fluvial, pluvial, coastal)**
-Based on global River/Pluvial/Coastal flood hazard maps produced by **Fathom (v3)**. Data are not publicly disclosed due to license terms.
+Based on global River/Pluvial/Coastal flood hazard maps produced by **Fathom (Global Flood Map v3, v3.1 tiles; 1 arc-second, 2020 climate)**: fluvial undefended, pluvial defended and coastal undefended. Data are not publicly disclosed due to license terms.
 
 ### **Water Scarcity / Drought**
 Based on global water stress (baseline) hazard maps produced by **[Aqueduct (v4)](https://www.wri.org/aqueduct)**.
